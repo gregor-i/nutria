@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="SBT: com.chuusai:shapeless_2.11:2.3.0:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/org.spire-math/spire_2.11/jars/spire_2.11-0.11.0.jar!/" />
+      <root url="jar://$USER_HOME$/.ivy2/cache/org.spire-math/spire-macros_2.11/jars/spire-macros_2.11-0.11.0.jar!/" />
+      <root url="jar://$USER_HOME$/.ivy2/cache/org.spire-math/json4s-support_2.10/jars/json4s-support_2.10-0.6.0.jar!/" />
+      <root url="jar://$USER_HOME$/.ivy2/cache/org.spire-math/jawn-parser_2.10/jars/jawn-parser_2.10-0.6.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
