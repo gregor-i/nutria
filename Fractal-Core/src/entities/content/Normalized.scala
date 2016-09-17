@@ -36,7 +36,7 @@ case class StrongNormalizedContent(content: CachedContent) extends Content with 
 
   private var finished = 0
   
-  for ((value, pos) <- sorted) {
+  for ((_, pos) <- sorted) {
     for ((x, y) <- pos) {
       values(x)(y) = finished.toDouble / (width * height)
     }

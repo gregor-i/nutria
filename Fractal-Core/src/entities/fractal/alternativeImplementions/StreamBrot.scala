@@ -1,6 +1,6 @@
-package entities
-package fractal
+package entities.fractal.alternativeImplementions
 
+import entities.fractal.technics.Fractal
 import spire.math.Complex
 import spire.implicits._
 

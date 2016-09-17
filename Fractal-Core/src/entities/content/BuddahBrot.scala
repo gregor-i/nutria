@@ -2,6 +2,7 @@ package entities
 package content
 
 import entities.fractal.Mandelbrot
+import entities.fractal.sequence.MandelbrotSequence
 import entities.viewport.HasDimensions
 
 private object BuddahBrotHelper{
@@ -20,7 +21,7 @@ case class BuddahBrot(targetViewport: Transform, sourceViewport: Transform, maxI
   private val values = Array.ofDim[Double](width, height)
 
   def loop(sx: Double, sy: Double): Unit = {
-    for ((x, y) <- new Mandelbrot.Iterator(sx, sy, maxIterations).wrapped) {
+    for ((x, y) <- new MandelbrotSequence(sx, sy, maxIterations).wrapped) {
       val ix = targetViewport.invertX(x, y)
       val iy = targetViewport.invertY(x, y)
       if (!ix.isNaN && !iy.isNaN){
@@ -45,7 +46,7 @@ case class BuddahBrotWithLines(targetViewport: Transform, sourceViewport: Transf
   private val values = Array.ofDim[Double](width, height)
 
   def loop(sx: Double, sy: Double): Unit = {
-    val iterator = new Mandelbrot.Iterator(sx, sy, maxIterations)
+    val iterator = new MandelbrotSequence(sx, sy, maxIterations)
     var state = (iterator.x, iterator.y)
     while(iterator.hasNext){
       val lastState = state

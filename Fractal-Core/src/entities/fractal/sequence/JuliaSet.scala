@@ -1,4 +1,7 @@
-package entities.fractal
+package entities.fractal.sequence
+
+import entities.Fractal
+;
 
 case class JuliaSet(maxIteration: Int, cr: Double, ci: Double) extends Fractal {
 //  val phi = (1 + Math.sqrt(5)) / 2

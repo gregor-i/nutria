@@ -1,6 +1,8 @@
 package entities
 package content
 
+import entities.fractal.technics.Fractal
+
 // Implements SSAA/FSAA
 case class AntiAliasedFractalContent(fractal: Fractal, transform: Transform,
   accu: Accumulator, multi: Int)

@@ -1,19 +1,12 @@
 package entities.fractal
 
-class Tricorn(val maxIteration: Int) extends Fractal {
+import entities.fractal.sequence.{HasSequenceConstructor, TricornSequence}
+import entities.fractal.technics.{CardioidTechnics, EscapeTechnics, TrapTechnics}
 
-  override def apply(x0: Double, y0: Double): Double = {
-    var x = x0
-    var y = y0
-    for (i <- 0 until maxIteration) {
-      val xx = x * x
-      val yy = y * y
-      y = -2 * x * y + y0
-      x = xx - yy + x0
-      if (xx + yy > 4) return i / maxIteration.toDouble
-    }
-    1d
-  }
+object Tricorn extends HasSequenceConstructor[TricornSequence]
+  with EscapeTechnics[TricornSequence]
+  with TrapTechnics[TricornSequence]
+  with CardioidTechnics[TricornSequence] {
 
-  override def toString() = "Tricorn " + maxIteration
+  override def sequence(x0: Double, y0: Double, maxIterations: Int): TricornSequence = new TricornSequence(x0, y0, maxIterations)
 }

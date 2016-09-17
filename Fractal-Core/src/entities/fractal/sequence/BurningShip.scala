@@ -1,5 +1,7 @@
 package entities.fractal
 
+import entities.fractal.technics.Fractal
+
 class BurningShip (val maxIteration: Int) extends Fractal {
 
   override def apply(x0: Double, y0: Double): Double = {

@@ -1,5 +1,6 @@
+
 package object entities {
-  type Fractal = entities.fractal.Fractal
+  type Fractal = entities.fractal.technics.Fractal
   type Dimensions = entities.viewport.Dimensions
   val Dimensions = entities.viewport.Dimensions
   type Accumulator = entities.accumulator.Accumulator

@@ -3,14 +3,15 @@ package nutria
 import org.openjdk.jmh.annotations._
 import entities.fractal._
 import entities.content._
+import entities.fractal.alternativeImplementions.{SpireBrot, StreamBrot}
+import entities.fractal.technics.Fractal
 import entities.viewport._
 import entities.syntax._
-import spire.math.Quaternion
 
 class Bench {
    def operation(fractal: Fractal): CachedContent =
     entities.viewport.Viewport.benchmark
-      .withDimensions(Dimensions.screenHD.scale(0.1))
+      .withDimensions(Dimensions.fujitsu.scale(0.1))
       .withAntiAliasedFractal(fractal)
       .cached
 

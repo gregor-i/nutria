@@ -4,16 +4,24 @@ import entities.accumulator.Arithmetic
 import entities.content._
 import java.io.File
 
+import entities.fractal.technics
+
 object syntax {
+
   implicit class EnrichedViewport(val viewport: Viewport) extends AnyVal {
     def withDimensions(dim: Dimensions): Transform = new Transform(viewport, dim)
   }
 
   implicit class EnrichedTransform(val transform: Transform) extends AnyVal {
-    def withFractal(fractal: Fractal): Content = FractalContent(fractal, transform)
+    def withFractal(fractal: technics.Fractal): Content = FractalContent(fractal, transform)
 
-    def withAntiAliasedFractal(fractal: Fractal, accu: Accumulator = Arithmetic, samplingFactor: Int = 5): Content =
+    def withAntiAliasedFractal(fractal: technics.Fractal, accu: Accumulator = Arithmetic, samplingFactor: Int = 5): Content =
       AntiAliasedFractalContent(fractal, transform, accu, samplingFactor)
+
+    def withDynamAntiAliasedFractal(fractal: technics.Fractal, accu: Accumulator = Arithmetic,
+                                    limit: Double = 0.12, minimalIterations: Int = 4, maximalIterations: Int = 50): Content =
+      DynamAntiAliasFractalContent(fractal, transform, accu, limit, minimalIterations, maximalIterations)
+
 
     def withBuddhaBrot(sourceTransform: Transform = transform, maxIteration: Int = 250) =
       BuddahBrot(transform, sourceTransform, maxIteration)
@@ -24,8 +32,17 @@ object syntax {
       case cached: CachedContent => cached
       case _ => new CachedContent(content)
     }
-    def linearNormalized: FinishedContent = LinearNormalizedContent(content.cached)
-    def strongNormalized: FinishedContent = StrongNormalizedContent(content.cached)
+
+    def linearNormalized: FinishedContent =
+      try {
+        LinearNormalizedContent(cached)
+      } catch {
+        case _: IllegalArgumentException =>
+          println("Warning: Content could not be normalized. Replaced with NullContent.")
+          NullContent(content.dimensions)
+      }
+
+      def strongNormalized: FinishedContent = StrongNormalizedContent(cached)
   }
 
   implicit class EnrichedFinishedContent(val content: FinishedContent) extends AnyVal {
@@ -38,13 +55,16 @@ object syntax {
         file.getParentFile.mkdirs()
       javax.imageio.ImageIO.write(image.buffer, "png", file)
       file
-     }
+    }
+
     def verboseSave(fileName: String): File = {
       val file = new java.io.File(fileName)
       save(file)
       println("Saved: " + file.getAbsoluteFile)
       file
     }
+
     def save(fileName: String): Unit = save(new java.io.File(fileName))
   }
+
 }

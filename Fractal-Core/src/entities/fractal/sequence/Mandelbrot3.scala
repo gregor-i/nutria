@@ -1,5 +1,7 @@
 package entities.fractal
 
+import entities.fractal.technics.Fractal
+
 class Mandelbrot3(val maxIteration: Int) extends Fractal {
 
   override def apply(x0: Double, y0: Double): Double = {

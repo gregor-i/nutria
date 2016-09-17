@@ -5,7 +5,7 @@ case class Dimensions(width: Int, height: Int) {
 }
 
 object Dimensions {
-  val screenHD = Dimensions(1920, 1200)
+  val fujitsu = Dimensions(1920, 1200)
   val fullHD = Dimensions(1920, 1080)
   val lenovoX1 = Dimensions(2560, 1440)
 }

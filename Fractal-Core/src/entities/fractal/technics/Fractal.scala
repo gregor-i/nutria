@@ -1,3 +1,3 @@
-package entities.fractal
+package entities.fractal.technics
 
 trait Fractal extends ((Double, Double) => Double)
