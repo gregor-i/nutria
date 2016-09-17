@@ -1,12 +1,9 @@
-package meta
-
 import MVC.model._
 import MVC.view._
 import entities.color.Invert
-import entities.fractal.{Fractal, Mandelbrot}
-import entities.viewport.Point
+import entities.fractal.Mandelbrot
 
-object GUIStarter extends App {
+object Viewer extends App {
 //  val cardoid = Mandelbrot.Cardioid(350, 50)
 //  val model  = new Model( )
 //  model.setPoints(cardoid.points.map(Point.tupled))
@@ -30,7 +27,7 @@ object GUIStarter extends App {
   //  val p2 = Mandelbrot.CircleTrap(350, -1, 0, 0.25)
   val model  = new Model()
 //  model.setPoints(p2.points(100).map(Point.tupled))
-  model.setFractal(Mandelbrot.CardioidNumeric(50, 10))
+//  model.setFractal(Mandelbrot.CardioidNumeric(500, 50))
   model.setColor(new Invert(model.farbe))
   new View(model)
 

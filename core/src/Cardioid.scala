@@ -1,16 +1,14 @@
-package meta
-
 import entities.Color
-import entities.Syntax._
 import entities.color.{HSV, Invert}
 import entities.fractal.Mandelbrot
+import entities.syntax._
 import entities.viewport.{Dimensions, Fokus, Viewport, ViewportUtil}
 
 object Cardioid extends App {
     def apply(view:Viewport, path:(Viewport, Color) => String) {
       val content =
         view
-          .withDimensions(Dimensions.screenHD)
+          .withDimensions(Dimensions.fullHD)
           .withFractal(Mandelbrot.CardioidNumeric(500, 50))
           //.withAntiAliasedFractal(Mandelbrot.CardioidNumeric(500, 50))
           .cached

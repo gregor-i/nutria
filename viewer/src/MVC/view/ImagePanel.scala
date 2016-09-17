@@ -35,29 +35,30 @@ class ImagePanel(val modell: Model) extends JPanel with Observer {
     val trans = modell.view.withDimensions(Dimensions(getWidth, getHeight))
 
     // link points
-//    val factorBeyond = 10
-//    for {
-//      iterator <- modell.points.sliding(2)
-//      p1 = iterator.head
-//      p2 = iterator.tail.head
-//      invertP1 = trans.invert(p1.x, p1.y)
-//      invertP2 = trans.invert(p2.x, p2.y)
-//      if invertP1._1 >= -(factorBeyond-1)*getWidth && invertP1._1 < factorBeyond*getWidth
-//      if invertP2._1 >= -(factorBeyond-1)*getWidth && invertP2._1 < factorBeyond*getWidth
-//      if invertP1._2 >= -(factorBeyond-1)*getHeight && invertP1._2 < factorBeyond*getHeight
-//      if invertP2._2 >= -(factorBeyond-1)*getHeight && invertP2._2 < factorBeyond*getHeight
-//    }{
-//        g.drawLine(invertP1._1.toInt, invertP1._2.toInt, invertP2._1.toInt, invertP2._2.toInt)
-//    }
+    val factorBeyond = 10
+    if(modell.points.length >= 2)
+    for {
+      iterator <- modell.points.sliding(2)
+      p1 = iterator.head
+      p2 = iterator.tail.head
+      invertP1 = trans.invert(p1.x, p1.y)
+      invertP2 = trans.invert(p2.x, p2.y)
+      if invertP1._1 >= -(factorBeyond-1)*getWidth && invertP1._1 < factorBeyond*getWidth
+      if invertP2._1 >= -(factorBeyond-1)*getWidth && invertP2._1 < factorBeyond*getWidth
+      if invertP1._2 >= -(factorBeyond-1)*getHeight && invertP1._2 < factorBeyond*getHeight
+      if invertP2._2 >= -(factorBeyond-1)*getHeight && invertP2._2 < factorBeyond*getHeight
+    }{
+        g.drawLine(invertP1._1.toInt, invertP1._2.toInt, invertP2._1.toInt, invertP2._2.toInt)
+    }
 
 
     // One Cross per Point
-    for (p <- modell.points) {
-      val posx = trans.invertX(p.x, p.y).toInt
-      val posy = trans.invertY(p.x, p.y).toInt
-      g.drawLine(posx - 25, posy - 25, posx + 25, posy + 25)
-      g.drawLine(posx - 25, posy + 25, posx + 25, posy - 25)
-    }
+//    for (p <- modell.points) {
+//      val posx = trans.invertX(p.x, p.y).toInt
+//      val posy = trans.invertY(p.x, p.y).toInt
+//      g.drawLine(posx - 25, posy - 25, posx + 25, posy + 25)
+//      g.drawLine(posx - 25, posy + 25, posx + 25, posy - 25)
+//    }
 
     /*
         // Kreuze fuer alle Fokus-Viewports

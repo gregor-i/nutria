@@ -12,7 +12,7 @@ object Mandelbrot extends HasSequenceConstructor[MandelbrotSequence]
   with CardioidTechnics[MandelbrotSequence] {
 
 
-  val fractals = List(
+  val fractals = Seq(
     RoughColoring(150),
     RoughColoring(250),
     RoughColoring(500),

@@ -1,17 +1,17 @@
 package entities.fractal.sequence
 
 
-final class MandelbrotSequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends Sequence2[Double, Double] { self =>
-  var x:X = 0d
-  var y:Y = 0d
+class JuliaSetSequence(cx: Double, cy: Double)(x0: Double, y0: Double, private var iterationsRemaining: Int) extends Sequence2[Double, Double] {
+  var x: X = x0
+  var y: Y = y0
   private var xx = x * x
   private var yy = y * y
 
   @inline def hasNext: Boolean = (xx + yy < 4) && iterationsRemaining >= 0
 
-  @inline def next(): Boolean = {
-    y = 2 * x * y + y0
-    x = xx - yy + x0
+  @inline override def next(): Boolean = {
+    y = (x + x) * y + cy
+    x = xx - yy + cx
     xx = x * x
     yy = y * y
     iterationsRemaining -= 1

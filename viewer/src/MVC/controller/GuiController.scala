@@ -10,11 +10,11 @@ import entities.viewport.{Dimensions, Point}
 import entities.syntax._
 
 class GuiController(val modell: Model, val view: View) extends KeyListener with MouseListener with MouseWheelListener with MouseMotionListener {
-  val master = view.imgPanel
-  master.addMouseListener(this)
-  master.addMouseWheelListener(this)
-  master.addMouseMotionListener(this)
-  master.addKeyListener(this)
+  val imgPanel = view.imgPanel
+  imgPanel.addMouseListener(this)
+  imgPanel.addMouseWheelListener(this)
+  imgPanel.addMouseMotionListener(this)
+  imgPanel.addKeyListener(this)
 
   override def keyReleased(arg0: KeyEvent) = ()
   override def keyTyped(arg0: KeyEvent) = ()
@@ -24,10 +24,9 @@ class GuiController(val modell: Model, val view: View) extends KeyListener with 
   override def mouseReleased(e: MouseEvent) = ()
 
   override def mousePressed(e: MouseEvent) = {
-    val trans = modell.view.withDimensions(Dimensions(master.getWidth, master.getHeight))
+    val trans = modell.view.withDimensions(Dimensions(imgPanel.getWidth, imgPanel.getHeight))
     val x = trans.transformX(e.getX, e.getY)
     val y = trans.transformY(e.getX, e.getY)
-    println(x, y)
     modell.setPoints{
       val card = Mandelbrot.CardioidNumeric(0, 100)
       val ts = card.golden(x, y)
@@ -50,24 +49,29 @@ class GuiController(val modell: Model, val view: View) extends KeyListener with 
     }
 
   override def mouseWheelMoved(e: MouseWheelEvent) = {
-    val px = e.getX / master.getWidth.toDouble
-    val py = e.getY / master.getHeight.toDouble
+    val px = e.getX / imgPanel.getWidth.toDouble
+    val py = e.getY / imgPanel.getHeight.toDouble
     modell.setViewport(modell.view.zoom(px, py, e.getWheelRotation))
   }
 
   override def mouseMoved(e: MouseEvent): Unit = {
-    val trans = modell.view.withDimensions(Dimensions(master.getWidth, master.getHeight))
+    val trans = modell.view.withDimensions(Dimensions(imgPanel.getWidth, imgPanel.getHeight))
     val x = trans.transformX(e.getX, e.getY)
     val y = trans.transformY(e.getX, e.getY)
 
-//    modell.setPoints(new Mandelbrot.Iterator(x, y, 500).wrapped.map(Point.tupled).toSeq)
-    modell.setPoints{
-      val card = Mandelbrot.CardioidNumeric(0, 100)
-      val g = card.golden(x, y.abs)
-      val n = card.newton(g, x, y.abs)
-      println(g, n)
-      Seq(n, g).map(card.contour).map(Point.tupled)
-    }
+    modell.sequenceConstructor.map(_.sequence(x, y, 50)).map(_.wrapped).map(_.map(Point.tupled).toSeq).foreach(modell.setPoints)
+
+//    match
+//      case seq @ Some[Sequ] => modell.setPoints(construcor.sequence(x,y, 50).wrapped.map(Point.tupled).toSeq)
+//      case None =>
+//    }
+
+//    modell.setPoints{
+//      val card = Mandelbrot.CardioidNumeric(0, 100)
+//      val g = card.golden(x, y.abs)
+//      val n = card.newton(g, x, y.abs)
+//      Seq(n, g).map(card.contour).map(Point.tupled)
+//    }
   }
   override def mouseDragged(e: MouseEvent): Unit = ()
 }

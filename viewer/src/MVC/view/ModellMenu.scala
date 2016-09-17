@@ -15,7 +15,7 @@ class ModellMenu(val f: (Model => String), val modell: Model)
   }
 }
 
-class FractalMenu(modell: Model) extends ModellMenu((modell) => modell.fractal.toString(), modell) {}
+class FractalMenu(modell: Model) extends ModellMenu((modell) => modell.fractal.getClass.getSimpleName, modell) {}
 class ViewportMenu(modell: Model) extends ModellMenu((modell) => modell.view.toString(), modell) {}
 class ColorMenu(modell: Model) extends ModellMenu((modell) => modell.farbe.toString(), modell) {}
 class ContentFactoryMenu(modell: Model) extends ModellMenu((modell) => modell.contentFactory.toString(), modell) {}

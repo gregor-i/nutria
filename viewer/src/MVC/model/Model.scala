@@ -6,13 +6,15 @@ import MVC.{ContentFactory, SimpleFactory}
 import entities.Fractal
 import entities.syntax._
 import entities.color.{Color, HSV}
+import entities.fractal.Mandelbrot
+import entities.fractal.sequence.{HasSequenceConstructor, Sequence2}
 import entities.viewport.{Point, Viewport, ViewportUtil}
 import util.Observable
 
 
 @SerialVersionUID(1L)
 class Model(
-  var fractal: Fractal = entities.fractal.Mandelbrot.RoughColoring(250),
+  var fractal: Fractal = Mandelbrot.RoughColoring(250),
   var contentFactory: ContentFactory = SimpleFactory,
   var farbe: Color = HSV.MonoColor.Blue,
   var view: Viewport = ViewportUtil.start) extends Observable {
@@ -20,6 +22,7 @@ class Model(
   var quali: Double = 0.25
   var img: BufferedImage = _
   var points = Seq[Point]()
+  var sequenceConstructor: Option[HasSequenceConstructor[_ <: Sequence2[Double, Double]]] = Some(Mandelbrot)
 
   preview()
 
@@ -69,19 +72,15 @@ class Model(
     preview()
   }
 
-  def setPoints(ps:Seq[Point]) = {
-    points = ps
+
+  def setSequence(newSequenceConstructor: Option[HasSequenceConstructor[_ <: Sequence2[Double, Double]]]): Unit ={
+    sequenceConstructor = newSequenceConstructor
     notifyObservers()
   }
 
-  def addPoint(p: Point) = {
-    points = p +: points
+  def setPoints(ps:Seq[Point]) = {
+    points = ps
     notifyObservers()
-  }
-  
-  def clearPoints() = {
-    points = List()
-    notifyObservers()    
   }
 }
 

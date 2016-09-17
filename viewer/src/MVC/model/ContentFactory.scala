@@ -15,24 +15,24 @@ trait ContentFactory {
 
 case object SimpleFactory extends ContentFactory {
   def simple(model: Model): Content =
-    model.view.withDimensions(Dimensions.screenHD.scale(model.quali)).withFractal(model.fractal)
+    model.view.withDimensions(Dimensions.fullHD.scale(model.quali)).withFractal(model.fractal)
 
   def beaty(model: Model): Content =
-    model.view.withDimensions(Dimensions.screenHD).withFractal(model.fractal)
+    model.view.withDimensions(Dimensions.fullHD).withFractal(model.fractal)
 }
 
 case object AntiAliaseFactory extends ContentFactory {
   def simple(model: Model): Content =
-    model.view.withDimensions(Dimensions.screenHD.scale(model.quali)).withAntiAliasedFractal(model.fractal)
+    model.view.withDimensions(Dimensions.fullHD.scale(model.quali)).withAntiAliasedFractal(model.fractal)
 
   def beaty(model: Model): Content =
-    model.view.withDimensions(Dimensions.screenHD).withAntiAliasedFractal(model.fractal)
+    model.view.withDimensions(Dimensions.fullHD).withAntiAliasedFractal(model.fractal)
 }
 
 case object BuddhaBrotFactory extends ContentFactory {
   def simple(model: Model): Content =
-    model.view.withDimensions(Dimensions.screenHD.scale(model.quali)).withBuddhaBrot()
+    model.view.withDimensions(Dimensions.fullHD.scale(model.quali)).withBuddhaBrot()
 
   def beaty(model: Model): Content =
-    model.view.withDimensions(Dimensions.screenHD).withBuddhaBrot()
+    model.view.withDimensions(Dimensions.fullHD).withBuddhaBrot()
 }
