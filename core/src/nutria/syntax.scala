@@ -61,4 +61,8 @@ object syntax {
   implicit class EnrichmentFanOut[A](val self:A) extends AnyVal{
     def fanOut[B](ops: (A => B)*):Seq[B] = ops.map(_.apply(self))
   }
+
+  implicit class FoldBoooleans(val self: Boolean) extends AnyVal {
+    def fold[B](ifTrue: => B, ifFalse: => B): B = if (self) ifTrue else ifFalse
+  }
 }
