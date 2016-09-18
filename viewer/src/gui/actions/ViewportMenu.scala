@@ -5,8 +5,8 @@ import java.awt.event.ActionListener
 import javax.swing.JMenu
 import javax.swing.JMenuItem
 
-import entities.fractal.Mandelbrot
-import entities.viewport._
+import nutria.fractal.Mandelbrot
+import nutria.viewport._
 
 class ViewportMenu(views: Array[Viewport], gui: Model) extends JMenu("Viewports") {
 

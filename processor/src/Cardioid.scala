@@ -1,10 +1,10 @@
 import java.io.File
 
-import entities.Color
-import entities.color.{HSV, Invert}
-import entities.fractal.Mandelbrot
-import entities.syntax._
-import entities.viewport.{Dimensions, Viewport}
+import nutria.Color
+import nutria.color.{HSV, Invert}
+import nutria.fractal.Mandelbrot
+import nutria.syntax._
+import nutria.viewport.{Dimensions, Viewport}
 import viewportSelections.{FocusSelection, ViewportSelection}
 
 object Cardioid extends ProcessorHelper {

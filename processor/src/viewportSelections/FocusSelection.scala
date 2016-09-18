@@ -1,6 +1,6 @@
 package viewportSelections
 
-import entities.viewport.Viewport.createByDefaultFocusAndLongs
+import nutria.viewport.Viewport.createByDefaultFocusAndLongs
 
 object FocusSelection {
 

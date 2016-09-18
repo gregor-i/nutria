@@ -1,7 +1,7 @@
 import MVC.model._
 import MVC.view._
-import entities.color.Invert
-import entities.fractal.Mandelbrot
+import nutria.color.Invert
+import nutria.fractal.Mandelbrot
 
 object Viewer extends App {
 //  val cardoid = Mandelbrot.Cardioid(350, 50)

@@ -1,8 +1,8 @@
 import java.io.{File, FileWriter}
 
-import entities.fractal.{Mandelbrot, QuatBrot}
-import entities.syntax._
-import entities.viewport.Dimensions
+import nutria.fractal.{Mandelbrot, QuatBrot}
+import nutria.syntax._
+import nutria.viewport.Dimensions
 import spire.math.Quaternion
 
 object Matlab3DExport extends App {

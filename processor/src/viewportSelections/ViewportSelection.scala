@@ -1,6 +1,6 @@
 package viewportSelections
 
-import entities.viewport.Viewport.createViewportByLongs
+import nutria.viewport.Viewport.createViewportByLongs
 
 object ViewportSelection {
 

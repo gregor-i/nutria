@@ -3,12 +3,12 @@ package MVC.model
 import java.awt.image.BufferedImage
 
 import MVC.{ContentFactory, SimpleFactory}
-import entities.Fractal
-import entities.syntax._
-import entities.color.{Color, HSV}
-import entities.fractal.Mandelbrot
-import entities.fractal.sequence.{HasSequenceConstructor, Sequence2}
-import entities.viewport.{Point, Viewport, ViewportUtil}
+import nutria.Fractal
+import nutria.syntax._
+import nutria.color.{Color, HSV}
+import nutria.fractal.Mandelbrot
+import nutria.fractal.sequence.{HasSequenceConstructor, Sequence2}
+import nutria.viewport.{Point, Viewport}
 import util.Observable
 
 

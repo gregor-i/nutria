@@ -7,9 +7,9 @@ import javax.swing.{JFrame, JMenu, JMenuBar, JMenuItem}
 import MVC.{AntiAliaseFactory, BuddhaBrotFactory, ContentFactory, SimpleFactory}
 import MVC.controller.GuiController
 import MVC.model.Model
-import entities.Fractal
-import entities.fractal._
-import entities.fractal.sequence.{HasSequenceConstructor, Sequence2}
+import nutria.Fractal
+import nutria.fractal._
+import nutria.fractal.sequence.{HasSequenceConstructor, Sequence2}
 
 object Collection {
 
@@ -73,43 +73,43 @@ class View(val model: Model) extends JFrame {
     myMenuBar.add(menu)
   }
 
-  {
-    // Auswahl Menu
-    val menu = new JMenu("Auswahl")
-    var i = 0
-    var sub: JMenu = null
-    for (viewport <- entities.viewport.Viewport.auswahl) {
-      if (i % 10 == 0) {
-        sub = new JMenu("sub %d".format(i / 10))
-        menu.add(sub.asInstanceOf[JMenuItem])
-      }
-      sub.add(
-        new MenuItem(
-          "%d".format(i),
-          () => model.setViewport(viewport)))
-      i = i + 1
-    }
-    myMenuBar.add(menu)
-  }
+//  {
+//    // Auswahl Menu
+//    val menu = new JMenu("Auswahl")
+//    var i = 0
+//    var sub: JMenu = null
+//    for (viewport <- nutria.viewport.Viewport.auswahl) {
+//      if (i % 10 == 0) {
+//        sub = new JMenu("sub %d".format(i / 10))
+//        menu.add(sub.asInstanceOf[JMenuItem])
+//      }
+//      sub.add(
+//        new MenuItem(
+//          "%d".format(i),
+//          () => model.setViewport(viewport)))
+//      i = i + 1
+//    }
+//    myMenuBar.add(menu)
+//  }
 
-  {
-    // Auswahl Menu
-    val menu = new JMenu("FokusAuswahl1")
-    var i = 0
-    var sub: JMenu = null
-    for (viewport <- entities.viewport.Fokus.iteration1) {
-      if (i % 10 == 0) {
-        sub = new JMenu("sub %d".format(i / 10))
-        menu.add(sub.asInstanceOf[JMenuItem])
-      }
-      sub.add(
-        new MenuItem(
-          "%d".format(i),
-          () => model.setViewport(viewport)))
-      i = i + 1
-    }
-    myMenuBar.add(menu)
-  }
+//  {
+//    // Auswahl Menu
+//    val menu = new JMenu("FokusAuswahl1")
+//    var i = 0
+//    var sub: JMenu = null
+//    for (viewport <- nutria.viewport.Fokus.iteration1) {
+//      if (i % 10 == 0) {
+//        sub = new JMenu("sub %d".format(i / 10))
+//        menu.add(sub.asInstanceOf[JMenuItem])
+//      }
+//      sub.add(
+//        new MenuItem(
+//          "%d".format(i),
+//          () => model.setViewport(viewport)))
+//      i = i + 1
+//    }
+//    myMenuBar.add(menu)
+//  }
 
   {
     // Save Menu

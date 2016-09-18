@@ -3,7 +3,7 @@ package gui.actions
 import java.awt.event.ActionListener
 import javax.swing.JMenu
 import javax.swing.JMenuItem
-import entities.color._
+import nutria.color._
 import MVC.model.Model
 
 class ColorMenu(farben: List[Color], gui: Model) extends JMenu("Farben") {

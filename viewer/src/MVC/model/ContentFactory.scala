@@ -1,11 +1,11 @@
 package MVC
 
 import MVC.model.Model
-import entities.content.{AntiAliasedFractalContent, BuddahBrot}
-import entities.viewport.Dimensions
-import entities.{Content, Transform}
+import nutria.content.{AntiAliasedFractalContent, BuddahBrot}
+import nutria.viewport.Dimensions
+import nutria.{Content, Transform}
 
-import entities.syntax._
+import nutria.syntax._
 
 trait ContentFactory {
   def simple(model: Model): Content

@@ -1,7 +1,7 @@
-import entities.color.HSV
-import entities.fractal.Mandelbrot
-import entities.syntax._
-import entities.viewport.Dimensions
+import nutria.color.HSV
+import nutria.fractal.Mandelbrot
+import nutria.syntax._
+import nutria.viewport.Dimensions
 
 
 object Main extends App {

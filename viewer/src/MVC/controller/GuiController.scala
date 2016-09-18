@@ -4,10 +4,10 @@ import java.awt.event._
 
 import MVC.model.Model
 import MVC.view.View
-import entities.fractal.Mandelbrot
-import entities.viewport.{Dimensions, Point}
+import nutria.fractal.Mandelbrot
+import nutria.viewport.{Dimensions, Point}
 
-import entities.syntax._
+import nutria.syntax._
 
 class GuiController(val modell: Model, val view: View) extends KeyListener with MouseListener with MouseWheelListener with MouseMotionListener {
   val imgPanel = view.imgPanel
@@ -40,7 +40,7 @@ class GuiController(val modell: Model, val view: View) extends KeyListener with 
       case KeyEvent.VK_SUBTRACT  => modell.setViewport(modell.view.zoomOut())
       case KeyEvent.VK_ENTER     => println(modell.view.toString)
       case KeyEvent.VK_S         => modell.snap()
-      case KeyEvent.VK_R         => modell.setViewport(entities.fractal.Mandelbrot.start)
+      case KeyEvent.VK_R         => modell.setViewport(nutria.fractal.Mandelbrot.start)
       case _ =>
     }
 

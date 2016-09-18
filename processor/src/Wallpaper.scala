@@ -1,9 +1,9 @@
-import entities.accumulator.Max
-import entities.color.{Color, HSV}
-import entities.content.Content
-import entities.fractal.Mandelbrot
-import entities.syntax._
-import entities.viewport.{Dimensions, Viewport}
+import nutria.accumulator.Max
+import nutria.color.{Color, HSV}
+import nutria.content.Content
+import nutria.fractal.Mandelbrot
+import nutria.syntax._
+import nutria.viewport.{Dimensions, Viewport}
 import viewportSelections.ViewportSelection
 
 object Wallpaper extends ProcessorHelper {

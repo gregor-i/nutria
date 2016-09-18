@@ -6,10 +6,10 @@ import java.awt.Graphics
 import util._
 import MVC.model.Model
 
-import entities.viewport.Transform
-import entities.viewport.Dimensions
-import entities.viewport._
-import entities.syntax._
+import nutria.viewport.Transform
+import nutria.viewport.Dimensions
+import nutria.viewport._
+import nutria.syntax._
 
 class ImagePanel(val modell: Model) extends JPanel with Observer {
   modell.addObserver(this)
