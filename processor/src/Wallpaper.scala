@@ -4,9 +4,14 @@ import entities.content.Content
 import entities.fractal.Mandelbrot
 import entities.syntax._
 import entities.viewport.{Dimensions, Viewport}
+import viewportSelections.ViewportSelection
 
-object Wandbild {
-  def make(path: String, view: Viewport)(color: Color): Unit = {
+object Wallpaper extends ProcessorHelper {
+  override def rootFolder: String = "/home/gregor/Pictures/Wallpaper/"
+
+  override def statusPrints: Boolean = true
+
+  def make(view: Viewport, color: Color): Unit = {
     val transform = view
       .withDimensions(Dimensions.fullHD)
 
@@ -22,14 +27,16 @@ object Wandbild {
       override def apply(x: Int, y: Int): Double = rough(x, y) + circle(x, y)
     }.strongNormalized
 
-    rough.withColor(color).save(s"$path\\rough.png")
-    circle.withColor(color).save(s"$path\\circle.png")
-    added.withColor(color).save(s"$path\\added.png")
+    rough.withColor(color).save(fileInRootFolder(s"$view/rough.png"))
+    circle.withColor(color).save(fileInRootFolder(s"$view/circle.png"))
+    added.withColor(color).save(fileInRootFolder(s"$view/added.png"))
   }
 
-  def main(args: Array[String]) = {
-    for (view <- Viewport.auswahl) {
-      make(s"auswahl\\$view", view)(HSV.MonoColor.Blue)
-    }
+  def main(args: Array[String]):Unit = {
+    makeAll(
+      (for (view <- ViewportSelection.selection)
+        yield () => make(view, HSV.MonoColor.Blue)).toSeq
+    )
+
   }
 }

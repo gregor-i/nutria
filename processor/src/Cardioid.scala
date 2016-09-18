@@ -1,43 +1,42 @@
+import java.io.File
+
 import entities.Color
 import entities.color.{HSV, Invert}
 import entities.fractal.Mandelbrot
-import entities.fractal.technics.CardioidTechnics
 import entities.syntax._
-import entities.viewport.{Dimensions, Fokus, Viewport, ViewportUtil}
+import entities.viewport.{Dimensions, Viewport}
+import viewportSelections.{FocusSelection, ViewportSelection}
 
-object Cardioid extends App {
-    def apply(view:Viewport, path:(Viewport, Color) => String) {
-      val content =
-        view
-          .withDimensions(Dimensions.fullHD)
-          .withFractal(Mandelbrot.CardioidNumeric(500, 50))
-          //.withAntiAliasedFractal(Mandelbrot.CardioidNumeric(500, 50))
-          .cached
+object Cardioid extends ProcessorHelper {
+  override def rootFolder: String = "/home/gregor/Pictures/Cardioid/"
 
-      val normalized =
-        content
-          .strongNormalized
+  override def statusPrints: Boolean = true
 
-      normalized
-        .withColor(HSV.MonoColor.Blue)
-        .save(path(view, HSV.MonoColor.Blue))
-
-      normalized
-        .withColor(Invert(HSV.MonoColor.Blue))
-        .save(path(view, Invert(HSV.MonoColor.Blue)))
-    }
-
-  def createImages() = {
-    apply(Mandelbrot.start, (view, color) => s"images/start_$color.png")
-
-    for (viewport <- Viewport.auswahl)
-      apply(viewport, (view, color) => s"images/auswahl/$view/$color.png")
-
-    for (viewport <- Fokus.iteration2)
-      apply(viewport, (view, color) => s"images/fokus/$view/$color.png")
+  def make(view: Viewport, path: Color => File): Unit = {
+    view
+      .withDimensions(Dimensions.fullHD)
+      .withFractal(Mandelbrot.CardioidNumeric(50, 50))
+      //.withAntiAliasedFractal(Mandelbrot.CardioidNumeric(500, 50))
+      .strongNormalized
+      .fanOut(
+        _.withColor(HSV.MonoColor.Blue)
+          .save(path(HSV.MonoColor.Blue)),
+        _.withColor(Invert(HSV.MonoColor.Blue))
+          .save(path(Invert(HSV.MonoColor.Blue)))
+      )
   }
 
-  createImages()
+  def main(args: Array[String]): Unit = {
+    val tasks1 = Seq(() => make(Mandelbrot.start, color => fileInRootFolder(s"start_$color.png")))
+
+    val tasks2 = for (viewport <- ViewportSelection.selection)
+      yield () => make(viewport, color => fileInRootFolder(s"auswahl/$viewport/$color.png"))
+
+    val tasks3 = for (viewport <- FocusSelection.iteration2)
+      yield () => make(viewport, color => fileInRootFolder(s"fokus/$viewport/$color.png"))
+
+    makeAll(tasks1 ++ tasks2 ++ tasks3)
+  }
 
 
 //  def checkNewton() = {

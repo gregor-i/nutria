@@ -1,7 +1,7 @@
 import entities.color.HSV
 import entities.fractal.Mandelbrot
 import entities.syntax._
-import entities.viewport.{Dimensions, ViewportUtil}
+import entities.viewport.Dimensions
 
 
 object Main extends App {

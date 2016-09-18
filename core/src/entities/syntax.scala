@@ -58,4 +58,7 @@ object syntax {
     def save(fileName: String): Unit = save(new java.io.File(fileName))
   }
 
+  implicit class EnrichmentFanOut[A](val self:A) extends AnyVal{
+    def fanOut[B](ops: (A => B)*):Seq[B] = ops.map(_.apply(self))
+  }
 }
