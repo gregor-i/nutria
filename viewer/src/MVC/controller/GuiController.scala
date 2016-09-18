@@ -27,11 +27,7 @@ class GuiController(val modell: Model, val view: View) extends KeyListener with 
     val trans = modell.view.withDimensions(Dimensions(imgPanel.getWidth, imgPanel.getHeight))
     val x = trans.transformX(e.getX, e.getY)
     val y = trans.transformY(e.getX, e.getY)
-    modell.setPoints{
-      val card = Mandelbrot.CardioidNumeric(0, 100)
-      val ts = card.golden(x, y)
-      Seq(ts).map(card.contour).map(Point.tupled)
-    }
+    println(s"Clicked in ($x, $y)")
   }
 
   override def keyPressed(arg0: KeyEvent) =
@@ -44,7 +40,7 @@ class GuiController(val modell: Model, val view: View) extends KeyListener with 
       case KeyEvent.VK_SUBTRACT  => modell.setViewport(modell.view.zoomOut())
       case KeyEvent.VK_ENTER     => println(modell.view.toString)
       case KeyEvent.VK_S         => modell.snap()
-      case KeyEvent.VK_R         => modell.setViewport(entities.viewport.ViewportUtil.start)
+      case KeyEvent.VK_R         => modell.setViewport(entities.fractal.Mandelbrot.start)
       case _ =>
     }
 

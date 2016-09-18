@@ -18,7 +18,6 @@ object ViewportUtil {
     new Viewport(U, A, B)
   }
 
-  val start = new Viewport(new Point(-2.5, -1), new Point(3.5, 0), new Point(0, 2))
 
 }
 

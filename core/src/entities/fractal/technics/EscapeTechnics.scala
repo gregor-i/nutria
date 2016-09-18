@@ -1,23 +1,14 @@
-package entities.fractal.technics
+package entities
+package fractal.technics
 
 import entities.fractal.sequence.{HasSequenceConstructor, Sequence}
-
-import scala.reflect.ClassTag
 
 trait EscapeTechnics[A <: Sequence] {
   _: HasSequenceConstructor[A] =>
 
-  case class RoughColoring(maxIteration: Int) extends Fractal {
-    override def apply(x0: Double, y0: Double): Double =
-      sequence(x0, y0, maxIteration).size()
-//    override def toString = s"${implicitly[ClassTag[A]].runtimeClass.getSimpleName}.${this.getClass.getSimpleName}"
-  }
+  def RoughColoring(maxIteration: Int): Fractal = sequence(_, _, maxIteration).size().toDouble
 
 
-  case class Brot(maxIteration: Int) extends Fractal {
-    override def apply(x0: Double, y0: Double): Double =
-      if (sequence(x0, y0, maxIteration).size() == maxIteration) 0
-      else 1
-  }
-
+  def Brot(maxIteration: Int): Fractal =
+    (x, y) => if (sequence(x, y, maxIteration).size() == maxIteration) 1 else 0
 }

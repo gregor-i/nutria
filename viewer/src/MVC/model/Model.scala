@@ -17,7 +17,7 @@ class Model(
   var fractal: Fractal = Mandelbrot.RoughColoring(250),
   var contentFactory: ContentFactory = SimpleFactory,
   var farbe: Color = HSV.MonoColor.Blue,
-  var view: Viewport = ViewportUtil.start) extends Observable {
+  var view: Viewport = Mandelbrot.start) extends Observable {
 
   var quali: Double = 0.25
   var img: BufferedImage = _

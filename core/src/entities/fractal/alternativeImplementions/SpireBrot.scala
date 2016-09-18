@@ -1,8 +1,7 @@
 package entities.fractal.alternativeImplementions
 
-import entities.fractal.technics.Fractal
-import spire.math.Complex
 import spire.implicits._
+import spire.math.Complex
 
 object SpireBrot {
 
@@ -22,10 +21,5 @@ object SpireBrot {
       while (next()) i = i + 1
       i
     }
-  }
-
-  case class RoughColoring(maxIteration: Int) extends Fractal {
-    override def apply(x0: Double, y0: Double): Double =
-      new Iterator(Complex(x0, y0), maxIteration).size()
   }
 }

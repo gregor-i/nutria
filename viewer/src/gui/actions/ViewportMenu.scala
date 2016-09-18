@@ -4,6 +4,8 @@ import MVC.model.Model
 import java.awt.event.ActionListener
 import javax.swing.JMenu
 import javax.swing.JMenuItem
+
+import entities.fractal.Mandelbrot
 import entities.viewport._
 
 class ViewportMenu(views: Array[Viewport], gui: Model) extends JMenu("Viewports") {
@@ -32,7 +34,7 @@ class ViewportMenu(views: Array[Viewport], gui: Model) extends JMenu("Viewports"
 
   val reset = new JMenuItem("Reset")
 
-  reset.addActionListener(new ViewportAction(gui, ViewportUtil.start))
+  reset.addActionListener(new ViewportAction(gui, Mandelbrot.start))
 
   add(reset)
 

@@ -8,48 +8,29 @@ import MVC.{AntiAliaseFactory, BuddhaBrotFactory, ContentFactory, SimpleFactory}
 import MVC.controller.GuiController
 import MVC.model.Model
 import entities.Fractal
-import entities.fractal.JuliaSet
+import entities.fractal._
 import entities.fractal.sequence.{HasSequenceConstructor, Sequence2}
 
 object Collection {
 
   val factories = Seq(
-    SimpleFactory,AntiAliaseFactory,BuddhaBrotFactory
+    SimpleFactory, AntiAliaseFactory, BuddhaBrotFactory
   )
 
-  def typedJulia(cx:Double, cy:Double):HasSequenceConstructor[_ <: Sequence2[Double, Double]] = JuliaSet(cx, cy)
+  def typedJulia(cx: Double, cy: Double): HasSequenceConstructor[_ <: Sequence2[Double, Double]] = JuliaSet(cx, cy)
 
 
-  import entities.fractal._
-  val fractals:Seq[(Fractal, Option[HasSequenceConstructor[_ <: Sequence2[Double, Double]]])] =
-    Mandelbrot.fractals.map(_ -> Some(Mandelbrot)) ++
-      Seq(
-  // new Collatz(150),
-
-    new BurningShip(100) -> None,
-    new BurningShip(500) -> None,
-    new BurningShip(1000) -> None,
-
-    Tricorn.RoughColoring(100) -> Some(Tricorn),
-    Tricorn.RoughColoring(500)-> Some(Tricorn),
-    Tricorn.RoughColoring(1000)-> Some(Tricorn),
-
-    JuliaSet(-0.6, -0.6).RoughColoring(100)-> Some(typedJulia(-0.6, -0.6)),
-    JuliaSet(-0.6, -0.6).RoughColoring(500)-> Some(JuliaSet(-0.6, -0.6)),
-    JuliaSet(-0.6, -0.6).RoughColoring(1000)-> Some(JuliaSet(-0.6, -0.6)),
-
-    JuliaSet(-0.4, 0.6).RoughColoring(100)-> Some(JuliaSet(-0.4, -0.6)),
-    JuliaSet(-0.4, 0.6).RoughColoring(500)-> Some(JuliaSet(-0.4, -0.6)),
-    JuliaSet(-0.4, 0.6).RoughColoring(1000)-> Some(JuliaSet(-0.4, -0.6)),
-
-    JuliaSet(-0.8, 0.156).RoughColoring(100)-> Some(JuliaSet(-0.8, 0.156)),
-    JuliaSet(-0.8, 0.156).RoughColoring(500)-> Some(JuliaSet(-0.8, 0.156)),
-    JuliaSet(-0.8, 0.156).RoughColoring(1000)-> Some(JuliaSet(-0.8, 0.156)),
-
-    new Mandelbrot3(500) -> None)
-
+  val fractals: Seq[(String, HasSequenceConstructor[_ <: Sequence2[Double, Double]], Seq[(String, Fractal)])] =
+    Seq(
+      ("Mandelbrot", Mandelbrot, Mandelbrot.fractals),
+      ("MandelbrotCube", MandelbrotCube, MandelbrotCube.fractals),
+      ("Burning Ship", BurningShip, BurningShip.fractals),
+      ("JuliaSet(-0.6, -0.6)", JuliaSet(-0.6, -0.6), JuliaSet(-0.6, -0.6).fractals),
+      ("JuliaSet(-0.4, 0.6)", JuliaSet(-0.4, 0.6), JuliaSet(-0.4, 0.6).fractals),
+      ("JuliaSet-0.8, 0.156)", JuliaSet(-0.8, 0.156), JuliaSet(-0.8, 0.156).fractals),
+      ("Tricorn", Tricorn, Tricorn.fractals)
+    )
 }
-
 
 
 @SerialVersionUID(1L)
@@ -62,7 +43,8 @@ class View(val model: Model) extends JFrame {
   val myMenuBar = new JMenuBar()
 
 
-  { // Men� f�r die Auswahl des "simple" Algorithmus (Preview-Shot)
+  {
+    // Men� f�r die Auswahl des "simple" Algorithmus (Preview-Shot)
     val menu = new ContentFactoryMenu(model)
     for (factory <- Collection.factories) {
       menu.add(
@@ -73,57 +55,64 @@ class View(val model: Model) extends JFrame {
     myMenuBar.add(menu)
   }
 
-  { // Menü für die Auswahl des Fraktals
+  {
+    // Menü für die Auswahl des Fraktals
     val menu = new FractalMenu(model)
-    for ((fractal, maybeSeq) <- Collection.fractals) {
-      menu.add(
-        new MenuItem(
-          fractal.toString(),
-          () => {
-            model.setFractal(fractal)
-            model.setSequence(maybeSeq)
-          }))
+    for ((collectorName, collector, fractals) <- Collection.fractals) {
+      val subMenu = new JMenu(collectorName)
+      for ((fractalName, fractal) <- fractals)
+        subMenu.add(
+          new MenuItem(
+            fractalName,
+            () => {
+              model.setFractal(fractal)
+              model.setSequence(Some(collector))
+            }))
+      menu.add(subMenu)
     }
     myMenuBar.add(menu)
   }
 
-  { // Auswahl Menu
+  {
+    // Auswahl Menu
     val menu = new JMenu("Auswahl")
     var i = 0
-    var sub:JMenu = null
+    var sub: JMenu = null
     for (viewport <- entities.viewport.Viewport.auswahl) {
-      if(i%10 == 0){
-        sub = new JMenu("sub %d".format(i/10))
+      if (i % 10 == 0) {
+        sub = new JMenu("sub %d".format(i / 10))
         menu.add(sub.asInstanceOf[JMenuItem])
       }
       sub.add(
         new MenuItem(
           "%d".format(i),
           () => model.setViewport(viewport)))
-      i = i+1
+      i = i + 1
     }
     myMenuBar.add(menu)
   }
 
-    { // Auswahl Menu
+  {
+    // Auswahl Menu
     val menu = new JMenu("FokusAuswahl1")
     var i = 0
-    var sub:JMenu = null
+    var sub: JMenu = null
     for (viewport <- entities.viewport.Fokus.iteration1) {
-      if(i%10 == 0){
-        sub = new JMenu("sub %d".format(i/10))
+      if (i % 10 == 0) {
+        sub = new JMenu("sub %d".format(i / 10))
         menu.add(sub.asInstanceOf[JMenuItem])
       }
       sub.add(
         new MenuItem(
           "%d".format(i),
           () => model.setViewport(viewport)))
-      i = i+1
+      i = i + 1
     }
     myMenuBar.add(menu)
   }
 
-  { // Save Menu
+  {
+    // Save Menu
     val menu = new JMenu("Save")
     var menuItem: JMenuItem = null
     menuItem = new JMenuItem("Viewport")
@@ -143,23 +132,23 @@ class View(val model: Model) extends JFrame {
     myMenuBar.add(menu)
   }
 
-//  { // fokus von points
-//    val menuItem = new JMenuItem("Fokus")
-//    menuItem.addActionListener(new ActionListener() {
-//      override def actionPerformed(arg0: ActionEvent) {
-//        if (model.points.length >= 2) {
-//          val a = model.points(0)
-//          val b = model.points(1)
-//          val fokus = new entities.viewport.Fokus(a, b)
-//          model.setViewport(fokus)
-//          model.clearPoints()
-//        }
-//      }
-//    })
-//    myMenuBar.add(menuItem)
-//  }
+  //  { // fokus von points
+  //    val menuItem = new JMenuItem("Fokus")
+  //    menuItem.addActionListener(new ActionListener() {
+  //      override def actionPerformed(arg0: ActionEvent) {
+  //        if (model.points.length >= 2) {
+  //          val a = model.points(0)
+  //          val b = model.points(1)
+  //          val fokus = new entities.viewport.Fokus(a, b)
+  //          model.setViewport(fokus)
+  //          model.clearPoints()
+  //        }
+  //      }
+  //    })
+  //    myMenuBar.add(menuItem)
+  //  }
 
-  
+
   setJMenuBar(myMenuBar)
   //  myMenuBar.add(new ColorMenu(DefaultColors.instances, modell))
   setFocusable(false)

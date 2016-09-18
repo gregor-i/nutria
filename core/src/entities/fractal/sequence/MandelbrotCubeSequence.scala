@@ -1,18 +1,18 @@
 package entities.fractal.sequence
 
-final class TricornSequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends Sequence2[Double, Double] {
-  var x: X = 0
-  var y: Y = 0
+final class MandelbrotCubeSequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends Sequence2[Double, Double] { self =>
+  var x:X = 0d
+  var y:Y = 0d
   private var xx = x * x
   private var yy = y * y
 
-  @inline def hasNext: Boolean = (xx + yy < 4) && iterationsRemaining >= 0
+  @inline def hasNext: Boolean = (x*x + y*y < 4) && iterationsRemaining >= 0
 
-  @inline override def next(): Boolean = {
-    y = -2 * x * y + y0
-    x = xx - yy + x0
-    xx = x * x
-    yy = y * y
+  @inline def next(): Boolean = {
+    val ty = -3 * y * y * x + x * x * x + y0
+    val tx = -y * y * y + 3 * y * x * x + x0
+    y = ty
+    x = tx
     iterationsRemaining -= 1
     hasNext
   }

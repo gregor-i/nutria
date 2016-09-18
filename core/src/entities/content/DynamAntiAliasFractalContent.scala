@@ -1,9 +1,7 @@
-package entities.content
+package entities
+package content
 
-import entities.accumulator._
-import entities.fractal.technics.Fractal
-import entities.viewport.Transform
-
+import entities.accumulator.Variance
 
 case class DynamAntiAliasFractalContent(fractal: Fractal, transform: Transform,
                                         accumulator: Accumulator, limit: Double, minimalIterations: Int, maximalIterations: Int)

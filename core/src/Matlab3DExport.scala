@@ -1,13 +1,13 @@
 import java.io.{File, FileWriter}
 
-import entities.fractal.QuatBrot
-import entities.viewport.{Dimensions, ViewportUtil}
-import spire.math.Quaternion
+import entities.fractal.{Mandelbrot, QuatBrot}
 import entities.syntax._
+import entities.viewport.Dimensions
+import spire.math.Quaternion
 
 object Matlab3DExport extends App {
   val dimensions = Dimensions.fullHD.scale(0.1)
-  val viewport = ViewportUtil.start
+  val viewport = Mandelbrot.start
   val transform =  viewport.withDimensions(dimensions)
 
   val iterations = 50
