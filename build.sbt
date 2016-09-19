@@ -20,26 +20,27 @@ val benchmark = project.in(file("benchmark"))
   .settings(commonSettings)
   .settings(
     name := "nutria-benchmark"
-  ).dependsOn(core)
-//  .enablePlugins(JmhPlugin)
+  )
+  .dependsOn(core)
+  .enablePlugins(JmhPlugin)
 
 
 val viewer = project.in(file("viewer"))
   .settings(commonSettings)
   .settings(
-    name := "nutria-viewer"
-  ).dependsOn(core)
+    name := "nutria-viewer")
+  .dependsOn(core)
 
 
 val processor = project.in(file("processor"))
   .settings(commonSettings)
   .settings(
-    name := "nutria-processor"
-  ).settings(
-  libraryDependencies += "io.circe" % "0.5.1" % "circe-core",
-  libraryDependencies += "io.circe" % "0.5.1" % "circe-parser",
-  libraryDependencies += "io.circe" % "0.5.1" % "circe-generic"
-).dependsOn(core)
+    name := "nutria-processor",
+    libraryDependencies += "io.circe" % "circe-core_2.11" % "0.5.1",
+    libraryDependencies += "io.circe" % "circe-parser_2.11" % "0.5.1",
+    libraryDependencies += "io.circe" % "circe-generic_2.11" % "0.5.1"
+  )
+  .dependsOn(core)
 
 
 addCommandAlias("bench", "benchmark/jmh:run -i 10 -wi 10 -f 2 -t 1 nutria.Bench")

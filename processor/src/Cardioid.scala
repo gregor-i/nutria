@@ -5,7 +5,7 @@ import nutria.color.{HSV, Invert}
 import nutria.fractal.Mandelbrot
 import nutria.syntax._
 import nutria.viewport.{Dimensions, Viewport}
-import viewportSelections.{FocusSelection, ViewportSelection}
+import viewportSelections.ViewportSelection
 
 object Cardioid extends ProcessorHelper {
   override def rootFolder: String = "/home/gregor/Pictures/Cardioid/"
@@ -32,7 +32,7 @@ object Cardioid extends ProcessorHelper {
     val tasks2 = for (viewport <- ViewportSelection.selection)
       yield () => make(viewport, color => fileInRootFolder(s"auswahl/$viewport/$color.png"))
 
-    val tasks3 = for (viewport <- FocusSelection.iteration2)
+    val tasks3 = for (viewport <- ViewportSelection.focusIteration2)
       yield () => make(viewport, color => fileInRootFolder(s"fokus/$viewport/$color.png"))
 
     makeAll(tasks1 ++ tasks2 ++ tasks3)
