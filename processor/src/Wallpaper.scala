@@ -32,10 +32,10 @@ object Wallpaper extends ProcessorHelper {
     added.withColor(color).save(fileInRootFolder(s"$view/added.png"))
   }
 
-  def main(args: Array[String]):Unit = {
+  def main(args: Array[String]): Unit = {
     makeAll(
-      (for (view <- ViewportSelection.selection)
-        yield () => make(view, HSV.MonoColor.Blue)).toSeq
+      for (view <- ViewportSelection.selection)
+        yield (() => false, () => make(view, HSV.MonoColor.Blue))
     )
 
   }

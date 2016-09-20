@@ -6,22 +6,26 @@ import nutria.fractal._
 import nutria.fractal.alternativeImplementions.{SpireBrot, StreamBrot}
 import nutria.syntax._
 import nutria.viewport._
+import org.openjdk.jmh.annotations.Benchmark
 import spire.math.Quaternion
 
 class Bench {
-   def operation(fractal: Fractal): CachedContent =
-     Mandelbrot.start
+  def operation(fractal: Fractal): CachedContent =
+    Mandelbrot.start
       .withDimensions(Dimensions.fujitsu.scale(0.1))
       .withAntiAliasedFractal(fractal)
       .cached
 
-  //@Benchmark
+  @Benchmark
   def mandelRough = operation(Mandelbrot.RoughColoring(500))
+
   @Benchmark
   def spireRough = operation(SpireBrot.RoughColoring(500))
-  //@Benchmark
+
+  @Benchmark
   def streamRough = operation(StreamBrot.RoughColoring(500))
-  //@Benchmark
-  def quatbRough = operation(QuatBrot.RoughColoring(500){ case (x,y) => Quaternion(x,y,0,0) })
+
+  @Benchmark
+  def quatbRough = operation(new QuatBrot((x, y) => Quaternion(x, y, 0, 0)).RoughColoring(500))
 
 }

@@ -12,12 +12,12 @@ trait Sequence {
   }
 }
 
-trait Sequence2[_X, _Y] extends Sequence { self =>
-  type X = _X
-  type Y = _Y
-  @inline def x: X
+trait DoubleSequence extends Sequence { self =>
+  type X = Double
+  type Y = Double
 
-  @inline def y: Y
+  def publicX: X
+  def publicY: X
 
   @inline def foldLeft(start: Double)(@inline f: (Double, X, Y) => Double): Double
 
@@ -31,7 +31,7 @@ trait Sequence2[_X, _Y] extends Sequence { self =>
 
       override def next(): (X, Y) = {
         self.next()
-        (x, y)
+        (publicX, publicY)
       }
     }
 }

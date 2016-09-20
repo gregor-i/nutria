@@ -9,7 +9,7 @@ import MVC.controller.GuiController
 import MVC.model.Model
 import nutria.Fractal
 import nutria.fractal._
-import nutria.fractal.sequence.{HasSequenceConstructor, Sequence2}
+import nutria.fractal.sequence.{HasSequenceConstructor, DoubleSequence}
 
 object Collection {
 
@@ -17,10 +17,10 @@ object Collection {
     SimpleFactory, AntiAliaseFactory, BuddhaBrotFactory
   )
 
-  def typedJulia(cx: Double, cy: Double): HasSequenceConstructor[_ <: Sequence2[Double, Double]] = JuliaSet(cx, cy)
+  def typedJulia(cx: Double, cy: Double): HasSequenceConstructor[_ <: DoubleSequence] = JuliaSet(cx, cy)
 
 
-  val fractals: Seq[(String, HasSequenceConstructor[_ <: Sequence2[Double, Double]], Seq[(String, Fractal)])] =
+  val fractals: Seq[(String, HasSequenceConstructor[_ <: DoubleSequence], Seq[(String, Fractal)])] =
     Seq(
       ("Mandelbrot", Mandelbrot, Mandelbrot.fractals),
       ("MandelbrotCube", MandelbrotCube, MandelbrotCube.fractals),

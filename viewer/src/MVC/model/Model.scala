@@ -4,10 +4,10 @@ import java.awt.image.BufferedImage
 
 import MVC.{ContentFactory, SimpleFactory}
 import nutria.Fractal
-import nutria.syntax._
 import nutria.color.{Color, HSV}
 import nutria.fractal.Mandelbrot
-import nutria.fractal.sequence.{HasSequenceConstructor, Sequence2}
+import nutria.fractal.sequence.{DoubleSequence, HasSequenceConstructor}
+import nutria.syntax._
 import nutria.viewport.{Point, Viewport}
 import util.Observable
 
@@ -22,7 +22,7 @@ class Model(
   var quali: Double = 0.25
   var img: BufferedImage = _
   var points = Seq[Point]()
-  var sequenceConstructor: Option[HasSequenceConstructor[_ <: Sequence2[Double, Double]]] = Some(Mandelbrot)
+  var sequenceConstructor: Option[HasSequenceConstructor[_ <: DoubleSequence]] = Some(Mandelbrot)
 
   preview()
 
@@ -73,7 +73,7 @@ class Model(
   }
 
 
-  def setSequence(newSequenceConstructor: Option[HasSequenceConstructor[_ <: Sequence2[Double, Double]]]): Unit ={
+  def setSequence(newSequenceConstructor: Option[HasSequenceConstructor[_ <: DoubleSequence]]): Unit ={
     sequenceConstructor = newSequenceConstructor
     notifyObservers()
   }

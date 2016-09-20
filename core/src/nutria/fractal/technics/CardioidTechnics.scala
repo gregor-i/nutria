@@ -1,20 +1,24 @@
 package nutria
 package fractal.technics
 
-import nutria.fractal.sequence.{HasSequenceConstructor, Sequence2}
+import nutria.fractal.sequence.{DoubleSequence, HasSequenceConstructor}
 
 object CardioidTechnics {
 
-  import Math.{PI, cos, sin, sqrt}
+  import Math.{cos, sin, sqrt}
 
   @inline def q(@inline x: Double): Double = x * x
 
-  def contour(t: Double) = (0.5 * cos(t) - 0.25 * cos(t * 2), 0.5 * sin(t) - 0.25 * sin(2 * t))
+  def contour(t: Double) = (contourX(t), contourY(t))
+  def contourX(t: Double) = 0.5 * cos(t) - 0.25 * cos(t * 2)
+  def contourY(t: Double) = 0.5 * sin(t) - 0.25 * sin(2 * t)
 
-  def dist(t: Double, x: Double, y: Double): Double = {
-    val (cx, cy) = contour(t)
-    sqrt(q(cx - x) + q(cy - y))
-  }
+  def dist(t: Double, x: Double, y: Double): Double =
+    sqrt(q(contourX(t) - x) + q(contourY(t) - y))
+
+  def distSquared(t: Double, x: Double, y: Double): Double =
+    q(contourX(t) - x) + q(contourY(t) - y)
+
 
   // sqrt( (cos(t)/2 - cos(2t)/4-x)^2 + (sin(t)/2 - sin(2t)/4-y)^2 )
   // d/dt sqrt( (cos(t)/2 - cos(2t)/4-x)^2 + (sin(t)/2 - sin(2t)/4-y)^2 )
@@ -53,14 +57,22 @@ object CardioidTechnics {
 
   // calculates [d/dt dist(t, x, y)] / [d/dt^2 dist(t, x, y)]
   def der1DivDer2(t: Double, x: Double, y: Double) = {
-    val (c1, c2) = (cos(t), cos(t * 2))
-    val (c1h, c2h, c2hh) = (c1 / 2, c2 / 2, c2 / 4)
+    val c1 = cos(t)
+    val c2 = cos(t * 2)
+    val c1h = c1 / 2
+    val c2h = c2 / 2
+    val c2hh = c2 / 4
 
-    val (s1, s2) = (sin(t), sin(t * 2))
-    val (s1h, s2h, s2hh) = (s1 / 2, s2 / 2, s2 / 4)
+    val s1 = sin(t)
+    val s2 = sin(t * 2)
+    val s1h = s1 / 2
+    val s2h= s2 / 2
+    val s2hh = s2 / 4
 
-    val (cd, sd) = (c1h - c2h, s2h - s1h)
-    val (ct, st) = (c1h - c2hh - x, s1h - s2hh - y)
+    val cd = c1h - c2h
+    val sd = s2h - s1h
+    val ct = c1h - c2hh - x
+    val st = s1h - s2hh - y
 
     val d1 = cd * st + ct * sd
     val d2 = (c2 - c1h) * ct + (s2 - s1h) * st + q(sd) + q(cd) - q(d1) / (q(ct) + q(st))
@@ -71,7 +83,7 @@ object CardioidTechnics {
   val phi = (Math.sqrt(5) + 1) / 2
 }
 
-trait CardioidTechnics[A <: Sequence2[Double, Double]] {
+trait CardioidTechnics[A <: DoubleSequence] {
   _: HasSequenceConstructor[A] =>
 
   import CardioidTechnics._
@@ -94,9 +106,10 @@ trait CardioidTechnics[A <: Sequence2[Double, Double]] {
   }
 
   def CardioidNumeric(maxIteration: Int, newtonIterations: Int): Fractal = {
+    val range: Range = 0 until newtonIterations
     def newton(t0: Double, x: Double, y: Double): Double = {
       var t = t0
-      for (i <- 0 until newtonIterations)
+      for (i <- range)
         t -= der1DivDer2(t, x, y)
       t
     }
@@ -106,10 +119,10 @@ trait CardioidTechnics[A <: Sequence2[Double, Double]] {
       val y = _y.abs
       var a = 0.0
       var b = Math.PI
-      for (i <- 0 until newtonIterations) {
+      for (i <- range) {
         val c = b - (b - a) / phi
         val d = a + (b - a) / phi
-        if (dist(c, x, y) < dist(d, x, y))
+        if (distSquared(c, x, y) < distSquared(d, x, y))
           b = d
         else
           a = c
@@ -121,8 +134,8 @@ trait CardioidTechnics[A <: Sequence2[Double, Double]] {
     def minimalDistance(x: Double, _y: Double): Double = {
       val y = _y.abs
       val t0 = golden(x, y)
-      val n = newton(t0, x, y)
-      dist(t0, x, y)
+//      val n = newton(t0, x, y)
+      distSquared(t0, x, y)
     }
 
     (x0, y0) =>

@@ -10,7 +10,7 @@ case object RequirementFailed extends Result
 case object UnexpectedException extends Result
 
 trait ProcessorHelper {
-  type Task = () => Unit
+  type Task = (() => Boolean, () => Unit)
 
   def rootFolder: String
   def statusPrints: Boolean
@@ -19,16 +19,21 @@ trait ProcessorHelper {
 
   def make(task: Task): Result =
     try {
-      val startTime = System.currentTimeMillis()
-        task()
-      val endTime = System.currentTimeMillis()
-        Made((endTime-startTime).millis)
+      val (skipCondition, operation) = task
+      if(skipCondition()){
+        Skipped
+      }else {
+        val startTime = System.currentTimeMillis()
+        operation()
+        val endTime = System.currentTimeMillis()
+        Made((endTime - startTime).millis)
+      }
     } catch {
       case _: IllegalArgumentException => RequirementFailed
       case _: Exception => UnexpectedException
     }
 
-  def makeAll(tasks: Seq[Task]): Seq[Result] = {
+  def makeAll(tasks: Set[Task]): Set[Result] = {
     val results = for (task <- tasks)
       yield {
         val result = make(task)

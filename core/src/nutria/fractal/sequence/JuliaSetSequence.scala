@@ -1,11 +1,13 @@
 package nutria.fractal.sequence
 
 
-class JuliaSetSequence(cx: Double, cy: Double)(x0: Double, y0: Double, private var iterationsRemaining: Int) extends Sequence2[Double, Double] {
-  var x: X = x0
-  var y: Y = y0
-  private var xx = x * x
-  private var yy = y * y
+class JuliaSetSequence(cx: Double, cy: Double)(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence {
+  private[this] var x: X = x0
+  private[this] var y: Y = x0
+  private[this] var xx = x * x
+  private[this] var yy = y * y
+  def publicX = x
+  def publicY = y
 
   @inline def hasNext: Boolean = (xx + yy < 4) && iterationsRemaining >= 0
 

@@ -1,10 +1,12 @@
 package nutria.fractal.sequence
 
-final class TricornSequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends Sequence2[Double, Double] {
-  var x: X = 0
-  var y: Y = 0
-  private var xx = x * x
-  private var yy = y * y
+final class TricornSequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence {
+  private[this] var x: X = 0d
+  private[this] var y: Y = 0d
+  private[this] var xx = x * x
+  private[this] var yy = y * y
+  def publicX = x
+  def publicY = y
 
   @inline def hasNext: Boolean = (xx + yy < 4) && iterationsRemaining >= 0
 

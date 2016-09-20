@@ -30,7 +30,7 @@ object Mandelbrot
     "Brot(1000)" -> Brot(1000),
     "Contour(500)" -> Contour(500),
     "CardioidHeuristic(50, 20)" -> CardioidHeuristic(50, 20),
-    "CardioidNumeric(50, 20)" -> CardioidNumeric(50, 20))
+    "CardioidNumeric(500, 50)" -> CardioidNumeric(500, 50))
 
   override def sequence(x0: Double, y0: Double, maxIterations: Int): MandelbrotSequence = new MandelbrotSequence(x0, y0, maxIterations)
 
@@ -41,8 +41,8 @@ object Mandelbrot
     var distance = 0d
     for (i <- 0 to maxIterations) {
       seq.next()
-      if (seq.x.abs > distance)
-        distance = seq.x.abs
+      if (seq.publicX.abs > distance)
+        distance = seq.publicX.abs
     }
     (distance == Double.PositiveInfinity).fold(0, 1)
   }
