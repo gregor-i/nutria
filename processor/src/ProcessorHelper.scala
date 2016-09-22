@@ -9,22 +9,30 @@ case object Skipped extends Result
 case object RequirementFailed extends Result
 case object UnexpectedException extends Result
 
-trait ProcessorHelper {
-  type Task = (() => Boolean, () => Unit)
+trait Task{
+  def name: String
+  def skipCondition: Boolean
+  def execute(): Unit
+}
 
+trait NoSkip {
+  _: Task =>
+  override def skipCondition = false
+}
+
+trait ProcessorHelper {
   def rootFolder: String
   def statusPrints: Boolean
 
   def fileInRootFolder(file: String): File = new File(rootFolder + file)
 
-  def make(task: Task): Result =
+  def executeTask(task: Task): Result =
     try {
-      val (skipCondition, operation) = task
-      if(skipCondition()){
+      if(task.skipCondition){
         Skipped
       }else {
         val startTime = System.currentTimeMillis()
-        operation()
+        task.execute()
         val endTime = System.currentTimeMillis()
         Made((endTime - startTime).millis)
       }
@@ -33,10 +41,10 @@ trait ProcessorHelper {
       case _: Exception => UnexpectedException
     }
 
-  def makeAll(tasks: Seq[Task]): Seq[Result] = {
+  def executeAllTasks(tasks: Traversable[Task]): Seq[Result] = {
     val results = for (task <- tasks)
       yield {
-        val result = make(task)
+        val result = executeTask(task)
         if (statusPrints) println(s"completed ??? with status $result")
         result
       }
@@ -49,6 +57,6 @@ trait ProcessorHelper {
       println(s"RequirementFailed:   ${countsByResult(RequirementFailed)}")
       println(s"UnexpectedException: ${countsByResult(UnexpectedException)}")
     }
-    results
+    results.toSeq
   }
 }

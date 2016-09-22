@@ -1,6 +1,6 @@
 import java.io.File
 
-import nutria.Color
+import nutria.{Color, FinishedContent}
 import nutria.color.{HSV, Invert}
 import nutria.fractal.Mandelbrot
 import nutria.syntax._
@@ -12,36 +12,38 @@ object Cardioid extends ProcessorHelper {
 
   override def statusPrints: Boolean = true
 
-  def make(view: Viewport, path: Color => File): Unit = {
-    view
-      .withDimensions(Dimensions.fullHD)
-//      .withFractal(Mandelbrot.CardioidNumeric(2000, 75))
-      .withAntiAliasedFractal(Mandelbrot.CardioidNumeric(2000, 75), samplingFactor = 2)
-      .strongNormalized
-      .fanOut(
-        _.withColor(HSV.MonoColor.Blue)
-          .save(path(HSV.MonoColor.Blue)),
-        _.withColor(Invert(HSV.MonoColor.Blue))
-          .save(path(Invert(HSV.MonoColor.Blue)))
-      )
+  val colors = Seq(HSV.MonoColor.Blue, Invert(HSV.MonoColor.Blue))
+
+  case class CardioidTask(view: Viewport, path: Color => File) extends Task {
+    override def name = s"CardioidTask(${view.toString})"
+
+    override def skipCondition: Boolean = path(colors.head).exists
+
+    override def execute(): Unit = {
+      view
+        .withDimensions(Dimensions.fullHD.scale(0.1))
+        .withFractal(Mandelbrot.CardioidNumeric(2000, 75))
+        .strongNormalized
+        .fanOut(
+          colors.map {
+            color => (normalized: FinishedContent) => normalized.withColor(color).save(path(color))
+          }: _*
+        )
+    }
   }
 
   def main(args: Array[String]): Unit = {
-    val tasks1:Set[Task] = Set(
-      (() => false,
-        () => make(Mandelbrot.start, color => fileInRootFolder(s"start_$color.png"))))
+    val tasks1: Set[Task] = Set(CardioidTask(Mandelbrot.start, color => fileInRootFolder(s"start_$color.png")))
 
-    val tasks2:Set[Task] = for (viewport <- ViewportSelection.selection)
-      yield (() => fileInRootFolder(s"auswahl/$viewport").exists,
-        () => make(viewport, color => fileInRootFolder(s"auswahl/$viewport/$color.png")))
+    val tasks2: Set[Task] = for (viewport <- ViewportSelection.selection)
+      yield CardioidTask(viewport, color => fileInRootFolder(s"auswahl/$viewport/$color.png"))
 
-    val tasks3:Set[Task] = for (viewport <- ViewportSelection.focusIteration2)
-      yield (() => fileInRootFolder(s"fokus/$viewport").exists,
-        () => make(viewport, color => fileInRootFolder(s"fokus/$viewport/$color.png")))
+    val tasks3: Set[Task] = for (viewport <- ViewportSelection.focusIteration2)
+      yield CardioidTask(viewport, color => fileInRootFolder(s"fokus/$viewport/$color.png"))
 
-    makeAll(tasks1.toSeq)
-//    makeAll(tasks3)
-    makeAll(tasks2.toSeq)
+    executeAllTasks(tasks1.toSeq)
+    executeAllTasks(tasks3.toSeq)
+    executeAllTasks(tasks2.toSeq)
   }
 
 

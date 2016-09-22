@@ -15,12 +15,8 @@ object CardioidIterations extends ProcessorHelper {
 
   override def statusPrints: Boolean = true
 
-  def calculateDistance(seq: MandelbrotSequence): Double = {
-    if (seq.hasNext)
+  def calculateDistance(seq: MandelbrotSequence): Double =
       CardioidTechniques.minimalDistance(1 to 100)(seq.publicX, seq.publicY)
-    else
-      2
-  }
 
 
   def main(args: Array[String]): Unit = {
