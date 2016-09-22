@@ -3,9 +3,9 @@ package nutria.viewport
 object Viewport {
 
   def createViewportByLongs(x0: Long, y0: Long, ax: Long, ay: Long, bx: Long, by: Long) =
-    Viewport(PointUtil.createPointByLongs(x0, y0),
-      PointUtil.createPointByLongs(ax, ay),
-      PointUtil.createPointByLongs(bx, by))
+    Viewport(Point.createWithLongs(x0, y0),
+      Point.createWithLongs(ax, ay),
+      Point.createWithLongs(bx, by))
 
   def createViewportCentered(a: Point, b: Point): Viewport = {
     val diff = b - a
@@ -41,7 +41,7 @@ object Viewport {
     Viewport(U, TA, TB)
   }
 
-  def createByDefaultFocusAndLongs(ax: Long, ay: Long, bx: Long, by: Long) = createByFocus(Point(0.3, 0.1), Point(0.7, 0.3))(Point(ax, ay), Point(bx, by))
+  def createByDefaultFocusAndLongs(ax: Long, ay: Long, bx: Long, by: Long) = createByFocus(Point(0.3, 0.1), Point(0.7, 0.3))(Point.createWithLongs(ax, ay), Point.createWithLongs(bx, by))
 
 
   val defaultMovementFactor: Double = 0.20
@@ -51,7 +51,7 @@ object Viewport {
 }
 
 case class Viewport(origin: Point, A: Point, B: Point) {
-  require(PointUtil.linearIndependant(A, B))
+  require(Point.linearIndependant(A, B))
 
   import Viewport._
 

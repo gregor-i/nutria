@@ -1,6 +1,6 @@
 package nutria.viewport
 
-object PointUtil {
+object Point {
 
   def doubleToString(d: Double): String = {
     java.lang.Long.toHexString(java.lang.Double.doubleToLongBits(d))
@@ -14,7 +14,9 @@ object PointUtil {
     lambda1 != lambda2
   }
 
-  def createPointByLongs(x: Long, y: Long) =
+  def tupled(t:(Double, Double)):Point = Point(t._1, t._2)
+
+  def createWithLongs(x: Long, y: Long) =
     new Point(longToDouble(x), longToDouble(y))
 }
 
@@ -25,7 +27,7 @@ case class Point(x: Double, y: Double) {
   require(!java.lang.Double.isInfinite(y))
 
   override def toString: String = {
-    String.format("0x%sL, 0x%sL", PointUtil.doubleToString(x), PointUtil.doubleToString(y))
+    String.format("0x%sL, 0x%sL", Point.doubleToString(x), Point.doubleToString(y))
   }
   
   def +(px: Double, py: Double): Point = new Point(x + px, y + py)

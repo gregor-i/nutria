@@ -2,7 +2,7 @@ import nutria.color.{HSV, Invert}
 import nutria.content.CachedContent
 import nutria.fractal.Mandelbrot
 import nutria.fractal.sequence.MandelbrotSequence
-import nutria.fractal.techniques.CardioidTechniques$
+import nutria.fractal.techniques.CardioidTechniques
 import nutria.syntax._
 import nutria.viewport.Dimensions
 
