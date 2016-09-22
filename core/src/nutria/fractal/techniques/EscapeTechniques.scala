@@ -1,9 +1,9 @@
 package nutria
-package fractal.technics
+package fractal.techniques
 
 import nutria.fractal.sequence.{HasSequenceConstructor, Sequence}
 
-trait EscapeTechnics[A <: Sequence] {
+trait EscapeTechniques[A <: Sequence] {
   _: HasSequenceConstructor[A] =>
 
   def RoughColoring(maxIteration: Int): Fractal = sequence(_, _, maxIteration).size().toDouble

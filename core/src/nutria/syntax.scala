@@ -48,6 +48,12 @@ object syntax {
       file
     }
 
+    def verboseSave(file: java.io.File): File = {
+      save(file)
+      println("Saved: " + file.getAbsoluteFile)
+      file
+    }
+
     def verboseSave(fileName: String): File = {
       val file = new java.io.File(fileName)
       save(file)

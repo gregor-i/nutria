@@ -4,8 +4,16 @@ val commonSettings = Seq(
   version := "0.0.1",
   scalaVersion := "2.11.8",
   scalaSource in Compile := baseDirectory.value / "src",
+  scalaSource in Test := baseDirectory.value / "test",
   scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation"),
-  libraryDependencies += "org.spire-math" % "spire_2.11" % "0.12.0"
+  libraryDependencies += "org.spire-math" % "spire_2.11" % "0.12.0",
+  libraryDependencies ++= testDependencies
+)
+
+def testDependencies = Seq(
+  "org.scalacheck" %% "scalacheck" % "1.13.2" % "test",
+  "org.specs2" %% "specs2-core" % "3.8.5" % "test",
+  "org.specs2" %% "specs2-scalacheck" % "3.8.5" % "test"
 )
 
 val core = project.in(file("core"))

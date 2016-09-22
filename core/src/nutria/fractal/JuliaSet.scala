@@ -1,12 +1,12 @@
 package nutria.fractal
 
 import nutria.fractal.sequence.{HasSequenceConstructor, JuliaSetSequence}
-import nutria.fractal.technics.{CardioidTechnics, EscapeTechnics, TrapTechnics}
+import nutria.fractal.techniques.{CardioidTechniques$, EscapeTechniques, TrapTechniques}
 
 case class JuliaSet(cx: Double, cy: Double)
   extends HasSequenceConstructor[JuliaSetSequence]
-    with EscapeTechnics[JuliaSetSequence]
-    with TrapTechnics[JuliaSetSequence] {
+    with EscapeTechniques[JuliaSetSequence]
+    with TrapTechniques[JuliaSetSequence] {
 
   val fractals = Seq(
     "RoughColoring(100)" -> RoughColoring(100),

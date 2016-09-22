@@ -16,8 +16,7 @@ object Viewport {
     Viewport(U, A, B)
   }
 
-  def createByFocus(FA: Point = Point(0.3, 0.1), FB: Point = Point(0.7, 0.3))
-                   (a: Point, b: Point): Viewport = {
+  def createByFocus(FA: Point, FB: Point)(a: Point, b: Point): Viewport = {
     val Fdelta = FB - FA
     val angle = Math.acos(Fdelta.y / Fdelta.norm())
 
@@ -42,7 +41,7 @@ object Viewport {
     Viewport(U, TA, TB)
   }
 
-  def createByDefaultFocusAndLongs(ax: Long, ay:Long, bx:Long, by:Long) = createByFocus()(Point(ax, ay), Point(bx, by))
+  def createByDefaultFocusAndLongs(ax: Long, ay: Long, bx: Long, by: Long) = createByFocus(Point(0.3, 0.1), Point(0.7, 0.3))(Point(ax, ay), Point(bx, by))
 
 
   val defaultMovementFactor: Double = 0.20

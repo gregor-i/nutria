@@ -1,12 +1,12 @@
 package nutria.fractal
 
 import nutria.fractal.sequence.{BurningShipSequence, HasSequenceConstructor}
-import nutria.fractal.technics.{EscapeTechnics, TrapTechnics}
+import nutria.fractal.techniques.{EscapeTechniques, TrapTechniques}
 
 object BurningShip
   extends HasSequenceConstructor[BurningShipSequence]
-    with EscapeTechnics[BurningShipSequence]
-    with TrapTechnics[BurningShipSequence] {
+    with EscapeTechniques[BurningShipSequence]
+    with TrapTechniques[BurningShipSequence] {
 
   val fractals = Seq(
     "RoughColoring(100)" -> RoughColoring(100),

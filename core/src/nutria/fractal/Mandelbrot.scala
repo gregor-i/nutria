@@ -2,15 +2,15 @@ package nutria
 package fractal
 
 import nutria.fractal.sequence.{HasSequenceConstructor, MandelbrotSequence}
-import nutria.fractal.technics.{CardioidTechnics, EscapeTechnics, TrapTechnics}
+import nutria.fractal.techniques.{CardioidTechniques, EscapeTechniques, TrapTechniques}
 import nutria.syntax.FoldBoooleans
 import nutria.viewport.Point
 
 object Mandelbrot
   extends HasSequenceConstructor[MandelbrotSequence]
-    with EscapeTechnics[MandelbrotSequence]
-    with TrapTechnics[MandelbrotSequence]
-    with CardioidTechnics[MandelbrotSequence] {
+    with EscapeTechniques[MandelbrotSequence]
+    with TrapTechniques[MandelbrotSequence]
+    with CardioidTechniques[MandelbrotSequence] {
 
   val start = Viewport(Point(-2.5, -1), Point(3.5, 0), Point(0, 2))
 

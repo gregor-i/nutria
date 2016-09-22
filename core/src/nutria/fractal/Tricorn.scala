@@ -1,12 +1,12 @@
 package nutria.fractal
 
 import nutria.fractal.sequence.{HasSequenceConstructor, TricornSequence}
-import nutria.fractal.technics.{EscapeTechnics, TrapTechnics}
+import nutria.fractal.techniques.{EscapeTechniques, TrapTechniques}
 
 object Tricorn
   extends HasSequenceConstructor[TricornSequence]
-    with EscapeTechnics[TricornSequence]
-    with TrapTechnics[TricornSequence] {
+    with EscapeTechniques[TricornSequence]
+    with TrapTechniques[TricornSequence] {
 
   val fractals = Seq(
     "RoughColoring(100)" -> RoughColoring(100),

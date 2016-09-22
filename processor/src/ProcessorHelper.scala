@@ -33,7 +33,7 @@ trait ProcessorHelper {
       case _: Exception => UnexpectedException
     }
 
-  def makeAll(tasks: Set[Task]): Set[Result] = {
+  def makeAll(tasks: Seq[Task]): Seq[Result] = {
     val results = for (task <- tasks)
       yield {
         val result = make(task)

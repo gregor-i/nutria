@@ -15,8 +15,8 @@ object Cardioid extends ProcessorHelper {
   def make(view: Viewport, path: Color => File): Unit = {
     view
       .withDimensions(Dimensions.fullHD)
-      .withFractal(Mandelbrot.CardioidNumeric(500, 50))
-      //.withAntiAliasedFractal(Mandelbrot.CardioidNumeric(500, 50))
+//      .withFractal(Mandelbrot.CardioidNumeric(2000, 75))
+      .withAntiAliasedFractal(Mandelbrot.CardioidNumeric(2000, 75), samplingFactor = 2)
       .strongNormalized
       .fanOut(
         _.withColor(HSV.MonoColor.Blue)
@@ -39,9 +39,9 @@ object Cardioid extends ProcessorHelper {
       yield (() => fileInRootFolder(s"fokus/$viewport").exists,
         () => make(viewport, color => fileInRootFolder(s"fokus/$viewport/$color.png")))
 
-    makeAll(tasks1)
-    makeAll(tasks3)
-    makeAll(tasks2)
+    makeAll(tasks1.toSeq)
+//    makeAll(tasks3)
+    makeAll(tasks2.toSeq)
   }
 
 

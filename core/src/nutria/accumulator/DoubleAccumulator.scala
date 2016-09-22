@@ -14,7 +14,7 @@ case object Geometric extends Accumulator {
   override def lastOperation(result: Double, count: Int): Double = Math.pow(result, 1d/count)
 }
 
-case object  Harmonic extends Accumulator {
+case object Harmonic extends Accumulator {
   override type State = Double
   override val neutral: Double = 0d
   override def fold(left: Double, right: Double): Double = left + 1d/right

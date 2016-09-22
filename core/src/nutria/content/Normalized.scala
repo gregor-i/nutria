@@ -28,9 +28,9 @@ case class StrongNormalizedContent(content: CachedContent) extends Content with 
   val dimensions = content.dimensions
 
   private val map = (for (x <- 0 until width; y <- 0 until height)
-    yield content(x, y) -> (x, y)).groupBy(_._1).mapValues(_.map(_._2))
+    yield content(x, y) -> (x, y)).par.groupBy(_._1).mapValues(_.map(_._2))
 
-  private val sorted = map.toSeq.sortBy(_._1)
+  private val sorted = map.seq.toSeq.sortBy(_._1)
 
   private val values = Array.fill[Double](width, height)(0d)
 

@@ -1,9 +1,9 @@
 package nutria
-package fractal.technics
+package fractal.techniques
 
 import nutria.fractal.sequence.{DoubleSequence, HasSequenceConstructor}
 
-object CardioidTechnics {
+object CardioidTechniques {
 
   import Math.{cos, sin, sqrt}
 
@@ -79,14 +79,42 @@ object CardioidTechnics {
     d1 / d2
   }
 
+  def newton(range:Range)(t0: Double, x: Double, y: Double): Double = {
+    var t = t0
+    for (i <- range)
+      t -= der1DivDer2(t, x, y)
+    t
+  }
 
-  val phi = (Math.sqrt(5) + 1) / 2
+  final val phi = (Math.sqrt(5) + 1) / 2
+  def golden(range:Range)(x: Double, _y: Double): Double = {
+    val y = _y.abs
+    var a = 0.0
+    var b = Math.PI
+    for (i <- range) {
+      val c = b - (b - a) / phi
+      val d = a + (b - a) / phi
+      if (distSquared(c, x, y) < distSquared(d, x, y))
+        b = d
+      else
+        a = c
+    }
+    (a + b) / 2
+  }
+
+
+  def minimalDistance(range:Range)(x: Double, _y: Double): Double = {
+    val y = _y.abs
+    val t0 = golden(range)(x, y)
+    //      val n = newton(t0, x, y)
+    distSquared(t0, x, y)
+  }
 }
 
-trait CardioidTechnics[A <: DoubleSequence] {
+trait CardioidTechniques[A <: DoubleSequence] {
   _: HasSequenceConstructor[A] =>
 
-  import CardioidTechnics._
+  import CardioidTechniques._
 
   def CardioidHeuristic(maxIteration: Int, numberOfPoints: Int): Fractal = {
     val points = (0 to numberOfPoints)
@@ -106,41 +134,21 @@ trait CardioidTechnics[A <: DoubleSequence] {
   }
 
   def CardioidNumeric(maxIteration: Int, newtonIterations: Int): Fractal = {
-    val range: Range = 0 until newtonIterations
-    def newton(t0: Double, x: Double, y: Double): Double = {
-      var t = t0
-      for (i <- range)
-        t -= der1DivDer2(t, x, y)
-      t
-    }
-
-
-    def golden(x: Double, _y: Double): Double = {
-      val y = _y.abs
-      var a = 0.0
-      var b = Math.PI
-      for (i <- range) {
-        val c = b - (b - a) / phi
-        val d = a + (b - a) / phi
-        if (distSquared(c, x, y) < distSquared(d, x, y))
-          b = d
-        else
-          a = c
+    (x0, y0) => {
+      val range: Range = 0 until newtonIterations
+      sequence(x0, y0, maxIteration).foldLeft(minimalDistance(range)(x0, y0)) {
+        (v, x, y) => v.min(minimalDistance(range)(x, y))
       }
-      (a + b) / 2
     }
+  }
 
 
-    def minimalDistance(x: Double, _y: Double): Double = {
-      val y = _y.abs
-      val t0 = golden(x, y)
-//      val n = newton(t0, x, y)
-      distSquared(t0, x, y)
+  def CardioidNumericInSpecificIteration(iteration: Int, newtonIterations: Int): Fractal = {
+    (x0, y0) => {
+      val seq = sequence(x0, y0, 0)
+      for(i <- 0 until iteration)
+        seq.next()
+      minimalDistance(0 until newtonIterations)(seq.publicX, seq.publicY)
     }
-
-    (x0, y0) =>
-      sequence(x0, y0, maxIteration).foldLeft(minimalDistance(x0, y0)) {
-        (v, x, y) => v.min(minimalDistance(x, y))
-      }
   }
 }

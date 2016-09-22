@@ -1,9 +1,9 @@
 package nutria
-package fractal.technics
+package fractal.techniques
 
 import nutria.fractal.sequence.{HasSequenceConstructor, DoubleSequence}
 
-trait TrapTechnics[A <: DoubleSequence] {
+trait TrapTechniques[A <: DoubleSequence] {
   _: HasSequenceConstructor[A] =>
 
   import Math.sqrt

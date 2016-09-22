@@ -18,6 +18,7 @@ trait DoubleSequence extends Sequence { self =>
 
   def publicX: X
   def publicY: X
+  def public: (X, Y) = (publicX, publicY)
 
   @inline def foldLeft(start: Double)(@inline f: (Double, X, Y) => Double): Double
 

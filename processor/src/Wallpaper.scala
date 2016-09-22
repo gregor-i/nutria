@@ -34,8 +34,8 @@ object Wallpaper extends ProcessorHelper {
 
   def main(args: Array[String]): Unit = {
     makeAll(
-      for (view <- ViewportSelection.selection)
-        yield (() => false, () => make(view, HSV.MonoColor.Blue))
+      (for (view <- ViewportSelection.selection)
+        yield (() => false, () => make(view, HSV.MonoColor.Blue))).toSeq
     )
 
   }

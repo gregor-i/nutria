@@ -1,12 +1,12 @@
 package nutria.fractal
 
 import nutria.fractal.sequence.{HasSequenceConstructor, MandelbrotCubeSequence}
-import nutria.fractal.technics.{EscapeTechnics, TrapTechnics}
+import nutria.fractal.techniques.{EscapeTechniques, TrapTechniques}
 
 object MandelbrotCube
   extends HasSequenceConstructor[MandelbrotCubeSequence]
-    with EscapeTechnics[MandelbrotCubeSequence]
-    with TrapTechnics[MandelbrotCubeSequence] {
+    with EscapeTechniques[MandelbrotCubeSequence]
+    with TrapTechniques[MandelbrotCubeSequence] {
 
   val fractals = Seq(
     "RoughColoring(100)" -> RoughColoring(100),

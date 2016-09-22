@@ -1,7 +1,7 @@
 package nutria.fractal.alternativeImplementions
 
 import nutria.fractal.sequence.{HasSequenceConstructor, Sequence}
-import nutria.fractal.technics.EscapeTechnics
+import nutria.fractal.techniques.EscapeTechniques
 import spire.implicits._
 import spire.math.Complex
 
@@ -19,7 +19,7 @@ final class SpireBrotSequence(val start: Complex[Double], private var iterations
 
 object SpireBrot
   extends HasSequenceConstructor[SpireBrotSequence]
-    with EscapeTechnics[SpireBrotSequence] {
+    with EscapeTechniques[SpireBrotSequence] {
 
   override def sequence(x0: Double, y0: Double, maxIterations: Int): SpireBrotSequence = new SpireBrotSequence(Complex(x0, y0), maxIterations)
 }
