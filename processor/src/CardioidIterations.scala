@@ -1,7 +1,6 @@
 import nutria.color.{HSV, Invert}
 import nutria.content.CachedContent
 import nutria.fractal.Mandelbrot
-import nutria.fractal.sequence.MandelbrotSequence
 import nutria.fractal.techniques.CardioidTechniques
 import nutria.syntax._
 import nutria.viewport.Dimensions
@@ -15,7 +14,7 @@ object CardioidIterations extends ProcessorHelper {
 
   override def statusPrints: Boolean = true
 
-  def calculateDistance(seq: MandelbrotSequence): Double =
+  def calculateDistance(seq: Mandelbrot.Sequence): Double =
       CardioidTechniques.minimalDistance(1 to 100)(seq.publicX, seq.publicY)
 
 
@@ -28,7 +27,7 @@ object CardioidIterations extends ProcessorHelper {
       yield for {
         j <- 0 until dim.height
         (x, y) = transform(i, j)
-      } yield Mandelbrot.sequence(x, y, 1000)
+      } yield Mandelbrot.seqConstructor(x, y, 1000)
 
     var oldContent = new CachedContent(seqs.par.map(_.map(calculateDistance)).seq, dim)
 

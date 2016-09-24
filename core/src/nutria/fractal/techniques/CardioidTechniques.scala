@@ -1,9 +1,10 @@
 package nutria
 package fractal.techniques
 
-import nutria.fractal.sequence.{DoubleSequence, HasSequenceConstructor}
+import nutria.fractal.{Mandelbrot, SequenceConstructor}
 
 object CardioidTechniques {
+  def apply(implicit sequence: SequenceConstructor[Mandelbrot.Sequence]):CardioidTechniques = new CardioidTechniques()
 
   import Math.{cos, sin, sqrt}
 
@@ -111,8 +112,7 @@ object CardioidTechniques {
   }
 }
 
-trait CardioidTechniques[A <: DoubleSequence] {
-  _: HasSequenceConstructor[A] =>
+class CardioidTechniques(implicit sequence:SequenceConstructor[Mandelbrot.Sequence]) {
 
   import CardioidTechniques._
 

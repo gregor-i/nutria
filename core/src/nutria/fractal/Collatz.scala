@@ -1,43 +1,40 @@
 package nutria.fractal
 
-import nutria.fractal.techniques.{CardioidTechniques, ContourTechniques, EscapeTechniques, TrapTechniques}
+import spire.implicits._
+import spire.math.Complex
 
-object Tricorn {
+object Collatz {
 
   final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence {
-    private[this] var x: X = 0d
-    private[this] var y: Y = 0d
-    private[this] var xx = x * x
-    private[this] var yy = y * y
-    def publicX = x
-    def publicY = y
+    private[this] var c = Complex[Double](x0, y0)
 
-    @inline def hasNext: Boolean = (xx + yy < 4) && iterationsRemaining >= 0
+    def publicX = c.real
 
-    @inline override def next(): Boolean = {
-      y = -2 * x * y + y0
-      x = xx - yy + x0
-      xx = x * x
-      yy = y * y
+    def publicY = c.imag
+
+    @inline def hasNext: Boolean = (c.imag.abs <= 2) && iterationsRemaining >= 0
+
+    @inline def next(): Boolean = {
+      c = 0.25 * (2 + 7 * c - (Math.PI * c).cos * (2 +  5 * c))
       iterationsRemaining -= 1
       hasNext
     }
 
     @inline override def foldLeft(start: Double)(@inline f: (Double, X, Y) => Double): Double = {
       var v = start
-      while (next()) v = f(v, x, y)
+      while (next()) v = f(v, c.real, c.imag)
       v
     }
 
     @inline override def foldLeftX(start: Double)(@inline f: (Double, X) => Double): Double = {
       var v = start
-      while (next()) v = f(v, x)
+      while (next()) v = f(v, c.real)
       v
     }
 
     @inline override def foldLeftY(start: Double)(@inline f: (Double, Y) => Double): Double = {
       var v = start
-      while (next()) v = f(v, y)
+      while (next()) v = f(v, c.imag)
       v
     }
   }

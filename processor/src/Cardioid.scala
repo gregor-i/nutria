@@ -3,6 +3,7 @@ import java.io.File
 import nutria.{Color, FinishedContent}
 import nutria.color.{HSV, Invert}
 import nutria.fractal.Mandelbrot
+import nutria.fractal.techniques.CardioidTechniques
 import nutria.syntax._
 import nutria.viewport.{Dimensions, Viewport}
 import viewportSelections.ViewportSelection
@@ -22,7 +23,7 @@ object Cardioid extends ProcessorHelper {
     override def execute(): Unit = {
       view
         .withDimensions(Dimensions.fullHD.scale(0.1))
-        .withFractal(Mandelbrot.CardioidNumeric(2000, 75))
+        .withFractal(CardioidTechniques.apply.CardioidNumeric(2000, 75))
         .strongNormalized
         .fanOut(
           colors.map {

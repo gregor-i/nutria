@@ -20,46 +20,49 @@ class MandelbrotSpec extends Specification with ScalaCheck {
 
   val iterations = 1000
 
+  private def sequence = SequenceConstructor[Mandelbrot.Sequence]
+
+
   def insideCardioid = forAll(chooseFromTheInsideOfTheCardioid) {
     case (x: Double, y: Double) =>
-      Mandelbrot.sequence(x, y, iterations).size() === iterations
+      sequence(x, y, iterations).size() === iterations
   }
 
   def insideP2 = forAll(chooseFromPointsInsideOfP2) {
     case (x, y) =>
-      Mandelbrot.sequence(x, y, iterations).size() === iterations
+      sequence(x, y, iterations).size() === iterations
   }
 
   def zero = forAll(choose(0, iterations)) {
     (i: Int) =>
-      val seq = Mandelbrot.sequence(0, 0, iterations)
+      val seq = sequence(0, 0, iterations)
       for (_ <- 0 until i) seq.next()
       seq.publicX === 0 and seq.publicY === 0
   }
 
   def startAtZero = forAll(chooseFromUsefullStartPoints) {
     case (x: Double, y: Double) =>
-      val seq = Mandelbrot.sequence(x, y, iterations)
+      val seq = sequence(x, y, iterations)
       seq.publicX === 0 and seq.publicY === 0
   }
 
   def afterOneIteration = forAll(chooseFromUsefullStartPoints) {
     case (x, y) =>
-      val seq = Mandelbrot.sequence(x, y, iterations)
+      val seq = sequence(x, y, iterations)
       seq.next()
       seq.publicX === x and seq.publicY === y
   }
 
   def staringOutside = forAll(chooseFromPointsOutsideOfTheEscapeRadius) {
     case (x, y) =>
-      val seq = Mandelbrot.sequence(x, y, iterations)
+      val seq = sequence(x, y, iterations)
       seq.next()
       seq.hasNext === false
   }
 
   def noRepeating = forAll(chooseFromUsefullStartPoints) {
     case (x, y) =>
-      val seq = Mandelbrot.sequence(x, y, iterations)
+      val seq = sequence(x, y, iterations)
       val oldState = seq.public
       seq.next()
       oldState !== seq.public

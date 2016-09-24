@@ -1,69 +1,58 @@
 package nutria
 package fractal
 
-import nutria.fractal.sequence.{HasSequenceConstructor, MandelbrotSequence}
-import nutria.fractal.techniques.{CardioidTechniques, EscapeTechniques, TrapTechniques}
-import nutria.syntax.FoldBoooleans
+import nutria.fractal.techniques.{CardioidTechniques, ContourTechniques, EscapeTechniques, TrapTechniques}
 import nutria.viewport.Point
 
-object Mandelbrot
-  extends HasSequenceConstructor[MandelbrotSequence]
-    with EscapeTechniques[MandelbrotSequence]
-    with TrapTechniques[MandelbrotSequence]
-    with CardioidTechniques[MandelbrotSequence] {
+object Mandelbrot {
 
-  val start = Viewport(Point(-2.5, -1), Point(3.5, 0), Point(0, 2))
+  final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence {
+    private[this] var x: X = 0d
+    private[this] var y: Y = 0d
+    private[this] var xx = x * x
+    private[this] var yy = y * y
 
-  val fractals = Seq(
-    "RoughColoring(150)" -> RoughColoring(150),
-    "RoughColoring(250)" -> RoughColoring(250),
-    "RoughColoring(500)" -> RoughColoring(500),
-    "RoughColoring(750)" -> RoughColoring(750),
-    "RoughColoring(1500)" -> RoughColoring(1500),
-    "OrbitPoint(250, 0, 0)" -> OrbitPoint(250, 0, 0),
-    "OrbitPoint(250, -1, 0)" -> OrbitPoint(250, -1, 0),
-    "OrbitPoint(1250, 1, 1)" -> OrbitPoint(1250, 1, 1),
-    "OrbitPoint(250, 1, 0)" -> OrbitPoint(250, 1, 0),
-    "OrbitPoint(250, 0, 1)" -> OrbitPoint(250, 0, 1),
-    "OrbitRealAxis(250)" -> OrbitRealAxis(250),
-    "OrbitImgAxis(250)" -> OrbitImgAxis(250),
-    "Brot(1000)" -> Brot(1000),
-    "Contour(500)" -> Contour(500),
-    "CardioidHeuristic(50, 20)" -> CardioidHeuristic(50, 20),
-    "CardioidNumeric(500, 50)" -> CardioidNumeric(500, 50))
+    def publicX = x
 
-  override def sequence(x0: Double, y0: Double, maxIterations: Int): MandelbrotSequence = new MandelbrotSequence(x0, y0, maxIterations)
+    def publicY = y
 
-  // Careful. A lot of strage double magic goes on in this function. ContourCompare is an implementation of the same function to compare.
-  def Contour(maxIterations: Int): Fractal =
-  (x0, y0) => {
-    val seq = sequence(x0, y0, maxIterations)
-    var distance = 0d
-    for (i <- 0 to maxIterations) {
-      seq.next()
-      if (seq.publicX.abs > distance)
-        distance = seq.publicX.abs
+    private[this] var t = 0d
+
+    @inline def hasNext: Boolean = (xx + yy < 4) && iterationsRemaining >= 0
+
+    @inline def next(): Boolean = {
+      t += 1
+      y = 2 * x * y + y0
+      x = xx - yy + x0
+      xx = x * x
+      yy = y * y
+      iterationsRemaining -= 1
+      hasNext
     }
-    (distance == Double.PositiveInfinity).fold(0, 1)
+
+    @inline override def foldLeft(start: Double)(@inline f: (Double, X, Y) => Double): Double = {
+      var v = start
+      while (next()) v = f(v, x, y)
+      v
+    }
+
+    @inline override def foldLeftX(start: Double)(@inline f: (Double, X) => Double): Double = {
+      var v = start
+      while (next()) v = f(v, x)
+      v
+    }
+
+    @inline override def foldLeftY(start: Double)(@inline f: (Double, Y) => Double): Double = {
+      var v = start
+      while (next()) v = f(v, y)
+      v
+    }
   }
 
-  private def ContourCompare(maxIterations: Int): Fractal =
-    (x0, y0) => {
-      var distance = 10d
-      var x = x0
-      var y = y0
-      for (i <- 0 until maxIterations) {
-        val xx = x * x
-        val yy = y * y
-        y = 2 * x * y + y0
-        x = xx - yy + x0
+  val start: Viewport = Viewport(Point(-2.5, -1), Point(3.5, 0), Point(0, 2))
 
-        if (x.abs > distance)
-          distance = x.abs
-      }
-      if (distance == Double.PositiveInfinity)
-        1d
-      else
-        0d
-    }
+  implicit val seqConstructor = new SequenceConstructor[Sequence] {
+    override def apply(x0: Double, y0: Double, maxIterations: Int): Sequence = new Sequence(x0, y0, maxIterations)
+  }
+
 }

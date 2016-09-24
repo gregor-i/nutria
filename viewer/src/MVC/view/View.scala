@@ -4,12 +4,11 @@ import java.awt.Frame
 import java.awt.event.{ActionEvent, ActionListener}
 import javax.swing.{JFrame, JMenu, JMenuBar, JMenuItem}
 
-import MVC.{AntiAliaseFactory, BuddhaBrotFactory, ContentFactory, SimpleFactory}
 import MVC.controller.GuiController
 import MVC.model.Model
-import nutria.Fractal
+import MVC.{AntiAliaseFactory, BuddhaBrotFactory, SimpleFactory}
+import nurtia.data.{CollatzData, Data, MandelbrotData}
 import nutria.fractal._
-import nutria.fractal.sequence.{HasSequenceConstructor, DoubleSequence}
 
 object Collection {
 
@@ -17,18 +16,16 @@ object Collection {
     SimpleFactory, AntiAliaseFactory, BuddhaBrotFactory
   )
 
-  def typedJulia(cx: Double, cy: Double): HasSequenceConstructor[_ <: DoubleSequence] = JuliaSet(cx, cy)
-
-
-  val fractals: Seq[(String, HasSequenceConstructor[_ <: DoubleSequence], Seq[(String, Fractal)])] =
+  val fractals: Seq[(String, SequenceConstructor[_ <: DoubleSequence], Data[_])] =
     Seq(
-      ("Mandelbrot", Mandelbrot, Mandelbrot.fractals),
-      ("MandelbrotCube", MandelbrotCube, MandelbrotCube.fractals),
-      ("Burning Ship", BurningShip, BurningShip.fractals),
-      ("JuliaSet(-0.6, -0.6)", JuliaSet(-0.6, -0.6), JuliaSet(-0.6, -0.6).fractals),
-      ("JuliaSet(-0.4, 0.6)", JuliaSet(-0.4, 0.6), JuliaSet(-0.4, 0.6).fractals),
-      ("JuliaSet-0.8, 0.156)", JuliaSet(-0.8, 0.156), JuliaSet(-0.8, 0.156).fractals),
-      ("Tricorn", Tricorn, Tricorn.fractals)
+      ("Mandelbrot", SequenceConstructor[Mandelbrot.Sequence], MandelbrotData),
+        ("Collatz", SequenceConstructor[Collatz.Sequence], CollatzData)
+//      ("MandelbrotCube", MandelbrotCube, MandelbrotCube.fractals),
+//      ("Burning Ship", BurningShip, BurningShip.fractals),
+//      ("JuliaSet(-0.6, -0.6)", JuliaSet(-0.6, -0.6), JuliaSet(-0.6, -0.6).fractals),
+//      ("JuliaSet(-0.4, 0.6)", JuliaSet(-0.4, 0.6), JuliaSet(-0.4, 0.6).fractals),
+//      ("JuliaSet-0.8, 0.156)", JuliaSet(-0.8, 0.156), JuliaSet(-0.8, 0.156).fractals),
+//      ("Tricorn", Tricorn, Tricorn.fractals)
     )
 }
 
@@ -60,7 +57,7 @@ class View(val model: Model) extends JFrame {
     val menu = new FractalMenu(model)
     for ((collectorName, collector, fractals) <- Collection.fractals) {
       val subMenu = new JMenu(collectorName)
-      for ((fractalName, fractal) <- fractals)
+      for ((fractalName, fractal) <- fractals.selectionFractals)
         subMenu.add(
           new MenuItem(
             fractalName,

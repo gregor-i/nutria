@@ -1,54 +1,63 @@
 import sbt.Keys._
 
-val commonSettings = Seq(
+// settings and libs
+def commonSettings = Seq(
   version := "0.0.1",
   scalaVersion := "2.11.8",
   scalaSource in Compile := baseDirectory.value / "src",
   scalaSource in Test := baseDirectory.value / "test",
-  scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation"),
-  libraryDependencies += "org.spire-math" % "spire_2.11" % "0.12.0",
-  libraryDependencies ++= testDependencies
+  scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
+) ++ specs2AndScalaCheck ++ spire ++ simulacrum
+
+def spire = Seq(
+  libraryDependencies += "org.spire-math" % "spire_2.11" % "0.12.0"
 )
 
-def testDependencies = Seq(
-  "org.scalacheck" %% "scalacheck" % "1.13.2" % "test",
-  "org.specs2" %% "specs2-core" % "3.8.5" % "test",
-  "org.specs2" %% "specs2-scalacheck" % "3.8.5" % "test"
+def specs2AndScalaCheck = Seq(
+  libraryDependencies += "org.scalacheck" %% "scalacheck" % "1.13.2" % "test",
+  libraryDependencies += "org.specs2" %% "specs2-core" % "3.8.5" % "test",
+  libraryDependencies += "org.specs2" %% "specs2-scalacheck" % "3.8.5" % "test"
 )
 
+def circe = Seq(
+  libraryDependencies += "io.circe" % "circe-core_2.11" % "0.5.1",
+  libraryDependencies += "io.circe" % "circe-parser_2.11" % "0.5.1",
+  libraryDependencies += "io.circe" % "circe-generic_2.11" % "0.5.1"
+)
+
+def simulacrum = Seq(
+  addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
+  libraryDependencies += "com.github.mpilquist" %% "simulacrum" % "0.8.0"
+)
+
+// projects
 val core = project.in(file("core"))
+  .settings(name := "nutria-core")
   .settings(commonSettings)
-  .settings(
-    name := "nutria-core"
-  )
 
-
+val data = project.in(file("data"))
+  .settings(name := "nutria-data")
+  .settings(commonSettings)
+  .dependsOn(core)
 
 val benchmark = project.in(file("benchmark"))
+  .settings(name := "nutria-benchmark")
   .settings(commonSettings)
-  .settings(
-    name := "nutria-benchmark"
-  )
-  .dependsOn(core)
+  .dependsOn(core, data)
   .enablePlugins(JmhPlugin)
 
 
 val viewer = project.in(file("viewer"))
+  .settings(name := "nutria-viewer")
   .settings(commonSettings)
-  .settings(
-    name := "nutria-viewer")
-  .dependsOn(core)
-
+  .dependsOn(core, data)
 
 val processor = project.in(file("processor"))
+  .settings(name := "nutria-processor")
   .settings(commonSettings)
-  .settings(
-    name := "nutria-processor",
-    libraryDependencies += "io.circe" % "circe-core_2.11" % "0.5.1",
-    libraryDependencies += "io.circe" % "circe-parser_2.11" % "0.5.1",
-    libraryDependencies += "io.circe" % "circe-generic_2.11" % "0.5.1"
-  )
-  .dependsOn(core)
+  .settings(circe)
+  .dependsOn(core, data)
 
 
+// alias
 addCommandAlias("bench", "benchmark/jmh:run -i 10 -wi 10 -f 2 -t 1 nutria.Bench")

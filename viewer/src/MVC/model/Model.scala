@@ -5,8 +5,8 @@ import java.awt.image.BufferedImage
 import MVC.{ContentFactory, SimpleFactory}
 import nutria.Fractal
 import nutria.color.{Color, HSV}
-import nutria.fractal.Mandelbrot
-import nutria.fractal.sequence.{DoubleSequence, HasSequenceConstructor}
+import nutria.fractal.techniques.EscapeTechniques
+import nutria.fractal.{DoubleSequence, Mandelbrot, SequenceConstructor}
 import nutria.syntax._
 import nutria.viewport.{Point, Viewport}
 import util.Observable
@@ -14,15 +14,15 @@ import util.Observable
 
 @SerialVersionUID(1L)
 class Model(
-  var fractal: Fractal = Mandelbrot.RoughColoring(250),
-  var contentFactory: ContentFactory = SimpleFactory,
-  var farbe: Color = HSV.MonoColor.Blue,
-  var view: Viewport = Mandelbrot.start) extends Observable {
+             var fractal: Fractal = EscapeTechniques[Mandelbrot.Sequence].RoughColoring(250),
+             var contentFactory: ContentFactory = SimpleFactory,
+             var farbe: Color = HSV.MonoColor.Blue,
+             var view: Viewport = Mandelbrot.start) extends Observable {
 
   var quali: Double = 0.25
   var img: BufferedImage = _
   var points = Seq[Point]()
-  var sequenceConstructor: Option[HasSequenceConstructor[_ <: DoubleSequence]] = Some(Mandelbrot)
+  var sequenceConstructor: Option[SequenceConstructor[_ <: DoubleSequence]] = Some(Mandelbrot.seqConstructor)
 
   preview()
 
@@ -73,7 +73,7 @@ class Model(
   }
 
 
-  def setSequence(newSequenceConstructor: Option[HasSequenceConstructor[_ <: DoubleSequence]]): Unit ={
+  def setSequence(newSequenceConstructor: Option[SequenceConstructor[_ <: DoubleSequence]]): Unit ={
     sequenceConstructor = newSequenceConstructor
     notifyObservers()
   }

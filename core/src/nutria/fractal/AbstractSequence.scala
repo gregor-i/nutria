@@ -1,6 +1,6 @@
-package nutria.fractal.sequence
+package nutria.fractal
 
-trait Sequence {
+trait AbstractSequence {
   @inline def hasNext: Boolean
 
   @inline def next(): Boolean
@@ -12,7 +12,7 @@ trait Sequence {
   }
 }
 
-trait DoubleSequence extends Sequence { self =>
+trait DoubleSequence extends AbstractSequence { self =>
   type X = Double
   type Y = Double
 
