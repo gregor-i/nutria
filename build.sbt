@@ -1,4 +1,5 @@
 import sbt.Keys._
+import de.heikoseeberger.sbtheader.license.GPLv3
 
 // settings and libs
 def commonSettings = Seq(
@@ -6,6 +7,7 @@ def commonSettings = Seq(
   scalaVersion := "2.11.8",
   scalaSource in Compile := baseDirectory.value / "src",
   scalaSource in Test := baseDirectory.value / "test",
+	headers := Map("scala" -> GPLv3("2016", "Gregor Ihmor & Merlin Göttlinger")),
   scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
 ) ++ specs2AndScalaCheck ++ spire ++ simulacrum
 
@@ -34,6 +36,7 @@ def simulacrum = Seq(
 val core = project.in(file("core"))
   .settings(name := "nutria-core")
   .settings(commonSettings)
+  .enablePlugins(AutomateHeaderPlugin)
 
 val data = project.in(file("data"))
   .settings(name := "nutria-data")
@@ -44,19 +47,20 @@ val benchmark = project.in(file("benchmark"))
   .settings(name := "nutria-benchmark")
   .settings(commonSettings)
   .dependsOn(core, data)
-  .enablePlugins(JmhPlugin)
-
+  .enablePlugins(JmhPlugin, AutomateHeaderPlugin)
 
 val viewer = project.in(file("viewer"))
   .settings(name := "nutria-viewer")
   .settings(commonSettings)
   .dependsOn(core, data)
+	.enablePlugins(AutomateHeaderPlugin)
 
 val processor = project.in(file("processor"))
   .settings(name := "nutria-processor")
   .settings(commonSettings)
   .settings(circe)
   .dependsOn(core, data)
+	.enablePlugins(AutomateHeaderPlugin)
 
 commonSettings
 
