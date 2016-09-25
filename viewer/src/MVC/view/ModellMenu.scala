@@ -4,18 +4,15 @@ import MVC.model.Model
 import javax.swing.JMenu
 import util._
 
-class ModellMenu(val f: (Model => String), val modell: Model)
-  extends JMenu(f(modell))
-  with Observer {
+class ModellMenu(f: => String, val modell: Model) extends JMenu(f) {
 
-  modell.addObserver(ModellMenu.this)
-
-  override def update(caller: Observable) = {
-    ModellMenu.this.setText(f(modell))
-  }
+  modell.addObserver(() => this.setText(f))
 }
 
-class FractalMenu(modell: Model) extends ModellMenu((modell) => modell.fractal.getClass.getSimpleName, modell) {}
-class ViewportMenu(modell: Model) extends ModellMenu((modell) => modell.view.toString(), modell) {}
-class ColorMenu(modell: Model) extends ModellMenu((modell) => modell.farbe.toString(), modell) {}
-class ContentFactoryMenu(modell: Model) extends ModellMenu((modell) => modell.contentFactory.toString(), modell) {}
+class FractalMenu(modell: Model) extends ModellMenu(modell.fractal.getClass.getSimpleName, modell) {}
+
+class ViewportMenu(modell: Model) extends ModellMenu(modell.view.toString(), modell) {}
+
+class ColorMenu(modell: Model) extends ModellMenu(modell.farbe.toString(), modell) {}
+
+class ContentFactoryMenu(modell: Model) extends ModellMenu(modell.contentFactory.toString(), modell) {}

@@ -6,7 +6,7 @@ import java.lang.Math.sqrt
 import nutria.fractal.{DoubleSequence, SequenceConstructor}
 
 object TrapTechniques {
-  def apply[A <: DoubleSequence:SequenceConstructor]:TrapTechniques[A] = new TrapTechniques[A]
+  def apply[A <: DoubleSequence : SequenceConstructor]: TrapTechniques[A] = new TrapTechniques[A]
 }
 
 class TrapTechniques[A <: DoubleSequence](implicit sequence: SequenceConstructor[A]) {
@@ -14,7 +14,7 @@ class TrapTechniques[A <: DoubleSequence](implicit sequence: SequenceConstructor
 
   def OrbitPoint(maxIteration: Int, trapx: Double, trapy: Double): Fractal =
     (x0, y0) =>
-      sequence(x0, y0, maxIteration).foldLeft(q(x0-trapx) + q(y0-trapy)) {
+      sequence(x0, y0, maxIteration).foldLeft(q(x0 - trapx) + q(y0 - trapy)) {
         (d, x, y) => d.min(q(x - trapx) + q(y - trapy))
       }
 
@@ -38,4 +38,13 @@ class TrapTechniques[A <: DoubleSequence](implicit sequence: SequenceConstructor
         (v, x, y) => v.min((sqrt(q(x - cx) + q(y - cy)) - cr).abs)
       }
 
+
+  // not really a trap trechnique, so this needs to be moved.
+  def SmoothColoring(maxIteration: Int): Fractal = (x, y) => {
+    val seq = sequence(x, y, maxIteration)
+    var accu = 0d
+    while (seq.next())
+      accu += Math.exp(-(seq.publicX * seq.publicX + seq.publicY * seq.publicY))
+    accu
+  }
 }

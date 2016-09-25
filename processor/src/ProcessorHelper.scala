@@ -7,7 +7,7 @@ sealed trait Result
 case class Made(executionTime:Duration) extends Result
 case object Skipped extends Result
 case object RequirementFailed extends Result
-case object UnexpectedException extends Result
+case class UnexpectedException(e:Exception) extends Result
 
 trait Task{
   def name: String
@@ -38,14 +38,14 @@ trait ProcessorHelper {
       }
     } catch {
       case _: IllegalArgumentException => RequirementFailed
-      case _: Exception => UnexpectedException
+      case e: Exception => UnexpectedException(e)
     }
 
   def executeAllTasks(tasks: Traversable[Task]): Seq[Result] = {
     val results = for (task <- tasks)
       yield {
         val result = executeTask(task)
-        if (statusPrints) println(s"completed ??? with status $result")
+        if (statusPrints) println(s"completed ${task.name} with status $result")
         result
       }
 
@@ -55,7 +55,12 @@ trait ProcessorHelper {
       println(s"Made:                ${results.count(_.isInstanceOf[Made])}")
       println(s"Skipped:             ${countsByResult(Skipped)}")
       println(s"RequirementFailed:   ${countsByResult(RequirementFailed)}")
-      println(s"UnexpectedException: ${countsByResult(UnexpectedException)}")
+      println(s"UnexpectedException: ${results.count(_.isInstanceOf[UnexpectedException])}")
+
+      for(exception <- results.collect{case UnexpectedException(exception) => exception}.toSet[Exception]) {
+        println(s"Unexpected Exception: ${exception.getMessage}")
+        exception.printStackTrace()
+      }
     }
     results.toSeq
   }

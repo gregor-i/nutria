@@ -2,15 +2,15 @@ package MVC.model
 
 import java.awt.image.BufferedImage
 
-import MVC.{ContentFactory, SimpleFactory}
+import nurtia.data.{ContentFactory, SimpleFactory}
 import nutria.Fractal
 import nutria.color.{Color, HSV}
 import nutria.fractal.techniques.EscapeTechniques
 import nutria.fractal.{DoubleSequence, Mandelbrot, SequenceConstructor}
-import nutria.syntax._
-import nutria.viewport.{Point, Viewport}
+import nutria.viewport.{Dimensions, Point, Viewport}
 import util.Observable
 
+import nutria.syntax._
 
 @SerialVersionUID(1L)
 class Model(
@@ -27,18 +27,18 @@ class Model(
   preview()
 
   def preview() {
-    img = contentFactory.simple(this).linearNormalized.withColor(farbe).buffer
+    img = contentFactory(view, Dimensions.fullHD.scale(quali), fractal, farbe).buffer
     notifyObservers()
   }
 
   def snap() {
-    img = contentFactory.beaty(this).linearNormalized.withColor(farbe).buffer
+    img = contentFactory(view, Dimensions.fullHD, fractal, farbe).buffer
     notifyObservers()
   }
 
   def save() {
-    val image = contentFactory.beaty(this).linearNormalized.withColor(farbe)
-    image.save(s"snapshots\\$view")
+    val image = contentFactory(view, Dimensions.fullHD, fractal, farbe)
+    image.verboseSave(s"snapshots/$view")
     img = image.buffer
   }
 

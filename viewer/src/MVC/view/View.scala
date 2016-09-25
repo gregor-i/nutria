@@ -6,28 +6,7 @@ import javax.swing.{JFrame, JMenu, JMenuBar, JMenuItem}
 
 import MVC.controller.GuiController
 import MVC.model.Model
-import MVC.{AntiAliaseFactory, BuddhaBrotFactory, SimpleFactory}
-import nurtia.data.{CollatzData, Data, MandelbrotData}
-import nutria.fractal._
-
-object Collection {
-
-  val factories = Seq(
-    SimpleFactory, AntiAliaseFactory, BuddhaBrotFactory
-  )
-
-  val fractals: Seq[(String, SequenceConstructor[_ <: DoubleSequence], Data[_])] =
-    Seq(
-      ("Mandelbrot", SequenceConstructor[Mandelbrot.Sequence], MandelbrotData),
-        ("Collatz", SequenceConstructor[Collatz.Sequence], CollatzData)
-//      ("MandelbrotCube", MandelbrotCube, MandelbrotCube.fractals),
-//      ("Burning Ship", BurningShip, BurningShip.fractals),
-//      ("JuliaSet(-0.6, -0.6)", JuliaSet(-0.6, -0.6), JuliaSet(-0.6, -0.6).fractals),
-//      ("JuliaSet(-0.4, 0.6)", JuliaSet(-0.4, 0.6), JuliaSet(-0.4, 0.6).fractals),
-//      ("JuliaSet-0.8, 0.156)", JuliaSet(-0.8, 0.156), JuliaSet(-0.8, 0.156).fractals),
-//      ("Tricorn", Tricorn, Tricorn.fractals)
-    )
-}
+import nurtia.data.Collection
 
 
 @SerialVersionUID(1L)
@@ -41,7 +20,7 @@ class View(val model: Model) extends JFrame {
 
 
   {
-    // Men� f�r die Auswahl des "simple" Algorithmus (Preview-Shot)
+    // Menu for the selection of the ContentFactory
     val menu = new ContentFactoryMenu(model)
     for (factory <- Collection.factories) {
       menu.add(
@@ -53,7 +32,7 @@ class View(val model: Model) extends JFrame {
   }
 
   {
-    // Menü für die Auswahl des Fraktals
+    // Menu for the selection of the fractal
     val menu = new FractalMenu(model)
     for ((collectorName, collector, fractals) <- Collection.fractals) {
       val subMenu = new JMenu(collectorName)

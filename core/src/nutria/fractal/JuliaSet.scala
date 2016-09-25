@@ -1,12 +1,10 @@
 package nutria.fractal
 
-import nutria.fractal.techniques.{CardioidTechniques, EscapeTechniques, TrapTechniques}
-
 case class JuliaSet(cx: Double, cy: Double) {
 
   class Sequence(cx: Double, cy: Double)(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence {
     private[this] var x: X = x0
-    private[this] var y: Y = x0
+    private[this] var y: Y = y0
     private[this] var xx = x * x
     private[this] var yy = y * y
 
@@ -17,7 +15,7 @@ case class JuliaSet(cx: Double, cy: Double) {
     @inline def hasNext: Boolean = (xx + yy < 4) && iterationsRemaining >= 0
 
     @inline override def next(): Boolean = {
-      y = (x + x) * y + cy
+      y = 2 * x * y + cy
       x = xx - yy + cx
       xx = x * x
       yy = y * y

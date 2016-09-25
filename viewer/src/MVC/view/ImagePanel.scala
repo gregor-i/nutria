@@ -11,8 +11,8 @@ import nutria.viewport.Dimensions
 import nutria.viewport._
 import nutria.syntax._
 
-class ImagePanel(val modell: Model) extends JPanel with Observer {
-  modell.addObserver(this)
+class ImagePanel(val modell: Model) extends JPanel {
+  modell.addObserver(() => this.repaint())
   setFocusable(true)
   setPreferredSize(new java.awt.Dimension(1000, 800))
 
@@ -109,6 +109,4 @@ class ImagePanel(val modell: Model) extends JPanel with Observer {
 
      }*/
   }
-
-  override def update(caller: Observable) = repaint()
 }

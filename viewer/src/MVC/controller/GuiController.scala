@@ -4,9 +4,9 @@ import java.awt.event._
 
 import MVC.model.Model
 import MVC.view.View
+import nutria.color.Invert
 import nutria.fractal.Mandelbrot
 import nutria.viewport.{Dimensions, Point}
-
 import nutria.syntax._
 
 class GuiController(val modell: Model, val view: View) extends KeyListener with MouseListener with MouseWheelListener with MouseMotionListener {
@@ -38,6 +38,7 @@ class GuiController(val modell: Model, val view: View) extends KeyListener with 
       case KeyEvent.VK_LEFT      => modell.setViewport(modell.view.left())
       case KeyEvent.VK_ADD       => modell.setViewport(modell.view.zoomIn())
       case KeyEvent.VK_SUBTRACT  => modell.setViewport(modell.view.zoomOut())
+      case KeyEvent.VK_I         => modell.setColor(Invert.invert(modell.farbe))
       case KeyEvent.VK_ENTER     => println(modell.view.toString)
       case KeyEvent.VK_S         => modell.snap()
       case KeyEvent.VK_R         => modell.setViewport(nutria.fractal.Mandelbrot.start)

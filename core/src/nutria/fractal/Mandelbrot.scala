@@ -16,12 +16,9 @@ object Mandelbrot {
 
     def publicY = y
 
-    private[this] var t = 0d
-
     @inline def hasNext: Boolean = (xx + yy < 4) && iterationsRemaining >= 0
 
     @inline def next(): Boolean = {
-      t += 1
       y = 2 * x * y + y0
       x = xx - yy + x0
       xx = x * x
