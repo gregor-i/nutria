@@ -20,7 +20,7 @@ package nurtia.data
 import nutria.syntax._
 import nutria._
 
-trait ContentFactory extends ((Viewport, Dimensions, Fractal, Color) => Image)
+sealed trait ContentFactory extends ((Viewport, Dimensions, Fractal, Color) => Image)
 
 case object SimpleFactory extends ContentFactory {
   def apply(view: Viewport, dim: Dimensions, fractal: Fractal, color:Color) =
