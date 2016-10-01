@@ -22,6 +22,7 @@ import java.awt.event._
 import MVC.model.Model
 import MVC.view.View
 import nutria.color.Invert
+import nutria.sequences.Mandelbrot
 import nutria.viewport.{Dimensions, Point}
 import nutria.syntax._
 
@@ -57,7 +58,7 @@ class GuiController(val modell: Model, val view: View) extends KeyListener with 
       case KeyEvent.VK_I         => modell.setColor(Invert.invert(modell.farbe))
       case KeyEvent.VK_ENTER     => println(modell.view.toString)
       case KeyEvent.VK_S         => modell.snap()
-      case KeyEvent.VK_R         => modell.setViewport(nutria.fractal.Mandelbrot.start)
+      case KeyEvent.VK_R         => modell.setViewport(Mandelbrot.start)
       case _ =>
     }
 

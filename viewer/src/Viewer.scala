@@ -17,9 +17,8 @@
 
 import MVC.model._
 import MVC.view._
-import nutria.fractal.JuliaSet
-import nutria.fractal.techniques.SmoothColoring
-
+import nutria.consumers.SmoothColoring
+import nutria.sequences.JuliaSet
 import nutria.syntax._
 
 object Viewer {
@@ -30,7 +29,7 @@ object Viewer {
 //    model.setFractal(TrapTechniques[Mandelbrot.Sequence].SmoothColoring(500))
 
     model.setSequence(Some(JuliaSet(-0.6, 0.6)(50)))
-    model.setFractal(JuliaSet(-0.6, 0.6)(500) -> SmoothColoring())
+    model.setFractal(JuliaSet(-0.6, 0.6)(500) ~> SmoothColoring())
     new View(model)
   }
 }

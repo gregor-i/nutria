@@ -17,8 +17,8 @@
 
 import java.io.{File, FileWriter}
 
-import nutria.fractal.techniques.RoughColoring
-import nutria.fractal.{Mandelbrot, QuaternionBrot}
+import nutria.consumers.RoughColoring
+import nutria.sequences.{Mandelbrot, QuaternionBrot}
 import nutria.syntax._
 import nutria.viewport.Dimensions
 import spire.math.Quaternion
@@ -41,7 +41,7 @@ object Matlab3DExport extends App {
     def p(i:Int) = transform.transformY(0, i)
     def selector(x:Double, y:Double):Quaternion[Double] = Quaternion(x, y, p(i), p(i))
     val content = transform
-      .withFractal(QuaternionBrot(selector)(iterations) -> RoughColoring())
+      .withFractal(QuaternionBrot(selector)(iterations) ~> RoughColoring())
       .cached
 
     val data = s"data(:, :, ${i+1}) = [${content.values.map(_.mkString(",")).mkString(";")}];\n"

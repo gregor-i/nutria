@@ -18,7 +18,7 @@
 package nurtia.data
 
 import nutria.SequenceConstructor
-import nutria.fractal.{Collatz, DoubleSequence, Mandelbrot}
+import nutria.sequences.{Collatz, DoubleSequence, Mandelbrot}
 
 object Collection {
 

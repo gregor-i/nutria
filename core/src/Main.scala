@@ -16,8 +16,8 @@
  */
 
 import nutria.color.HSV
-import nutria.fractal.Mandelbrot
-import nutria.fractal.techniques.SmoothColoring
+import nutria.consumers.SmoothColoring
+import nutria.sequences.Mandelbrot
 import nutria.syntax._
 import nutria.viewport.Dimensions
 
@@ -48,7 +48,7 @@ object Main extends App {
 
   Mandelbrot.start
     .withDimensions(Dimensions.fullHD)
-    .withFractal(Mandelbrot(350) -> SmoothColoring())
+    .withFractal(Mandelbrot(350) ~> SmoothColoring())
     .linearNormalized
     .withColor(HSV.MonoColor.Blue)
     .verboseSave(root + "consumerPattern.png")

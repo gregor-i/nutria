@@ -18,7 +18,7 @@
 package nutria
 package content
 
-import nutria.fractal.Mandelbrot
+import nutria.sequences.Mandelbrot
 
 private object BuddahBrotHelper{
   def ignoreIndex(operation : => Unit) = {

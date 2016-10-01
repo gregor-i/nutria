@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nutria
-package fractal.techniques
+package nutria.consumers
 
-import nutria.fractal.Mandelbrot
+import nutria._
+import nutria.sequences.Mandelbrot
 
 object CardioidHeuristic{
   @inline private[this] def q(@inline x: Double): Double = x * x

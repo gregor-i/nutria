@@ -1,6 +1,7 @@
 package nutria.fractal
 
 import nutria.fractal.SequenceChooser._
+import nutria.sequences.Mandelbrot
 import org.scalacheck.Gen.choose
 import org.scalacheck.Prop.forAll
 import org.specs2.{ScalaCheck, Specification}

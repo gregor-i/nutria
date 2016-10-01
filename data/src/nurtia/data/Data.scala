@@ -17,8 +17,8 @@
 
 package nurtia.data
 
+import nutria.sequences.AbstractSequence
 import nutria.{Fractal, Viewport}
-import nutria.fractal.AbstractSequence
 import simulacrum.typeclass
 
 @typeclass trait Data[A <: AbstractSequence] {

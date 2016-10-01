@@ -15,13 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nutria.fractal.techniques
+package nutria.directFractals
 
 import nutria._
-import nutria.fractal.Mandelbrot
+import nutria.sequences.Mandelbrot
 import nutria.syntax._
 
-object Contour {
+object MandelbrotContour {
   // Careful. A lot of strage double magic goes on in this function. ContourCompare is an implementation of the same function to compare for the Mandelbrot sequence.
   def apply(maxIterations:Int): Fractal =
   (x0, y0) => {

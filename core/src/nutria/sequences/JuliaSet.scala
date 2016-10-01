@@ -15,27 +15,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nutria.fractal
+package nutria.sequences
 
-import nutria._
+import nutria.SequenceConstructor
 
-object MandelbrotCube {
+object JuliaSet {
 
-  final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence { self =>
-    private[this] var x: X = 0d
-    private[this] var y: Y = 0d
+  class Sequence(cx: Double, cy: Double)(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence {
+    private[this] var x: X = x0
+    private[this] var y: Y = y0
     private[this] var xx = x * x
     private[this] var yy = y * y
+
     def publicX = x
+
     def publicY = y
 
-    @inline def hasNext: Boolean = (x*x + y*y < 4) && iterationsRemaining >= 0
+    @inline def hasNext: Boolean = (xx + yy < 4) && iterationsRemaining >= 0
 
-    @inline def next(): Boolean = {
-      val ty = -3 * y * y * x + x * x * x + y0
-      val tx = -y * y * y + 3 * y * x * x + x0
-      y = ty
-      x = tx
+    @inline override def next(): Boolean = {
+      y = 2 * x * y + cy
+      x = xx - yy + cx
+      xx = x * x
+      yy = y * y
       iterationsRemaining -= 1
       hasNext
     }
@@ -59,11 +61,12 @@ object MandelbrotCube {
     }
   }
 
-//  val fractals = Seq(
-//    "RoughColoring(100)" -> RoughColoring(100),
-//    "RoughColoring(500)" -> RoughColoring(500),
-//    "RoughColoring(1000)" -> RoughColoring(1000)
-//  )
 
-  def apply(maxIterations:Int):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(x0, y0, maxIterations)
+  //  val fractals = Seq(
+  //    "RoughColoring(100)" -> RoughColoring(100),
+  //    "RoughColoring(500)" -> RoughColoring(500),
+  //    "RoughColoring(1000)" -> RoughColoring(1000)
+  //  )
+
+  def apply(cx: Double, cy: Double)(maxIterations:Int):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(cx, cy)(x0, y0, maxIterations)
 }

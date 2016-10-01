@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nutria.fractal
+package nutria.sequences
 
 trait AbstractSequence {
   @inline def hasNext: Boolean

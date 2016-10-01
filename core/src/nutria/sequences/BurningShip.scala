@@ -15,27 +15,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nutria.fractal
+package nutria.sequences
 
-import nutria.SequenceConstructor
-import nutria.viewport.{Point, Viewport}
+import nutria._
 
-object Mandelbrot{
-  final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence {
+object BurningShip{
+  final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence { self =>
     private[this] var x: X = 0d
     private[this] var y: Y = 0d
     private[this] var xx = x * x
     private[this] var yy = y * y
-
     def publicX = x
-
     def publicY = y
 
     @inline def hasNext: Boolean = (xx + yy < 4) && iterationsRemaining >= 0
 
     @inline def next(): Boolean = {
-      y = 2 * x * y + y0
-      x = xx - yy + x0
+      y = 2 * Math.abs(x * y) - y0
+      x = xx - yy - x0
       xx = x * x
       yy = y * y
       iterationsRemaining -= 1
@@ -61,7 +58,12 @@ object Mandelbrot{
     }
   }
 
-  val start: Viewport = Viewport(Point(-2.5, -1), Point(3.5, 0), Point(0, 2))
+
+//  val fractals = Seq(
+//    "RoughColoring(100)" -> RoughColoring(100),
+//    "RoughColoring(500)" -> RoughColoring(500),
+//    "RoughColoring(1000)" -> RoughColoring(1000)
+//  )
 
   def apply(maxIterations:Int):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(x0, y0, maxIterations)
 }

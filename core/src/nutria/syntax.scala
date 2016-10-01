@@ -45,7 +45,7 @@ object syntax {
 
   implicit class EnrichSequenceConstructors[A <: AbstractSequence](val constructor: SequenceConstructor[A]) extends AnyVal {
     def withConsumer(consumer: SequenceConsumer[A]): Fractal = (x, y) => consumer(constructor(x, y))
-    def ->(consumer: SequenceConsumer[A]): Fractal = (x, y) => consumer(constructor(x, y))
+    def ~>(consumer: SequenceConsumer[A]): Fractal = (x, y) => consumer(constructor(x, y))
   }
 
   implicit class EnrichedContent(val content: Content) extends AnyVal {

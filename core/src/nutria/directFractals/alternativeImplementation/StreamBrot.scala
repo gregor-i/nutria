@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nutria.fractal.alternativeImplementions
+package nutria.directFractals.alternativeImplementation
 
 import nutria.Fractal
 import spire.implicits._

@@ -18,10 +18,12 @@
 package nutria
 package benchmark
 
+import nutria.consumers.RoughColoring
 import nutria.content._
+import nutria.directFractals.alternativeImplementation.StreamBrot
 import nutria.fractal._
-import nutria.fractal.alternativeImplementions.{SpireBrot, StreamBrot}
-import nutria.fractal.techniques.RoughColoring
+import nutria.sequences.{Mandelbrot, QuaternionBrot}
+import nutria.sequences.alternativeImlementations.SpireBrot
 import nutria.syntax._
 import nutria.viewport._
 import org.openjdk.jmh.annotations.Benchmark
@@ -35,14 +37,14 @@ class Bench {
       .cached
 
   @Benchmark
-  def mandelRough = operation(Mandelbrot(500) -> RoughColoring())
+  def mandelRough = operation(Mandelbrot(500) ~> RoughColoring())
 
   @Benchmark
-  def spireRough = operation(SpireBrot(500) -> RoughColoring())
+  def spireRough = operation(SpireBrot(500) ~> RoughColoring())
 
   @Benchmark
   def streamRough = operation(StreamBrot.RoughColoring(500))
 
   @Benchmark
-  def quatbRough = operation(QuaternionBrot((x, y) => Quaternion(x, y, 0, 0))(500) -> RoughColoring())
+  def quatbRough = operation(QuaternionBrot((x, y) => Quaternion(x, y, 0, 0))(500) ~> RoughColoring())
 }

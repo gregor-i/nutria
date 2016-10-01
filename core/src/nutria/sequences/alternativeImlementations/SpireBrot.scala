@@ -15,20 +15,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nutria
-package fractal.techniques
+package nutria.sequences.alternativeImlementations
 
-import nutria.fractal.{AbstractSequence, DoubleSequence}
-
-object RoughColoring {
-  def apply[A <: AbstractSequence](): SequenceConsumer[A] =
-    seq => seq.size().toDouble
-}
+import nutria.SequenceConstructor
+import nutria.sequences.AbstractSequence
+import spire.implicits._
+import spire.math.Complex
 
 
-object SmoothColoring {
-  def apply[A <: DoubleSequence](): SequenceConsumer[A] =
-    seq => seq.foldLeft(0d) {
-      (v, x, y) => v + Math.exp(-(x * x + y * y))
+object SpireBrot {
+
+  final class Sequence(val start: Complex[Double], private var iterationsRemaining: Int) extends AbstractSequence {
+    private var current: Complex[Double] = Complex.zero
+
+    @inline def hasNext: Boolean = current.abs < 2 && iterationsRemaining >= 0
+
+    @inline def next(): Boolean = {
+      current = current * current + start
+      iterationsRemaining -= 1
+      hasNext
     }
+  }
+
+  def apply(maxIterations:Int):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(Complex(x0, y0), maxIterations)
 }

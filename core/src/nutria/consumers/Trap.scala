@@ -15,12 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nutria
-package fractal.techniques
+package nutria.consumers
 
 import java.lang.Math.sqrt
 
-import nutria.fractal.{DoubleSequence, Mandelbrot}
+import nutria._
+import nutria.sequences.{DoubleSequence, Mandelbrot}
 
 
 object OrbitPoint {

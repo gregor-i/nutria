@@ -15,26 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nutria
-package fractal
+package nutria.consumers
 
-import spire.implicits._
-import spire.math.Quaternion
+import nutria._
+import nutria.sequences.DoubleSequence
 
-object QuaternionBrot {
+object RoughColoring {
+  def apply[A <: sequences.AbstractSequence](): SequenceConsumer[A] =
+    seq => seq.size().toDouble
+}
 
-  final class Sequence(val start: Quaternion[Double], private var iterationsRemaining: Int) extends AbstractSequence {
-    var current: Quaternion[Double] = Quaternion.zero
 
-    @inline def hasNext: Boolean = current.abs < 2 && iterationsRemaining >= 0
-
-    @inline def next(): Boolean = {
-      current = current * current + start
-      iterationsRemaining -= 1
-      hasNext
+object SmoothColoring {
+  def apply[A <: DoubleSequence](): SequenceConsumer[A] =
+    seq => seq.foldLeft(0d) {
+      (v, x, y) => v + Math.exp(-(x * x + y * y))
     }
-  }
-
-  def apply(selector: (Double, Double) => Quaternion[Double])(maxIterations:Int):SequenceConstructor[Sequence] =
-    (x0, y0) => new Sequence(selector(x0, y0), maxIterations)
 }

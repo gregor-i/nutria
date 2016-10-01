@@ -15,11 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nutria.fractal
+package nutria.sequences
 
 import nutria._
 
-object BurningShip{
+object MandelbrotCube {
+
   final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence { self =>
     private[this] var x: X = 0d
     private[this] var y: Y = 0d
@@ -28,13 +29,13 @@ object BurningShip{
     def publicX = x
     def publicY = y
 
-    @inline def hasNext: Boolean = (xx + yy < 4) && iterationsRemaining >= 0
+    @inline def hasNext: Boolean = (x*x + y*y < 4) && iterationsRemaining >= 0
 
     @inline def next(): Boolean = {
-      y = 2 * Math.abs(x * y) - y0
-      x = xx - yy - x0
-      xx = x * x
-      yy = y * y
+      val ty = -3 * y * y * x + x * x * x + y0
+      val tx = -y * y * y + 3 * y * x * x + x0
+      y = ty
+      x = tx
       iterationsRemaining -= 1
       hasNext
     }
@@ -57,7 +58,6 @@ object BurningShip{
       v
     }
   }
-
 
 //  val fractals = Seq(
 //    "RoughColoring(100)" -> RoughColoring(100),

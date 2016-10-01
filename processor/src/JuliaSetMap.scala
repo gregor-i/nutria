@@ -16,9 +16,9 @@
  */
 
 import nutria.color.{HSV, Invert}
+import nutria.consumers.{RoughColoring, SmoothColoring}
 import nutria.content.Content
-import nutria.fractal.JuliaSet
-import nutria.fractal.techniques.{RoughColoring, SmoothColoring}
+import nutria.sequences.JuliaSet
 import nutria.syntax._
 import nutria.viewport.{Dimensions, Viewport}
 
@@ -43,7 +43,7 @@ object JuliaSetMap extends ProcessorHelper {
     def content(cx: Double, cy: Double):Content = {
       view
         .withDimensions(patchDimensions)
-        .withFractal(JuliaSet(cx, cy)(5000) -> SmoothColoring())
+        .withFractal(JuliaSet(cx, cy)(5000) ~> SmoothColoring())
     }
 
     override def execute(): Unit = {
@@ -82,7 +82,7 @@ object JuliaSetMap extends ProcessorHelper {
     override def execute(): Unit = {
       view
         .withDimensions(Dimensions.fullHD.scale(0.1))
-        .withFractal(JuliaSet(cx, cy)(500) -> RoughColoring())
+        .withFractal(JuliaSet(cx, cy)(500) ~> RoughColoring())
         .strongNormalized
         .withColor(HSV.MonoColor.Blue).save(file)
     }

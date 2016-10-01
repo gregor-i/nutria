@@ -21,8 +21,8 @@ import java.awt.image.BufferedImage
 
 import nurtia.data.{ContentFactory, SimpleFactory}
 import nutria.color.{Color, HSV}
-import nutria.fractal.techniques.RoughColoring
-import nutria.fractal.{DoubleSequence, Mandelbrot}
+import nutria.consumers.RoughColoring
+import nutria.sequences.{DoubleSequence, Mandelbrot}
 import nutria.syntax._
 import nutria.viewport.{Dimensions, Point, Viewport}
 import nutria.{Fractal, SequenceConstructor}
@@ -30,7 +30,7 @@ import util.Observable
 
 @SerialVersionUID(1L)
 class Model(
-             var fractal: Fractal = Mandelbrot(250) -> RoughColoring(),
+             var fractal: Fractal = Mandelbrot(250) ~> RoughColoring(),
              var contentFactory: ContentFactory = SimpleFactory,
              var farbe: Color = HSV.MonoColor.Blue,
              var view: Viewport = Mandelbrot.start) extends Observable {

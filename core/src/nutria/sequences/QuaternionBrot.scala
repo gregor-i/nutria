@@ -15,18 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nutria.fractal.alternativeImplementions
+package nutria.sequences
 
-import nutria.SequenceConstructor
-import nutria.fractal.AbstractSequence
+import nutria._
 import spire.implicits._
-import spire.math.Complex
+import spire.math.Quaternion
 
+object QuaternionBrot {
 
-object SpireBrot {
-
-  final class Sequence(val start: Complex[Double], private var iterationsRemaining: Int) extends AbstractSequence {
-    private var current: Complex[Double] = Complex.zero
+  final class Sequence(val start: Quaternion[Double], private var iterationsRemaining: Int) extends AbstractSequence {
+    var current: Quaternion[Double] = Quaternion.zero
 
     @inline def hasNext: Boolean = current.abs < 2 && iterationsRemaining >= 0
 
@@ -37,5 +35,6 @@ object SpireBrot {
     }
   }
 
-  def apply(maxIterations:Int):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(Complex(x0, y0), maxIterations)
+  def apply(selector: (Double, Double) => Quaternion[Double])(maxIterations:Int):SequenceConstructor[Sequence] =
+    (x0, y0) => new Sequence(selector(x0, y0), maxIterations)
 }
