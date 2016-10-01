@@ -17,9 +17,6 @@
 
 package nutria.color
 
-import java.util.ArrayList
-import java.util.Arrays
-
 case class Gradient(farben: ConstantColor*) extends Color {
   private val n = farben.length - 1
   require(n > 0)

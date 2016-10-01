@@ -17,10 +17,12 @@
 
 package nurtia.data
 
-import nutria.{Fractal, Viewport}
 import nutria.fractal.Mandelbrot
-import nutria.fractal.techniques.{CardioidTechniques, ContourTechniques, EscapeTechniques, TrapTechniques}
+import nutria.fractal.techniques._
 import nutria.viewport.Point
+import nutria.{Fractal, Viewport}
+
+import nutria.syntax._
 
 object MandelbrotData extends Data[Mandelbrot.Sequence] {
 
@@ -96,22 +98,21 @@ object MandelbrotData extends Data[Mandelbrot.Sequence] {
     Viewport.createViewportByLongs(0xbffff1289a2f9024L, 0x3ecc1658de9600a1L, 0x3e89545b65000000L, 0x0000000000000000L, 0x0000000000000000L, 0xbe7cf2b1970e7280L))
 
   val selectionFractals: Seq[(String, Fractal)] = Seq(
-    "RoughColoring(150)" -> EscapeTechniques[Sequence].RoughColoring(150),
-    "RoughColoring(250)" -> EscapeTechniques[Sequence].RoughColoring(250),
-    "RoughColoring(500)" -> EscapeTechniques[Sequence].RoughColoring(500),
-    "RoughColoring(750)" -> EscapeTechniques[Sequence].RoughColoring(750),
-    "RoughColoring(1500)" -> EscapeTechniques[Sequence].RoughColoring(1500),
-    "OrbitPoint(250, 0, 0)" -> TrapTechniques[Sequence].OrbitPoint(250, 0, 0),
-    "OrbitPoint(250, -1, 0)" -> TrapTechniques[Sequence].OrbitPoint(250, -1, 0),
-    "OrbitPoint(1250, 1, 1)" -> TrapTechniques[Sequence].OrbitPoint(1250, 1, 1),
-    "OrbitPoint(250, 1, 0)" -> TrapTechniques[Sequence].OrbitPoint(250, 1, 0),
-    "OrbitPoint(250, 0, 1)" -> TrapTechniques[Sequence].OrbitPoint(250, 0, 1),
-    "OrbitRealAxis(250)" -> TrapTechniques[Sequence].OrbitRealAxis(250),
-    "OrbitImgAxis(250)" -> TrapTechniques[Sequence].OrbitImgAxis(250),
-    "Brot(1000)" -> EscapeTechniques[Sequence].Brot(1000),
-    "Contour(500)" -> ContourTechniques[Sequence].Contour(500),
-    "CardioidHeuristic(50, 20)" -> CardioidTechniques.apply.CardioidHeuristic(50, 20),
-    "CardioidNumeric(500, 50)" -> CardioidTechniques.apply.CardioidNumeric(500, 50))
+    "RoughColoring(150)" -> (Mandelbrot(150) -> RoughColoring()),
+    "RoughColoring(250)" -> (Mandelbrot(250) -> RoughColoring()),
+    "RoughColoring(500)" -> (Mandelbrot(500) -> RoughColoring()),
+    "RoughColoring(750)" -> (Mandelbrot(750) -> RoughColoring()),
+    "RoughColoring(1500)" -> (Mandelbrot(1500) -> RoughColoring()),
+    "OrbitPoint(250, 0, 0)" -> (Mandelbrot(250) -> OrbitPoint(0, 0)),
+    "OrbitPoint(250, -1, 0)" ->(Mandelbrot(250) ->  OrbitPoint(-1, 0)),
+    "OrbitPoint(1250, 1, 1)" -> (Mandelbrot(250) -> OrbitPoint(1, 1)),
+    "OrbitPoint(250, 1, 0)" ->(Mandelbrot(250) ->  OrbitPoint(1, 0)),
+    "OrbitPoint(250, 0, 1)" ->(Mandelbrot(250) ->  OrbitPoint(0, 1)),
+    "OrbitRealAxis(250)" ->(Mandelbrot(250) ->  OrbitRealAxis()),
+    "OrbitImgAxis(250)" ->(Mandelbrot(250) ->  OrbitImgAxis()),
+    "Contour(500)" -> Contour(500),
+    "CardioidHeuristic(50, 20)" -> (Mandelbrot(250) -> CardioidHeuristic(20)),
+    "CardioidNumeric(500, 50)" -> (Mandelbrot(250) -> CardioidNumeric(50)))
 
   object Focus {
     val iteration1 = Set(

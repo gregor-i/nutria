@@ -43,6 +43,11 @@ object syntax {
       BuddahBrot(transform, sourceTransform, maxIteration)
   }
 
+  implicit class EnrichSequenceConstructors[A <: AbstractSequence](val constructor: SequenceConstructor[A]) extends AnyVal {
+    def withConsumer(consumer: SequenceConsumer[A]): Fractal = (x, y) => consumer(constructor(x, y))
+    def ->(consumer: SequenceConsumer[A]): Fractal = (x, y) => consumer(constructor(x, y))
+  }
+
   implicit class EnrichedContent(val content: Content) extends AnyVal {
     def cached: CachedContent = content match {
       case cached: CachedContent => cached

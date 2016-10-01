@@ -19,7 +19,7 @@ import nutria.accumulator.Max
 import nutria.color.{Color, HSV}
 import nutria.content.Content
 import nutria.fractal.Mandelbrot
-import nutria.fractal.techniques.{EscapeTechniques, TrapTechniques}
+import nutria.fractal.techniques.{CircleP2, RoughColoring}
 import nutria.syntax._
 import nutria.viewport.{Dimensions, Viewport}
 import viewportSelections.ViewportSelection
@@ -39,10 +39,10 @@ object Wallpaper extends ProcessorHelper {
         .withDimensions(Dimensions.fullHD)
 
       val rough = transform
-        .withAntiAliasedFractal(EscapeTechniques[Mandelbrot.Sequence].RoughColoring(5000)).strongNormalized
+        .withAntiAliasedFractal(Mandelbrot(5000) -> RoughColoring()).strongNormalized
 
       val circle = transform
-        .withAntiAliasedFractal(TrapTechniques[Mandelbrot.Sequence].CircleP2(7500), Max).strongNormalized
+        .withAntiAliasedFractal(Mandelbrot(7500) ->CircleP2(), Max).strongNormalized
 
       val added = new Content {
         override def dimensions: Dimensions = Dimensions.fullHD

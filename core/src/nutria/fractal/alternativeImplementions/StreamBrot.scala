@@ -18,8 +18,8 @@
 package nutria.fractal.alternativeImplementions
 
 import nutria.Fractal
-import spire.math.Complex
 import spire.implicits._
+import spire.math.Complex
 
 object StreamBrot {
   def RoughColoring(maxIterations:Int):Fractal =

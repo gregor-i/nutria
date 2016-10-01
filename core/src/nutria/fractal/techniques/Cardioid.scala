@@ -18,14 +18,36 @@
 package nutria
 package fractal.techniques
 
-import nutria.fractal.{Mandelbrot, SequenceConstructor}
+import nutria.fractal.Mandelbrot
 
-object CardioidTechniques {
-  def apply(implicit sequence: SequenceConstructor[Mandelbrot.Sequence]):CardioidTechniques = new CardioidTechniques()
+object CardioidHeuristic{
+  @inline private[this] def q(@inline x: Double): Double = x * x
+  import Math.{cos, sin}
 
+  def contour(t: Double) = (contourX(t), contourY(t))
+  def contourX(t: Double) = 0.5 * cos(t) - 0.25 * cos(t * 2)
+  def contourY(t: Double) = 0.5 * sin(t) - 0.25 * sin(2 * t)
+
+  def apply(numberOfPoints: Int):SequenceConsumer[Mandelbrot.Sequence] = {
+    val points = (0 to numberOfPoints)
+      .map(_ * math.Pi / numberOfPoints)
+      .map(contour)
+
+    def minimalDistance(v: Double, x: Double, _y: Double): Double = {
+      val y = _y.abs
+      points.foldLeft(v) {
+        case (d, (px, py)) => d.min(q(px - x) + q(py - y))
+      }
+    }
+
+    seq => seq.foldLeft(minimalDistance(2, seq.publicX, seq.publicY))(minimalDistance)
+  }
+}
+
+
+object CardioidNumeric{
+  @inline private[this] def q(@inline x: Double): Double = x * x
   import Math.{cos, sin, sqrt}
-
-  @inline def q(@inline x: Double): Double = x * x
 
   def contour(t: Double) = (contourX(t), contourY(t))
   def contourX(t: Double) = 0.5 * cos(t) - 0.25 * cos(t * 2)
@@ -127,45 +149,11 @@ object CardioidTechniques {
     //      val n = newton(t0, x, y)
     distSquared(t0, x, y)
   }
-}
 
-class CardioidTechniques(implicit sequence:SequenceConstructor[Mandelbrot.Sequence]) {
-
-  import CardioidTechniques._
-
-  def CardioidHeuristic(maxIteration: Int, numberOfPoints: Int): Fractal = {
-    val points = (0 to numberOfPoints)
-      .map(_ * math.Pi / numberOfPoints)
-      .map(contour)
-
-    def minimalDistance(v: Double, x: Double, y: Double): Double =
-      points.foldLeft(v) {
-        case (d, (px, py)) => d.min(q(px - x) + q(py - y))
-      }
-
-    (x0, y0) =>
-      sequence(x0, y0.abs, maxIteration).foldLeft(minimalDistance(2, x0, y0)) {
-        (v, x, y) =>
-          minimalDistance(v, x, y)
-      }
-  }
-
-  def CardioidNumeric(maxIteration: Int, newtonIterations: Int): Fractal = {
-    (x0, y0) => {
-      val range: Range = 0 until newtonIterations
-      sequence(x0, y0, maxIteration).foldLeft(minimalDistance(range)(x0, y0)) {
-        (v, x, y) => v.min(minimalDistance(range)(x, y))
-      }
-    }
-  }
-
-
-  def CardioidNumericInSpecificIteration(iteration: Int, newtonIterations: Int): Fractal = {
-    (x0, y0) => {
-      val seq = sequence(x0, y0, 0)
-      for(i <- 0 until iteration)
-        seq.next()
-      minimalDistance(0 until newtonIterations)(seq.publicX, seq.publicY)
+  def apply(newtonIterations: Int):SequenceConsumer[Mandelbrot.Sequence] =  {
+    val range: Range = 0 until newtonIterations
+    seq => seq.foldLeft(minimalDistance(range)(seq.publicX, seq.publicY)) {
+      (v, x, y) => v.min(minimalDistance(range)(x, y))
     }
   }
 }

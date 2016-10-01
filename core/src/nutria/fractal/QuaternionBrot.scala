@@ -18,11 +18,10 @@
 package nutria
 package fractal
 
-import nutria.fractal.techniques.{EscapeTechniques, TrapTechniques}
-import spire.math.Quaternion
 import spire.implicits._
+import spire.math.Quaternion
 
-class QuaternionBrot(selector: (Double, Double) => Quaternion[Double]) {
+object QuaternionBrot {
 
   final class Sequence(val start: Quaternion[Double], private var iterationsRemaining: Int) extends AbstractSequence {
     var current: Quaternion[Double] = Quaternion.zero
@@ -36,7 +35,6 @@ class QuaternionBrot(selector: (Double, Double) => Quaternion[Double]) {
     }
   }
 
-  implicit val seqConstructor = new SequenceConstructor[Sequence] {
-    override def apply(x0: Double, y0: Double, maxIterations: Int): Sequence = new Sequence(selector(x0, y0), maxIterations)
-  }
+  def apply(selector: (Double, Double) => Quaternion[Double])(maxIterations:Int):SequenceConstructor[Sequence] =
+    (x0, y0) => new Sequence(selector(x0, y0), maxIterations)
 }

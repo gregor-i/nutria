@@ -18,18 +18,14 @@
 package nutria.fractal.techniques
 
 import nutria._
-import nutria.fractal.{DoubleSequence, SequenceConstructor}
+import nutria.fractal.Mandelbrot
 import nutria.syntax._
 
-object ContourTechniques{
-  def apply[A <: DoubleSequence:SequenceConstructor]:ContourTechniques[A] = new ContourTechniques[A]
-}
-
-class ContourTechniques[A <: DoubleSequence](implicit sequence:SequenceConstructor[A]) {
+object Contour {
   // Careful. A lot of strage double magic goes on in this function. ContourCompare is an implementation of the same function to compare for the Mandelbrot sequence.
-  def Contour(maxIterations: Int): Fractal =
+  def apply(maxIterations:Int): Fractal =
   (x0, y0) => {
-    val seq = sequence(x0, y0, maxIterations)
+    val seq = new Mandelbrot.Sequence(x0, y0, maxIterations)
     var distance = 0d
     for (i <- 0 to maxIterations) {
       seq.next()

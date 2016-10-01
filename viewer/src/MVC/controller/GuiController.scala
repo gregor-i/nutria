@@ -22,7 +22,6 @@ import java.awt.event._
 import MVC.model.Model
 import MVC.view.View
 import nutria.color.Invert
-import nutria.fractal.Mandelbrot
 import nutria.viewport.{Dimensions, Point}
 import nutria.syntax._
 
@@ -73,7 +72,11 @@ class GuiController(val modell: Model, val view: View) extends KeyListener with 
     val x = trans.transformX(e.getX, e.getY)
     val y = trans.transformY(e.getX, e.getY)
 
-    modell.sequenceConstructor.map(_.apply(x, y, 50)).map(_.wrapped).map(points => Point(x, y) +: points.filter(t => t._1 == t._1 && t._2 == t._2).map(Point.tupled).toSeq).foreach(modell.setPoints)
+    modell.sequenceConstructor
+      .map(_.apply(x, y))
+      .map(_.wrapped)
+      .map(points => Point(x, y) +: points.filter(t => t._1 == t._1 && t._2 == t._2).map(Point.tupled).toSeq)
+      .foreach(modell.setPoints)
 
 //    match
 //      case seq @ Some[Sequ] => modell.setPoints(construcor.sequence(x,y, 50).wrapped.map(Point.tupled).toSeq)

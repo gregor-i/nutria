@@ -17,8 +17,10 @@
 
 import MVC.model._
 import MVC.view._
-import nutria.fractal.{JuliaSet, Mandelbrot}
-import nutria.fractal.techniques.{EscapeTechniques, TrapTechniques}
+import nutria.fractal.JuliaSet
+import nutria.fractal.techniques.SmoothColoring
+
+import nutria.syntax._
 
 object Viewer {
   def main(args: Array[String]): Unit = {
@@ -27,10 +29,8 @@ object Viewer {
     val model = new Model()
 //    model.setFractal(TrapTechniques[Mandelbrot.Sequence].SmoothColoring(500))
 
-        val julia = JuliaSet(-0.6, 0.6)
-        import julia.seqConstructor
-        model.setSequence(Some(julia.seqConstructor))
-    model.setFractal(TrapTechniques[julia.Sequence].SmoothColoring(500))
+    model.setSequence(Some(JuliaSet(-0.6, 0.6)(50)))
+    model.setFractal(JuliaSet(-0.6, 0.6)(500) -> SmoothColoring())
     new View(model)
   }
 }

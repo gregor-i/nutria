@@ -20,18 +20,17 @@ package MVC.model
 import java.awt.image.BufferedImage
 
 import nurtia.data.{ContentFactory, SimpleFactory}
-import nutria.Fractal
 import nutria.color.{Color, HSV}
-import nutria.fractal.techniques.EscapeTechniques
-import nutria.fractal.{DoubleSequence, Mandelbrot, SequenceConstructor}
-import nutria.viewport.{Dimensions, Point, Viewport}
-import util.Observable
-
+import nutria.fractal.techniques.RoughColoring
+import nutria.fractal.{DoubleSequence, Mandelbrot}
 import nutria.syntax._
+import nutria.viewport.{Dimensions, Point, Viewport}
+import nutria.{Fractal, SequenceConstructor}
+import util.Observable
 
 @SerialVersionUID(1L)
 class Model(
-             var fractal: Fractal = EscapeTechniques[Mandelbrot.Sequence].RoughColoring(250),
+             var fractal: Fractal = Mandelbrot(250) -> RoughColoring(),
              var contentFactory: ContentFactory = SimpleFactory,
              var farbe: Color = HSV.MonoColor.Blue,
              var view: Viewport = Mandelbrot.start) extends Observable {
@@ -39,7 +38,7 @@ class Model(
   var quali: Double = 0.25
   var img: BufferedImage = _
   var points = Seq[Point]()
-  var sequenceConstructor: Option[SequenceConstructor[_ <: DoubleSequence]] = Some(Mandelbrot.seqConstructor)
+  var sequenceConstructor: Option[SequenceConstructor[_ <: DoubleSequence]] = Some(Mandelbrot.apply(50))
 
   preview()
 

@@ -16,13 +16,19 @@
  */
 
 package nutria
+package fractal.techniques
 
-import simulacrum._
+import nutria.fractal.{AbstractSequence, DoubleSequence}
 
-package object fractal {
+object RoughColoring {
+  def apply[A <: AbstractSequence](): SequenceConsumer[A] =
+    seq => seq.size().toDouble
+}
 
-  @typeclass trait SequenceConstructor[A <: AbstractSequence] {
-    def apply(x0: Double, y0: Double, maxIterations: Int): A
-  }
 
+object SmoothColoring {
+  def apply[A <: DoubleSequence](): SequenceConsumer[A] =
+    seq => seq.foldLeft(0d) {
+      (v, x, y) => v + Math.exp(-(x * x + y * y))
+    }
 }

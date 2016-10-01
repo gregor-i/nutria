@@ -49,7 +49,7 @@ trait DoubleSequence extends AbstractSequence { self =>
 
       override def next(): (X, Y) = {
         self.next()
-        (publicX, publicY)
+        public
       }
     }
 }

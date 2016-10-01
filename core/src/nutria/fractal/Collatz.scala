@@ -17,6 +17,7 @@
 
 package nutria.fractal
 
+import nutria._
 import spire.implicits._
 import spire.math.Complex
 
@@ -56,7 +57,5 @@ object Collatz {
     }
   }
 
-  implicit val seqConstructor = new SequenceConstructor[Sequence] {
-    override def apply(x0: Double, y0: Double, maxIterations: Int): Sequence = new Sequence(x0, y0, maxIterations)
-  }
+  def apply(maxIterations:Int):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(x0, y0, maxIterations)
 }

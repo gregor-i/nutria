@@ -17,7 +17,7 @@
 
 import java.io.{File, FileWriter}
 
-import nutria.fractal.techniques.EscapeTechniques
+import nutria.fractal.techniques.RoughColoring
 import nutria.fractal.{Mandelbrot, QuaternionBrot}
 import nutria.syntax._
 import nutria.viewport.Dimensions
@@ -39,10 +39,9 @@ object Matlab3DExport extends App {
     i <- 0 until dimensions.height / 2
   } {
     def p(i:Int) = transform.transformY(0, i)
-    val quatBrot = new QuaternionBrot({ case (x, y) => Quaternion(x, y, p(i), p(i))})
-    import quatBrot.seqConstructor
+    def selector(x:Double, y:Double):Quaternion[Double] = Quaternion(x, y, p(i), p(i))
     val content = transform
-      .withFractal(EscapeTechniques[quatBrot.Sequence].RoughColoring(iterations))
+      .withFractal(QuaternionBrot(selector)(iterations) -> RoughColoring())
       .cached
 
     val data = s"data(:, :, ${i+1}) = [${content.values.map(_.mkString(",")).mkString(";")}];\n"

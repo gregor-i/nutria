@@ -15,14 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nutria
-package fractal
+package nutria.fractal
 
-import nutria.fractal.techniques.{CardioidTechniques, ContourTechniques, EscapeTechniques, TrapTechniques}
-import nutria.viewport.Point
+import nutria.SequenceConstructor
+import nutria.viewport.{Point, Viewport}
 
-object Mandelbrot {
-
+object Mandelbrot{
   final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence {
     private[this] var x: X = 0d
     private[this] var y: Y = 0d
@@ -65,8 +63,5 @@ object Mandelbrot {
 
   val start: Viewport = Viewport(Point(-2.5, -1), Point(3.5, 0), Point(0, 2))
 
-  implicit val seqConstructor = new SequenceConstructor[Sequence] {
-    override def apply(x0: Double, y0: Double, maxIterations: Int): Sequence = new Sequence(x0, y0, maxIterations)
-  }
-
+  def apply(maxIterations:Int):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(x0, y0, maxIterations)
 }

@@ -17,7 +17,8 @@
 
 package nurtia.data
 
-import nutria.fractal.{Collatz, DoubleSequence, Mandelbrot, SequenceConstructor}
+import nutria.SequenceConstructor
+import nutria.fractal.{Collatz, DoubleSequence, Mandelbrot}
 
 object Collection {
 
@@ -27,8 +28,8 @@ object Collection {
 
   val fractals: Seq[(String, SequenceConstructor[_ <: DoubleSequence], Data[_])] =
     Seq(
-      ("Mandelbrot", SequenceConstructor[Mandelbrot.Sequence], MandelbrotData),
-      ("Collatz", SequenceConstructor[Collatz.Sequence], CollatzData)
+      ("Mandelbrot", Mandelbrot(50), MandelbrotData),
+      ("Collatz", Collatz(50), CollatzData)
       //      ("MandelbrotCube", MandelbrotCube, MandelbrotCube.fractals),
       //      ("Burning Ship", BurningShip, BurningShip.fractals),
       //      ("JuliaSet(-0.6, -0.6)", JuliaSet(-0.6, -0.6), JuliaSet(-0.6, -0.6).fractals),

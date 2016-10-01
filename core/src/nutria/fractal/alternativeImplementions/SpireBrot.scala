@@ -17,7 +17,8 @@
 
 package nutria.fractal.alternativeImplementions
 
-import nutria.fractal.{AbstractSequence, SequenceConstructor}
+import nutria.SequenceConstructor
+import nutria.fractal.AbstractSequence
 import spire.implicits._
 import spire.math.Complex
 
@@ -36,7 +37,5 @@ object SpireBrot {
     }
   }
 
-  implicit val seqConstructor = new SequenceConstructor[Sequence] {
-    override def apply(x0: Double, y0: Double, maxIterations: Int): Sequence = new Sequence(Complex(x0, y0), maxIterations)
-  }
+  def apply(maxIterations:Int):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(Complex(x0, y0), maxIterations)
 }

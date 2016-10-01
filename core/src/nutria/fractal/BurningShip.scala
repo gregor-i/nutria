@@ -17,7 +17,7 @@
 
 package nutria.fractal
 
-import nutria.fractal.techniques.{CardioidTechniques, ContourTechniques, EscapeTechniques, TrapTechniques}
+import nutria._
 
 object BurningShip{
   final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence { self =>
@@ -65,7 +65,5 @@ object BurningShip{
 //    "RoughColoring(1000)" -> RoughColoring(1000)
 //  )
 
-  implicit val seqConstructor = new SequenceConstructor[Sequence] {
-    override def apply(x0: Double, y0: Double, maxIterations: Int): Sequence = new Sequence(x0, y0, maxIterations)
-  }
+  def apply(maxIterations:Int):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(x0, y0, maxIterations)
 }

@@ -17,11 +17,10 @@
 
 package gui.actions
 
-import MVC.model.Model
 import java.awt.event.ActionListener
-import javax.swing.JMenu
-import javax.swing.JMenuItem
+import javax.swing.{JMenu, JMenuItem}
 
+import MVC.model.Model
 import nutria.fractal.Mandelbrot
 import nutria.viewport._
 

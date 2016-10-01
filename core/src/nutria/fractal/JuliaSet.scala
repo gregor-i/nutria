@@ -17,7 +17,9 @@
 
 package nutria.fractal
 
-case class JuliaSet(cx: Double, cy: Double) {
+import nutria.SequenceConstructor
+
+object JuliaSet {
 
   class Sequence(cx: Double, cy: Double)(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence {
     private[this] var x: X = x0
@@ -66,7 +68,5 @@ case class JuliaSet(cx: Double, cy: Double) {
   //    "RoughColoring(1000)" -> RoughColoring(1000)
   //  )
 
-  implicit val seqConstructor = new SequenceConstructor[Sequence] {
-    override def apply(x0: Double, y0: Double, maxIterations: Int): Sequence = new Sequence(cx, cy)(x0, y0, maxIterations)
-  }
+  def apply(cx: Double, cy: Double)(maxIterations:Int):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(cx, cy)(x0, y0, maxIterations)
 }

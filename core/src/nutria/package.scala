@@ -16,8 +16,6 @@
  */
 
 package object nutria {
-  type Fractal = (Double, Double) => Double
-
   type Accumulator = nutria.accumulator.Accumulator
 
   type Dimensions = nutria.viewport.Dimensions
@@ -26,6 +24,13 @@ package object nutria {
   type Viewport = nutria.viewport.Viewport
   val Viewport = nutria.viewport.Viewport
   type Transform = nutria.viewport.Transform
+
+  type Fractal = (Double, Double) => Double
+
+  type AbstractSequence = nutria.fractal.AbstractSequence
+
+  type SequenceConstructor[A <: AbstractSequence] = (Double, Double) => A
+  type SequenceConsumer[A <: AbstractSequence] = A => Double
 
   type Content = nutria.content.Content
   type FinishedContent = Content with nutria.content.Normalized

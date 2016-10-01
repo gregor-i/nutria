@@ -15,15 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import java.io.File
-
 import nutria.color.{HSV, Invert}
 import nutria.content.Content
-import nutria.fractal.{JuliaSet, Mandelbrot}
-import nutria.fractal.techniques.{CardioidTechniques, EscapeTechniques, TrapTechniques}
+import nutria.fractal.JuliaSet
+import nutria.fractal.techniques.{RoughColoring, SmoothColoring}
 import nutria.syntax._
 import nutria.viewport.{Dimensions, Viewport}
-import nutria.{Color, FinishedContent}
 
 object JuliaSetMap extends ProcessorHelper {
   override def rootFolder: String = "/home/gregor/Pictures/JuliaSetMap/"
@@ -44,12 +41,9 @@ object JuliaSetMap extends ProcessorHelper {
     val patchDimensions = Dimensions.fullHD.scale(0.1)
 
     def content(cx: Double, cy: Double):Content = {
-      val julia = JuliaSet(cx, cy)
-      import julia.seqConstructor
-
       view
         .withDimensions(patchDimensions)
-        .withFractal(TrapTechniques[julia.Sequence].SmoothColoring(5000))
+        .withFractal(JuliaSet(cx, cy)(5000) -> SmoothColoring())
     }
 
     override def execute(): Unit = {
@@ -86,12 +80,9 @@ object JuliaSetMap extends ProcessorHelper {
     override def skipCondition: Boolean = file.exists()
 
     override def execute(): Unit = {
-      val julia = JuliaSet(cx, cy)
-      import julia.seqConstructor
-
       view
         .withDimensions(Dimensions.fullHD.scale(0.1))
-        .withFractal(EscapeTechniques[julia.Sequence].RoughColoring(500))
+        .withFractal(JuliaSet(cx, cy)(500) -> RoughColoring())
         .strongNormalized
         .withColor(HSV.MonoColor.Blue).save(file)
     }
