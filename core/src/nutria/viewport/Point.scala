@@ -17,6 +17,8 @@
 
 package nutria.viewport
 
+import spire.math.Complex
+
 object Point {
 
   def doubleToString(d: Double): String = {

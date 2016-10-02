@@ -20,12 +20,12 @@ package MVC.model
 import java.awt.image.BufferedImage
 
 import nurtia.data.{ContentFactory, SimpleFactory}
-import nutria.color.{Color, HSV}
+import nutria.color.{HSV}
 import nutria.consumers.RoughColoring
 import nutria.sequences.{DoubleSequence, Mandelbrot}
 import nutria.syntax._
 import nutria.viewport.{Dimensions, Point, Viewport}
-import nutria.{Fractal, SequenceConstructor}
+import nutria.{Color, Fractal, SequenceConstructor}
 import util.Observable
 
 @SerialVersionUID(1L)

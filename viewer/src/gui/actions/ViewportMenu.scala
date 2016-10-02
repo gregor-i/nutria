@@ -29,7 +29,7 @@ class ViewportMenu(views: Array[Viewport], gui: Model) extends JMenu("Viewports"
   private def menu_order(s: Array[String], a: Array[ActionListener]) {
     if (s.length > 10) {
       var sub = new JMenu("Sub")
-      for (i <- 0 until s.length) {
+      for (i <- s.indices) {
         val menuItem = new JMenuItem(s(i))
         menuItem.addActionListener(a(i))
         sub.add(menuItem)
@@ -40,7 +40,7 @@ class ViewportMenu(views: Array[Viewport], gui: Model) extends JMenu("Viewports"
       }
       add(sub)
     } else {
-      for (i <- 0 until s.length) {
+      for (i <- s.indices) {
         val menuItem = new JMenuItem(s(i))
         menuItem.addActionListener(a(i))
         add(menuItem)
@@ -50,7 +50,7 @@ class ViewportMenu(views: Array[Viewport], gui: Model) extends JMenu("Viewports"
 
   val reset = new JMenuItem("Reset")
 
-  reset.addActionListener(new ViewportAction(gui, Mandelbrot.start))
+  reset.addActionListener(new Action(gui.setViewport(Mandelbrot.start)))
 
   add(reset)
 
@@ -58,9 +58,9 @@ class ViewportMenu(views: Array[Viewport], gui: Model) extends JMenu("Viewports"
 
   val actions = Array.ofDim[ActionListener](views.length)
 
-  for (i <- 0 until views.length) {
+  for (i <- views.indices) {
     names(i) = java.lang.Integer.toString(i)
-    actions(i) = new ViewportAction(gui, views(i))
+    actions(i) = new Action(gui.setViewport(views(i)))
   }
 
   menu_order(names, actions)

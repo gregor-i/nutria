@@ -17,6 +17,8 @@
 
 package nutria.color
 
+import nutria.Color
+
 object Invert {
   def invert(color: Color): Color = color match {
     case Invert(innerColor) => innerColor

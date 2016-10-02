@@ -20,7 +20,6 @@ package image
 
 import java.awt.image.BufferedImage
 
-import nutria.color.Color
 import nutria.viewport.HasDimensions
 
 class Image(val content: FinishedContent, val farbe: Color) extends HasDimensions {

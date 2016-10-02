@@ -17,6 +17,8 @@
 
 package nutria.color
 
+import nutria.Color
+
 trait HSV extends Color {
   def H(lambda: Double): Double
   def S(lambda: Double): Double
@@ -31,13 +33,6 @@ trait HSV extends Color {
     require(lambda <= 1)
 
     HSV2RGB(H(lambda), S(lambda), V(lambda))
-  }
-
-  def RGB(R: Double, G: Double, B: Double): Int = {
-    assert(R >= 0 && R <= 1)
-    assert(G >= 0 && G <= 1)
-    assert(B >= 0 && B <= 1)
-    (R * 255).toInt * (256 * 256) + (G * 255).toInt * (256) + (B * 255).toInt
   }
 
   def HSV2RGB(H: Double, S: Double, V: Double): Int = {
@@ -76,7 +71,7 @@ object HSV {
   }
 
   object MonoColor {
-    abstract class HSVMonoColor(val H: Double) extends HSV {
+    abstract class HSVMonoColor(H: Double) extends HSV {
       def H(lambd: Double) = H
       def S(lambda: Double) = if (lambda < 0.5) 1 else 2 * (1 - lambda)
       def V(lambda: Double) = if (lambda < 0.5) 2 * lambda else 1
@@ -91,7 +86,7 @@ object HSV {
   }
 
   object MonoColor2 {
-    abstract class HSVMonoColor(val H: Double) extends HSV {
+    abstract class HSVMonoColor(H: Double) extends HSV {
       def H(lambd: Double) = H
       def S(lambda: Double) = 1 - math.sqrt(1 - math.pow(1 - lambda, 2))
       def V(lambda: Double) = math.sqrt(1 - math.pow(1 - lambda, 2))

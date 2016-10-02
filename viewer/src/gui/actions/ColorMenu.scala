@@ -20,15 +20,17 @@ package gui.actions
 import java.awt.event.ActionListener
 import javax.swing.JMenu
 import javax.swing.JMenuItem
+
 import nutria.color._
 import MVC.model.Model
+import nutria.Color
 
 class ColorMenu(farben: List[Color], gui: Model) extends JMenu("Farben") {
 
   private def menu_order(s: Array[String], a: Array[ActionListener]) {
     if (s.length > 10) {
       var sub = new JMenu("Sub")
-      for (i <- 0 until s.length) {
+      for (i <- s.indices) {
         val menuItem = new JMenuItem(s(i))
         menuItem.addActionListener(a(i))
         sub.add(menuItem)
@@ -39,7 +41,7 @@ class ColorMenu(farben: List[Color], gui: Model) extends JMenu("Farben") {
       }
       add(sub)
     } else {
-      for (i <- 0 until s.length) {
+      for (i <- s.indices) {
         val menuItem = new JMenuItem(s(i))
         menuItem.addActionListener(a(i))
         add(menuItem)
@@ -48,14 +50,14 @@ class ColorMenu(farben: List[Color], gui: Model) extends JMenu("Farben") {
   }
 
   val reset = new JMenuItem("Default")
-  reset.addActionListener(new ColorAction(gui, HSV.MonoColor.Blue))
+  reset.addActionListener(new Action(gui.setColor(HSV.MonoColor.Blue)))
   add(reset)
   val names = Array.ofDim[String](farben.length)
   val actions = Array.ofDim[ActionListener](farben.length)
 
-  for (i <- 0 until farben.length) {
+  for (i <- farben.indices) {
     names(i) = farben(i).toString
-    actions(i) = new ColorAction(gui, farben(i))
+    actions(i) = new Action(gui.setColor(farben(i)))
   }
   menu_order(names, actions)
 }

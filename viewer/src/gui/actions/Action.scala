@@ -17,14 +17,9 @@
 
 package gui.actions
 
-import MVC.model.Model
-import java.awt.event.ActionEvent
-import java.awt.event.ActionListener
-import nutria.viewport.Viewport
+import java.awt.event.{ActionEvent, ActionListener}
 
-class ViewportAction(private val gui: Model, private val view: Viewport) extends ActionListener {
-
-  override def actionPerformed(e: ActionEvent) {
-    gui.setViewport(view)
-  }
+class Action(action: => Unit) extends ActionListener {
+  override def actionPerformed(e: ActionEvent) = action
 }
+

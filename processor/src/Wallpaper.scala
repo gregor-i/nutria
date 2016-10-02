@@ -15,8 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import nutria.Color
 import nutria.accumulator.Max
-import nutria.color.{Color, HSV}
+import nutria.color.HSV
 import nutria.consumers.{CircleP2, RoughColoring}
 import nutria.content.Content
 import nutria.sequences.Mandelbrot
