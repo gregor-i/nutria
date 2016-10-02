@@ -15,8 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import nutria.Content
 import nutria.color.HSV
-import nutria.consumers.SmoothColoring
+import nutria.consumers.{OrbitImgAxis, OrbitRealAxis}
 import nutria.sequences.Mandelbrot
 import nutria.syntax._
 import nutria.viewport.Dimensions
@@ -24,33 +25,32 @@ import nutria.viewport.Dimensions
 object Main extends App {
 
   val root = "E:\\snapshots\\"
-//  start
-//    .withDimensions(Dimensions.fujitsu)
-//    .withDynamAntiAliasedFractal(EscapeTechniques[Sequence].RoughColoring(350))
-//    .linearNormalized
-//    .withColor(HSV.MonoColor.Blue)
-//    .verboseSave(root + s"dynam.png")
-//
-//  start
-//    .withDimensions(Dimensions.fujitsu)
-//    .withAntiAliasedFractal(EscapeTechniques[Sequence].RoughColoring(350))
-//    .linearNormalized
-//    .withColor(HSV.MonoColor.Blue)
-//    .verboseSave(root + s"aa.png")
-//
-//
-//  start
-//    .withDimensions(Dimensions.fujitsu)
-//    .withFractal(EscapeTechniques[Sequence].RoughColoring(350))
-//    .linearNormalized
+//  Mandelbrot.start
+//    .withDimensions(Dimensions.fujitsu.scale(0.5))
+//    .withFractal(Mandelbrot(350, 100) ~> SmoothColoring())
+//    .strongNormalized
 //    .withColor(HSV.MonoColor.Blue)
 //    .verboseSave(root + s"basic.png")
 
-  Mandelbrot.start
-    .withDimensions(Dimensions.fullHD)
-    .withFractal(Mandelbrot(350) ~> SmoothColoring())
-    .linearNormalized
-    .withColor(HSV.MonoColor.Blue)
-    .verboseSave(root + "consumerPattern.png")
+  val real = Mandelbrot.start
+    .withDimensions(Dimensions.fujitsu)
+    .withAntiAliasedFractal(Mandelbrot(350, 10000) ~> OrbitRealAxis())
 
+  val imag = Mandelbrot.start
+    .withDimensions(Dimensions.fujitsu)
+    .withAntiAliasedFractal(Mandelbrot(350, 10000) ~> OrbitImgAxis())
+
+  new Content {
+    val dimensions = real.dimensions
+    def apply(x: Int, y: Int) = real(x, y) - imag(x, y)
+  }.linearNormalized
+    .withColor(HSV.MonoColor.Blue)
+    .verboseSave(root + s"bothAxis.png")
+
+//  Mandelbrot.start
+//    .withDimensions(Dimensions.fujitsu.scale(0.5))
+//    .withAntiAliasedFractal(Mandelbrot(350, 100) ~> SmoothColoring())
+//    .strongNormalized
+//    .withColor(HSV.MonoColor.Blue)
+//    .verboseSave(root + s"aa.png")
 }

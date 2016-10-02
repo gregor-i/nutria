@@ -36,7 +36,7 @@ case class BuddahBrot(targetViewport: Transform, sourceViewport: Transform, maxI
   private val values = Array.ofDim[Double](width, height)
 
   def loop(sx: Double, sy: Double): Unit = {
-    for ((x, y) <- new Mandelbrot.Sequence(sx, sy, maxIterations).wrapped) {
+    for ((x, y) <- new Mandelbrot.Sequence(sx, sy, maxIterations, 4).wrapped) {
       val ix = targetViewport.invertX(x, y)
       val iy = targetViewport.invertY(x, y)
       if (!ix.isNaN && !iy.isNaN){
@@ -61,7 +61,7 @@ case class BuddahBrotWithLines(targetViewport: Transform, sourceViewport: Transf
   private val values = Array.ofDim[Double](width, height)
 
   def loop(sx: Double, sy: Double): Unit = {
-    val iterator = new Mandelbrot.Sequence(sx, sy, maxIterations)
+    val iterator = new Mandelbrot.Sequence(sx, sy, maxIterations, 4)
     var state = (iterator.publicX, iterator.publicY)
     while(iterator.hasNext){
       val lastState = state

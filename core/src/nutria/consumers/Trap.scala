@@ -34,22 +34,29 @@ object OrbitPoint {
 
 object OrbitImgAxis {
   def apply[A <: DoubleSequence](): SequenceConsumer[A] =
-    seq => seq.foldLeftY(seq.publicY.abs) {
+    seq => seq.foldLeftY(Double.MaxValue) {
       (d, y) => d.min(y.abs)
     }
 }
 
 object OrbitRealAxis {
   def apply[A <: DoubleSequence](): SequenceConsumer[A] =
-    seq => seq.foldLeftX(seq.publicX.abs) {
+    seq => seq.foldLeftX(Double.MaxValue) {
       (d, x) => d.min(x.abs)
     }
 }
 
 object OrbitBothAxis {
   def apply[A <: DoubleSequence](): SequenceConsumer[A] =
-    seq => seq.foldLeft(seq.publicX.abs.min(seq.publicY.abs)) {
-      (d, x, y) => d.min(x.abs.min(y.abs))
+    seq => 1/seq.foldLeft(Double.MaxValue) {
+      (d, x, y) =>
+        if(x.abs < y.abs && x.abs < d.abs){
+        (x.abs)
+      }else if(y.abs < x.abs && y.abs < d.abs){
+        -(y.abs)
+      }else{
+          d
+        }
     }
 }
 

@@ -17,8 +17,8 @@
 
 import MVC.model._
 import MVC.view._
-import nutria.consumers.SmoothColoring
-import nutria.sequences.JuliaSet
+import nutria.consumers.{OrbitBothAxis, SmoothColoring}
+import nutria.sequences.{JuliaSet, Mandelbrot}
 import nutria.syntax._
 
 object Viewer {
@@ -28,8 +28,9 @@ object Viewer {
     val model = new Model()
 //    model.setFractal(TrapTechniques[Mandelbrot.Sequence].SmoothColoring(500))
 
-    model.setSequence(Some(JuliaSet(-0.6, 0.6)(50)))
-    model.setFractal(JuliaSet(-0.6, 0.6)(500) ~> SmoothColoring())
+//    model.setSequence(Some(JuliaSet(-0.6, 0.6)(50)))
+//    model.setFractal(JuliaSet(-0.6, 0.6)(500) ~> SmoothColoring())
+    model.setFractal(Mandelbrot(350, 10000) ~> OrbitBothAxis())
     new View(model)
   }
 }

@@ -40,7 +40,7 @@ object Cardioid extends ProcessorHelper {
     override def execute(): Unit = {
       view
         .withDimensions(Dimensions.fullHD.scale(0.1))
-        .withFractal(Mandelbrot(2000) ~> CardioidNumeric(75))
+        .withFractal(Mandelbrot(2000, 4) ~> CardioidNumeric(75))
         .strongNormalized
         .fanOut(
           colors.map {

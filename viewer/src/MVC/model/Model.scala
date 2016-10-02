@@ -30,7 +30,7 @@ import util.Observable
 
 @SerialVersionUID(1L)
 class Model(
-             var fractal: Fractal = Mandelbrot(250) ~> RoughColoring(),
+             var fractal: Fractal = Mandelbrot(250, 100) ~> RoughColoring(),
              var contentFactory: ContentFactory = SimpleFactory,
              var farbe: Color = HSV.MonoColor.Blue,
              var view: Viewport = Mandelbrot.start) extends Observable {
@@ -38,7 +38,7 @@ class Model(
   var quali: Double = 0.25
   var img: BufferedImage = _
   var points = Seq[Point]()
-  var sequenceConstructor: Option[SequenceConstructor[_ <: DoubleSequence]] = Some(Mandelbrot.apply(50))
+  var sequenceConstructor: Option[SequenceConstructor[_ <: DoubleSequence]] = Some(Mandelbrot.apply(50, 100))
 
   preview()
 

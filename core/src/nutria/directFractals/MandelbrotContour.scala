@@ -25,7 +25,7 @@ object MandelbrotContour {
   // Careful. A lot of strage double magic goes on in this function. ContourCompare is an implementation of the same function to compare for the Mandelbrot sequence.
   def apply(maxIterations:Int): Fractal =
   (x0, y0) => {
-    val seq = new Mandelbrot.Sequence(x0, y0, maxIterations)
+    val seq = new Mandelbrot.Sequence(x0, y0, maxIterations, 4)
     var distance = 0d
     for (i <- 0 to maxIterations) {
       seq.next()

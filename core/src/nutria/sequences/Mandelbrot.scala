@@ -21,7 +21,7 @@ import nutria.SequenceConstructor
 import nutria.viewport.{Point, Viewport}
 
 object Mandelbrot{
-  final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence {
+  final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int, escapeOrbit:Double) extends DoubleSequence {
     private[this] var x: X = 0d
     private[this] var y: Y = 0d
     private[this] var xx = x * x
@@ -31,7 +31,7 @@ object Mandelbrot{
 
     def publicY = y
 
-    @inline def hasNext: Boolean = (xx + yy < 4) && iterationsRemaining >= 0
+    @inline def hasNext: Boolean = (xx + yy < escapeOrbit) && iterationsRemaining >= 0
 
     @inline def next(): Boolean = {
       y = 2 * x * y + y0
@@ -63,5 +63,5 @@ object Mandelbrot{
 
   val start: Viewport = Viewport(Point(-2.5, -1), Point(3.5, 0), Point(0, 2))
 
-  def apply(maxIterations:Int):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(x0, y0, maxIterations)
+  def apply(maxIterations:Int, escapeOrbit:Double):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(x0, y0, maxIterations, escapeOrbit)
 }
