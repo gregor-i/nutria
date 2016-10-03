@@ -23,6 +23,7 @@ import nutria.consumers.CardioidNumeric
 import nutria.sequences.Mandelbrot
 import nutria.syntax._
 import nutria.viewport.{Dimensions, Viewport}
+import processorHelper.{ProcessorHelper, Task}
 import viewportSelections.ViewportSelection
 
 object Cardioid extends ProcessorHelper {

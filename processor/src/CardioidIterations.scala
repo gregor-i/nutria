@@ -21,6 +21,7 @@ import nutria.content.CachedContent
 import nutria.sequences.Mandelbrot
 import nutria.syntax._
 import nutria.viewport.Dimensions
+import processorHelper.ProcessorHelper
 
 
 /**

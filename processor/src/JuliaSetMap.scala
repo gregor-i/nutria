@@ -21,6 +21,7 @@ import nutria.content.Content
 import nutria.sequences.JuliaSet
 import nutria.syntax._
 import nutria.viewport.{Dimensions, Viewport}
+import processorHelper.{ProcessorHelper, Task}
 
 object JuliaSetMap extends ProcessorHelper {
   override def rootFolder: String = "/home/gregor/Pictures/JuliaSetMap/"
