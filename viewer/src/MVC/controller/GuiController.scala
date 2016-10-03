@@ -21,10 +21,11 @@ import java.awt.event._
 
 import MVC.model.Model
 import MVC.view.View
-import nutria.color.Invert
-import nutria.sequences.Mandelbrot
-import nutria.viewport.{Dimensions, Point}
-import nutria.syntax._
+import nutria.core.color.Invert
+import nutria.core.sequences.Mandelbrot
+import nutria.core.syntax
+import nutria.core.syntax._
+import nutria.core.viewport.{Dimensions, Point}
 
 class GuiController(val modell: Model, val view: View) extends KeyListener with MouseListener with MouseWheelListener with MouseMotionListener {
   val imgPanel = view.imgPanel

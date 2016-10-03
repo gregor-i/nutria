@@ -15,12 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nutria.color.{HSV, Invert}
-import nutria.consumers.CardioidNumeric
-import nutria.content.CachedContent
-import nutria.sequences.Mandelbrot
-import nutria.syntax._
-import nutria.viewport.Dimensions
+import nutria.core.consumers.CardioidNumeric
+import nutria.core.content.CachedContent
+import nutria.core.sequences.Mandelbrot
+import nutria.core.syntax._
+import nutria.core.viewport.Dimensions
 import processorHelper.ProcessorHelper
 
 
@@ -58,7 +57,7 @@ object CardioidIterations extends ProcessorHelper {
               j <- 0 until dim.height
             } yield calculateDistance(seqs(i)(j)).min(oldContent(i, j))).seq
           , dim)
-      nextContent.strongNormalized.withColor(Invert(HSV.MonoColor.Blue)).verboseSave(fileInRootFolder(s"iteration_$i.png"))
+      nextContent.strongNormalized.withInvertDefaultColor.verboseSave(fileInRootFolder(s"iteration_$i.png"))
       oldContent = nextContent
     }
   }

@@ -17,16 +17,12 @@
 
 package MVC.view
 
-import javax.swing.JPanel
-import java.awt.image.BufferedImage
 import java.awt.Graphics
-import util._
-import MVC.model.Model
+import javax.swing.JPanel
 
-import nutria.viewport.Transform
-import nutria.viewport.Dimensions
-import nutria.viewport._
-import nutria.syntax._
+import MVC.model.Model
+import nutria.core.syntax._
+import nutria.core.viewport.{Dimensions, Point}
 
 class ImagePanel(val modell: Model) extends JPanel {
   modell.addObserver(() => this.repaint())

@@ -17,9 +17,9 @@
 
 import MVC.model._
 import MVC.view._
-import nutria.consumers.{OrbitBothAxis, SmoothColoring}
-import nutria.sequences.{JuliaSet, Mandelbrot}
-import nutria.syntax._
+import nutria.core.consumers.OrbitBothAxis
+import nutria.core.sequences.Mandelbrot
+import nutria.core.syntax._
 
 object Viewer {
   def main(args: Array[String]): Unit = {

@@ -17,11 +17,10 @@
 
 package nurtia.data
 
-import nutria.sequences.AbstractSequence
-import nutria.{Fractal, Viewport}
-import simulacrum.typeclass
+import nutria.core.sequences.AbstractSequence
+import nutria.core.{Fractal, Viewport}
 
-@typeclass trait Data[A <: AbstractSequence] {
+trait Data[A <: AbstractSequence] {
   type Named[B] = (String, B)
 
   val initialViewport:Viewport

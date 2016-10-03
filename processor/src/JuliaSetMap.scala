@@ -15,12 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nutria.color.{HSV, Invert}
-import nutria.consumers.{RoughColoring, SmoothColoring}
-import nutria.content.Content
-import nutria.sequences.JuliaSet
-import nutria.syntax._
-import nutria.viewport.{Dimensions, Viewport}
+import nutria.core.color.{HSV, Invert}
+import nutria.core.consumers.{RoughColoring, SmoothColoring}
+import nutria.core.content.Content
+import nutria.core.sequences.JuliaSet
+import nutria.core.syntax._
+import nutria.core.viewport.{Dimensions, Viewport}
 import processorHelper.{ProcessorHelper, Task}
 
 object JuliaSetMap extends ProcessorHelper {

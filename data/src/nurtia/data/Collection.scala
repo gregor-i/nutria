@@ -17,8 +17,8 @@
 
 package nurtia.data
 
-import nutria.SequenceConstructor
-import nutria.sequences.{Collatz, DoubleSequence, Mandelbrot}
+import nutria.core.SequenceConstructor
+import nutria.core.sequences.{Collatz, DoubleSequence, Mandelbrot}
 
 object Collection {
 

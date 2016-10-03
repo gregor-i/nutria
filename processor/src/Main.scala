@@ -15,42 +15,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nutria.Content
-import nutria.color.HSV
-import nutria.consumers.{OrbitImgAxis, OrbitRealAxis}
-import nutria.sequences.Mandelbrot
-import nutria.syntax._
-import nutria.viewport.Dimensions
+import nutria.core.consumers.SmoothColoring
+import nutria.core.sequences.Mandelbrot
+import nutria.core.syntax._
+import nutria.core.viewport.Dimensions
 
 object Main extends App {
 
   val root = "E:\\snapshots\\"
-//  Mandelbrot.start
-//    .withDimensions(Dimensions.fujitsu.scale(0.5))
-//    .withFractal(Mandelbrot(350, 100) ~> SmoothColoring())
-//    .strongNormalized
-//    .withColor(HSV.MonoColor.Blue)
-//    .verboseSave(root + s"basic.png")
+  Mandelbrot.start
+    .withDimensions(Dimensions.fujitsu.scale(0.5))
+    .withFractal(Mandelbrot(350, 100) ~> SmoothColoring())
+    .strongNormalized
+    .withDefaultColor
+    .verboseSave(root + s"basic.png")
 
-  val real = Mandelbrot.start
-    .withDimensions(Dimensions.fujitsu)
-    .withAntiAliasedFractal(Mandelbrot(350, 10000) ~> OrbitRealAxis())
-
-  val imag = Mandelbrot.start
-    .withDimensions(Dimensions.fujitsu)
-    .withAntiAliasedFractal(Mandelbrot(350, 10000) ~> OrbitImgAxis())
-
-  new Content {
-    val dimensions = real.dimensions
-    def apply(x: Int, y: Int) = real(x, y) - imag(x, y)
-  }.linearNormalized
-    .withColor(HSV.MonoColor.Blue)
-    .verboseSave(root + s"bothAxis.png")
-
-//  Mandelbrot.start
-//    .withDimensions(Dimensions.fujitsu.scale(0.5))
-//    .withAntiAliasedFractal(Mandelbrot(350, 100) ~> SmoothColoring())
-//    .strongNormalized
-//    .withColor(HSV.MonoColor.Blue)
-//    .verboseSave(root + s"aa.png")
+  Mandelbrot.start
+    .withDimensions(Dimensions.fujitsu.scale(0.5))
+    .withAntiAliasedFractal(Mandelbrot(350, 100) ~> SmoothColoring())
+    .strongNormalized
+    .withDefaultColor
+    .verboseSave(root + s"aa.png")
 }

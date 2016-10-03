@@ -21,8 +21,8 @@ import java.awt.event.ActionListener
 import javax.swing.{JMenu, JMenuItem}
 
 import MVC.model.Model
-import nutria.sequences.Mandelbrot
-import nutria.viewport._
+import nutria.core.Viewport
+import nutria.core.sequences.Mandelbrot
 
 class ViewportMenu(views: Array[Viewport], gui: Model) extends JMenu("Viewports") {
 

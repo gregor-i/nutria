@@ -18,12 +18,11 @@
 package gui.actions
 
 import java.awt.event.ActionListener
-import javax.swing.JMenu
-import javax.swing.JMenuItem
+import javax.swing.{JMenu, JMenuItem}
 
-import nutria.color._
 import MVC.model.Model
-import nutria.Color
+import nutria.core.Color
+import nutria.core.color.HSV
 
 class ColorMenu(farben: List[Color], gui: Model) extends JMenu("Farben") {
 

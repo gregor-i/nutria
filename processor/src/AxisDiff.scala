@@ -15,11 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nutria.accumulator.Variance
-import nutria.consumers.{OrbitImgAxis, OrbitRealAxis}
-import nutria.sequences.Mandelbrot
-import nutria.syntax._
-import nutria.viewport.{Dimensions, Viewport}
+import nutria.core.Viewport
+import nutria.core.accumulator.Variance
+import nutria.core.consumers.{OrbitImgAxis, OrbitRealAxis}
+import nutria.core.sequences.Mandelbrot
+import nutria.core.syntax._
+import nutria.core.viewport.Dimensions
 import processorHelper.ProcessorHelper
 import viewportSelections.ViewportSelection
 
@@ -28,7 +29,7 @@ object AxisDiff extends ProcessorHelper {
 
   override def statusPrints: Boolean = true
 
-  object Fractal extends nutria.Fractal {
+  object Fractal extends nutria.core.Fractal {
     val sequence = Mandelbrot(3500, 10000)
     val real = sequence ~> OrbitRealAxis()
     val imag = sequence ~> OrbitImgAxis()

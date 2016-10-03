@@ -17,12 +17,12 @@
 
 import java.io.File
 
-import nutria.{Color, FinishedContent}
-import nutria.color.{HSV, Invert}
-import nutria.consumers.CardioidNumeric
-import nutria.sequences.Mandelbrot
-import nutria.syntax._
-import nutria.viewport.{Dimensions, Viewport}
+import nutria.core.{Color, FinishedContent, Viewport}
+import nutria.core.color.{HSV, Invert}
+import nutria.core.consumers.CardioidNumeric
+import nutria.core.sequences.Mandelbrot
+import nutria.core.syntax._
+import nutria.core.viewport.Dimensions
 import processorHelper.{ProcessorHelper, Task}
 import viewportSelections.ViewportSelection
 

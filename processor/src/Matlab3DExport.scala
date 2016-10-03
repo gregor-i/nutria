@@ -17,10 +17,11 @@
 
 import java.io.{File, FileWriter}
 
-import nutria.consumers.RoughColoring
-import nutria.sequences.{Mandelbrot, QuaternionBrot}
-import nutria.syntax._
-import nutria.viewport.Dimensions
+import nutria.core.consumers.RoughColoring
+import nutria.core.sequences.{Mandelbrot, QuaternionBrot}
+import nutria.core.syntax
+import nutria.core.syntax._
+import nutria.core.viewport.Dimensions
 import spire.math.Quaternion
 
 object Matlab3DExport extends App {

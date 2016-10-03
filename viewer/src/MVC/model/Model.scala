@@ -20,12 +20,12 @@ package MVC.model
 import java.awt.image.BufferedImage
 
 import nurtia.data.{ContentFactory, SimpleFactory}
-import nutria.color.{HSV}
-import nutria.consumers.RoughColoring
-import nutria.sequences.{DoubleSequence, Mandelbrot}
-import nutria.syntax._
-import nutria.viewport.{Dimensions, Point, Viewport}
-import nutria.{Color, Fractal, SequenceConstructor}
+import nutria.core.{Color, Fractal, SequenceConstructor, Viewport}
+import nutria.core.color.HSV
+import nutria.core.consumers.RoughColoring
+import nutria.core.sequences.{DoubleSequence, Mandelbrot}
+import nutria.core.syntax._
+import nutria.core.viewport.{Dimensions, Point}
 import util.Observable
 
 @SerialVersionUID(1L)
@@ -38,7 +38,7 @@ class Model(
   var quali: Double = 0.25
   var img: BufferedImage = _
   var points = Seq[Point]()
-  var sequenceConstructor: Option[SequenceConstructor[_ <: DoubleSequence]] = Some(Mandelbrot.apply(50, 100))
+  var sequenceConstructor: Option[SequenceConstructor[_ <: DoubleSequence]] = Some(Mandelbrot(50, 100))
 
   preview()
 

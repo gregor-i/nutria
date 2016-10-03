@@ -15,14 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nutria.Color
-import nutria.accumulator.Max
-import nutria.color.HSV
-import nutria.consumers.{CircleP2, RoughColoring}
-import nutria.content.Content
-import nutria.sequences.Mandelbrot
-import nutria.syntax._
-import nutria.viewport.{Dimensions, Viewport}
+import nutria.core.Viewport
+import nutria.core.accumulator.Max
+import nutria.core.consumers.{CircleP2, RoughColoring}
+import nutria.core.content.Content
+import nutria.core.sequences.Mandelbrot
+import nutria.core.syntax._
+import nutria.core.viewport.Dimensions
 import processorHelper.{ProcessorHelper, Task}
 import viewportSelections.ViewportSelection
 
@@ -31,7 +30,7 @@ object Wallpaper extends ProcessorHelper {
 
   override def statusPrints: Boolean = true
 
-  case class WallpaperTask(view: Viewport, color: Color) extends Task {
+  case class WallpaperTask(view: Viewport) extends Task {
     override def name: String = s"WallpaperTask($view)"
 
     override def skipCondition: Boolean = fileInRootFolder(s"$view/added.png").exists()
@@ -52,15 +51,15 @@ object Wallpaper extends ProcessorHelper {
         override def apply(x: Int, y: Int): Double = rough(x, y) + circle(x, y)
       }.strongNormalized
 
-      rough.withColor(color).save(fileInRootFolder(s"$view/rough.png"))
-      circle.withColor(color).save(fileInRootFolder(s"$view/circle.png"))
-      added.withColor(color).save(fileInRootFolder(s"$view/added.png"))
+      rough.withDefaultColor.save(fileInRootFolder(s"$view/rough.png"))
+      circle.withDefaultColor.save(fileInRootFolder(s"$view/circle.png"))
+      added.withDefaultColor.save(fileInRootFolder(s"$view/added.png"))
     }
 
     def main(args: Array[String]): Unit = {
       executeAllTasks(
         for (view <- ViewportSelection.selection)
-          yield WallpaperTask(view, HSV.MonoColor.Blue))
+          yield WallpaperTask(view))
     }
   }
 

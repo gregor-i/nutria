@@ -17,11 +17,12 @@
 
 package nurtia.data
 
-import nutria.consumers.{OrbitPoint, RoughColoring}
-import nutria.sequences.Collatz
-import nutria.syntax._
-import nutria.viewport.Point
-import nutria.{Fractal, Viewport}
+import nutria.core.consumers.{OrbitPoint, RoughColoring}
+import nutria.core.sequences.Collatz
+import nutria.core.viewport.Point
+import nutria.core.{Fractal, Viewport, syntax}
+import syntax._
+
 object CollatzData extends Data[Collatz.Sequence] {
 
   val initialViewport: Viewport = Viewport(Point(-2.5, -1), Point(3.5, 0), Point(0, 2))

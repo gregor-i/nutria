@@ -18,14 +18,14 @@
 package nutria
 package benchmark
 
-import nutria.consumers.RoughColoring
-import nutria.content._
-import nutria.directFractals.alternativeImplementation.StreamBrot
-import nutria.fractal._
-import nutria.sequences.{Mandelbrot, QuaternionBrot}
-import nutria.sequences.alternativeImlementations.SpireBrot
-import nutria.syntax._
-import nutria.viewport._
+import nutria.core.Fractal
+import nutria.core.consumers.RoughColoring
+import nutria.core.content.CachedContent
+import nutria.core.directFractals.alternativeImplementation.StreamBrot
+import nutria.core.sequences.alternativeImlementations.SpireBrot
+import nutria.core.sequences.{Mandelbrot, QuaternionBrot}
+import nutria.core.syntax._
+import nutria.core.viewport.Dimensions
 import org.openjdk.jmh.annotations.Benchmark
 import spire.math.Quaternion
 

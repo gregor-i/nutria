@@ -17,12 +17,12 @@
 
 package nurtia.data
 
-import nutria.consumers._
-import nutria.directFractals.MandelbrotContour
-import nutria.sequences.Mandelbrot
-import nutria.syntax._
-import nutria.viewport.Point
-import nutria.{Fractal, Viewport}
+import nutria.core.Fractal
+import nutria.core.consumers._
+import nutria.core.directFractals.MandelbrotContour
+import nutria.core.sequences.Mandelbrot
+import nutria.core.syntax._
+import nutria.core.viewport.{Point, Viewport}
 
 object MandelbrotData extends Data[Mandelbrot.Sequence] {
 
