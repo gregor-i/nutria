@@ -21,6 +21,7 @@ import nurtia.data.MandelbrotData
 import nutria.core.{Color, FinishedContent, Viewport}
 import nutria.core.color.{HSV, Invert}
 import nutria.core.consumers.CardioidNumeric
+import nutria.core.image.{DefaultSaveFolder, SaveFolder}
 import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax._
 import nutria.core.viewport.Dimensions
@@ -28,8 +29,6 @@ import processorHelper.{ProcessorHelper, Task}
 import viewportSelections.ViewportSelection
 
 object Cardioid extends ProcessorHelper {
-  override def rootFolder: String = "/home/gregor/Pictures/Cardioid/"
-
   override def statusPrints: Boolean = true
 
   val colors = Seq(HSV.MonoColor.Blue, Invert(HSV.MonoColor.Blue))
@@ -37,7 +36,7 @@ object Cardioid extends ProcessorHelper {
   case class CardioidTask(view: Viewport, path: Color => File) extends Task {
     override def name = s"CardioidTask(${view.toString})"
 
-    override def skipCondition: Boolean = path(colors.head).exists
+    override def skipCondition: Boolean = path(colors.head).exists()
 
     override def execute(): Unit = {
       view
@@ -53,13 +52,15 @@ object Cardioid extends ProcessorHelper {
   }
 
   def main(args: Array[String]): Unit = {
-    val tasks1: Set[Task] = Set(CardioidTask(MandelbrotData.initialViewport, color => fileInRootFolder(s"start_$color.png")))
+    val saveFolder: SaveFolder = DefaultSaveFolder / "Cardioid"
+
+    val tasks1: Set[Task] = Set(CardioidTask(MandelbrotData.initialViewport, color => saveFolder /~ s"start_$color.png"))
 
     val tasks2: Set[Task] = for (viewport <- ViewportSelection.selection)
-      yield CardioidTask(viewport, color => fileInRootFolder(s"auswahl/$viewport/$color.png"))
+      yield CardioidTask(viewport, color => saveFolder / "auswahl" / viewport.toString /~ s"$color.png")
 
     val tasks3: Set[Task] = for (viewport <- ViewportSelection.focusIteration2)
-      yield CardioidTask(viewport, color => fileInRootFolder(s"fokus/$viewport/$color.png"))
+      yield CardioidTask(viewport, color => saveFolder / "fokus" / viewport.toString /~ s"$color.png")
 
     executeAllTasks(tasks1.toSeq)
     executeAllTasks(tasks3.toSeq)

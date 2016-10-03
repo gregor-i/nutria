@@ -42,7 +42,7 @@ class ImagePanel(val modell: Model) extends JPanel {
 
   override def paint(g: Graphics) {
     //g.clearRect(0, 0, getWidth(), getHeight())
-    g.drawImage(modell.img, 0, 0, getWidth, getHeight, this)
+    g.drawImage(modell.img.buffer, 0, 0, getWidth, getHeight, this)
 
     g.setColor(java.awt.Color.red)
     val trans = modell.view.withDimensions(Dimensions(getWidth, getHeight))

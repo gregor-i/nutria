@@ -19,6 +19,7 @@ import java.io.{File, FileWriter}
 
 import nurtia.data.MandelbrotData
 import nutria.core.consumers.RoughColoring
+import nutria.core.image.DefaultSaveFolder
 import nutria.core.sequences.QuaternionBrot
 import nutria.core.syntax._
 import nutria.core.viewport.Dimensions
@@ -31,7 +32,7 @@ object Matlab3DExport extends App {
 
   val iterations = 50
 
-  val writer = new FileWriter(new File("/home/gregor/Matlab3DExport.m"))
+  val writer = new FileWriter(DefaultSaveFolder /~ "Matlab3DExport.m")
 
   writer.append(s"data = zeros(${dimensions.width}, ${dimensions.height}, ${dimensions.height/2});\n")
 

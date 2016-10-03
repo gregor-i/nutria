@@ -18,6 +18,7 @@
 import nurtia.data.MandelbrotData
 import nutria.core.consumers.CardioidNumeric
 import nutria.core.content.CachedContent
+import nutria.core.image.DefaultSaveFolder
 import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax._
 import nutria.core.viewport.Dimensions
@@ -28,13 +29,10 @@ import processorHelper.ProcessorHelper
   * Saves a sequence of Files. The sequence shows how the cardioid images are constructed. Each image is the state at the defined iteration.
   */
 object CardioidIterations extends ProcessorHelper {
-  override def rootFolder: String = "/home/gregor/Pictures/CardioidIterations/"
-
   override def statusPrints: Boolean = true
 
   def calculateDistance(seq: Mandelbrot.Sequence): Double =
-      CardioidNumeric.minimalDistance(1 to 100)(seq.publicX, seq.publicY)
-
+    CardioidNumeric.minimalDistance(1 to 100)(seq.publicX, seq.publicY)
 
   def main(args: Array[String]): Unit = {
     val dim = Dimensions.fullHD
@@ -58,7 +56,10 @@ object CardioidIterations extends ProcessorHelper {
               j <- 0 until dim.height
             } yield calculateDistance(seqs(i)(j)).min(oldContent(i, j))).seq
           , dim)
-      nextContent.strongNormalized.withInvertDefaultColor.verboseSave(fileInRootFolder(s"iteration_$i.png"))
+      nextContent
+        .strongNormalized
+        .withInvertDefaultColor
+        .verboseSave(DefaultSaveFolder / "CardioidIterations" /~ s"iteration_$i.png")
       oldContent = nextContent
     }
   }

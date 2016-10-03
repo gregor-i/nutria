@@ -19,6 +19,7 @@ import nurtia.data.MandelbrotData
 import nutria.core.Viewport
 import nutria.core.accumulator.Variance
 import nutria.core.consumers.{OrbitImgAxis, OrbitRealAxis}
+import nutria.core.image.DefaultSaveFolder
 import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax._
 import nutria.core.viewport.Dimensions
@@ -26,8 +27,6 @@ import processorHelper.ProcessorHelper
 import viewportSelections.ViewportSelection
 
 object AxisDiff extends ProcessorHelper {
-  override def rootFolder: String = "E:\\snapshots\\AxisDiff\\"
-
   override def statusPrints: Boolean = true
 
   object Fractal extends nutria.core.Fractal {
@@ -38,10 +37,12 @@ object AxisDiff extends ProcessorHelper {
     def apply(x: Double, y: Double): Double = real(x, y) - imag(x, y)
   }
 
+  val saveFolder = DefaultSaveFolder / "AxisDiff"
+
   case class Task(viewport: Viewport) extends processorHelper.Task {
     override def name: String = toString
 
-    override def skipCondition: Boolean = fileInRootFolder(s"$viewport.png").exists()
+    override def skipCondition: Boolean = (saveFolder /~ s"$viewport.png").exists()
 
     override def execute(): Unit = {
       val diff = viewport
@@ -51,11 +52,11 @@ object AxisDiff extends ProcessorHelper {
 
       diff
         .withInvertDefaultColor
-        .verboseSave(fileInRootFolder(s"${viewport}_invert.png"))
+        .verboseSave(saveFolder /~ s"${viewport}_invert.png")
 
       diff
         .withDefaultColor
-        .verboseSave(fileInRootFolder(s"$viewport.png"))
+        .verboseSave(saveFolder /~ s"$viewport.png")
     }
   }
 

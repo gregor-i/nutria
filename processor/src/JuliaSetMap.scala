@@ -18,13 +18,14 @@
 import nutria.core.color.{HSV, Invert}
 import nutria.core.consumers.{RoughColoring, SmoothColoring}
 import nutria.core.content.Content
+import nutria.core.image.{DefaultSaveFolder, SaveFolder}
 import nutria.core.sequences.JuliaSet
 import nutria.core.syntax._
 import nutria.core.viewport.{Dimensions, Viewport}
 import processorHelper.{ProcessorHelper, Task}
 
 object JuliaSetMap extends ProcessorHelper {
-  override def rootFolder: String = "/home/gregor/Pictures/JuliaSetMap/"
+  val saveFolder: SaveFolder = DefaultSaveFolder / "JuliaSetMap"
 
   override def statusPrints: Boolean = true
 
@@ -33,9 +34,9 @@ object JuliaSetMap extends ProcessorHelper {
 
 
   object JuliaSetMapTask extends Task {
-    val file = fileInRootFolder(s"map.png")
+    val file = saveFolder /~ "map.png"
 
-    override def name = s"JuliaSetMapTask"
+    override def name = "JuliaSetMapTask"
 
     override def skipCondition: Boolean = file.exists()
 
@@ -74,7 +75,7 @@ object JuliaSetMap extends ProcessorHelper {
 
 
   case class JuliaSetTask(cx: Double, cy: Double) extends Task {
-    val file = fileInRootFolder(s"$cx,$cy.png")
+    val file = saveFolder /~ s"$cx,$cy.png"
 
     override def name = s"JuliaSetTask($cx, $cy)"
 

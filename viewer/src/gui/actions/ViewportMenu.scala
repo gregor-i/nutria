@@ -21,8 +21,8 @@ import java.awt.event.ActionListener
 import javax.swing.{JMenu, JMenuItem}
 
 import MVC.model.Model
+import nurtia.data.MandelbrotData
 import nutria.core.Viewport
-import nutria.core.sequences.Mandelbrot
 
 class ViewportMenu(views: Array[Viewport], gui: Model) extends JMenu("Viewports") {
 
@@ -50,7 +50,7 @@ class ViewportMenu(views: Array[Viewport], gui: Model) extends JMenu("Viewports"
 
   val reset = new JMenuItem("Reset")
 
-  reset.addActionListener(new Action(gui.setViewport(Mandelbrot.start)))
+  reset.addActionListener(new Action(gui.setViewport(MandelbrotData.initialViewport)))
 
   add(reset)
 

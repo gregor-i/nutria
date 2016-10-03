@@ -22,6 +22,7 @@ import java.io.File
 import nutria.core.accumulator.{Accumulator, Arithmetic}
 import nutria.core.color.{HSV, Invert}
 import nutria.core.content._
+import nutria.core.image.SaveFolder
 
 object syntax {
 
@@ -68,17 +69,10 @@ object syntax {
       file
     }
 
-    def save(fileName: String): Unit = save(new java.io.File(fileName))
-
     def verboseSave(file: java.io.File): File = {
       save(file)
       println("Saved: " + file.getAbsoluteFile)
       file
-    }
-
-    def verboseSave(fileName: String): File = {
-      val file = new java.io.File(fileName)
-      verboseSave(file)
     }
   }
 

@@ -17,7 +17,7 @@
 
 package processorHelper
 
-import java.io.File
+import nutria.core.image.SaveFolder
 
 import scala.concurrent.duration.{Duration, DurationLong}
 
@@ -39,10 +39,7 @@ trait NoSkip {
 }
 
 trait ProcessorHelper {
-  def rootFolder: String
   def statusPrints: Boolean
-
-  def fileInRootFolder(file: String): File = new File(rootFolder + file)
 
   def executeTask(task: Task): Result =
     try {

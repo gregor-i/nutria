@@ -19,6 +19,7 @@ import nutria.core.Viewport
 import nutria.core.accumulator.Max
 import nutria.core.consumers.{CircleP2, RoughColoring}
 import nutria.core.content.Content
+import nutria.core.image.{DefaultSaveFolder, SaveFolder}
 import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax._
 import nutria.core.viewport.Dimensions
@@ -26,14 +27,15 @@ import processorHelper.{ProcessorHelper, Task}
 import viewportSelections.ViewportSelection
 
 object Wallpaper extends ProcessorHelper {
-  override def rootFolder: String = "/home/gregor/Pictures/Wallpaper/"
+
 
   override def statusPrints: Boolean = true
 
   case class WallpaperTask(view: Viewport) extends Task {
+    val saveFolder: SaveFolder = DefaultSaveFolder / "Wallpaper" / s"$view"
     override def name: String = s"WallpaperTask($view)"
 
-    override def skipCondition: Boolean = fileInRootFolder(s"$view/added.png").exists()
+    override def skipCondition: Boolean = (saveFolder /~ "added.png").exists()
 
     override def execute(): Unit = {
       val transform = view
@@ -51,9 +53,9 @@ object Wallpaper extends ProcessorHelper {
         override def apply(x: Int, y: Int): Double = rough(x, y) + circle(x, y)
       }.strongNormalized
 
-      rough.withDefaultColor.save(fileInRootFolder(s"$view/rough.png"))
-      circle.withDefaultColor.save(fileInRootFolder(s"$view/circle.png"))
-      added.withDefaultColor.save(fileInRootFolder(s"$view/added.png"))
+      rough.withDefaultColor.save(saveFolder /~ "rough.png")
+      circle.withDefaultColor.save(saveFolder /~ "circle.png")
+      added.withDefaultColor.save(saveFolder /~ "added.png")
     }
 
     def main(args: Array[String]): Unit = {

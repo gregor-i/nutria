@@ -17,45 +17,51 @@
 
 package MVC.model
 
-import java.awt.image.BufferedImage
-
 import nurtia.data.{ContentFactory, MandelbrotData, SimpleFactory}
-import nutria.core.{Color, Fractal, SequenceConstructor, Viewport}
 import nutria.core.color.HSV
 import nutria.core.consumers.RoughColoring
 import nutria.core.sequences.{DoubleSequence, Mandelbrot}
 import nutria.core.syntax._
 import nutria.core.viewport.{Dimensions, Point}
+import nutria.core._
+import nutria.core.image.SaveFolder
 import util.Observable
 
+object Model {
+  def default(implicit folder:SaveFolder) = new Model(
+    Mandelbrot(250, 100) ~> RoughColoring(),
+    SimpleFactory,
+    HSV.MonoColor.Blue,
+    MandelbrotData.initialViewport,
+    Some(Mandelbrot(50, 100)))
+}
+
 @SerialVersionUID(1L)
-class Model(
-             var fractal: Fractal = Mandelbrot(250, 100) ~> RoughColoring(),
-             var contentFactory: ContentFactory = SimpleFactory,
-             var farbe: Color = HSV.MonoColor.Blue,
-             var view: Viewport = MandelbrotData.initialViewport) extends Observable {
+class Model(var fractal: Fractal,
+            var contentFactory: ContentFactory,
+            var farbe: Color,
+            var view: Viewport,
+            var sequenceConstructor: Option[SequenceConstructor[_ <: DoubleSequence]])
+           (implicit folder:SaveFolder)extends Observable {
 
   var quali: Double = 0.25
-  var img: BufferedImage = _
+  var img: Image = _
   var points = Seq[Point]()
-  var sequenceConstructor: Option[SequenceConstructor[_ <: DoubleSequence]] = Some(Mandelbrot(50, 100))
 
   preview()
 
-  def preview() {
-    img = contentFactory(view, Dimensions.fullHD.scale(quali), fractal, farbe).buffer
+  def preview() = {
+    img = contentFactory(view, Dimensions.fullHD.scale(quali), fractal, farbe)
     notifyObservers()
   }
 
-  def snap() {
-    img = contentFactory(view, Dimensions.fullHD, fractal, farbe).buffer
+  def snap() = {
+    img = contentFactory(view, Dimensions.fullHD, fractal, farbe)
     notifyObservers()
   }
 
-  def save() {
-    val image = contentFactory(view, Dimensions.fullHD, fractal, farbe)
-    image.verboseSave(s"snapshots/$view")
-    img = image.buffer
+  def save() = {
+    img.verboseSave(folder /~ s"$view.png")
   }
 
   def setViewport(v: Viewport) {
@@ -88,15 +94,13 @@ class Model(
     preview()
   }
 
-
-  def setSequence(newSequenceConstructor: Option[SequenceConstructor[_ <: DoubleSequence]]): Unit ={
+  def setSequence(newSequenceConstructor: Option[SequenceConstructor[_ <: DoubleSequence]]): Unit = {
     sequenceConstructor = newSequenceConstructor
     notifyObservers()
   }
 
-  def setPoints(ps:Seq[Point]) = {
+  def setPoints(ps: Seq[Point]) = {
     points = ps
     notifyObservers()
   }
 }
-

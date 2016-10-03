@@ -17,24 +17,26 @@
 
 import nurtia.data.MandelbrotData
 import nutria.core.consumers.SmoothColoring
+import nutria.core.image.{DefaultSaveFolder, SaveFolder}
 import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax._
 import nutria.core.viewport.Dimensions
 
 object SimpleExampleMain extends App {
 
-  val root = "E:\\snapshots\\"
+  val saveFolder = DefaultSaveFolder
+
   MandelbrotData.initialViewport
     .withDimensions(Dimensions.fujitsu.scale(0.5))
     .withFractal(Mandelbrot(350, 100) ~> SmoothColoring())
     .strongNormalized
     .withDefaultColor
-    .verboseSave(root + s"basic.png")
+    .verboseSave(saveFolder /~ "basic.png")
 
   MandelbrotData.initialViewport
     .withDimensions(Dimensions.fujitsu.scale(0.5))
     .withAntiAliasedFractal(Mandelbrot(350, 100) ~> SmoothColoring())
     .strongNormalized
     .withDefaultColor
-    .verboseSave(root + s"aa.png")
+    .verboseSave(saveFolder /~ "aa.png")
 }
