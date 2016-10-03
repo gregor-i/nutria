@@ -20,6 +20,7 @@ package nutria
 import java.io.File
 
 import nutria.accumulator.Arithmetic
+import nutria.color.{HSV, Invert}
 import nutria.content._
 
 object syntax {
@@ -34,18 +35,13 @@ object syntax {
     def withAntiAliasedFractal(fractal: Fractal, accu: Accumulator = Arithmetic, samplingFactor: Int = 5): Content =
       AntiAliasedFractalContent(fractal, transform, accu, samplingFactor)
 
-    def withDynamAntiAliasedFractal(fractal: Fractal, accu: Accumulator = Arithmetic,
-                                    limit: Double = 0.12, minimalIterations: Int = 4, maximalIterations: Int = 50): Content =
-      DynamAntiAliasFractalContent(fractal, transform, accu, limit, minimalIterations, maximalIterations)
-
-
     def withBuddhaBrot(sourceTransform: Transform = transform, maxIteration: Int = 250) =
       BuddahBrot(transform, sourceTransform, maxIteration)
   }
 
-  implicit class EnrichSequenceConstructors[A <: AbstractSequence](val constructor: SequenceConstructor[A]) extends AnyVal {
+  implicit class EnrichedSequenceConstructors[A <: AbstractSequence](val constructor: SequenceConstructor[A]) extends AnyVal {
     def withConsumer(consumer: SequenceConsumer[A]): Fractal = (x, y) => consumer(constructor(x, y))
-    def ~>(consumer: SequenceConsumer[A]): Fractal = (x, y) => consumer(constructor(x, y))
+    def ~>(consumer: SequenceConsumer[A]): Fractal = withConsumer(consumer)
   }
 
   implicit class EnrichedContent(val content: Content) extends AnyVal {
@@ -60,6 +56,8 @@ object syntax {
 
   implicit class EnrichedFinishedContent(val content: FinishedContent) extends AnyVal {
     def withColor(color: Color) = new Image(content, color)
+    def withDefaultColor = new Image(content, HSV.MonoColor.Blue)
+    def withInvertDefaultColor = new Image(content, Invert(HSV.MonoColor.Blue))
   }
 
   implicit class EnrichedImage(val image: Image) extends AnyVal {
@@ -70,6 +68,8 @@ object syntax {
       file
     }
 
+    def save(fileName: String): Unit = save(new java.io.File(fileName))
+
     def verboseSave(file: java.io.File): File = {
       save(file)
       println("Saved: " + file.getAbsoluteFile)
@@ -78,12 +78,8 @@ object syntax {
 
     def verboseSave(fileName: String): File = {
       val file = new java.io.File(fileName)
-      save(file)
-      println("Saved: " + file.getAbsoluteFile)
-      file
+      verboseSave(file)
     }
-
-    def save(fileName: String): Unit = save(new java.io.File(fileName))
   }
 
   implicit class EnrichmentFanOut[A](val self:A) extends AnyVal{
