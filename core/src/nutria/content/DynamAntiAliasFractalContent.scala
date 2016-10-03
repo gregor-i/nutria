@@ -20,6 +20,7 @@ package content
 
 import nutria.accumulator.Variance
 
+@deprecated("not working", ".")
 case class DynamAntiAliasFractalContent(fractal: Fractal, transform: Transform,
                                         accumulator: Accumulator, limit: Double, minimalIterations: Int, maximalIterations: Int)
   extends Content {
