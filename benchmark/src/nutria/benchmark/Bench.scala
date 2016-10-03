@@ -18,6 +18,7 @@
 package nutria
 package benchmark
 
+import nurtia.data.MandelbrotData
 import nutria.core.Fractal
 import nutria.core.consumers.RoughColoring
 import nutria.core.content.CachedContent
@@ -31,7 +32,7 @@ import spire.math.Quaternion
 
 class Bench {
   def operation(fractal: Fractal): CachedContent =
-    Mandelbrot.start
+    MandelbrotData.initialViewport
       .withDimensions(Dimensions.fujitsu.scale(0.1))
       .withAntiAliasedFractal(fractal)
       .cached

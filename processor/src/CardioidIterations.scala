@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import nurtia.data.MandelbrotData
 import nutria.core.consumers.CardioidNumeric
 import nutria.core.content.CachedContent
 import nutria.core.sequences.Mandelbrot
@@ -38,7 +39,7 @@ object CardioidIterations extends ProcessorHelper {
   def main(args: Array[String]): Unit = {
     val dim = Dimensions.fullHD
 
-    val transform = Mandelbrot.start.withDimensions(dim)
+    val transform = MandelbrotData.initialViewport.withDimensions(dim)
 
     val seqs = for (i <- 0 until dim.width)
       yield for {

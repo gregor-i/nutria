@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import nurtia.data.MandelbrotData
 import nutria.core.consumers.SmoothColoring
 import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax._
@@ -23,14 +24,14 @@ import nutria.core.viewport.Dimensions
 object SimpleExampleMain extends App {
 
   val root = "E:\\snapshots\\"
-  Mandelbrot.start
+  MandelbrotData.initialViewport
     .withDimensions(Dimensions.fujitsu.scale(0.5))
     .withFractal(Mandelbrot(350, 100) ~> SmoothColoring())
     .strongNormalized
     .withDefaultColor
     .verboseSave(root + s"basic.png")
 
-  Mandelbrot.start
+  MandelbrotData.initialViewport
     .withDimensions(Dimensions.fujitsu.scale(0.5))
     .withAntiAliasedFractal(Mandelbrot(350, 100) ~> SmoothColoring())
     .strongNormalized

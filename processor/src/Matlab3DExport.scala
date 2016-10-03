@@ -17,16 +17,16 @@
 
 import java.io.{File, FileWriter}
 
+import nurtia.data.MandelbrotData
 import nutria.core.consumers.RoughColoring
-import nutria.core.sequences.{Mandelbrot, QuaternionBrot}
-import nutria.core.syntax
+import nutria.core.sequences.QuaternionBrot
 import nutria.core.syntax._
 import nutria.core.viewport.Dimensions
 import spire.math.Quaternion
 
 object Matlab3DExport extends App {
   val dimensions = Dimensions.fullHD.scale(0.1)
-  val viewport = Mandelbrot.start
+  val viewport = MandelbrotData.initialViewport
   val transform =  viewport.withDimensions(dimensions)
 
   val iterations = 50

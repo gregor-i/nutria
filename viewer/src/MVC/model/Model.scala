@@ -19,7 +19,7 @@ package MVC.model
 
 import java.awt.image.BufferedImage
 
-import nurtia.data.{ContentFactory, SimpleFactory}
+import nurtia.data.{ContentFactory, MandelbrotData, SimpleFactory}
 import nutria.core.{Color, Fractal, SequenceConstructor, Viewport}
 import nutria.core.color.HSV
 import nutria.core.consumers.RoughColoring
@@ -33,7 +33,7 @@ class Model(
              var fractal: Fractal = Mandelbrot(250, 100) ~> RoughColoring(),
              var contentFactory: ContentFactory = SimpleFactory,
              var farbe: Color = HSV.MonoColor.Blue,
-             var view: Viewport = Mandelbrot.start) extends Observable {
+             var view: Viewport = MandelbrotData.initialViewport) extends Observable {
 
   var quali: Double = 0.25
   var img: BufferedImage = _

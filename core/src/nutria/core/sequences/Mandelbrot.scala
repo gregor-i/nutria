@@ -18,7 +18,6 @@
 package nutria.core.sequences
 
 import nutria.core.SequenceConstructor
-import nutria.core.viewport.{Point, Viewport}
 
 object Mandelbrot{
   final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int, escapeOrbit:Double) extends DoubleSequence {
@@ -28,7 +27,6 @@ object Mandelbrot{
     private[this] var yy = y * y
 
     def publicX = x
-
     def publicY = y
 
     @inline def hasNext: Boolean = (xx + yy < escapeOrbit) && iterationsRemaining >= 0
@@ -60,8 +58,6 @@ object Mandelbrot{
       v
     }
   }
-
-  val start: Viewport = Viewport(Point(-2.5, -1), Point(3.5, 0), Point(0, 2))
 
   def apply(maxIterations:Int, escapeOrbit:Double):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(x0, y0, maxIterations, escapeOrbit)
 }

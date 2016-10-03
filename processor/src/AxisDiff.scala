@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import nurtia.data.MandelbrotData
 import nutria.core.Viewport
 import nutria.core.accumulator.Variance
 import nutria.core.consumers.{OrbitImgAxis, OrbitRealAxis}
@@ -59,7 +60,7 @@ object AxisDiff extends ProcessorHelper {
   }
 
   def main(args: Array[String]): Unit = {
-    val tasks1: Set[Task] = Set(Task(Mandelbrot.start))
+    val tasks1: Set[Task] = Set(Task(MandelbrotData.initialViewport))
 
     val tasks2: Set[Task] = for (viewport <- ViewportSelection.selection)
       yield new Task(viewport)

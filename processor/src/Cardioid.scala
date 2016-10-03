@@ -17,6 +17,7 @@
 
 import java.io.File
 
+import nurtia.data.MandelbrotData
 import nutria.core.{Color, FinishedContent, Viewport}
 import nutria.core.color.{HSV, Invert}
 import nutria.core.consumers.CardioidNumeric
@@ -52,7 +53,7 @@ object Cardioid extends ProcessorHelper {
   }
 
   def main(args: Array[String]): Unit = {
-    val tasks1: Set[Task] = Set(CardioidTask(Mandelbrot.start, color => fileInRootFolder(s"start_$color.png")))
+    val tasks1: Set[Task] = Set(CardioidTask(MandelbrotData.initialViewport, color => fileInRootFolder(s"start_$color.png")))
 
     val tasks2: Set[Task] = for (viewport <- ViewportSelection.selection)
       yield CardioidTask(viewport, color => fileInRootFolder(s"auswahl/$viewport/$color.png"))
