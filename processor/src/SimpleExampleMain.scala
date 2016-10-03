@@ -20,7 +20,7 @@ import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax._
 import nutria.core.viewport.Dimensions
 
-object Main extends App {
+object SimpleExampleMain extends App {
 
   val root = "E:\\snapshots\\"
   Mandelbrot.start
