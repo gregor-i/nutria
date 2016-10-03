@@ -17,27 +17,18 @@
 
 package nutria.core.viewport
 
-import org.scalacheck.Prop.forAll
-import org.specs2.{ScalaCheck, Specification}
-import org.scalacheck.Gen.choose
+import nutria.core.fractal.SequenceChooser.chooseFromUsefullStartPoints
 
-class ViewportSpec extends Specification with ScalaCheck {
-  def is = s2"""
-        Viewports describe parts of the complex plane.
-        The parts are parallelograms. The 4 corners are:
-          Origin
-          Origin + A
-          Origin + A + B
-          Origin + B
-
-        The Viewports can be moved and zoomed:
-          move has invers operations $moveHasInversOperations
-      """
-
-
-  import ViewportChooser._
-
-  def moveHasInversOperations = forAll(chooseViewport, choose(-10d, 10d)){
-    (viewport, factor) => viewport.right(factor).left(factor) === viewport
-  }
+/**
+  * Created by GREGOR on 03.10.2016.
+  */
+object ViewportChooser {
+  val chooseViewport = for {
+    origin <- chooseFromUsefullStartPoints
+    originPlusA <- chooseFromUsefullStartPoints
+    originPlusB <- chooseFromUsefullStartPoints
+  } yield Viewport(
+    Point(origin._1, origin._2),
+    Point(originPlusA._1 - origin._1, originPlusA._2 - origin._2),
+    Point(originPlusB._1 - origin._1, originPlusB._2 - origin._2))
 }
