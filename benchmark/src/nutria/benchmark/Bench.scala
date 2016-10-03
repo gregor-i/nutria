@@ -37,7 +37,7 @@ class Bench {
       .cached
 
   @Benchmark
-  def mandelRough = operation(Mandelbrot(500) ~> RoughColoring())
+  def mandelRough = operation(Mandelbrot(500, 4d) ~> RoughColoring())
 
   @Benchmark
   def spireRough = operation(SpireBrot(500) ~> RoughColoring())
