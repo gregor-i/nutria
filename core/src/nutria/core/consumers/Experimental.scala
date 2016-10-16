@@ -17,11 +17,10 @@
 
 package nutria.core.consumers
 
-import nutria.core.SequenceConsumer
 import nutria.core.sequences.DoubleSequence
 
 object BiggestStep {
-  def apply[A <: DoubleSequence](): SequenceConsumer[A, Double] =
+  def apply[A <: DoubleSequence](): A => Double =
     seq => {
       var lastX = seq.publicX
       var lastY = seq.publicY
@@ -37,7 +36,7 @@ object BiggestStep {
 }
 
 object SmallestStep {
-  def apply[A <: DoubleSequence](): SequenceConsumer[A, Double] =
+  def apply[A <: DoubleSequence](): A => Double =
     seq => {
       var lastX = seq.publicX
       var lastY = seq.publicY

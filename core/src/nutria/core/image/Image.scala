@@ -18,14 +18,30 @@
 package nutria.core.image
 
 import java.awt.image.BufferedImage
+import java.io.File
 
-import nutria.core.viewport.HasDimensions
-import nutria.core.{Color, FinishedContent}
+import nutria.core.{Color, Image, NormalizedContent}
 
-class Image[A](val content: FinishedContent[A], val farbe: Color[A]) extends HasDimensions {
-  val dimensions = content.dimensions
+object Image {
+  def apply[A](content: NormalizedContent[A], color: Color[A]): Image = content.map(color)
 
-  val buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
-  for (w <- 0 until width; h <- 0 until height)
-    buffer.setRGB(w, h, farbe(content(w, h)).hex)
+  def buffer(image: Image) = {
+    val b = new BufferedImage(image.width, image.height, BufferedImage.TYPE_INT_RGB)
+    for (w <- 0 until image.width; h <- 0 until image.height)
+      b.setRGB(w, h, image(w, h).hex)
+    b
+  }
+
+  def save(image: Image, file: java.io.File): File = {
+    if (file.getParentFile != null)
+      file.getParentFile.mkdirs()
+    javax.imageio.ImageIO.write(buffer(image), "png", file)
+    file
+  }
+
+  def verboseSave(image: Image, file: java.io.File): File = {
+    save(image, file)
+    println("Saved: " + file.getAbsoluteFile)
+    file
+  }
 }

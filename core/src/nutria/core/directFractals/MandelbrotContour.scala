@@ -17,13 +17,13 @@
 
 package nutria.core.directFractals
 
-import nutria.core.Fractal
+import nutria.core.ContentFunction
 import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax._
 
 object MandelbrotContour {
   // Careful. A lot of strage double magic goes on in this function. ContourCompare is an implementation of the same function to compare for the Mandelbrot sequence.
-  def apply(maxIterations:Int): Fractal[Boolean] =
+  def apply(maxIterations:Int): ContentFunction[Boolean] =
   (x0, y0) => {
     val seq = new Mandelbrot.Sequence(x0, y0, maxIterations, 4)
     var distance = 0d
@@ -35,7 +35,7 @@ object MandelbrotContour {
     distance == Double.PositiveInfinity
   }
 
-  private def ContourCompare(maxIterations: Int): Fractal[Boolean] =
+  private def ContourCompare(maxIterations: Int): ContentFunction[Boolean] =
     (x0, y0) => {
       var distance = 10d
       var x = x0

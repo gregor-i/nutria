@@ -29,7 +29,7 @@ import util.Observable
 
 object Model {
   def default(implicit folder:SaveFolder) = new Model(
-    Mandelbrot(250, 100) ~> RoughColoring(),
+    Mandelbrot(250, 100) ~> RoughColoring.double(),
     SimpleFactory,
     HSV.MonoColor.Blue,
     MandelbrotData.initialViewport,
@@ -37,15 +37,15 @@ object Model {
 }
 
 @SerialVersionUID(1L)
-class Model(var fractal: Fractal[Double],
+class Model(var fractal: ContentFunction[Double],
             var contentFactory: ContentFactory,
             var farbe: Color[Double],
             var view: Viewport,
-            var sequenceConstructor: Option[SequenceConstructor[_ <: DoubleSequence]])
+            var sequenceConstructor: Option[ContentFunction[_ <: DoubleSequence]])
            (implicit folder:SaveFolder)extends Observable {
 
   var quali: Double = 0.25
-  var img: Image[_] = _
+  var img: Image = _
   var points = Seq[Point]()
 
   preview()
@@ -82,7 +82,7 @@ class Model(var fractal: Fractal[Double],
     preview()
   }
 
-  def setFractal(f: Fractal[Double]) = {
+  def setFractal(f: ContentFunction[Double]) = {
     require(f != null)
     fractal = f
     preview()
@@ -94,8 +94,8 @@ class Model(var fractal: Fractal[Double],
     preview()
   }
 
-  def setSequence(newSequenceConstructor: Option[SequenceConstructor[_ <: DoubleSequence]]): Unit = {
-    sequenceConstructor = newSequenceConstructor
+  def setSequence(newContentFunction: Option[ContentFunction[_ <: DoubleSequence]]): Unit = {
+    sequenceConstructor = newContentFunction
     notifyObservers()
   }
 

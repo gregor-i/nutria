@@ -17,7 +17,7 @@
 
 package nurtia.data
 
-import nutria.core.Fractal
+import nutria.core.ContentFunction
 import nutria.core.consumers._
 import nutria.core.directFractals.MandelbrotContour
 import nutria.core.sequences.Mandelbrot
@@ -95,12 +95,12 @@ object MandelbrotData extends Data[Mandelbrot.Sequence] {
     Viewport.createViewportByLongs(0xbffff12880163b21L, 0x3ecb6329faccb6e0L, 0x3e70999697000000L, 0x3b90000000000000L, 0x0000000000000000L, 0xbe62f8ac174d6080L),
     Viewport.createViewportByLongs(0xbffff1289a2f9024L, 0x3ecc1658de9600a1L, 0x3e89545b65000000L, 0x0000000000000000L, 0x0000000000000000L, 0xbe7cf2b1970e7280L))
 
-  val selectionFractals: Seq[(String, Fractal[Double])] = Seq(
-    "RoughColoring(150)"        -> Mandelbrot(150, 100)  ~> RoughColoring(),
-    "RoughColoring(250)"        -> Mandelbrot(250, 100)  ~> RoughColoring(),
-    "RoughColoring(500)"        -> Mandelbrot(500, 100)  ~> RoughColoring(),
-    "RoughColoring(750)"        -> Mandelbrot(750, 100)  ~> RoughColoring(),
-    "RoughColoring(1500)"       -> Mandelbrot(1500, 100) ~> RoughColoring(),
+  val selectionFractals: Seq[(String, ContentFunction[Double])] = Seq(
+    "RoughColoring(150)"        -> Mandelbrot(150, 100)  ~> RoughColoring.double(),
+    "RoughColoring(250)"        -> Mandelbrot(250, 100)  ~> RoughColoring.double(),
+    "RoughColoring(500)"        -> Mandelbrot(500, 100)  ~> RoughColoring.double(),
+    "RoughColoring(750)"        -> Mandelbrot(750, 100)  ~> RoughColoring.double(),
+    "RoughColoring(1500)"       -> Mandelbrot(1500, 100) ~> RoughColoring.double(),
     "OrbitPoint(250, 0, 0)"     -> Mandelbrot(250, 100)  ~> OrbitPoint(0, 0),
     "OrbitPoint(250, -1, 0)"    -> Mandelbrot(250, 100)  ~> OrbitPoint(-1, 0),
     "OrbitPoint(1250, 1, 1)"    -> Mandelbrot(250, 100)  ~> OrbitPoint(1, 1),

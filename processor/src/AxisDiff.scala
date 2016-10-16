@@ -29,8 +29,8 @@ import viewportSelections.ViewportSelection
 object AxisDiff extends ProcessorHelper {
   override def statusPrints: Boolean = true
 
-  object Fractal extends nutria.core.Fractal[Double] {
-    val sequence = Mandelbrot(3500, 10000)
+  object Fractal extends nutria.core.ContentFunction[Double] {
+    val sequence = Mandelbrot(350, 10000)
     val real = sequence ~> OrbitRealAxis()
     val imag = sequence ~> OrbitImgAxis()
 
@@ -62,12 +62,8 @@ object AxisDiff extends ProcessorHelper {
 
   def main(args: Array[String]): Unit = {
     val tasks1: Set[Task] = Set(Task(MandelbrotData.initialViewport))
-
-    val tasks2: Set[Task] = for (viewport <- ViewportSelection.selection)
-      yield new Task(viewport)
-
-    val tasks3: Set[Task] = for (viewport <- ViewportSelection.focusIteration2)
-      yield new Task(viewport)
+    val tasks2: Set[Task] = ViewportSelection.selection.map(Task)
+    val tasks3: Set[Task] = ViewportSelection.focusIteration2.map(Task)
 
     executeAllTasks(tasks1.toSeq)
     executeAllTasks(tasks3.toSeq)

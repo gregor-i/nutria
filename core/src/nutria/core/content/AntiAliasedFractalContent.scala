@@ -18,11 +18,11 @@
 package nutria.core.content
 
 import nutria.core.accumulator.Accumulator
-import nutria.core.{Fractal, Transform}
+import nutria.core.{ContentFunction, Transform}
 
 // Implements SSAA/FSAA
-case class AntiAliasedFractalContent(fractal: Fractal[Double], transform: Transform,
-  accu: Accumulator, multi: Int)
+case class AntiAliasedFractalContent(fractal: ContentFunction[Double], transform: Transform,
+                                     accu: Accumulator, multi: Int)
   extends Content[Double] {
 
   val dimensions = transform.dimensions

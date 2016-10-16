@@ -22,6 +22,7 @@ import java.io.File
 import nutria.core.accumulator.{Accumulator, Arithmetic}
 import nutria.core.color.{HSV, Invert}
 import nutria.core.content._
+import nutria.core.image.Image
 
 object syntax {
 
@@ -30,18 +31,18 @@ object syntax {
   }
 
   implicit class EnrichedTransform(val transform: Transform) extends AnyVal {
-    def withFractal[B](fractal: Fractal[B]): Content[B] = FractalContent(fractal, transform)
+    def withFractal[B](fractal: ContentFunction[B]): Content[B] = FractalContent(fractal, transform)
 
-    def withAntiAliasedFractal(fractal: Fractal[Double], accu: Accumulator = Arithmetic, samplingFactor: Int = 5): Content[Double] =
+    def withAntiAliasedFractal(fractal: ContentFunction[Double], accu: Accumulator = Arithmetic, samplingFactor: Int = 5): Content[Double] =
       AntiAliasedFractalContent(fractal, transform, accu, samplingFactor)
 
     def withBuddhaBrot(sourceTransform: Transform = transform, maxIteration: Int = 250) =
       BuddahBrot(transform, sourceTransform, maxIteration)
   }
 
-  implicit class EnrichedSequenceConstructors[A <: AbstractSequence, B](val constructor: SequenceConstructor[A]) extends AnyVal {
-    def withConsumer(consumer: SequenceConsumer[A, B]): Fractal[B] = (x, y) => consumer(constructor(x, y))
-    def ~>(consumer: SequenceConsumer[A, B]): Fractal[B] = withConsumer(consumer)
+  implicit class EnrichedContentFunctions[A, B](val content: ContentFunction[A]) extends AnyVal {
+    def map(f: A => B): ContentFunction[B] = new ContentFunctionMap(content, f)
+    def ~>(f: A => B): ContentFunction[B] = map(f)
   }
 
   implicit class EnrichedContentForCache[A](val content: Content[A]) extends AnyVal {
@@ -52,37 +53,26 @@ object syntax {
   }
 
   implicit class EnrichedContentForLinNorm(val content: Content[Double]) extends AnyVal {
-    def linearNormalized: FinishedContent[Double] = LinearNormalizedContent(content.cached)
+    def linearNormalized: NormalizedContent[Double] = LinearNormalizedContent(content.cached)
   }
 
   implicit class EnrichedContentForStrNorm[A](val content: Content[A]) extends AnyVal {
-    def strongNormalized(implicit ordering: Ordering[A]): FinishedContent[Double] = StrongNormalizedContent(content.cached)
+    def strongNormalized(implicit ordering: Ordering[A]): NormalizedContent[Double] = StrongNormalizedContent(content.cached)
   }
 
-
-
-  implicit class EnrichedFinishedContent[A](val content: FinishedContent[A]) extends AnyVal {
-    def withColor(color: Color[A]) = new Image(content, color)
+  implicit class EnrichedFinishedContent[A](val content: NormalizedContent[A]) extends AnyVal {
+    def withColor(color: Color[A]) = Image(content, color)
   }
 
-  implicit class EnrichedFinishedContentWithDefaultColors(val content: FinishedContent[Double]) extends AnyVal {
-    def withDefaultColor = new Image(content, HSV.MonoColor.Blue)
-    def withInvertDefaultColor = new Image(content, Invert(HSV.MonoColor.Blue))
+  implicit class EnrichedFinishedContentWithDefaultColors(val content: NormalizedContent[Double]) extends AnyVal {
+    def withDefaultColor = Image(content, HSV.MonoColor.Blue)
+    def withInvertDefaultColor = Image(content, Invert(HSV.MonoColor.Blue))
   }
 
-  implicit class EnrichedImage(val image: Image[_]) extends AnyVal {
-    def save(file: java.io.File): File = {
-      if (file.getParentFile != null)
-        file.getParentFile.mkdirs()
-      javax.imageio.ImageIO.write(image.buffer, "png", file)
-      file
-    }
-
-    def verboseSave(file: java.io.File): File = {
-      save(file)
-      println("Saved: " + file.getAbsoluteFile)
-      file
-    }
+  implicit class EnrichedImage(val image: Image) extends AnyVal {
+    def buffer = Image.buffer(image)
+    def save(file: java.io.File): File = Image.save(image, file)
+    def verboseSave(file: java.io.File): File = Image.verboseSave(image, file)
   }
 
   implicit class EnrichmentFanOut[A](val self:A) extends AnyVal{

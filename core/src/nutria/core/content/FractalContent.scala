@@ -17,9 +17,9 @@
 
 package nutria.core.content
 
-import nutria.core.{Fractal, Transform}
+import nutria.core.{ContentFunction, Transform}
 
-case class FractalContent[B](fractal: Fractal[B], transform: Transform) extends Content[B]{
+case class FractalContent[B](fractal: ContentFunction[B], transform: Transform) extends Content[B]{
   val dimensions = transform.dimensions
   def apply(x:Int, y:Int): B =
     fractal(transform.transformX(x, y), transform.transformY(x, y))

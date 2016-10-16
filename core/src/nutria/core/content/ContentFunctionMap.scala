@@ -15,17 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nutria.core.directFractals.alternativeImplementation
+package nutria.core.content
 
 import nutria.core.ContentFunction
-import spire.implicits._
-import spire.math.Complex
 
-object StreamBrot {
-  def RoughColoring(maxIterations:Int):ContentFunction[Double] =
-    (x0, y0) => {
-      val start = Complex(x0,y0)
-      def seq: Stream[Complex[Double]] = Complex.zero[Double] #:: seq.map(c => c * c + start)
-      seq.zipWithIndex.takeWhile{ case (v, i) => v.abs < 2 && i < maxIterations }.size
-    }
+class ContentFunctionMap[A, B](oldFractal:ContentFunction[A], map:A => B) extends ContentFunction[B] {
+  override def apply(x: Double, y: Double): B = map(oldFractal(x, y))
 }

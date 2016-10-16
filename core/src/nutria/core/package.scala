@@ -19,24 +19,21 @@ package nutria
 
 package object core {
   type Dimensions = nutria.core.viewport.Dimensions
-  val Dimensions = nutria.core.viewport.Dimensions
+  val  Dimensions = nutria.core.viewport.Dimensions
 
   type Viewport = nutria.core.viewport.Viewport
-  val Viewport = nutria.core.viewport.Viewport
+  val  Viewport = nutria.core.viewport.Viewport
   type Transform = nutria.core.viewport.Transform
 
-  type Fractal[B] = (Double, Double) => B
+  type ContentFunction[B] = (Double, Double) => B
 
   type AbstractSequence = sequences.AbstractSequence
 
-  type SequenceConstructor[A <: AbstractSequence] = (Double, Double) => A
-  type SequenceConsumer[A <: AbstractSequence, B] = A => B
-
-  type Content[A] = content.Content[A]
-  type FinishedContent[A] = Content[A] with content.Normalized
+  type Content[A] = nutria.core.content.Content[A] // (Int, Int) => A
+  type NormalizedContent[A] = Content[A] with content.Normalized
 
   type RGB = nutria.core.color.RGB
   type Color[A] = A => RGB
 
-  type Image[A] = nutria.core.image.Image[A]
+  type Image = Content[RGB]
 }

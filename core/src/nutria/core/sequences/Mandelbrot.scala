@@ -17,7 +17,7 @@
 
 package nutria.core.sequences
 
-import nutria.core.SequenceConstructor
+import nutria.core.ContentFunction
 
 object Mandelbrot{
   final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int, escapeOrbit:Double) extends DoubleSequence {
@@ -59,5 +59,5 @@ object Mandelbrot{
     }
   }
 
-  def apply(maxIterations:Int, escapeOrbit:Double):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(x0, y0, maxIterations, escapeOrbit)
+  def apply(maxIterations:Int, escapeOrbit:Double):ContentFunction[Sequence] = (x0, y0) => new Sequence(x0, y0, maxIterations, escapeOrbit)
 }

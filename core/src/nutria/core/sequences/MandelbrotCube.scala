@@ -17,7 +17,7 @@
 
 package nutria.core.sequences
 
-import nutria.core.SequenceConstructor
+import nutria.core.ContentFunction
 
 object MandelbrotCube {
 
@@ -65,5 +65,5 @@ object MandelbrotCube {
 //    "RoughColoring(1000)" -> RoughColoring(1000)
 //  )
 
-  def apply(maxIterations:Int):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(x0, y0, maxIterations)
+  def apply(maxIterations:Int):ContentFunction[Sequence] = (x0, y0) => new Sequence(x0, y0, maxIterations)
 }

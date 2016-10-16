@@ -42,7 +42,7 @@ object Wallpaper extends ProcessorHelper {
         .withDimensions(Dimensions.fullHD)
 
       val rough = transform
-        .withAntiAliasedFractal(Mandelbrot(5000, 4) ~> RoughColoring()).strongNormalized
+        .withAntiAliasedFractal(Mandelbrot(5000, 4) ~> RoughColoring.double()).strongNormalized
 
       val circle = transform
         .withAntiAliasedFractal(Mandelbrot(7500, 4) ~> CircleP2(), Max).strongNormalized

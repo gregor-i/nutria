@@ -20,8 +20,13 @@ package nutria.core.content
 import nutria.core.Dimensions
 import nutria.core.viewport.HasDimensions
 
-trait Content[A] extends HasDimensions {
+trait Content[A] extends HasDimensions { self =>
   def apply(x: Int, y: Int): A
+
+  def map[B](f: A => B): Content[B] = new Content[B]{
+    override def apply(x: Int, y: Int): B = f(self(x, y))
+    override def dimensions: Dimensions = self.dimensions
+  }
 }
 
 class CachedContent[A](val values: Seq[Seq[A]], val dimensions: Dimensions) extends Content[A] {
@@ -32,5 +37,5 @@ class CachedContent[A](val values: Seq[Seq[A]], val dimensions: Dimensions) exte
 
   override def apply(x: Int, y: Int): A = values(x)(y)
 
-  def map[B](f: A => B): CachedContent[B] = new CachedContent[B](values.map(_.map(f)), dimensions)
+  override def map[B](f: A => B): CachedContent[B] = new CachedContent[B](values.map(_.map(f)), dimensions)
 }

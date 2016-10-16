@@ -18,7 +18,7 @@
 package nurtia.data
 
 import nutria.core.sequences.AbstractSequence
-import nutria.core.{Fractal, Viewport}
+import nutria.core.{ContentFunction, Viewport}
 
 trait Data[A <: AbstractSequence] {
   type Named[B] = (String, B)
@@ -26,7 +26,7 @@ trait Data[A <: AbstractSequence] {
   val initialViewport:Viewport
   val selectionViewports:Set[Viewport]
 
-  val selectionFractals:Seq[Named[Fractal[Double]]]
+  val selectionFractals:Seq[Named[ContentFunction[Double]]]
 }
 
 

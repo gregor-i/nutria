@@ -17,17 +17,20 @@
 
 package nutria.core.consumers
 
+import nutria.core.AbstractSequence
 import nutria.core.sequences.DoubleSequence
-import nutria.core.{AbstractSequence, SequenceConsumer}
 
 object RoughColoring {
-  def apply[A <: AbstractSequence](): SequenceConsumer[A, Double] =
+  def apply[A <: AbstractSequence](): A => Int =
     seq => seq.size()
+
+  def double[A <: AbstractSequence](): A => Double =
+    apply().andThen(_.toDouble)
 }
 
 
 object SmoothColoring {
-  def apply[A <: DoubleSequence](): SequenceConsumer[A, Double] =
+  def apply[A <: DoubleSequence](): A => Double =
     seq => seq.foldLeft(0d) {
       (v, x, y) => v + Math.exp(-(x * x + y * y))
     }

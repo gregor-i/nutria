@@ -17,8 +17,8 @@
 
 package nurtia.data
 
-import nutria.core.SequenceConstructor
-import nutria.core.sequences.{Collatz, DoubleSequence, Mandelbrot}
+import nutria.core.ContentFunction
+import nutria.core.sequences.{AbstractSequence, Collatz, DoubleSequence, Mandelbrot}
 
 object Collection {
 
@@ -26,7 +26,7 @@ object Collection {
     SimpleFactory, AntiAliaseFactory, BuddhaBrotFactory
   )
 
-  val fractals: Seq[(String, SequenceConstructor[_ <: DoubleSequence], Data[_])] =
+  val fractals: Seq[(String, ContentFunction[_ <: DoubleSequence], Data[_])] =
     Seq(
       ("Mandelbrot", Mandelbrot(50, 100), MandelbrotData),
       ("Collatz", Collatz(50), CollatzData)

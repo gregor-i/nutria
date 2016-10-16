@@ -18,7 +18,7 @@
 import java.io.File
 
 import nurtia.data.MandelbrotData
-import nutria.core.{Color, FinishedContent, Viewport}
+import nutria.core.{Color, NormalizedContent, Viewport}
 import nutria.core.color.{HSV, Invert}
 import nutria.core.consumers.CardioidNumeric
 import nutria.core.image.{DefaultSaveFolder, SaveFolder}
@@ -45,7 +45,7 @@ object Cardioid extends ProcessorHelper {
         .strongNormalized
         .fanOut(
           colors.map {
-            color => (normalized: FinishedContent[Double]) => normalized.withColor(color).save(path(color))
+            color => (normalized: NormalizedContent[Double]) => normalized.withColor(color).save(path(color))
           }: _*
         )
     }

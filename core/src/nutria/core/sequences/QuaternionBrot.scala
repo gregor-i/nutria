@@ -17,7 +17,7 @@
 
 package nutria.core.sequences
 
-import nutria.core.SequenceConstructor
+import nutria.core.ContentFunction
 import spire.implicits._
 import spire.math.Quaternion
 
@@ -35,6 +35,6 @@ object QuaternionBrot {
     }
   }
 
-  def apply(selector: (Double, Double) => Quaternion[Double])(maxIterations:Int):SequenceConstructor[Sequence] =
+  def apply(selector: (Double, Double) => Quaternion[Double])(maxIterations:Int):ContentFunction[Sequence] =
     (x0, y0) => new Sequence(selector(x0, y0), maxIterations)
 }

@@ -17,7 +17,7 @@
 
 package nutria.core.sequences.alternativeImlementations
 
-import nutria.core.SequenceConstructor
+import nutria.core.ContentFunction
 import nutria.core.sequences.AbstractSequence
 import spire.implicits._
 import spire.math.Complex
@@ -37,5 +37,5 @@ object SpireBrot {
     }
   }
 
-  def apply(maxIterations:Int):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(Complex(x0, y0), maxIterations)
+  def apply(maxIterations:Int):ContentFunction[Sequence] = (x0, y0) => new Sequence(Complex(x0, y0), maxIterations)
 }

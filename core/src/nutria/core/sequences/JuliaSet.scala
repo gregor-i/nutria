@@ -17,7 +17,7 @@
 
 package nutria.core.sequences
 
-import nutria.core.SequenceConstructor
+import nutria.core.ContentFunction
 
 object JuliaSet {
 
@@ -68,5 +68,5 @@ object JuliaSet {
   //    "RoughColoring(1000)" -> RoughColoring(1000)
   //  )
 
-  def apply(cx: Double, cy: Double)(maxIterations:Int):SequenceConstructor[Sequence] = (x0, y0) => new Sequence(cx, cy)(x0, y0, maxIterations)
+  def apply(cx: Double, cy: Double)(maxIterations:Int):ContentFunction[Sequence] = (x0, y0) => new Sequence(cx, cy)(x0, y0, maxIterations)
 }

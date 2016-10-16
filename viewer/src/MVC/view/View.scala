@@ -25,9 +25,7 @@ import MVC.controller.GuiController
 import MVC.model.Model
 import nurtia.data.Collection
 
-
-@SerialVersionUID(1L)
-class View(val model: Model) extends JFrame {
+case class View(val model: Model) extends JFrame {
   val imgPanel = new ImagePanel(model)
   add(imgPanel)
 
