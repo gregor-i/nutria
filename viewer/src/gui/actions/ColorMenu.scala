@@ -24,7 +24,7 @@ import MVC.model.Model
 import nutria.core.Color
 import nutria.core.color.HSV
 
-class ColorMenu(farben: List[Color], gui: Model) extends JMenu("Farben") {
+class ColorMenu(farben: List[Color[Double]], gui: Model) extends JMenu("Farben") {
 
   private def menu_order(s: Array[String], a: Array[ActionListener]) {
     if (s.length > 10) {

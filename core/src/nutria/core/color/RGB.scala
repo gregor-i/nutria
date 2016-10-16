@@ -57,7 +57,7 @@ final case class RGB(R:Double, G:Double, B:Double) {
   override def toString: String = "#%02x%02x%02x".format(0xff & R.toInt, 0xff & G.toInt, 0xff & B.toInt)
 }
 
-case class Gradient(colors: RGB*) extends Color {
+case class Gradient(colors: RGB*) extends Color[Double] {
   private val n = colors.length - 1
   require(n > 0)
 

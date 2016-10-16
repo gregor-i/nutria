@@ -33,7 +33,7 @@ object Cardioid extends ProcessorHelper {
 
   val colors = Seq(HSV.MonoColor.Blue, Invert(HSV.MonoColor.Blue))
 
-  case class CardioidTask(view: Viewport, path: Color => File) extends Task {
+  case class CardioidTask(view: Viewport, path: Color[Double] => File) extends Task {
     override def name = s"CardioidTask(${view.toString})"
 
     override def skipCondition: Boolean = path(colors.head).exists()

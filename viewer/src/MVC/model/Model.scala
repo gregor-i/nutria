@@ -39,13 +39,13 @@ object Model {
 @SerialVersionUID(1L)
 class Model(var fractal: Fractal,
             var contentFactory: ContentFactory,
-            var farbe: Color,
+            var farbe: Color[Double],
             var view: Viewport,
             var sequenceConstructor: Option[SequenceConstructor[_ <: DoubleSequence]])
            (implicit folder:SaveFolder)extends Observable {
 
   var quali: Double = 0.25
-  var img: Image = _
+  var img: Image[_] = _
   var points = Seq[Point]()
 
   preview()
@@ -70,7 +70,7 @@ class Model(var fractal: Fractal,
     preview()
   }
 
-  def setColor(f: Color) {
+  def setColor(f: Color[Double]) {
     require(f != null)
     farbe = f
     preview()

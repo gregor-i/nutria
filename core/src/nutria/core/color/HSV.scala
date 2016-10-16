@@ -19,13 +19,13 @@ package nutria.core.color
 
 import nutria.core.Color
 
-trait HSV extends Color {
-  def H(lambda: Double): Double
-  def S(lambda: Double): Double
-  def V(lambda: Double): Double
+trait HSV[A] extends Color[A] {
+  def H(lambda: A): Double
+  def S(lambda: A): Double
+  def V(lambda: A): Double
 
-  def apply(lambda: Double): RGB = {
-    require(0 <= lambda && lambda <= 1)
+  def apply(lambda: A): RGB = {
+//    require(0 <= lambda && lambda <= 1)
     HSV2RGB(H(lambda), S(lambda), V(lambda))
   }
 
@@ -53,20 +53,20 @@ trait HSV extends Color {
 }
 
 object HSV {
-  case object TestColor extends HSV {
+  case object TestColor extends HSV[Double] {
     def H(lambda: Double) = lambda * 360 + 60
     def S(lambda: Double) = if (lambda < 0.5) 1 else 2 * (1 - lambda)
     def V(lambda: Double) = if (lambda < 0.5) 2 * lambda else 1
   }
 
-  case object Rainbow extends HSV {
+  case object Rainbow extends HSV[Double] {
     def H(lambda: Double) = lambda * 360 + 240
     def S(lambda: Double) = 1
     def V(lambda: Double) = 1
   }
 
   object MonoColor {
-    abstract class HSVMonoColor(H: Double) extends HSV {
+    abstract class HSVMonoColor(H: Double) extends HSV[Double] {
       def H(lambd: Double) = H
       def S(lambda: Double) = if (lambda < 0.5) 1 else 2 * (1 - lambda)
       def V(lambda: Double) = if (lambda < 0.5) 2 * lambda else 1
@@ -81,7 +81,7 @@ object HSV {
   }
 
   object MonoColor2 {
-    abstract class HSVMonoColor(H: Double) extends HSV {
+    abstract class HSVMonoColor(H: Double) extends HSV[Double] {
       def H(lambd: Double) = H
       def S(lambda: Double) = 1 - math.sqrt(1 - math.pow(1 - lambda, 2))
       def V(lambda: Double) = math.sqrt(1 - math.pow(1 - lambda, 2))

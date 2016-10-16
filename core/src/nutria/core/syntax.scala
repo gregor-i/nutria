@@ -59,13 +59,18 @@ object syntax {
     def strongNormalized(implicit ordering: Ordering[A]): FinishedContent[Double] = StrongNormalizedContent(content.cached)
   }
 
-  implicit class EnrichedFinishedContent(val content: FinishedContent[Double]) extends AnyVal {
-    def withColor(color: Color) = new Image(content, color)
+
+
+  implicit class EnrichedFinishedContent[A](val content: FinishedContent[A]) extends AnyVal {
+    def withColor(color: Color[A]) = new Image(content, color)
+  }
+
+  implicit class EnrichedFinishedContentWithDefaultColors(val content: FinishedContent[Double]) extends AnyVal {
     def withDefaultColor = new Image(content, HSV.MonoColor.Blue)
     def withInvertDefaultColor = new Image(content, Invert(HSV.MonoColor.Blue))
   }
 
-  implicit class EnrichedImage(val image: Image) extends AnyVal {
+  implicit class EnrichedImage(val image: Image[_]) extends AnyVal {
     def save(file: java.io.File): File = {
       if (file.getParentFile != null)
         file.getParentFile.mkdirs()

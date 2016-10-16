@@ -20,12 +20,12 @@ package nutria.core.color
 import nutria.core.Color
 
 object Invert {
-  def invert(color: Color): Color = color match {
+  def invert(color: Color[Double]): Color[Double] = color match {
     case Invert(innerColor) => innerColor
     case _ => Invert(color)
   }
 }
 
-case class Invert(color: Color) extends Color {
+case class Invert(color: Color[Double]) extends Color[Double] {
   override def apply(d: Double): RGB = color(1 - d)
 }
