@@ -21,70 +21,51 @@ import nutria.core.Color
 
 object RGB {
   val default = new Gradient(
-    new ConstantColor(0x00000000),
-    new ConstantColor(0x000000ff),
-    new ConstantColor(0x0000ffff),
-    new ConstantColor(0x00ffffff)
+    RGB.byHex(0x00000000),
+    RGB.byHex(0x000000ff),
+    RGB.byHex(0x0000ffff),
+    RGB.byHex(0x00ffffff)
   )
 
-  val white = new ConstantColor(0x00ffffff)
-  val black = new ConstantColor(0x00000000)
+  val white = RGB.byHex(0x00ffffff)
+  val black = RGB.byHex(0x00000000)
 
-  val corners = Array(
+  val corners = Set(
     white,
-    new ConstantColor(0x000000ff),
-    new ConstantColor(0x0000ff00),
-    new ConstantColor(0x0000ffff),
-    new ConstantColor(0x00ff0000),
-    new ConstantColor(0x00ff00ff),
-    new ConstantColor(0x00ffff00),
+    RGB.byHex(0x000000ff),
+    RGB.byHex(0x0000ff00),
+    RGB.byHex(0x0000ffff),
+    RGB.byHex(0x00ff0000),
+    RGB.byHex(0x00ff00ff),
+    RGB.byHex(0x00ffff00),
     black)
 
-  def interpolate(la: ConstantColor, lb: ConstantColor, p: Double): Int = {
-    val a = la.color
-    val a0 = 0xff & a
-    val a1 = 0xff & (a >> 8)
-    val a2 = 0xff & (a >> 16)
-    val a3 = 0xff & (a >> 24)
-    val b = lb.color
-    val b0 = 0xff & b
-    val b1 = 0xff & (b >> 8)
-    val b2 = 0xff & (b >> 16)
-    val b3 = 0xff & (b >> 24)
+  def interpolate(la: RGB, lb: RGB, p: Double): RGB = {
+    assert(0 <= p && p <= 1)
     val q = 1 - p
-    (a3 * q + b3 * p).toInt << 24 | (a2 * q + b2 * p).toInt << 16 | (a1 * q + b1 * p).toInt << 8 | (a0 * q + b0 * p).toInt
+    RGB(la.R * q + lb.R * p,
+        la.G * q + lb.G * p,
+        la.B * q + lb.B * p)
   }
 
-  def apply(R: Double, G: Double, B: Double): Int = {
-    assert(R >= 0 && R <= 1)
-    assert(G >= 0 && G <= 1)
-    assert(B >= 0 && B <= 1)
-    (R * 255).toInt * (256 * 256) + (G * 255).toInt * (256) + (B * 255).toInt
-  }
+  def byHex(hex: Int): RGB = RGB((hex >> 16) & 0xff, (hex >> 8) & 0xff, 0xff & hex)
 }
 
-@SerialVersionUID(1L)
-final case class ConstantColor(color: Int) extends Color {
-  override def apply(in: Double): Int = color
-
-  override def toString: String =
-    "#%02x%02x%02x".format(0xff & (color >> 16), 0xff & (color >> 8), 0xff & color)
+final case class RGB(R:Double, G:Double, B:Double) {
+  require((0 <= R && R < 256) && (0 <= G && G < 256) && (0 <= B && B < 256), s"Requirement for RGB failed. input: R=$R, G=$G, B=$B")
+  val hex: Int = R.toInt << 16 | G.toInt << 8 | B.toInt
+  override def toString: String = "#%02x%02x%02x".format(0xff & R.toInt, 0xff & G.toInt, 0xff & B.toInt)
 }
 
-
-case class Gradient(colors: ConstantColor*) extends Color {
+case class Gradient(colors: RGB*) extends Color {
   private val n = colors.length - 1
   require(n > 0)
 
-  override def apply(input: Double): Int = {
-    if (input <= 0) return colors(0).color
-    if (input >= 1) return colors(n).color
+  override def apply(input: Double): RGB = {
+    if (input <= 0) return colors(0)
+    if (input >= 1) return colors(n)
     val rest = input * n
     val position = rest.toInt
     RGB.interpolate(colors(position), colors(position + 1), rest % 1)
-  }
-
-  override def toString(): String = {
-    String.format("GradientN %s", colors.toString())
   }
 }

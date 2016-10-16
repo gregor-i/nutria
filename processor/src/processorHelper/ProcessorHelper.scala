@@ -17,8 +17,6 @@
 
 package processorHelper
 
-import nutria.core.image.SaveFolder
-
 import scala.concurrent.duration.{Duration, DurationLong}
 
 sealed trait Result
@@ -33,9 +31,12 @@ trait Task{
   def execute(): Unit
 }
 
-trait NoSkip {
-  _: Task =>
+trait NoSkip { _: Task =>
   override def skipCondition = false
+}
+
+trait Skip { _: Task =>
+  override def skipCondition = true
 }
 
 trait ProcessorHelper {

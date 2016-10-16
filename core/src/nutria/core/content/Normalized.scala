@@ -30,13 +30,8 @@ case class LinearNormalizedContent(content: CachedContent) extends Content with 
   private val dy: Double = 1.0 / (max - min)
   private val y0: Double = -min / (max - min)
 
-  @inline private def clamp(v: Double, max: Double, min: Double) =
-    if (v > max) max
-    else if (v < min) min
-    else v
-
   def apply(x: Int, y: Int): Double = {
-    clamp(y0 + content(x, y) * dy, 1, 0)
+    y0 + content(x, y) * dy ensuring(t => 0 <= t && t <= 1, s"${content(x, y)} was not normalized. (dy = $dy, y0 = $y0)")
   }
 }
 

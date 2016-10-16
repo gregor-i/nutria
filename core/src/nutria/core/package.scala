@@ -35,7 +35,8 @@ package object core {
   type Content = content.Content
   type FinishedContent = Content with content.Normalized
 
-  type Color = Double => Int
+  type RGB = nutria.core.color.RGB
+  type Color = Double => RGB
 
   type Image = nutria.core.image.Image
 }

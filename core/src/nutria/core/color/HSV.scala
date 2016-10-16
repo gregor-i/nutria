@@ -24,21 +24,16 @@ trait HSV extends Color {
   def S(lambda: Double): Double
   def V(lambda: Double): Double
 
-  def clamp(l:Double):Double =
-    l.max(0).min(1)
-
-  def apply(_lambda: Double): Int = {
-    val lambda = clamp(_lambda)
-    require(lambda >= 0)
-    require(lambda <= 1)
-
+  def apply(lambda: Double): RGB = {
+    require(0 <= lambda && lambda <= 1)
     HSV2RGB(H(lambda), S(lambda), V(lambda))
   }
 
-  def HSV2RGB(H: Double, S: Double, V: Double): Int = {
-    // H \in [0 : 360]
-    // S \in [0 : 1]
-    // V \in [0 : 1]
+  def HSV2RGB(H: Double, S: Double, V: Double): RGB = {
+    require(0 <= H && H <= 360)
+    require(0 <= S && S <= 1)
+    require(0 <= V && V <= 1)
+
     val h = (H / 60).toInt
     val f = H / 60.0 - h
     val q = V * (1 - S * f)
@@ -46,12 +41,12 @@ trait HSV extends Color {
     val t = V * (1 - S * (1 - f))
 
     h % 6 match {
-      case 6 | 0 => RGB(V, t, p);
-      case 1 => RGB(q, V, p);
-      case 2 => RGB(p, V, t);
-      case 3 => RGB(p, q, V);
-      case 4 => RGB(t, p, V);
-      case 5 => RGB(V, p, q);
+      case 0 => RGB(V*255, t*255, p*255);
+      case 1 => RGB(q*255, V*255, p*255);
+      case 2 => RGB(p*255, V*255, t*255);
+      case 3 => RGB(p*255, q*255, V*255);
+      case 4 => RGB(t*255, p*255, V*255);
+      case 5 => RGB(V*255, p*255, q*255);
       case _ => RGB(0, 0, 0);
     }
   }

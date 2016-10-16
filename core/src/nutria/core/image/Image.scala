@@ -27,5 +27,5 @@ class Image(val content: FinishedContent, val farbe: Color) extends HasDimension
 
   val buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
   for (w <- 0 until width; h <- 0 until height)
-    buffer.setRGB(w, h, farbe(content(w, h)))
+    buffer.setRGB(w, h, farbe(content(w, h)).hex)
 }
