@@ -23,7 +23,7 @@ import nutria.core.{Fractal, Transform}
 // Implements SSAA/FSAA
 case class AntiAliasedFractalContent(fractal: Fractal, transform: Transform,
   accu: Accumulator, multi: Int)
-  extends Content {
+  extends Content[Double] {
 
   val dimensions = transform.dimensions
 

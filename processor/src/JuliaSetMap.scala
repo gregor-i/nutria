@@ -42,7 +42,7 @@ object JuliaSetMap extends ProcessorHelper {
 
     val patchDimensions = Dimensions.fullHD.scale(0.1)
 
-    def content(cx: Double, cy: Double):Content = {
+    def content(cx: Double, cy: Double):Content[Double] = {
       view
         .withDimensions(patchDimensions)
         .withFractal(JuliaSet(cx, cy)(5000) ~> SmoothColoring())
@@ -56,7 +56,7 @@ object JuliaSetMap extends ProcessorHelper {
         y = 0.1 * j
       } yield (i+10, j+10) -> content(x, y)).toMap
 
-      val combined = new Content{
+      val combined = new Content[Double]{
         override def dimensions: Dimensions = patchDimensions.scale(21)
 
         override def apply(x: Int, y: Int): Double = {

@@ -23,7 +23,7 @@ import nutria.core.{Fractal, Transform}
 @deprecated("not working", ".")
 case class DynamAntiAliasFractalContent(fractal: Fractal, transform: Transform,
                                         accumulator: Accumulator, limit: Double, minimalIterations: Int, maximalIterations: Int)
-  extends Content {
+  extends Content[Double] {
   val dimensions = transform.dimensions
 
   val phi = (Math.sqrt(5) + 1) / 2

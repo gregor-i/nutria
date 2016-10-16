@@ -21,11 +21,11 @@ import nutria.core.accumulator.{Max, Min}
 
 trait Normalized
 
-case class LinearNormalizedContent(content: CachedContent) extends Content with Normalized {
+case class LinearNormalizedContent(content: CachedContent[Double]) extends Content[Double] with Normalized {
   val dimensions = content.dimensions
 
-  private val max = content.applyAccumulator(Max)
-  private val min = content.applyAccumulator(Min)
+  private val max = Max(content.values.flatten)
+  private val min = Min(content.values.flatten)
   require(max != min)
   private val dy: Double = 1.0 / (max - min)
   private val y0: Double = -min / (max - min)
@@ -35,7 +35,7 @@ case class LinearNormalizedContent(content: CachedContent) extends Content with 
   }
 }
 
-case class StrongNormalizedContent(content: CachedContent) extends Content with Normalized {
+case class StrongNormalizedContent[A : Ordering](content: CachedContent[A]) extends Content[Double] with Normalized {
   val dimensions = content.dimensions
 
   private val map = (for (x <- 0 until width; y <- 0 until height)

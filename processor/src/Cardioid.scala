@@ -45,7 +45,7 @@ object Cardioid extends ProcessorHelper {
         .strongNormalized
         .fanOut(
           colors.map {
-            color => (normalized: FinishedContent) => normalized.withColor(color).save(path(color))
+            color => (normalized: FinishedContent[Double]) => normalized.withColor(color).save(path(color))
           }: _*
         )
     }

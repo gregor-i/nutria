@@ -22,7 +22,6 @@ import java.io.File
 import nutria.core.accumulator.{Accumulator, Arithmetic}
 import nutria.core.color.{HSV, Invert}
 import nutria.core.content._
-import nutria.core.image.SaveFolder
 
 object syntax {
 
@@ -31,9 +30,9 @@ object syntax {
   }
 
   implicit class EnrichedTransform(val transform: Transform) extends AnyVal {
-    def withFractal(fractal: Fractal): Content = FractalContent(fractal, transform)
+    def withFractal(fractal: Fractal): Content[Double] = FractalContent(fractal, transform)
 
-    def withAntiAliasedFractal(fractal: Fractal, accu: Accumulator = Arithmetic, samplingFactor: Int = 5): Content =
+    def withAntiAliasedFractal(fractal: Fractal, accu: Accumulator = Arithmetic, samplingFactor: Int = 5): Content[Double] =
       AntiAliasedFractalContent(fractal, transform, accu, samplingFactor)
 
     def withBuddhaBrot(sourceTransform: Transform = transform, maxIteration: Int = 250) =
@@ -45,17 +44,22 @@ object syntax {
     def ~>(consumer: SequenceConsumer[A]): Fractal = withConsumer(consumer)
   }
 
-  implicit class EnrichedContent(val content: Content) extends AnyVal {
-    def cached: CachedContent = content match {
-      case cached: CachedContent => cached
-      case _ => new CachedContent(content)
+  implicit class EnrichedContentForCache[A](val content: Content[A]) extends AnyVal {
+    def cached: CachedContent[A] = content match {
+      case cached: CachedContent[A] => cached
+      case _ => new CachedContent[A](content)
     }
-
-    def linearNormalized: FinishedContent = LinearNormalizedContent(cached)
-    def strongNormalized: FinishedContent = StrongNormalizedContent(cached)
   }
 
-  implicit class EnrichedFinishedContent(val content: FinishedContent) extends AnyVal {
+  implicit class EnrichedContentForLinNorm(val content: Content[Double]) extends AnyVal {
+    def linearNormalized: FinishedContent[Double] = LinearNormalizedContent(content.cached)
+  }
+
+  implicit class EnrichedContentForStrNorm[A](val content: Content[A]) extends AnyVal {
+    def strongNormalized(implicit ordering: Ordering[A]): FinishedContent[Double] = StrongNormalizedContent(content.cached)
+  }
+
+  implicit class EnrichedFinishedContent(val content: FinishedContent[Double]) extends AnyVal {
     def withColor(color: Color) = new Image(content, color)
     def withDefaultColor = new Image(content, HSV.MonoColor.Blue)
     def withInvertDefaultColor = new Image(content, Invert(HSV.MonoColor.Blue))

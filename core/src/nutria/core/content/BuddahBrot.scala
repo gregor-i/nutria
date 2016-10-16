@@ -30,7 +30,7 @@ private object BuddahBrotHelper{
   }
 }
 
-case class BuddahBrot(targetViewport: Transform, sourceViewport: Transform, maxIterations: Int) extends Content {
+case class BuddahBrot(targetViewport: Transform, sourceViewport: Transform, maxIterations: Int) extends Content[Double] {
   val dimensions = targetViewport.dimensions
 
   private val values = Array.ofDim[Double](width, height)
@@ -55,7 +55,7 @@ case class BuddahBrot(targetViewport: Transform, sourceViewport: Transform, maxI
   def apply(x: Int, y: Int): Double = values(x)(y)
 }
 
-case class BuddahBrotWithLines(targetViewport: Transform, sourceViewport: Transform, maxIterations: Int = 250, steps: Int = 100) extends Content {
+case class BuddahBrotWithLines(targetViewport: Transform, sourceViewport: Transform, maxIterations: Int = 250, steps: Int = 100) extends Content[Double] {
   val dimensions = targetViewport.dimensions
 
   private val values = Array.ofDim[Double](width, height)

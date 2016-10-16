@@ -32,8 +32,8 @@ package object core {
   type SequenceConstructor[A <: AbstractSequence] = (Double, Double) => A
   type SequenceConsumer[A <: AbstractSequence] = A => Double
 
-  type Content = content.Content
-  type FinishedContent = Content with content.Normalized
+  type Content[A] = content.Content[A]
+  type FinishedContent[A] = Content[A] with content.Normalized
 
   type RGB = nutria.core.color.RGB
   type Color = Double => RGB

@@ -47,7 +47,7 @@ object Wallpaper extends ProcessorHelper {
       val circle = transform
         .withAntiAliasedFractal(Mandelbrot(7500, 4) ~> CircleP2(), Max).strongNormalized
 
-      val added = new Content {
+      val added = new Content[Double] {
         override def dimensions: Dimensions = Dimensions.fullHD
 
         override def apply(x: Int, y: Int): Double = rough(x, y) + circle(x, y)

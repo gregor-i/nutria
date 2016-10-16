@@ -19,7 +19,7 @@ package nutria.core.content
 
 import nutria.core.viewport.Dimensions
 
-object Spectrum extends Content with Normalized {
+object Spectrum extends Content[Double] with Normalized {
   override def apply(x: Int, y: Int): Double = x.toDouble / Dimensions.fujitsu.width
 
   override def dimensions: Dimensions = Dimensions.fujitsu

@@ -22,7 +22,7 @@ import java.awt.image.BufferedImage
 import nutria.core.viewport.HasDimensions
 import nutria.core.{Color, FinishedContent}
 
-class Image(val content: FinishedContent, val farbe: Color) extends HasDimensions {
+class Image(val content: FinishedContent[Double], val farbe: Color) extends HasDimensions {
   val dimensions = content.dimensions
 
   val buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
