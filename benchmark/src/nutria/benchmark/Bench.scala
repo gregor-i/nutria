@@ -31,7 +31,7 @@ import org.openjdk.jmh.annotations.Benchmark
 import spire.math.Quaternion
 
 class Bench {
-  def operation(fractal: Fractal): CachedContent[Double] =
+  def operation(fractal: Fractal[Double]): CachedContent[Double] =
     MandelbrotData.initialViewport
       .withDimensions(Dimensions.fujitsu.scale(0.1))
       .withAntiAliasedFractal(fractal)

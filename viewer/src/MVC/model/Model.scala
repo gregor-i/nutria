@@ -37,7 +37,7 @@ object Model {
 }
 
 @SerialVersionUID(1L)
-class Model(var fractal: Fractal,
+class Model(var fractal: Fractal[Double],
             var contentFactory: ContentFactory,
             var farbe: Color[Double],
             var view: Viewport,
@@ -82,7 +82,7 @@ class Model(var fractal: Fractal,
     preview()
   }
 
-  def setFractal(f: Fractal) = {
+  def setFractal(f: Fractal[Double]) = {
     require(f != null)
     fractal = f
     preview()

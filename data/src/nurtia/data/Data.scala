@@ -26,7 +26,7 @@ trait Data[A <: AbstractSequence] {
   val initialViewport:Viewport
   val selectionViewports:Set[Viewport]
 
-  val selectionFractals:Seq[Named[Fractal]]
+  val selectionFractals:Seq[Named[Fractal[Double]]]
 }
 
 

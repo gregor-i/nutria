@@ -95,7 +95,7 @@ object MandelbrotData extends Data[Mandelbrot.Sequence] {
     Viewport.createViewportByLongs(0xbffff12880163b21L, 0x3ecb6329faccb6e0L, 0x3e70999697000000L, 0x3b90000000000000L, 0x0000000000000000L, 0xbe62f8ac174d6080L),
     Viewport.createViewportByLongs(0xbffff1289a2f9024L, 0x3ecc1658de9600a1L, 0x3e89545b65000000L, 0x0000000000000000L, 0x0000000000000000L, 0xbe7cf2b1970e7280L))
 
-  val selectionFractals: Seq[(String, Fractal)] = Seq(
+  val selectionFractals: Seq[(String, Fractal[Double])] = Seq(
     "RoughColoring(150)"        -> Mandelbrot(150, 100)  ~> RoughColoring(),
     "RoughColoring(250)"        -> Mandelbrot(250, 100)  ~> RoughColoring(),
     "RoughColoring(500)"        -> Mandelbrot(500, 100)  ~> RoughColoring(),
@@ -108,7 +108,7 @@ object MandelbrotData extends Data[Mandelbrot.Sequence] {
     "OrbitPoint(250, 0, 1)"     -> Mandelbrot(250, 100)  ~> OrbitPoint(0, 1),
     "OrbitRealAxis(250)"        -> Mandelbrot(250, 100)  ~> OrbitRealAxis(),
     "OrbitImgAxis(250)"         -> Mandelbrot(250, 100)  ~> OrbitImgAxis(),
-    "Contour(500)"              -> MandelbrotContour(500),
+//    "Contour(500)"              -> MandelbrotContour(500),
     "CardioidHeuristic(50, 20)" -> Mandelbrot(250, 100)  ~> CardioidHeuristic(20),
     "CardioidNumeric(500, 50)"  -> Mandelbrot(250, 100)  ~> CardioidNumeric(50))
 

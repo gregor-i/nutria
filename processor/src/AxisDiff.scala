@@ -29,7 +29,7 @@ import viewportSelections.ViewportSelection
 object AxisDiff extends ProcessorHelper {
   override def statusPrints: Boolean = true
 
-  object Fractal extends nutria.core.Fractal {
+  object Fractal extends nutria.core.Fractal[Double] {
     val sequence = Mandelbrot(3500, 10000)
     val real = sequence ~> OrbitRealAxis()
     val imag = sequence ~> OrbitImgAxis()

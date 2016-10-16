@@ -22,7 +22,7 @@ import spire.implicits._
 import spire.math.Complex
 
 object StreamBrot {
-  def RoughColoring(maxIterations:Int):Fractal =
+  def RoughColoring(maxIterations:Int):Fractal[Double] =
     (x0, y0) => {
       val start = Complex(x0,y0)
       def seq: Stream[Complex[Double]] = Complex.zero[Double] #:: seq.map(c => c * c + start)

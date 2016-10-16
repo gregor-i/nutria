@@ -25,12 +25,12 @@ package object core {
   val Viewport = nutria.core.viewport.Viewport
   type Transform = nutria.core.viewport.Transform
 
-  type Fractal = (Double, Double) => Double
+  type Fractal[B] = (Double, Double) => B
 
   type AbstractSequence = sequences.AbstractSequence
 
   type SequenceConstructor[A <: AbstractSequence] = (Double, Double) => A
-  type SequenceConsumer[A <: AbstractSequence] = A => Double
+  type SequenceConsumer[A <: AbstractSequence, B] = A => B
 
   type Content[A] = content.Content[A]
   type FinishedContent[A] = Content[A] with content.Normalized

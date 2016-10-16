@@ -21,13 +21,13 @@ import nutria.core.sequences.DoubleSequence
 import nutria.core.{AbstractSequence, SequenceConsumer}
 
 object RoughColoring {
-  def apply[A <: AbstractSequence](): SequenceConsumer[A] =
-    seq => seq.size().toDouble
+  def apply[A <: AbstractSequence](): SequenceConsumer[A, Double] =
+    seq => seq.size()
 }
 
 
 object SmoothColoring {
-  def apply[A <: DoubleSequence](): SequenceConsumer[A] =
+  def apply[A <: DoubleSequence](): SequenceConsumer[A, Double] =
     seq => seq.foldLeft(0d) {
       (v, x, y) => v + Math.exp(-(x * x + y * y))
     }

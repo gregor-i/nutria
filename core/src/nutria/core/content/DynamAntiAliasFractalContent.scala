@@ -21,7 +21,7 @@ import nutria.core.accumulator.{Accumulator, Variance}
 import nutria.core.{Fractal, Transform}
 
 @deprecated("not working", ".")
-case class DynamAntiAliasFractalContent(fractal: Fractal, transform: Transform,
+case class DynamAntiAliasFractalContent(fractal: Fractal[Double], transform: Transform,
                                         accumulator: Accumulator, limit: Double, minimalIterations: Int, maximalIterations: Int)
   extends Content[Double] {
   val dimensions = transform.dimensions

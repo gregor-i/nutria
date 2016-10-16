@@ -19,9 +19,9 @@ package nurtia.data
 
 import nutria.core.consumers.{OrbitPoint, RoughColoring}
 import nutria.core.sequences.Collatz
+import nutria.core.syntax._
 import nutria.core.viewport.Point
 import nutria.core.{Fractal, Viewport, syntax}
-import syntax._
 
 object CollatzData extends Data[Collatz.Sequence] {
 
@@ -29,8 +29,8 @@ object CollatzData extends Data[Collatz.Sequence] {
 
   val selectionViewports: Set[Viewport] = Set.empty
 
-  val selectionFractals: Seq[(String, Fractal)] = Seq(
-    "RoughColoring(50)" -> (Collatz(50) ~>RoughColoring()),
+  val selectionFractals: Seq[(String, Fractal[Double])] = Seq(
+    "RoughColoring(50)" -> (Collatz(50) ~> RoughColoring()),
     "OrbitPoint(50, 0, 0)" -> (Collatz(50) ~> OrbitPoint(0, 0)))
 }
 

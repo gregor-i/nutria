@@ -30,18 +30,18 @@ object syntax {
   }
 
   implicit class EnrichedTransform(val transform: Transform) extends AnyVal {
-    def withFractal(fractal: Fractal): Content[Double] = FractalContent(fractal, transform)
+    def withFractal[B](fractal: Fractal[B]): Content[B] = FractalContent(fractal, transform)
 
-    def withAntiAliasedFractal(fractal: Fractal, accu: Accumulator = Arithmetic, samplingFactor: Int = 5): Content[Double] =
+    def withAntiAliasedFractal(fractal: Fractal[Double], accu: Accumulator = Arithmetic, samplingFactor: Int = 5): Content[Double] =
       AntiAliasedFractalContent(fractal, transform, accu, samplingFactor)
 
     def withBuddhaBrot(sourceTransform: Transform = transform, maxIteration: Int = 250) =
       BuddahBrot(transform, sourceTransform, maxIteration)
   }
 
-  implicit class EnrichedSequenceConstructors[A <: AbstractSequence](val constructor: SequenceConstructor[A]) extends AnyVal {
-    def withConsumer(consumer: SequenceConsumer[A]): Fractal = (x, y) => consumer(constructor(x, y))
-    def ~>(consumer: SequenceConsumer[A]): Fractal = withConsumer(consumer)
+  implicit class EnrichedSequenceConstructors[A <: AbstractSequence, B](val constructor: SequenceConstructor[A]) extends AnyVal {
+    def withConsumer(consumer: SequenceConsumer[A, B]): Fractal[B] = (x, y) => consumer(constructor(x, y))
+    def ~>(consumer: SequenceConsumer[A, B]): Fractal[B] = withConsumer(consumer)
   }
 
   implicit class EnrichedContentForCache[A](val content: Content[A]) extends AnyVal {

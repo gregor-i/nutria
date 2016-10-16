@@ -28,7 +28,7 @@ object CardioidHeuristic{
   def contourX(t: Double) = 0.5 * cos(t) - 0.25 * cos(t * 2)
   def contourY(t: Double) = 0.5 * sin(t) - 0.25 * sin(2 * t)
 
-  def apply(numberOfPoints: Int):SequenceConsumer[Mandelbrot.Sequence] = {
+  def apply(numberOfPoints: Int):SequenceConsumer[Mandelbrot.Sequence, Double] = {
     val points = (0 to numberOfPoints)
       .map(_ * math.Pi / numberOfPoints)
       .map(contour)
@@ -150,7 +150,7 @@ object CardioidNumeric{
     distSquared(t0, x, y)
   }
 
-  def apply(newtonIterations: Int):SequenceConsumer[Mandelbrot.Sequence] =  {
+  def apply(newtonIterations: Int):SequenceConsumer[Mandelbrot.Sequence, Double] =  {
     val range: Range = 0 until newtonIterations
     seq => seq.foldLeft(minimalDistance(range)(seq.publicX, seq.publicY)) {
       (v, x, y) => v.min(minimalDistance(range)(x, y))
