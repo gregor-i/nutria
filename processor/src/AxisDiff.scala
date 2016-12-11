@@ -52,11 +52,11 @@ object AxisDiff extends ProcessorHelper {
 
       diff
         .withInvertDefaultColor
-        .verboseSave(saveFolder /~ s"${viewport}_invert.png")
+        .save(saveFolder /~ s"${viewport}_invert.png")
 
       diff
         .withDefaultColor
-        .verboseSave(saveFolder /~ s"$viewport.png")
+        .save(saveFolder /~ s"$viewport.png")
     }
   }
 

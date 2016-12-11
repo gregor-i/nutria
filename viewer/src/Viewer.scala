@@ -18,14 +18,14 @@
 import MVC.model._
 import MVC.view._
 import nutria.core.consumers.OrbitBothAxis
-import nutria.core.image.SaveFolder
+import nutria.core.image.{DefaultSaveFolder, SaveFolder}
 import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax._
 
 object Viewer {
   def main(args: Array[String]): Unit = {
 
-    implicit val saveFolder = new SaveFolder("E:\\snapshots\\")
+    implicit val saveFolder = DefaultSaveFolder / "viewer"
     val model = Model.default
 //    model.setFractal(TrapTechniques[Mandelbrot.Sequence].SmoothColoring(500))
 
