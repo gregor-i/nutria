@@ -15,37 +15,28 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nutria
-package benchmark
+package nutria.benchmark
 
 import nurtia.data.MandelbrotData
-import nutria.core.ContentFunction
-import nutria.core.consumers.RoughColoring
-import nutria.core.content.CachedContent
-import nutria.core.directFractals.alternativeImplementation.StreamBrot
-import nutria.core.sequences.alternativeImlementations.SpireBrot
-import nutria.core.sequences.{Mandelbrot, QuaternionBrot}
 import nutria.core.syntax._
+import nutria.core._
+import nutria.core.content.CachedContent
+import nutria.core.sequences.Mandelbrot
 import nutria.core.viewport.Dimensions
 import org.openjdk.jmh.annotations.Benchmark
-import spire.math.Quaternion
 
-class Bench {
-  def operation(fractal: ContentFunction[Double]): CachedContent[Double] =
+object NormalizationBenchmark{
+  val exampleCachedContent: CachedContent[Double] =
     MandelbrotData.initialViewport
       .withDimensions(Dimensions.fujitsu.scale(0.1))
-      .withAntiAliasedFractal(fractal)
+      .withFractal(Mandelbrot(350, 4) ~> consumers.SmoothColoring())
       .cached
+}
+
+class NormalizationBenchmark {
+//  @Benchmark
+//  def linear = NormalizationBenchmark.exampleCachedContent.linearNormalized.cached
 
   @Benchmark
-  def mandelRough = operation(Mandelbrot(500, 4d) ~> RoughColoring.double())
-
-  @Benchmark
-  def spireRough = operation(SpireBrot(500) ~> RoughColoring.double())
-
-  @Benchmark
-  def streamRough = operation(StreamBrot.RoughColoring(500))
-
-  @Benchmark
-  def quatbRough = operation(QuaternionBrot((x, y) => Quaternion(x, y, 0, 0))(500) ~> RoughColoring.double())
+  def strong = NormalizationBenchmark.exampleCachedContent.strongNormalized.cached
 }

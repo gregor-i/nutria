@@ -31,28 +31,42 @@ case class LinearNormalizedContent(content: CachedContent[Double]) extends Conte
   private val y0: Double = -min / (max - min)
 
   def apply(x: Int, y: Int): Double = {
-    y0 + content(x, y) * dy ensuring(t => 0 <= t && t <= 1, s"${content(x, y)} was not normalized. (dy = $dy, y0 = $y0)")
+    y0 + content(x, y) * dy
   }
 }
 
-case class StrongNormalizedContent[A : Ordering](content: CachedContent[A]) extends Content[Double] with Normalized {
-  val dimensions = content.dimensions
+private object StrongNormalizedContentHelper {
+  def apply[A: Ordering](content: CachedContent[A]): Seq[Seq[Double]] = {
+    val width = content.width
+    val height = content.height
 
-  private val map = (for (x <- 0 until width; y <- 0 until height)
-    yield content(x, y) -> (x, y)).par.groupBy(_._1).mapValues(_.map(_._2))
+    val swappedAndSorted = (for {
+      x <- 0 until width
+      y <- 0 until height
+    } yield content(x, y) ->(x, y)).toList.sortBy(_._1)
 
-  private val sorted = map.seq.toSeq.sortBy(_._1)
+    val values = Array.fill[Double](width, height)(0d)
 
-  private val values = Array.fill[Double](width, height)(0d)
+    var list = swappedAndSorted
+    var finished = 0
+    while (list.nonEmpty) {
+      val headKey = list.head._1
+      val (part, remaining) = list.span(_._1 == headKey)
+      val partSize = part.size
 
-  private var finished = 0
-  
-  for ((_, pos) <- sorted) {
-    for ((x, y) <- pos) {
-      values(x)(y) = finished.toDouble / (width * height)
+      val value = (finished + partSize / 2d) / (width * height)
+      part.foreach { case (_, (x, y)) => values(x)(y) = value }
+
+      list = remaining
+      finished += partSize
     }
-    finished += pos.size
-  }
+    assert(list == Nil)
+    assert(finished == width * height)
 
-  override def apply(x: Int, y: Int): Double = values(x)(y)
+    values.map(_.toSeq)
+  }
 }
+
+case class StrongNormalizedContent[A: Ordering](content: CachedContent[A])
+  extends CachedContent[Double](StrongNormalizedContentHelper(content), content.dimensions)
+    with Normalized

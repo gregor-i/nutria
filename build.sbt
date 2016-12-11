@@ -48,6 +48,7 @@ val benchmark = project.in(file("benchmark"))
   .settings(commonSettings)
   .dependsOn(core, data)
   .enablePlugins(JmhPlugin, AutomateHeaderPlugin)
+  .settings(addCommandAlias("runAll", "jmh:run -i 10 -wi 10 -f 2 -t 1 nutria.benchmark.*"))
 
 val viewer = project.in(file("viewer"))
   .settings(name := "nutria-viewer")
@@ -66,4 +67,3 @@ commonSettings
 
 // alias
 addCommandAlias("startViewer", "viewer/runMain Viewer")
-addCommandAlias("bench", "benchmark/jmh:run -i 10 -wi 10 -f 2 -t 1 nutria.benchmark.Bench")
