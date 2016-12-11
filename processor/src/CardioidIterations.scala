@@ -32,7 +32,7 @@ object CardioidIterations extends ProcessorHelper {
   override def statusPrints: Boolean = true
 
   def calculateDistance(seq: Mandelbrot.Sequence): Double =
-    CardioidNumeric.minimalDistance(1 to 100)(seq.publicX, seq.publicY)
+    CardioidNumeric.minimalDistance(100)(seq.publicX, seq.publicY)
 
   def main(args: Array[String]): Unit = {
     val dim = Dimensions.fullHD

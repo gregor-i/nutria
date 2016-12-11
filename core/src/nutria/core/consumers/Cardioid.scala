@@ -118,19 +118,19 @@ object CardioidNumeric{
     d1 / d2
   }
 
-  def newton(range:Range)(t0: Double, x: Double, y: Double): Double = {
+  def newton(iterations: Int)(t0: Double, x: Double, y: Double): Double = {
     var t = t0
-    for (i <- range)
+    for (i <- 0 until iterations)
       t -= der1DivDer2(t, x, y)
     t
   }
 
   final val phi = (Math.sqrt(5) + 1) / 2
-  def golden(range:Range)(x: Double, _y: Double): Double = {
+  def golden(iterations :Int)(x: Double, _y: Double): Double = {
     val y = _y.abs
     var a = 0.0
     var b = Math.PI
-    for (i <- range) {
+    for (i <- 0 until iterations) {
       val c = b - (b - a) / phi
       val d = a + (b - a) / phi
       if (distSquared(c, x, y) < distSquared(d, x, y))
@@ -142,17 +142,16 @@ object CardioidNumeric{
   }
 
 
-  def minimalDistance(range:Range)(x: Double, _y: Double): Double = {
+  def minimalDistance(iterations :Int)(x: Double, _y: Double): Double = {
     val y = _y.abs
-    val t0 = golden(range)(x, y)
+    val t0 = golden(iterations)(x, y)
     //      val n = newton(t0, x, y)
     distSquared(t0, x, y)
   }
 
   def apply(newtonIterations: Int): Mandelbrot.Sequence => Double = {
-    val range: Range = 0 until newtonIterations
-    seq => seq.foldLeft(minimalDistance(range)(seq.publicX, seq.publicY)) {
-      (v, x, y) => v.min(minimalDistance(range)(x, y))
+    seq => seq.foldLeft(minimalDistance(newtonIterations)(seq.publicX, seq.publicY)) {
+      (v, x, y) => v.min(minimalDistance(newtonIterations)(x, y))
     }
   }
 }

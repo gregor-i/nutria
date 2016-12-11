@@ -41,7 +41,7 @@ object Image {
 
   def verboseSave(image: Image, file: java.io.File): File = {
     save(image, file)
-    println("Saved: " + file.getAbsoluteFile)
+    println("Saved: " + file.getAbsoluteFile.toString)
     file
   }
 }

@@ -34,7 +34,7 @@ trait DoubleSequence extends AbstractSequence { self =>
   type Y = Double
 
   def publicX: X
-  def publicY: X
+  def publicY: Y
   def public: (X, Y) = (publicX, publicY)
 
   @inline def foldLeft(start: Double)(@inline f: (Double, X, Y) => Double): Double
