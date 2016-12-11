@@ -19,7 +19,7 @@ package nutria.core.image
 
 import java.io.File
 
-object DefaultSaveFolder extends SaveFolder("E:\\snapshots\\")
+object DefaultSaveFolder extends SaveFolder(nutria.core.BuildInfo.defaultSaveFolder)
 
 case class SaveFolder(path: String) {
   require(path.endsWith(File.separator))
@@ -31,8 +31,10 @@ case class SaveFolder(path: String) {
 
   def /~ (file:String):File = inFolder(file)
 
-  def /(subFolder: String):SaveFolder = {
-    require(!subFolder.contains(File.separator))
-    SaveFolder(path + subFolder + File.separator)
+  def subFolder(folder: String):SaveFolder = {
+    require(!folder.contains(File.separator))
+    SaveFolder(path + folder + File.separator)
   }
+
+  def /(folder: String) = subFolder(folder)
 }

@@ -1,5 +1,8 @@
-import sbt.Keys._
 import de.heikoseeberger.sbtheader.license.GPLv3
+import sbt.Keys._
+
+// config
+val defaultSaveFolder = """E:\snapshots\"""
 
 // settings and libs
 def commonSettings = Seq(
@@ -9,7 +12,14 @@ def commonSettings = Seq(
   scalaSource in Test := baseDirectory.value / "test",
 	headers := Map("scala" -> GPLv3("2016", "Gregor Ihmor & Merlin Göttlinger")),
   scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
-) ++ specs2AndScalaCheck ++ spire ++ simulacrum
+) ++ specs2AndScalaCheck ++ spire
+
+def buildInfos = Seq(
+  buildInfoPackage := name.value.replaceAll("-", "."),
+  buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion,
+    "defaultSaveFolder" -> defaultSaveFolder
+  )
+)
 
 def spire = Seq(
   libraryDependencies += "org.spire-math" % "spire_2.11" % "0.12.0"
@@ -27,16 +37,13 @@ def circe = Seq(
   libraryDependencies += "io.circe" % "circe-generic_2.11" % "0.5.1"
 )
 
-def simulacrum = Seq(
-  addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full),
-  libraryDependencies += "com.github.mpilquist" %% "simulacrum" % "0.8.0"
-)
-
 // projects
 val core = project.in(file("core"))
   .settings(name := "nutria-core")
   .settings(commonSettings)
   .enablePlugins(AutomateHeaderPlugin)
+  .settings(buildInfos)
+  .enablePlugins(BuildInfoPlugin)
 
 val data = project.in(file("data"))
   .settings(name := "nutria-data")
@@ -62,8 +69,6 @@ val processor = project.in(file("processor"))
   .settings(circe)
   .dependsOn(core, data)
 	.enablePlugins(AutomateHeaderPlugin)
-
-commonSettings
 
 // alias
 addCommandAlias("startViewer", "viewer/runMain Viewer")
