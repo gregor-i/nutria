@@ -53,11 +53,3 @@ class ForBenchmark {
     a
   }
 }
-
-/*
-unexpected results:
-[info] Benchmark                                  Mode  Cnt       Score     Error  Units
-[info] ForBenchmark.defaultScala                 thrpt  100  117632,143 ÃƒÂ¢Ã¢â‚¬â€œÃ¢â‚¬â„¢ 580,704  ops/s
-[info] ForBenchmark.defaultScalaWithCashedRange  thrpt  100   88782,861 ÃƒÂ¢Ã¢â‚¬â€œÃ¢â‚¬â„¢ 417,568  ops/s
-[info] ForBenchmark.spireCFor                    thrpt  100  118483,978 ÃƒÂ¢Ã¢â‚¬â€œÃ¢â‚¬â„¢ 377,722  ops/s
- */

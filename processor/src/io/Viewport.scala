@@ -17,7 +17,6 @@
 
 package io
 
-import cats.data.Xor
 import io.circe._
 import io.circe.generic.auto._
 import io.circe.parser._
@@ -29,6 +28,6 @@ object ViewportExporter {
 }
 
 object ViewportImporter {
-  def apply(data: String): Xor[Error, Set[Viewport]] =
+  def apply(data: String): Either[Error, Set[Viewport]] =
     decode[Set[Viewport]](data)
 }
