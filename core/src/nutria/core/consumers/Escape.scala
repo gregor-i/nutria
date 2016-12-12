@@ -31,7 +31,7 @@ object RoughColoring {
 
 object SmoothColoring {
   def apply[A <: DoubleSequence](): A => Double =
-    seq => seq.foldLeft(0d) {
+    seq => seq.foldLeft((_, _) => 0d) {
       (v, x, y) => v + Math.exp(-(x * x + y * y))
     }
 }

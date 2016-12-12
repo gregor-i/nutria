@@ -21,32 +21,18 @@ import nutria.core.sequences.DoubleSequence
 
 object BiggestStep {
   def apply[A <: DoubleSequence](): A => Double =
-    seq => {
-      var lastX = seq.publicX
-      var lastY = seq.publicY
-      seq.next()
-      seq.foldLeft(0d){
-        (v, x, y) =>
+    _.foldLeft((x, y) => (x, y, 0d)){
+        case ((lastX, lastY, v), x, y) =>
           val d = (x-lastX)*(x-lastX)  + (y-lastY) *(y-lastY)
-          lastX = x
-          lastY = y
-          v.max(d)
-      }
-    }
+          (x, y, v.max(d))
+      }._3
 }
 
 object SmallestStep {
   def apply[A <: DoubleSequence](): A => Double =
-    seq => {
-      var lastX = seq.publicX
-      var lastY = seq.publicY
-      seq.next()
-      seq.foldLeft(Double.MaxValue){
-        (v, x, y) =>
-          val d = (x-lastX)*(x-lastX)  + (y-lastY) *(y-lastY)
-          lastX = x
-          lastY = y
-          v.min(d)
-      }
-    }
+    _.foldLeft((x, y) => (x, y, Double.MaxValue)){
+      case ((lastX, lastY, v), x, y) =>
+        val d = (x-lastX)*(x-lastX)  + (y-lastY) *(y-lastY)
+        (x, y, v.min(d))
+    }._3
 }

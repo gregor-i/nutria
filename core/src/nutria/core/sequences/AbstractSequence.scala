@@ -37,11 +37,11 @@ trait DoubleSequence extends AbstractSequence { self =>
   def publicY: Y
   def public: (X, Y) = (publicX, publicY)
 
-  @inline def foldLeft(start: Double)(@inline f: (Double, X, Y) => Double): Double
+  @inline def foldLeft[A](start: (X, Y) => A)(@inline f: (A, X, Y) => A): A
 
-  @inline def foldLeftX(start: Double)(@inline f: (Double, X) => Double): Double
+  @inline def foldLeftX[A](start: X => A)(@inline f: (A, X) => A): A
 
-  @inline def foldLeftY(start: Double)(@inline f: (Double, Y) => Double): Double
+  @inline def foldLeftY[A](start: Y => A)(@inline f: (A, Y) => A): A
 
   def wrapped: scala.Iterator[(X, Y)] =
     new scala.Iterator[(X, Y)] {

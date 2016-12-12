@@ -39,7 +39,7 @@ object CardioidHeuristic{
       }
     }
 
-    seq => seq.foldLeft(minimalDistance(2, seq.publicX, seq.publicY))(minimalDistance)
+    seq => seq.foldLeft(minimalDistance(2, _, _))(minimalDistance)
   }
 }
 
@@ -150,7 +150,7 @@ object CardioidNumeric{
   }
 
   def apply(newtonIterations: Int): Mandelbrot.Sequence => Double = {
-    seq => seq.foldLeft(minimalDistance(newtonIterations)(seq.publicX, seq.publicY)) {
+    seq => seq.foldLeft(minimalDistance(newtonIterations)) {
       (v, x, y) => v.min(minimalDistance(newtonIterations)(x, y))
     }
   }

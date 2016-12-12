@@ -21,7 +21,7 @@ import nutria.core.ContentFunction
 
 object MandelbrotCube {
 
-  final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence { self =>
+  final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence {
     private[this] var x: X = 0d
     private[this] var y: Y = 0d
     private[this] var xx = x * x
@@ -40,20 +40,19 @@ object MandelbrotCube {
       hasNext
     }
 
-    @inline override def foldLeft(start: Double)(@inline f: (Double, X, Y) => Double): Double = {
-      var v = start
+    @inline override def foldLeft[A](start: (X, Y) => A)(@inline f: (A, X, Y) => A): A = {
+      var v = start(x, y)
       while (next()) v = f(v, x, y)
       v
     }
-
-    @inline override def foldLeftX(start: Double)(@inline f: (Double, X) => Double): Double = {
-      var v = start
+    @inline override def foldLeftX[A](start: X => A)(@inline f: (A, X) => A): A = {
+      var v = start(x)
       while (next()) v = f(v, x)
       v
     }
 
-    @inline override def foldLeftY(start: Double)(@inline f: (Double, Y) => Double): Double = {
-      var v = start
+    @inline override def foldLeftY[A](start: Y => A)(@inline f: (A, Y) => A): A = {
+      var v = start(y)
       while (next()) v = f(v, y)
       v
     }

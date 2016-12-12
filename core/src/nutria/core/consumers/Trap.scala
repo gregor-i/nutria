@@ -25,28 +25,28 @@ object OrbitPoint {
   @inline private[this] def q(@inline x: Double): Double = x * x
 
   def apply[A <: DoubleSequence](trapx: Double, trapy: Double): A => Double =
-    seq => seq.foldLeft(q(seq.publicX - trapx) + q(seq.publicY - trapy)) {
+    _.foldLeft((x, y) => q(x - trapx) + q(y - trapy)) {
       (d, x, y) => d.min(q(x - trapx) + q(y - trapy))
     }
 }
 
 object OrbitImgAxis {
   def apply[A <: DoubleSequence](): A => Double =
-    seq => seq.foldLeftY(Double.MaxValue) {
+    seq => seq.foldLeftY(_ => Double.MaxValue) {
       (d, y) => d.min(y.abs)
     }
 }
 
 object OrbitRealAxis {
   def apply[A <: DoubleSequence](): A => Double =
-    seq => seq.foldLeftX(Double.MaxValue) {
+    seq => seq.foldLeftX(_ => Double.MaxValue) {
       (d, x) => d.min(x.abs)
     }
 }
 
 object OrbitBothAxis {
   def apply[A <: DoubleSequence](): A => Double =
-    seq => seq.foldLeft(Double.MaxValue) {
+    seq => seq.foldLeft((_, _) => Double.MaxValue) {
       (d, x, y) => d.min(x.abs.min(y.abs))
     }
 }
@@ -56,7 +56,7 @@ object CircleTrap{
 
   def apply[A <: DoubleSequence](cx: Double, cy: Double, cr: Double):A => Double =  {
     @inline def d(x: Double, y: Double) = (sqrt(q(x - cx) + q(y - cy)) - cr).abs
-    seq => seq.foldLeft(d(seq.publicX, seq.publicY)) {
+    _.foldLeft(d) {
       (v, x, y) => v.min(d(x, y))
     }
   }
