@@ -26,9 +26,9 @@ object QuaternionBrot {
   final class Sequence(val start: Quaternion[Double], private var iterationsRemaining: Int) extends AbstractSequence {
     var current: Quaternion[Double] = Quaternion.zero
 
-    @inline def hasNext: Boolean = current.abs < 2 && iterationsRemaining >= 0
+    def hasNext: Boolean = current.abs < 2 && iterationsRemaining >= 0
 
-    @inline def next(): Boolean = {
+    def next(): Boolean = {
       current = current * current + start
       iterationsRemaining -= 1
       hasNext

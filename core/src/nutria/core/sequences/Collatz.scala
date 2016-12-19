@@ -30,26 +30,26 @@ object Collatz {
 
     def publicY = c.imag
 
-    @inline def hasNext: Boolean = (c.imag.abs <= 2) && iterationsRemaining >= 0
+    def hasNext: Boolean = (c.imag.abs <= 2) && iterationsRemaining >= 0
 
-    @inline def next(): Boolean = {
+    def next(): Boolean = {
       c = 0.25 * (2 + 7 * c - (Math.PI * c).cos * (2 +  5 * c))
       iterationsRemaining -= 1
       hasNext
     }
 
-    @inline override def foldLeft[A](start: (X, Y) => A)(@inline f: (A, X, Y) => A): A = {
+    override def foldLeft[A](start: (X, Y) => A)(f: (A, X, Y) => A): A = {
       var v = start(c.real, c.imag)
       while (next()) v = f(v, c.real, c.imag)
       v
     }
-    @inline override def foldLeftX[A](start: X => A)(@inline f: (A, X) => A): A = {
+    override def foldLeftX[A](start: X => A)(f: (A, X) => A): A = {
       var v = start(c.real)
       while (next()) v = f(v, c.real)
       v
     }
 
-    @inline override def foldLeftY[A](start: Y => A)(@inline f: (A, Y) => A): A = {
+    override def foldLeftY[A](start: Y => A)(f: (A, Y) => A): A = {
       var v = start(c.imag)
       while (next()) v = f(v, c.imag)
       v

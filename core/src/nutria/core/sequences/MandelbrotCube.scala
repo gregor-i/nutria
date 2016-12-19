@@ -29,9 +29,9 @@ object MandelbrotCube {
     def publicX = x
     def publicY = y
 
-    @inline def hasNext: Boolean = (x*x + y*y < 4) && iterationsRemaining >= 0
+    def hasNext: Boolean = (x*x + y*y < 4) && iterationsRemaining >= 0
 
-    @inline def next(): Boolean = {
+    def next(): Boolean = {
       val ty = -3 * y * y * x + x * x * x + y0
       val tx = -y * y * y + 3 * y * x * x + x0
       y = ty
@@ -40,18 +40,18 @@ object MandelbrotCube {
       hasNext
     }
 
-    @inline override def foldLeft[A](start: (X, Y) => A)(@inline f: (A, X, Y) => A): A = {
+    override def foldLeft[A](start: (X, Y) => A)(f: (A, X, Y) => A): A = {
       var v = start(x, y)
       while (next()) v = f(v, x, y)
       v
     }
-    @inline override def foldLeftX[A](start: X => A)(@inline f: (A, X) => A): A = {
+    override def foldLeftX[A](start: X => A)(f: (A, X) => A): A = {
       var v = start(x)
       while (next()) v = f(v, x)
       v
     }
 
-    @inline override def foldLeftY[A](start: Y => A)(@inline f: (A, Y) => A): A = {
+    override def foldLeftY[A](start: Y => A)(f: (A, Y) => A): A = {
       var v = start(y)
       while (next()) v = f(v, y)
       v

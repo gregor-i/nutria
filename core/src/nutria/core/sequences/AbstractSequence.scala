@@ -22,7 +22,7 @@ trait AbstractSequence {
 
   @inline def next(): Boolean
 
-  @inline def size(): Int = {
+  def size(): Int = {
     var i = 0
     while (next()) i = i + 1
     i
@@ -37,11 +37,9 @@ trait DoubleSequence extends AbstractSequence { self =>
   def publicY: Y
   def public: (X, Y) = (publicX, publicY)
 
-  @inline def foldLeft[A](start: (X, Y) => A)(@inline f: (A, X, Y) => A): A
-
-  @inline def foldLeftX[A](start: X => A)(@inline f: (A, X) => A): A
-
-  @inline def foldLeftY[A](start: Y => A)(@inline f: (A, Y) => A): A
+  def foldLeft[A](@inline start: (X, Y) => A)(@inline f: (A, X, Y) => A): A
+  def foldLeftX[A](@inline start: X => A)(@inline f: (A, X) => A): A
+  def foldLeftY[A](@inline start: Y => A)(@inline f: (A, Y) => A): A
 
   def wrapped: scala.Iterator[(X, Y)] =
     new scala.Iterator[(X, Y)] {

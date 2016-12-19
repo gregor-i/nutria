@@ -17,10 +17,10 @@
 
 package nutria.core.consumers
 
+import nutria.core.MathUtils
 import nutria.core.sequences.Mandelbrot
 
-object CardioidHeuristic{
-  @inline private[this] def q(@inline x: Double): Double = x * x
+object CardioidHeuristic extends MathUtils{
   import Math.{cos, sin}
 
   def contour(t: Double) = (contourX(t), contourY(t))
@@ -44,8 +44,7 @@ object CardioidHeuristic{
 }
 
 
-object CardioidNumeric{
-  @inline private[this] def q(@inline x: Double): Double = x * x
+object CardioidNumeric extends MathUtils{
   import Math.{cos, sin, sqrt}
 
   def contour(t: Double) = (contourX(t), contourY(t))

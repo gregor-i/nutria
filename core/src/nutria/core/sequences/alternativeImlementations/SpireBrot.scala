@@ -28,9 +28,9 @@ object SpireBrot {
   final class Sequence(val start: Complex[Double], private var iterationsRemaining: Int) extends AbstractSequence {
     private var current: Complex[Double] = Complex.zero
 
-    @inline def hasNext: Boolean = current.abs < 2 && iterationsRemaining >= 0
+    def hasNext: Boolean = current.abs < 2 && iterationsRemaining >= 0
 
-    @inline def next(): Boolean = {
+    def next(): Boolean = {
       current = current * current + start
       iterationsRemaining -= 1
       hasNext

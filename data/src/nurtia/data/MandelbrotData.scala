@@ -111,7 +111,9 @@ object MandelbrotData extends Data[Mandelbrot.Sequence] {
     "OrbitImgAxis(250)"         -> Mandelbrot(250, 100)   ~> OrbitImgAxis(),
     "Contour(500)"              -> MandelbrotContour(500) ~> (b => if(b) 1d else 0d),
     "CardioidHeuristic(50, 20)" -> Mandelbrot(250, 100)   ~> CardioidHeuristic(20),
-    "CardioidNumeric(500, 50)"  -> Mandelbrot(250, 100)   ~> CardioidNumeric(50))
+    "BiggestStep(250)"          -> Mandelbrot(250, 100)   ~> BiggestStep(),
+    "SmallestStep(250)"         -> Mandelbrot(250, 10000) ~> SmallestStep()
+  )
 
   object Focus {
     val iteration1 = Set(

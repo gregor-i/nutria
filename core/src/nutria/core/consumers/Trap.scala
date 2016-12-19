@@ -19,11 +19,10 @@ package nutria.core.consumers
 
 import java.lang.Math.sqrt
 
+import nutria.core.MathUtils
 import nutria.core.sequences.{DoubleSequence, Mandelbrot}
 
-object OrbitPoint {
-  @inline private[this] def q(@inline x: Double): Double = x * x
-
+object OrbitPoint extends MathUtils {
   def apply[A <: DoubleSequence](trapx: Double, trapy: Double): A => Double =
     _.foldLeft((x, y) => q(x - trapx) + q(y - trapy)) {
       (d, x, y) => d.min(q(x - trapx) + q(y - trapy))
@@ -51,9 +50,7 @@ object OrbitBothAxis {
     }
 }
 
-object CircleTrap{
-  @inline private[this] def q(@inline x: Double): Double = x * x
-
+object CircleTrap extends MathUtils{
   def apply[A <: DoubleSequence](cx: Double, cy: Double, cr: Double):A => Double =  {
     @inline def d(x: Double, y: Double) = (sqrt(q(x - cx) + q(y - cy)) - cr).abs
     _.foldLeft(d) {
