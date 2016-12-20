@@ -41,7 +41,7 @@ object RGB {
     black)
 
   def interpolate(la: RGB, lb: RGB, p: Double): RGB = {
-    assert(0 <= p && p <= 1)
+    require(0 <= p && p <= 1, s"$p was not in the expected interval [0, 1]")
     val q = 1 - p
     RGB(la.R * q + lb.R * p,
         la.G * q + lb.G * p,

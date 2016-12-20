@@ -33,9 +33,6 @@ abstract class AccumulateOverStepSize[A <: Accumulator](val accu: A) extends Mat
 
   def apply[S <: DoubleSequence](): S => Double =
     _.foldLeft(Step(_, _)) { case (step, x, y) => step.next(x, y) }.eval
-
-  def alternativ[S <: DoubleSequence](): S => Double =
-    _.wrapped.aggregate()
 }
 
 object BiggestStep extends AccumulateOverStepSize(Max)

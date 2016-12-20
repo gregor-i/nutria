@@ -40,7 +40,7 @@ trait Skip { _: Task =>
 }
 
 trait ProcessorHelper {
-  def statusPrints: Boolean
+  def statusPrints: Boolean = true
 
   def executeTask(task: Task): Result =
     try {
