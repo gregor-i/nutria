@@ -20,13 +20,23 @@ package nutria.core.consumers
 import nutria.core.MathUtils
 import nutria.core.sequences.Mandelbrot
 
-object CardioidHeuristic extends MathUtils{
-  import Math.{cos, sin}
+import scala.annotation.tailrec
 
-  def contour(t: Double) = (contourX(t), contourY(t))
-  def contourX(t: Double) = 0.5 * cos(t) - 0.25 * cos(t * 2)
-  def contourY(t: Double) = 0.5 * sin(t) - 0.25 * sin(2 * t)
+trait CardioidUtils extends MathUtils {
+  import Math.{cos, sin, sqrt}
 
+  @inline final def contour(t: Double): (Double, Double) = (contourX(t), contourY(t))
+  @inline final def contourX(t: Double): Double = 0.5 * cos(t) - 0.25 * cos(2 * t)
+  @inline final def contourY(t: Double): Double = 0.5 * sin(t) - 0.25 * sin(2 * t)
+
+  @inline final def distSquared(t: Double, x: Double, y: Double): Double =
+    q(contourX(t) - x) + q(contourY(t) - y)
+
+  @inline final def dist(t: Double, x: Double, y: Double): Double =
+    sqrt(distSquared(t, x, y))
+}
+
+object CardioidHeuristic extends CardioidUtils {
   def apply(numberOfPoints: Int): Mandelbrot.Sequence => Double = {
     val points = (0 to numberOfPoints)
       .map(_ * math.Pi / numberOfPoints)
@@ -34,9 +44,8 @@ object CardioidHeuristic extends MathUtils{
 
     def minimalDistance(v: Double, x: Double, _y: Double): Double = {
       val y = _y.abs
-      points.foldLeft(v) {
-        case (d, (px, py)) => d.min(q(px - x) + q(py - y))
-      }
+      def d(p:(Double, Double)): Double = q(p._1 - x) + q(p._2 - y)
+      d(points.minBy(d))
     }
 
     seq => seq.foldLeft(minimalDistance(2, _, _))(minimalDistance)
@@ -44,19 +53,8 @@ object CardioidHeuristic extends MathUtils{
 }
 
 
-object CardioidNumeric extends MathUtils{
+object CardioidNumeric extends CardioidUtils {
   import Math.{cos, sin, sqrt}
-
-  def contour(t: Double) = (contourX(t), contourY(t))
-  def contourX(t: Double) = 0.5 * cos(t) - 0.25 * cos(t * 2)
-  def contourY(t: Double) = 0.5 * sin(t) - 0.25 * sin(2 * t)
-
-  def dist(t: Double, x: Double, y: Double): Double =
-    sqrt(q(contourX(t) - x) + q(contourY(t) - y))
-
-  def distSquared(t: Double, x: Double, y: Double): Double =
-    q(contourX(t) - x) + q(contourY(t) - y)
-
 
   // sqrt( (cos(t)/2 - cos(2t)/4-x)^2 + (sin(t)/2 - sin(2t)/4-y)^2 )
   // d/dt sqrt( (cos(t)/2 - cos(2t)/4-x)^2 + (sin(t)/2 - sin(2t)/4-y)^2 )
@@ -117,40 +115,45 @@ object CardioidNumeric extends MathUtils{
     d1 / d2
   }
 
-  def newton(iterations: Int)(t0: Double, x: Double, y: Double): Double = {
-    var t = t0
-    for (i <- 0 until iterations)
+  def newton(iterations: Int)(lower: Double, upper:Double)(x: Double, y: Double): Double = {
+    var t = (lower + upper) /2
+    for (i <- 0 until iterations) {
       t -= der1DivDer2(t, x, y)
+      if(t > upper || t < lower)
+        throw new ArithmeticException(s"Newton does not converge. After $i iterations.")
+    }
     t
   }
 
-  final val phi = (Math.sqrt(5) + 1) / 2
-  def golden(iterations :Int)(x: Double, _y: Double): Double = {
+  final val phi:Double = (sqrt(5) + 1) / 2
+  def golden(iterations:Int)(x:Double, _y:Double): (Double, Double) = {
     val y = _y.abs
-    var a = 0.0
-    var b = Math.PI
-    for (i <- 0 until iterations) {
-      val c = b - (b - a) / phi
-      val d = a + (b - a) / phi
-      if (distSquared(c, x, y) < distSquared(d, x, y))
-        b = d
-      else
-        a = c
-    }
-    (a + b) / 2
+    def calc(t:Double):Double = distSquared(t, x, y)
+    @tailrec def loop(i:Int, a:Double, fa:Double, b:Double, fb:Double): (Double, Double) =
+      if(i == 0)
+        (a, b)
+      else {
+        val c = b - (b - a) / phi
+        val d = a + (b - a) / phi
+        val fc = calc(c)
+        val fd = calc(d)
+        if (fc < fd)
+          loop(i - 1, a, fa, d, fd)
+        else
+          loop(i - 1, c, fc, b, fb)
+      }
+    loop(iterations-1, 0, calc(0), Math.PI, calc(Math.PI))
   }
-
 
   def minimalDistance(iterations :Int)(x: Double, _y: Double): Double = {
     val y = _y.abs
-    val t0 = golden(iterations)(x, y)
-    //      val n = newton(t0, x, y)
-    distSquared(t0, x, y)
+    val (lower, upper) = golden(iterations)(x, y)
+    val t = (lower + upper) / 2
+    distSquared(t, x, y)
   }
 
-  def apply(newtonIterations: Int): Mandelbrot.Sequence => Double = {
-    seq => seq.foldLeft(minimalDistance(newtonIterations)) {
+  def apply(newtonIterations: Int): Mandelbrot.Sequence => Double =
+    _.foldLeft((_, _) => Double.MaxValue) {
       (v, x, y) => v.min(minimalDistance(newtonIterations)(x, y))
     }
-  }
 }

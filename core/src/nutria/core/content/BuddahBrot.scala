@@ -61,11 +61,12 @@ case class BuddahBrotWithLines(targetViewport: Transform, sourceViewport: Transf
   private val values = Array.ofDim[Double](width, height)
 
   def loop(sx: Double, sy: Double): Unit = {
-    val iterator = new Mandelbrot.Sequence(sx, sy, maxIterations, 4)
+    val iterator = Mandelbrot(maxIterations, 4)(sx, sy)
     var state = (iterator.publicX, iterator.publicY)
     while(iterator.hasNext){
       val lastState = state
-      state = (iterator.publicX, iterator.publicY)
+      iterator.next()
+      state = iterator.public
 
       for(f <- 0d until 1d by (1d/steps)){
         val x = lastState._1 * f + state._1 *(1-f)

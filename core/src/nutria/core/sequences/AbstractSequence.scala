@@ -21,12 +21,6 @@ trait AbstractSequence {
   @inline def hasNext: Boolean
 
   @inline def next(): Boolean
-
-  def size(): Int = {
-    var i = 0
-    while (next()) i = i + 1
-    i
-  }
 }
 
 trait DoubleSequence extends AbstractSequence { self =>

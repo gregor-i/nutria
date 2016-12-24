@@ -20,9 +20,8 @@ package nutria.core
 import java.io.File
 
 import nutria.core.accumulator.{Accumulator, Arithmetic}
-import nutria.core.color.{HSV, Invert}
+import nutria.core.color.{Invert, Periodic, Wikipedia}
 import nutria.core.content._
-import nutria.core.image.Image
 
 object syntax {
 
@@ -33,7 +32,7 @@ object syntax {
   implicit class EnrichedTransform(val transform: Transform) extends AnyVal {
     def withFractal[B](fractal: ContentFunction[B]): Content[B] = FractalContent(fractal, transform)
 
-    def withAntiAliasedFractal(fractal: ContentFunction[Double], accu: Accumulator = Arithmetic, samplingFactor: Int = 5): Content[Double] =
+    def withAntiAliasedFractal(fractal: ContentFunction[Double], accu: Accumulator = Arithmetic, samplingFactor: Int = 2): Content[Double] =
       AntiAliasedFractalContent(fractal, transform, accu, samplingFactor)
 
     def withBuddhaBrot(sourceTransform: Transform = transform, maxIteration: Int = 250) =
@@ -64,9 +63,14 @@ object syntax {
     def withColor(color: Color[A]) = Image(content, color)
   }
 
+  implicit class EnrichColor(val color: Color[Double]) extends AnyVal {
+    def invert:Color[Double] = Invert.invert(color)
+    def repeated(repeat:Int) = Periodic(color, 0d, repeat)
+  }
+
   implicit class EnrichedFinishedContentWithDefaultColors(val content: NormalizedContent[Double]) extends AnyVal {
-    def withDefaultColor = Image(content, HSV.MonoColor.Blue)
-    def withInvertDefaultColor = Image(content, Invert(HSV.MonoColor.Blue))
+    def withDefaultColor = Image(content, Wikipedia)
+    def withInvertDefaultColor = Image(content, Wikipedia.invert)
   }
 
   implicit class EnrichedImage(val image: Image) extends AnyVal {

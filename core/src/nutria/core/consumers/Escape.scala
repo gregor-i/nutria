@@ -22,7 +22,11 @@ import nutria.core.sequences.DoubleSequence
 
 object RoughColoring {
   def apply[A <: AbstractSequence](): A => Int =
-    seq => seq.size()
+    seq => {
+      var i = 0
+      while (seq.next()) i = i + 1
+      i
+    }
 
   def double[A <: AbstractSequence](): A => Double =
     apply().andThen(_.toDouble)

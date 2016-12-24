@@ -72,7 +72,7 @@ object HSV {
     }
 
     case object Red extends HSVMonoColor(0)
-    case object Yello extends HSVMonoColor(60)
+    case object Yellow extends HSVMonoColor(60)
     case object Green extends HSVMonoColor(120)
     case object Cyan extends HSVMonoColor(180)
     case object Blue extends HSVMonoColor(240)

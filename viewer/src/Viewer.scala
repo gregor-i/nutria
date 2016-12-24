@@ -17,21 +17,23 @@
 
 import MVC.model._
 import MVC.view._
-import nutria.core.consumers.OrbitBothAxis
+import nutria.core.consumers.{CardioidNumeric, OrbitBothAxis}
 import nutria.core.image.{DefaultSaveFolder, SaveFolder}
 import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax._
+import nutria.core.viewport.{Point, Viewport}
 
 object Viewer {
   def main(args: Array[String]): Unit = {
 
     implicit val saveFolder = DefaultSaveFolder / "viewer"
     val model = Model.default
-//    model.setFractal(TrapTechniques[Mandelbrot.Sequence].SmoothColoring(500))
+    //model.setViewport(Viewport(Point(-2.5, 0), Point(3.5, 0), Point(0, 1)))
+    model.setFractal(Mandelbrot(1, 40) ~> CardioidNumeric(20))
 
 //    model.setSequence(Some(JuliaSet(-0.6, 0.6)(50)))
 //    model.setFractal(JuliaSet(-0.6, 0.6)(500) ~> SmoothColoring())
-    model.setFractal(Mandelbrot(350, 10000) ~> OrbitBothAxis())
+    //model.setFractal(Mandelbrot(350, 10000) ~> OrbitBothAxis())
     new View(model)
   }
 }

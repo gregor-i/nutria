@@ -16,7 +16,8 @@
  */
 
 import nurtia.data.MandelbrotData
-import nutria.core.consumers.SmoothColoring
+import nutria.core.color.Wikipedia
+import nutria.core.consumers.{RoughColoring, SmoothColoring}
 import nutria.core.image.{DefaultSaveFolder, SaveFolder}
 import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax._
@@ -28,15 +29,15 @@ object SimpleExampleMain extends App {
 
   MandelbrotData.initialViewport
     .withDimensions(Dimensions.fujitsu.scale(0.5))
-    .withFractal(Mandelbrot(350, 100) ~> SmoothColoring())
-    .strongNormalized
-    .withDefaultColor
+    .withFractal(Mandelbrot(350, 100) ~> RoughColoring.double())
+    .linearNormalized
+    .withColor(Wikipedia.periodic(1))
     .verboseSave(saveFolder /~ "basic.png")
 
   MandelbrotData.initialViewport
     .withDimensions(Dimensions.fujitsu.scale(0.5))
-    .withAntiAliasedFractal(Mandelbrot(350, 100) ~> SmoothColoring())
-    .strongNormalized
+    .withAntiAliasedFractal(Mandelbrot(350, 100) ~> RoughColoring.double())
+    .linearNormalized
     .withDefaultColor
     .verboseSave(saveFolder /~ "aa.png")
 }

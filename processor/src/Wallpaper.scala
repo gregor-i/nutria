@@ -17,7 +17,7 @@
 
 import nutria.core.Viewport
 import nutria.core.accumulator.Max
-import nutria.core.consumers.{CircleP2, RoughColoring}
+import nutria.core.consumers._
 import nutria.core.content.Content
 import nutria.core.image.{DefaultSaveFolder, SaveFolder}
 import nutria.core.sequences.Mandelbrot
@@ -27,12 +27,9 @@ import processorHelper.{ProcessorHelper, Task}
 import viewportSelections.ViewportSelection
 
 object Wallpaper extends ProcessorHelper {
-
-
-  override def statusPrints: Boolean = true
-
   case class WallpaperTask(view: Viewport) extends Task {
     val saveFolder: SaveFolder = DefaultSaveFolder / "Wallpaper" / s"$view"
+
     override def name: String = s"WallpaperTask($view)"
 
     override def skipCondition: Boolean = (saveFolder /~ "added.png").exists()
@@ -41,28 +38,27 @@ object Wallpaper extends ProcessorHelper {
       val transform = view
         .withDimensions(Dimensions.fullHD)
 
-      val rough = transform
-        .withAntiAliasedFractal(Mandelbrot(5000, 4) ~> RoughColoring.double()).strongNormalized
+      val escape = transform
+        .withAntiAliasedFractal(Mandelbrot(5000, 4000) ~> SmoothColoring()).strongNormalized
 
-      val circle = transform
-        .withAntiAliasedFractal(Mandelbrot(7500, 4) ~> CircleP2(), Max).strongNormalized
+      val smallestStep = transform
+        .withAntiAliasedFractal(Mandelbrot(7500, 4000) ~> SmallestStep(), Max).strongNormalized
 
       val added = new Content[Double] {
         override def dimensions: Dimensions = Dimensions.fullHD
-
-        override def apply(x: Int, y: Int): Double = rough(x, y) + circle(x, y)
+        override def apply(x: Int, y: Int): Double = escape(x, y) + smallestStep(x, y)
       }.strongNormalized
 
-      rough.withDefaultColor.save(saveFolder /~ "rough.png")
-      circle.withDefaultColor.save(saveFolder /~ "circle.png")
+      escape.withDefaultColor.save(saveFolder /~ "escape.png")
+      smallestStep.withDefaultColor.save(saveFolder /~ "smallestStep.png")
       added.withDefaultColor.save(saveFolder /~ "added.png")
     }
 
-    def main(args: Array[String]): Unit = {
-      executeAllTasks(
-        for (view <- ViewportSelection.selection)
-          yield WallpaperTask(view))
-    }
   }
 
+  def main(args: Array[String]): Unit = {
+    executeAllTasks(
+      for (view <- ViewportSelection.selection)
+        yield WallpaperTask(view))
+  }
 }

@@ -15,52 +15,55 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import java.io.File
-
 import nurtia.data.MandelbrotData
-import nutria.core.{Color, NormalizedContent, Viewport}
-import nutria.core.color.{HSV, Invert}
+import nutria.core.color.{HSV, Invert, Wikipedia}
 import nutria.core.consumers.CardioidNumeric
 import nutria.core.image.{DefaultSaveFolder, SaveFolder}
 import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax._
 import nutria.core.viewport.Dimensions
+import nutria.core.{Color, Viewport}
 import processorHelper.{ProcessorHelper, Task}
 import viewportSelections.ViewportSelection
 
 object Cardioid extends ProcessorHelper {
   override def statusPrints: Boolean = true
 
-  val colors = Seq(HSV.MonoColor.Blue, Invert(HSV.MonoColor.Blue))
+    case class CardioidTask(view: Viewport, saveFolder: SaveFolder) extends Task {
+    override def name = s"CardioidTask($view)"
 
-  case class CardioidTask(view: Viewport, path: Color[Double] => File) extends Task {
-    override def name = s"CardioidTask(${view.toString})"
+      val colors = Seq(
+        "HSV.MonoColor.Blue" -> HSV.MonoColor.Blue,
+        "Invert(HSV.MonoColor.Blue)" -> Invert(HSV.MonoColor.Blue),
+        "Wikipedia" -> Wikipedia,
+        "Invert(Wikipedia)" -> Invert(Wikipedia))
 
-    override def skipCondition: Boolean = path(colors.head).exists()
+    override def skipCondition: Boolean = (saveFolder / view.toString /~ s"${colors.last._1}.png").exists()
 
     override def execute(): Unit = {
-      view
-        .withDimensions(Dimensions.fullHD.scale(0.1))
-        .withFractal(Mandelbrot(2000, 4) ~> CardioidNumeric(75))
+      val content = view
+        .withDimensions(Dimensions.fullHD)
+        //.withDimensions(Dimensions.fullHD.scale(0.1))
+        .withFractal(Mandelbrot(2000, 4) ~> CardioidNumeric(30))
         .strongNormalized
-        .fanOut(
-          colors.map {
-            color => (normalized: NormalizedContent[Double]) => normalized.withColor(color).save(path(color))
-          }: _*
-        )
+
+      for((name, color) <- colors)
+        content.withColor(color).save(saveFolder / view.toString /~ s"$name.png")
     }
   }
+
+  def extractColorName(color:Color[Double]):String = color.getClass.getName.split("\\.").last
 
   def main(args: Array[String]): Unit = {
     val saveFolder: SaveFolder = DefaultSaveFolder / "Cardioid"
 
-    val tasks1: Set[Task] = Set(CardioidTask(MandelbrotData.initialViewport, color => saveFolder /~ s"start_$color.png"))
+    val tasks1: Set[Task] = Set(CardioidTask(MandelbrotData.initialViewport, saveFolder / "start"))
 
     val tasks2: Set[Task] = for (viewport <- ViewportSelection.selection)
-      yield CardioidTask(viewport, color => saveFolder / "auswahl" / viewport.toString /~ s"$color.png")
+      yield CardioidTask(viewport, saveFolder / "auswahl")
 
     val tasks3: Set[Task] = for (viewport <- ViewportSelection.focusIteration2)
-      yield CardioidTask(viewport, color => saveFolder / "fokus" / viewport.toString /~ s"$color.png")
+      yield CardioidTask(viewport, saveFolder / "fokus")
 
     executeAllTasks(tasks1.toSeq)
     executeAllTasks(tasks3.toSeq)

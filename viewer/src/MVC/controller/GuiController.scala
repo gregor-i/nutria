@@ -22,7 +22,9 @@ import java.awt.event._
 import MVC.model.Model
 import MVC.view.View
 import nurtia.data.MandelbrotData
-import nutria.core.color.Invert
+import nutria.core.color.{Invert, RGB}
+import nutria.core.consumers.CardioidNumeric
+import nutria.core.content.CachedContent
 import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax
 import nutria.core.syntax._
@@ -47,6 +49,7 @@ class GuiController(val modell: Model, val view: View) extends KeyListener with 
     val x = trans.transformX(e.getX, e.getY)
     val y = trans.transformY(e.getX, e.getY)
     println(s"Clicked in ($x, $y)")
+    println(s"minDist = ${CardioidNumeric.minimalDistance(10)(x, y)}")
   }
 
   override def keyPressed(arg0: KeyEvent) =

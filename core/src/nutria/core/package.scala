@@ -36,4 +36,5 @@ package object core {
   type Color[A] = A => RGB
 
   type Image = Content[RGB]
+  val  Image = nutria.core.image.Image
 }
