@@ -17,9 +17,9 @@
 
 package nutria.core.sequences
 
-import nutria.core.ContentFunction
+import nutria.core.{ContentFunction, MathUtils}
 
-object Mandelbrot{
+object Mandelbrot extends MathUtils {
   final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int, escapeOrbitSquared:Double) extends DoubleSequence {
     private[this] var x: X = 0d
     private[this] var y: Y = 0d
@@ -34,8 +34,8 @@ object Mandelbrot{
     def next(): Boolean = {
       y = 2 * x * y + y0
       x = xx - yy + x0
-      xx = x * x
-      yy = y * y
+      xx = q(x)
+      yy = q(y)
       iterationsRemaining -= 1
       hasNext
     }

@@ -45,11 +45,14 @@ class GuiController(val modell: Model, val view: View) extends KeyListener with 
   override def mouseReleased(e: MouseEvent) = ()
 
   override def mousePressed(e: MouseEvent) = {
-    val trans = modell.view.withDimensions(Dimensions(imgPanel.getWidth, imgPanel.getHeight))
+    /*val trans = modell.view.withDimensions(Dimensions(imgPanel.getWidth, imgPanel.getHeight))
     val x = trans.transformX(e.getX, e.getY)
     val y = trans.transformY(e.getX, e.getY)
     println(s"Clicked in ($x, $y)")
-    println(s"minDist = ${CardioidNumeric.minimalDistance(10)(x, y)}")
+    println(s"minDist = ${CardioidNumeric.minimalDistance(10)(x, y)}")*/
+    val px = e.getX / imgPanel.getWidth.toDouble
+    val py = e.getY / imgPanel.getHeight.toDouble
+    modell.setViewport(modell.view.focus(px, py))
   }
 
   override def keyPressed(arg0: KeyEvent) =

@@ -20,19 +20,21 @@ package nurtia.data
 import nutria.core._
 import nutria.core.syntax._
 
-trait ContentFactory extends ((Viewport, Dimensions, ContentFunction[Double], Color[Double]) => Image)
+trait ContentFactory {
+  def apply(viewport: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color: Color[Double]): Image
+}
 
 case object SimpleFactory extends ContentFactory {
-  def apply(view: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color:Color[Double]) =
+  def apply(view: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color: Color[Double]) =
     view.withDimensions(dim).withFractal(fractal).strongNormalized.withColor(color)
 }
 
 case object AntiAliaseFactory extends ContentFactory {
-  def apply(view: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color:Color[Double]) =
+  def apply(view: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color: Color[Double]) =
     view.withDimensions(dim).withAntiAliasedFractal(fractal).strongNormalized.withColor(color)
 }
 
 case object BuddhaBrotFactory extends ContentFactory {
-  def apply(view: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color:Color[Double]) =
+  def apply(view: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color: Color[Double]) =
     view.withDimensions(dim).withBuddhaBrot().strongNormalized.withColor(color)
 }

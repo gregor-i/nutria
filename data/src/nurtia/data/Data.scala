@@ -17,16 +17,17 @@
 
 package nurtia.data
 
-import nutria.core.sequences.AbstractSequence
-import nutria.core.{ContentFunction, Viewport}
+import nutria.core.{AbstractSequence, ContentFunction, Viewport}
 
 trait Data[A <: AbstractSequence] {
   type Named[B] = (String, B)
 
-  val initialViewport:Viewport
-  val selectionViewports:Set[Viewport]
+  val name: String
+  val exampleSequenceConstructor: ContentFunction[A]
+  val initialViewport: Viewport
+  val selectionViewports: Set[Viewport]
 
-  val selectionFractals:Seq[Named[ContentFunction[Double]]]
+  val selectionFractals: Seq[Named[ContentFunction[Double]]]
 }
 
 

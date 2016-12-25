@@ -29,7 +29,7 @@ object Viewer {
     implicit val saveFolder = DefaultSaveFolder / "viewer"
     val model = Model.default
     //model.setViewport(Viewport(Point(-2.5, 0), Point(3.5, 0), Point(0, 1)))
-    model.setFractal(Mandelbrot(1, 10d) ~> CardioidNumeric(20))
+//    model.setFractal(Mandelbrot(1, 10d) ~> CardioidNumeric(20))
 
 //    model.setSequence(Some(JuliaSet(-0.6, 0.6)(50)))
 //    model.setFractal(JuliaSet(-0.6, 0.6)(500) ~> SmoothColoring())

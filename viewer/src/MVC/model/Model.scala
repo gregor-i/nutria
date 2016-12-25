@@ -18,7 +18,7 @@
 package MVC.model
 
 import nurtia.data.{ContentFactory, MandelbrotData, SimpleFactory}
-import nutria.core.color.HSV
+import nutria.core.color.{HSV, Wikipedia}
 import nutria.core.consumers.RoughColoring
 import nutria.core.sequences.{DoubleSequence, Mandelbrot}
 import nutria.core.syntax._
@@ -31,7 +31,7 @@ object Model {
   def default(implicit folder:SaveFolder) = new Model(
     Mandelbrot(250, 10d) ~> RoughColoring.double(),
     SimpleFactory,
-    HSV.MonoColor.Blue,
+    Wikipedia,
     MandelbrotData.initialViewport,
     Some(Mandelbrot(50, 10d)))
 }
@@ -96,6 +96,7 @@ class Model(var fractal: ContentFunction[Double],
 
   def setSequence(newContentFunction: Option[ContentFunction[_ <: DoubleSequence]]): Unit = {
     sequenceConstructor = newContentFunction
+    points = Nil
     notifyObservers()
   }
 

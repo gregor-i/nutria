@@ -24,6 +24,10 @@ import javax.swing.{JFrame, JMenu, JMenuBar, JMenuItem}
 import MVC.controller.GuiController
 import MVC.model.Model
 import nurtia.data.Collection
+import nutria.core.ContentFunction
+import nutria.core.sequences.DoubleSequence
+
+import scala.util.Try
 
 case class View(model: Model) extends JFrame {
   val imgPanel = new ImagePanel(model)
@@ -49,15 +53,27 @@ case class View(model: Model) extends JFrame {
   {
     // Menu for the selection of the fractal
     val menu = new FractalMenu(model)
-    for ((collectorName, collector, fractals) <- Collection.fractals) {
-      val subMenu = new JMenu(collectorName)
-      for ((fractalName, fractal) <- fractals.selectionFractals)
+    for (data <- Collection.doubleSequenceFractals) {
+      val subMenu = new JMenu(data.name)
+      for ((fractalName, fractal) <- data.selectionFractals)
         subMenu.add(
           new MenuItem(
             fractalName,
             () => {
               model.setFractal(fractal)
-              model.setSequence(Some(collector))
+              model.setSequence(Some(data.exampleSequenceConstructor))
+            }))
+      menu.add(subMenu)
+    }
+    for (data <- Collection.abstractFracals) {
+      val subMenu = new JMenu(data.name)
+      for ((fractalName, fractal) <- data.selectionFractals)
+        subMenu.add(
+          new MenuItem(
+            fractalName,
+            () => {
+              model.setFractal(fractal)
+              model.setSequence(None)
             }))
       menu.add(subMenu)
     }

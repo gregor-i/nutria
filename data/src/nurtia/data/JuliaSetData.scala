@@ -18,22 +18,18 @@
 package nurtia.data
 
 import nutria.core.consumers.{OrbitPoint, RoughColoring, SmoothColoring}
-import nutria.core.sequences.Collatz
+import nutria.core.sequences.JuliaSet
 import nutria.core.syntax._
-import nutria.core.viewport.Point
 import nutria.core.{ContentFunction, Viewport}
 
-object CollatzData extends Data[Collatz.Sequence] {
-
-  val name = "Collatz"
-  val exampleSequenceConstructor: ContentFunction[Collatz.Sequence] = Collatz(50)
-  val initialViewport: Viewport = Viewport(Point(-2.5, -1), Point(3.5, 0), Point(0, 2))
-
-  val selectionViewports: Set[Viewport] = Set.empty
-
-  val selectionFractals: Seq[(String, ContentFunction[Double])] = Seq(
-    "RoughColoring(50)"    -> Collatz(50) ~> RoughColoring.double(),
-    "SmoothColoring(50)"   -> Collatz(50) ~> SmoothColoring(),
-    "OrbitPoint(50, 0, 0)" -> Collatz(50) ~> OrbitPoint(0, 0))
+case class JuliaSetData(cx:Double, cy:Double) extends Data[JuliaSet.Sequence]{
+  override val name: String = toString
+  override val exampleSequenceConstructor: ContentFunction[JuliaSet.Sequence] = JuliaSet(cx, cy)(50)
+  override val initialViewport: Viewport = MandelbrotData.initialViewport
+  override val selectionViewports: Set[Viewport] = Set.empty
+  override val selectionFractals: Seq[(String, ContentFunction[Double])] = Seq(
+    "RoughColoring(50)"    -> JuliaSet(cx, cy)(50) ~> RoughColoring.double(),
+    "SmoothColoring(50)"   -> JuliaSet(cx, cy)(50) ~> SmoothColoring(),
+    "OrbitPoint(50, 0, 0)" -> JuliaSet(cx, cy)(50) ~> OrbitPoint(0, 0)
+  )
 }
-

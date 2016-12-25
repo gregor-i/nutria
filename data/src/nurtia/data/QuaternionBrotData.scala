@@ -18,22 +18,21 @@
 package nurtia.data
 
 import nutria.core.consumers.{OrbitPoint, RoughColoring, SmoothColoring}
-import nutria.core.sequences.Collatz
+import nutria.core.sequences.QuaternionBrot
 import nutria.core.syntax._
 import nutria.core.viewport.Point
 import nutria.core.{ContentFunction, Viewport}
+import spire.math.Quaternion
 
-object CollatzData extends Data[Collatz.Sequence] {
+class QuaternionBrotData(val name:String, selector:(Double, Double) => Quaternion[Double]) extends Data[QuaternionBrot.Sequence] {
 
-  val name = "Collatz"
-  val exampleSequenceConstructor: ContentFunction[Collatz.Sequence] = Collatz(50)
+  val exampleSequenceConstructor: ContentFunction[QuaternionBrot.Sequence] = QuaternionBrot(selector)(50)
   val initialViewport: Viewport = Viewport(Point(-2.5, -1), Point(3.5, 0), Point(0, 2))
 
   val selectionViewports: Set[Viewport] = Set.empty
 
   val selectionFractals: Seq[(String, ContentFunction[Double])] = Seq(
-    "RoughColoring(50)"    -> Collatz(50) ~> RoughColoring.double(),
-    "SmoothColoring(50)"   -> Collatz(50) ~> SmoothColoring(),
-    "OrbitPoint(50, 0, 0)" -> Collatz(50) ~> OrbitPoint(0, 0))
+    "RoughColoring(50)"    -> QuaternionBrot(selector)(50) ~> RoughColoring.double()
+  )
 }
 

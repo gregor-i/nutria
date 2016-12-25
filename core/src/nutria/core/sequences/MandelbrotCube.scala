@@ -17,23 +17,21 @@
 
 package nutria.core.sequences
 
-import nutria.core.ContentFunction
+import nutria.core.{ContentFunction, MathUtils}
 
-object MandelbrotCube {
+object MandelbrotCube extends MathUtils {
 
   final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence {
     private[this] var x: X = 0d
     private[this] var y: Y = 0d
-    private[this] var xx = x * x
-    private[this] var yy = y * y
     def publicX = x
     def publicY = y
 
-    def hasNext: Boolean = (x*x + y*y < 4) && iterationsRemaining >= 0
+    def hasNext: Boolean = (q(x) + q(y) < 4) && iterationsRemaining >= 0
 
     def next(): Boolean = {
-      val ty = -3 * y * y * x + x * x * x + y0
-      val tx = -y * y * y + 3 * y * x * x + x0
+      val tx = q3(x) - 3 * x * q(y) + x0
+      val ty = 3 * q(x) * y - q3(y) + y0
       y = ty
       x = tx
       iterationsRemaining -= 1
@@ -57,12 +55,6 @@ object MandelbrotCube {
       v
     }
   }
-
-//  val fractals = Seq(
-//    "RoughColoring(100)" -> RoughColoring(100),
-//    "RoughColoring(500)" -> RoughColoring(500),
-//    "RoughColoring(1000)" -> RoughColoring(1000)
-//  )
 
   def apply(maxIterations:Int):ContentFunction[Sequence] = (x0, y0) => new Sequence(x0, y0, maxIterations)
 }

@@ -17,8 +17,8 @@
 
 package nurtia.data
 
-import nutria.core.ContentFunction
-import nutria.core.sequences.{AbstractSequence, Collatz, DoubleSequence, Mandelbrot}
+import nutria.core.sequences._
+import spire.math.Quaternion
 
 object Collection {
 
@@ -26,15 +26,23 @@ object Collection {
     SimpleFactory, AntiAliaseFactory, BuddhaBrotFactory
   )
 
-  val fractals: Seq[(String, ContentFunction[_ <: DoubleSequence], Data[_])] =
+  val doubleSequenceFractals: Seq[Data[_ <: DoubleSequence]] =
     Seq(
-      ("Mandelbrot", Mandelbrot(50, 10d), MandelbrotData),
-      ("Collatz", Collatz(50), CollatzData)
-      //      ("MandelbrotCube", MandelbrotCube, MandelbrotCube.fractals),
-      //      ("Burning Ship", BurningShip, BurningShip.fractals),
-      //      ("JuliaSet(-0.6, -0.6)", JuliaSet(-0.6, -0.6), JuliaSet(-0.6, -0.6).fractals),
-      //      ("JuliaSet(-0.4, 0.6)", JuliaSet(-0.4, 0.6), JuliaSet(-0.4, 0.6).fractals),
-      //      ("JuliaSet-0.8, 0.156)", JuliaSet(-0.8, 0.156), JuliaSet(-0.8, 0.156).fractals),
-      //      ("Tricorn", Tricorn, Tricorn.fractals)
+      MandelbrotData,
+      MandelbrotCubeData,
+      TricornData,
+      CollatzData,
+      BurningShipData,
+      JuliaSetData(-0.6, -0.6),
+      JuliaSetData(-0.4, 0.6),
+      JuliaSetData(-0.8, 0.156)
+    )
+
+  val abstractFracals: Seq[Data[_]] =
+    Seq(
+      new QuaternionBrotData("QuaternionBrot(x, y, 0, 0)", (x, y) => Quaternion(x, y, 0, 0)),
+      new QuaternionBrotData("QuaternionBrot(x, y, 0.5, 0.5)", (x, y) => Quaternion(x, y, 0.5, 0.5)),
+      new QuaternionBrotData("QuaternionBrot(x, y, 0.5, 0)", (x, y) => Quaternion(x, y, 0.5, 0)),
+      new QuaternionBrotData("QuaternionBrot(strange)", (x, y) => Quaternion(x, y, x, x))
     )
 }

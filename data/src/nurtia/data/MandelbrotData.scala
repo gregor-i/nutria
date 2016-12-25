@@ -26,6 +26,9 @@ import nutria.core.viewport.{Point, Viewport}
 
 object MandelbrotData extends Data[Mandelbrot.Sequence] {
 
+  val name = "Mandelbrot"
+  val exampleSequenceConstructor: ContentFunction[Mandelbrot.Sequence] = Mandelbrot(50, 4d)
+
   val initialViewport: Viewport = Viewport(Point(-2.5, -1), Point(3.5, 0), Point(0, 2))
 
   val selectionViewports: Set[Viewport] = Set(
