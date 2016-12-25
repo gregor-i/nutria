@@ -31,7 +31,7 @@ object SimpleExampleMain extends App {
     .withDimensions(Dimensions.fujitsu.scale(0.5))
     .withFractal(Mandelbrot(350, 100) ~> RoughColoring.double())
     .linearNormalized
-    .withColor(Wikipedia.periodic(1))
+    .withColor(Wikipedia.repeated(1))
     .verboseSave(saveFolder /~ "basic.png")
 
   MandelbrotData.initialViewport

@@ -126,6 +126,9 @@ object CardioidNumeric extends CardioidUtils {
   }
 
   final val phi:Double = (sqrt(5) + 1) / 2
+  // This algorithm has is flaw:
+  // For some inputs it yields an incorrect output. In this cases t=0 is a better solution.
+  // But the good thing is, that it's always exactly t=0, so it can be checked with in a single calculation.
   def golden(iterations:Int)(x:Double, _y:Double): (Double, Double) = {
     val y = _y.abs
     def calc(t:Double):Double = distSquared(t, x, y)
@@ -149,7 +152,10 @@ object CardioidNumeric extends CardioidUtils {
     val y = _y.abs
     val (lower, upper) = golden(iterations)(x, y)
     val t = (lower + upper) / 2
-    distSquared(t, x, y)
+    val d = distSquared(t, x, y)
+    val d0 = distSquared(0, x, y)
+    if(d > d0) d0
+    else d
   }
 
   def apply(newtonIterations: Int): Mandelbrot.Sequence => Double =
