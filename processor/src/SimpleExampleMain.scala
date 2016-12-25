@@ -29,14 +29,14 @@ object SimpleExampleMain extends App {
 
   MandelbrotData.initialViewport
     .withDimensions(Dimensions.fujitsu.scale(0.5))
-    .withFractal(Mandelbrot(350, 100) ~> RoughColoring.double())
+    .withFractal(Mandelbrot(350, 10d) ~> RoughColoring.double())
     .linearNormalized
     .withColor(Wikipedia.repeated(1))
     .verboseSave(saveFolder /~ "basic.png")
 
   MandelbrotData.initialViewport
     .withDimensions(Dimensions.fujitsu.scale(0.5))
-    .withAntiAliasedFractal(Mandelbrot(350, 100) ~> RoughColoring.double())
+    .withAntiAliasedFractal(Mandelbrot(350, 10d) ~> RoughColoring.double())
     .linearNormalized
     .withDefaultColor
     .verboseSave(saveFolder /~ "aa.png")

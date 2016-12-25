@@ -39,10 +39,10 @@ object Wallpaper extends ProcessorHelper {
         .withDimensions(Dimensions.fullHD)
 
       val escape = transform
-        .withAntiAliasedFractal(Mandelbrot(5000, 4000) ~> SmoothColoring()).strongNormalized
+        .withAntiAliasedFractal(Mandelbrot(5000, 20d) ~> SmoothColoring()).strongNormalized
 
       val smallestStep = transform
-        .withAntiAliasedFractal(Mandelbrot(7500, 4000) ~> SmallestStep(), Max).strongNormalized
+        .withAntiAliasedFractal(Mandelbrot(7500, 20d) ~> SmallestStep(), Max).strongNormalized
 
       val added = new Content[Double] {
         override def dimensions: Dimensions = Dimensions.fullHD

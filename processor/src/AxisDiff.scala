@@ -30,7 +30,7 @@ object AxisDiff extends ProcessorHelper {
   override def statusPrints: Boolean = true
 
   object Fractal extends nutria.core.ContentFunction[Double] {
-    val sequence = Mandelbrot(350, 10000)
+    val sequence = Mandelbrot(350, 100d)
     val real = sequence ~> OrbitRealAxis()
     val imag = sequence ~> OrbitImgAxis()
 

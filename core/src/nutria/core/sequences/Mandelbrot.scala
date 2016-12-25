@@ -20,7 +20,7 @@ package nutria.core.sequences
 import nutria.core.ContentFunction
 
 object Mandelbrot{
-  final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int, escapeOrbit:Double) extends DoubleSequence {
+  final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int, escapeOrbitSquared:Double) extends DoubleSequence {
     private[this] var x: X = 0d
     private[this] var y: Y = 0d
     private[this] var xx = x * x
@@ -29,7 +29,7 @@ object Mandelbrot{
     def publicX = x
     def publicY = y
 
-    def hasNext: Boolean = (xx + yy < escapeOrbit) && iterationsRemaining >= 0
+    def hasNext: Boolean = (xx + yy < escapeOrbitSquared) && iterationsRemaining >= 0
 
     def next(): Boolean = {
       y = 2 * x * y + y0
@@ -58,5 +58,5 @@ object Mandelbrot{
     }
   }
 
-  def apply(maxIterations:Int, escapeOrbit:Double):ContentFunction[Sequence] = (x0, y0) => new Sequence(x0, y0, maxIterations, escapeOrbit)
+  def apply(maxIterations:Int, escapeOrbit:Double):ContentFunction[Sequence] = (x0, y0) => new Sequence(x0, y0, maxIterations, escapeOrbit*escapeOrbit)
 }

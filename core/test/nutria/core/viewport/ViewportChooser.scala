@@ -19,9 +19,6 @@ package nutria.core.viewport
 
 import nutria.core.fractal.SequenceChooser.chooseFromUsefullStartPoints
 
-/**
-  * Created by GREGOR on 03.10.2016.
-  */
 object ViewportChooser {
   val chooseViewport = for {
     origin <- chooseFromUsefullStartPoints

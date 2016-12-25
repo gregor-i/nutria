@@ -18,6 +18,8 @@
 package nutria.core.fractal
 
 import nutria.core.sequences.Mandelbrot
+import nutria.core.consumers.RoughColoring
+import nutria.core.syntax._
 import SequenceChooser._
 import org.scalacheck.Gen.choose
 import org.scalacheck.Prop.forAll
@@ -37,29 +39,31 @@ class MandelbrotSpec extends Specification with ScalaCheck {
     """
 
   val iterations = 1000
+  val escapeRadius = 2d
 
-  private def sequence = Mandelbrot(1000, 4)
+  private def sequence = Mandelbrot(iterations, escapeRadius)
+  private def roughColoring = sequence ~> RoughColoring()
 
 
   def insideCardioid = forAll(chooseFromTheInsideOfTheCardioid) {
     case (x: Double, y: Double) =>
-      sequence(x, y).size() === iterations
+      roughColoring(x, y) === iterations
   }
 
   def insideP2 = forAll(chooseFromPointsInsideOfP2) {
     case (x, y) =>
-      sequence(x, y).size() === iterations
+      roughColoring(x, y) === iterations
   }
 
   def zero = forAll(choose(0, iterations)) {
-    (i: Int) =>
+    (i) =>
       val seq = sequence(0, 0)
       for (_ <- 0 until i) seq.next()
       seq.publicX === 0 and seq.publicY === 0
   }
 
   def startAtZero = forAll(chooseFromUsefullStartPoints) {
-    case (x: Double, y: Double) =>
+    case (x, y) =>
       val seq = sequence(x, y)
       seq.publicX === 0 and seq.publicY === 0
   }

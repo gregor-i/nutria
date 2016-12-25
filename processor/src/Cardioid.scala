@@ -44,7 +44,7 @@ object Cardioid extends ProcessorHelper {
       val content = view
         .withDimensions(Dimensions.fullHD)
         //.withDimensions(Dimensions.fullHD.scale(0.1))
-        .withFractal(Mandelbrot(2000, 4) ~> CardioidNumeric(30))
+        .withFractal(Mandelbrot(2000, 2d) ~> CardioidNumeric(30))
         .strongNormalized
 
       for((name, color) <- colors)

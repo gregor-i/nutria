@@ -43,7 +43,7 @@ object CardioidIterations extends ProcessorHelper {
       yield for {
         j <- 0 until dim.height
         (x, y) = transform(i, j)
-      } yield Mandelbrot(1000, 4)(x, y)
+      } yield Mandelbrot(1000, 2d)(x, y)
 
     var oldContent = new CachedContent(seqs.par.map(_.map(calculateDistance)).seq, dim)
 

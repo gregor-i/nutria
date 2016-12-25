@@ -28,7 +28,7 @@ object Collection {
 
   val fractals: Seq[(String, ContentFunction[_ <: DoubleSequence], Data[_])] =
     Seq(
-      ("Mandelbrot", Mandelbrot(50, 100), MandelbrotData),
+      ("Mandelbrot", Mandelbrot(50, 10d), MandelbrotData),
       ("Collatz", Collatz(50), CollatzData)
       //      ("MandelbrotCube", MandelbrotCube, MandelbrotCube.fractals),
       //      ("Burning Ship", BurningShip, BurningShip.fractals),

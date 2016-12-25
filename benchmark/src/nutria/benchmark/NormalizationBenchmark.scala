@@ -29,7 +29,7 @@ object NormalizationBenchmark{
   val exampleCachedContent: CachedContent[Double] =
     MandelbrotData.initialViewport
       .withDimensions(Dimensions.fujitsu.scale(0.1))
-      .withFractal(Mandelbrot(350, 4) ~> consumers.SmoothColoring())
+      .withFractal(Mandelbrot(350, 2d) ~> consumers.SmoothColoring())
       .cached
 }
 

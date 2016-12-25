@@ -29,11 +29,11 @@ import util.Observable
 
 object Model {
   def default(implicit folder:SaveFolder) = new Model(
-    Mandelbrot(250, 100) ~> RoughColoring.double(),
+    Mandelbrot(250, 10d) ~> RoughColoring.double(),
     SimpleFactory,
     HSV.MonoColor.Blue,
     MandelbrotData.initialViewport,
-    Some(Mandelbrot(50, 100)))
+    Some(Mandelbrot(50, 10d)))
 }
 
 @SerialVersionUID(1L)

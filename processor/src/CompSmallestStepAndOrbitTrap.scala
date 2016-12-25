@@ -45,7 +45,7 @@ object CompSmallestStepAndOrbitTrap extends ProcessorHelper {
         .verboseSave(saveFolder /~ s"$name.png")
   }
 
-  def seq = Mandelbrot(350, 100)
+  def seq = Mandelbrot(350, 10d)
 
   def main(args: Array[String]): Unit = {
     val a = Task(seq ~> SmallestStep(), "SmallestStep.png")
