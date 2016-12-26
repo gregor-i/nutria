@@ -35,7 +35,9 @@ object Collection {
       BurningShipData,
       JuliaSetData(-0.6, -0.6),
       JuliaSetData(-0.4, 0.6),
-      JuliaSetData(-0.8, 0.156)
+      JuliaSetData(-0.8, 0.156),
+      ThreeRootsNewtonData,
+      ExperimentalNewtonData
     )
 
   val abstractFracals: Seq[Data[_]] =
