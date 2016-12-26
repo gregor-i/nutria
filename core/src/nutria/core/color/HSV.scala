@@ -24,15 +24,14 @@ trait HSV[A] extends Color[A] {
   def S(lambda: A): Double
   def V(lambda: A): Double
 
-  def apply(lambda: A): RGB = {
-//    require(0 <= lambda && lambda <= 1)
-    HSV2RGB(H(lambda), S(lambda), V(lambda))
-  }
+  def apply(lambda: A): RGB = HSV.HSV2RGB(H(lambda), S(lambda), V(lambda))
+}
 
+object HSV {
   def HSV2RGB(H: Double, S: Double, V: Double): RGB = {
-    require(0 <= H && H <= 360)
-    require(0 <= S && S <= 1)
-    require(0 <= V && V <= 1)
+    require(0 <= H && H <= 360, s"H = $H  is not in [0; 360]")
+    require(0 <= S && S <= 1, s"S = $S  is not in [0; 1]")
+    require(0 <= V && V <= 1, s"V = $V  is not in [0; 1]")
 
     val h = (H / 60).toInt
     val f = H / 60.0 - h
@@ -49,9 +48,7 @@ trait HSV[A] extends Color[A] {
       case 5 => RGB(V*255, p*255, q*255)
     }
   }
-}
 
-object HSV {
   case object TestColor extends HSV[Double] {
     def H(lambda: Double) = lambda * 360 + 60
     def S(lambda: Double) = if (lambda < 0.5) 1 else 2 * (1 - lambda)
