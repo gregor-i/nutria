@@ -30,9 +30,7 @@ case class LinearNormalizedContent(content: CachedContent[Double]) extends Conte
   private val dy: Double = 1.0 / (max - min)
   private val y0: Double = -min / (max - min)
 
-  def apply(x: Int, y: Int): Double = {
-    y0 + content(x, y) * dy
-  }
+  def apply(x: Int, y: Int): Double = (y0 + content(x, y) * dy).max(0).min(1)
 }
 
 private object StrongNormalizedContentHelper {

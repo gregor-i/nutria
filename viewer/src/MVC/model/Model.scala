@@ -47,6 +47,7 @@ class Model(var fractal: ContentFunction[Double],
   var quali: Double = 0.25
   var img: Image = _
   var points = Seq[Point]()
+  var stateString = ""
 
   preview()
 

@@ -64,6 +64,7 @@ class ImagePanel(val modell: Model) extends JPanel {
         g.drawLine(invertP1._1.toInt, invertP1._2.toInt, invertP2._1.toInt, invertP2._2.toInt)
     }
 
+    g.drawString(modell.stateString, 0, 10)
 
     // One Cross per Point
 //    for (p <- modell.points) {

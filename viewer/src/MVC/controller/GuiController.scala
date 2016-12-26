@@ -81,23 +81,13 @@ class GuiController(val modell: Model, val view: View) extends KeyListener with 
     val x = trans.transformX(e.getX, e.getY)
     val y = trans.transformY(e.getX, e.getY)
 
+    modell.stateString = s"MousePosition = ($x, $y)"
+
     modell.sequenceConstructor
       .map(_.apply(x, y))
       .map(_.wrapped)
       .map(points => Point(x, y) +: points.filter(t => t._1 == t._1 && t._2 == t._2).map(Point.tupled).toSeq)
       .foreach(modell.setPoints)
-
-//    match
-//      case seq @ Some[Sequ] => modell.setPoints(construcor.sequence(x,y, 50).wrapped.map(Point.tupled).toSeq)
-//      case None =>
-//    }
-
-//    modell.setPoints{
-//      val card = Mandelbrot.CardioidNumeric(0, 100)
-//      val g = card.golden(x, y.abs)
-//      val n = card.newton(g, x, y.abs)
-//      Seq(n, g).map(card.contour).map(Point.tupled)
-//    }
   }
   override def mouseDragged(e: MouseEvent): Unit = ()
 }
