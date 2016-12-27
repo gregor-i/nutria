@@ -20,6 +20,8 @@ package nutria.core.consumers
 import nutria.core.color.{HSV, RGB}
 import nutria.core.sequences.DoubleSequence
 
+import scala.util.control.NonFatal
+
 object AngleAtLastPosition {
   def apply[A <: DoubleSequence](): A => Double =
     seq => {
@@ -31,19 +33,18 @@ object AngleAtLastPosition {
 
 object DirectColors {
   def apply[A <: DoubleSequence](): A => RGB =
-    seq => {
+    seq => try{
       var i = 1
       while (seq.next()) i += 1
       val (x, y) = seq.public
       val a = Math.atan2(x, y)
 
-      val H = (a / Math.PI * 360 + 360) % 360
-      val S = Math.exp(-i / 20d)
+      val H = (a / Math.PI * 180 + 360) % 360
+      val S = Math.exp(-i / 25d)
       val V = S
 
-      if(H == H && S == S && V == V)
-        HSV.HSV2RGB(H, S, S)
-      else
-        RGB.black
+      HSV.HSV2RGB(H, S, S)
+    }catch {
+      case NonFatal(_) => RGB.black
     }
 }

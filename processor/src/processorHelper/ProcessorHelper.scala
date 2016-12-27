@@ -58,7 +58,7 @@ trait ProcessorHelper {
     }
 
   def executeAllTasks(tasks: Traversable[Task]): Seq[Result] = {
-    val results = for (task <- tasks)
+    val results = for (task <- tasks.toSeq)
       yield {
         val result = executeTask(task)
         if (statusPrints) println(s"completed ${task.name} with status $result")
@@ -66,11 +66,10 @@ trait ProcessorHelper {
       }
 
     if (statusPrints) {
-      val countsByResult = results.groupBy(identity).mapValues(_.size).withDefaultValue(0)
       println("Tasks completed:")
       println(s"Made:                ${results.count(_.isInstanceOf[Made])}")
-      println(s"Skipped:             ${countsByResult(Skipped)}")
-      println(s"RequirementFailed:   ${countsByResult(RequirementFailed)}")
+      println(s"Skipped:             ${results.count(_ == Skipped)}")
+      println(s"RequirementFailed:   ${results.count(_ == RequirementFailed)}")
       println(s"UnexpectedException: ${results.count(_.isInstanceOf[UnexpectedException])}")
 
       for(exception <- results.collect{case UnexpectedException(exception) => exception}.toSet[Exception]) {
