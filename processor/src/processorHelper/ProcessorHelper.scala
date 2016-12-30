@@ -22,7 +22,7 @@ import scala.concurrent.duration.{Duration, DurationLong}
 sealed trait Result
 case class Made(executionTime:Duration) extends Result
 case object Skipped extends Result
-case object RequirementFailed extends Result
+case class RequirementFailed(e:IllegalArgumentException) extends Result
 case class UnexpectedException(e:Exception) extends Result
 
 trait Task{
@@ -53,8 +53,12 @@ trait ProcessorHelper {
         Made((endTime - startTime).millis)
       }
     } catch {
-      case _: IllegalArgumentException => RequirementFailed
-      case e: Exception => UnexpectedException(e)
+      case e: IllegalArgumentException =>
+        e.printStackTrace()
+        RequirementFailed(e)
+      case e: Exception =>
+        e.printStackTrace()
+        UnexpectedException(e)
     }
 
   def executeAllTasks(tasks: Traversable[Task]): Seq[Result] = {
@@ -69,7 +73,7 @@ trait ProcessorHelper {
       println("Tasks completed:")
       println(s"Made:                ${results.count(_.isInstanceOf[Made])}")
       println(s"Skipped:             ${results.count(_ == Skipped)}")
-      println(s"RequirementFailed:   ${results.count(_ == RequirementFailed)}")
+      println(s"RequirementFailed:   ${results.count(_.isInstanceOf[RequirementFailed])}")
       println(s"UnexpectedException: ${results.count(_.isInstanceOf[UnexpectedException])}")
 
       for(exception <- results.collect{case UnexpectedException(exception) => exception}.toSet[Exception]) {
