@@ -69,6 +69,11 @@ val newton = project.in(file("newton"))
     .settings(commonSettings, spire, specs2AndScalaCheck)
     .dependsOn(processor, mathParser)
 
+val settings = project.in(file("settings"))
+  .settings(name := "nutria-settings")
+  .settings(commonSettings)
+  .dependsOn(core, data, mathParser)
+
 // alias
 addCommandAlias("startViewer", "viewer/runMain Viewer")
 addCommandAlias("headers", "createHeaders")
