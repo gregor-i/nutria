@@ -22,11 +22,13 @@ import spire.implicits._
 import spire.math.Complex
 
 trait Newton {
+  val threshold = 0.00001
+
   def f(c:Complex[Double]):Complex[Double]
   def f_der(c:Complex[Double]):Complex[Double]
 
   def iteration(c:Complex[Double]):Complex[Double] = c - f(c) / f_der(c)
-  def notConverged(c:Complex[Double]):Boolean      = f(c).abs > 0.00001
+  def notConverged(c:Complex[Double]):Boolean      = f(c).abs > threshold
 
   final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence {
     private[this] var c = Complex[Double](x0, y0)

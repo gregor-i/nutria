@@ -16,7 +16,7 @@
  */
 
 import nurtia.data.MandelbrotData
-import nutria.core.consumers.DirectColors
+import nutria.core.consumers.NewtonColoring
 import nutria.core.image.DefaultSaveFolder
 import nutria.core.sequences.{ExperimentalNewton, Newton, SimplePolynom, ThreeRoots}
 import nutria.core.syntax._
@@ -45,7 +45,7 @@ object NewtonFractals extends ProcessorHelper {
     override def execute(): Unit =
       MandelbrotData.initialViewport
         .withDimensions(Dimensions.fullHD)
-        .withFractal(functions(50) ~> DirectColors())
+        .withFractal(functions(50) ~> NewtonColoring.smooth(functions))
         .save(saveFolder /~ s"$name.png")
   }
 
