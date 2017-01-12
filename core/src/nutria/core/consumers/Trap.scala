@@ -72,4 +72,10 @@ object GaussianIntegerTraps extends MathUtils{
       (v, x, y) => v.min(distance(x, y))
     }
   }
+
+  def withFadeout[A <: DoubleSequence]():A => Double = {
+    _.foldLeft((_, _) => (1, Double.MaxValue)) {
+      case ((i, v), x, y) => (i+1, v.min(distance(x, y)/i))
+    }._2
+  }
 }

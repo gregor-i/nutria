@@ -29,6 +29,11 @@ case object SimpleFactory extends ContentFactory {
     view.withDimensions(dim).withFractal(fractal).strongNormalized.withColor(color)
 }
 
+case class DirectFactory(contentFunction: ContentFunction[RGB]) extends ContentFactory {
+  def apply(view: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color: Color[Double]) =
+    view.withDimensions(dim).withFractal(contentFunction)
+}
+
 case object AntiAliaseFactory extends ContentFactory {
   def apply(view: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color: Color[Double]) =
     view.withDimensions(dim).withAntiAliasedFractal(fractal).strongNormalized.withColor(color)

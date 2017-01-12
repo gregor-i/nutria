@@ -17,7 +17,7 @@
 
 package nurtia.data
 
-import nutria.core.{AbstractSequence, ContentFunction, Viewport}
+import nutria.core.{AbstractSequence, ContentFunction, RGB, Viewport}
 
 trait Data[A <: AbstractSequence] {
   type Named[B] = (String, B)
@@ -28,6 +28,7 @@ trait Data[A <: AbstractSequence] {
   val selectionViewports: Set[Viewport]
 
   val selectionFractals: Seq[Named[ContentFunction[Double]]]
+  val directFractals: Seq[Named[ContentFunction[RGB]]] = Seq.empty
 }
 
 

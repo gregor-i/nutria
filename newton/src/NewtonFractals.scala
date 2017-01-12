@@ -67,10 +67,12 @@ object NewtonFractals extends ProcessorHelper {
 
     override def name = function
 
+    val newton = NewtonByString(function)
+
     override def execute(): Unit =
       MandelbrotData.initialViewport
         .withDimensions(Dimensions.fullHD)
-        .withFractal(NewtonByString(function)(50) ~> NewtonColoring())
+        .withFractal(newton(50) ~> NewtonColoring.smooth(newton))
         .save(saveFolder /~ s"$fileName.png")
   }
 

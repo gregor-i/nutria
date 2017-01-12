@@ -111,6 +111,7 @@ object MandelbrotData extends Data[Mandelbrot.Sequence] {
     "OrbitPoint(250, 1, 0)"      -> Mandelbrot(250, 10d)   ~> OrbitPoint(1, 0),
     "OrbitPoint(250, 0, 1)"      -> Mandelbrot(250, 10d)   ~> OrbitPoint(0, 1),
     "GaussionInteger(250)"       -> Mandelbrot(250, 1000d)   ~> GaussianIntegerTraps(),
+    "GaussionInteger.withFadeout(250)"       -> Mandelbrot(250, 1000d)   ~> GaussianIntegerTraps.withFadeout(),
     "OrbitRealAxis(250)"         -> Mandelbrot(250, 10d)   ~> OrbitRealAxis(),
     "OrbitImgAxis(250)"          -> Mandelbrot(250, 10d)   ~> OrbitImgAxis(),
     "Contour(500)"               -> MandelbrotContour(500) ~> (b => if(b) 1d else 0d),
