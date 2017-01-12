@@ -62,3 +62,14 @@ object CircleTrap extends MathUtils{
 object CircleP2{
   def apply():Mandelbrot.Sequence => Double = CircleTrap(-1, 0, 0.25)
 }
+
+object GaussianIntegerTraps extends MathUtils{
+  @inline def distance(x:Double, y:Double): Double =
+    q(x - Math.round(x)) + q(y - Math.round(y))
+
+  def apply[A <: DoubleSequence]():A => Double = {
+    _.foldLeft((_, _) =>Double.MaxValue) {
+      (v, x, y) => v.min(distance(x, y))
+    }
+  }
+}

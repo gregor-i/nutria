@@ -42,6 +42,7 @@ object Collection {
 
   val abstractFracals: Seq[Data[_]] =
     Seq(
+      NovaData,
       new QuaternionBrotData("QuaternionBrot(x, y, 0, 0)", (x, y) => Quaternion(x, y, 0, 0)),
       new QuaternionBrotData("QuaternionBrot(x, y, 0.5, 0.5)", (x, y) => Quaternion(x, y, 0.5, 0.5)),
       new QuaternionBrotData("QuaternionBrot(x, y, 0.5, 0)", (x, y) => Quaternion(x, y, 0.5, 0)),
