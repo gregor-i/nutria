@@ -55,20 +55,40 @@ class GuiController(val modell: Model, val view: View) extends KeyListener with 
     modell.setViewport(modell.view.focus(px, py))
   }
 
+  class DocAction(descr: String, run: => Unit) {
+    def unsafePerformIO: Unit = run
+    override def toString(): String = descr
+  }
+  val keyCodePretty: Map[Int, String] = Map(
+    KeyEvent.VK_DOWN     -> "Down",
+    KeyEvent.VK_UP       -> "Up",
+    KeyEvent.VK_RIGHT    -> "Right",
+    KeyEvent.VK_LEFT     -> "Left",
+    KeyEvent.VK_ADD      -> "+",
+    KeyEvent.VK_SUBTRACT -> "-",
+    KeyEvent.VK_I        -> "I",
+    KeyEvent.VK_ENTER    -> "Enter",
+    KeyEvent.VK_S        -> "S",
+    KeyEvent.VK_R        -> "R",
+    KeyEvent.VK_H        -> "H"
+  ).withDefaultValue("Undefined")
+
+  val keyMap: Map[Int, DocAction] = Map(
+    KeyEvent.VK_DOWN      -> new DocAction("Move viewport down", modell.setViewport(modell.view.down())),
+    KeyEvent.VK_UP        -> new DocAction("Move viewport up", modell.setViewport(modell.view.up())),
+    KeyEvent.VK_RIGHT     -> new DocAction("Move viewport right", modell.setViewport(modell.view.right())),
+    KeyEvent.VK_LEFT      -> new DocAction("Move viewport left", modell.setViewport(modell.view.left())),
+    KeyEvent.VK_ADD       -> new DocAction("Zoom in", modell.setViewport(modell.view.zoomIn())),
+    KeyEvent.VK_SUBTRACT  -> new DocAction("Zoom out", modell.setViewport(modell.view.zoomOut())),
+    KeyEvent.VK_I         -> new DocAction("Invert colors", modell.setColor(Invert.invert(modell.farbe))),
+    KeyEvent.VK_ENTER     -> new DocAction("Print current position", println(modell.view.toString)),
+    KeyEvent.VK_S         -> new DocAction("Renders the current view in HD", modell.snap()),
+    KeyEvent.VK_R         -> new DocAction("Reset viewport", modell.setViewport(MandelbrotData.initialViewport)),
+    KeyEvent.VK_H         -> new DocAction("Display this help", println(keyMap map { case (keyCode, docu) => s"[${keyCodePretty(keyCode)}]\t $docu"} mkString "\n"))
+  ).withDefaultValue(new DocAction("Undefined", ()))
+
   override def keyPressed(arg0: KeyEvent) =
-    arg0.getKeyCode match {
-      case KeyEvent.VK_DOWN      => modell.setViewport(modell.view.down())
-      case KeyEvent.VK_UP        => modell.setViewport(modell.view.up())
-      case KeyEvent.VK_RIGHT     => modell.setViewport(modell.view.right())
-      case KeyEvent.VK_LEFT      => modell.setViewport(modell.view.left())
-      case KeyEvent.VK_ADD       => modell.setViewport(modell.view.zoomIn())
-      case KeyEvent.VK_SUBTRACT  => modell.setViewport(modell.view.zoomOut())
-      case KeyEvent.VK_I         => modell.setColor(Invert.invert(modell.farbe))
-      case KeyEvent.VK_ENTER     => println(modell.view.toString)
-      case KeyEvent.VK_S         => modell.snap()
-      case KeyEvent.VK_R         => modell.setViewport(MandelbrotData.initialViewport)
-      case _ =>
-    }
+    arg0.getKeyCode match { case whatever => keyMap(whatever).unsafePerformIO }
 
   override def mouseWheelMoved(e: MouseWheelEvent) = {
     val px = e.getX / imgPanel.getWidth.toDouble
