@@ -17,20 +17,24 @@
 
 package nutria.core.content
 
-import nutria.core.accumulator.{Max, Min}
-
 trait Normalized
 
-case class LinearNormalizedContent(content: CachedContent[Double]) extends Content[Double] with Normalized {
+case class LinearNormalizedContent(content: CachedContent[Double], min:Double, max:Double) extends Content[Double] with Normalized {
+  require(max != min)
+
   val dimensions = content.dimensions
 
-  private val max = Max(content.values.flatten)
-  private val min = Min(content.values.flatten)
-  require(max != min)
   private val dy: Double = 1.0 / (max - min)
   private val y0: Double = -min / (max - min)
 
-  def apply(x: Int, y: Int): Double = (y0 + content(x, y) * dy).max(0).min(1)
+  def apply(x: Int, y: Int): Double = y0 + content(x, y) * dy
+}
+
+object LinearNormalizedContent{
+  def automatic(content: CachedContent[Double]): LinearNormalizedContent = {
+    val values = content.values.flatten
+    new LinearNormalizedContent(content, values.min, values.max)
+  }
 }
 
 private object StrongNormalizedContentHelper {
@@ -41,7 +45,7 @@ private object StrongNormalizedContentHelper {
     val swappedAndSorted = (for {
       x <- 0 until width
       y <- 0 until height
-    } yield content(x, y) ->(x, y)).toList.sortBy(_._1)
+    } yield content(x, y) -> (x, y)).toList.sortBy(_._1)
 
     val values = Array.fill[Double](width, height)(0d)
 

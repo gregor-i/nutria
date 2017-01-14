@@ -52,7 +52,8 @@ object syntax {
   }
 
   implicit class EnrichedContentForLinNorm(val content: Content[Double]) extends AnyVal {
-    def linearNormalized: NormalizedContent[Double] = LinearNormalizedContent(content.cached)
+    def linearNormalized(min:Double, max:Double): NormalizedContent[Double] = LinearNormalizedContent(content.cached, min, max)
+    def linearNormalized: NormalizedContent[Double] = LinearNormalizedContent.automatic(content.cached)
   }
 
   implicit class EnrichedContentForStrNorm[A](val content: Content[A]) extends AnyVal {
