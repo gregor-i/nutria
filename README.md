@@ -19,14 +19,9 @@ It also holds some utility functions to easily create masses of images.
 
 ##nutria-core
 The most use cases for using `core` is covered with an abstract builder pipeline:
-1. The first step is to select a part of the complex number plane. This part is called `Viewport`. 
-It is described by 3 vectors: The origin, the x-axis and the y-axis. 
-2. The next step is to rasterize the `Viewport`. This is done by adding a `Dimensions` object. 
-The rasterized `Viewport`is called a `Transform`.
-With the `Transform` it's possible to actually start the rendering process.
-3. The next thing to do is actually render the fractal. 
-This is done by providing a `ContentFunction[A]`. The function will calculate a value for each rasterized point from the viewport.
-This is called a `Content[A]`.
+1. The first step is to select a part of the complex number plane. This part is called `Viewport`. It is described by 3 vectors: The origin, the x-axis and the y-axis. 
+2. The next step is to rasterize the `Viewport`. This is done by adding a `Dimensions` object. The rasterized `Viewport`is called a `Transform`. With the `Transform` it's possible to actually start the rendering process.
+3. The next thing to do is actually render the fractal. This is done by providing a `ContentFunction[A]`. The function will calculate a value for each rasterized point from the viewport. This is called a `Content[A]`.
 4. The `Content[A]` must be transformed to a `Content[RGB]` which can be saved to the filesystem or display by a GUI. 
 
 #####Details to Point 3: 
