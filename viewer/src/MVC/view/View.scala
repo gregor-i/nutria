@@ -23,7 +23,7 @@ import javax.swing.{JFrame, JMenu, JMenuBar, JMenuItem}
 
 import MVC.controller.GuiController
 import MVC.model.Model
-import nurtia.data.Collection
+import nurtia.data.{Collection, DirectFactory}
 import nutria.core.ContentFunction
 import nutria.core.sequences.DoubleSequence
 
@@ -61,6 +61,15 @@ case class View(model: Model) extends JFrame {
             fractalName,
             () => {
               model.setFractal(fractal)
+              model.setSequence(Some(data.exampleSequenceConstructor))
+            }))
+      menu.add(subMenu)
+      for ((fractalName, fractal) <- data.directFractals)
+        subMenu.add(
+          new MenuItem(
+            fractalName,
+            () => {
+              model.setImageFactory(DirectFactory(fractal))
               model.setSequence(Some(data.exampleSequenceConstructor))
             }))
       menu.add(subMenu)

@@ -7,7 +7,7 @@ val defaultSaveFolder = """E:\snapshots\"""
 // settings and libs
 def commonSettings = Seq(
   version := "0.0.1",
-  scalaVersion := "2.12.0",
+  scalaVersion in ThisBuild := "2.12.0",
   scalaSource in Compile := baseDirectory.value / "src",
   scalaSource in Test := baseDirectory.value / "test",
   headers := Map("scala" -> GPLv3("2016", "Gregor Ihmor & Merlin Göttlinger")),

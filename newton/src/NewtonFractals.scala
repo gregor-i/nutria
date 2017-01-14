@@ -16,13 +16,16 @@
  */
 
 import nurtia.data.MandelbrotData
-import nutria.core.consumers.DirectColors
+import nutria.core.consumers.NewtonColoring
 import nutria.core.image.DefaultSaveFolder
 import nutria.core.sequences.Newton
 import nutria.core.syntax._
 import nutria.core.viewport.Dimensions
 import processorHelper.ProcessorHelper
 import spire.math.Complex
+
+import scala.io.Source
+import scala.util.Try
 
 object NewtonFractals extends ProcessorHelper {
   type C = Complex[Double]
@@ -64,18 +67,23 @@ object NewtonFractals extends ProcessorHelper {
 
     override def name = function
 
+    val newton = NewtonByString(function)
+
     override def execute(): Unit =
       MandelbrotData.initialViewport
         .withDimensions(Dimensions.fullHD)
-        .withFractal(NewtonByString(function)(50) ~> DirectColors())
+        .withFractal(newton(50) ~> NewtonColoring.smooth(newton))
         .save(saveFolder /~ s"$fileName.png")
   }
 
 
   def main(args: Array[String]): Unit = {
-    val tasks = Set(
-      Task("ThreeRoots", "x^3+1")
-    )
+    val source = Source.fromFile("newton/newton.fractals")
+    val tasks = source.getLines().flatMap { line =>
+      Try(line.split(" -> ").take(2))
+        .map(l => Task(l(0), l(1)))
+        .toOption
+    }.toSet
 
     executeAllTasks(tasks)
   }

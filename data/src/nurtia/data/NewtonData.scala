@@ -21,21 +21,38 @@ import nutria.core.consumers._
 import nutria.core.sequences.{ExperimentalNewton, Newton, ThreeRoots}
 import nutria.core.syntax._
 import nutria.core.viewport.Point
-import nutria.core.{ContentFunction, Viewport}
+import nutria.core.{ContentFunction, RGB, Viewport}
+
+import scala.util.control.NonFatal
 
 abstract class NewtonData[N <: Newton](val name: String,
-                                       val exampleSequenceConstructor:ContentFunction[N#Sequence]) extends Data[N#Sequence] {
+                                       val newton:N) extends Data[N#Sequence] {
+
+  override val exampleSequenceConstructor: ContentFunction[N#Sequence] = newton(50)
 
   val initialViewport: Viewport = Viewport(Point(-2.5, -1), Point(3.5, 0), Point(0, 2))
 
   val selectionViewports: Set[Viewport] = Set.empty
 
+  def wrappInTry[A, B](f: A=>B, default:B): (A=>B) = a =>{
+    try{
+      f(a)
+    }catch {
+      case NonFatal(_) => default
+    }
+  }
+
   val selectionFractals: Seq[(String, ContentFunction[Double])] = Seq(
-    "RoughColoring"            -> exampleSequenceConstructor ~> RoughColoring.double(),
-    "SmallestStep"             -> exampleSequenceConstructor ~> SmallestStep(),
-    "AngleALastPosition"       -> exampleSequenceConstructor ~> AngleAtLastPosition()
+    "RoughColoring"            -> newton(50) ~> wrappInTry(RoughColoring.double(), Double.MaxValue),
+    "SmallestStep"             -> newton(50) ~> wrappInTry(SmallestStep(), Double.MaxValue),
+    "AngleALastPosition"       -> newton(50) ~> wrappInTry(AngleAtLastPosition(), Double.MaxValue),
+    "GaussianInteger"          -> newton(50) ~> wrappInTry(GaussianIntegerTraps(), Double.MaxValue)
+  )
+  override val directFractals: Seq[(String, ContentFunction[RGB])] = Seq(
+    "NewtonColoring"           -> newton(50) ~> NewtonColoring(),
+    "NewtonColoring.smooth"    -> newton(50) ~> NewtonColoring.smooth(newton)
   )
 }
 
-object ThreeRootsNewtonData extends NewtonData[ThreeRoots.type]("ThreeRoots", ThreeRoots(50))
-object ExperimentalNewtonData extends NewtonData[ExperimentalNewton.type]("Experimental", ExperimentalNewton(50))
+object ThreeRootsNewtonData extends NewtonData[ThreeRoots.type]("ThreeRoots", ThreeRoots)
+object ExperimentalNewtonData extends NewtonData[ExperimentalNewton.type]("Experimental", ExperimentalNewton)

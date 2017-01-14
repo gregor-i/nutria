@@ -18,7 +18,10 @@
 package nutria.core.consumers
 
 import nutria.core.color.{HSV, RGB}
-import nutria.core.sequences.DoubleSequence
+import nutria.core.sequences.{DoubleSequence, Newton}
+import spire.math.Complex
+import spire.implicits._
+
 
 import scala.util.control.NonFatal
 
@@ -31,7 +34,7 @@ object AngleAtLastPosition {
     }
 }
 
-object DirectColors {
+object NewtonColoring {
   def apply[A <: DoubleSequence](): A => RGB =
     seq => try{
       var i = 1
@@ -42,6 +45,37 @@ object DirectColors {
       val H = (a / Math.PI * 180 + 360) % 360
       val S = Math.exp(-i / 25d)
       val V = S
+
+      HSV.HSV2RGB(H, S, S)
+    }catch {
+      case NonFatal(_) => RGB.black
+    }
+
+  def smooth[A <: Newton, B <: A#Sequence](newton:A): B => RGB =
+    seq => try{
+      var i = 1
+
+      var last = seq.public
+      while (seq.next()) {
+        if(seq.hasNext)
+          last = seq.public
+        i += 1
+      }
+
+      val now  =seq.public
+
+
+      val a = Math.atan2(now._1, now._2)
+
+      val logT = Math.log(newton.threshold)
+      val logD0 = Math.log(newton.f(Complex(now._1, now._2)).abs)
+      val logD1 = Math.log(newton.f(Complex(last._1, last._2)).abs)
+
+      val s = i -(logT - logD0) / (logD1 - logD0)
+
+      val H = (a / Math.PI * 180 + 360) % 360
+      val S = Math.exp(-s / 25d)
+      val V = 1
 
       HSV.HSV2RGB(H, S, S)
     }catch {
