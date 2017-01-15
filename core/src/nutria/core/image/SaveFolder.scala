@@ -19,22 +19,23 @@ package nutria.core.image
 
 import java.io.File
 
-object DefaultSaveFolder extends SaveFolder(nutria.core.BuildInfo.defaultSaveFolder)
+object DefaultSaveFolder
+  extends SaveFolder(nutria.core.BuildInfo.defaultSaveFolder.getOrElse("." + File.pathSeparator))
 
 case class SaveFolder(path: String) {
-  require(path.endsWith(File.separator))
+  require(path.endsWith(File.separator), s"per convention all save folder path have to end with an '${File.separator}'")
 
   def inFolder(file: String): File = {
     require(!file.contains(File.separator))
     new File(path + file)
   }
 
-  def /~ (file:String):File = inFolder(file)
+  def /~(file: String): File = inFolder(file)
 
-  def subFolder(folder: String):SaveFolder = {
+  def subFolder(folder: String): SaveFolder = {
     require(!folder.contains(File.separator))
     SaveFolder(path + folder + File.separator)
   }
 
-  def /(folder: String) = subFolder(folder)
+  def /(folder: String): SaveFolder = subFolder(folder)
 }

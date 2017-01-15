@@ -2,7 +2,7 @@ import de.heikoseeberger.sbtheader.license.GPLv3
 import sbt.Keys._
 
 // config
-val defaultSaveFolder = """E:\snapshots\"""
+val defaultSaveFolder:Option[String] = None
 
 // settings and libs
 def commonSettings = Seq(
@@ -10,11 +10,12 @@ def commonSettings = Seq(
   scalaVersion in ThisBuild := "2.12.0",
   scalaSource in Compile := baseDirectory.value / "src",
   scalaSource in Test := baseDirectory.value / "test",
+  scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation"),
   headers := Map("scala" -> GPLv3("2016", "Gregor Ihmor & Merlin Göttlinger")),
-  scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
+  cancelable in Global := true
 ) ++ specs2AndScalaCheck ++ spire
 
-def buildInfos = Seq(
+def buildInfo = Seq(
   buildInfoPackage := name.value.replaceAll("-", "."),
   buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion,
     "defaultSaveFolder" -> defaultSaveFolder
@@ -39,7 +40,7 @@ def mathParser = RootProject(uri("https://github.com/gregor-i/mathParser.git"))
 // projects
 val core = project.in(file("core"))
   .settings(name := "nutria-core")
-  .settings(commonSettings, buildInfos)
+  .settings(commonSettings, buildInfo)
   .enablePlugins(BuildInfoPlugin)
 
 val data = project.in(file("data"))
@@ -65,9 +66,9 @@ val processor = project.in(file("processor"))
   .dependsOn(core, data)
 
 val newton = project.in(file("newton"))
-    .settings(name := "nutria-newton")
-    .settings(commonSettings, spire, specs2AndScalaCheck)
-    .dependsOn(processor, mathParser)
+  .settings(name := "nutria-newton")
+  .settings(commonSettings, spire, specs2AndScalaCheck)
+  .dependsOn(processor, mathParser)
 
 val settings = project.in(file("settings"))
   .settings(name := "nutria-settings")
