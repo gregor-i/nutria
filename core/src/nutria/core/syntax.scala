@@ -25,7 +25,6 @@ import nutria.core.colors.{Invert, Periodic, Wikipedia}
 import nutria.core.content._
 
 object syntax {
-
   implicit class EnrichedViewport(val viewport: Viewport) extends AnyVal {
     def withDimensions(dim: Dimensions): Transform = new Transform(viewport, dim)
   }
@@ -68,11 +67,6 @@ object syntax {
   implicit class EnrichColor(val color: Color[Double]) extends AnyVal {
     def invert:Color[Double] = Invert.invert(color)
     def repeated(repeat:Int) = Periodic(color, 0d, repeat)
-  }
-
-  implicit class EnrichedFinishedContentWithDefaultColors(val content: NormalizedContent[Double]) extends AnyVal {
-    def withDefaultColor = Image(content, Wikipedia)
-    def withInvertDefaultColor = Image(content, Wikipedia.invert)
   }
 
   implicit class EnrichedImage(val image: Image) extends AnyVal {

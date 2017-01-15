@@ -20,7 +20,7 @@ package MVC.model
 import nurtia.data.consumers.RoughColoring
 import nurtia.data.fractalFamilies.MandelbrotData
 import nurtia.data.sequences.Mandelbrot
-import nurtia.data.{ContentFactory, DimensionInstances, SimpleFactory}
+import nurtia.data.{ContentFactory, Defaults, DimensionInstances, SimpleFactory}
 import nutria.core._
 import nutria.core.colors.Wikipedia
 import nutria.core.image.SaveFolder
@@ -28,13 +28,15 @@ import nutria.core.syntax._
 import nutria.core.viewport.Point
 import util.Observable
 
-object Model {
-  def default(implicit folder:SaveFolder) = new Model(
+object Model extends Defaults {
+  def defaultModel = new Model(
     Mandelbrot(250, 10d) ~> RoughColoring.double(),
     SimpleFactory,
-    Wikipedia,
-    MandelbrotData.initialViewport,
-    Some(Mandelbrot(50, 10d)))
+    default,
+    default,
+    Some(Mandelbrot(50, 10d)),
+    defaultSaveFolder / "Viewer"
+  )
 }
 
 @SerialVersionUID(1L)
@@ -42,8 +44,8 @@ class Model(var fractal: ContentFunction[Double],
             var contentFactory: ContentFactory,
             var farbe: Color[Double],
             var view: Viewport,
-            var sequenceConstructor: Option[ContentFunction[_ <: DoubleSequence]])
-           (implicit folder:SaveFolder)extends Observable {
+            var sequenceConstructor: Option[ContentFunction[_ <: DoubleSequence]],
+            val folder:SaveFolder)extends Observable {
 
   var quali: Double = 0.25
   var img: Image = _

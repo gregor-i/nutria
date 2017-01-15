@@ -15,17 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nurtia.data.DimensionInstances
+import nurtia.data.Defaults
 import nurtia.data.consumers.NewtonColoring
-import nurtia.data.fractalFamilies.MandelbrotData
 import nurtia.data.sequences.{ExperimentalNewton, Newton, SimplePolynom, ThreeRoots}
-import nutria.core.image.DefaultSaveFolder
 import nutria.core.syntax._
 import processorHelper.ProcessorHelper
 import spire.implicits._
 import spire.math.Complex
 
-object NewtonFractals extends ProcessorHelper {
+object NewtonFractals extends ProcessorHelper with Defaults {
   type C = Complex[Double]
   type F = C => C
 
@@ -37,14 +35,14 @@ object NewtonFractals extends ProcessorHelper {
 
   override def statusPrints: Boolean = true
 
-  val saveFolder = DefaultSaveFolder / "Newton"
+  val saveFolder = defaultSaveFolder / "Newton"
 
   case class Task(name: String, functions: Newton) extends processorHelper.Task {
     override def skipCondition: Boolean = (saveFolder /~ s"$name.png").exists()
 
     override def execute(): Unit =
-      MandelbrotData.initialViewport
-        .withDimensions(DimensionInstances.fullHD)
+      defaultViewport
+        .withDimensions(default)
         .withFractal(functions(50) ~> NewtonColoring.smooth(functions))
         .save(saveFolder /~ s"$name.png")
   }

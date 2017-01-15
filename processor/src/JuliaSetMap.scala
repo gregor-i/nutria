@@ -15,19 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nurtia.data.DimensionInstances
 import nurtia.data.colors.MonoColor
 import nurtia.data.consumers.{RoughColoring, SmoothColoring}
 import nurtia.data.sequences.JuliaSet
+import nurtia.data.{Defaults, DimensionInstances}
 import nutria.core.colors.Invert
 import nutria.core.content.Content
-import nutria.core.image.{DefaultSaveFolder, SaveFolder}
+import nutria.core.image.SaveFolder
 import nutria.core.syntax._
 import nutria.core.viewport.{Dimensions, Viewport}
 import processorHelper.{ProcessorHelper, Task}
 
-object JuliaSetMap extends ProcessorHelper {
-  val saveFolder: SaveFolder = DefaultSaveFolder / "JuliaSetMap"
+object JuliaSetMap extends ProcessorHelper with Defaults {
+  val saveFolder: SaveFolder = defaultSaveFolder / "JuliaSetMap"
 
   override def statusPrints: Boolean = true
 
@@ -42,7 +42,7 @@ object JuliaSetMap extends ProcessorHelper {
 
     override def skipCondition: Boolean = file.exists()
 
-    val patchDimensions = DimensionInstances.fullHD.scale(0.1)
+    val patchDimensions = defaultDimensions.scale(0.1)
 
     def content(cx: Double, cy: Double):Content[Double] = {
       view

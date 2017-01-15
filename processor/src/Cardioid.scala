@@ -15,19 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nurtia.data.DimensionInstances
+import nurtia.data.Defaults
 import nurtia.data.colors.MonoColor
 import nurtia.data.consumers.CardioidNumeric
 import nurtia.data.fractalFamilies.MandelbrotData
 import nurtia.data.sequences.Mandelbrot
 import nutria.core.colors.{Invert, Wikipedia}
-import nutria.core.image.{DefaultSaveFolder, SaveFolder}
+import nutria.core.image.SaveFolder
 import nutria.core.syntax._
 import nutria.core.{Color, Viewport}
 import processorHelper.{ProcessorHelper, Task}
-import viewportSelections.ViewportSelection
 
-object Cardioid extends ProcessorHelper {
+object Cardioid extends ProcessorHelper with Defaults {
   override def statusPrints: Boolean = true
 
     case class CardioidTask(view: Viewport, saveFolder: SaveFolder) extends Task {
@@ -43,8 +42,7 @@ object Cardioid extends ProcessorHelper {
 
     override def execute(): Unit = {
       val content = view
-        .withDimensions(DimensionInstances.fullHD)
-        //.withDimensions(Dimensions.fullHD.scale(0.1))
+        .withDimensions(default)
         .withFractal(Mandelbrot(2000, 2d) ~> CardioidNumeric(30))
         .strongNormalized
 
@@ -56,14 +54,14 @@ object Cardioid extends ProcessorHelper {
   def extractColorName(color:Color[Double]):String = color.getClass.getName.split("\\.").last
 
   def main(args: Array[String]): Unit = {
-    val saveFolder: SaveFolder = DefaultSaveFolder / "Cardioid"
+    val saveFolder: SaveFolder = defaultSaveFolder / "Cardioid"
 
     val tasks1: Set[Task] = Set(CardioidTask(MandelbrotData.initialViewport, saveFolder / "start"))
 
-    val tasks2: Set[Task] = for (viewport <- ViewportSelection.selection)
+    val tasks2: Set[Task] = for (viewport <- MandelbrotData.selectionViewports)
       yield CardioidTask(viewport, saveFolder / "auswahl")
 
-    val tasks3: Set[Task] = for (viewport <- ViewportSelection.focusIteration2)
+    val tasks3: Set[Task] = for (viewport <- MandelbrotData.Focus.iteration2)
       yield CardioidTask(viewport, saveFolder / "fokus")
 
     executeAllTasks(tasks1.toSeq)

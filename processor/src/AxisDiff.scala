@@ -15,18 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nurtia.data.DimensionInstances
+import nurtia.data.Defaults
 import nurtia.data.consumers.{OrbitImgAxis, OrbitRealAxis}
 import nurtia.data.fractalFamilies.MandelbrotData
 import nurtia.data.sequences.Mandelbrot
 import nutria.core.Viewport
 import nutria.core.accumulator.Variance
-import nutria.core.image.DefaultSaveFolder
 import nutria.core.syntax._
 import processorHelper.ProcessorHelper
-import viewportSelections.ViewportSelection
 
-object AxisDiff extends ProcessorHelper {
+object AxisDiff extends ProcessorHelper with Defaults {
   override def statusPrints: Boolean = true
 
   object Fractal extends nutria.core.ContentFunction[Double] {
@@ -37,7 +35,7 @@ object AxisDiff extends ProcessorHelper {
     def apply(x: Double, y: Double): Double = real(x, y) - imag(x, y)
   }
 
-  val saveFolder = DefaultSaveFolder / "AxisDiff"
+  val saveFolder = defaultSaveFolder / "AxisDiff"
 
   case class Task(viewport: Viewport) extends processorHelper.Task {
     override def name: String = toString
@@ -46,24 +44,24 @@ object AxisDiff extends ProcessorHelper {
 
     override def execute(): Unit = {
       val diff = viewport
-        .withDimensions(DimensionInstances.fullHD)
+        .withDimensions(default)
         .withAntiAliasedFractal(Fractal, Variance)
         .strongNormalized
 
       diff
-        .withInvertDefaultColor
+        .withColor(default)
         .save(saveFolder /~ s"${viewport}_invert.png")
 
       diff
-        .withDefaultColor
+        .withColor(defaultColor.invert)
         .save(saveFolder /~ s"$viewport.png")
     }
   }
 
   def main(args: Array[String]): Unit = {
     val tasks1: Set[Task] = Set(Task(MandelbrotData.initialViewport))
-    val tasks2: Set[Task] = ViewportSelection.selection.map(Task)
-    val tasks3: Set[Task] = ViewportSelection.focusIteration2.map(Task)
+    val tasks2: Set[Task] = MandelbrotData.selectionViewports.map(Task)
+    val tasks3: Set[Task] = MandelbrotData.Focus.iteration2.map(Task)
 
     executeAllTasks(tasks1.toSeq)
     executeAllTasks(tasks3.toSeq)

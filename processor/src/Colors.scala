@@ -15,16 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import nurtia.data.Defaults
 import nurtia.data.colors.{MonoColor, RGBGradient}
 import nutria.core.Color
 import nutria.core.colors.Wikipedia
 import nutria.core.content.Spectrum
-import nutria.core.image.{DefaultSaveFolder, SaveFolder}
+import nutria.core.image.SaveFolder
 import nutria.core.syntax._
 import processorHelper.{ProcessorHelper, Task}
 
-object Colors extends ProcessorHelper {
-  val saveFolder: SaveFolder = DefaultSaveFolder / "ColorTest"
+object Colors extends ProcessorHelper with Defaults {
+  val saveFolder: SaveFolder = defaultSaveFolder / "ColorTest"
 
   case class ColorTask(color: Color[Double], name: String) extends Task {
     override def skipCondition: Boolean = false

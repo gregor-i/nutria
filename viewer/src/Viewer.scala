@@ -17,13 +17,10 @@
 
 import MVC.model._
 import MVC.view._
-import nutria.core.image.DefaultSaveFolder
 
 object Viewer {
   def main(args: Array[String]): Unit = {
-
-    implicit val saveFolder = DefaultSaveFolder / "viewer"
-    val model = Model.default
+    val model = Model.defaultModel
     //model.setViewport(Viewport(Point(-2.5, 0), Point(3.5, 0), Point(0, 1)))
 //    model.setFractal(Mandelbrot(1, 10d) ~> CardioidNumeric(20))
 

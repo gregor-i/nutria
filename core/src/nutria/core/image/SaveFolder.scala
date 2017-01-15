@@ -19,9 +19,6 @@ package nutria.core.image
 
 import java.io.File
 
-object DefaultSaveFolder
-  extends SaveFolder(nutria.core.BuildInfo.defaultSaveFolder.getOrElse("." + File.pathSeparator))
-
 case class SaveFolder(path: String) {
   require(path.endsWith(File.separator), s"per convention all save folder path have to end with an '${File.separator}'")
 

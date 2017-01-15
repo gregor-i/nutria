@@ -17,22 +17,21 @@
 
 import java.io.FileWriter
 
-import nurtia.data.DimensionInstances
 import nurtia.data.consumers.RoughColoring
 import nurtia.data.fractalFamilies.MandelbrotData
 import nurtia.data.sequences.QuaternionBrot
-import nutria.core.image.DefaultSaveFolder
+import nurtia.data.{Defaults, DimensionInstances}
 import nutria.core.syntax._
 import spire.math.Quaternion
 
-object Matlab3DExport extends App {
+object Matlab3DExport extends App with Defaults {
   val dimensions = DimensionInstances.fullHD.scale(0.1)
   val viewport = MandelbrotData.initialViewport
   val transform =  viewport.withDimensions(dimensions)
 
   val iterations = 50
 
-  val writer = new FileWriter(DefaultSaveFolder /~ "Matlab3DExport.m")
+  val writer = new FileWriter(defaultSaveFolder /~ "Matlab3DExport.m")
 
   writer.append(s"data = zeros(${dimensions.width}, ${dimensions.height}, ${dimensions.height/2});\n")
 

@@ -15,20 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nurtia.data.DimensionInstances
 import nurtia.data.consumers.{SmallestStep, SmoothColoring}
+import nurtia.data.fractalFamilies.MandelbrotData
 import nurtia.data.sequences.Mandelbrot
+import nurtia.data.{Defaults, DimensionInstances}
 import nutria.core.accumulator.Max
 import nutria.core.content.Content
-import nutria.core.image.{DefaultSaveFolder, SaveFolder}
+import nutria.core.image.SaveFolder
 import nutria.core.syntax._
 import nutria.core.{Dimensions, Viewport}
 import processorHelper.{ProcessorHelper, Task}
-import viewportSelections.ViewportSelection
 
-object Wallpaper extends ProcessorHelper {
+object Wallpaper extends ProcessorHelper with Defaults {
   case class WallpaperTask(view: Viewport) extends Task {
-    val saveFolder: SaveFolder = DefaultSaveFolder / "Wallpaper" / s"$view"
+    val saveFolder: SaveFolder = defaultSaveFolder / "Wallpaper" / s"$view"
 
     override def name: String = s"WallpaperTask($view)"
 
@@ -36,7 +36,7 @@ object Wallpaper extends ProcessorHelper {
 
     override def execute(): Unit = {
       val transform = view
-        .withDimensions(DimensionInstances.fullHD)
+        .withDimensions(default)
 
       val escape = transform
         .withAntiAliasedFractal(Mandelbrot(5000, 20d) ~> SmoothColoring()).strongNormalized
@@ -49,16 +49,16 @@ object Wallpaper extends ProcessorHelper {
         override def apply(x: Int, y: Int): Double = escape(x, y) + smallestStep(x, y)
       }.strongNormalized
 
-      escape.withDefaultColor.save(saveFolder /~ "escape.png")
-      smallestStep.withDefaultColor.save(saveFolder /~ "smallestStep.png")
-      added.withDefaultColor.save(saveFolder /~ "added.png")
+      escape.withColor(default).save(saveFolder /~ "escape.png")
+      smallestStep.withColor(default).save(saveFolder /~ "smallestStep.png")
+      added.withColor(default).save(saveFolder /~ "added.png")
     }
 
   }
 
   def main(args: Array[String]): Unit = {
     executeAllTasks(
-      for (view <- ViewportSelection.selection)
+      for (view <- MandelbrotData.selectionViewports)
         yield WallpaperTask(view))
   }
 }

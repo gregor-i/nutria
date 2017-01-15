@@ -15,11 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nurtia.data.DimensionInstances
 import nurtia.data.consumers.NewtonColoring
 import nurtia.data.fractalFamilies.MandelbrotData
 import nurtia.data.sequences.Newton
-import nutria.core.image.DefaultSaveFolder
+import nurtia.data.{Defaults, DimensionInstances}
 import nutria.core.syntax._
 import processorHelper.ProcessorHelper
 import spire.math.Complex
@@ -27,7 +26,7 @@ import spire.math.Complex
 import scala.io.Source
 import scala.util.Try
 
-object NewtonFractals extends ProcessorHelper {
+object NewtonFractals extends ProcessorHelper with Defaults {
   type C = Complex[Double]
   type F = C => C
 
@@ -59,7 +58,7 @@ object NewtonFractals extends ProcessorHelper {
     override def f_der(c: C): C = f2(c)
   }
 
-  private val saveFolder = DefaultSaveFolder / "Newton"
+  private val saveFolder = defaultSaveFolder / "Newton"
 
   case class Task(fileName: String, function: String) extends processorHelper.Task {
     override def skipCondition: Boolean = (saveFolder /~ s"$fileName.png").exists()

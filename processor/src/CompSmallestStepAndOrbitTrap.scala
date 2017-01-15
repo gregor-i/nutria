@@ -15,18 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nurtia.data.DimensionInstances
+import nurtia.data.Defaults
 import nurtia.data.consumers.{OrbitPoint, SmallestStep}
 import nurtia.data.sequences.Mandelbrot
-import nutria.core.image.DefaultSaveFolder
 import nutria.core.syntax._
 import nutria.core.{ContentFunction, Viewport}
 import processorHelper.ProcessorHelper
 
-object CompSmallestStepAndOrbitTrap extends ProcessorHelper {
+object CompSmallestStepAndOrbitTrap extends ProcessorHelper with Defaults {
   val view = Viewport.createViewportByLongs(0xbfed3fc8cfd68914L, 0x3fd153b629fa6027L, 0x3f6677f4689b7037L, 0x0L, 0x0L, 0x3f59ada99c1f5babL)
 
-  val saveFolder = DefaultSaveFolder / "CompSmallestStepAndOrbitTrap"
+  val saveFolder = defaultSaveFolder / "CompSmallestStepAndOrbitTrap"
 
 
   override def statusPrints: Boolean = true
@@ -36,10 +35,10 @@ object CompSmallestStepAndOrbitTrap extends ProcessorHelper {
 
     override def execute(): Unit =
       view
-        .withDimensions(DimensionInstances.fujitsu)
+        .withDimensions(default)
         .withFractal(content)
         .strongNormalized
-        .withDefaultColor
+        .withColor(default)
         .verboseSave(saveFolder /~ s"$name.png")
   }
 

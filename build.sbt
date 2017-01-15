@@ -32,9 +32,6 @@ def specs2AndScalaCheck = Seq(
   "org.specs2" %% "specs2-scalacheck" % "3.8.6")
   .map(libraryDependencies += _ % "test")
 
-def circe = Seq("circe-core", "circe-parser", "circe-generic")
-  .map(libraryDependencies += "io.circe" %% _ % "0.6.1")
-
 def mathParser = RootProject(uri("https://github.com/gregor-i/mathParser.git"))
 
 // projects
@@ -62,7 +59,7 @@ val viewer = project.in(file("viewer"))
 
 val processor = project.in(file("processor"))
   .settings(name := "nutria-processor")
-  .settings(commonSettings, circe)
+  .settings(commonSettings)
   .dependsOn(core, data)
 
 val newton = project.in(file("newton"))
