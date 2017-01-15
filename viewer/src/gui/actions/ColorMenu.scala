@@ -21,8 +21,8 @@ import java.awt.event.ActionListener
 import javax.swing.{JMenu, JMenuItem}
 
 import MVC.model.Model
+import nurtia.data.colors.MonoColor
 import nutria.core.Color
-import nutria.core.color.HSV
 
 class ColorMenu(farben: List[Color[Double]], gui: Model) extends JMenu("Farben") {
 
@@ -49,7 +49,7 @@ class ColorMenu(farben: List[Color[Double]], gui: Model) extends JMenu("Farben")
   }
 
   val reset = new JMenuItem("Default")
-  reset.addActionListener(new Action(gui.setColor(HSV.MonoColor.Blue)))
+  reset.addActionListener(new Action(gui.setColor(MonoColor.Blue)))
   add(reset)
   val names = Array.ofDim[String](farben.length)
   val actions = Array.ofDim[ActionListener](farben.length)

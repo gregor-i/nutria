@@ -17,14 +17,15 @@
 
 package MVC.model
 
-import nurtia.data.{ContentFactory, MandelbrotData, SimpleFactory}
-import nutria.core.color.{HSV, Wikipedia}
-import nutria.core.consumers.RoughColoring
-import nutria.core.sequences.{DoubleSequence, Mandelbrot}
-import nutria.core.syntax._
-import nutria.core.viewport.{Dimensions, Point}
+import nurtia.data.consumers.RoughColoring
+import nurtia.data.fractalFamilies.MandelbrotData
+import nurtia.data.sequences.Mandelbrot
+import nurtia.data.{ContentFactory, DimensionInstances, SimpleFactory}
 import nutria.core._
+import nutria.core.colors.Wikipedia
 import nutria.core.image.SaveFolder
+import nutria.core.syntax._
+import nutria.core.viewport.Point
 import util.Observable
 
 object Model {
@@ -52,12 +53,12 @@ class Model(var fractal: ContentFunction[Double],
   preview()
 
   def preview() = {
-    img = contentFactory(view, Dimensions.fullHD.scale(quali), fractal, farbe)
+    img = contentFactory(view, DimensionInstances.fullHD.scale(quali), fractal, farbe)
     notifyObservers()
   }
 
   def snap() = {
-    img = contentFactory(view, Dimensions.fullHD, fractal, farbe)
+    img = contentFactory(view, DimensionInstances.fullHD, fractal, farbe)
     notifyObservers()
   }
 

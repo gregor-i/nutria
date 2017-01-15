@@ -17,9 +17,16 @@
 
 package nutria.core.viewport
 
-import nutria.core.fractal.SequenceChooser.chooseFromUsefullStartPoints
+import org.scalacheck.Gen.choose
 
 object ViewportChooser {
+  val chooseAngle = choose(0d, Math.PI * 2)
+
+  val chooseFromUsefullStartPoints = for {
+    a <- chooseAngle
+    r <- choose(0d, 5d)
+  } yield (Math.sin(a) * r, Math.cos(a) * r)
+
   val chooseViewport = for {
     origin <- chooseFromUsefullStartPoints
     originPlusA <- chooseFromUsefullStartPoints

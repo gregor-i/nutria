@@ -17,8 +17,9 @@
 
 package MVC.view
 
-import MVC.model.Model
 import javax.swing.JMenu
+
+import MVC.model.Model
 
 class ModellMenu(f: => String, val modell: Model) extends JMenu(f) {
   modell.addObserver(() => this.setText(f))

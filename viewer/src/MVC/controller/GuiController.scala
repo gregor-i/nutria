@@ -21,12 +21,8 @@ import java.awt.event._
 
 import MVC.model.Model
 import MVC.view.View
-import nurtia.data.MandelbrotData
-import nutria.core.color.{Invert, RGB}
-import nutria.core.consumers.CardioidNumeric
-import nutria.core.content.CachedContent
-import nutria.core.sequences.Mandelbrot
-import nutria.core.syntax
+import nurtia.data.fractalFamilies.MandelbrotData
+import nutria.core.colors.Invert
 import nutria.core.syntax._
 import nutria.core.viewport.{Dimensions, Point}
 

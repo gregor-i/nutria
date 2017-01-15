@@ -15,14 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import AxisDiff.executeAllTasks
-import nutria.core.accumulator.Variance
-import nutria.core.{ContentFunction, Viewport}
-import nutria.core.consumers.{OrbitImgAxis, OrbitPoint, OrbitRealAxis, SmallestStep}
+import nurtia.data.DimensionInstances
+import nurtia.data.consumers.{OrbitPoint, SmallestStep}
+import nurtia.data.sequences.Mandelbrot
 import nutria.core.image.DefaultSaveFolder
-import nutria.core.sequences.Mandelbrot
-import nutria.core.viewport._
 import nutria.core.syntax._
+import nutria.core.{ContentFunction, Viewport}
 import processorHelper.ProcessorHelper
 
 object CompSmallestStepAndOrbitTrap extends ProcessorHelper {
@@ -38,7 +36,7 @@ object CompSmallestStepAndOrbitTrap extends ProcessorHelper {
 
     override def execute(): Unit =
       view
-        .withDimensions(Dimensions.fujitsu)
+        .withDimensions(DimensionInstances.fujitsu)
         .withFractal(content)
         .strongNormalized
         .withDefaultColor

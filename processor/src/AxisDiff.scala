@@ -15,14 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nurtia.data.MandelbrotData
+import nurtia.data.DimensionInstances
+import nurtia.data.consumers.{OrbitImgAxis, OrbitRealAxis}
+import nurtia.data.fractalFamilies.MandelbrotData
+import nurtia.data.sequences.Mandelbrot
 import nutria.core.Viewport
 import nutria.core.accumulator.Variance
-import nutria.core.consumers.{OrbitImgAxis, OrbitRealAxis}
 import nutria.core.image.DefaultSaveFolder
-import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax._
-import nutria.core.viewport.Dimensions
 import processorHelper.ProcessorHelper
 import viewportSelections.ViewportSelection
 
@@ -46,7 +46,7 @@ object AxisDiff extends ProcessorHelper {
 
     override def execute(): Unit = {
       val diff = viewport
-        .withDimensions(Dimensions.fullHD)
+        .withDimensions(DimensionInstances.fullHD)
         .withAntiAliasedFractal(Fractal, Variance)
         .strongNormalized
 

@@ -15,23 +15,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//package nutria.accumulator
-//
-//import org.specs2.{ScalaCheck, Specification}
-//
-//import scala.reflect.ClassTag
-//import scala.util.Random
-//
-//case class AccumulatorLaws[A <: Accumulator : ClassTag](accumulator:A)(implicit ct:ClassTag[A]) extends Specification with ScalaCheck {
-//    def is = s"Accumulator Laws for ${ct.getClass.getSimpleName}" ^ s2"""
-//       Accumulators are independant of the order: $orderIndependant
-//      """
-//
-//  def compareInclusiveNaN(a:Double, b:Double): Boolean = (a == a, b == b) match {
-//    case (false, false) => true
-//    case (true, _) | (_, true) => false
-//    case _ => a == b
-//  }
-//
-//  def orderIndependant = prop{(ds: Seq[Double]) => compareInclusiveNaN(accumulator(ds) , accumulator(Random.shuffle(ds)))}
-//}
+package nutria.accumulator
+
+import nutria.core.accumulator.Accumulator
+import org.specs2.{ScalaCheck, Specification}
+
+import scala.reflect.ClassTag
+import scala.util.Random
+
+case class AccumulatorLaws[A <: Accumulator : ClassTag](accumulator:A)(implicit ct:ClassTag[A]) extends Specification with ScalaCheck {
+    def is = s"Accumulator Laws for ${ct.getClass.getSimpleName}" ^ s2"""
+       Accumulators are independant of the order: $orderIndependant
+      """
+
+  def compareInclusiveNaN(a:Double, b:Double): Boolean = (a == a, b == b) match {
+    case (false, false) => true
+    case (true, _) | (_, true) => false
+    case _ => a == b
+  }
+
+  def orderIndependant = prop{(ds: Seq[Double]) => compareInclusiveNaN(accumulator(ds) , accumulator(Random.shuffle(ds)))}
+}

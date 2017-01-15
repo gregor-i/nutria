@@ -27,12 +27,10 @@ package object core {
 
   type ContentFunction[B] = (Double, Double) => B
 
-  type AbstractSequence = sequences.AbstractSequence
-
-  type Content[A] = nutria.core.content.Content[A] // (Int, Int) => A
+  type Content[A] = nutria.core.content.Content[A]
   type NormalizedContent[A] = Content[A] with content.Normalized
 
-  type RGB = nutria.core.color.RGB
+  type RGB = nutria.core.colors.RGB
   type Color[A] = A => RGB
 
   type Image = Content[RGB]

@@ -17,10 +17,10 @@
 
 package nutria.core.viewport
 
-import org.scalacheck.Prop.forAll
-import org.specs2.{ScalaCheck, Specification}
 import org.scalacheck.Gen.choose
+import org.scalacheck.Prop.forAll
 import org.specs2.matcher.Matcher
+import org.specs2.{ScalaCheck, Specification}
 
 class ViewportSpec extends Specification with ScalaCheck {
   def is = s2"""

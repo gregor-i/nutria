@@ -15,14 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import nurtia.data.DimensionInstances
+import nurtia.data.consumers.{OrbitPoint, SmoothColoring}
+import nurtia.data.sequences.Mandelbrot
 import nutria.core.NormalizedContent
-import nutria.core.consumers.{OrbitPoint, SmoothColoring}
-import nutria.core.sequences.Mandelbrot
-import nutria.core.viewport.{Dimensions, Viewport}
 import nutria.core.syntax._
+import nutria.core.viewport.Viewport
 
 case class Model() {
-  val dimensions = Dimensions.fullHD
+  val dimensions = DimensionInstances.fullHD
 
   val transform =
     Viewport.createByDefaultFocusAndLongs(0x3fb9f74a2103c027L, 0x3fe441bdb7277199L, 0x3fba08bcceb6efe6L, 0x3fe440cf7c4a6d3aL)

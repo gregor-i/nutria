@@ -46,7 +46,7 @@ val core = project.in(file("core"))
 val data = project.in(file("data"))
   .settings(name := "nutria-data")
   .settings(commonSettings)
-  .dependsOn(core)
+  .dependsOn(core % "compile->compile;test->test")
 
 val benchmark = project.in(file("benchmark"))
   .settings(name := "nutria-benchmark")

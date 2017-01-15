@@ -17,13 +17,15 @@
 
 package nurtia.data
 
-import nutria.core.sequences._
+import nurtia.data.fractalFamilies._
+import nutria.core.DoubleSequence
 import spire.math.Quaternion
 
 object Collection {
 
   val factories = Seq(
-    SimpleFactory, AntiAliaseFactory, BuddhaBrotFactory
+    SimpleFactory, AntiAliaseFactory
+//    , BuddhaBrotFactory
   )
 
   val doubleSequenceFractals: Seq[Data[_ <: DoubleSequence]] =

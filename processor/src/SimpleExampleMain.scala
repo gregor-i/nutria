@@ -15,27 +15,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nurtia.data.MandelbrotData
-import nutria.core.color.Wikipedia
-import nutria.core.consumers.{RoughColoring, SmoothColoring}
-import nutria.core.image.{DefaultSaveFolder, SaveFolder}
-import nutria.core.sequences.Mandelbrot
+import nurtia.data.DimensionInstances
+import nurtia.data.consumers.RoughColoring
+import nurtia.data.fractalFamilies.MandelbrotData
+import nurtia.data.sequences.Mandelbrot
+import nutria.core.colors.Wikipedia
+import nutria.core.image.DefaultSaveFolder
 import nutria.core.syntax._
-import nutria.core.viewport.Dimensions
 
 object SimpleExampleMain extends App {
 
   val saveFolder = DefaultSaveFolder
 
   MandelbrotData.initialViewport
-    .withDimensions(Dimensions.fujitsu.scale(0.5))
+    .withDimensions(DimensionInstances.fujitsu.scale(0.5))
     .withFractal(Mandelbrot(350, 10d) ~> RoughColoring.double())
     .linearNormalized
     .withColor(Wikipedia.repeated(1))
     .verboseSave(saveFolder /~ "basic.png")
 
   MandelbrotData.initialViewport
-    .withDimensions(Dimensions.fujitsu.scale(0.5))
+    .withDimensions(DimensionInstances.fujitsu.scale(0.5))
     .withAntiAliasedFractal(Mandelbrot(350, 10d) ~> RoughColoring.double())
     .linearNormalized
     .withDefaultColor

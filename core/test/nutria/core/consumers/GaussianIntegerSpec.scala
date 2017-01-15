@@ -1,13 +1,12 @@
 package nutria.core.consumers
 
-import nutria.core.fractal.SequenceChooser
-import org.scalacheck.{Arbitrary, Gen}
-import org.scalacheck.Gen.{Choose, choose}
-import org.specs2.{ScalaCheck, Specification}
-import spire.math.{Complex, Real}
-import spire.implicits._
+import org.scalacheck.Gen.choose
 import org.scalacheck.Prop.forAll
+import org.scalacheck.{Arbitrary, Gen}
+import org.specs2.{ScalaCheck, Specification}
 import spire.algebra.Field
+import spire.implicits._
+import spire.math.Complex
 
 
 class GaussianIntegerSpec extends Specification with ScalaCheck {

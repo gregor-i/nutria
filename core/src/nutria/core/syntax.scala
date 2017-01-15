@@ -17,10 +17,11 @@
 
 package nutria.core
 
+import java.awt.image.BufferedImage
 import java.io.File
 
 import nutria.core.accumulator.{Accumulator, Arithmetic}
-import nutria.core.color.{Invert, Periodic, Wikipedia}
+import nutria.core.colors.{Invert, Periodic, Wikipedia}
 import nutria.core.content._
 
 object syntax {
@@ -35,8 +36,8 @@ object syntax {
     def withAntiAliasedFractal(fractal: ContentFunction[Double], accu: Accumulator = Arithmetic, samplingFactor: Int = 2): Content[Double] =
       AntiAliasedFractalContent(fractal, transform, accu, samplingFactor)
 
-    def withBuddhaBrot(sourceTransform: Transform = transform, maxIteration: Int = 250) =
-      BuddahBrot(transform, sourceTransform, maxIteration)
+//    def withBuddhaBrot(sourceTransform: Transform = transform, maxIteration: Int = 250) =
+//      BuddahBrot(transform, sourceTransform, maxIteration)
   }
 
   implicit class EnrichedContentFunctions[A, B](val content: ContentFunction[A]) extends AnyVal {
@@ -75,16 +76,8 @@ object syntax {
   }
 
   implicit class EnrichedImage(val image: Image) extends AnyVal {
-    def buffer = Image.buffer(image)
+    def buffer: BufferedImage = Image.buffer(image)
     def save(file: java.io.File): File = Image.save(image, file)
     def verboseSave(file: java.io.File): File = Image.verboseSave(image, file)
-  }
-
-  implicit class EnrichmentFanOut[A](val self:A) extends AnyVal{
-    def fanOut[B](ops: (A => B)*):Seq[B] = ops.map(_.apply(self))
-  }
-
-  implicit class FoldBoooleans(val self: Boolean) extends AnyVal {
-    def fold[B](ifTrue: => B, ifFalse: => B): B = if (self) ifTrue else ifFalse
   }
 }

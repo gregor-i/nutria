@@ -17,8 +17,9 @@
 
 package nurtia.data
 
-import nutria.core.consumers.{OrbitPoint, RoughColoring, SmoothColoring}
-import nutria.core.sequences.Tricorn
+import nurtia.data.consumers.{OrbitPoint, RoughColoring, SmoothColoring}
+import nurtia.data.fractalFamilies.{Data, MandelbrotData}
+import nurtia.data.sequences.Tricorn
 import nutria.core.syntax._
 import nutria.core.{ContentFunction, Viewport}
 

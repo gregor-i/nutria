@@ -15,13 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nurtia.data.MandelbrotData
-import nutria.core.consumers.CardioidNumeric
+import nurtia.data.DimensionInstances
+import nurtia.data.consumers.CardioidNumeric
+import nurtia.data.fractalFamilies.MandelbrotData
+import nurtia.data.sequences.Mandelbrot
 import nutria.core.content.CachedContent
 import nutria.core.image.DefaultSaveFolder
-import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax._
-import nutria.core.viewport.Dimensions
 import processorHelper.ProcessorHelper
 
 
@@ -35,7 +35,7 @@ object CardioidIterations extends ProcessorHelper {
     CardioidNumeric.minimalDistance(100)(seq.publicX, seq.publicY)
 
   def main(args: Array[String]): Unit = {
-    val dim = Dimensions.fullHD
+    val dim = DimensionInstances.fullHD
 
     val transform = MandelbrotData.initialViewport.withDimensions(dim)
 

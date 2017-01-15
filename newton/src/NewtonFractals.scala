@@ -15,12 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nurtia.data.MandelbrotData
-import nutria.core.consumers.NewtonColoring
+import nurtia.data.DimensionInstances
+import nurtia.data.consumers.NewtonColoring
+import nurtia.data.fractalFamilies.MandelbrotData
+import nurtia.data.sequences.Newton
 import nutria.core.image.DefaultSaveFolder
-import nutria.core.sequences.Newton
 import nutria.core.syntax._
-import nutria.core.viewport.Dimensions
 import processorHelper.ProcessorHelper
 import spire.math.Complex
 
@@ -32,9 +32,8 @@ object NewtonFractals extends ProcessorHelper {
   type F = C => C
 
   private object ParseAndDerive {
-    import mathParser.implicits._
-    import spire.implicits._
     import mathParser.Parser
+    import mathParser.implicits._
 
     val x = 'x
     val lang = mathParser.complex.ComplexLanguage
@@ -71,7 +70,7 @@ object NewtonFractals extends ProcessorHelper {
 
     override def execute(): Unit =
       MandelbrotData.initialViewport
-        .withDimensions(Dimensions.fullHD)
+        .withDimensions(DimensionInstances.fullHD)
         .withFractal(newton(50) ~> NewtonColoring.smooth(newton))
         .save(saveFolder /~ s"$fileName.png")
   }

@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import java.awt.event.{ActionEvent, ActionListener, FocusEvent, FocusListener}
+import java.awt.event.{ActionListener, FocusEvent, FocusListener}
 import java.awt.{Container, Dimension, GridLayout}
 import javax.swing.{JTextField, _}
 

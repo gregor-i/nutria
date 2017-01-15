@@ -15,13 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nurtia.data.MandelbrotData
-import nutria.core.color.{HSV, Invert, Wikipedia}
-import nutria.core.consumers.CardioidNumeric
+import nurtia.data.DimensionInstances
+import nurtia.data.colors.MonoColor
+import nurtia.data.consumers.CardioidNumeric
+import nurtia.data.fractalFamilies.MandelbrotData
+import nurtia.data.sequences.Mandelbrot
+import nutria.core.colors.{Invert, Wikipedia}
 import nutria.core.image.{DefaultSaveFolder, SaveFolder}
-import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax._
-import nutria.core.viewport.Dimensions
 import nutria.core.{Color, Viewport}
 import processorHelper.{ProcessorHelper, Task}
 import viewportSelections.ViewportSelection
@@ -33,8 +34,8 @@ object Cardioid extends ProcessorHelper {
     override def name = s"CardioidTask($view)"
 
       val colors = Seq(
-        "HSV.MonoColor.Blue" -> HSV.MonoColor.Blue,
-        "Invert(HSV.MonoColor.Blue)" -> Invert(HSV.MonoColor.Blue),
+        "HSV.MonoColor.Blue" -> MonoColor.Blue,
+        "Invert(HSV.MonoColor.Blue)" -> Invert(MonoColor.Blue),
         "Wikipedia" -> Wikipedia,
         "Invert(Wikipedia)" -> Invert(Wikipedia))
 
@@ -42,7 +43,7 @@ object Cardioid extends ProcessorHelper {
 
     override def execute(): Unit = {
       val content = view
-        .withDimensions(Dimensions.fullHD)
+        .withDimensions(DimensionInstances.fullHD)
         //.withDimensions(Dimensions.fullHD.scale(0.1))
         .withFractal(Mandelbrot(2000, 2d) ~> CardioidNumeric(30))
         .strongNormalized

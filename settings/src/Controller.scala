@@ -20,7 +20,7 @@ import java.awt.event.{ActionEvent, ActionListener}
 import mathParser.double.DoubleLanguage
 import mathParser.implicits.doubleParseLiterals
 import mathParser.{Evaluate, Parser, Variable}
-import nutria.core.color.HSV
+import nutria.core.colors.HSV
 import nutria.core.syntax._
 import nutria.core.{Content, Dimensions}
 

@@ -15,18 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import java.io.{File, FileWriter}
+import java.io.FileWriter
 
-import nurtia.data.MandelbrotData
-import nutria.core.consumers.RoughColoring
+import nurtia.data.DimensionInstances
+import nurtia.data.consumers.RoughColoring
+import nurtia.data.fractalFamilies.MandelbrotData
+import nurtia.data.sequences.QuaternionBrot
 import nutria.core.image.DefaultSaveFolder
-import nutria.core.sequences.QuaternionBrot
 import nutria.core.syntax._
-import nutria.core.viewport.Dimensions
 import spire.math.Quaternion
 
 object Matlab3DExport extends App {
-  val dimensions = Dimensions.fullHD.scale(0.1)
+  val dimensions = DimensionInstances.fullHD.scale(0.1)
   val viewport = MandelbrotData.initialViewport
   val transform =  viewport.withDimensions(dimensions)
 

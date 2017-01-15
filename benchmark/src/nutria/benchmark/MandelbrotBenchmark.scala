@@ -18,22 +18,22 @@
 package nutria
 package benchmark
 
-import nurtia.data.MandelbrotData
+import nurtia.data.DimensionInstances
+import nurtia.data.consumers.RoughColoring
+import nurtia.data.directFractals.alternativeImplementation.StreamBrot
+import nurtia.data.fractalFamilies.MandelbrotData
+import nurtia.data.sequences.alternativeImlementations.SpireBrot
+import nurtia.data.sequences.{Mandelbrot, QuaternionBrot}
 import nutria.core.ContentFunction
-import nutria.core.consumers.RoughColoring
 import nutria.core.content.CachedContent
-import nutria.core.directFractals.alternativeImplementation.StreamBrot
-import nutria.core.sequences.alternativeImlementations.SpireBrot
-import nutria.core.sequences.{Mandelbrot, QuaternionBrot}
 import nutria.core.syntax._
-import nutria.core.viewport.Dimensions
 import org.openjdk.jmh.annotations.Benchmark
 import spire.math.Quaternion
 
 class MandelbrotBenchmark {
   def operation(fractal: ContentFunction[Double]): CachedContent[Double] =
     MandelbrotData.initialViewport
-      .withDimensions(Dimensions.fujitsu.scale(0.1))
+      .withDimensions(DimensionInstances.fujitsu.scale(0.1))
       .withAntiAliasedFractal(fractal)
       .cached
 

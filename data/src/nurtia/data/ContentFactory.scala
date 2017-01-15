@@ -39,7 +39,7 @@ case object AntiAliaseFactory extends ContentFactory {
     view.withDimensions(dim).withAntiAliasedFractal(fractal).strongNormalized.withColor(color)
 }
 
-case object BuddhaBrotFactory extends ContentFactory {
-  def apply(view: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color: Color[Double]) =
-    view.withDimensions(dim).withBuddhaBrot().strongNormalized.withColor(color)
-}
+//case object BuddhaBrotFactory extends ContentFactory {
+//  def apply(view: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color: Color[Double]) =
+//    view.withDimensions(dim).withBuddhaBrot().strongNormalized.withColor(color)
+//}

@@ -15,11 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import nurtia.data.colors.{MonoColor, RGBGradient}
 import nutria.core.Color
-import nutria.core.color.{HSV, RGB, Wikipedia}
-import nutria.core.syntax._
+import nutria.core.colors.Wikipedia
 import nutria.core.content.Spectrum
 import nutria.core.image.{DefaultSaveFolder, SaveFolder}
+import nutria.core.syntax._
 import processorHelper.{ProcessorHelper, Task}
 
 object Colors extends ProcessorHelper {
@@ -35,8 +36,8 @@ object Colors extends ProcessorHelper {
   def main(args: Array[String]): Unit = {
     val tasks = Seq(
       ColorTask(Wikipedia, "Wikipedia"),
-      ColorTask(RGB.default, "RGB.default"),
-      ColorTask(HSV.MonoColor.Blue, "HSV.MonoColor.Blue")
+      ColorTask(RGBGradient.default, "RGB.default"),
+      ColorTask(MonoColor.Blue, "HSV.MonoColor.Blue")
     )
 
     executeAllTasks(tasks)

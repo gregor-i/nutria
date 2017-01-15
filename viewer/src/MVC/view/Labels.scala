@@ -17,9 +17,9 @@
 
 package MVC.view
 
-import MVC.model.Model
 import javax.swing.JLabel
-import util._
+
+import MVC.model.Model
 
 class ModellLabel(f: => String, modell: Model) extends JLabel(f) {
 

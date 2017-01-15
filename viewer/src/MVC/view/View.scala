@@ -24,10 +24,6 @@ import javax.swing.{JFrame, JMenu, JMenuBar, JMenuItem}
 import MVC.controller.GuiController
 import MVC.model.Model
 import nurtia.data.{Collection, DirectFactory}
-import nutria.core.ContentFunction
-import nutria.core.sequences.DoubleSequence
-
-import scala.util.Try
 
 case class View(model: Model) extends JFrame {
   val imgPanel = new ImagePanel(model)

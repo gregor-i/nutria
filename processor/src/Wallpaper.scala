@@ -15,14 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nutria.core.Viewport
+import nurtia.data.DimensionInstances
+import nurtia.data.consumers.{SmallestStep, SmoothColoring}
+import nurtia.data.sequences.Mandelbrot
 import nutria.core.accumulator.Max
-import nutria.core.consumers._
 import nutria.core.content.Content
 import nutria.core.image.{DefaultSaveFolder, SaveFolder}
-import nutria.core.sequences.Mandelbrot
 import nutria.core.syntax._
-import nutria.core.viewport.Dimensions
+import nutria.core.{Dimensions, Viewport}
 import processorHelper.{ProcessorHelper, Task}
 import viewportSelections.ViewportSelection
 
@@ -36,7 +36,7 @@ object Wallpaper extends ProcessorHelper {
 
     override def execute(): Unit = {
       val transform = view
-        .withDimensions(Dimensions.fullHD)
+        .withDimensions(DimensionInstances.fullHD)
 
       val escape = transform
         .withAntiAliasedFractal(Mandelbrot(5000, 20d) ~> SmoothColoring()).strongNormalized
@@ -45,7 +45,7 @@ object Wallpaper extends ProcessorHelper {
         .withAntiAliasedFractal(Mandelbrot(7500, 20d) ~> SmallestStep(), Max).strongNormalized
 
       val added = new Content[Double] {
-        override def dimensions: Dimensions = Dimensions.fullHD
+        override def dimensions: Dimensions = DimensionInstances.fullHD
         override def apply(x: Int, y: Int): Double = escape(x, y) + smallestStep(x, y)
       }.strongNormalized
 

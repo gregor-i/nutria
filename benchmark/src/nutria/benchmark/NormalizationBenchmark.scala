@@ -17,19 +17,19 @@
 
 package nutria.benchmark
 
-import nurtia.data.MandelbrotData
-import nutria.core.syntax._
-import nutria.core._
+import nurtia.data.DimensionInstances
+import nurtia.data.consumers.SmoothColoring
+import nurtia.data.fractalFamilies.MandelbrotData
+import nurtia.data.sequences.Mandelbrot
 import nutria.core.content.CachedContent
-import nutria.core.sequences.Mandelbrot
-import nutria.core.viewport.Dimensions
+import nutria.core.syntax._
 import org.openjdk.jmh.annotations.Benchmark
 
 object NormalizationBenchmark{
   val exampleCachedContent: CachedContent[Double] =
     MandelbrotData.initialViewport
-      .withDimensions(Dimensions.fujitsu.scale(0.1))
-      .withFractal(Mandelbrot(350, 2d) ~> consumers.SmoothColoring())
+      .withDimensions(DimensionInstances.fujitsu.scale(0.1))
+      .withFractal(Mandelbrot(350, 2d) ~> SmoothColoring())
       .cached
 }
 

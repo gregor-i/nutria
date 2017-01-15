@@ -15,11 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import nutria.core.color.{HSV, Invert}
-import nutria.core.consumers.{RoughColoring, SmoothColoring}
+import nurtia.data.DimensionInstances
+import nurtia.data.colors.MonoColor
+import nurtia.data.consumers.{RoughColoring, SmoothColoring}
+import nurtia.data.sequences.JuliaSet
+import nutria.core.colors.Invert
 import nutria.core.content.Content
 import nutria.core.image.{DefaultSaveFolder, SaveFolder}
-import nutria.core.sequences.JuliaSet
 import nutria.core.syntax._
 import nutria.core.viewport.{Dimensions, Viewport}
 import processorHelper.{ProcessorHelper, Task}
@@ -29,7 +31,7 @@ object JuliaSetMap extends ProcessorHelper {
 
   override def statusPrints: Boolean = true
 
-  val colors = Seq(HSV.MonoColor.Blue, Invert(HSV.MonoColor.Blue))
+  val colors = Seq(MonoColor.Blue, Invert(MonoColor.Blue))
   val view = Viewport.createViewportByLongs(0xbffcccccccccccccL, 0xbff0000000000000L, 0x400c000000000000L, 0x0L, 0x0L, 0x4000000000000000L)
 
 
@@ -40,7 +42,7 @@ object JuliaSetMap extends ProcessorHelper {
 
     override def skipCondition: Boolean = file.exists()
 
-    val patchDimensions = Dimensions.fullHD.scale(0.1)
+    val patchDimensions = DimensionInstances.fullHD.scale(0.1)
 
     def content(cx: Double, cy: Double):Content[Double] = {
       view
@@ -69,7 +71,7 @@ object JuliaSetMap extends ProcessorHelper {
         }
       }
 
-      combined.strongNormalized.withColor(HSV.MonoColor.Blue).save(file)
+      combined.strongNormalized.withColor(MonoColor.Blue).save(file)
     }
   }
 
@@ -83,10 +85,10 @@ object JuliaSetMap extends ProcessorHelper {
 
     override def execute(): Unit = {
       view
-        .withDimensions(Dimensions.fullHD.scale(0.1))
+        .withDimensions(DimensionInstances.fullHD.scale(0.1))
         .withFractal(JuliaSet(cx, cy)(500) ~> RoughColoring())
         .strongNormalized
-        .withColor(HSV.MonoColor.Blue).save(file)
+        .withColor(MonoColor.Blue).save(file)
     }
   }
 

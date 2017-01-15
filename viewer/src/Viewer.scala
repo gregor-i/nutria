@@ -17,11 +17,7 @@
 
 import MVC.model._
 import MVC.view._
-import nutria.core.consumers.{CardioidNumeric, OrbitBothAxis}
-import nutria.core.image.{DefaultSaveFolder, SaveFolder}
-import nutria.core.sequences.Mandelbrot
-import nutria.core.syntax._
-import nutria.core.viewport.{Point, Viewport}
+import nutria.core.image.DefaultSaveFolder
 
 object Viewer {
   def main(args: Array[String]): Unit = {
