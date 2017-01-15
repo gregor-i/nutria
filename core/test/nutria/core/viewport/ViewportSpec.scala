@@ -57,8 +57,8 @@ class ViewportSpec extends Specification with ScalaCheck {
 
   def zoomHasInversOperations = forAll(chooseViewport, choose(-10d, 10d), choose(0d, 1d), choose(0d, 1d)) {
     (viewport, factor, zoomX, zoomY) =>
-      (viewport.zoomIn(zoomX, zoomY).zoomOut(zoomX, zoomY) must beCloseTo(viewport))
-        .and(viewport.zoomOut(zoomX, zoomY).zoomIn(zoomX, zoomY) must beCloseTo(viewport))
+      (viewport.zoomIn((zoomX, zoomY)).zoomOut((zoomX, zoomY)) must beCloseTo(viewport))
+        .and(viewport.zoomOut((zoomX, zoomY)).zoomIn((zoomX, zoomY)) must beCloseTo(viewport))
   }
 
   def focused = forAll(chooseViewport, choose(0d, 1d), choose(0d, 1d)) {

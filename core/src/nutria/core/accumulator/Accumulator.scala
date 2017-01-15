@@ -23,6 +23,6 @@ trait Accumulator {
   def fold(left:State, right:Double) : State
   def lastOperation(result:State, count:Int) : Double
 
-  def apply(collection:TraversableOnce[Double]): Double =
+  def apply(collection:Traversable[Double]): Double =
       lastOperation(collection.foldLeft(neutral)(fold), collection.size)
 }

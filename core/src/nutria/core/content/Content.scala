@@ -25,7 +25,7 @@ trait Content[A] extends HasDimensions { self =>
 
   def map[B](f: A => B): Content[B] = new Content[B]{
     override def apply(x: Int, y: Int): B = f(self(x, y))
-    override def dimensions: Dimensions = self.dimensions
+    override val dimensions: Dimensions = self.dimensions
   }
 }
 

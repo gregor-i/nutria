@@ -24,5 +24,5 @@ trait DefaultViewport {
 }
 
 trait DefaultSaveFolder {
-  val defaultSaveFolder:SaveFolder = SaveFolder(nutria.core.BuildInfo.defaultSaveFolder.getOrElse("." + File.pathSeparator))
+  val defaultSaveFolder:SaveFolder = SaveFolder(nutria.core.BuildInfo.defaultSaveFolder.getOrElse("." + File.separator))
 }

@@ -45,7 +45,7 @@ object Wallpaper extends ProcessorHelper with Defaults {
         .withAntiAliasedFractal(Mandelbrot(7500, 20d) ~> SmallestStep(), Max).strongNormalized
 
       val added = new Content[Double] {
-        override def dimensions: Dimensions = DimensionInstances.fullHD
+        override val dimensions: Dimensions = DimensionInstances.fullHD
         override def apply(x: Int, y: Int): Double = escape(x, y) + smallestStep(x, y)
       }.strongNormalized
 

@@ -66,7 +66,7 @@ case class Controller(model: Model, view: View) extends Object with ActionListen
             }
           }
 
-          override def dimensions: Dimensions = model.dimensions
+          override val dimensions: Dimensions = model.dimensions
         }.strongNormalized
 
         new ImagePanel(state, content.withColor(color).buffer)

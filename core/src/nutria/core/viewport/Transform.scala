@@ -18,12 +18,12 @@
 package nutria.core.viewport
 
 case class Transform(view: Viewport, dimensions: Dimensions) extends HasDimensions with ((Double,Double) => (Double, Double)) {
-  val scaleX = view.A.x / width
-  val scaleY = view.B.y / height
-  val shearX = view.B.x / height
-  val shearY = view.A.y / width
-  val translationX = view.origin.x
-  val translationY = view.origin.y
+  private val scaleX = view.A.x / width
+  private val scaleY = view.B.y / height
+  private val shearX = view.B.x / height
+  private val shearY = view.A.y / width
+  private val translationX = view.origin.x
+  private val translationY = view.origin.y
 
   def transformX(x: Double, y: Double): Double = scaleX * x + shearX * y + translationX
   def transformY(x: Double, y: Double): Double = shearY * x + scaleY * y + translationY

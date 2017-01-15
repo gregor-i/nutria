@@ -59,7 +59,7 @@ object JuliaSetMap extends ProcessorHelper with Defaults {
       } yield (i+10, j+10) -> content(x, y)).toMap
 
       val combined = new Content[Double]{
-        override def dimensions: Dimensions = patchDimensions.scale(21)
+        override val dimensions: Dimensions = patchDimensions.scale(21)
 
         override def apply(x: Int, y: Int): Double = {
           val patchX = x / patchDimensions.width

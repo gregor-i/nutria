@@ -23,7 +23,7 @@ case class Dimensions(width: Int, height: Int) {
 
 
 trait HasDimensions {
-  def dimensions: Dimensions
+  val dimensions: Dimensions
   def width: Int = dimensions.width
   def height: Int = dimensions.height
 }

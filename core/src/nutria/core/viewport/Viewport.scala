@@ -62,9 +62,7 @@ object Viewport {
 
 
   val defaultMovementFactor: Double = 0.20
-  val defaultZoomFactor: Double = 0.40
-  val invFactorZoom: Double = 1.0 / (1.0 - defaultZoomFactor)
-
+  val defaultZoomInFactor: Double = 0.60
 }
 
 case class Viewport(origin: Point, A: Point, B: Point) {
@@ -80,23 +78,17 @@ case class Viewport(origin: Point, A: Point, B: Point) {
   def focus(xRatio: Double, yRatio: Double): Viewport =
     translate(A * (xRatio - 0.5) + (B * (yRatio - 0.5)))
 
-  def zoomOut(zx: Double = 0.5, zy: Double = 0.5): Viewport =
+  def zoom(z: (Double, Double), zoomFactor: Double): Viewport =
     Viewport(
-      A = A * invFactorZoom,
-      B = B * invFactorZoom,
-      origin = origin + ((A * (-defaultZoomFactor * zx) + B * (-defaultZoomFactor * zy)) * invFactorZoom)
+      origin = origin + (A * z._1 + B * z._2) * (1 - zoomFactor),
+      A = A * zoomFactor,
+      B = B * zoomFactor
     )
 
-  def zoomIn(zx: Double = 0.5, zy: Double = 0.5): Viewport =
-    Viewport(
-      A = A * (1 - defaultZoomFactor),
-      B = B * (1 - defaultZoomFactor),
-      origin = origin + (A * (defaultZoomFactor * zx)) + (B * (defaultZoomFactor * zy))
-    )
-
-  def zoom(zx: Double, zy: Double, steps: Int): Viewport =
-    if (steps > 0)
-      (0 until steps).foldLeft(this)((view, _) => view.zoomOut(zx, zy))
-    else
-      (0 until -steps).foldLeft(this)((view, _) => view.zoomIn(zx, zy))
+  def zoomOut(z: (Double, Double) = (0.5, 0.5), zoomFactor: Double = defaultZoomInFactor): Viewport =
+    zoom(z, 1 / zoomFactor)
+  def zoomIn(z: (Double, Double) = (0.5, 0.5), zoomFactor: Double = defaultZoomInFactor): Viewport =
+    zoom(z, zoomFactor)
+  def zoomSteps(z: (Double, Double) = (0.5, 0.5), steps: Int): Viewport =
+    zoom(z, Math.pow(defaultZoomInFactor, steps))
 }

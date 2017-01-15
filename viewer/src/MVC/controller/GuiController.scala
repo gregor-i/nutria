@@ -89,7 +89,7 @@ class GuiController(val modell: Model, val view: View) extends KeyListener with 
   override def mouseWheelMoved(e: MouseWheelEvent) = {
     val px = e.getX / imgPanel.getWidth.toDouble
     val py = e.getY / imgPanel.getHeight.toDouble
-    modell.setViewport(modell.view.zoom(px, py, e.getWheelRotation))
+    modell.setViewport(modell.view.zoomSteps((px, py), -e.getWheelRotation))
   }
 
   override def mouseMoved(e: MouseEvent): Unit = {
