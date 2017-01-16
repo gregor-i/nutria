@@ -16,9 +16,8 @@
  */
 
 import nurtia.data.Defaults
-import nurtia.data.colors.{MonoColor, RGBGradient}
+import nurtia.data.colors.{MonoColor, RGBGradient, Wikipedia}
 import nutria.core.Color
-import nutria.core.colors.Wikipedia
 import nutria.core.content.Spectrum
 import nutria.core.image.SaveFolder
 import nutria.core.syntax._

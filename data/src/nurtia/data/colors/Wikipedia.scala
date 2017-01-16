@@ -15,9 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package nutria.core.colors
+package nurtia.data.colors
 
 import nutria.core.Color
+import nutria.core.colors.RGB
 
 object Wikipedia extends Color[Double] {
   val values = List(

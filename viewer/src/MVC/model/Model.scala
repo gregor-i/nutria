@@ -17,12 +17,12 @@
 
 package MVC.model
 
+import nurtia.data.colors.Wikipedia
 import nurtia.data.consumers.RoughColoring
 import nurtia.data.fractalFamilies.MandelbrotData
 import nurtia.data.sequences.Mandelbrot
 import nurtia.data.{ContentFactory, Defaults, DimensionInstances, SimpleFactory}
 import nutria.core._
-import nutria.core.colors.Wikipedia
 import nutria.core.image.SaveFolder
 import nutria.core.syntax._
 import nutria.core.viewport.Point

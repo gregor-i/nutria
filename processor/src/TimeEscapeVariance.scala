@@ -1,6 +1,7 @@
 import nurtia.data.Defaults
 import nurtia.data.colors.RGBGradient
 import nurtia.data.consumers.SmoothColoring
+import nurtia.data.optimizations.MandelbrotOptimizations
 import nurtia.data.sequences.Mandelbrot
 import nutria.core.accumulator.Variance
 import nutria.core.colors.RGB
@@ -11,7 +12,7 @@ object TimeEscapeVariance extends Defaults with ProcessorHelper {
   def main(args:Array[String]): Unit = {
     val cached = defaultViewport
       .withDimensions(default)
-      .withAntiAliasedFractal(Mandelbrot(1000, 100d) ~> SmoothColoring(), Variance, 5)
+      .withAntiAliasedFractal(MandelbrotOptimizations.SmoothColoring(1000, 100d), Variance, 5)
       .cached
 
     cached

@@ -16,11 +16,11 @@
  */
 
 import nurtia.data.Defaults
-import nurtia.data.colors.MonoColor
+import nurtia.data.colors.{MonoColor, Wikipedia}
 import nurtia.data.consumers.CardioidNumeric
 import nurtia.data.fractalFamilies.MandelbrotData
 import nurtia.data.sequences.Mandelbrot
-import nutria.core.colors.{Invert, Wikipedia}
+import nutria.core.colors.Invert
 import nutria.core.image.SaveFolder
 import nutria.core.syntax._
 import nutria.core.{Color, Viewport}

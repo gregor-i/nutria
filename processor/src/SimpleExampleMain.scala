@@ -16,9 +16,9 @@
  */
 
 import nurtia.data.Defaults
+import nurtia.data.colors.Wikipedia
 import nurtia.data.consumers.RoughColoring
 import nurtia.data.sequences.Mandelbrot
-import nutria.core.colors.Wikipedia
 import nutria.core.syntax._
 
 object SimpleExampleMain extends App with Defaults {

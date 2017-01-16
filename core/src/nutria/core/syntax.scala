@@ -21,7 +21,7 @@ import java.awt.image.BufferedImage
 import java.io.File
 
 import nutria.core.accumulator.{Accumulator, Arithmetic}
-import nutria.core.colors.{Invert, Periodic, Wikipedia}
+import nutria.core.colors.{Invert, Periodic}
 import nutria.core.content._
 
 object syntax {
