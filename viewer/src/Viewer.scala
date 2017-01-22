@@ -15,19 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import MVC.model._
-import MVC.view._
+import scalafx.application.JFXApp
+import scalafx.scene.Scene
+import scalafxml.core.{FXMLView, NoDependencyResolver}
 
-object Viewer {
-  def main(args: Array[String]): Unit = {
-    val model = Model.defaultModel
-    //model.setViewport(Viewport(Point(-2.5, 0), Point(3.5, 0), Point(0, 1)))
-//    model.setFractal(Mandelbrot(1, 10d) ~> CardioidNumeric(20))
+object Viewer extends JFXApp {
+  val root = FXMLView(getClass.getResource("gui.fxml"), NoDependencyResolver)
 
-//    model.setSequence(Some(JuliaSet(-0.6, 0.6)(50)))
-//    model.setFractal(JuliaSet(-0.6, 0.6)(500) ~> SmoothColoring())
-    //model.setFractal(Mandelbrot(350, 10000) ~> OrbitBothAxis())
-    new View(model)
+  stage = new JFXApp.PrimaryStage {
+    title.value = "Nutria Viewer"
+    width = 800
+    height = 600
+    scene = new Scene {
+      root
+    }
+    //val model = Model.defaultModel
+    //new View(model)
   }
 }
 

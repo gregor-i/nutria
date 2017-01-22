@@ -26,7 +26,6 @@ import nutria.core._
 import nutria.core.image.SaveFolder
 import nutria.core.syntax._
 import nutria.core.viewport.Point
-import util.Observable
 
 object Model extends Defaults {
   def defaultModel = new Model(

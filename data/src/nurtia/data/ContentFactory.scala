@@ -25,17 +25,17 @@ trait ContentFactory {
 }
 
 case object SimpleFactory extends ContentFactory {
-  def apply(view: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color: Color[Double]) =
+  def apply(view: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color: Color[Double]): Image =
     view.withDimensions(dim).withFractal(fractal).strongNormalized.withColor(color)
 }
 
 case class DirectFactory(contentFunction: ContentFunction[RGB]) extends ContentFactory {
-  def apply(view: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color: Color[Double]) =
+  def apply(view: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color: Color[Double]): Content[RGB] =
     view.withDimensions(dim).withFractal(contentFunction)
 }
 
 case object AntiAliaseFactory extends ContentFactory {
-  def apply(view: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color: Color[Double]) =
+  def apply(view: Viewport, dim: Dimensions, fractal: ContentFunction[Double], color: Color[Double]): Image =
     view.withDimensions(dim).withAntiAliasedFractal(fractal).strongNormalized.withColor(color)
 }
 

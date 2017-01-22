@@ -10,6 +10,7 @@ def commonSettings = Seq(
   scalaVersion in ThisBuild := "2.12.0",
   javaOptions += "-Xmx16G",
   fork := true,
+  resourceDirectory in Compile := baseDirectory.value / "resources",
   scalaSource in Compile := baseDirectory.value / "src",
   scalaSource in Test := baseDirectory.value / "test",
   scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation"),
@@ -26,6 +27,12 @@ def buildInfo = Seq(
 
 def spire = Seq(
   libraryDependencies += "org.spire-math" %% "spire" % "0.13.0"
+)
+
+val scalaFX = Seq(
+  libraryDependencies += "org.scalafx" %% "scalafx" % "8.0.102-R11",
+  libraryDependencies += "org.scalafx" %% "scalafxml-core-sfx8" % "0.3",
+  addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.0" cross CrossVersion.full)
 )
 
 def specs2AndScalaCheck = Seq(
@@ -57,6 +64,7 @@ val benchmark = project.in(file("benchmark"))
 val viewer = project.in(file("viewer"))
   .settings(name := "nutria-viewer")
   .settings(commonSettings)
+  .settings(scalaFX)
   .dependsOn(core, data)
 
 val processor = project.in(file("processor"))
