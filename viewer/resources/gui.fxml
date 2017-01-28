@@ -1,43 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.BorderPane?>
 
-<StackPane prefHeight="278.0" prefWidth="599.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
-   <children>
-      <MenuBar StackPane.alignment="TOP_CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <ImageView fx:id="fractalView" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-         <StackPane.margin>
-            <Insets />
-         </StackPane.margin>
-         <cursor>
-            <Cursor fx:constant="CROSSHAIR" />
-         </cursor>
-      </ImageView>
-      <ProgressBar fx:id="renderProgress" prefWidth="599.0" progress="0.56" StackPane.alignment="BOTTOM_CENTER" />
-   </children>
-</StackPane>
+<?import javafx.scene.layout.AnchorPane?>
+<BorderPane prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+ <top>
+    <MenuBar BorderPane.alignment="CENTER" minHeight="20">
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Close" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Delete" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+          <items>
+            <MenuItem mnemonicParsing="false" text="About" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+ </top>
+ <center>
+     <AnchorPane fx:id="fractalContainer">
+        <ImageView fx:id="fractalView" fitHeight="600" fitWidth="800" BorderPane.alignment="CENTER" />
+     </AnchorPane>
+ </center>
+   <bottom>
+      <ProgressBar prefWidth="200.0" progress="0.0" BorderPane.alignment="CENTER" minHeight="20"/>
+   </bottom>
+</BorderPane>

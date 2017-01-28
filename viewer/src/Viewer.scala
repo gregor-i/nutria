@@ -15,20 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import javafx.scene.{Scene => jScene}
+
 import scalafx.application.JFXApp
 import scalafx.scene.Scene
+import scalafx.scene.Parent
 import scalafxml.core.{FXMLView, NoDependencyResolver}
 
 object Viewer extends JFXApp {
-  val root = FXMLView(getClass.getResource("gui.fxml"), NoDependencyResolver)
-
   stage = new JFXApp.PrimaryStage {
     title.value = "Nutria Viewer"
     width = 800
     height = 600
-    scene = new Scene {
-      root
-    }
+    scene = new Scene(new jScene(FXMLView(getClass.getResource("gui.fxml"), NoDependencyResolver)))
     //val model = Model.defaultModel
     //new View(model)
   }
