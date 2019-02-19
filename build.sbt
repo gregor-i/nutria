@@ -21,7 +21,7 @@ def scalaTestAndScalaCheck = Seq(
 
 def mathParser = Seq(
   resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
-  libraryDependencies += "com.github.gregor-i" %% "math-parser" % "1.1"
+  libraryDependencies += "com.github.gregor-i" %% "math-parser" % "1.2"
 )
 
 def scalaCompiler = libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value
