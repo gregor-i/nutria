@@ -108,5 +108,5 @@ class View(val model: Model) extends JFrame {
   pack()
   setExtendedState(Frame.MAXIMIZED_BOTH)
   setVisible(true)
-  setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+  setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
 }

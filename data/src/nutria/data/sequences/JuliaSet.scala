@@ -5,7 +5,8 @@ import nutria.core.{DoubleSequence, Point}
 class JuliaSet(cx: Double, cy: Double) {
 
   class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence {
-    private[this] var x, y = y0
+    private[this] var x = x0
+    private[this] var y = y0
     private[this] var xx = x * x
     private[this] var yy = y * y
 
