@@ -1,3 +1,4 @@
+import DefaultSaveFolder.defaultSaveFolder
 import nutria.core.accumulator.Variance
 import nutria.core.syntax._
 import nutria.data.Defaults
@@ -5,7 +6,6 @@ import nutria.data.colors.WhiteToBlack
 import nutria.data.consumers.CountIterations
 import nutria.data.sequences.Mandelbrot
 import processorHelper.ProcessorHelper
-
 object TimeEscapeVariance extends Defaults with ProcessorHelper {
   def main(args: Array[String]): Unit = {
     val cached = defaultViewport

@@ -1,10 +1,11 @@
+import DefaultSaveFolder.defaultSaveFolder
 import nutria.core.Dimensions
 import nutria.core.content.{LinearNormalized, StreamByResolution}
-import nutria.data.Defaults
 import nutria.data.colors.Wikipedia
 import nutria.data.consumers.CountIterations
 import nutria.data.fractalFamilies.MandelbrotFamily
 import nutria.data.sequences.Mandelbrot
+
 
 object TestStream extends App {
   def fractal = Mandelbrot(500, 2) andThen
@@ -18,8 +19,6 @@ object TestStream extends App {
     fractal)
 
   import nutria.core.syntax._
-
-  val defaultSaveFolder = Defaults.defaultSaveFolder
 
   stream.zipWithIndex.foreach{
     case (img, i) => img.verboseSave(defaultSaveFolder /~ s"i_$i.png")

@@ -1,3 +1,4 @@
+import DefaultSaveFolder.defaultSaveFolder
 import nutria.core.colors.Invert
 import nutria.core.content.{Content, LinearNormalized}
 import nutria.core.image.SaveFolder
@@ -8,7 +9,6 @@ import nutria.data.colors.MonoColor
 import nutria.data.consumers.CountIterations
 import nutria.data.sequences.JuliaSet
 import processorHelper.{ProcessorHelper, Task}
-
 object JuliaSetMap extends ProcessorHelper with Defaults {
   val saveFolder: SaveFolder = defaultSaveFolder / "JuliaSetMap"
 

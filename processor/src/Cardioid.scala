@@ -1,13 +1,14 @@
-import nutria.data.Defaults
-import nutria.data.colors.{MonoColor, Wikipedia}
-import nutria.data.consumers.CardioidNumeric
-import nutria.data.fractalFamilies.MandelbrotFamily
-import nutria.data.sequences.Mandelbrot
+import DefaultSaveFolder.defaultSaveFolder
 import nutria.core.colors.Invert
 import nutria.core.content.LinearNormalized
 import nutria.core.image.SaveFolder
 import nutria.core.syntax._
 import nutria.core.{Color, Viewport}
+import nutria.data.Defaults
+import nutria.data.colors.{MonoColor, Wikipedia}
+import nutria.data.consumers.CardioidNumeric
+import nutria.data.fractalFamilies.MandelbrotFamily
+import nutria.data.sequences.Mandelbrot
 import processorHelper.{ProcessorHelper, Task}
 
 object Cardioid extends ProcessorHelper with Defaults {

@@ -22,3 +22,5 @@ project/plugins/project/
 # Emacs
 .ensime*
 *~
+
+service/public/js/*.js

@@ -1,17 +1,14 @@
-import sbt.Keys._
+import sbt.Keys.{libraryDependencies, _}
+import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
+
+scalaVersion in ThisBuild := "2.12.7"
 
 // settings and libs
 def commonSettings = Seq(
   version := "0.0.1",
-  scalaVersion in ThisBuild := "2.12.7",
-  fork := true,
   scalaSource in Compile := baseDirectory.value / "src",
   scalaSource in Test := baseDirectory.value / "test",
   scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
-)
-
-def spire = Seq(
-  libraryDependencies += "org.typelevel" %% "spire" % "0.16.0"
 )
 
 def scalaTestAndScalaCheck = Seq(
@@ -27,24 +24,60 @@ def mathParser = Seq(
 def scalaCompiler = libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value
 
 // projects
-val core = project.in(file("core"))
-  .settings(name := "nutria-core")
-  .settings(commonSettings, scalaTestAndScalaCheck)
+val core = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("core"))
 
-val data = project.in(file("data"))
-  .settings(name := "nutria-data")
-  .settings(commonSettings, scalaTestAndScalaCheck, spire, mathParser)
-  .dependsOn(core % "compile->compile;test->test")
-
-val viewer = project.in(file("viewer"))
-  .settings(name := "nutria-viewer")
-  .settings(commonSettings, scalaTestAndScalaCheck)
-  .dependsOn(core, data)
+val data = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("data"))
+  .dependsOn(core)
+  .jsSettings(
+    libraryDependencies += "org.typelevel" %%% "spire" % "0.16.0"
+  )
+  .jvmSettings(
+    libraryDependencies += "org.typelevel" %% "spire" % "0.16.0"
+  )
+//  .settings(commonSettings, scalaTestAndScalaCheck, spire, mathParser)
+//  .dependsOn(core % "compile->compile;test->test")
 
 val processor = project.in(file("processor"))
   .settings(name := "nutria-processor")
   .settings(commonSettings, scalaTestAndScalaCheck)
-  .dependsOn(core, data)
+  .dependsOn(core.jvm, data.jvm)
 
-// alias
-addCommandAlias("startViewer", "viewer/runMain Viewer")
+val service = project.in(file("service"))
+  .settings(scalaTestAndScalaCheck)
+  .enablePlugins(PlayScala)
+  .settings(libraryDependencies += guice)
+
+val frontend = project.in(file("frontend"))
+  .settings(commonSettings)
+  .dependsOn(core.js, data.js)
+  .enablePlugins(ScalaJSPlugin)
+  .settings(scalaJSUseMainModuleInitializer := true)
+  .enablePlugins(ScalaJSBundlerPlugin)
+  .settings(skip in packageJSDependencies := false)
+  .settings(emitSourceMaps := false)
+  .settings(
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.7",
+    libraryDependencies += "org.typelevel" %%% "spire" % "0.16.0"
+  )
+
+val integration = taskKey[Seq[java.io.File]]("build the frontend and copy the results into service")
+integration in frontend := {
+  val frontendJs: Seq[Attributed[sbt.File]] = (frontend / Compile / fastOptJS / webpack).value
+  if (frontendJs.size != 1) {
+    throw new IllegalArgumentException("expected only a single js file")
+  } else {
+    val src = frontendJs.head.data
+    val dest = (baseDirectory in service).value / "public" / "js" / "nutria.js"
+    IO.copy(Seq((src, dest)))
+    Seq(dest)
+  }
+}
+
+compile in Compile := {
+  (frontend / integration).value
+  (compile in Compile).value
+}
