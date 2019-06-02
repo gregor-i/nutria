@@ -49,7 +49,6 @@ object Viewport {
     createByFocus(Point(0.3, 0.1), Point(0.7, 0.3))(
       Point.createWithLongs(ax, ay), Point.createWithLongs(bx, by))
 
-
   val defaultMovementFactor: Double = 0.20
   val defaultZoomInFactor: Double = 0.60
 }
@@ -78,4 +77,28 @@ case class Viewport(origin: Point, A: Point, B: Point) {
     zoom(z, zoomFactor)
   def zoomSteps(z: (Double, Double) = (0.5, 0.5), steps: Int): Viewport =
     zoom(z, Math.pow(defaultZoomInFactor, steps))
+
+  // scales up the viewport so that a) the center is unchanged b) the given aspect ratio is preserved.
+  // see https://developer.mozilla.org/de/docs/Web/CSS/object-fit
+  def cover(width: Int, height: Int): Viewport = {
+    val lambda = (width * B.norm) / (height * A.norm)
+    val mu = 1.0 / lambda
+    if (lambda < 1) {
+      Viewport(origin + A * (0.5 - lambda / 2), A * lambda, B)
+    } else {
+      Viewport(origin + B * (0.5 - mu / 2), A, B * mu)
+    }
+  }
+
+  // scales down the viewport so that a) the center is unchanged b) the given aspect ratio is preserved.
+  // see https://developer.mozilla.org/de/docs/Web/CSS/object-fit
+  def contain(width: Int, height: Int): Viewport = {
+    val lambda = (width * B.norm) / (height * A.norm)
+    val mu = 1.0 / lambda
+    if (lambda > 1) {
+      Viewport(origin + A * (0.5 - lambda / 2), A * lambda, B)
+    } else {
+      Viewport(origin + B * (0.5 - mu / 2), A, B * mu)
+    }
+  }
 }

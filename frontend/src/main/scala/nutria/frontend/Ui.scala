@@ -76,6 +76,8 @@ object Ui {
       tags.button("up", events.onClick := (() => update(state.copy(view = state.view.up())))),
       tags.button("left", events.onClick := (() => update(state.copy(view = state.view.left())))),
       tags.button("down", events.onClick := (() => update(state.copy(view = state.view.down())))),
+      tags.button("cover", events.onClick := (() => update(state.copy(view = state.view.cover(4, 3))))),
+      tags.button("contain", events.onClick := (() => update(state.copy(view = state.view.contain(4, 3))))),
     )
 
   def draw(ctx: CanvasRenderingContext2D)(implicit state: State): Unit = {
