@@ -80,7 +80,7 @@ case class Viewport(origin: Point, A: Point, B: Point) {
 
   // scales up the viewport so that a) the center is unchanged b) the given aspect ratio is preserved.
   // see https://developer.mozilla.org/de/docs/Web/CSS/object-fit
-  def cover(width: Int, height: Int): Viewport = {
+  def cover(width: Double, height: Double): Viewport = {
     val lambda = (width * B.norm) / (height * A.norm)
     val mu = 1.0 / lambda
     if (lambda < 1) {
@@ -92,7 +92,7 @@ case class Viewport(origin: Point, A: Point, B: Point) {
 
   // scales down the viewport so that a) the center is unchanged b) the given aspect ratio is preserved.
   // see https://developer.mozilla.org/de/docs/Web/CSS/object-fit
-  def contain(width: Int, height: Int): Viewport = {
+  def contain(width: Double, height: Double): Viewport = {
     val lambda = (width * B.norm) / (height * A.norm)
     val mu = 1.0 / lambda
     if (lambda > 1) {
