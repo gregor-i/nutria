@@ -1,15 +1,9 @@
 import sbt.Keys.{libraryDependencies, _}
 import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
+version in ThisBuild := "0.0.1"
 scalaVersion in ThisBuild := "2.12.7"
-
-// settings and libs
-def commonSettings = Seq(
-  version := "0.0.1",
-  scalaSource in Compile := baseDirectory.value / "src",
-  scalaSource in Test := baseDirectory.value / "test",
-  scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
-)
+scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
 
 def scalaTestAndScalaCheck = Seq(
   "org.scalatest" %% "scalatest" % "3.0.5",
@@ -43,7 +37,7 @@ val data = crossProject(JSPlatform, JVMPlatform)
 
 val processor = project.in(file("processor"))
   .settings(name := "nutria-processor")
-  .settings(commonSettings, scalaTestAndScalaCheck)
+  .settings(scalaTestAndScalaCheck)
   .dependsOn(core.jvm, data.jvm)
 
 val service = project.in(file("service"))
@@ -52,7 +46,6 @@ val service = project.in(file("service"))
   .settings(libraryDependencies += guice)
 
 val frontend = project.in(file("frontend"))
-  .settings(commonSettings)
   .dependsOn(core.js, data.js)
   .enablePlugins(ScalaJSPlugin)
   .settings(scalaJSUseMainModuleInitializer := true)
@@ -61,7 +54,9 @@ val frontend = project.in(file("frontend"))
   .settings(emitSourceMaps := false)
   .settings(
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.7",
-    libraryDependencies += "org.typelevel" %%% "spire" % "0.16.0"
+    libraryDependencies += "org.typelevel" %%% "spire" % "0.16.0",
+    libraryDependencies += "com.raquo" %%% "snabbdom" % "0.1.1",
+    npmDependencies in Compile += "snabbdom" -> "0.7.0"
   )
 
 val integration = taskKey[Seq[java.io.File]]("build the frontend and copy the results into service")

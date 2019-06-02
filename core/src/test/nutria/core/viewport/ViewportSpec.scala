@@ -22,7 +22,7 @@ class ViewportSpec extends FunSuite with Matchers with Checkers {
   //          focused to a point         $focused
   //      """
 
-  def beClose(left: Viewport, right: Viewport) = {
+  def beClose(left: Viewport, right: Viewport): Assertion = {
     left.origin._1 shouldBe (right.origin._1 +- 0.01)
     left.origin._2 shouldBe (right.origin._2 +- 0.01)
     left.A._1 shouldBe (right.A._1 +- 0.01)
