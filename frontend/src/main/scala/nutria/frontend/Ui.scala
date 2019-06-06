@@ -35,7 +35,7 @@ object Ui {
           canvas.width = boundingBox.width.toInt
           canvas.height = boundingBox.height.toInt
           val ctx = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
-          FractalRenderer.render(ctx, state.view.contain(boundingBox.width, boundingBox.height), state.maxIterations)
+          FractalRenderer.render(ctx, state)
         },
         Hooks.postPatchHook { (_, newNode) =>
           val canvas = newNode.elm.get.asInstanceOf[Canvas]
@@ -43,7 +43,7 @@ object Ui {
           canvas.width = boundingBox.width.toInt
           canvas.height = boundingBox.height.toInt
           val ctx = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
-          FractalRenderer.render(ctx, state.view.contain(boundingBox.width, boundingBox.height), state.maxIterations)
+          FractalRenderer.render(ctx, state)
         },
         events.onClick := { event =>
           val boundingBox = event.target.asInstanceOf[Element].getBoundingClientRect()
