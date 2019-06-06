@@ -61,7 +61,7 @@ object Ui {
           val steps = event.asInstanceOf[WheelEvent].deltaY
           val newView = state.view
             .contain(boundingBox.width, boundingBox.height)
-            .zoomSteps((x, y), -(steps / 3).round.toInt)
+            .zoomSteps((x, y), if (steps > 0) -1 else 1)
           update(state.copy(view = newView))
         }
       )

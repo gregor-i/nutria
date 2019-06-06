@@ -33,7 +33,7 @@ object FractalRenderer {
     gl.compileShader(vertexShader)
 
     var fragmentShader = gl.createShader(WebGLRenderingContext.FRAGMENT_SHADER)
-    gl.shaderSource(fragmentShader, fragmentShaderSource2(maxIterations))
+    gl.shaderSource(fragmentShader, fragmentShaderSource2(maxIterations, 100.1d*100.1d))
     gl.compileShader(fragmentShader)
 
     val program = gl.createProgram()
@@ -55,7 +55,7 @@ object FractalRenderer {
     gl.drawArrays(WebGLRenderingContext.TRIANGLES, 0, 6)
   }
 
-  def fragmentShaderSource(maxIterations: Int) =
+  def fragmentShaderSource(maxIterations: Int, escapeRadiusSquared: Double) =
     s"""precision highp float;
        |
        |uniform vec2 u_resolution;
@@ -73,7 +73,7 @@ object FractalRenderer {
        |  int max = u_max_iterations;
        |  for(int i = 0;i< $maxIterations; i++){
        |		z = vec2(z.x*z.x - z.y*z.y + c.x, z.x*z.y * 2.0 + c.y);
-       |    if(dot(z,z) > 2.0)
+       |    if(dot(z,z) > $escapeRadiusSquared)
        |      break;
        |    l ++;
        |  }
@@ -85,7 +85,7 @@ object FractalRenderer {
        |}
     """.stripMargin
 
-  def fragmentShaderSource2(maxIterations: Int) =
+  def fragmentShaderSource2(maxIterations: Int, escapeRadiusSquared: Double) =
     s"""precision highp float;
        |
        |//Define complex operations
@@ -120,7 +120,7 @@ object FractalRenderer {
        |    vec2 new_der1 = product(der1, z) * 2.0 + vec2(1.0, 0.0);
        |    z = new_z;
        |    der1 = new_der1;
-       |    if(dot(z,z) > 2.0)
+       |    if(dot(z,z) > $escapeRadiusSquared)
        |      break;
        |    l ++;
        |  }
