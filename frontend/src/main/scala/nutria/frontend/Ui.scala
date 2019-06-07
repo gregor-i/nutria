@@ -78,5 +78,7 @@ object Ui {
       tags.button("down", events.onClick := (() => update(state.copy(view = state.view.down())))),
       tags.button(s"more iterations (${state.maxIterations})", events.onClick := (() => update(state.copy(maxIterations = state.maxIterations * 2)))),
       tags.button(s"less iterations (${state.maxIterations})", events.onClick := (() => update(state.copy(maxIterations = state.maxIterations / 2)))),
+      tags.button("toggle anit aliase", events.onClick := (() => update(state.copy(antiAliase = if(state.antiAliase == 2) 1 else 2)))),
+      tags.button("toggle shaded", events.onClick := (() => update(state.copy(shaded = !state.shaded)))),
     )
 }

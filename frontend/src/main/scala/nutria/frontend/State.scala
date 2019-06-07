@@ -8,7 +8,8 @@ case class State(dim: Dimensions,
                  view: Viewport,
                  maxIterations: Int,
                  escapeRadius: Double,
-                 antiAliase: Int)
+                 antiAliase: Int,
+                 shaded: Boolean)
 
 object State {
   def initial = State(
@@ -16,6 +17,7 @@ object State {
     view = Defaults.defaultViewport,
     maxIterations = 200,
     escapeRadius = 100.1 * 100,
-    antiAliase = 2
+    antiAliase = 2,
+    shaded = true
   )
 }

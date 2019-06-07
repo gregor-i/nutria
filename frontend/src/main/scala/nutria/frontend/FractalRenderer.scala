@@ -1,6 +1,6 @@
 package nutria.frontend
 
-import nutria.frontend.shaderBuilder.{AntiAliase, Mandelbrot}
+import nutria.frontend.shaderBuilder.{AntiAliase, Mandelbrot, RefVec2, RefVec4}
 import org.scalajs.dom.raw.WebGLRenderingContext
 
 import scala.scalajs.js.typedarray.Float32Array
@@ -57,7 +57,10 @@ object FractalRenderer {
   }
 
   def fragmentShaderSource(state: State) = {
-    val block: String => String = AntiAliase(Mandelbrot.shaded(state.maxIterations, state.escapeRadius), state.antiAliase)
+    val block: RefVec4 => String = AntiAliase(
+      if (state.shaded) Mandelbrot.shaded(state.maxIterations, state.escapeRadius)
+      else Mandelbrot.iterations(state.maxIterations, state.escapeRadius),
+      state.antiAliase)
 
     s"""precision highp float;
        |
@@ -72,7 +75,7 @@ object FractalRenderer {
        |
        |void main() {
        |
-       |  ${block("gl_FragColor")}
+       |  ${block(RefVec4("gl_FragColor"))}
        |
        |}
     """.stripMargin

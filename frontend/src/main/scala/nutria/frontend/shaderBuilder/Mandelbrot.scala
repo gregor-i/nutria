@@ -2,9 +2,9 @@ package nutria.frontend.shaderBuilder
 
 object Mandelbrot {
 
-  def iterations(maxIterations: Int, escapeRadiusSquared: Double)(inputVarName: String, outputVarName: String): String =
+  def iterations(maxIterations: Int, escapeRadiusSquared: Double)(inputVar: RefVec2, outputVar: RefVec4): String =
     s"""{
-       |  vec2 p = $inputVarName;
+       |  vec2 p = ${inputVar.name};
        |
        |  int l = 0;
        |  vec2 c = p;
@@ -17,19 +17,19 @@ object Mandelbrot {
        |  }
        |
        |  float fract = float(l) / float($maxIterations);
-       |  $outputVarName = vec4(fract, fract, fract,1.0);
+       |  ${outputVar.name} = vec4(fract, fract, fract,1.0);
        |}
      """.stripMargin
 
 
-  def shaded(maxIterations: Int, escapeRadiusSquared: Double)(inputVarName: String, outputVarName: String) =
+  def shaded(maxIterations: Int, escapeRadiusSquared: Double)(inputVar: RefVec2, outputVar: RefVec4) =
     s"""{
        |  const float h2 = 1.5;  // height factor of the incoming light
        |  const float angle = ${45.0 / 180.0 * Math.PI};  // incoming direction of light
        |  const vec2 v = vec2(sin(angle), cos(angle));  // unit 2D vector in this direction
        |  // incoming light 3D vector = (v.re,v.im,h2)
        |
-       |  vec2 c = $inputVarName;
+       |  vec2 c = ${inputVar.name};
        |  int l = 0;
        |  vec2 z = c;
        |  vec2 der1 = vec2(1.0, 0.0);
@@ -46,7 +46,7 @@ object Mandelbrot {
        |  float fract = float(l) / float($maxIterations);
        |
        |  if(l == $maxIterations){
-       |    $outputVarName = vec4(0.0, 0.0, 0.5, 1.0);
+       |    ${outputVar.name} = vec4(0.0, 0.0, 0.5, 1.0);
        |  }else{
        |    vec2 u = divide(z, der1);
        |    float absu = sqrt(u.x*u.x+u.y*u.y);
@@ -56,9 +56,8 @@ object Mandelbrot {
        |    if(t<0.0) {
        |      t = 0.0;
        |    }
-       |    $outputVarName = vec4(mix(vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0), t),1.0);
+       |    ${outputVar.name} = vec4(mix(vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0), t),1.0);
        |  }
        |}
-       |
      """.stripMargin
 }
