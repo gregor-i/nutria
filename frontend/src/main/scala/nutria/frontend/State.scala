@@ -3,13 +3,15 @@ package nutria.frontend
 import nutria.core.Viewport
 import nutria.core.viewport.Dimensions
 import nutria.data.Defaults
+import nutria.frontend.shaderBuilder.{Iteration, MandelbrotIteration}
 
 case class State(dim: Dimensions,
                  view: Viewport,
                  maxIterations: Int,
                  escapeRadius: Double,
                  antiAliase: Int,
-                 shaded: Boolean)
+                 shaded: Boolean,
+                 iteration: Iteration)
 
 object State {
   def initial = State(
@@ -18,6 +20,7 @@ object State {
     maxIterations = 200,
     escapeRadius = 100.1 * 100,
     antiAliase = 2,
-    shaded = true
+    shaded = true,
+    iteration = MandelbrotIteration
   )
 }

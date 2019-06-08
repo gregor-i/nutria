@@ -5,8 +5,11 @@ import com.raquo.snabbdom.simple._
 import nutria.frontend.util.Hooks
 import org.scalajs.dom.Element
 import org.scalajs.dom.html.Canvas
+import nutria.core.viewport.Point._
 import nutria.data.Defaults
+import nutria.frontend.shaderBuilder.{JuliaSetIteration, MandelbrotIteration}
 import org.scalajs.dom.raw.{ClientRect, MouseEvent, WebGLRenderingContext, WheelEvent}
+import spire.math.Complex
 
 
 object Ui {
@@ -76,5 +79,15 @@ object Ui {
       tags.button(s"less iterations (${state.maxIterations})", events.onClick := (() => update(state.copy(maxIterations = state.maxIterations / 2)))),
       tags.button("toggle anit aliase", events.onClick := (() => update(state.copy(antiAliase = if(state.antiAliase == 2) 1 else 2)))),
       tags.button("toggle shaded", events.onClick := (() => update(state.copy(shaded = !state.shaded)))),
+      tags.button("toggle julia/mandelbrot", events.onClick := (() => update{
+        state.iteration match {
+          case MandelbrotIteration =>
+            val view = state.view
+            val center = view.origin + view.A*0.5 + view.B*0.5
+            state.copy(iteration = JuliaSetIteration(Complex(center._1, center._2)))
+          case JuliaSetIteration(_) =>
+            state.copy(iteration = MandelbrotIteration)
+        }
+      }))
     )
 }
