@@ -19,7 +19,7 @@ object Consumer {
      """.stripMargin
 
 
-  def shaded(maxIterations: Int, escapeRadiusSquared: Double, iteration: Iteration)(inputVar: RefVec2, outputVar: RefVec4) = {
+  def shaded(maxIterations: Int, escapeRadiusSquared: Double, iteration: DeriveableIteration)(inputVar: RefVec2, outputVar: RefVec4) = {
     val h2 = 2.0
     val angle = 45.0 / 180.0 * Math.PI
     val vx = Math.sin(angle)
@@ -27,9 +27,9 @@ object Consumer {
     // incoming light 3D vector = (v.re,v.im,h2)
     s"""{
        |  int l = 0;
-       |	${Iteration.initialWithDer(iteration)(RefVec2("z"), inputVar)}
+       |	${DeriveableIteration.initial(iteration)(RefVec2("z"), inputVar)}
        |  for(int i = 0; i < $maxIterations; i++){
-       |	  ${Iteration.stepWithDer(iteration)(RefVec2("z"), inputVar)}
+       |	  ${DeriveableIteration.step(iteration)(RefVec2("z"), inputVar)}
        |    if(dot(z,z) > float($escapeRadiusSquared))
        |      break;
        |    l ++;

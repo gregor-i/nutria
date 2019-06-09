@@ -7,8 +7,8 @@ import org.scalajs.dom.Element
 import org.scalajs.dom.html.Canvas
 import nutria.core.viewport.Point._
 import nutria.data.Defaults
-import nutria.frontend.shaderBuilder.{JuliaSetIteration, MandelbrotIteration}
-import org.scalajs.dom.raw.{ClientRect, MouseEvent, WebGLRenderingContext, WheelEvent}
+import nutria.frontend.shaderBuilder.{DeriveableIteration, JuliaSetIteration, MandelbrotIteration, TricornIteration}
+import org.scalajs.dom.raw.{ClientRect, HTMLSelectElement, MouseEvent, WebGLRenderingContext, WheelEvent}
 import spire.math.Complex
 
 
@@ -50,8 +50,8 @@ object Ui {
         },
         events.onClick := { event =>
           val boundingBox = event.target.asInstanceOf[Element].getBoundingClientRect()
-          val x = (event.clientX -boundingBox.left) / boundingBox.width
-          val y = 1-(event.clientY -boundingBox.top) / boundingBox.height
+          val x = (event.clientX - boundingBox.left) / boundingBox.width
+          val y = 1 - (event.clientY - boundingBox.top) / boundingBox.height
           val newView = state.view
             .contain(boundingBox.width, boundingBox.height)
             .focus(x, y)
@@ -59,8 +59,8 @@ object Ui {
         },
         events.onWheel := { event =>
           val boundingBox = event.target.asInstanceOf[Element].getBoundingClientRect()
-          val x = (event.clientX -boundingBox.left) / boundingBox.width
-          val y = 1-(event.clientY -boundingBox.top) / boundingBox.height
+          val x = (event.clientX - boundingBox.left) / boundingBox.width
+          val y = 1 - (event.clientY - boundingBox.top) / boundingBox.height
           val steps = event.asInstanceOf[WheelEvent].deltaY
           val newView = state.view
             .contain(boundingBox.width, boundingBox.height)
@@ -77,17 +77,24 @@ object Ui {
       tags.button("zoom out", events.onClick := (() => update(state.copy(view = state.view.zoomOut())))),
       tags.button(s"more iterations (${state.maxIterations})", events.onClick := (() => update(state.copy(maxIterations = state.maxIterations * 2)))),
       tags.button(s"less iterations (${state.maxIterations})", events.onClick := (() => update(state.copy(maxIterations = state.maxIterations / 2)))),
-      tags.button("toggle anit aliase", events.onClick := (() => update(state.copy(antiAliase = if(state.antiAliase == 2) 1 else 2)))),
-      tags.button("toggle shaded", events.onClick := (() => update(state.copy(shaded = !state.shaded)))),
-      tags.button("toggle julia/mandelbrot", events.onClick := (() => update{
-        state.iteration match {
-          case MandelbrotIteration =>
-            val view = state.view
-            val center = view.origin + view.A*0.5 + view.B*0.5
-            state.copy(iteration = JuliaSetIteration(Complex(center._1, center._2)))
-          case JuliaSetIteration(_) =>
-            state.copy(iteration = MandelbrotIteration)
+      tags.button("toggle anit aliase", events.onClick := (() => update(state.copy(antiAliase = if (state.antiAliase == 2) 1 else 2)))),
+      tags.select(
+        tags.option("Mandelbrot"),
+        tags.option("JuliaSet"),
+        tags.option("Tricorn"),
+        events.onChange := { event =>
+          val value = event.target.asInstanceOf[HTMLSelectElement].value
+          val newIteration = value match {
+            case "Mandelbrot" => MandelbrotIteration
+            case "JuliaSet" =>
+              val view = state.view
+              val center = view.origin + view.A * 0.5 + view.B * 0.5
+              JuliaSetIteration(Complex(center._1, center._2))
+            case "Tricorn" => TricornIteration
+          }
+          update(state.copy(iteration = newIteration, shaded = newIteration.isInstanceOf[DeriveableIteration] && state.shaded))
         }
-      }))
+      ),
+      tags.button("toggle shaded", attrs.disabled := !state.iteration.isInstanceOf[DeriveableIteration], events.onClick := (() => update(state.copy(shaded = !state.shaded)))),
     )
 }

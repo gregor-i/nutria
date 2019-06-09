@@ -34,15 +34,15 @@ object FractalRenderer {
     gl.shaderSource(fragmentShader, fragmentShaderSource(state))
     gl.compileShader(fragmentShader)
 
-    if(! gl.getShaderParameter(vertexShader, WebGLRenderingContext.COMPILE_STATUS).asInstanceOf[Boolean]) {
+    if (!gl.getShaderParameter(vertexShader, WebGLRenderingContext.COMPILE_STATUS).asInstanceOf[Boolean]) {
       println("failed to compile vertex shader:")
       org.scalajs.dom.console.log(vertexShaderSource)
       org.scalajs.dom.console.log(gl.getShaderInfoLog(vertexShader))
-    }else if(! gl.getShaderParameter(fragmentShader, WebGLRenderingContext.COMPILE_STATUS).asInstanceOf[Boolean]) {
+    } else if (!gl.getShaderParameter(fragmentShader, WebGLRenderingContext.COMPILE_STATUS).asInstanceOf[Boolean]) {
       println("failed to compile fragment shader:")
       org.scalajs.dom.console.log(fragmentShaderSource(state))
       org.scalajs.dom.console.log(gl.getShaderInfoLog(fragmentShader))
-    }else {
+    } else {
       val program = gl.createProgram()
       gl.attachShader(program, vertexShader)
       gl.attachShader(program, fragmentShader)
@@ -65,10 +65,17 @@ object FractalRenderer {
   }
 
   def fragmentShaderSource(state: State) = {
-    val block: RefVec4 => String = AntiAliase(
-      if (state.shaded) Consumer.shaded(state.maxIterations, state.escapeRadius, state.iteration)
-      else Consumer.iterations(state.maxIterations, state.escapeRadius, state.iteration),
-      state.antiAliase)
+    val block: RefVec4 => String =
+      state.iteration match {
+        case it: DeriveableIteration if state.shaded =>
+          AntiAliase(
+            Consumer.shaded(state.maxIterations, state.escapeRadius, it),
+            state.antiAliase)
+        case _ =>
+          AntiAliase(
+            Consumer.iterations(state.maxIterations, state.escapeRadius, state.iteration),
+            state.antiAliase)
+      }
 
     s"""precision highp float;
        |
