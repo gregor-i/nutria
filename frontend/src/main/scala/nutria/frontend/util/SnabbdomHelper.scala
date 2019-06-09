@@ -7,9 +7,12 @@ import com.raquo.snabbdom.simple.{VNode, VNodeData}
 
 trait SnabbdomHelper {
   def vargs(s: VNode*) = new IterableNode(s.map(snabbdom.nodeToChildNode))
-  def seq(s: Seq[VNode]) = new IterableNode(s.map(snabbdom.nodeToChildNode))
 
-  def cond[A](b: Boolean, node: => A): Option[A] = if(b) Some(node) else None
+  def seq(s: Seq[Modifier[VNode, VNodeData]]): Modifier[VNode, VNodeData] = node => {
+    s.foreach(_.apply(node))
+  }
+
+  def cond[A](b: Boolean, node: => A): Option[A] = if (b) Some(node) else None
 }
 
 object SnabbdomHelper extends SnabbdomHelper

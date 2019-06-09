@@ -9,7 +9,9 @@ case class State(view: Viewport,
                  escapeRadius: Double,
                  antiAliase: Int,
                  shaded: Boolean,
-                 iteration: Iteration)
+                 iteration: Iteration,
+                 dragStartPosition: Option[(Double, Double)],
+                )
 
 object State {
   def initial = State(
@@ -18,6 +20,7 @@ object State {
     escapeRadius = 100 * 100,
     antiAliase = 2,
     shaded = true,
-    iteration = MandelbrotIteration
+    iteration = MandelbrotIteration,
+    dragStartPosition = None,
   )
 }
