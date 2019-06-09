@@ -40,8 +40,7 @@ object Consumer {
        |  }else{
        |    const float h2 = float($h2);
        |    const vec2 v = vec2(float($vx), float($vy));
-       |    vec2 u = divide(z, z_der);
-       |    u = u/length(u);
+       |    vec2 u = normalize(divide(z, z_der));
        |    float t = max((dot(u, v) + h2) / (1.0 + h2), 0.0);
        |    ${outputVar.name} = mix(vec4(0.0, 0.0, 0.0, 1.0), vec4(1.0, 1.0, 1.0, 1.0), t);
        |  }

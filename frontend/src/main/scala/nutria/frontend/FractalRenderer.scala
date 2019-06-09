@@ -26,34 +26,42 @@ object FractalRenderer {
       WebGLRenderingContext.STATIC_DRAW
     )
 
-    var vertexShader = gl.createShader(WebGLRenderingContext.VERTEX_SHADER)
+    val vertexShader = gl.createShader(WebGLRenderingContext.VERTEX_SHADER)
     gl.shaderSource(vertexShader, vertexShaderSource)
     gl.compileShader(vertexShader)
 
-    var fragmentShader = gl.createShader(WebGLRenderingContext.FRAGMENT_SHADER)
+    val fragmentShader = gl.createShader(WebGLRenderingContext.FRAGMENT_SHADER)
     gl.shaderSource(fragmentShader, fragmentShaderSource(state))
     gl.compileShader(fragmentShader)
 
-    val program = gl.createProgram()
-    gl.attachShader(program, vertexShader)
-    gl.attachShader(program, fragmentShader)
-    gl.linkProgram(program)
-    gl.useProgram(program)
-    var positionLocation = gl.getAttribLocation(program, "a_position")
-    gl.enableVertexAttribArray(positionLocation)
-    gl.vertexAttribPointer(positionLocation, 2, WebGLRenderingContext.FLOAT, false, 0, 0)
+    if(! gl.getShaderParameter(vertexShader, WebGLRenderingContext.COMPILE_STATUS).asInstanceOf[Boolean]) {
+      println("failed to compile vertex shader:")
+      org.scalajs.dom.console.log(vertexShaderSource)
+      org.scalajs.dom.console.log(gl.getShaderInfoLog(vertexShader))
+    }else if(! gl.getShaderParameter(fragmentShader, WebGLRenderingContext.COMPILE_STATUS).asInstanceOf[Boolean]) {
+      println("failed to compile fragment shader:")
+      org.scalajs.dom.console.log(fragmentShaderSource(state))
+      org.scalajs.dom.console.log(gl.getShaderInfoLog(fragmentShader))
+    }else {
+      val program = gl.createProgram()
+      gl.attachShader(program, vertexShader)
+      gl.attachShader(program, fragmentShader)
+      gl.linkProgram(program)
+      gl.useProgram(program)
+      var positionLocation = gl.getAttribLocation(program, "a_position")
+      gl.enableVertexAttribArray(positionLocation)
+      gl.vertexAttribPointer(positionLocation, 2, WebGLRenderingContext.FLOAT, false, 0, 0)
 
-    gl.uniform2f(gl.getUniformLocation(program, "u_resolution"), gl.drawingBufferWidth, gl.drawingBufferHeight)
+      gl.uniform2f(gl.getUniformLocation(program, "u_resolution"), gl.drawingBufferWidth, gl.drawingBufferHeight)
 
-    val view = state.view.cover(gl.drawingBufferWidth, gl.drawingBufferHeight)
+      val view = state.view.cover(gl.drawingBufferWidth, gl.drawingBufferHeight)
 
-    gl.uniform2f(gl.getUniformLocation(program, "u_view_O"), view.origin._1, view.origin._2)
-    gl.uniform2f(gl.getUniformLocation(program, "u_view_A"), view.A._1, view.A._2)
-    gl.uniform2f(gl.getUniformLocation(program, "u_view_B"), view.B._1, view.B._2)
+      gl.uniform2f(gl.getUniformLocation(program, "u_view_O"), view.origin._1, view.origin._2)
+      gl.uniform2f(gl.getUniformLocation(program, "u_view_A"), view.A._1, view.A._2)
+      gl.uniform2f(gl.getUniformLocation(program, "u_view_B"), view.B._1, view.B._2)
 
-    org.scalajs.dom.console.log(fragmentShaderSource(state))
-
-    gl.drawArrays(WebGLRenderingContext.TRIANGLES, 0, 6)
+      gl.drawArrays(WebGLRenderingContext.TRIANGLES, 0, 6)
+    }
   }
 
   def fragmentShaderSource(state: State) = {
