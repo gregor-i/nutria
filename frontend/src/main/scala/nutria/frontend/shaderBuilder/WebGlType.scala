@@ -9,7 +9,10 @@ case object WebGlTypeVec4 extends WebGlType
 
 object WebGlType {
   def declare[T <: WebGlType : TypeProps](ref: Ref[T], expr: WebGlExpression[T]): String =
-    s"${TypeProps[T].webGlType} ${ref.name} = ${expr.toCode};"
+    s"${TypeProps[T].webGlType} ${assign(ref, expr)}"
+
+  def assign[T <: WebGlType : TypeProps](ref: Ref[T], expr: WebGlExpression[T]): String =
+    s"${ref.name} = ${expr.toCode};"
 
   def zero[T <: WebGlType : TypeProps]: WebGlExpression[T] = TypeProps[T].zero
 

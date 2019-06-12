@@ -6,11 +6,11 @@ import com.raquo.snabbdom.simple.implicits._
 import nutria.core.Point
 import nutria.core.viewport.Point._
 import nutria.data.Defaults
-import nutria.frontend.shaderBuilder.{DeriveableIteration, JuliaSetIteration, MandelbrotIteration, TricornIteration}
+import nutria.frontend.shaderBuilder._
 import nutria.frontend.util.{Hooks, SnabbdomHelper}
-import org.scalajs.dom.{Element, PointerEvent, WheelEvent}
 import org.scalajs.dom.html.Canvas
-import org.scalajs.dom.raw.{HTMLSelectElement, MouseEvent, WebGLRenderingContext}
+import org.scalajs.dom.raw.{HTMLInputElement, HTMLSelectElement, MouseEvent, WebGLRenderingContext}
+import org.scalajs.dom.{Element, PointerEvent, WheelEvent}
 import spire.math.Complex
 
 import scala.scalajs.js
@@ -111,6 +111,7 @@ object Ui {
         tags.option("Mandelbrot"),
         tags.option("JuliaSet"),
         tags.option("Tricorn"),
+        tags.option("Newton"),
         events.onChange := { event =>
           val value = event.target.asInstanceOf[HTMLSelectElement].value
           val newIteration = value match {
@@ -120,10 +121,28 @@ object Ui {
               val center = view.origin + view.A * 0.5 + view.B * 0.5
               JuliaSetIteration(Complex(center._1, center._2))
             case "Tricorn" => TricornIteration
+            case "Newton" => NewtonIteration("x*x*x - 1")
           }
           update(state.copy(iteration = newIteration, shaded = newIteration.isInstanceOf[DeriveableIteration] && state.shaded))
         }
       ),
+      state.iteration match {
+        case NewtonIteration(function) =>
+          Some(tags.input(
+            attrs.`type` := "text",
+            attrs.value := function,
+            events.onChange := {event =>
+            val target = event.target.asInstanceOf[HTMLInputElement]
+            Parser.lang.parse(target.value) match {
+              case Some(_) =>
+                target.setCustomValidity("")
+                update(state.copy(iteration = NewtonIteration(target.value)))
+              case None =>
+                target.setCustomValidity("failed to parse")
+            }
+          }))
+        case _ => None
+      },
       tags.button("toggle shaded", attrs.disabled := !state.iteration.isInstanceOf[DeriveableIteration], events.onClick := (() => update(state.copy(shaded = !state.shaded)))),
     )
 }

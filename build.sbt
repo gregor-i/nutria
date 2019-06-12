@@ -5,18 +5,6 @@ version in ThisBuild := "0.0.1"
 scalaVersion in ThisBuild := "2.12.7"
 scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
 
-def scalaTestAndScalaCheck = Seq(
-  "org.scalatest" %% "scalatest" % "3.0.5",
-  "org.scalacheck" %% "scalacheck" % "1.14.0"
-).map(libraryDependencies += _ % Test)
-
-def mathParser = Seq(
-  resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
-  libraryDependencies += "com.github.gregor-i" %% "math-parser" % "1.2"
-)
-
-def scalaCompiler = libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value
-
 // projects
 val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -26,14 +14,8 @@ val data = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("data"))
   .dependsOn(core)
-  .jsSettings(
-    libraryDependencies += "org.typelevel" %%% "spire" % "0.16.0"
-  )
-  .jvmSettings(
-    libraryDependencies += "org.typelevel" %% "spire" % "0.16.0"
-  )
-//  .settings(commonSettings, scalaTestAndScalaCheck, spire, mathParser)
-//  .dependsOn(core % "compile->compile;test->test")
+  .settings(scalaTestAndScalaCheck, spire, mathParser)
+  .dependsOn(core % "compile->compile;test->test")
 
 val processor = project.in(file("processor"))
   .settings(name := "nutria-processor")
@@ -54,10 +36,10 @@ val frontend = project.in(file("frontend"))
   .settings(emitSourceMaps := false)
   .settings(
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.7",
-    libraryDependencies += "org.typelevel" %%% "spire" % "0.16.0",
     libraryDependencies += "com.raquo" %%% "snabbdom" % "0.1.1",
     npmDependencies in Compile += "snabbdom" -> "0.7.0"
   )
+  .settings(mathParser)
 
 val integration = taskKey[Seq[java.io.File]]("build the frontend and copy the results into service")
 integration in frontend := {
@@ -76,3 +58,16 @@ compile in Compile := {
   (frontend / integration).value
   (compile in Compile).value
 }
+
+def spire = libraryDependencies += "org.typelevel" %%% "spire" % "0.16.0"
+
+def scalaTestAndScalaCheck =
+  libraryDependencies ++= Seq(
+    "org.scalatest" %%% "scalatest" % "3.0.5" % Test,
+    "org.scalacheck" %%% "scalacheck" % "1.14.0" % Test
+  )
+
+def mathParser = Seq(
+  resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
+  libraryDependencies += "com.github.gregor-i" %%% "math-parser" % "1.3"
+)

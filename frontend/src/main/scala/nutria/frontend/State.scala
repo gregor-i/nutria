@@ -2,7 +2,7 @@ package nutria.frontend
 
 import nutria.core.Viewport
 import nutria.data.Defaults
-import nutria.frontend.shaderBuilder.{Iteration, JuliaSetIteration, MandelbrotIteration, TricornIteration}
+import nutria.frontend.shaderBuilder.{Iteration, JuliaSetIteration, MandelbrotIteration, NewtonIteration, TricornIteration}
 import spire.math.Complex
 
 import scala.util.Try
@@ -80,10 +80,12 @@ object State {
 
   implicit object IterationQueryParamCodex extends QueryParamCodex[Iteration]{
     private val jsR = "JuliaSetIteration\\((.*),(.*)\\)".r
+    private val niR = "NewtonIteration\\((.*)\\)".r
     override def fromString(string: String): Option[Iteration] =
       string match {
         case "MandelbrotIteration" => Some(MandelbrotIteration)
         case "TricornIteration" => Some(TricornIteration)
+        case niR(term) => Some(NewtonIteration(term))
         case jsR(real, imag) => Try(JuliaSetIteration(Complex(real.toDouble, imag.toDouble))).toOption
       }
 

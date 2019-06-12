@@ -1,6 +1,7 @@
 package nutria.frontend.shaderBuilder
 
-sealed trait WebGlExpression[T <: WebGlType]{
+//sealed
+trait WebGlExpression[T <: WebGlType]{
   def toCode : String
 }
 
@@ -9,7 +10,7 @@ case class IntLiteral(value: Int) extends WebGlExpression[WebGlTypeInt.type]{
 }
 
 case class FloatLiteral(value: Float) extends WebGlExpression[WebGlTypeFloat.type]{
-  override def toCode: String = value.toString
+  override def toCode: String = s"float($value)"
 }
 
 case class Vec2(a: WebGlExpression[WebGlTypeFloat.type],
@@ -33,3 +34,5 @@ case class Vec4(a: WebGlExpression[WebGlTypeFloat.type],
 case class RefExp[T <: WebGlType](ref: Ref[T]) extends WebGlExpression[T]{
   override def toCode: String = ref.name
 }
+
+case class PureStringExpression[T <: WebGlType](toCode: String) extends WebGlExpression[T]
