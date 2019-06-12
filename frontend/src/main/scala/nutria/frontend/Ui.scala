@@ -104,8 +104,6 @@ object Ui {
   def renderControls(implicit state: State, update: State => Unit): VNode =
     tags.div(
       tags.button("reset", events.onClick := (() => update(state.copy(view = Defaults.defaultViewport)))),
-      tags.button("zoom in", events.onClick := (() => update(state.copy(view = state.view.zoomIn())))),
-      tags.button("zoom out", events.onClick := (() => update(state.copy(view = state.view.zoomOut())))),
       tags.button(s"more iterations (${state.maxIterations})", events.onClick := (() => update(state.copy(maxIterations = state.maxIterations * 2)))),
       tags.button(s"less iterations (${state.maxIterations})", events.onClick := (() => update(state.copy(maxIterations = state.maxIterations / 2)))),
       tags.button("toggle anit aliase", events.onClick := (() => update(state.copy(antiAliase = if (state.antiAliase == 2) 1 else 2)))),
