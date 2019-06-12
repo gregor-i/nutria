@@ -77,6 +77,8 @@ object FractalRenderer {
             state.antiAliase)
       }
 
+    val out = WebGlType.reference[WebGlTypeVec4.type]("gl_FragColor")
+
     s"""precision highp float;
        |
        |//Define complex operations
@@ -90,7 +92,7 @@ object FractalRenderer {
        |
        |void main() {
        |
-       |  ${block(RefVec4("gl_FragColor"))}
+       |  ${block(out)}
        |
        |}
     """.stripMargin

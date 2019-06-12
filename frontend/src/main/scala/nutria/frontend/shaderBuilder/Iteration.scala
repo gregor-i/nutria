@@ -24,7 +24,7 @@ object Iteration {
            |""".stripMargin
       case JuliaSetIteration(c) =>
         s"""
-           |${z.name} = product(${z.name}, ${z.name}) + vec2(float(${c.real}), float(${c.imag}));
+           |${z.name} = product(${z.name}, ${z.name}) + ${Vec2(FloatLiteral(c.real.toFloat), FloatLiteral(c.imag.toFloat)).toCode};
            |""".stripMargin
       case TricornIteration =>
         s"""
@@ -36,7 +36,7 @@ object Iteration {
 object DeriveableIteration{
   def initial(iteration: DeriveableIteration)(z: RefVec2, p: RefVec2): String =
     s"""
-       |vec2 ${z.name} = ${p.name};
+       |${WebGlType.declare(z, RefExp(p))};
        |vec2 ${z.name}_der = vec2(1.0, 0.0);
      """.stripMargin
 
