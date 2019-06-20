@@ -1,0 +1,83 @@
+body{
+    margin: 0px;
+    padding: 0px;
+}
+
+/* navbar */
+.top-bar {
+    display : flex;
+    justify-content : space-between;
+    background-color : #eee;
+    box-shadow : 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+    height : 52px;
+}
+
+.top-bar > div {
+    display : flex;
+    align-items : center;
+}
+
+.top-bar > div > span {
+    font-size: x-large;
+}
+
+.top-bar > div  > * {
+    margin : 0px 8px;
+}
+
+
+.lobby-tile-list{
+    display : flex;
+    flex-wrap : wrap;
+    margin: 8px;
+}
+
+.lobby-tile-list > div {
+    flex-grow : 1;
+    box-shadow : rgba(0, 0, 0, 0.32) 8px 8px 8px 0px;
+    margin : 8px;
+}
+
+
+.lobby-tile-list > div > a > canvas {
+    width : 100%;
+    display : block;
+}
+
+.lobby-tile-list > div > footer {
+    align-items : stretch;
+    display : flex;
+    border-top : 1px solid #dbdbdb;
+}
+
+.lobby-tile-list > div > footer > a {
+    align-items : center;
+    display : flex;
+    flex-basis : 0;
+    flex-grow : 1;
+    flex-shrink : 0;
+    justify-content : center;
+    padding : .75rem;
+    border : 1px solid #dbdbdb;
+}
+
+
+.lobby-tile-list > div > footer > a:not(:last-child) {
+    border-right : 0px solid #dbdbdb;
+}
+
+.lobby-tile-list > div.dummy-tile {
+    height: 0px;
+    margin : 0px 8px;
+    border : 0px;
+}
+
+a{
+    color: #3273dc;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+a:hover{
+    color: #363636;
+}
