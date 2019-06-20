@@ -96,11 +96,7 @@ object FractalRenderer {
 
     s"""precision highp float;
        |
-       |//Define complex operations
-       |#define product(a, b) vec2(a.x*b.x-a.y*b.y, a.x*b.y+a.y*b.x)
-       |#define conjugate(a) vec2(a.x,-a.y)
-       |#define divide(a, b) vec2(((a.x*b.x+a.y*b.y)/(b.x*b.x+b.y*b.y)),((a.y*b.x-a.x*b.y)/(b.x*b.x+b.y*b.y)))
-       |
+       |${GlobalDefintions.definitions}
        |
        |uniform vec2 u_resolution;
        |uniform vec2 u_view_O, u_view_A, u_view_B;

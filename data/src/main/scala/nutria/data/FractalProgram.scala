@@ -44,6 +44,20 @@ case class NewtonIteration(view: Viewport = Defaults.defaultViewport,
   def withViewport(viewport: Viewport) = copy(view = viewport)
 }
 
+object NewtonIteration{
+  def mandelbrotPolynomial(n: Int): NewtonIteration = {
+    def loop(n: Int): String =
+      if(n == 1)
+        "x"
+      else
+        s"(${loop(n-1)})^2 + lambda"
+
+    NewtonIteration(function = loop(n), initial = "lambda")
+  }
+}
+
+
+
 object FractalProgram {
   implicit val encodeViewport: Encoder[Viewport] = deriveEncoder
   implicit val decodeViewport: Decoder[Viewport] = deriveDecoder

@@ -21,18 +21,18 @@ object FractalProgramToWebGl {
 
   def stepMandelbrot(z: RefVec2, p: RefVec2): String =
     s"""
-       |${z.name} = product(${z.name}, ${z.name}) + ${p.name};
+       |${z.name} = complex_product(${z.name}, ${z.name}) + ${p.name};
        |""".stripMargin
 
   def stepJulia(c: (Double, Double))
                (z: RefVec2, p: RefVec2): String =
     s"""
-       |${z.name} = product(${z.name}, ${z.name}) + ${Vec2(FloatLiteral(c._1.toFloat), FloatLiteral(c._2.toFloat)).toCode};
+       |${z.name} = complex_product(${z.name}, ${z.name}) + ${Vec2(FloatLiteral(c._1.toFloat), FloatLiteral(c._2.toFloat)).toCode};
        |""".stripMargin
 
   def stepTricorn(z: RefVec2, p: RefVec2): String =
     s"""
-       |${z.name} = conjugate(product(${z.name}, ${z.name})) + ${p.name};
+       |${z.name} = complex_conjugate(complex_product(${z.name}, ${z.name})) + ${p.name};
        |""".stripMargin
 
 
@@ -44,8 +44,8 @@ object FractalProgramToWebGl {
 
   def deriveableInitialStepMandelbrot(z: RefVec2, p: RefVec2): String =
     s"""
-       |vec2 ${z.name}_new = product(${z.name}, ${z.name}) + ${p.name};
-       |vec2 ${z.name}_der_new = product(${z.name}_der, z) * 2.0 + vec2(1.0, 0.0);
+       |vec2 ${z.name}_new = complex_product(${z.name}, ${z.name}) + ${p.name};
+       |vec2 ${z.name}_der_new = complex_product(${z.name}_der, z) * 2.0 + vec2(1.0, 0.0);
        |${z.name} = ${z.name}_new;
        |${z.name}_der = ${z.name}_der_new;
        |""".stripMargin
@@ -53,8 +53,8 @@ object FractalProgramToWebGl {
 
   def deriveableInitialStepJuliaset(c: (Double, Double))(z: RefVec2, p: RefVec2): String =
     s"""
-       |vec2 ${z.name}_new = product(${z.name}, ${z.name}) + vec2(float(${c._1}), float(${c._2}));
-       |vec2 ${z.name}_der_new = product(${z.name}_der, z) * 2.0 + vec2(1.0, 0.0);
+       |vec2 ${z.name}_new = complex_product(${z.name}, ${z.name}) + vec2(float(${c._1}), float(${c._2}));
+       |vec2 ${z.name}_der_new = complex_product(${z.name}_der, z) * 2.0 + vec2(1.0, 0.0);
        |${z.name} = ${z.name}_new;
        |${z.name}_der = ${z.name}_der_new;
        |""".stripMargin
@@ -82,7 +82,7 @@ object FractalProgramToWebGl {
        |  }else{
        |    const float h2 = float($h2);
        |    const vec2 v = vec2(float($vx), float($vy));
-       |    vec2 u = normalize(divide(z, z_der));
+       |    vec2 u = normalize(complex_divide(z, z_der));
        |    float t = max((dot(u, v) + h2) / (1.0 + h2), 0.0);
        |    ${outputVar.name} = mix(vec4(0.0, 0.0, 0.0, 1.0), vec4(1.0, 1.0, 1.0, 1.0), t);
        |  }
@@ -136,9 +136,9 @@ object FractalProgramToWebGl {
        |  ${WebGlType.declare(fzlast, RefExp(fz))}
        |  for(int i = 0;i< ${n.maxIterations}; i++){
        |    ${WebGlType.assign(fzlast, RefExp(fz))}
-       |    ${WebGlType.assign(fz, PureStringExpression(NewtonLang.toWebGlCode(node, functionLangNames)))};
+       |    ${WebGlType.assign(fz, PureStringExpression(NewtonLang.toWebGlCode(node, functionLangNames)))}
        |    ${WebGlType.declare(fderz, PureStringExpression(NewtonLang.toWebGlCode(derived, functionLangNames)))}
-       |    ${z.name} -= divide(${fz.name}, ${fderz.name});
+       |    ${z.name} -= complex_divide(${fz.name}, ${fderz.name});
        |    if(length(${fz.name}) < ${FloatLiteral(n.threshold.toFloat).toCode})
        |      break;
        |    l ++;

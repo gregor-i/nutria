@@ -17,6 +17,10 @@ class FractalController @Inject()() extends InjectedController with CirceSupport
     NewtonIteration(function = "x*x*x + 1/x - 1", initial = "lambda"),
     NewtonIteration(function = "(x * x + lambda - 1) * x - lambda", initial = "0"),
     NewtonIteration(function = "exp(x)-i", initial = "lambda"),
+    NewtonIteration.mandelbrotPolynomial(1),
+    NewtonIteration.mandelbrotPolynomial(2),
+    NewtonIteration.mandelbrotPolynomial(3),
+    NewtonIteration.mandelbrotPolynomial(4),
   )
 
   def savedFractals() = Action(

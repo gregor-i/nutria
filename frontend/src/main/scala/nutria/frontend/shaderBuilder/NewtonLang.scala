@@ -12,16 +12,19 @@ object NewtonLang {
       ifBinary = (op, left, right) => op match {
         case NewtonLang.initialLang.Plus => left + "+" + right
         case NewtonLang.initialLang.Minus => left + "-" + right
-        case NewtonLang.initialLang.Times => s"product(vec2($left), vec2($right))"
-        case NewtonLang.initialLang.Divided => s"divide(vec2($left), vec2($right))"
+        case NewtonLang.initialLang.Times => s"complex_product(vec2($left), vec2($right))"
+        case NewtonLang.initialLang.Divided => s"complex_divide(vec2($left), vec2($right))"
         case NewtonLang.functionLang.Plus => left + "+" + right
         case NewtonLang.functionLang.Minus => left + "-" + right
-        case NewtonLang.functionLang.Times => s"product(vec2($left), vec2($right))"
-        case NewtonLang.functionLang.Divided => s"divide(vec2($left), vec2($right))"
+        case NewtonLang.functionLang.Times => s"complex_product(vec2($left), vec2($right))"
+        case NewtonLang.functionLang.Divided => s"complex_divide(vec2($left), vec2($right))"
+        case NewtonLang.functionLang.Power if right == "vec2(float(2), float(0))" => s"complex_sq(vec2($left))"
+        case NewtonLang.functionLang.Power if right == "vec2(float(1), float(0))" => left
+        case NewtonLang.functionLang.Power => println(right); ???
       },
       ifUnitary = (op, child) => op match {
-        case NewtonLang.initialLang.Exp => s"exp(vec2($child).x) * vec2(cos($child).y, sin($child).y)"
-        case NewtonLang.functionLang.Exp => s"exp(vec2($child).x) * vec2(cos($child).y, sin($child).y)"
+        case NewtonLang.initialLang.Exp => s"complex_exp(vec2($child))"
+        case NewtonLang.functionLang.Exp => s"complex_exp(vec2($child))"
       },
       ifVariable = varsToCode
     )
