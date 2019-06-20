@@ -1,7 +1,7 @@
 package nutria.frontend.shaderBuilder
 
 import mathParser.complex.ComplexLanguage
-import nutria.frontend.Ui
+import nutria.frontend.ViewerUi
 import spire.math.Complex
 
 sealed trait Iteration
@@ -20,7 +20,7 @@ object Iteration {
         case Parser.lang.Plus => left + "+" + right
         case Parser.lang.Minus => left + "-" + right
         case Parser.lang.Times => s"product(vec2($left), vec2($right))"
-        case Parser.lang.Divided => s"conjugate(vec2($left), vec2($right))"
+        case Parser.lang.Divided => s"divide(vec2($left), vec2($right))"
         case Parser.lang.Power =>
           println("power")
           ???

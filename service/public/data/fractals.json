@@ -1,0 +1,128 @@
+[
+  {
+    "view": {
+      "origin": [-2.5,-1],
+      "A": [3.5,0],
+      "B": [0,2]
+    },
+    "maxIterations": 200,
+    "escapeRadius": 100,
+    "antiAliase": 2,
+    "shaded": true,
+    "iteration": {
+      "MandelbrotIteration": {
+      }
+    }
+  },
+  {
+    "view": {
+      "origin": [-2.5,-1],
+      "A": [3.5,0],
+      "B": [0,2]
+    },
+    "maxIterations": 200,
+    "escapeRadius": 100,
+    "antiAliase": 2,
+    "shaded": false,
+    "iteration": {
+      "MandelbrotIteration": {
+      }
+    }
+  },
+  {
+    "view": {
+      "origin": [-2.5,-1],
+      "A": [3.5,0],
+      "B": [0,2]
+    },
+    "maxIterations": 200,
+    "escapeRadius": 100,
+    "antiAliase": 2,
+    "shaded": true,
+    "iteration": {
+      "JuliaSetIteration": {
+        "c": [-0.6, 0.6]
+      }
+    }
+  },
+  {
+    "view": {
+      "origin": [-2.5,-1],
+      "A": [3.5,0],
+      "B": [0,2]
+    },
+    "maxIterations": 200,
+    "escapeRadius": 100,
+    "antiAliase": 2,
+    "shaded": false,
+    "iteration": {
+      "JuliaSetIteration": {
+        "c": [-0.6, 0.6]
+      }
+    }
+  },
+  {
+    "view": {
+      "origin": [-2.5,-1],
+      "A": [3.5,0],
+      "B": [0,2]
+    },
+    "maxIterations": 200,
+    "escapeRadius": 100,
+    "antiAliase": 2,
+    "shaded": true,
+    "iteration": {
+      "NewtonIteration": {
+        "function": "x*x*x - 1"
+      }
+    }
+  },
+  {
+    "view": {
+      "origin": [-2.5,-1],
+      "A": [3.5,0],
+      "B": [0,2]
+    },
+    "maxIterations": 200,
+    "escapeRadius": 100,
+    "antiAliase": 2,
+    "shaded": true,
+    "iteration": {
+      "NewtonIteration": {
+        "function": "x*x*x -x - 1"
+      }
+    }
+  },
+  {
+    "view": {
+      "origin": [-2.5,-1],
+      "A": [3.5,0],
+      "B": [0,2]
+    },
+    "maxIterations": 200,
+    "escapeRadius": 100,
+    "antiAliase": 2,
+    "shaded": true,
+    "iteration": {
+      "NewtonIteration": {
+        "function": "x*x*x +x*x -1"
+      }
+    }
+  },
+  {
+    "view": {
+      "origin": [-2.5,-1],
+      "A": [3.5,0],
+      "B": [0,2]
+    },
+    "maxIterations": 200,
+    "escapeRadius": 100,
+    "antiAliase": 2,
+    "shaded": true,
+    "iteration": {
+      "NewtonIteration": {
+        "function": "x*x*x + 1/x - 1"
+      }
+    }
+  }
+]

@@ -39,7 +39,7 @@ val frontend = project.in(file("frontend"))
     libraryDependencies += "com.raquo" %%% "snabbdom" % "0.1.1",
     npmDependencies in Compile += "snabbdom" -> "0.7.0"
   )
-  .settings(mathParser)
+  .settings(mathParser, circe)
 
 val integration = taskKey[Seq[java.io.File]]("build the frontend and copy the results into service")
 integration in frontend := {
@@ -71,3 +71,11 @@ def mathParser = Seq(
   resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
   libraryDependencies += "com.github.gregor-i" %%% "math-parser" % "1.3"
 )
+
+def circe =
+  libraryDependencies ++= Seq(
+    "io.circe" %%% "circe-core" % "0.10.0",
+    "io.circe" %%% "circe-generic" % "0.10.0",
+    "io.circe" %%% "circe-generic-extras" % "0.10.0",
+    "io.circe" %%% "circe-parser" % "0.10.0",
+  )

@@ -1,14 +1,39 @@
-package nutria.frontend
+package nutria.frontend.shaderBuilder
 
-import nutria.frontend.shaderBuilder._
+import nutria.frontend.util.Untyped
+import org.scalajs.dom
+import org.scalajs.dom.CanvasRenderingContext2D
+import org.scalajs.dom.html.Canvas
 import org.scalajs.dom.raw.WebGLRenderingContext
 
 import scala.scalajs.js.typedarray.Float32Array
 
 object FractalRenderer {
 
+  def render(canvas: Canvas, state: FractalProgram, resize: Boolean): Unit = {
+    if (Untyped(dom.window).WebGLRenderingContext != null) {
+      if(resize) {
+        canvas.width = (canvas.clientWidth * dom.window.devicePixelRatio).toInt
+        canvas.height = (canvas.clientHeight * dom.window.devicePixelRatio).toInt
+      }
+      val ctx = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
+      render(ctx, state)
+    } else {
+      if(resize) {
+        canvas.width = canvas.clientWidth
+        canvas.height = canvas.clientHeight
+      }
+      val ctx = canvas.getContext("2d").asInstanceOf[CanvasRenderingContext2D]
+      ctx.font = "30px Arial"
+      ctx.textAlign = "center"
+      ctx.textBaseline = "middle"
+      ctx.fillStyle = "red"
+      ctx.fillText("WebGl is not supported", canvas.width / 2, canvas.height / 2)
+    }
+  }
+
   def render(gl: WebGLRenderingContext,
-             state: State): Unit = {
+             state: FractalProgram): Unit = {
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
 
     var buffer = gl.createBuffer()
@@ -19,6 +44,7 @@ object FractalRenderer {
         -1.0f, -1.0f, // left  down
         1.0f, -1.0f, // right down
         -1.0f, 1.0f, // left  up
+
         -1.0f, 1.0f, // left  up
         1.0f, -1.0f, // right down
         1.0f, 1.0f // right up
@@ -35,11 +61,11 @@ object FractalRenderer {
     gl.compileShader(fragmentShader)
 
     if (!gl.getShaderParameter(vertexShader, WebGLRenderingContext.COMPILE_STATUS).asInstanceOf[Boolean]) {
-      println("failed to compile vertex shader:")
+      org.scalajs.dom.console.log("failed to compile vertex shader:")
       org.scalajs.dom.console.log(vertexShaderSource)
       org.scalajs.dom.console.log(gl.getShaderInfoLog(vertexShader))
     } else if (!gl.getShaderParameter(fragmentShader, WebGLRenderingContext.COMPILE_STATUS).asInstanceOf[Boolean]) {
-      println("failed to compile fragment shader:")
+      org.scalajs.dom.console.log("failed to compile fragment shader:")
       org.scalajs.dom.console.log(fragmentShaderSource(state))
       org.scalajs.dom.console.log(gl.getShaderInfoLog(fragmentShader))
     } else {
@@ -64,7 +90,7 @@ object FractalRenderer {
     }
   }
 
-  def fragmentShaderSource(state: State) = {
+  def fragmentShaderSource(state: FractalProgram) = {
     val block: RefVec4 => String =
       AntiAliase(
         state.iteration match {

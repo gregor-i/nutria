@@ -1,6 +1,6 @@
 package nutria.frontend.shaderBuilder
 
-import nutria.frontend.Ui
+import nutria.frontend.ViewerUi
 
 object Consumer {
 
