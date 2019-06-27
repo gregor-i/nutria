@@ -11,7 +11,7 @@ object FractalProgramToWebGl {
       case f: JuliaSet if f.shaded => AntiAliase(shaded(f.maxIterations, f.escapeRadius)(deriveableInitial, deriveableInitialStepJuliaset(f.c)), f.antiAliase)
       case f: JuliaSet => AntiAliase(countIterations(f.maxIterations, f.escapeRadius)(initial, stepJulia(f.c)), f.antiAliase)
       case f: TricornIteration => AntiAliase(countIterations(f.maxIterations, f.escapeRadius)(initial, stepTricorn), f.antiAliase)
-      case f: NewtonIteration => AntiAliase(newtonIteration(f.maxIterations, f.threshold, f.function), f.antiAliase)
+      case f: NewtonIteration => AntiAliase(newtonIteration(f), f.antiAliase)
     }
 
   def initial(z: RefVec2, p: RefVec2): String =
@@ -109,26 +109,37 @@ object FractalProgramToWebGl {
        """.stripMargin
 
 
-  def newtonIteration(maxIterations: Int, threshold: Double, fn: String)(inputVar: RefVec2, outputVar: RefVec4): String = {
-    val node = Parser.lang.parse(fn).get
-    val derived = Parser.lang.derive(node)('x)
+  def newtonIteration(n: NewtonIteration)(inputVar: RefVec2, outputVar: RefVec4): String = {
+    val node = NewtonLang.functionLang.optimize(NewtonLang.functionLang.parse(n.function).getOrElse(throw new Exception(n.function)))
+    val derived = NewtonLang.functionLang.optimize(NewtonLang.functionLang.derive(node)('x))
+
+    val inital = NewtonLang.initialLang.optimize(NewtonLang.initialLang.parse(n.initial).getOrElse(throw new Exception(n.initial)))
 
     val z = RefVec2("z")
     val fzlast = RefVec2("fzlast")
     val fz = RefVec2("fz")
     val fderz = RefVec2("fderz")
 
+    val functionLangNames: PartialFunction[Symbol, String] = {
+      case 'x => "z"
+      case 'lambda => "p"
+    }
+
+    val initialLangNames: PartialFunction[Symbol, String] = {
+      case 'lambda => "p"
+    }
+
     s"""{
        |  int l = 0;
-       |  ${WebGlType.declare(z, RefExp(inputVar))}
-       |  ${WebGlType.declare(fz, PureStringExpression(toCode(node)))}
+       |  ${WebGlType.declare(z, PureStringExpression(toCode(inital, initialLangNames)))}
+       |  ${WebGlType.declare(fz, PureStringExpression(toCode(node, functionLangNames)))}
        |  ${WebGlType.declare(fzlast, RefExp(fz))}
-       |  for(int i = 0;i< $maxIterations; i++){
+       |  for(int i = 0;i< ${n.maxIterations}; i++){
        |    ${WebGlType.assign(fzlast, RefExp(fz))}
-       |    ${WebGlType.assign(fz, PureStringExpression(toCode(node)))};
-       |    ${WebGlType.declare(fderz, PureStringExpression(toCode(derived)))}
+       |    ${WebGlType.assign(fz, PureStringExpression(toCode(node, functionLangNames)))};
+       |    ${WebGlType.declare(fderz, PureStringExpression(toCode(derived, functionLangNames)))}
        |    ${z.name} -= divide(${fz.name}, ${fderz.name});
-       |    if(length(${fz.name}) < ${FloatLiteral(threshold.toFloat).toCode})
+       |    if(length(${fz.name}) < ${FloatLiteral(n.threshold.toFloat).toCode})
        |      break;
        |    l ++;
        |  }
@@ -137,7 +148,7 @@ object FractalProgramToWebGl {
        |  if(fz == ${WebGlType.zero[WebGlTypeVec2.type].toCode}){
        |    fract = float(l - 1);
        |  }else{
-       |    fract = float(l) - log(${threshold} / length(${fz.name})) / log( length(${fzlast.name}) / length(${fz.name}));
+       |    fract = float(l) - log(${n.threshold} / length(${fz.name})) / log( length(${fzlast.name}) / length(${fz.name}));
        |  }
        |
        |  float H = atan(z.x, z.y) / float(${2 * Math.PI}) + 0.5;
@@ -150,21 +161,23 @@ object FractalProgramToWebGl {
   }
 
 
-  def toCode(node: ComplexLanguage#Node): String =
+  def toCode(node: ComplexLanguage#Node, varsToCode: PartialFunction[Symbol, String]): String =
     node.fold[String](
       ifConstant = c => Vec2(FloatLiteral(c.real.toFloat), FloatLiteral(c.imag.toFloat)).toCode,
       ifBinary = (op, left, right) => op match {
-        case Parser.lang.Plus => left + "+" + right
-        case Parser.lang.Minus => left + "-" + right
-        case Parser.lang.Times => s"product(vec2($left), vec2($right))"
-        case Parser.lang.Divided => s"divide(vec2($left), vec2($right))"
-        case Parser.lang.Power =>
+        case NewtonLang.initialLang.Plus => left + "+" + right
+        case NewtonLang.initialLang.Minus => left + "-" + right
+        case NewtonLang.initialLang.Times => s"product(vec2($left), vec2($right))"
+        case NewtonLang.initialLang.Divided => s"divide(vec2($left), vec2($right))"
+        case NewtonLang.functionLang.Plus => left + "+" + right
+        case NewtonLang.functionLang.Minus => left + "-" + right
+        case NewtonLang.functionLang.Times => s"product(vec2($left), vec2($right))"
+        case NewtonLang.functionLang.Divided => s"divide(vec2($left), vec2($right))"
+        case NewtonLang.initialLang.Power =>
           println("power")
           ???
       },
       ifUnitary = (op, child) => ???,
-      ifVariable = _ match {
-        case 'x => "z"
-      }
+      ifVariable = varsToCode
     )
 }

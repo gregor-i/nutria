@@ -38,7 +38,8 @@ case class NewtonIteration(view: Viewport = Defaults.defaultViewport,
                            antiAliase: Int = 2,
                            maxIterations: Int = 200,
                            threshold: Double = 1e-6,
-                           function: String
+                           function: String,
+                           initial: String
                           ) extends FractalProgram{
   def withViewport(viewport: Viewport) = copy(view = viewport)
 }
