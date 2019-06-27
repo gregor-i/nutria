@@ -1,5 +1,6 @@
 package nutria.frontend.shaderBuilder
 
+import nutria.data.FractalProgram
 import nutria.frontend.util.Untyped
 import org.scalajs.dom
 import org.scalajs.dom.CanvasRenderingContext2D
@@ -91,19 +92,6 @@ object FractalRenderer {
   }
 
   def fragmentShaderSource(state: FractalProgram) = {
-    val block: RefVec4 => String =
-      AntiAliase(
-        state.iteration match {
-          case NewtonIteration(fn) =>
-            Consumer.newtonIteration(state.maxIterations, 1e-3, fn)
-          case it: DeriveableIteration if state.shaded =>
-              Consumer.shaded(state.maxIterations, state.escapeRadius, it)
-          case _ =>
-              Consumer.iterations(state.maxIterations, state.escapeRadius, state.iteration)
-        },
-        state.antiAliase
-      )
-
     val out = RefVec4("gl_FragColor")
 
     s"""precision highp float;
@@ -128,7 +116,7 @@ object FractalRenderer {
        |
        |void main() {
        |
-       |  ${block(out)}
+       |  ${FractalProgramToWebGl(state)(out)}
        |
        |}
     """.stripMargin

@@ -52,7 +52,7 @@ object ViewerUi {
       val newView = state.fractalProgram.view.translate(translateA + translateB)
       event.target.asInstanceOf[js.Dynamic].style.left = "0px"
       event.target.asInstanceOf[js.Dynamic].style.top = "0px"
-      update(state.copy(dragStartPosition = None, fractalProgram = state.fractalProgram.copy( view =newView)))
+      update(state.copy(dragStartPosition = None, fractalProgram = state.fractalProgram.withViewport(newView)))
     }
 
     def moveEvent(startPosition: Point): PointerEvent => Unit = { event =>
@@ -80,7 +80,7 @@ object ViewerUi {
       val newView = state.fractalProgram.view
         .contain(boundingBox.width, boundingBox.height)
         .zoomSteps((x, y), if (steps > 0) -1 else 1)
-      update(state.copy(fractalProgram = state.fractalProgram.copy(view = newView)))
+      update(state.copy(fractalProgram = state.fractalProgram.withViewport(newView)))
     }
 
     startEvent +: wheelEvent +: inProgressEvents.getOrElse(Seq.empty)

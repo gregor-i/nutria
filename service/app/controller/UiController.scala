@@ -9,3 +9,4 @@ class UiController @Inject()(assets: Assets) extends InjectedController {
 
   def asset(file: String, folder: String) = assets.at(folder, file)
 }
+

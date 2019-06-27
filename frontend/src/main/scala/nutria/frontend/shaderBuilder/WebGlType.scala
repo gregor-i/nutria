@@ -25,25 +25,25 @@ object WebGlType {
     def construct(name: String): Ref[T]
   }
 
-  object TypeProps{
+  object TypeProps {
     def apply[T <: WebGlType](implicit props: TypeProps[T]): TypeProps[T] = props
   }
 
-  implicit object TypePropsInt extends TypeProps[WebGlTypeInt.type ] {
+  implicit object TypePropsInt extends TypeProps[WebGlTypeInt.type] {
     override val zero: WebGlExpression[WebGlTypeInt.type] = IntLiteral(0)
     override val webGlType: String = "int"
 
     override def construct(name: String): RefInt = RefInt(name)
   }
 
-  implicit object TypePropsVec2 extends TypeProps[WebGlTypeVec2.type ] {
+  implicit object TypePropsVec2 extends TypeProps[WebGlTypeVec2.type] {
     override val zero: WebGlExpression[WebGlTypeVec2.type] = Vec2(FloatLiteral(0), FloatLiteral(0))
     override val webGlType: String = "vec2"
 
     override def construct(name: String): RefVec2 = RefVec2(name)
   }
 
-  implicit object TypePropsVec4 extends TypeProps[WebGlTypeVec4.type ] {
+  implicit object TypePropsVec4 extends TypeProps[WebGlTypeVec4.type] {
     override val zero: WebGlExpression[WebGlTypeVec4.type] = Vec4(FloatLiteral(0), FloatLiteral(0), FloatLiteral(0), FloatLiteral(0))
     override val webGlType: String = "vec4"
 

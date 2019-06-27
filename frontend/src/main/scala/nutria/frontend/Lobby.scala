@@ -2,20 +2,18 @@ package nutria
 package frontend
 
 import com.raquo.snabbdom.simple.implicits._
-import com.raquo.snabbdom.simple.{VNode, attrs, events, styles, tags}
+import com.raquo.snabbdom.simple.{VNode, attrs, styles, tags}
 import io.circe.{Decoder, parser}
-import nutria.frontend.shaderBuilder.{FractalProgram, FractalRenderer, NewtonIteration}
+import nutria.data.FractalProgram
+import nutria.frontend.shaderBuilder.FractalRenderer
 import nutria.frontend.util.{Hooks, SnabbdomApp, SnabbdomHelper}
-import org.scalajs.dom
-import org.scalajs.dom.{Element, XMLHttpRequest}
-import org.scalajs.dom.html.Canvas
-import org.scalajs.dom.raw.WebGLRenderingContext
-import io.circe.syntax._
 import org.scalajs.dom.ext.Ajax
+import org.scalajs.dom.html.Canvas
+import org.scalajs.dom.{Element, XMLHttpRequest}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.scalajs.js.|
-import scala.concurrent.ExecutionContext.Implicits.global
 
 class Lobby(container: Element) extends SnabbdomApp {
 
@@ -60,7 +58,7 @@ object LobbyUi extends SnabbdomHelper {
       styles.boxShadow := "rgba(0, 0, 0, 0.32) 8px 8px 8px 0px",
       styles.margin := "8px",
       styles.border := "1px black solid",
-      attrs.href := s"/viewer?state=${FractalProgram.queryEncoded(fractalProgram)}",
+      attrs.href := Viewer.url(fractalProgram),
       tags.canvas(
         attrs.widthAttr := 400,
         attrs.heightAttr := 225,

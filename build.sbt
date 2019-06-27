@@ -14,7 +14,7 @@ val data = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("data"))
   .dependsOn(core)
-  .settings(scalaTestAndScalaCheck, spire, mathParser)
+  .settings(scalaTestAndScalaCheck, spire, mathParser, circe)
   .dependsOn(core % "compile->compile;test->test")
 
 val processor = project.in(file("processor"))
@@ -23,7 +23,8 @@ val processor = project.in(file("processor"))
   .dependsOn(core.jvm, data.jvm)
 
 val service = project.in(file("service"))
-  .settings(scalaTestAndScalaCheck)
+  .dependsOn(data.jvm)
+  .settings(scalaTestAndScalaCheck, circe)
   .enablePlugins(PlayScala)
   .settings(libraryDependencies += guice)
 
