@@ -1,7 +1,7 @@
 import DefaultSaveFolder.defaultSaveFolder
 import nutria.core.colors.Invert
 import nutria.core.content.{Content, LinearNormalized}
-import nutria.core.image.SaveFolder
+import image.Image
 import nutria.core.syntax._
 import nutria.core.viewport.{Dimensions, Viewport}
 import nutria.data.Defaults
@@ -54,7 +54,7 @@ object JuliaSetMap extends ProcessorHelper with Defaults {
         }
       }
 
-      combined.map(LinearNormalized(0d, 5000d)).withColor(MonoColor.Blue).save(file)
+      Image.save(combined.map(LinearNormalized(0d, 5000d)).withColor(MonoColor.Blue), file)
     }
   }
 
@@ -67,10 +67,11 @@ object JuliaSetMap extends ProcessorHelper with Defaults {
     override def skipCondition: Boolean = file.exists()
 
     override def execute(): Unit = {
-      view
-        .withDimensions(Defaults.defaultDimensions.scale(0.1))
-        .withContent(new JuliaSet(cx, cy)(500) andThen CountIterations.double() andThen LinearNormalized(0d, 500d))
-        .withColor(MonoColor.Blue).save(file)
+      Image.save(
+        view
+          .withDimensions(Defaults.defaultDimensions.scale(0.1))
+          .withContent(new JuliaSet(cx, cy)(500) andThen CountIterations.double() andThen LinearNormalized(0d, 500d))
+          .withColor(MonoColor.Blue), file)
     }
   }
 

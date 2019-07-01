@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage
 
 import nutria.core._
 import nutria.core.content.{FractalCalculation, StreamByResolution}
-import nutria.core.image.SaveFolder
+import image.{Image, SaveFolder}
 import nutria.core.syntax._
 import util.Observable
 
@@ -30,7 +30,7 @@ class Model(private var thisFractal: FractalCalculation,
           coloredImage = fc.postprocessing(rawImage)
         } {
           img = coloredImage
-          buffer = img.buffer
+          buffer = Image.buffer(img)
           notifyObservers()
         }
     })
@@ -39,7 +39,7 @@ class Model(private var thisFractal: FractalCalculation,
   }
 
   def save() = {
-    img.verboseSave(folder /~ s"$thisViewport.png")
+    Image.verboseSave(img, folder /~ s"$thisViewport.png")
   }
 
   def fractal_=(_fractal: FractalCalculation): Unit = {

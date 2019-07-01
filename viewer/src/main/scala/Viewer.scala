@@ -1,5 +1,6 @@
 import MVC.Model
 import MVC.view._
+import image.SaveFolder
 import nutria.data.Defaults
 import nutria.data.fractalFamilies.MandelbrotFamily
 
@@ -9,7 +10,7 @@ object Viewer extends Defaults {
       MandelbrotFamily.exampleCalculations.head._2,
       defaultViewport,
       Some(MandelbrotFamily.exampleSequenceConstructor),
-      defaultSaveFolder
+      SaveFolder.defaultSaveFolder
     )
     new View(model)
   }

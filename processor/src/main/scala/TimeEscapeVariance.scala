@@ -1,4 +1,5 @@
 import DefaultSaveFolder.defaultSaveFolder
+import image.Image
 import nutria.core.accumulator.Variance
 import nutria.core.syntax._
 import nutria.data.Defaults
@@ -6,6 +7,7 @@ import nutria.data.colors.WhiteToBlack
 import nutria.data.consumers.CountIterations
 import nutria.data.sequences.Mandelbrot
 import processorHelper.ProcessorHelper
+
 object TimeEscapeVariance extends Defaults with ProcessorHelper {
   def main(args: Array[String]): Unit = {
     val cached = defaultViewport
@@ -14,9 +16,9 @@ object TimeEscapeVariance extends Defaults with ProcessorHelper {
       .multisampled(Variance, 5)
       .cached
 
-    cached
-      .linearNormalized
-      .withColor(WhiteToBlack)
-      .save(defaultSaveFolder /~ "TimeEscapeVariance.png")
+    Image.save(
+      cached
+        .linearNormalized
+        .withColor(WhiteToBlack), defaultSaveFolder /~ "TimeEscapeVariance.png")
   }
 }

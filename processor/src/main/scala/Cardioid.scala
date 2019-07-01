@@ -1,7 +1,7 @@
 import DefaultSaveFolder.defaultSaveFolder
 import nutria.core.colors.Invert
 import nutria.core.content.LinearNormalized
-import nutria.core.image.SaveFolder
+import image.{Image, SaveFolder}
 import nutria.core.syntax._
 import nutria.core.{Color, Viewport}
 import nutria.data.Defaults
@@ -31,7 +31,7 @@ object Cardioid extends ProcessorHelper with Defaults {
         .withContent(Mandelbrot(2000) andThen CardioidNumeric(30) andThen LinearNormalized(0d, 0.1))
 
       for((name, color) <- colors)
-        content.map(color).save(saveFolder / view.toString /~ s"$name.png")
+        Image.save(content.map(color), saveFolder / view.toString /~ s"$name.png")
     }
   }
 

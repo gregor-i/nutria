@@ -1,4 +1,4 @@
-package nutria.core.image
+package image
 
 import java.io.File
 
@@ -18,4 +18,9 @@ case class SaveFolder(path: String) {
   }
 
   def /(folder: String): SaveFolder = subFolder(folder)
+}
+
+
+object SaveFolder{
+  val defaultSaveFolder: SaveFolder = SaveFolder("." + File.separator)
 }

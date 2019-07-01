@@ -1,7 +1,6 @@
 package nutria.data
 
 import nutria.core.{Color, Dimensions}
-import nutria.core.image.SaveFolder
 import nutria.core.viewport.{Point, Viewport}
 import nutria.data.colors.Wikipedia
 

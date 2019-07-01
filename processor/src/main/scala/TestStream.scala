@@ -1,4 +1,5 @@
 import DefaultSaveFolder.defaultSaveFolder
+import image.Image
 import nutria.core.Dimensions
 import nutria.core.content.{LinearNormalized, StreamByResolution}
 import nutria.data.colors.Wikipedia
@@ -14,13 +15,11 @@ object TestStream extends App {
     Wikipedia
 
   val stream = StreamByResolution(MandelbrotFamily.initialViewport,
-    Dimensions(16,9),
+    Dimensions(16, 9),
     8,
     fractal)
 
-  import nutria.core.syntax._
-
-  stream.zipWithIndex.foreach{
-    case (img, i) => img.verboseSave(defaultSaveFolder /~ s"i_$i.png")
+  stream.zipWithIndex.foreach {
+    case (img, i) => Image.verboseSave(img, defaultSaveFolder /~ s"i_$i.png")
   }
 }

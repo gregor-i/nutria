@@ -1,3 +1,5 @@
+package image
+
 import java.io.File
 
 case class SaveFolder(path: String) {
@@ -19,8 +21,6 @@ case class SaveFolder(path: String) {
 }
 
 
-trait DefaultSaveFolder {
+object SaveFolder{
   val defaultSaveFolder: SaveFolder = SaveFolder("." + File.separator)
 }
-
-object DefaultSaveFolder extends DefaultSaveFolder

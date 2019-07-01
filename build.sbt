@@ -18,7 +18,6 @@ val data = crossProject(JSPlatform, JVMPlatform)
   .dependsOn(core % "compile->compile;test->test")
 
 val processor = project.in(file("processor"))
-  .settings(name := "nutria-processor")
   .settings(scalaTestAndScalaCheck)
   .dependsOn(core.jvm, data.jvm)
 

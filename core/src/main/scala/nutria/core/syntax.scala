@@ -1,11 +1,7 @@
 package nutria.core
 
-import java.awt.image.BufferedImage
-import java.io.File
-
 import nutria.core.accumulator.{Accumulator, Arithmetic}
 import nutria.core.content._
-import nutria.core.image.Image
 
 object syntax {
   implicit class EnrichedViewport(val viewport: Viewport) extends AnyVal {
@@ -30,11 +26,5 @@ object syntax {
 
   implicit class EnrichedFinishedContent[A](val content: Content[A]) extends AnyVal {
     def withColor(color: Color[A]): Image = content.map(color)
-  }
-
-  implicit class EnrichedImage(val image: Image) extends AnyVal {
-    def buffer: BufferedImage = Image.buffer(image)
-    def save(file: java.io.File): File = Image.save(image, file)
-    def verboseSave(file: java.io.File): File = Image.verboseSave(image, file)
   }
 }
