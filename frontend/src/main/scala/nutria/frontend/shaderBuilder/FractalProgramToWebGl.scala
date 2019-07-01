@@ -131,13 +131,13 @@ object FractalProgramToWebGl {
 
     s"""{
        |  int l = 0;
-       |  ${WebGlType.declare(z, PureStringExpression(toCode(inital, initialLangNames)))}
-       |  ${WebGlType.declare(fz, PureStringExpression(toCode(node, functionLangNames)))}
+       |  ${WebGlType.declare(z, PureStringExpression(NewtonLang.toWebGlCode(inital, initialLangNames)))}
+       |  ${WebGlType.declare(fz, PureStringExpression(NewtonLang.toWebGlCode(node, functionLangNames)))}
        |  ${WebGlType.declare(fzlast, RefExp(fz))}
        |  for(int i = 0;i< ${n.maxIterations}; i++){
        |    ${WebGlType.assign(fzlast, RefExp(fz))}
-       |    ${WebGlType.assign(fz, PureStringExpression(toCode(node, functionLangNames)))};
-       |    ${WebGlType.declare(fderz, PureStringExpression(toCode(derived, functionLangNames)))}
+       |    ${WebGlType.assign(fz, PureStringExpression(NewtonLang.toWebGlCode(node, functionLangNames)))};
+       |    ${WebGlType.declare(fderz, PureStringExpression(NewtonLang.toWebGlCode(derived, functionLangNames)))}
        |    ${z.name} -= divide(${fz.name}, ${fderz.name});
        |    if(length(${fz.name}) < ${FloatLiteral(n.threshold.toFloat).toCode})
        |      break;
@@ -160,24 +160,4 @@ object FractalProgramToWebGl {
        """.stripMargin
   }
 
-
-  def toCode(node: ComplexLanguage#Node, varsToCode: PartialFunction[Symbol, String]): String =
-    node.fold[String](
-      ifConstant = c => Vec2(FloatLiteral(c.real.toFloat), FloatLiteral(c.imag.toFloat)).toCode,
-      ifBinary = (op, left, right) => op match {
-        case NewtonLang.initialLang.Plus => left + "+" + right
-        case NewtonLang.initialLang.Minus => left + "-" + right
-        case NewtonLang.initialLang.Times => s"product(vec2($left), vec2($right))"
-        case NewtonLang.initialLang.Divided => s"divide(vec2($left), vec2($right))"
-        case NewtonLang.functionLang.Plus => left + "+" + right
-        case NewtonLang.functionLang.Minus => left + "-" + right
-        case NewtonLang.functionLang.Times => s"product(vec2($left), vec2($right))"
-        case NewtonLang.functionLang.Divided => s"divide(vec2($left), vec2($right))"
-        case NewtonLang.initialLang.Power =>
-          println("power")
-          ???
-      },
-      ifUnitary = (op, child) => ???,
-      ifVariable = varsToCode
-    )
 }
