@@ -22,12 +22,12 @@ class Viewer(container: Element) extends SnabbdomApp {
   }
 
   def initialProgram = Viewer.queryDecoded(dom.window.location.search.stripPrefix("?").stripPrefix("state="))
-      .getOrElse(Mandelbrot())
+    .getOrElse(Mandelbrot())
 
   renderState(ViewerState(fractalProgram = initialProgram))
 }
 
-object Viewer{
+object Viewer {
   def url(fractalProgram: FractalProgram) = "/viewer?state=" + Viewer.queryEncoded(fractalProgram)
 
   def queryEncoded(fractalProgram: FractalProgram): String = URIUtils.encodeURIComponent(fractalProgram.asJson.noSpaces)

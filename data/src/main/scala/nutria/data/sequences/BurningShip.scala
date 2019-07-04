@@ -3,7 +3,7 @@ package nutria.data.sequences
 import nutria.core.Point
 import nutria.data.DoubleSequence
 
-object BurningShip{
+object BurningShip {
   final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence {
     private[this] var x, y = 0d
     private[this] var xx = x * x
@@ -18,9 +18,9 @@ object BurningShip{
       xx = x * x
       yy = y * y
       iterationsRemaining -= 1
-      (x,y)
+      (x, y)
     }
   }
 
-  def apply(maxIterations:Int):Point => Sequence = p => new Sequence(p._1, p._2, maxIterations)
+  def apply(maxIterations: Int): Point => Sequence = p => new Sequence(p._1, p._2, maxIterations)
 }

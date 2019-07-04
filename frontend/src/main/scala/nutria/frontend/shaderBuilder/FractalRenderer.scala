@@ -13,14 +13,14 @@ object FractalRenderer {
 
   def render(canvas: Canvas, state: FractalProgram, resize: Boolean): Unit = {
     if (Untyped(dom.window).WebGLRenderingContext != null) {
-      if(resize) {
+      if (resize) {
         canvas.width = (canvas.clientWidth * dom.window.devicePixelRatio).toInt
         canvas.height = (canvas.clientHeight * dom.window.devicePixelRatio).toInt
       }
       val ctx = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
       render(ctx, state)
     } else {
-      if(resize) {
+      if (resize) {
         canvas.width = canvas.clientWidth
         canvas.height = canvas.clientHeight
       }

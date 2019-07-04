@@ -76,22 +76,22 @@ object MandelbrotFamily extends Family("Mandelbrot", Mandelbrot(50, 4d)) {
     Viewport.createViewportByLongs(0xbffff1289a2f9024L, 0x3ecc1658de9600a1L, 0x3e89545b65000000L, 0x0000000000000000L, 0x0000000000000000L, 0xbe7cf2b1970e7280L))
 
   override def exampleCalculations: Seq[(String, FractalCalculation)] = Seq(
-    ("RoughColoring(150)"         , FractalCalculation(Mandelbrot(150, 10d)   andThen CountIterations.double() andThen LinearNormalized(0d, 150d) andThen Defaults.defaultColor)),
-    ("RoughColoring(250)"         , FractalCalculation(Mandelbrot(250, 10d)   andThen CountIterations.double() andThen LinearNormalized(0d, 250d) andThen Defaults.defaultColor)),
-    ("RoughColoring(500)"         , FractalCalculation(Mandelbrot(500, 10d)   andThen CountIterations.double() andThen LinearNormalized(0d, 500d) andThen Defaults.defaultColor)),
-    ("RoughColoring(750)"         , FractalCalculation(Mandelbrot(750, 10d)   andThen CountIterations.double() andThen LinearNormalized(0d, 750d) andThen Defaults.defaultColor)),
-    ("RoughColoring(1500)"        , FractalCalculation(Mandelbrot(1500, 10d)  andThen CountIterations.double() andThen LinearNormalized(0d, 1500d) andThen Defaults.defaultColor)),
-    ("SmoothColoring(500)"        , FractalCalculation(Mandelbrot(500, 10d)   andThen CountIterations.smoothed() andThen LinearNormalized(0d, 500d) andThen Defaults.defaultColor)),
-    ("OrbitPoint(250, 0, 0)"      , FractalCalculation(Mandelbrot(250, 10d)   andThen Trap.OrbitPoint(0, 0) andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
-    ("OrbitPoint(250, -1, 0)"     , FractalCalculation(Mandelbrot(250, 10d)   andThen Trap.OrbitPoint(-1, 0) andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
-    ("OrbitPoint(1250, 1, 1)"     , FractalCalculation(Mandelbrot(250, 10d)   andThen Trap.OrbitPoint(1, 1) andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
-    ("OrbitPoint(250, 1, 0)"      , FractalCalculation(Mandelbrot(250, 10d)   andThen Trap.OrbitPoint(1, 0) andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
-    ("OrbitPoint(250, 0, 1)"      , FractalCalculation(Mandelbrot(250, 10d)   andThen Trap.OrbitPoint(0, 1) andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
-    ("GaussionInteger(250)"       , FractalCalculation(Mandelbrot(250, 1000d)   andThen Trap.GaussianIntegerTraps() andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
-    ("OrbitRealAxis(250)"         , FractalCalculation(Mandelbrot(250, 10d)   andThen Trap.OrbitRealAxis andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
-    ("OrbitImgAxis(250)"          , FractalCalculation(Mandelbrot(250, 10d)   andThen Trap.OrbitImgAxis andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
-    ("CardioidNumeric(250, 20)"   , FractalCalculation(Mandelbrot(250, 10d)   andThen CardioidNumeric(20) andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
-    ("CardioidHeuristic(250, 20)" , FractalCalculation(Mandelbrot(250, 10d)   andThen CardioidHeuristic(20) andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor))
+    ("RoughColoring(150)", FractalCalculation(Mandelbrot(150, 10d) andThen CountIterations.double() andThen LinearNormalized(0d, 150d) andThen Defaults.defaultColor)),
+    ("RoughColoring(250)", FractalCalculation(Mandelbrot(250, 10d) andThen CountIterations.double() andThen LinearNormalized(0d, 250d) andThen Defaults.defaultColor)),
+    ("RoughColoring(500)", FractalCalculation(Mandelbrot(500, 10d) andThen CountIterations.double() andThen LinearNormalized(0d, 500d) andThen Defaults.defaultColor)),
+    ("RoughColoring(750)", FractalCalculation(Mandelbrot(750, 10d) andThen CountIterations.double() andThen LinearNormalized(0d, 750d) andThen Defaults.defaultColor)),
+    ("RoughColoring(1500)", FractalCalculation(Mandelbrot(1500, 10d) andThen CountIterations.double() andThen LinearNormalized(0d, 1500d) andThen Defaults.defaultColor)),
+    ("SmoothColoring(500)", FractalCalculation(Mandelbrot(500, 10d) andThen CountIterations.smoothed() andThen LinearNormalized(0d, 500d) andThen Defaults.defaultColor)),
+    ("OrbitPoint(250, 0, 0)", FractalCalculation(Mandelbrot(250, 10d) andThen Trap.OrbitPoint(0, 0) andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
+    ("OrbitPoint(250, -1, 0)", FractalCalculation(Mandelbrot(250, 10d) andThen Trap.OrbitPoint(-1, 0) andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
+    ("OrbitPoint(1250, 1, 1)", FractalCalculation(Mandelbrot(250, 10d) andThen Trap.OrbitPoint(1, 1) andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
+    ("OrbitPoint(250, 1, 0)", FractalCalculation(Mandelbrot(250, 10d) andThen Trap.OrbitPoint(1, 0) andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
+    ("OrbitPoint(250, 0, 1)", FractalCalculation(Mandelbrot(250, 10d) andThen Trap.OrbitPoint(0, 1) andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
+    ("GaussionInteger(250)", FractalCalculation(Mandelbrot(250, 1000d) andThen Trap.GaussianIntegerTraps() andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
+    ("OrbitRealAxis(250)", FractalCalculation(Mandelbrot(250, 10d) andThen Trap.OrbitRealAxis andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
+    ("OrbitImgAxis(250)", FractalCalculation(Mandelbrot(250, 10d) andThen Trap.OrbitImgAxis andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
+    ("CardioidNumeric(250, 20)", FractalCalculation(Mandelbrot(250, 10d) andThen CardioidNumeric(20) andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor)),
+    ("CardioidHeuristic(250, 20)", FractalCalculation(Mandelbrot(250, 10d) andThen CardioidHeuristic(20) andThen LinearNormalized(0d, 0.1d) andThen Defaults.defaultColor))
   )
 
   object Focus {

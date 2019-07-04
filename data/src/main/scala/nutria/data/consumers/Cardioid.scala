@@ -6,6 +6,7 @@ import nutria.data.sequences.Mandelbrot
 import scala.annotation.tailrec
 
 trait CardioidUtils extends MathUtils {
+
   import Math.{cos, sin, sqrt}
 
   @inline final def contour(t: Double): (Double, Double) = (contourX(t), contourY(t))
@@ -27,7 +28,9 @@ object CardioidHeuristic extends CardioidUtils {
 
     def minimalDistance(x: Double, _y: Double): Double = {
       val y = _y.abs
-      def d(p:(Double, Double)): Double = q(p._1 - x) + q(p._2 - y)
+
+      def d(p: (Double, Double)): Double = q(p._1 - x) + q(p._2 - y)
+
       d(points.minBy(d))
     }
 
@@ -37,6 +40,7 @@ object CardioidHeuristic extends CardioidUtils {
 
 
 object CardioidNumeric extends CardioidUtils {
+
   import Math.{cos, sin, sqrt}
 
   // sqrt( (cos(t)/2 - cos(2t)/4-x)^2 + (sin(t)/2 - sin(2t)/4-y)^2 )
@@ -85,7 +89,7 @@ object CardioidNumeric extends CardioidUtils {
     val s1 = sin(t)
     val s2 = sin(t * 2)
     val s1h = s1 / 2
-    val s2h= s2 / 2
+    val s2h = s2 / 2
     val s2hh = s2 / 4
 
     val cd = c1h - c2h
@@ -98,15 +102,17 @@ object CardioidNumeric extends CardioidUtils {
     d1 / d2
   }
 
-  final val phi:Double = (sqrt(5) + 1) / 2
+  final val phi: Double = (sqrt(5) + 1) / 2
   // This algorithm has is flaw:
   // For some inputs it yields an incorrect output. In this cases t=0 is a better solution.
   // But the good thing is, that it's always exactly t=0, so it can be checked with in a single calculation.
-  def golden(iterations:Int)(x:Double, _y:Double): (Double, Double) = {
+  def golden(iterations: Int)(x: Double, _y: Double): (Double, Double) = {
     val y = _y.abs
-    def calc(t:Double):Double = distSquared(t, x, y)
-    @tailrec def loop(i:Int, a:Double, fa:Double, b:Double, fb:Double): (Double, Double) =
-      if(i == 0)
+
+    def calc(t: Double): Double = distSquared(t, x, y)
+
+    @tailrec def loop(i: Int, a: Double, fa: Double, b: Double, fb: Double): (Double, Double) =
+      if (i == 0)
         (a, b)
       else {
         val c = b - (b - a) / phi
@@ -118,16 +124,17 @@ object CardioidNumeric extends CardioidUtils {
         else
           loop(i - 1, c, fc, b, fb)
       }
-    loop(iterations-1, 0, calc(0), Math.PI, calc(Math.PI))
+
+    loop(iterations - 1, 0, calc(0), Math.PI, calc(Math.PI))
   }
 
-  def minimalDistance(iterations :Int)(x: Double, _y: Double): Double = {
+  def minimalDistance(iterations: Int)(x: Double, _y: Double): Double = {
     val y = _y.abs
     val (lower, upper) = golden(iterations)(x, y)
     val t = (lower + upper) / 2
     val d = distSquared(t, x, y)
     val d0 = distSquared(0, x, y)
-    if(d > d0) d0
+    if (d > d0) d0
     else d
   }
 

@@ -2,7 +2,7 @@ package nutria.frontend.shaderBuilder
 
 object AntiAliase {
   def apply[T <: WebGlType : WebGlType.TypeProps](block: (RefVec2, Ref[T]) => String, aaFactor: Int)(outputVar: Ref[T]) =
-    if(aaFactor > 1)
+    if (aaFactor > 1)
       antiAliase(block, aaFactor)(outputVar)
     else
       noAntiAliase(block)(outputVar)

@@ -16,8 +16,8 @@ object Main {
   def main(args: Array[String]): Unit = {
     dom.window.location.pathname match {
       case "/viewer" => dom.document.addEventListener[Event]("DOMContentLoaded", (_: Event) => gotoViewer())
-      case "/"       => dom.document.addEventListener[Event]("DOMContentLoaded", (_: Event) => gotoLobby())
-      case _         => println("unknown path")
+      case "/" => dom.document.addEventListener[Event]("DOMContentLoaded", (_: Event) => gotoLobby())
+      case _ => println("unknown path")
     }
   }
 }

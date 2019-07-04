@@ -2,8 +2,8 @@ package nutria.core.viewport
 
 import org.scalacheck.Gen.choose
 import org.scalacheck.Prop.forAll
-import org.scalatest.{Assertion, FunSuite, Matchers}
 import org.scalatest.prop.Checkers
+import org.scalatest.{Assertion, FunSuite, Matchers}
 
 class ViewportSpec extends FunSuite with Matchers with Checkers {
   def beClose(left: Viewport, right: Viewport): Assertion = {

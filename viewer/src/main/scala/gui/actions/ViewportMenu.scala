@@ -1,11 +1,11 @@
 package gui.actions
 
-import java.awt.event.{ActionEvent, ActionListener}
-import javax.swing.{JMenu, JMenuItem}
+import java.awt.event.ActionListener
 
 import MVC.Model
-import nutria.data.fractalFamilies.MandelbrotFamily
+import javax.swing.{JMenu, JMenuItem}
 import nutria.core.Viewport
+import nutria.data.fractalFamilies.MandelbrotFamily
 
 class ViewportMenu(views: Array[Viewport], gui: Model) extends JMenu("Viewports") {
 

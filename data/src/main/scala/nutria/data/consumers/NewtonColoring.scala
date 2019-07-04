@@ -25,13 +25,13 @@ object NewtonColoring {
     }
 
   def smooth(newton: Newton): newton.Sequence => RGB =
-    NewtonIteration(newton) andThen NewtonIteration.colorTheResult((0,0))
+    NewtonIteration(newton) andThen NewtonIteration.colorTheResult((0, 0))
 }
 
 
-object NewtonIteration{
+object NewtonIteration {
   sealed trait NewtonResult
-  case class ConvergedToRoot(iterations:Double, root:(Double, Double)) extends NewtonResult
+  case class ConvergedToRoot(iterations: Double, root: (Double, Double)) extends NewtonResult
   case object FailedByException extends NewtonResult
   case object NotConverged extends NewtonResult
 
@@ -49,7 +49,7 @@ object NewtonIteration{
       val s = {
         val fnow = newton.f(Complex(now._1, now._2), seq.lambda).abs
         val flast = newton.f(Complex(last._1, last._2), seq.lambda).abs
-        if(fnow == 0.0)
+        if (fnow == 0.0)
           i - 1
         else
           i - Math.log(seq.threshold / fnow) / Math.log(flast / fnow)

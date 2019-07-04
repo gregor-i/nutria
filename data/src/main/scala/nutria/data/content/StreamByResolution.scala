@@ -4,10 +4,10 @@ import nutria.core.{Dimensions, Point, Viewport}
 import nutria.data.syntax._
 
 object StreamByResolution {
-  def apply[A](view:Viewport, startResolution: Dimensions, steps: Int, function: Point => A): Stream[CachedContent[A]] = {
+  def apply[A](view: Viewport, startResolution: Dimensions, steps: Int, function: Point => A): Stream[CachedContent[A]] = {
     val initial = view.withDimensions(startResolution).withContent(function).cached
 
-    def next(prev: CachedContent[A]):CachedContent[A] = {
+    def next(prev: CachedContent[A]): CachedContent[A] = {
       val dim = prev.dimensions.scale(2)
       val trans = view.withDimensions(dim)
       new Content[A] {
@@ -20,7 +20,7 @@ object StreamByResolution {
       }.cached
     }
 
-    def stream(img:CachedContent[A]): Stream[CachedContent[A]] = img #:: stream(next(img))
+    def stream(img: CachedContent[A]): Stream[CachedContent[A]] = img #:: stream(next(img))
 
     stream(initial).take(steps)
   }

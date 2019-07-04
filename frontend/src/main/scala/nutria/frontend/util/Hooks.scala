@@ -7,7 +7,7 @@ import com.raquo.snabbdom.simple.{VNode => N, VNodeData => D}
 import scala.scalajs.js.UndefOr
 
 object Hooks {
-  def apply(f: NodeHooks[N, D] => Unit) : Modifier[N, D] =
+  def apply(f: NodeHooks[N, D] => Unit): Modifier[N, D] =
     node => f(hooks(node))
 
   def insertHook(f: NodeHooks[N, D]#NewNode => Any): Modifier[N, D] =

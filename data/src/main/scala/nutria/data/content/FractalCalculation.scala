@@ -5,7 +5,7 @@ import nutria.data.RGB
 
 trait FractalCalculation {
   type A
-  def content(p:Point): A
+  def content(p: Point): A
   def postprocessing(raw: Content[A]): Content[RGB]
 }
 

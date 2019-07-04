@@ -1,11 +1,6 @@
 package nutria.data.consumers
 
-import nutria.core.viewport.ViewportChooser._
-import nutria.data.consumers.SequenceChooser._
 import nutria.data.sequences.Mandelbrot
-import org.scalacheck.Prop.forAll
-import org.scalatest.prop.Checkers
-import org.scalatest.{FunSuite, Matchers}
 
 class MandelbrotSpec extends FunSuite with Matchers with Checkers {
 
@@ -47,7 +42,7 @@ class MandelbrotSpec extends FunSuite with Matchers with Checkers {
     })
   }
 
-  test("for all starting points outside of the escape radius, the sequence must end directly after c0"){
+  test("for all starting points outside of the escape radius, the sequence must end directly after c0") {
     check(forAll(chooseFromPointsOutsideOfTheEscapeRadius) {
       c0 =>
         val seq = sequence(c0)

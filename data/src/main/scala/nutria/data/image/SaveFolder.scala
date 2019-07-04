@@ -21,6 +21,6 @@ case class SaveFolder(path: String) {
 }
 
 
-object SaveFolder{
+object SaveFolder {
   val defaultSaveFolder: SaveFolder = SaveFolder("." + File.separator)
 }

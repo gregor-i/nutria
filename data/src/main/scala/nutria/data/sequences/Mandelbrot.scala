@@ -4,7 +4,7 @@ import nutria.core.Point
 import nutria.data.{DoubleSequence, MathUtils}
 
 object Mandelbrot extends MathUtils {
-  final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int, escapeOrbitSquared:Double) extends DoubleSequence {
+  final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int, escapeOrbitSquared: Double) extends DoubleSequence {
     private[this] var x, y = 0d
     private[this] var xx = x * x
     private[this] var yy = y * y
@@ -23,5 +23,5 @@ object Mandelbrot extends MathUtils {
     }
   }
 
-  def apply(maxIterations:Int, escapeOrbit:Double = 2):Point => Sequence = p => new Sequence(p._1, p._2, maxIterations, escapeOrbit*escapeOrbit)
+  def apply(maxIterations: Int, escapeOrbit: Double = 2): Point => Sequence = p => new Sequence(p._1, p._2, maxIterations, escapeOrbit * escapeOrbit)
 }

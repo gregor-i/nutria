@@ -9,11 +9,11 @@ object CountIterations extends MathUtils {
 
   def double() = apply() andThen (_.toDouble)
 
-  def smoothed() : DoubleSequence => Double =
+  def smoothed(): DoubleSequence => Double =
     seq => {
       val iterations = seq.size
       val state = seq.next
-      val smoothing = - Math.log(Math.log(Complex[Double](state._1, state._2).abs))/Math.log(2)
+      val smoothing = -Math.log(Math.log(Complex[Double](state._1, state._2).abs)) / Math.log(2)
       iterations + smoothing
     }
 }

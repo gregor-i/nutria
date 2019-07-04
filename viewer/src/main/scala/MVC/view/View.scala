@@ -1,33 +1,33 @@
 package MVC.view
 
-import java.awt.{Color, Frame, Graphics, MouseInfo}
+import java.awt.{Color, Frame, Graphics}
 
 import MVC.{Controller, Model}
 import javax.swing._
 import javax.swing.event.{MenuEvent, MenuListener}
-import nutria.data.content.FractalCalculation
+import nutria.core.viewport.Dimensions
 import nutria.data.Collection
 import nutria.data.consumers.NewtonColoring
-import nutria.data.syntax._
-import nutria.core.viewport.Dimensions
+import nutria.data.content.FractalCalculation
 import nutria.data.sequences.NewtonFractalByString
+import nutria.data.syntax._
 
 class View(val model: Model) extends JFrame {
   val imgPanel = new JPanel {
     override def paint(g: Graphics) = {
       g.drawImage(model.buffer, 0, 0, getWidth, getHeight, this)
 
-      model.sequence.foreach{ sequence =>
+      model.sequence.foreach { sequence =>
         val mouseInfo = getMousePosition()
-        if(mouseInfo != null){
+        if (mouseInfo != null) {
           val transform = model.viewport.withDimensions(Dimensions(getWidth, getHeight))
           val transformed = transform.transform(mouseInfo.x, mouseInfo.y)
           val path = sequence(transformed).map(transform.invert)
           g.setColor(Color.red)
           path.sliding(2)
-            .filter(_.length == 2).foreach{
-            case Seq((x1, y1), (x2, y2)) if (x2-x1).abs > 2*getWidth || (y2-y1).abs > 2*getHeight => ()
-            case Seq((x1, y1), (x2, y2))  =>
+            .filter(_.length == 2).foreach {
+            case Seq((x1, y1), (x2, y2)) if (x2 - x1).abs > 2 * getWidth || (y2 - y1).abs > 2 * getHeight => ()
+            case Seq((x1, y1), (x2, y2)) =>
               g.drawLine(x1.toInt, y1.toInt, x2.toInt, y2.toInt)
           }
         }

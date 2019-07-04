@@ -25,5 +25,5 @@ class JuliaSet(cx: Double, cy: Double) {
     }
   }
 
-  def apply(maxIterations:Int):Point => Sequence = p => new Sequence(p._1, p._2, maxIterations)
+  def apply(maxIterations: Int): Point => Sequence = p => new Sequence(p._1, p._2, maxIterations)
 }

@@ -15,11 +15,11 @@ object Collatz {
     def hasNext: Boolean = (c.imag.abs <= 2) && iterationsRemaining >= 0
 
     def next(): (Double, Double) = {
-      c = 0.25 * (2 + 7 * c - (Math.PI * c).cos * (2 +  5 * c))
+      c = 0.25 * (2 + 7 * c - (Math.PI * c).cos * (2 + 5 * c))
       iterationsRemaining -= 1
       c.asTuple
     }
   }
 
-  def apply(maxIterations:Int):Point => Sequence = p => new Sequence(p._1, p._2, maxIterations)
+  def apply(maxIterations: Int): Point => Sequence = p => new Sequence(p._1, p._2, maxIterations)
 }

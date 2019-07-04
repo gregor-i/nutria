@@ -3,22 +3,24 @@ package processorHelper
 import scala.concurrent.duration.{DurationLong, FiniteDuration}
 
 sealed trait Result
-case class Made(executionTime:FiniteDuration) extends Result
+case class Made(executionTime: FiniteDuration) extends Result
 case object Skipped extends Result
-case class RequirementFailed(e:IllegalArgumentException) extends Result
-case class UnexpectedException(e:Exception) extends Result
+case class RequirementFailed(e: IllegalArgumentException) extends Result
+case class UnexpectedException(e: Exception) extends Result
 
-trait Task{
+trait Task {
   def name: String
   def skipCondition: Boolean
   def execute(): Unit
 }
 
-trait NoSkip { _: Task =>
+trait NoSkip {
+  _: Task =>
   override def skipCondition = false
 }
 
-trait Skip { _: Task =>
+trait Skip {
+  _: Task =>
   override def skipCondition = true
 }
 
@@ -27,9 +29,9 @@ trait ProcessorHelper {
 
   def executeTask(task: Task): Result =
     try {
-      if(task.skipCondition){
+      if (task.skipCondition) {
         Skipped
-      }else {
+      } else {
         val startTime = System.currentTimeMillis()
         task.execute()
         val endTime = System.currentTimeMillis()
@@ -55,7 +57,7 @@ trait ProcessorHelper {
       println(s"RequirementFailed:   ${results.count(_.isInstanceOf[RequirementFailed])}")
       println(s"UnexpectedException: ${results.count(_.isInstanceOf[UnexpectedException])}")
 
-      for(exception <- results.collect{case UnexpectedException(exception) => exception}.toSet[Exception]) {
+      for (exception <- results.collect { case UnexpectedException(exception) => exception }.toSet[Exception]) {
         println(s"Unexpected Exception: ${exception.getMessage}")
         exception.printStackTrace()
       }

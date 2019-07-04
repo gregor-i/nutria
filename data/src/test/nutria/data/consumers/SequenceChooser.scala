@@ -1,8 +1,5 @@
 package nutria.data.consumers
 
-import nutria.core.viewport.ViewportChooser._
-import org.scalacheck.Gen._
-
 object SequenceChooser {
   val chooseFromPointsOutsideOfTheEscapeRadius = for {
     a <- chooseAngle

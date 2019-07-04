@@ -18,9 +18,9 @@ object MandelbrotCube extends MathUtils {
       y = ty
       x = tx
       iterationsRemaining -= 1
-      (x,y)
+      (x, y)
     }
   }
 
-  def apply(maxIterations:Int):Point => Sequence = p => new Sequence(p._1, p._2, maxIterations)
+  def apply(maxIterations: Int): Point => Sequence = p => new Sequence(p._1, p._2, maxIterations)
 }

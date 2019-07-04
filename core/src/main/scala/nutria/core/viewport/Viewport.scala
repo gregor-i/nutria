@@ -23,7 +23,7 @@ object Viewport {
     val Fdelta = FB - FA
     val angle = Math.acos(Fdelta.y / Fdelta.norm())
 
-    def rotAngle(p: Point): Point= {
+    def rotAngle(p: Point): Point = {
       val c = Math.cos(angle)
       val s = Math.sin(angle)
 
@@ -54,6 +54,7 @@ object Viewport {
 }
 
 case class Viewport(origin: Point, A: Point, B: Point) {
+
   import Viewport._
 
   def translate(t: Point): Viewport = Viewport(origin + t, A, B)

@@ -19,10 +19,10 @@ class NewtonFamily(name: String,
   }
 
   override def exampleCalculations: Seq[(String, FractalCalculation)] = Seq(
-    ("RoughColoring"            , FractalCalculation(newton(50) andThen wrappInTry(CountIterations.double(), Double.MaxValue) andThen LinearNormalized(0, 50) andThen Defaults.defaultColor)),
-    ("SmoothColoring"           , FractalCalculation(newton(50) andThen wrappInTry(CountIterations.smoothed(), Double.MaxValue) andThen LinearNormalized(0, 50) andThen Defaults.defaultColor)),
-    ("GaussianInteger"          , FractalCalculation(newton(50) andThen wrappInTry(Trap.GaussianIntegerTraps(), Double.MaxValue) andThen LinearNormalized(0, 50) andThen Defaults.defaultColor)),
-    ("NewtonColoring"           , FractalCalculation(newton(50) andThen NewtonColoring())),
-    ("NewtonColoring.smooth"    , FractalCalculation(newton(50) andThen NewtonColoring.smooth(newton)))
+    ("RoughColoring", FractalCalculation(newton(50) andThen wrappInTry(CountIterations.double(), Double.MaxValue) andThen LinearNormalized(0, 50) andThen Defaults.defaultColor)),
+    ("SmoothColoring", FractalCalculation(newton(50) andThen wrappInTry(CountIterations.smoothed(), Double.MaxValue) andThen LinearNormalized(0, 50) andThen Defaults.defaultColor)),
+    ("GaussianInteger", FractalCalculation(newton(50) andThen wrappInTry(Trap.GaussianIntegerTraps(), Double.MaxValue) andThen LinearNormalized(0, 50) andThen Defaults.defaultColor)),
+    ("NewtonColoring", FractalCalculation(newton(50) andThen NewtonColoring())),
+    ("NewtonColoring.smooth", FractalCalculation(newton(50) andThen NewtonColoring.smooth(newton)))
   )
 }

@@ -19,14 +19,14 @@ final case class Transform(view: Viewport, dimensions: Dimensions)
 
   @inline def transformX(x: Double, y: Double): Double = scaleX * x + shearX * y + translationX
   @inline def transformY(x: Double, y: Double): Double = shearY * x + scaleY * y + translationY
-  @inline def transform(x: Double, y: Double): (Double, Double) = (transformX(x, y), transformY(x,y))
-  @inline override def apply(x: Double, y: Double):Point = transform(x, y)
-  @inline override def apply(p:Point): Point = transform(p._1, p._2)
+  @inline def transform(x: Double, y: Double): (Double, Double) = (transformX(x, y), transformY(x, y))
+  @inline override def apply(x: Double, y: Double): Point = transform(x, y)
+  @inline override def apply(p: Point): Point = transform(p._1, p._2)
 
   @inline def invertX(x: Double, y: Double): Double =
     (scaleY * (x - translationX) - shearX * (y - translationY)) * factorInvert
   @inline def invertY(x: Double, y: Double): Double =
     (scaleX * (y - translationY) - shearY * (x - translationX)) * factorInvert
-  @inline def invert(x: Double, y: Double): Point = (invertX(x, y), invertY(x,y))
-  @inline def invert(p: Point): Point = (invertX(p._1, p._2), invertY(p._1,p._2))
+  @inline def invert(x: Double, y: Double): Point = (invertX(x, y), invertY(x, y))
+  @inline def invert(p: Point): Point = (invertX(p._1, p._2), invertY(p._1, p._2))
 }

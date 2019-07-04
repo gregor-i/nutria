@@ -11,7 +11,7 @@ trait SnabbdomHelper {
   def seq(s: Seq[Modifier[VNode, VNodeData]]): Modifier[VNode, VNodeData] = node => {
     s.foreach(_.apply(node))
   }
-  
+
   def seqNode(s: Seq[VNode]) = new IterableNode(s.map(snabbdom.nodeToChildNode))
 
   def cond[A](b: Boolean, node: => A): Option[A] = if (b) Some(node) else None

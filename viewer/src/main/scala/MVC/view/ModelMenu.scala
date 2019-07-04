@@ -1,8 +1,7 @@
 package MVC.view
 
-import javax.swing.JMenu
-
 import MVC.Model
+import javax.swing.JMenu
 
 class ModelMenu(f: => String, m: Model) extends JMenu(f) {
   m.addObserver(_ => this.setText(f))

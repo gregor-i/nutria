@@ -28,13 +28,14 @@ object Trap extends MathUtils {
     }
 
   def CircleTrap(cx: Double, cy: Double, cr: Double): DoubleSequence => Double = {
-      @inline def d(x: Double, y: Double) = (sqrt(q(x - cx) + q(y - cy)) - cr).abs
-      _.foldLeft(Double.MaxValue) {
-        (v, t) => v.min(d(t._1, t._2))
-      }
-    }
+    @inline def d(x: Double, y: Double) = (sqrt(q(x - cx) + q(y - cy)) - cr).abs
 
-  val CircleP2 : Mandelbrot.Sequence => Double = CircleTrap(-1, 0, 0.25)
+    _.foldLeft(Double.MaxValue) {
+      (v, t) => v.min(d(t._1, t._2))
+    }
+  }
+
+  val CircleP2: Mandelbrot.Sequence => Double = CircleTrap(-1, 0, 0.25)
 
   object GaussianIntegerTraps {
     @inline def distance(x: Double, y: Double): Double =

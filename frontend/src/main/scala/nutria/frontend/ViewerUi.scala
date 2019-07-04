@@ -7,9 +7,8 @@ import nutria.core.Point
 import nutria.core.viewport.Point._
 import nutria.frontend.shaderBuilder.FractalRenderer
 import nutria.frontend.util.{Hooks, SnabbdomHelper}
-import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
-import org.scalajs.dom.raw.{MouseEvent, WebGLRenderingContext}
+import org.scalajs.dom.raw.MouseEvent
 import org.scalajs.dom.{Element, PointerEvent, WheelEvent}
 
 import scala.scalajs.js

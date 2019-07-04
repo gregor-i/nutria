@@ -9,25 +9,25 @@ abstract class BinaryAccumulator(val _left: Accumulator, val _right: Accumulator
 }
 
 case class Norm(left: Accumulator, right: Accumulator) extends BinaryAccumulator(left, right) {
-  override def lastOperation(result: State, count:Int): Double = {
+  override def lastOperation(result: State, count: Int): Double = {
     val l = _left.lastOperation(result._1, count)
     val r = _right.lastOperation(result._2, count)
-    Math.sqrt(l*l + r*r)
+    Math.sqrt(l * l + r * r)
   }
 }
 
 case class Add(left: Accumulator, right: Accumulator) extends BinaryAccumulator(left, right) {
-  override def lastOperation(result: State, count:Int): Double = {
+  override def lastOperation(result: State, count: Int): Double = {
     val l = _left.lastOperation(result._1, count)
     val r = _right.lastOperation(result._2, count)
-    l+r
+    l + r
   }
 }
 
 case class Sub(left: Accumulator, right: Accumulator) extends BinaryAccumulator(left, right) {
-  override def lastOperation(result: State, count:Int): Double = {
+  override def lastOperation(result: State, count: Int): Double = {
     val l = _left.lastOperation(result._1, count)
     val r = _right.lastOperation(result._2, count)
-    l-r
+    l - r
   }
 }

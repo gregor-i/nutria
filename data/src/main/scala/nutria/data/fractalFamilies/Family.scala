@@ -15,9 +15,9 @@ class Family(val name: String,
 
 object Family {
   def exampleCalculations(f: Point => DoubleSequence) = Seq(
-    ("RoughColoring(50)"    , FractalCalculation(f andThen CountIterations.double() andThen LinearNormalized(0, 50) andThen Defaults.defaultColor)),
-    ("SmoothColoring(50)"   , FractalCalculation(f andThen CountIterations.smoothed() andThen LinearNormalized(0, 50) andThen Defaults.defaultColor)),
-    ("OrbitPoint(50, 0, 0)" , FractalCalculation(f andThen Trap.OrbitPoint(0, 0) andThen LinearNormalized(0, 50) andThen Defaults.defaultColor))
+    ("RoughColoring(50)", FractalCalculation(f andThen CountIterations.double() andThen LinearNormalized(0, 50) andThen Defaults.defaultColor)),
+    ("SmoothColoring(50)", FractalCalculation(f andThen CountIterations.smoothed() andThen LinearNormalized(0, 50) andThen Defaults.defaultColor)),
+    ("OrbitPoint(50, 0, 0)", FractalCalculation(f andThen Trap.OrbitPoint(0, 0) andThen LinearNormalized(0, 50) andThen Defaults.defaultColor))
   )
 }
 

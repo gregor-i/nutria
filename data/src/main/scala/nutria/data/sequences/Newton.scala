@@ -7,13 +7,13 @@ import spire.math.Complex
 
 trait Newton {
 
-  def c0(lambda:Complex[Double]): Complex[Double]
-  def f(c:Complex[Double], lambda:Complex[Double]):Complex[Double]
-  def f_der(c:Complex[Double], lambda:Complex[Double]):Complex[Double]
+  def c0(lambda: Complex[Double]): Complex[Double]
+  def f(c: Complex[Double], lambda: Complex[Double]): Complex[Double]
+  def f_der(c: Complex[Double], lambda: Complex[Double]): Complex[Double]
 
-  def iteration(c:Complex[Double], lambda:Complex[Double]):Complex[Double] = c - f(c, lambda) / f_der(c, lambda)
+  def iteration(c: Complex[Double], lambda: Complex[Double]): Complex[Double] = c - f(c, lambda) / f_der(c, lambda)
 
-  final class Sequence(x0: Double, y0: Double, val maxIterations: Int, val threshold:Double) extends DoubleSequence {
+  final class Sequence(x0: Double, y0: Double, val maxIterations: Int, val threshold: Double) extends DoubleSequence {
     val lambda = Complex(x0, y0)
     private[this] var c = c0(lambda)
     private[this] var lastC = c
@@ -31,7 +31,7 @@ trait Newton {
       (c.real, c.imag)
     }
 
-    def partOfLastIteration:Double = {
+    def partOfLastIteration: Double = {
       val logT = Math.log(threshold)
       val logD0 = Math.log(f(lastC, lambda).abs)
       val logD1 = Math.log(f(c, lambda).abs)
@@ -39,6 +39,6 @@ trait Newton {
     }
   }
 
-  def apply(maxIterations:Int, threshold:Double = 1e-8):Point => Sequence = p => new Sequence(p._1, p._2, maxIterations, threshold)
+  def apply(maxIterations: Int, threshold: Double = 1e-8): Point => Sequence = p => new Sequence(p._1, p._2, maxIterations, threshold)
 }
 
