@@ -1,4 +1,4 @@
-package nutria.core.accumulator
+package nutria.data.accumulator
 
 trait Accumulator {
   type State

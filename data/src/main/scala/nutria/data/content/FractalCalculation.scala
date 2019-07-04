@@ -1,6 +1,7 @@
-package nutria.core.content
+package nutria.data.content
 
-import nutria.core.{Point, RGB}
+import nutria.core.Point
+import nutria.data.RGB
 
 trait FractalCalculation {
   type A

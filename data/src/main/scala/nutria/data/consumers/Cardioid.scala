@@ -1,7 +1,7 @@
 package nutria.data.consumers
 
+import nutria.data.MathUtils
 import nutria.data.sequences.Mandelbrot
-import nutria.core.MathUtils
 
 import scala.annotation.tailrec
 

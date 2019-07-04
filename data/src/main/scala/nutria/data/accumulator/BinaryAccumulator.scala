@@ -1,4 +1,4 @@
-package nutria.core.accumulator
+package nutria.data.accumulator
 
 abstract class BinaryAccumulator(val _left: Accumulator, val _right: Accumulator) extends Accumulator {
   override type State = (_left.State, _right.State)

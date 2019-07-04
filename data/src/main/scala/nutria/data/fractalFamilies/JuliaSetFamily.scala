@@ -1,8 +1,8 @@
 package nutria.data.fractalFamilies
 
-import nutria.core.content.{FractalCalculation, LinearNormalized}
 import nutria.data.Defaults
 import nutria.data.consumers.CountIterations
+import nutria.data.content.{FractalCalculation, LinearNormalized}
 import nutria.data.sequences._
 
 class JuliaSetFamily(juliaSet: JuliaSet) extends Family(juliaSet.toString, juliaSet(1000)) {

@@ -1,4 +1,4 @@
-package nutria.core.content
+package nutria.data.content
 
 object HistogramNormalized {
   private def helper[A: Ordering](content: CachedContent[A]): Seq[Seq[Double]] = {

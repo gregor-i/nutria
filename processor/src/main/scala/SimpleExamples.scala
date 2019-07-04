@@ -1,11 +1,10 @@
-import DefaultSaveFolder.defaultSaveFolder
-import image.Image
-import nutria.core.content.LinearNormalized
-import nutria.core.syntax._
 import nutria.data.Defaults
 import nutria.data.colors.Wikipedia
 import nutria.data.consumers.CountIterations
+import nutria.data.content.LinearNormalized
+import nutria.data.image.Image
 import nutria.data.sequences.Mandelbrot
+import nutria.data.syntax._
 
 object SimpleExamples extends App with Defaults {
 

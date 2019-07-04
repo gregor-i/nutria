@@ -1,8 +1,8 @@
 package nutria.data.fractalFamilies
 
-import nutria.core.content.{FractalCalculation, LinearNormalized}
 import nutria.data.Defaults
 import nutria.data.consumers._
+import nutria.data.content.{FractalCalculation, LinearNormalized}
 import nutria.data.sequences.Newton
 
 import scala.util.control.NonFatal

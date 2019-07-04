@@ -1,7 +1,6 @@
 package nutria.frontend.shaderBuilder
 
-import mathParser.complex.ComplexLanguage
-import nutria.data._
+import nutria.core._
 
 object FractalProgramToWebGl {
   def apply(fractalProgram: FractalProgram): RefVec4 => String =

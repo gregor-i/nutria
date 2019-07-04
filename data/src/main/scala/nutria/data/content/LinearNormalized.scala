@@ -1,4 +1,4 @@
-package nutria.core.content
+package nutria.data.content
 
 object LinearNormalized {
   def apply(min:Double, max:Double): Double => Double =

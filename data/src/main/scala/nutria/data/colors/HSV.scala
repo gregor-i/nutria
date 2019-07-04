@@ -1,6 +1,6 @@
-package nutria.core.colors
+package nutria.data.colors
 
-import nutria.core.Color
+import nutria.data.Color
 
 trait HSV[A] extends Color[A] {
   def H(lambda: A): Double

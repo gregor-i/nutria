@@ -1,4 +1,4 @@
-package nutria.core.accumulator
+package nutria.data.accumulator
 
 case object Variance extends Accumulator {
   override type State = (Double, Double)

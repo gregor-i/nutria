@@ -30,27 +30,27 @@ class Controller(val view: View) extends KeyListener with MouseListener with Mou
     override def toString: String = descr
   }
   val keyCodePretty: Map[Int, String] = Map(
-    KeyEvent.VK_DOWN     -> "Down",
-    KeyEvent.VK_UP       -> "Up",
-    KeyEvent.VK_RIGHT    -> "Right",
-    KeyEvent.VK_LEFT     -> "Left",
-    KeyEvent.VK_ADD      -> "+",
+    KeyEvent.VK_DOWN -> "Down",
+    KeyEvent.VK_UP -> "Up",
+    KeyEvent.VK_RIGHT -> "Right",
+    KeyEvent.VK_LEFT -> "Left",
+    KeyEvent.VK_ADD -> "+",
     KeyEvent.VK_SUBTRACT -> "-",
-    KeyEvent.VK_ENTER    -> "Enter",
-    KeyEvent.VK_R        -> "R",
-    KeyEvent.VK_H        -> "H"
+    KeyEvent.VK_ENTER -> "Enter",
+    KeyEvent.VK_R -> "R",
+    KeyEvent.VK_H -> "H"
   ).withDefaultValue("Undefined")
 
   val keyMap: Map[Int, DocAction] = Map(
-    KeyEvent.VK_DOWN      -> new DocAction("Move viewport down", view.model.viewport = view.model.viewport.down()),
-    KeyEvent.VK_UP        -> new DocAction("Move viewport up", view.model.viewport = view.model.viewport.up()),
-    KeyEvent.VK_RIGHT     -> new DocAction("Move viewport right", view.model.viewport = view.model.viewport.right()),
-    KeyEvent.VK_LEFT      -> new DocAction("Move viewport left", view.model.viewport = view.model.viewport.left()),
-    KeyEvent.VK_ADD       -> new DocAction("Zoom in", view.model.viewport = view.model.viewport.zoomIn()),
-    KeyEvent.VK_SUBTRACT  -> new DocAction("Zoom out", view.model.viewport = view.model.viewport.zoomOut()),
-    KeyEvent.VK_ENTER     -> new DocAction("Print current position", println(view.model.viewport.toString)),
-    KeyEvent.VK_R         -> new DocAction("Reset viewport", view.model.viewport = MandelbrotFamily.initialViewport),
-    KeyEvent.VK_H         -> new DocAction("Display this help", println(keyMap map { case (keyCode, docu) => s"[${keyCodePretty(keyCode)}]\t $docu"} mkString "\n"))
+    KeyEvent.VK_DOWN -> new DocAction("Move viewport down", view.model.viewport = view.model.viewport.down()),
+    KeyEvent.VK_UP -> new DocAction("Move viewport up", view.model.viewport = view.model.viewport.up()),
+    KeyEvent.VK_RIGHT -> new DocAction("Move viewport right", view.model.viewport = view.model.viewport.right()),
+    KeyEvent.VK_LEFT -> new DocAction("Move viewport left", view.model.viewport = view.model.viewport.left()),
+    KeyEvent.VK_ADD -> new DocAction("Zoom in", view.model.viewport = view.model.viewport.zoomIn()),
+    KeyEvent.VK_SUBTRACT -> new DocAction("Zoom out", view.model.viewport = view.model.viewport.zoomOut()),
+    KeyEvent.VK_ENTER -> new DocAction("Print current position", println(view.model.viewport.toString)),
+    KeyEvent.VK_R -> new DocAction("Reset viewport", view.model.viewport = MandelbrotFamily.initialViewport),
+    KeyEvent.VK_H -> new DocAction("Display this help", println(keyMap map { case (keyCode, docu) => s"[${keyCodePretty(keyCode)}]\t $docu" } mkString "\n"))
   ).withDefaultValue(new DocAction("Undefined", ()))
 
   override def keyPressed(arg0: KeyEvent) = keyMap(arg0.getKeyCode).unsafePerformIO()

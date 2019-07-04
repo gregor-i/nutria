@@ -1,6 +1,7 @@
 package nutria.data.sequences
 
-import nutria.core.{DoubleSequence, Point}
+import nutria.core.Point
+import nutria.data.DoubleSequence
 
 class JuliaSet(cx: Double, cy: Double) {
 

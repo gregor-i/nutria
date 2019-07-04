@@ -1,13 +1,22 @@
 package nutria.data
 
-import nutria.core.{Color, Dimensions}
-import nutria.core.viewport.{Point, Viewport}
-import nutria.data.colors.Wikipedia
+import java.io.File
 
-trait Defaults extends DefaultColor with DefaultDimensions with DefaultViewport
+import nutria.core.Dimensions
+import nutria.data.image.SaveFolder
+
+trait Defaults
+  extends DefaultColor
+    with DefaultDimensions
+    with nutria.core.DefaultViewport
+    with DefaultSaveFolder
 
 trait DefaultColor {
-  val defaultColor : Color[Double] = Wikipedia
+  val defaultColor: Color[Double] = colors.Wikipedia
+}
+
+trait DefaultSaveFolder {
+  val defaultSaveFolder: SaveFolder = SaveFolder("." + File.separator)
 }
 
 trait DefaultDimensions {
@@ -16,10 +25,6 @@ trait DefaultDimensions {
   val lenovoX1 = new Dimensions(2560, 1440)
 
   val defaultDimensions: Dimensions = fullHD
-}
-
-trait DefaultViewport {
-  val defaultViewport: Viewport = Viewport(Point(-2.5, -1), Point(3.5, 0), Point(0, 2))
 }
 
 object Defaults extends Defaults

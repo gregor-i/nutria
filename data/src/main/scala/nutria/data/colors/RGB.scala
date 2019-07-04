@@ -1,4 +1,4 @@
-package nutria.core.colors
+package nutria.data.colors
 
 object RGB {
   val white = RGB(1, 1, 1)

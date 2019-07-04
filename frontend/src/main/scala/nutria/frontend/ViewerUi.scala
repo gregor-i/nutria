@@ -14,12 +14,10 @@ import org.scalajs.dom.{Element, PointerEvent, WheelEvent}
 
 import scala.scalajs.js
 
-
 object ViewerUi {
   def render(implicit state: ViewerState, update: ViewerState => Unit): VNode =
     tags.div(
-      renderCanvas,
-      renderControls
+      renderCanvas
     )
 
   def renderCanvas(implicit state: ViewerState, update: ViewerState => Unit): VNode =
@@ -85,49 +83,4 @@ object ViewerUi {
 
     startEvent +: wheelEvent +: inProgressEvents.getOrElse(Seq.empty)
   }
-
-  def renderControls(implicit state: ViewerState, update: ViewerState => Unit): VNode =
-    tags.div(
-//      tags.button("reset", events.onClick := (() => update(state.copy(fractalProgram = state.fractalProgram.copy(view = Defaults.defaultViewport))))),
-//      tags.button(s"more iterations (${state.fractalProgram.maxIterations})", events.onClick := (() => update(state.copy(maxIterations = state.maxIterations * 2)))),
-//      tags.button(s"less iterations (${state.fractalProgram.maxIterations})", events.onClick := (() => update(state.copy(maxIterations = state.maxIterations / 2)))),
-//      tags.button("toggle anit aliase", events.onClick := (() => update(state.copy(antiAliase = if (state.antiAliase == 2) 1 else 2)))),
-//      tags.select(
-//        tags.option("Mandelbrot"),
-//        tags.option("JuliaSet"),
-//        tags.option("Tricorn"),
-//        tags.option("Newton"),
-//        events.onChange := { event =>
-//          val value = event.target.asInstanceOf[HTMLSelectElement].value
-//          val newIteration = value match {
-//            case "Mandelbrot" => MandelbrotIteration
-//            case "JuliaSet" =>
-//              val view = state.view
-//              val center = view.origin + view.A * 0.5 + view.B * 0.5
-//              JuliaSetIteration(Complex(center._1, center._2))
-//            case "Tricorn" => TricornIteration
-//            case "Newton" => NewtonIteration("x*x*x - 1")
-//          }
-//          update(state.copy(iteration = newIteration, shaded = newIteration.isInstanceOf[DeriveableIteration] && state.shaded))
-//        }
-//      ),
-//      state.iteration match {
-//        case NewtonIteration(function) =>
-//          Some(tags.input(
-//            attrs.`type` := "text",
-//            attrs.value := function,
-//            events.onChange := {event =>
-//            val target = event.target.asInstanceOf[HTMLInputElement]
-//            Parser.lang.parse(target.value) match {
-//              case Some(_) =>
-//                target.setCustomValidity("")
-//                update(state.copy(iteration = NewtonIteration(target.value)))
-//              case None =>
-//                target.setCustomValidity("failed to parse")
-//            }
-//          }))
-//        case _ => None
-//      },
-//      tags.button("toggle shaded", attrs.disabled := !state.iteration.isInstanceOf[DeriveableIteration], events.onClick := (() => update(state.copy(shaded = !state.shaded)))),
-    )
 }

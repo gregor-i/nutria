@@ -1,9 +1,9 @@
 package nutria.data.fractalFamilies
 
-import nutria.core.content.{FractalCalculation, LinearNormalized}
 import nutria.core.viewport.Viewport
 import nutria.data.Defaults
 import nutria.data.consumers._
+import nutria.data.content.{FractalCalculation, LinearNormalized}
 import nutria.data.sequences.Mandelbrot
 
 object MandelbrotFamily extends Family("Mandelbrot", Mandelbrot(50, 4d)) {

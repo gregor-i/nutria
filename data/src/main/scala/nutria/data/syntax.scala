@@ -1,7 +1,8 @@
-package nutria.core
+package nutria.data
 
-import nutria.core.accumulator.{Accumulator, Arithmetic}
-import nutria.core.content._
+import nutria.core.{Dimensions, Point, Transform, Viewport}
+import nutria.data.accumulator.{Accumulator, Arithmetic}
+import nutria.data.content.{AntiAliasedFractalContent, FunctionContent, HistogramNormalized, LinearNormalized}
 
 object syntax {
   implicit class EnrichedViewport(val viewport: Viewport) extends AnyVal {

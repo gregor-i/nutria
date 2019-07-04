@@ -1,6 +1,6 @@
-package nutria.core.colors
+package nutria.data.colors
 
-import nutria.core.Color
+import nutria.data.Color
 
 object Invert {
   def apply(color: Color[Double]): Color[Double] = color match {

@@ -1,4 +1,3 @@
-import sbt.Keys.{libraryDependencies, _}
 import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
 version in ThisBuild := "0.0.1"
@@ -9,26 +8,28 @@ scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
 val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("core"))
+  .settings(mathParser, scalaTestAndScalaCheck, spire, circe)
 
-val data = crossProject(JSPlatform, JVMPlatform)
-  .crossType(CrossType.Pure)
-  .in(file("data"))
-  .dependsOn(core)
-  .settings(scalaTestAndScalaCheck, spire, mathParser, circe)
-  .dependsOn(core % "compile->compile;test->test")
-
-val processor = project.in(file("processor"))
+val data = project
+  .dependsOn(core.jvm)
   .settings(scalaTestAndScalaCheck)
-  .dependsOn(core.jvm, data.jvm)
+  .dependsOn(core.jvm % "compile->compile;test->test")
+
+val processor = project
+  .settings(scalaTestAndScalaCheck)
+  .dependsOn(data)
+
+val viewer = project
+  .dependsOn(data)
 
 val service = project.in(file("service"))
-  .dependsOn(data.jvm)
+  .dependsOn(core.jvm)
   .settings(scalaTestAndScalaCheck, circe)
   .enablePlugins(PlayScala)
   .settings(libraryDependencies += guice)
 
 val frontend = project.in(file("frontend"))
-  .dependsOn(core.js, data.js)
+  .dependsOn(core.js)
   .enablePlugins(ScalaJSPlugin)
   .settings(scalaJSUseMainModuleInitializer := true)
   .enablePlugins(ScalaJSBundlerPlugin)

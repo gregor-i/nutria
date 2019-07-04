@@ -1,11 +1,10 @@
-import DefaultSaveFolder.defaultSaveFolder
-import image.Image
-import nutria.core.accumulator.Variance
-import nutria.core.syntax._
 import nutria.data.Defaults
+import nutria.data.accumulator.Variance
 import nutria.data.colors.WhiteToBlack
 import nutria.data.consumers.CountIterations
+import nutria.data.image.Image
 import nutria.data.sequences.Mandelbrot
+import nutria.data.syntax._
 import processorHelper.ProcessorHelper
 
 object TimeEscapeVariance extends Defaults with ProcessorHelper {

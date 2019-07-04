@@ -1,7 +1,6 @@
-package nutria.core.content
+package nutria.data.content
 
-import nutria.core.accumulator.Accumulator
-import nutria.core.{Point, Transform}
+import nutria.data.accumulator.Accumulator
 
 case class AntiAliasedFractalContent(fractalContent: FunctionContent[Double], multi: Int, accu: Accumulator)
   extends Content[Double] {

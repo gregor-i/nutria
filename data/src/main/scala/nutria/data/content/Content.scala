@@ -1,4 +1,4 @@
-package nutria.core.content
+package nutria.data.content
 
 import nutria.core.Dimensions
 import nutria.core.viewport.HasDimensions

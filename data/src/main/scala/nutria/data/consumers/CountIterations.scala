@@ -1,6 +1,6 @@
 package nutria.data.consumers
 
-import nutria.core.{DoubleSequence, MathUtils}
+import nutria.data.{DoubleSequence, MathUtils}
 import spire.implicits._
 import spire.math.Complex
 

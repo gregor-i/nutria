@@ -3,7 +3,7 @@ package controller
 
 import io.circe.syntax._
 import javax.inject.Inject
-import nutria.data._
+import nutria.core._
 import play.api.mvc.InjectedController
 
 class FractalController @Inject()() extends InjectedController with CirceSupport {

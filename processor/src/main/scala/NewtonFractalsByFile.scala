@@ -1,10 +1,9 @@
-import DefaultSaveFolder.defaultSaveFolder
-import image.Image
-import nutria.core.syntax._
 import nutria.data.Defaults
 import nutria.data.consumers.NewtonColoring
 import nutria.data.fractalFamilies.MandelbrotFamily
+import nutria.data.image.Image
 import nutria.data.sequences.NewtonFractalByString
+import nutria.data.syntax._
 import processorHelper.ProcessorHelper
 import spire.math.Complex
 

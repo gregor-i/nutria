@@ -1,8 +1,7 @@
-package nutria.data
+package nutria.core
 
 import io.circe.generic.semiauto._
 import io.circe.{Decoder, Encoder}
-import nutria.core.Viewport
 
 sealed trait FractalProgram {
   def view: Viewport
@@ -10,7 +9,7 @@ sealed trait FractalProgram {
   def withViewport(viewport: Viewport): FractalProgram
 }
 
-case class Mandelbrot(view: Viewport = Defaults.defaultViewport,
+case class Mandelbrot(view: Viewport = DefaultViewport.defaultViewport,
                       antiAliase: Int = 2,
                       maxIterations: Int = 200,
                       escapeRadius: Double = 100,
@@ -18,7 +17,7 @@ case class Mandelbrot(view: Viewport = Defaults.defaultViewport,
   def withViewport(viewport: Viewport) = copy(view = viewport)
 }
 
-case class JuliaSet(view: Viewport = Defaults.defaultViewport,
+case class JuliaSet(view: Viewport = DefaultViewport.defaultViewport,
                     antiAliase: Int = 2,
                     maxIterations: Int = 200,
                     escapeRadius: Double = 100,
@@ -27,14 +26,14 @@ case class JuliaSet(view: Viewport = Defaults.defaultViewport,
   def withViewport(viewport: Viewport) = copy(view = viewport)
 }
 
-case class TricornIteration(view: Viewport = Defaults.defaultViewport,
+case class TricornIteration(view: Viewport = DefaultViewport.defaultViewport,
                             antiAliase: Int = 2,
                             maxIterations: Int = 200,
                             escapeRadius: Double = 100) extends FractalProgram{
   def withViewport(viewport: Viewport) = copy(view = viewport)
 }
 
-case class NewtonIteration(view: Viewport = Defaults.defaultViewport,
+case class NewtonIteration(view: Viewport = DefaultViewport.defaultViewport,
                            antiAliase: Int = 2,
                            maxIterations: Int = 200,
                            threshold: Double = 1e-6,

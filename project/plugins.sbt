@@ -1,5 +1,5 @@
 // cross
-addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject"      % "0.6.0")
+addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.6.0")
 
 // jvm
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.6.20")

@@ -1,27 +1,25 @@
-import DefaultSaveFolder.defaultSaveFolder
-import nutria.core.colors.Invert
-import nutria.core.content.LinearNormalized
-import image.{Image, SaveFolder}
-import nutria.core.syntax._
-import nutria.core.{Color, Viewport}
-import nutria.data.Defaults
-import nutria.data.colors.{MonoColor, Wikipedia}
+import nutria.core.Viewport
+import nutria.data.colors.{Invert, MonoColor, Wikipedia}
 import nutria.data.consumers.CardioidNumeric
+import nutria.data.content.LinearNormalized
 import nutria.data.fractalFamilies.MandelbrotFamily
+import nutria.data.image.{Image, SaveFolder}
 import nutria.data.sequences.Mandelbrot
+import nutria.data.syntax._
+import nutria.data.{Color, Defaults}
 import processorHelper.{ProcessorHelper, Task}
 
 object Cardioid extends ProcessorHelper with Defaults {
   override def statusPrints: Boolean = true
 
-    case class CardioidTask(view: Viewport, saveFolder: SaveFolder) extends Task {
+  case class CardioidTask(view: Viewport, saveFolder: SaveFolder) extends Task {
     override def name = s"CardioidTask($view)"
 
-      val colors = Seq(
-        "HSV.MonoColor.Blue" -> MonoColor.Blue,
-        "Invert(HSV.MonoColor.Blue)" -> Invert(MonoColor.Blue),
-        "Wikipedia" -> Wikipedia,
-        "Invert(Wikipedia)" -> Invert(Wikipedia))
+    val colors = Seq(
+      "HSV.MonoColor.Blue" -> MonoColor.Blue,
+      "Invert(HSV.MonoColor.Blue)" -> Invert(MonoColor.Blue),
+      "Wikipedia" -> Wikipedia,
+      "Invert(Wikipedia)" -> Invert(Wikipedia))
 
     override def skipCondition: Boolean = (saveFolder / view.toString /~ s"${colors.last._1}.png").exists()
 
@@ -30,12 +28,12 @@ object Cardioid extends ProcessorHelper with Defaults {
         .withDimensions(defaultDimensions)
         .withContent(Mandelbrot(2000) andThen CardioidNumeric(30) andThen LinearNormalized(0d, 0.1))
 
-      for((name, color) <- colors)
+      for ((name, color) <- colors)
         Image.save(content.map(color), saveFolder / view.toString /~ s"$name.png")
     }
   }
 
-  def extractColorName(color:Color[Double]):String = color.getClass.getName.split("\\.").last
+  def extractColorName(color: Color[Double]): String = color.getClass.getName.split("\\.").last
 
   def main(args: Array[String]): Unit = {
     val saveFolder: SaveFolder = defaultSaveFolder / "Cardioid"

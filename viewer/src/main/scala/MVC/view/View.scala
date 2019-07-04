@@ -5,10 +5,10 @@ import java.awt.{Color, Frame, Graphics, MouseInfo}
 import MVC.{Controller, Model}
 import javax.swing._
 import javax.swing.event.{MenuEvent, MenuListener}
-import nutria.core.content.FractalCalculation
+import nutria.data.content.FractalCalculation
 import nutria.data.Collection
 import nutria.data.consumers.NewtonColoring
-import nutria.core.syntax._
+import nutria.data.syntax._
 import nutria.core.viewport.Dimensions
 import nutria.data.sequences.NewtonFractalByString
 

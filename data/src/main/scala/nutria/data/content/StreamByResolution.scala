@@ -1,7 +1,7 @@
-package nutria.core
-package content
+package nutria.data.content
 
-import syntax._
+import nutria.core.{Dimensions, Point, Viewport}
+import nutria.data.syntax._
 
 object StreamByResolution {
   def apply[A](view:Viewport, startResolution: Dimensions, steps: Int, function: Point => A): Stream[CachedContent[A]] = {

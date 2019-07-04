@@ -1,9 +1,9 @@
 package nutria.data.fractalFamilies
 
-import nutria.core._
-import nutria.core.content.{FractalCalculation, LinearNormalized}
-import nutria.data.Defaults
+import nutria.core.{Point, Viewport}
 import nutria.data.consumers.{CountIterations, Trap}
+import nutria.data.content.{FractalCalculation, LinearNormalized}
+import nutria.data.{Defaults, DoubleSequence}
 
 class Family(val name: String,
              val exampleSequenceConstructor: Point => DoubleSequence) {

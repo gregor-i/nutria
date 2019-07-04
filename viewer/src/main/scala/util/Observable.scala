@@ -1,7 +1,7 @@
 package util
 
 trait Observable[A] {
-  _ : A =>
+  _: A =>
   var observer = Set[A => Unit]()
 
   def addObserver(op: A => Unit) = observer += op

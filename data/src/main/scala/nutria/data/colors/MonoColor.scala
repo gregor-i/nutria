@@ -1,7 +1,5 @@
 package nutria.data.colors
 
-import nutria.core.colors.HSV
-
 object MonoColor {
   abstract class HSVMonoColor(H: Double) extends HSV[Double] {
     def H(lambda: Double) = H

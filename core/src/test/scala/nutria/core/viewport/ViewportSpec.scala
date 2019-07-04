@@ -1,27 +1,11 @@
 package nutria.core.viewport
 
-import nutria.core.viewport.Point.PointOps
 import org.scalacheck.Gen.choose
 import org.scalacheck.Prop.forAll
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.{Assertion, FunSuite, Matchers}
 import org.scalatest.prop.Checkers
-import nutria.core.syntax._
 
 class ViewportSpec extends FunSuite with Matchers with Checkers {
-  //  def is = s2"""
-  //        A viewports describes a part of the complex plane.
-  //        The part is a parallelogram and the corners are:
-  //          Origin
-  //          Origin + A
-  //          Origin + A + B
-  //          Origin + B
-  //
-  //        The Viewports can be moved and zoomed:
-  //          move has invers operations $moveHasInversOperations
-  //          zoom has invers operations $zoomHasInversOperations
-  //          focused to a point         $focused
-  //      """
-
   def beClose(left: Viewport, right: Viewport): Assertion = {
     left.origin._1 shouldBe (right.origin._1 +- 0.01)
     left.origin._2 shouldBe (right.origin._2 +- 0.01)

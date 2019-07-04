@@ -1,6 +1,7 @@
 package nutria.data.sequences
 
-import nutria.core.{DoubleSequence, MathUtils, Point}
+import nutria.core.Point
+import nutria.data.{DoubleSequence, MathUtils}
 
 object MandelbrotCube extends MathUtils {
 

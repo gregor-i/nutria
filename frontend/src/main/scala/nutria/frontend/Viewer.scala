@@ -4,7 +4,7 @@ package frontend
 import com.raquo.snabbdom.simple.VNode
 import io.circe.parser
 import io.circe.syntax._
-import nutria.data.{FractalProgram, Mandelbrot}
+import nutria.core.{FractalProgram, Mandelbrot}
 import nutria.frontend.util.SnabbdomApp
 import org.scalajs.dom
 import org.scalajs.dom.Element

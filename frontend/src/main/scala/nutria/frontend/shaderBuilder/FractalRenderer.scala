@@ -1,6 +1,6 @@
 package nutria.frontend.shaderBuilder
 
-import nutria.data.FractalProgram
+import nutria.core.FractalProgram
 import nutria.frontend.util.Untyped
 import org.scalajs.dom
 import org.scalajs.dom.CanvasRenderingContext2D

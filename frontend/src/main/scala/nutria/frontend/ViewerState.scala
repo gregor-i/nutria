@@ -1,6 +1,6 @@
 package nutria.frontend
 
-import nutria.data.FractalProgram
+import nutria.core.FractalProgram
 
 case class ViewerState(fractalProgram: FractalProgram,
                        dragStartPosition: Option[(Double, Double)] = None)

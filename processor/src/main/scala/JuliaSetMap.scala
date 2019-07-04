@@ -1,14 +1,13 @@
-import DefaultSaveFolder.defaultSaveFolder
-import nutria.core.colors.Invert
-import nutria.core.content.{Content, LinearNormalized}
-import image.Image
-import nutria.core.syntax._
 import nutria.core.viewport.{Dimensions, Viewport}
 import nutria.data.Defaults
-import nutria.data.colors.MonoColor
+import nutria.data.colors.{Invert, MonoColor}
 import nutria.data.consumers.CountIterations
+import nutria.data.content.{Content, LinearNormalized}
+import nutria.data.image.{Image, SaveFolder}
 import nutria.data.sequences.JuliaSet
+import nutria.data.syntax._
 import processorHelper.{ProcessorHelper, Task}
+
 object JuliaSetMap extends ProcessorHelper with Defaults {
   val saveFolder: SaveFolder = defaultSaveFolder / "JuliaSetMap"
 
@@ -27,7 +26,7 @@ object JuliaSetMap extends ProcessorHelper with Defaults {
 
     val patchDimensions = defaultDimensions.scale(0.1)
 
-    def content(cx: Double, cy: Double):Content[Double] = {
+    def content(cx: Double, cy: Double): Content[Double] = {
       view
         .withDimensions(patchDimensions)
         .withContent(new JuliaSet(cx, cy)(5000) andThen CountIterations.smoothed())
@@ -39,9 +38,9 @@ object JuliaSetMap extends ProcessorHelper with Defaults {
         j <- -10 to 10
         x = 0.1 * i
         y = 0.1 * j
-      } yield (i+10, j+10) -> content(x, y)).toMap
+      } yield (i + 10, j + 10) -> content(x, y)).toMap
 
-      val combined = new Content[Double]{
+      val combined = new Content[Double] {
         override val dimensions: Dimensions = patchDimensions.scale(21)
 
         override def apply(x: Int, y: Int): Double = {
@@ -76,14 +75,14 @@ object JuliaSetMap extends ProcessorHelper with Defaults {
   }
 
   def main(args: Array[String]): Unit = {
-//    executeAllTasks(
-//      for {
-//        i <- -10 to 10
-//        j <- -10 to 10
-//        x = 0.1 * i
-//        y = 0.1 * j
-//      } yield JuliaSetTask(x, y)
-//    )
+    //    executeAllTasks(
+    //      for {
+    //        i <- -10 to 10
+    //        j <- -10 to 10
+    //        x = 0.1 * i
+    //        y = 0.1 * j
+    //      } yield JuliaSetTask(x, y)
+    //    )
 
     executeAllTasks(Seq(JuliaSetMapTask))
   }

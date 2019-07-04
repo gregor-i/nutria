@@ -3,7 +3,7 @@ package nutria.data.consumers
 import java.lang.Math.sqrt
 
 import nutria.data.sequences.Mandelbrot
-import nutria.core.{DoubleSequence, MathUtils}
+import nutria.data.{DoubleSequence, MathUtils}
 
 object Trap extends MathUtils {
 

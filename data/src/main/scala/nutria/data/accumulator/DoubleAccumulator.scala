@@ -1,4 +1,4 @@
-package nutria.core.accumulator
+package nutria.data.accumulator
 
 case object Arithmetic extends Accumulator {
   override type State = Double

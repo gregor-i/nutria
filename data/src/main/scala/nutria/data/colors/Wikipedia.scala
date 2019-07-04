@@ -1,7 +1,6 @@
 package nutria.data.colors
 
-import nutria.core.Color
-import nutria.core.colors.RGB
+import nutria.data.Color
 
 object Wikipedia extends Color[Double] {
   val values = List(

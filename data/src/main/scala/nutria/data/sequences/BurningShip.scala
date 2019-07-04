@@ -1,6 +1,7 @@
 package nutria.data.sequences
 
-import nutria.core.{DoubleSequence, Point}
+import nutria.core.Point
+import nutria.data.DoubleSequence
 
 object BurningShip{
   final class Sequence(x0: Double, y0: Double, private var iterationsRemaining: Int) extends DoubleSequence {

@@ -1,8 +1,8 @@
 package nutria.data.consumers
 
+import nutria.data.colors.{HSV, RGB}
 import nutria.data.sequences.Newton
-import nutria.core.{Color, DoubleSequence}
-import nutria.core.colors.{HSV, RGB}
+import nutria.data.{Color, DoubleSequence}
 import spire.implicits._
 import spire.math.Complex
 

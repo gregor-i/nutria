@@ -1,4 +1,4 @@
-package nutria.data
+package nutria.core
 
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.{Decoder, Encoder}

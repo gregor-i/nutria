@@ -14,7 +14,7 @@ class AccessFilter @Inject()(implicit val mat: Materializer, ex: ExecutionContex
     val startTime = System.currentTimeMillis()
     f(rh).map { resp =>
       val endTime = System.currentTimeMillis()
-      Logger.info(s"${rh.method} to ${rh.path} returned ${resp.header.status}. ${endTime-startTime}ms.")
+      Logger.info(s"${rh.method} to ${rh.path} returned ${resp.header.status}. ${endTime - startTime}ms.")
       resp
     }
   }

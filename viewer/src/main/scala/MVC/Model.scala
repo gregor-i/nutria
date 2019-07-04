@@ -3,9 +3,9 @@ package MVC
 import java.awt.image.BufferedImage
 
 import nutria.core._
-import nutria.core.content.{FractalCalculation, StreamByResolution}
-import image.{Image, SaveFolder}
-import nutria.core.syntax._
+import nutria.data.content.{FractalCalculation, StreamByResolution}
+import nutria.data.image.SaveFolder
+import nutria.data.{DoubleSequence, Image}
 import util.Observable
 
 @SerialVersionUID(1L)

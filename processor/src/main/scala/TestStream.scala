@@ -1,14 +1,13 @@
-import DefaultSaveFolder.defaultSaveFolder
-import image.Image
 import nutria.core.Dimensions
-import nutria.core.content.{LinearNormalized, StreamByResolution}
+import nutria.data.Defaults
 import nutria.data.colors.Wikipedia
 import nutria.data.consumers.CountIterations
+import nutria.data.content.{LinearNormalized, StreamByResolution}
 import nutria.data.fractalFamilies.MandelbrotFamily
+import nutria.data.image.Image
 import nutria.data.sequences.Mandelbrot
 
-
-object TestStream extends App {
+object TestStream extends App with Defaults {
   def fractal = Mandelbrot(500, 2) andThen
     CountIterations.smoothed() andThen
     LinearNormalized(0, 500) andThen

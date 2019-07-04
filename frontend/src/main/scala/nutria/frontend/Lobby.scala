@@ -4,7 +4,7 @@ package frontend
 import com.raquo.snabbdom.simple.implicits._
 import com.raquo.snabbdom.simple.{VNode, attrs, styles, tags}
 import io.circe.{Decoder, parser}
-import nutria.data.{FractalEntity, FractalProgram}
+import nutria.core.{FractalEntity, FractalProgram}
 import nutria.frontend.shaderBuilder.FractalRenderer
 import nutria.frontend.util.{Hooks, SnabbdomApp, SnabbdomHelper}
 import org.scalajs.dom.ext.Ajax
