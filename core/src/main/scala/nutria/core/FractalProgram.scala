@@ -2,6 +2,9 @@ package nutria.core
 
 import io.circe.generic.semiauto._
 import io.circe.{Decoder, Encoder}
+import monocle.Prism
+import monocle.macros.GenPrism
+
 
 sealed trait FractalProgram {
   def view: Viewport
@@ -9,6 +12,8 @@ sealed trait FractalProgram {
   def withViewport(viewport: Viewport): FractalProgram
 }
 
+
+@monocle.macros.Lenses()
 case class Mandelbrot(view: Viewport = DefaultViewport.defaultViewport,
                       antiAliase: Int = 2,
                       maxIterations: Int = 200,
@@ -17,15 +22,17 @@ case class Mandelbrot(view: Viewport = DefaultViewport.defaultViewport,
   def withViewport(viewport: Viewport) = copy(view = viewport)
 }
 
+@monocle.macros.Lenses()
 case class JuliaSet(view: Viewport = DefaultViewport.defaultViewport,
                     antiAliase: Int = 2,
                     maxIterations: Int = 200,
                     escapeRadius: Double = 100,
-                    c: (Double, Double),
+                    c: (Double, Double) = (-0.6, 0.6),
                     shaded: Boolean = true) extends FractalProgram {
   def withViewport(viewport: Viewport) = copy(view = viewport)
 }
 
+@monocle.macros.Lenses()
 case class TricornIteration(view: Viewport = DefaultViewport.defaultViewport,
                             antiAliase: Int = 2,
                             maxIterations: Int = 200,
@@ -33,12 +40,13 @@ case class TricornIteration(view: Viewport = DefaultViewport.defaultViewport,
   def withViewport(viewport: Viewport) = copy(view = viewport)
 }
 
+@monocle.macros.Lenses()
 case class NewtonIteration(view: Viewport = DefaultViewport.defaultViewport,
                            antiAliase: Int = 2,
                            maxIterations: Int = 200,
                            threshold: Double = 1e-6,
-                           function: String,
-                           initial: String
+                           function: String = "x*x*x - 1",
+                           initial: String = "lambda"
                           ) extends FractalProgram {
   def withViewport(viewport: Viewport) = copy(view = viewport)
 }
@@ -55,8 +63,9 @@ object NewtonIteration {
   }
 }
 
-
 object FractalProgram {
+  val newtonIteration: Prism[FractalProgram, NewtonIteration] = GenPrism[FractalProgram, NewtonIteration]
+
   implicit val encodeViewport: Encoder[Viewport] = deriveEncoder
   implicit val decodeViewport: Decoder[Viewport] = deriveDecoder
 

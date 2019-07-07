@@ -8,7 +8,7 @@ scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
 val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("core"))
-  .settings(mathParser, scalaTestAndScalaCheck, spire, circe)
+  .settings(mathParser, scalaTestAndScalaCheck, spire, circe, monocle)
 
 val data = project
   .dependsOn(core.jvm)
@@ -80,3 +80,13 @@ def circe =
     "io.circe" %%% "circe-generic-extras" % "0.10.0",
     "io.circe" %%% "circe-parser" % "0.10.0",
   )
+
+def monocle = Seq(
+  libraryDependencies ++= Seq(
+    "com.github.julien-truffaut" %%% "monocle-core" % "1.5.0",
+    "com.github.julien-truffaut" %%% "monocle-macro" % "1.5.0",
+    "com.github.julien-truffaut" %%% "monocle-unsafe" % "1.5.0",
+    "com.github.julien-truffaut" %%% "monocle-state" % "1.5.0",
+  ),
+  addCompilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full)
+)

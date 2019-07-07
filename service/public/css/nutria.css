@@ -1,6 +1,17 @@
+/* gloabal */
 body{
     margin: 0px;
     padding: 0px;
+}
+
+a{
+    color: #3273dc;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+a:hover{
+    color: #363636;
 }
 
 /* navbar */
@@ -25,32 +36,38 @@ body{
     margin : 0px 8px;
 }
 
-
+/* lobby-tile-list */
 .lobby-tile-list{
     display : flex;
     flex-wrap : wrap;
     margin: 8px;
 }
 
-.lobby-tile-list > div {
+.lobby-tile-list > article {
     flex-grow : 1;
     box-shadow : rgba(0, 0, 0, 0.32) 8px 8px 8px 0px;
     margin : 8px;
+    background : white;
 }
 
 
-.lobby-tile-list > div > a > canvas {
+.lobby-tile-list > article > a > canvas {
     width : 100%;
     display : block;
 }
 
-.lobby-tile-list > div > footer {
+.lobby-tile-list > article > form {
+    padding : 1.5rem;
+    border: 1px solid #dbdbdb;
+}
+
+.lobby-tile-list > article > footer {
     align-items : stretch;
     display : flex;
     border-top : 1px solid #dbdbdb;
 }
 
-.lobby-tile-list > div > footer > a {
+.lobby-tile-list > article > footer > a {
     align-items : center;
     display : flex;
     flex-basis : 0;
@@ -62,22 +79,28 @@ body{
 }
 
 
-.lobby-tile-list > div > footer > a:not(:last-child) {
+.lobby-tile-list > article > footer > a:not(:last-child) {
     border-right : 0px solid #dbdbdb;
 }
 
-.lobby-tile-list > div.dummy-tile {
+.lobby-tile-list > .dummy-tile {
     height: 0px;
     margin : 0px 8px;
     border : 0px;
 }
 
-a{
-    color: #3273dc;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-a:hover{
-    color: #363636;
+.modal{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    position: fixed;
+    z-index: 40;
+    background-color: rgba(10,10,10,.86);
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
 }
