@@ -69,6 +69,33 @@ object Form {
       )
     )
 
+  def tupleDoubleInput[S](label: String, lens: Lens[S, (Double, Double)])
+                         (implicit state: S, update: S => Unit) =
+    inputStyle(label,
+      tags.div(
+        tags.input(
+          attrs.className := "input",
+          attrs.`type` := "number",
+          attrs.value := lens.get(state)._1.toString,
+          events.onChange := {
+            event =>
+              val value = event.target.asInstanceOf[HTMLInputElement].value.toDouble
+              update(lens.modify(t => (value, t._2))(state))
+          }
+        ),
+        tags.input(
+          attrs.className := "input",
+          attrs.`type` := "number",
+          attrs.value := lens.get(state)._2.toString,
+          events.onChange := {
+            event =>
+              val value = event.target.asInstanceOf[HTMLInputElement].value.toDouble
+              update(lens.modify(t => (t._1, value))(state))
+          }
+        )
+      )
+    )
+
   def selectInput(label: String, options: Seq[String], value: String, onChange: String => Unit) =
     inputStyle(label,
       tags.div(
@@ -79,4 +106,6 @@ object Form {
         )
       )
     )
+
+
 }

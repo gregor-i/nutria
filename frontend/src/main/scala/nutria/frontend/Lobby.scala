@@ -176,6 +176,9 @@ object LobbyUi extends SnabbdomHelper {
               Form.intInput("max iterations", lensFractal composeLens NewtonIteration.maxIterations),
               Form.intInput("anti aliase", lensFractal composeLens NewtonIteration.antiAliase),
               Form.doubleInput("threshold", lensFractal composeLens NewtonIteration.threshold),
+              Form.doubleInput("brightness factor", lensFractal composeLens NewtonIteration.brightnessFactor),
+              Form.tupleDoubleInput("center", lensFractal composeLens NewtonIteration.center),
+              Form.doubleInput("overshoot", lensFractal composeLens NewtonIteration.overshoot),
             )
           case _ => Seq.empty
         }),

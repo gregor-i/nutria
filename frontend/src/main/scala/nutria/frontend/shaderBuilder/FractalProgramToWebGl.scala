@@ -137,7 +137,7 @@ object FractalProgramToWebGl {
        |    ${WebGlType.assign(fzlast, RefExp(fz))}
        |    ${WebGlType.assign(fz, PureStringExpression(NewtonLang.toWebGlCode(node, functionLangNames)))}
        |    ${WebGlType.declare(fderz, PureStringExpression(NewtonLang.toWebGlCode(derived, functionLangNames)))}
-       |    ${z.name} -= complex_divide(${fz.name}, ${fderz.name});
+       |    ${z.name} -= ${FloatLiteral(n.overshoot.toFloat).toCode} * complex_divide(${fz.name}, ${fderz.name});
        |    if(length(${fz.name}) < ${FloatLiteral(n.threshold.toFloat).toCode})
        |      break;
        |    l ++;
@@ -150,8 +150,8 @@ object FractalProgramToWebGl {
        |    fract = float(l) - log(${n.threshold} / length(${fz.name})) / log( length(${fzlast.name}) / length(${fz.name}));
        |  }
        |
-       |  float H = atan(z.x, z.y) / float(${2 * Math.PI}) + 0.5;
-       |  float S = exp(-fract / 25.0);
+       |  float H = atan(z.x - ${FloatLiteral(n.center._1.toFloat).toCode}, z.y - ${FloatLiteral(n.center._2.toFloat).toCode}) / float(${2 * Math.PI}) + 0.5;
+       |  float S = exp(-fract / ${FloatLiteral(n.brightnessFactor.toFloat).toCode});
        |  float V = S;
        |
        |  ${outputVar.name} = vec4(hsv2rgb(vec3(H, S, V)), 1.0);
