@@ -1,6 +1,8 @@
 package nutria.frontend.shaderBuilder
 
+import mathParser.implicits._
 import nutria.core._
+import nutria.core.newton.{Lambda, X, XAndLambda}
 
 object FractalProgramToWebGl {
   def apply(fractalProgram: FractalProgram): RefVec4 => String =
@@ -110,7 +112,7 @@ object FractalProgramToWebGl {
 
   def newtonIteration(n: NewtonIteration)(inputVar: RefVec2, outputVar: RefVec4): String = {
     val node = NewtonLang.functionLang.optimize(NewtonLang.functionLang.parse(n.function).getOrElse(throw new Exception(n.function)))
-    val derived = NewtonLang.functionLang.optimize(NewtonLang.functionLang.derive(node)('x))
+    val derived = NewtonLang.functionLang.optimize(NewtonLang.functionLang.derive(node)(X))
 
     val inital = NewtonLang.initialLang.optimize(NewtonLang.initialLang.parse(n.initial).getOrElse(throw new Exception(n.initial)))
 
@@ -119,13 +121,13 @@ object FractalProgramToWebGl {
     val fz = RefVec2("fz")
     val fderz = RefVec2("fderz")
 
-    val functionLangNames: PartialFunction[Symbol, String] = {
-      case 'x => "z"
-      case 'lambda => "p"
+    val functionLangNames: PartialFunction[XAndLambda, String] = {
+      case X => "z"
+      case Lambda => "p"
     }
 
-    val initialLangNames: PartialFunction[Symbol, String] = {
-      case 'lambda => "p"
+    val initialLangNames: PartialFunction[Lambda.type, String] = {
+      case Lambda => "p"
     }
 
     s"""{

@@ -70,7 +70,7 @@ def scalaTestAndScalaCheck =
 
 def mathParser = Seq(
   resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
-  libraryDependencies += "com.github.gregor-i" %%% "math-parser" % "1.3"
+  libraryDependencies += "com.github.gregor-i" %%% "math-parser" % "1.4"
 )
 
 def circe =
