@@ -33,6 +33,7 @@ class FractalController @Inject()() extends InjectedController with CirceSupport
     newton("x*x*x + 1/x - 1", "lambda"),
     newton("(x * x + lambda - 1) * x - lambda", "0"),
     newton("exp(x)-i", "lambda"),
+    newton("(x * x + sin(lambda) - 1) * x - lambda", "0"),
     newtonMandelbrotPolynomial(2),
     newtonMandelbrotPolynomial(3),
     newtonMandelbrotPolynomial(4),

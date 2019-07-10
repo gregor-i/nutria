@@ -3,6 +3,11 @@ package nutria.frontend.shaderBuilder
 object GlobalDefintions {
   val definitions =
     """
+      |// why is this necessary?
+      |#define sinh(x) 0.5*(exp(x)-(exp(-x)))
+      |#define cosh(x) 0.5*(exp(x)+(exp(-x)))
+      |
+      |
       |//Define complex operations
       |#define complex_product(a, b) vec2(a.x*b.x-a.y*b.y, a.x*b.y+a.y*b.x)
       |#define complex_conjugate(a) vec2(a.x,-a.y)
