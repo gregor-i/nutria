@@ -153,8 +153,8 @@ object FractalProgramToWebGl {
        |  }
        |
        |  float H = atan(z.x - ${FloatLiteral(n.center._1.toFloat).toCode}, z.y - ${FloatLiteral(n.center._2.toFloat).toCode}) / float(${2 * Math.PI}) + 0.5;
-       |  float S = exp(-fract / ${FloatLiteral(n.brightnessFactor.toFloat).toCode});
-       |  float V = S;
+       |  float V = exp(-fract / ${FloatLiteral(n.brightnessFactor.toFloat).toCode});
+       |  float S = length(z);
        |
        |  ${outputVar.name} = vec4(hsv2rgb(vec3(H, S, V)), 1.0);
        |}

@@ -1,7 +1,7 @@
 
 import nutria.core.viewport.Dimensions
 import nutria.data.accumulator.Arithmetic
-import nutria.data.colors.RGB
+import nutria.data.colors.RGBA
 import nutria.data.consumers.CountIterations
 import nutria.data.image.Image
 import nutria.data.sequences.Mandelbrot
@@ -10,7 +10,7 @@ import nutria.data.{Color, Defaults}
 
 object WebAssets extends App with Defaults {
   val color = new Color[Double] {
-    override def apply(v1: Double): RGB = RGB.interpolate(RGB(238d, 238d, 238d), RGB.black, v1)
+    override def apply(v1: Double): RGBA = RGBA.black.copy(A = v1)
   }
 
   Image.verboseSave(

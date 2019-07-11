@@ -1,15 +1,20 @@
 package nutria.data.image
 
-import java.awt.image.BufferedImage
+import java.awt.image.{BufferedImage, DataBufferInt}
 import java.io.File
 
 object Image {
   def buffer(image: nutria.data.Image): BufferedImage = {
-    val b = new BufferedImage(image.width, image.height, BufferedImage.TYPE_INT_RGB)
+    val b = new BufferedImage(image.width, image.height, BufferedImage.TYPE_INT_ARGB)
+    val data = b.getRaster.getDataBuffer.asInstanceOf[DataBufferInt]
     for {
       w <- 0 until image.width
       h <- 0 until image.height
-    } b.setRGB(w, h, image(w, h).hex)
+    } {
+      val color = image(w, h)
+      val hex: Int = (color.A * 255).toInt << 24 | color.R.toInt << 16 | color.G.toInt << 8 | color.B.toInt
+      data.setElem(w + h * image.width, hex)
+    }
     b
   }
 

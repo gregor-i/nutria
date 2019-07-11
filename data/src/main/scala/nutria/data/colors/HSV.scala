@@ -7,7 +7,7 @@ trait HSV[A] extends Color[A] {
   def S(lambda: A): Double
   def V(lambda: A): Double
 
-  def apply(lambda: A): RGB = HSV.HSV2RGB(H(lambda), S(lambda), V(lambda))
+  def apply(lambda: A): RGBA = HSV.HSV2RGB(H(lambda), S(lambda), V(lambda))
 }
 
 object HSV {
@@ -17,7 +17,7 @@ object HSV {
     else
       min
 
-  def HSV2RGB(_H: Double, _S: Double, _V: Double): RGB = {
+  def HSV2RGB(_H: Double, _S: Double, _V: Double): RGBA = {
     val H = clamp(_H, 0, 360)
     val S = clamp(_S, 0, 1)
     val V = clamp(_V, 0, 1)
@@ -29,12 +29,12 @@ object HSV {
     val t = V * (1 - S * (1 - f))
 
     h % 6 match {
-      case 0 => RGB(V * 255, t * 255, p * 255)
-      case 1 => RGB(q * 255, V * 255, p * 255)
-      case 2 => RGB(p * 255, V * 255, t * 255)
-      case 3 => RGB(p * 255, q * 255, V * 255)
-      case 4 => RGB(t * 255, p * 255, V * 255)
-      case 5 => RGB(V * 255, p * 255, q * 255)
+      case 0 => RGBA(V * 255, t * 255, p * 255)
+      case 1 => RGBA(q * 255, V * 255, p * 255)
+      case 2 => RGBA(p * 255, V * 255, t * 255)
+      case 3 => RGBA(p * 255, q * 255, V * 255)
+      case 4 => RGBA(t * 255, p * 255, V * 255)
+      case 5 => RGBA(V * 255, p * 255, q * 255)
     }
   }
 }

@@ -4,12 +4,12 @@ import nutria.data.Color
 
 object Wikipedia extends Color[Double] {
   val values = List(
-    0.0 -> RGB(0, 7, 100),
-    0.16 -> RGB(32, 107, 203),
-    0.42 -> RGB(237, 255, 255),
-    0.6425 -> RGB(255, 170, 0),
-    0.8575 -> RGB(0, 2, 0),
-    1.0 -> RGB(0, 7, 100)
+    0.0 -> RGBA(0, 7, 100),
+    0.16 -> RGBA(32, 107, 203),
+    0.42 -> RGBA(237, 255, 255),
+    0.6425 -> RGBA(255, 170, 0),
+    0.8575 -> RGBA(0, 2, 0),
+    1.0 -> RGBA(0, 7, 100)
   )
 
   @inline private def clamp(x: Double, min: Double, max: Double): Double =
@@ -18,7 +18,7 @@ object Wikipedia extends Color[Double] {
     else
       min
 
-  override def apply(_key: Double): RGB = {
+  override def apply(_key: Double): RGBA = {
     val key = clamp(_key, 0d, 1d)
     if (key == 0.0)
       values.head._2
@@ -35,7 +35,7 @@ object Wikipedia extends Color[Double] {
       assert(keyLeft <= key)
       assert(keyRight >= key)
 
-      RGB.interpolate(colorLeft, colorRight, (keyLeft - key) / (keyLeft - keyRight))
+      RGBA.interpolate(colorLeft, colorRight, (keyLeft - key) / (keyLeft - keyRight))
     }
   }
 }

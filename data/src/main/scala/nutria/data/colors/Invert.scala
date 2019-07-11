@@ -10,5 +10,5 @@ object Invert {
 }
 
 case class Invert(color: Color[Double]) extends Color[Double] {
-  override def apply(d: Double): RGB = color(1 - d)
+  override def apply(d: Double): RGBA = color(1 - d)
 }

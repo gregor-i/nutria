@@ -1,6 +1,6 @@
 package nutria.data.consumers
 
-import nutria.data.colors.{HSV, RGB}
+import nutria.data.colors.{HSV, RGBA}
 import nutria.data.sequences.Newton
 import nutria.data.{Color, DoubleSequence}
 import spire.implicits._
@@ -9,7 +9,7 @@ import spire.math.Complex
 import scala.util.control.NonFatal
 
 object NewtonColoring {
-  def apply(): DoubleSequence => RGB =
+  def apply(): DoubleSequence => RGBA =
     seq => try {
       val i = seq.size
       val (x, y) = seq.next()
@@ -21,10 +21,10 @@ object NewtonColoring {
 
       HSV.HSV2RGB(H, S, V)
     } catch {
-      case NonFatal(_) => RGB.white
+      case NonFatal(_) => RGBA.white
     }
 
-  def smooth(newton: Newton): newton.Sequence => RGB =
+  def smooth(newton: Newton): newton.Sequence => RGBA =
     NewtonIteration(newton) andThen NewtonIteration.colorTheResult((0, 0))
 }
 
@@ -64,8 +64,8 @@ object NewtonIteration {
     }
 
   def colorTheResult(origin: (Double, Double)): Color[NewtonResult] = {
-    case FailedByException => RGB.black
-    case NotConverged => RGB.black
+    case FailedByException => RGBA.black
+    case NotConverged => RGBA.black
     case ConvergedToRoot(iterations, root) =>
       val angle = Math.atan2(root._1 - origin._1, root._2 - origin._2)
       val H = (angle / Math.PI * 180 + 360) % 360
