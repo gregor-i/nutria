@@ -1,5 +1,5 @@
 
-import nutria.core.viewport.Dimensions
+import nutria.core.viewport.{Dimensions, Viewport}
 import nutria.data.accumulator.Arithmetic
 import nutria.data.colors.RGBA
 import nutria.data.consumers.CountIterations
@@ -13,14 +13,20 @@ object WebAssets extends App with Defaults {
     override def apply(v1: Double): RGBA = RGBA.black.copy(A = v1)
   }
 
-  Image.verboseSave(
-    defaultViewport
-      .cover(57, 32)
-      .withDimensions(Dimensions(57, 32).scale(4))
-      .withContent(Mandelbrot(350, 100d) andThen CountIterations.double())
-      .multisampled(Arithmetic, 4)
-      .cached
-      .linearNormalized
-      .withColor(color),
-    defaultSaveFolder / "service" / "public" / "img" /~ "icon.png")
+  val viewport = Viewport(
+    origin = (-1.59,-1.05),
+    A = (0.0,2.1),
+    B = (2.1,0.0)
+  )
+
+  val img = viewport
+    .withDimensions(Dimensions(64, 64).scale(4))
+    .withContent(Mandelbrot(350, 100d) andThen CountIterations.double())
+    .multisampled(Arithmetic, 4)
+    .cached
+    .linearNormalized
+    .withColor(color)
+    .cached
+
+  Image.verboseSave(img, defaultSaveFolder / "service" / "public" / "img" /~ "icon.png")
 }

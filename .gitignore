@@ -1,6 +1,5 @@
 *.class
 *.log
-*.png
 
 # sbt specific
 .cache
@@ -18,9 +17,5 @@ project/plugins/project/
 .worksheet
 .idea
 *.iml
-
-# Emacs
-.ensime*
-*~
 
 service/public/js/*.js

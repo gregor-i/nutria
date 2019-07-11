@@ -4,7 +4,7 @@
 GET           /                              controller.UiController.index
 GET           /viewer                        controller.UiController.index
 GET           /api/fractals                  controller.FractalController.savedFractals()
-GET           /favicon.png                   controller.UiController.asset(path = "favicon.png", folder = "/public")
+GET           /favicon.ico                   controller.UiController.asset(path = "icon.png", folder = "/public/img")
 GET           /img/*path                     controller.UiController.asset(path: String, folder = "/public/img")
 GET           /js/*path                      controller.UiController.asset(path: String, folder = "/public/js")
 GET           /css/*path                     controller.UiController.asset(path: String, folder = "/public/css")
