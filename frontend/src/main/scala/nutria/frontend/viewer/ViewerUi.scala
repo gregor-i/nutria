@@ -1,10 +1,11 @@
-package nutria.frontend
+package nutria.frontend.viewer
 
 import com.raquo.snabbdom.Modifier
 import com.raquo.snabbdom.simple._
 import com.raquo.snabbdom.simple.implicits._
 import nutria.core.Point
 import nutria.core.viewport.Point._
+import nutria.frontend.{LenseUtils, common}
 import nutria.frontend.shaderBuilder.FractalRenderer
 import nutria.frontend.util.{Hooks, SnabbdomHelper}
 import org.scalajs.dom.html.Canvas
@@ -16,8 +17,30 @@ import scala.scalajs.js
 object ViewerUi {
   def render(implicit state: ViewerState, update: ViewerState => Unit): VNode =
     tags.div(
-      renderCanvas
+      common.Header("Nutria Fractal Explorer"),
+      renderCanvas,
+      tags.a("edit",
+        styles.background := "white",
+        events.onClick := (() => update(state.copy(edit = Some(state.fractalEntity))))
+      ),
+      renderPopup()
     )
+
+  def renderPopup()
+                 (implicit state: ViewerState, update: ViewerState => Unit): Option[VNode] =
+    state.edit.map { fractal =>
+      tags.div(
+        attrs.className := "modal is-active",
+        tags.div(
+          attrs.className := "modal-background",
+          events.onClick := (() => update(state.copy(edit = None))),
+        ),
+        tags.div(
+          attrs.className := "modal-content lobby-tile-list",
+          common.RenderEditFractalEntity(fractal, LenseUtils.lookedUp(fractal, ViewerState.editOptional.asSetter))
+        )
+      )
+    }
 
   def renderCanvas(implicit state: ViewerState, update: ViewerState => Unit): VNode =
     tags.canvas(
@@ -29,14 +52,12 @@ object ViewerUi {
       styles.height := "100vh",
       styles.zIndex := "-1",
       styles.overflow := "hidden",
-      Hooks.insertHook { vnode => FractalRenderer.render(vnode.elm.get.asInstanceOf[Canvas], state.fractalProgram, true) },
-      Hooks.postPatchHook { (_, newNode) => FractalRenderer.render(newNode.elm.get.asInstanceOf[Canvas], state.fractalProgram, true) },
+      Hooks.insertHook { vnode => FractalRenderer.render(vnode.elm.get.asInstanceOf[Canvas], state.fractalEntity.program, true) },
+      Hooks.postPatchHook { (_, newNode) => FractalRenderer.render(newNode.elm.get.asInstanceOf[Canvas], state.fractalEntity.program, true) },
       SnabbdomHelper.seq(canvasMouseEvents)
     )
 
   private def canvasMouseEvents(implicit state: ViewerState, update: ViewerState => Unit): Seq[Modifier[VNode, VNodeData]] = {
-    val eventToPoint: PointerEvent => Point = event => (event.pageX, event.pageY)
-
     val startEvent =
       events.build[MouseEvent]("pointerdown") := { event =>
         update(state.copy(dragStartPosition = Some((event.pageX, event.pageY))))
@@ -44,16 +65,15 @@ object ViewerUi {
 
     def endEvent(startPosition: Point): PointerEvent => Unit = { event =>
       val boundingBox = event.target.asInstanceOf[Element].getBoundingClientRect()
-      val translateA = state.fractalProgram.view.A * ((-event.pageX + startPosition._1) / boundingBox.width)
-      val translateB = state.fractalProgram.view.B * ((event.pageY - startPosition._2) / boundingBox.height)
-      val newView = state.fractalProgram.view.translate(translateA + translateB)
+      val translateA = state.fractalEntity.program.view.A * ((-event.pageX + startPosition._1) / boundingBox.width)
+      val translateB = state.fractalEntity.program.view.B * ((event.pageY - startPosition._2) / boundingBox.height)
+      val newView = state.fractalEntity.program.view.translate(translateA + translateB)
       event.target.asInstanceOf[js.Dynamic].style.left = "0px"
       event.target.asInstanceOf[js.Dynamic].style.top = "0px"
-      update(state.copy(dragStartPosition = None, fractalProgram = state.fractalProgram.withViewport(newView)))
+      update(ViewerState.viewport.set(newView)(state).copy(dragStartPosition = None))
     }
 
     def moveEvent(startPosition: Point): PointerEvent => Unit = { event =>
-      val boundingBox = event.target.asInstanceOf[Element].getBoundingClientRect()
       val left = event.pageX - startPosition._1
       val top = event.pageY - startPosition._2
       event.target.asInstanceOf[js.Dynamic].style.left = s"${left}px"
@@ -74,10 +94,13 @@ object ViewerUi {
       val x = (event.clientX - boundingBox.left) / boundingBox.width
       val y = 1 - (event.clientY - boundingBox.top) / boundingBox.height
       val steps = event.asInstanceOf[WheelEvent].deltaY
-      val newView = state.fractalProgram.view
-        .contain(boundingBox.width, boundingBox.height)
-        .zoomSteps((x, y), if (steps > 0) -1 else 1)
-      update(state.copy(fractalProgram = state.fractalProgram.withViewport(newView)))
+
+      update(
+        ViewerState.viewport.modify {
+          _.contain(boundingBox.width, boundingBox.height)
+            .zoomSteps((x, y), if (steps > 0) -1 else 1)
+        }(state)
+      )
     }
 
     startEvent +: wheelEvent +: inProgressEvents.getOrElse(Seq.empty)

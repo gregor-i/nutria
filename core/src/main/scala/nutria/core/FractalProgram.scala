@@ -2,7 +2,7 @@ package nutria.core
 
 import io.circe.generic.semiauto._
 import io.circe.{Decoder, Encoder}
-import monocle.Prism
+import monocle.{Lens, Prism}
 import monocle.macros.GenPrism
 
 
@@ -36,7 +36,7 @@ case class JuliaSet(view: Viewport = DefaultViewport.defaultViewport,
 case class TricornIteration(view: Viewport = DefaultViewport.defaultViewport,
                             antiAliase: Int = 2,
                             maxIterations: Int = 200,
-                            escapeRadius: Double = 100) extends FractalProgram {
+                            escapeRadius: Double = 100) /*extends FractalProgram*/ {
   def withViewport(viewport: Viewport) = copy(view = viewport)
 }
 
@@ -67,7 +67,11 @@ object NewtonIteration {
 }
 
 object FractalProgram {
+  val viewport: Lens[FractalProgram, Viewport] = Lens[FractalProgram, Viewport](_.view)(view => _.withViewport(view))
+
   val newtonIteration: Prism[FractalProgram, NewtonIteration] = GenPrism[FractalProgram, NewtonIteration]
+  val mandelbrot: Prism[FractalProgram, Mandelbrot] = GenPrism[FractalProgram, Mandelbrot]
+  val juliaSet: Prism[FractalProgram, JuliaSet] = GenPrism[FractalProgram, JuliaSet]
 
   implicit val encodeViewport: Encoder[Viewport] = deriveEncoder
   implicit val decodeViewport: Decoder[Viewport] = deriveDecoder

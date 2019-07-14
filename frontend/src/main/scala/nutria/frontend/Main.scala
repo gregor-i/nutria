@@ -1,5 +1,7 @@
 package nutria.frontend
 
+import nutria.frontend.library.Library
+import nutria.frontend.viewer.Viewer
 import org.scalajs.dom
 import org.scalajs.dom.{Element, Event}
 
@@ -10,7 +12,7 @@ object Main {
     new Viewer(container)
 
   def gotoLobby() =
-    new Lobby(container)
+    new Library(container)
 
 
   def main(args: Array[String]): Unit = {
