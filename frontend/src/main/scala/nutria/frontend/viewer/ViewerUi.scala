@@ -5,9 +5,9 @@ import com.raquo.snabbdom.simple._
 import com.raquo.snabbdom.simple.implicits._
 import nutria.core.Point
 import nutria.core.viewport.Point._
-import nutria.frontend.{LenseUtils, common}
 import nutria.frontend.shaderBuilder.FractalRenderer
 import nutria.frontend.util.{Hooks, SnabbdomHelper}
+import nutria.frontend.{LenseUtils, common}
 import org.scalajs.dom.html.Canvas
 import org.scalajs.dom.raw.MouseEvent
 import org.scalajs.dom.{Element, PointerEvent, WheelEvent}
@@ -44,14 +44,7 @@ object ViewerUi {
 
   def renderCanvas(implicit state: ViewerState, update: ViewerState => Unit): VNode =
     tags.canvas(
-      styles.build[String]("object-fit", "object-fit") := "cover",
-      styles.position := "fixed",
-      styles.left := "0",
-      styles.top := "0",
-      styles.width := "100vw",
-      styles.height := "100vh",
-      styles.zIndex := "-1",
-      styles.overflow := "hidden",
+      attrs.className := "full-size",
       Hooks.insertHook { vnode => FractalRenderer.render(vnode.elm.get.asInstanceOf[Canvas], state.fractalEntity.program, true) },
       Hooks.postPatchHook { (_, newNode) => FractalRenderer.render(newNode.elm.get.asInstanceOf[Canvas], state.fractalEntity.program, true) },
       SnabbdomHelper.seq(canvasMouseEvents)

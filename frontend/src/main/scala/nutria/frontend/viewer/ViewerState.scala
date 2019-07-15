@@ -1,7 +1,7 @@
 package nutria.frontend.viewer
 
-import monocle.{Lens, Optional}
 import monocle.macros.GenLens
+import monocle.{Lens, Optional}
 import nutria.core.{FractalEntity, FractalProgram}
 
 case class ViewerState(fractalEntity: FractalEntity,

@@ -22,7 +22,4 @@ object GlobalDefintions {
       |#define complex_log(a) vec2(length(a), atan(a.x, a.y))
       |
     """.stripMargin
-
-
-  import spire.math.Complex
 }

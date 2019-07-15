@@ -7,29 +7,35 @@ import org.scalajs.dom.CanvasRenderingContext2D
 import org.scalajs.dom.html.Canvas
 import org.scalajs.dom.raw.WebGLRenderingContext
 
+import scala.scalajs.js
 import scala.scalajs.js.typedarray.Float32Array
 
 object FractalRenderer {
 
   def render(canvas: Canvas, state: FractalProgram, resize: Boolean): Unit = {
-    if (Untyped(dom.window).WebGLRenderingContext != null) {
-      if (resize) {
-        canvas.width = (canvas.clientWidth * dom.window.devicePixelRatio).toInt
-        canvas.height = (canvas.clientHeight * dom.window.devicePixelRatio).toInt
+    if(Untyped(canvas).state != Untyped(state.asInstanceOf[js.Object])) {
+      if (Untyped(dom.window).WebGLRenderingContext != null) {
+        if (resize) {
+          canvas.width = (canvas.clientWidth * dom.window.devicePixelRatio).toInt
+          canvas.height = (canvas.clientHeight * dom.window.devicePixelRatio).toInt
+        }
+        val ctx = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
+        render(ctx, state)
+        Untyped(canvas).state = state.asInstanceOf[js.Object]
+      } else {
+        if (resize) {
+          canvas.width = canvas.clientWidth
+          canvas.height = canvas.clientHeight
+        }
+        val ctx = canvas.getContext("2d").asInstanceOf[CanvasRenderingContext2D]
+        ctx.font = "30px Arial"
+        ctx.textAlign = "center"
+        ctx.textBaseline = "middle"
+        ctx.fillStyle = "red"
+        ctx.fillText("WebGl is not supported", canvas.width / 2, canvas.height / 2)
       }
-      val ctx = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
-      render(ctx, state)
-    } else {
-      if (resize) {
-        canvas.width = canvas.clientWidth
-        canvas.height = canvas.clientHeight
-      }
-      val ctx = canvas.getContext("2d").asInstanceOf[CanvasRenderingContext2D]
-      ctx.font = "30px Arial"
-      ctx.textAlign = "center"
-      ctx.textBaseline = "middle"
-      ctx.fillStyle = "red"
-      ctx.fillText("WebGl is not supported", canvas.width / 2, canvas.height / 2)
+    }else{
+      dom.console.log("state unchanged, skipping render")
     }
   }
 

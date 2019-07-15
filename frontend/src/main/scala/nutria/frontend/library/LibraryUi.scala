@@ -3,8 +3,7 @@ package nutria.frontend.library
 import com.raquo.snabbdom.simple._
 import com.raquo.snabbdom.simple.implicits._
 import nutria.core._
-import nutria.frontend.LenseUtils
-import nutria.frontend.common
+import nutria.frontend.{LenseUtils, common}
 import nutria.frontend.shaderBuilder.FractalRenderer
 import nutria.frontend.util.{Hooks, SnabbdomHelper}
 import nutria.frontend.viewer.Viewer

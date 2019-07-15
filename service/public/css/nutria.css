@@ -104,3 +104,13 @@ a:hover{
     right: 0;
     top: 0;
 }
+
+
+.full-size{
+    object-fit : cover;
+    position : fixed;
+    width : 100vw;
+    height : 100vh;
+    overflow : hidden;
+    z-index: -1;
+}
