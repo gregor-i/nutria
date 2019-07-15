@@ -26,7 +26,17 @@ val service = project.in(file("service"))
   .dependsOn(core.jvm)
   .settings(scalaTestAndScalaCheck, circe)
   .enablePlugins(PlayScala)
-  .settings(libraryDependencies += guice)
+  .settings(
+    libraryDependencies += guice,
+    libraryDependencies += "com.dripower" %% "play-circe" % "2610.0",
+    libraryDependencies += "org.postgresql" % "postgresql" % "42.2.5",
+    libraryDependencies += evolutions,
+    libraryDependencies += jdbc,
+    libraryDependencies += "org.playframework.anorm" %% "anorm" % "2.6.2",
+    libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
+  )
+  .enablePlugins(EmbeddedPostgresPlugin)
+  .settings(javaOptions += s"-DDATABASE_URL=${postgresConnectionString.value}")
 
 val frontend = project.in(file("frontend"))
   .dependsOn(core.js)

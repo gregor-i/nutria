@@ -1,62 +1,25 @@
 package controller
 
+import java.util.UUID
 
 import io.circe.syntax._
 import javax.inject.Inject
 import nutria.core._
+import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
+import repo.{FractalRepo, FractalRow}
 
-class FractalController @Inject()() extends InjectedController with CirceSupport {
-  val fractals = Vector[FractalEntity](
-    FractalEntity(
-      program = Mandelbrot(shaded = false),
-      description = "the famous mandelbrot with escape time",
-      reference = Some("https://en.wikipedia.org/wiki/Mandelbrot_set#Escape_time_algorithm")
-    ),
-    FractalEntity(
-      program = Mandelbrot(),
-      description = "the famous mandelbrot with Normal map effect",
-      reference = Some("https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set#Normal_map_effect")
-    ),
-    FractalEntity(
-      program = JuliaSet(c = (-0.6, 0.6), shaded = false),
-      description = "",
-      reference = None
-    ),
-    FractalEntity(
-      program = JuliaSet(c = (-0.6, 0.6)),
-      description = "",
-      reference = None
-    ),
-    newton("x*x*x - 1", "lambda"),
-    newton("x*x*x -x - 1", "lambda"),
-    newton("x*x*x + 1/x - 1", "lambda"),
-    newton("(x * x + lambda - 1) * x - lambda", "0"),
-    newton("exp(x)-i", "lambda"),
-    newton("(x * x + sin(lambda) - 1) * x - lambda", "0"),
-    newtonMandelbrotPolynomial(2),
-    newtonMandelbrotPolynomial(3),
-    newtonMandelbrotPolynomial(4),
-    newtonMandelbrotPolynomial(5),
-  )
-
-  private def newton(f: String, x0: String) =
-    FractalEntity(
-      program = NewtonIteration(function = f, initial = x0),
-      description = s"newton iteration with f(x) = $f, x0 = $x0",
-      reference = None
-    )
-
-  private def newtonMandelbrotPolynomial(n: Int) = {
-    val p = NewtonIteration.mandelbrotPolynomial(n)
-    FractalEntity(
-      program = p,
-      description = s"newton iteration over madelbrot polynomial($n) with f(x) = ${p.function}, x0 = ${p.initial}",
-      reference = None
-    )
+class FractalController @Inject()(repo: FractalRepo) extends InjectedController with Circe {
+  def listFractals() = Action {
+    val fractals = FractalEntity.systemFractals ++ repo.list().flatMap(_.maybeFractal)
+    Ok(fractals.asJson)
   }
 
-  def savedFractals() = Action(
-    Ok(fractals.asJson)
-  )
+  def postFractal() = Action(circe.tolerantJson[FractalEntity]) { request =>
+    repo.save(FractalRow(
+      id = UUID.randomUUID().toString,
+      maybeFractal = Some( request.body)
+    ))
+    Created
+  }
 }
