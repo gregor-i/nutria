@@ -5,6 +5,8 @@ POST          /api/fractals                  controller.FractalController.postFr
 #Frontend
 GET           /                              controller.UiController.index
 GET           /viewer                        controller.UiController.index
+
+#Assets
 GET           /favicon.ico                   controller.UiController.asset(path = "icon.png", folder = "/public/img")
 GET           /img/*path                     controller.UiController.asset(path: String, folder = "/public/img")
 GET           /js/*path                      controller.UiController.asset(path: String, folder = "/public/js")

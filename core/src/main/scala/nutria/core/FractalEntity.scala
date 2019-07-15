@@ -37,7 +37,6 @@ object FractalEntity {
     newton("(x * x + lambda - 1) * x - lambda", "0"),
     newton("exp(x)-i", "lambda"),
     newton("(x * x + sin(lambda) - 1) * x - lambda", "0"),
-    newtonMandelbrotPolynomial(2),
     newtonMandelbrotPolynomial(3),
     newtonMandelbrotPolynomial(4),
     newtonMandelbrotPolynomial(5),
@@ -46,7 +45,7 @@ object FractalEntity {
   private def newton(f: String, x0: String) =
     FractalEntity(
       program = NewtonIteration(function = f, initial = x0),
-      description = s"newton iteration with f(x) = $f, x0 = $x0",
+      description = "",
       reference = None
     )
 

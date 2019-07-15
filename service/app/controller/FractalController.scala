@@ -20,6 +20,7 @@ class FractalController @Inject()(repo: FractalRepo) extends InjectedController 
       id = UUID.randomUUID().toString,
       maybeFractal = Some( request.body)
     ))
-    Created
+    val fractals = FractalEntity.systemFractals ++ repo.list().flatMap(_.maybeFractal)
+    Ok(fractals.asJson)
   }
 }

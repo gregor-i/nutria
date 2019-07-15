@@ -35,10 +35,7 @@ object ViewerUi {
           attrs.className := "modal-background",
           events.onClick := (() => update(state.copy(edit = None))),
         ),
-        tags.div(
-          attrs.className := "modal-content lobby-tile-list",
-          common.RenderEditFractalEntity(fractal, LenseUtils.lookedUp(fractal, ViewerState.editOptional.asSetter))
-        )
+        common.RenderEditFractalEntity(fractal, LenseUtils.lookedUp(fractal, ViewerState.editOptional.asSetter), Seq.empty)
       )
     }
 

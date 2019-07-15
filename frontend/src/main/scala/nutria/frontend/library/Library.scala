@@ -1,6 +1,7 @@
 package nutria.frontend.library
 
 import com.raquo.snabbdom.simple._
+import nutria.frontend.NutriaService
 import nutria.frontend.util.SnabbdomApp
 import org.scalajs.dom.Element
 
@@ -15,6 +16,6 @@ class Library(container: Element) extends SnabbdomApp {
     node = patch(node, LibraryUi.render(state, renderState))
   }
 
-  LibraryService.loadFractals()
+  NutriaService.loadFractals()
     .foreach(fractals => renderState(LibraryState(fractals)))
 }

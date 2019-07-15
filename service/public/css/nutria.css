@@ -51,7 +51,7 @@ a:hover{
 }
 
 
-.lobby-tile-list > article > a > canvas {
+.lobby-tile-list > article canvas {
     width : 100%;
     display : block;
 }
@@ -89,23 +89,6 @@ a:hover{
     border : 0px;
 }
 
-.modal{
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    overflow: hidden;
-    position: fixed;
-    z-index: 40;
-    background-color: rgba(10,10,10,.86);
-    bottom: 0;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-
-
 .full-size{
     object-fit : cover;
     position : fixed;
@@ -113,4 +96,9 @@ a:hover{
     height : 100vh;
     overflow : hidden;
     z-index: -1;
+}
+
+canvas{
+    background: url("/img/canvas-fallback.svg") no-repeat center;
+    background-size: contain;
 }
