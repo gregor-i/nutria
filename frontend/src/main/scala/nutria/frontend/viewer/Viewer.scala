@@ -3,7 +3,7 @@ package nutria.frontend.viewer
 import com.raquo.snabbdom.simple.VNode
 import io.circe.parser
 import io.circe.syntax._
-import nutria.core.{FractalEntity, Mandelbrot}
+import nutria.core.{DivergingSeries, FractalEntity}
 import nutria.frontend.util.SnabbdomApp
 import org.scalajs.dom
 import org.scalajs.dom.Element
@@ -22,9 +22,7 @@ class Viewer(container: Element) extends SnabbdomApp {
 
   def initialProgram = Viewer.queryDecoded(dom.window.location.search.stripPrefix("?").stripPrefix("state="))
     .getOrElse(FractalEntity(
-      description = "",
-      reference = None,
-      Mandelbrot()
+      program = DivergingSeries.mandelbrot
     ))
 
   renderState(ViewerState(fractalEntity = initialProgram))

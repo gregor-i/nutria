@@ -51,17 +51,15 @@ object RenderEditFractalEntity {
       Form.selectInput(
         label = "Fractal Type",
         options = Vector(
-          "Mandelbrot",
-          "JuliaSet",
-          //            "TricornIteration",
-          "NewtonIteration"
+          "NewtonIteration",
+          "DivergingSeries",
+          "DerivedDivergingSeries"
         ),
         value = fractal.program.getClass.getSimpleName,
         onChange = {
-          case "Mandelbrot" => update((lens composeLens FractalEntity.program).set(Mandelbrot())(state))
-          case "JuliaSet" => update((lens composeLens FractalEntity.program).set(JuliaSet())(state))
-          //            case "TricornIteration" => update((lensEdit composeLens FractalEntity.program).set(TricornIteration())(state))
           case "NewtonIteration" => update((lens composeLens FractalEntity.program).set(NewtonIteration())(state))
+          case "DivergingSeries" => update((lens composeLens FractalEntity.program).set(DivergingSeries.mandelbrot)(state))
+          case "DerivedDivergingSeries" => update((lens composeLens FractalEntity.program).set(DerivedDivergingSeries.mandelbrot)(state))
         }
       ),
 
@@ -78,22 +76,27 @@ object RenderEditFractalEntity {
             Form.tupleDoubleInput("center", lensFractal composeLens NewtonIteration.center),
             Form.doubleInput("overshoot", lensFractal composeLens NewtonIteration.overshoot),
           )
-        case f: Mandelbrot =>
-          val lensFractal = lens composeLens FractalEntity.program composeLens LenseUtils.lookedUp(f, FractalProgram.mandelbrot.asSetter)
+        case f: DerivedDivergingSeries =>
+          val lensFractal = lens composeLens FractalEntity.program composeLens LenseUtils.lookedUp(f, FractalProgram.derivedDivergingSeries.asSetter)
           Seq(
-            Form.intInput("max iterations", lensFractal composeLens Mandelbrot.maxIterations),
-            Form.intInput("anti aliase", lensFractal composeLens Mandelbrot.antiAliase),
-            Form.doubleInput("escape radius", lensFractal composeLens Mandelbrot.escapeRadius),
-            Form.booleanInput("shaded", lensFractal composeLens Mandelbrot.shaded),
+            Form.intInput("max iterations", lensFractal composeLens DerivedDivergingSeries.maxIterations),
+            Form.intInput("anti aliase", lensFractal composeLens DerivedDivergingSeries.antiAliase),
+            Form.doubleInput("escape radius", lensFractal composeLens DerivedDivergingSeries.escapeRadius),
+            Form.stringInput("initial Z", lensFractal composeLens DerivedDivergingSeries.initialZ),
+            Form.stringInput("initial Z'", lensFractal composeLens DerivedDivergingSeries.initialZDer),
+            Form.stringInput("iteration Z", lensFractal composeLens DerivedDivergingSeries.iterationZ),
+            Form.stringInput("iteration Z'", lensFractal composeLens DerivedDivergingSeries.iterationZDer),
+            Form.doubleInput("h2", lensFractal composeLens DerivedDivergingSeries.h2),
+            Form.doubleInput("angle [0, 2pi]", lensFractal composeLens DerivedDivergingSeries.angle),
           )
-        case f: JuliaSet =>
-          val lensFractal = lens composeLens FractalEntity.program composeLens LenseUtils.lookedUp(f, FractalProgram.juliaSet.asSetter)
+        case f: DivergingSeries =>
+          val lensFractal = lens composeLens FractalEntity.program composeLens LenseUtils.lookedUp(f, FractalProgram.divergingSeries.asSetter)
           Seq(
-            Form.tupleDoubleInput("c", lensFractal composeLens JuliaSet.c),
-            Form.intInput("max iterations", lensFractal composeLens JuliaSet.maxIterations),
-            Form.intInput("anti aliase", lensFractal composeLens JuliaSet.antiAliase),
-            Form.doubleInput("escape radius", lensFractal composeLens JuliaSet.escapeRadius),
-            Form.booleanInput("shaded", lensFractal composeLens JuliaSet.shaded),
+            Form.stringInput("initial", lensFractal composeLens DivergingSeries.initial),
+            Form.stringInput("iteration", lensFractal composeLens DivergingSeries.iteration),
+            Form.intInput("max iterations", lensFractal composeLens DivergingSeries.maxIterations),
+            Form.intInput("anti aliase", lensFractal composeLens DivergingSeries.antiAliase),
+            Form.doubleInput("escape radius", lensFractal composeLens DivergingSeries.escapeRadius),
           )
       }),
       Form.stringInput("description", lens composeLens FractalEntity.description),

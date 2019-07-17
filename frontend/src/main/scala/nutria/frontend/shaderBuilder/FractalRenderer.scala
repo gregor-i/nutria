@@ -18,10 +18,7 @@ object FractalRenderer {
       if (Untyped(canvas).state != Untyped(state.asInstanceOf[js.Object])) {
         val ctx = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
         val (program, compileDuration) = messure {
-          Untyped(canvas).program match {
-            case program: WebGLProgram => program
-            case _ => constructProgram(ctx, state)
-          }
+          constructProgram(ctx, state)
         }
         if (resize) {
           canvas.width = (canvas.clientWidth * dom.window.devicePixelRatio).toInt
@@ -29,7 +26,6 @@ object FractalRenderer {
         }
         render(ctx, state.view, program)
         Untyped(canvas).state = state.asInstanceOf[js.Object]
-        Untyped(canvas).program = program
         dom.console.log(s"compile duration: ${compileDuration}ms")
       } else {
         dom.console.log("state unchanged, skipping render")

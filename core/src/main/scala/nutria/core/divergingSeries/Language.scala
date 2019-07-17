@@ -1,18 +1,19 @@
-package nutria.core.newton
+package nutria.core.divergingSeries
 
 import mathParser.algebra.SpireLanguage
 import spire.math.Complex
 
-sealed trait XAndLambda
-case object X extends XAndLambda
-case object Lambda extends XAndLambda
+sealed trait ZAndLambda
+case object Z extends ZAndLambda
+case object Lambda extends ZAndLambda
 
 object Language {
-  val fLang: SpireLanguage[Complex[Double], XAndLambda] =
+  val fLang: SpireLanguage[Complex[Double], ZAndLambda] =
     mathParser.MathParser.complexLanguage
-      .withVariables[XAndLambda](List('x -> X, 'lambda -> Lambda))
+      .withVariables[ZAndLambda](List('z -> Z, 'lambda -> Lambda))
 
   val c0Lang: SpireLanguage[Complex[Double], Lambda.type] =
     mathParser.MathParser.complexLanguage
       .withVariables[Lambda.type](List('lambda -> Lambda))
 }
+
