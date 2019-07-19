@@ -23,7 +23,7 @@ val viewer = project
   .dependsOn(data)
 
 val service = project.in(file("service"))
-  .dependsOn(core.jvm)
+  .dependsOn(core.jvm, data)
   .settings(scalaTestAndScalaCheck, circe)
   .enablePlugins(PlayScala)
   .settings(

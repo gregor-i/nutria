@@ -1,12 +1,18 @@
-#API
+# API
 GET           /api/fractals                  controller.FractalController.listFractals()
+GET           /api/fractals/:id              controller.FractalController.getFractal(id: String)
 POST          /api/fractals                  controller.FractalController.postFractal()
+GET           /api/fractals/:id/image        controller.FractalController.image(id: String)
 
-#Frontend
+# Admin
+POST          /admin/truncate-images         controller.AdminController.truncateImages()
+POST          /admin/delete-fractal/:id      controller.AdminController.deleteFractal(id : String)
+
+# Frontend
 GET           /                              controller.UiController.index
 GET           /viewer                        controller.UiController.index
 
-#Assets
+# Assets
 GET           /favicon.ico                   controller.UiController.asset(path = "icon.png", folder = "/public/img")
 GET           /img/*path                     controller.UiController.asset(path: String, folder = "/public/img")
 GET           /js/*path                      controller.UiController.asset(path: String, folder = "/public/js")

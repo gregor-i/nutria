@@ -91,7 +91,9 @@ object FractalRenderer {
 
     gl.uniform2f(gl.getUniformLocation(program, "u_resolution"), gl.drawingBufferWidth, gl.drawingBufferHeight)
 
-    val v = view.cover(gl.drawingBufferWidth, gl.drawingBufferHeight)
+    val v = view
+      .cover(gl.drawingBufferWidth, gl.drawingBufferHeight)
+      .flipB
     gl.uniform2f(gl.getUniformLocation(program, "u_view_O"), v.origin._1, v.origin._2)
     gl.uniform2f(gl.getUniformLocation(program, "u_view_A"), v.A._1, v.A._2)
     gl.uniform2f(gl.getUniformLocation(program, "u_view_B"), v.B._1, v.B._2)
@@ -108,15 +110,6 @@ object FractalRenderer {
        |
        |uniform vec2 u_resolution;
        |uniform vec2 u_view_O, u_view_A, u_view_B;
-       |
-       |
-       |vec3 hsv2rgb(vec3 c)
-       |{
-       |    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
-       |    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
-       |    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
-       |}
-       |
        |
        |void main() {
        |

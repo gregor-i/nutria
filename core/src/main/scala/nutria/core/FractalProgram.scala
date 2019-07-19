@@ -25,7 +25,7 @@ case class DivergingSeries(view: Viewport = DefaultViewport.defaultViewport,
 
 object DivergingSeries {
   def mandelbrot = DivergingSeries(initial = "0", iteration = "z*z + lambda")
-  def juliaSet(c: Point) = DivergingSeries(initial = "0", iteration = s"z*z + (${c._1} + i*${c._2})")
+  def juliaSet(c: Point) = DivergingSeries(initial = "lambda", iteration = s"z*z + (${c._1} + i*${c._2})", maxIterations = 50)
 }
 
 @monocle.macros.Lenses()

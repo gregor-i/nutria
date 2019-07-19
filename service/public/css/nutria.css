@@ -51,7 +51,8 @@ a:hover{
 }
 
 
-.lobby-tile-list > article canvas {
+.lobby-tile-list > article canvas,
+.lobby-tile-list > article img {
     width : 100%;
     display : block;
 }
@@ -98,7 +99,7 @@ a:hover{
     z-index: -1;
 }
 
-canvas{
+canvas {
     background: url("/img/canvas-fallback.svg") no-repeat center;
     background-size: contain;
 }
