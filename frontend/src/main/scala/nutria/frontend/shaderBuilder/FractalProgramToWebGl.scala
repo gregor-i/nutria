@@ -11,15 +11,6 @@ object FractalProgramToWebGl {
       case f: DerivedDivergingSeries => AntiAliase(derivedDivergingSeries(f), f.antiAliase)
     }
 
-
-  //  def deriveableInitialStepJuliaset(c: (Double, Double))(z: RefVec2, p: RefVec2): String =
-  //    s"""
-  //       |vec2 ${z.name}_new = complex_product(${z.name}, ${z.name}) + vec2(float(${c._1}), float(${c._2}));
-  //       |vec2 ${z.name}_der_new = complex_product(${z.name}_der, z) * 2.0 + vec2(1.0, 0.0);
-  //       |${z.name} = ${z.name}_new;
-  //       |${z.name}_der = ${z.name}_der_new;
-  //       |""".stripMargin
-
   def derivedDivergingSeries(f: DerivedDivergingSeries)
                             (inputVar: RefVec2, outputVar: RefVec4) = {
     import nutria.core.derivedDivergingSeries._
@@ -121,7 +112,7 @@ object FractalProgramToWebGl {
        |    fract = float(l) - log(${n.threshold} / length(${fz.name})) / log( length(${fzlast.name}) / length(${fz.name}));
        |  }
        |
-       |  float H = atan(z.x - ${FloatLiteral(n.center._1.toFloat).toCode}, z.y - ${FloatLiteral(n.center._2.toFloat).toCode}) / float(${2 * Math.PI}) + 0.5;
+       |  float H = atan(z.x - ${FloatLiteral(n.center._1.toFloat).toCode}, z.y - ${FloatLiteral(n.center._2.toFloat).toCode}) / float(${2 * Math.PI});
        |  float V = exp(-fract / ${FloatLiteral(n.brightnessFactor.toFloat).toCode});
        |  float S = length(z);
        |

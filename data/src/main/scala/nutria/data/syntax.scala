@@ -2,7 +2,8 @@ package nutria.data
 
 import nutria.core.{Dimensions, Point, Transform, Viewport}
 import nutria.data.accumulator.{Accumulator, Arithmetic}
-import nutria.data.content.{AntiAliasedFractalContent, FunctionContent, HistogramNormalized, LinearNormalized}
+import nutria.data.colors.RGBA
+import nutria.data.content.{AntiAliasedFractalContent, AntiAliasedRGBAContent, FunctionContent, HistogramNormalized, LinearNormalized}
 
 object syntax {
   implicit class EnrichedViewport(val viewport: Viewport) extends AnyVal {
@@ -15,6 +16,10 @@ object syntax {
 
   implicit class EnrichFractalContent(val fractalContent: FunctionContent[Double]) extends AnyVal {
     def multisampled(accu: Accumulator = Arithmetic, multi: Int = 2) = AntiAliasedFractalContent(fractalContent, multi, accu)
+  }
+
+  implicit class EnrichRGBAContent(val fractalContent: FunctionContent[RGBA]) extends AnyVal {
+    def multisampled(multi: Int = 2) = AntiAliasedRGBAContent(fractalContent, multi)
   }
 
   implicit class EnrichedContentForLinNorm(val content: Content[Double]) extends AnyVal {

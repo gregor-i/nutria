@@ -46,6 +46,9 @@ Just fire up [sbt](http://www.scala-sbt.org/) and `compile` or `run` the sub-pro
 - `performance`: As this library abstracts over all kinds of fractals, 
 it will be always slower als libraries dedicated to a single fractal or rendering techniques.
 
+## todo list:
+ - use refined types in `FractalProgram`
+
 ## future reads
 https://en.wikibooks.org/wiki/Fractals/Iterations_in_the_complex_plane/Mandelbrot_set/centers
 http://cosinekitty.com/mandel_orbits.html
