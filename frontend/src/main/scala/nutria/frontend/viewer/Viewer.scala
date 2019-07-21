@@ -29,7 +29,7 @@ class Viewer(container: Element) extends SnabbdomApp {
 }
 
 object Viewer {
-  def url(fractalProgram: FractalEntity) = "/viewer?state=" + Viewer.queryEncoded(fractalProgram)
+  def url(fractalEntity: FractalEntity) = "/viewer?state=" + Viewer.queryEncoded(fractalEntity)
 
   def queryEncoded(fractalProgram: FractalEntity): String = URIUtils.encodeURIComponent(fractalProgram.asJson.noSpaces)
   def queryDecoded(string: String): Option[FractalEntity] =

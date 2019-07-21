@@ -37,11 +37,11 @@ object RenderEditFractalEntity {
       styles.width := "100%",
       Hooks.insertHook { node =>
         val canvas = node.elm.get.asInstanceOf[Canvas]
-        FractalRenderer.render(canvas, fractal.program, false)
+        FractalRenderer.render(canvas, fractal, false)
       },
       Hooks.postPatchHook { (_, newNode) =>
         val canvas = newNode.elm.get.asInstanceOf[Canvas]
-        FractalRenderer.render(canvas, fractal.program, false)
+        FractalRenderer.render(canvas, fractal, false)
       }
     )
 

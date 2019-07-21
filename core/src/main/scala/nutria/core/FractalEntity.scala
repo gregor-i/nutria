@@ -6,6 +6,7 @@ import io.circe.syntax._
 
 @monocle.macros.Lenses()
 case class FractalEntity(program: FractalProgram,
+                         view: Viewport = DefaultViewport.defaultViewport,
                          description: String = "",
                          reference: Option[String] = None,
                         )
@@ -56,6 +57,9 @@ object FractalEntity {
       description = s"newton iteration over mandelbrot polynomial($n) with f(x) = ${p.function}, x0 = ${p.initial}",
     )
   }
+
+  implicit val encodeViewport: Encoder[Viewport] = deriveEncoder
+  implicit val decodeViewport: Decoder[Viewport] = deriveDecoder
 
   implicit val decoder: Decoder[FractalEntity] = deriveDecoder
   implicit val encoder: Encoder[FractalEntity] = deriveEncoder

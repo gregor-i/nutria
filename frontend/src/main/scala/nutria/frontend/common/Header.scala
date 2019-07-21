@@ -1,7 +1,8 @@
 package nutria.frontend.common
 
 import com.raquo.snabbdom.simple.implicits._
-import com.raquo.snabbdom.simple.{VNode, attrs, styles, tags}
+import com.raquo.snabbdom.simple._
+import org.scalajs.dom
 
 object Header {
   def apply(name: String): VNode =
@@ -11,6 +12,8 @@ object Header {
         tags.img(
           styles.height := "100%",
           attrs.src := "/img/icon.png",
+          events.onClick := (() => dom.window.location.assign("/")),
+          styles.cursor := "pointer"
         ),
         tags.span(name)
       )

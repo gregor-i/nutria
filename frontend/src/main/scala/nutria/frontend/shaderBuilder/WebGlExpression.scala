@@ -1,8 +1,21 @@
 package nutria.frontend.shaderBuilder
 
-//sealed
-trait WebGlExpression[T <: WebGlType] {
+import mathParser.algebra.{SpireBinaryOperator, SpireNode, SpireUnitaryOperator}
+import spire.math.Complex
+
+sealed trait WebGlExpression[T <: WebGlType] {
   def toCode: String
+}
+
+object WebGlExpression{
+  def toExpression[V](node: SpireNode[Complex[Double], V],
+                      varsToCode: PartialFunction[V, RefExp[WebGlTypeVec2.type ]]): WebGlExpression[WebGlTypeVec2.type] =
+    node.fold(
+      ifConstant = c => Vec2(FloatLiteral(c.real.toFloat), FloatLiteral(c.imag.toFloat)),
+      ifBinary = ComplexBinaryExp.apply,
+      ifUnitary = ComplexUnitaryExp.apply,
+      ifVariable = varsToCode,
+    )
 }
 
 case class IntLiteral(value: Int) extends WebGlExpression[WebGlTypeInt.type] {
@@ -35,4 +48,36 @@ case class RefExp[T <: WebGlType](ref: Ref[T]) extends WebGlExpression[T] {
   override def toCode: String = ref.name
 }
 
-case class PureStringExpression[T <: WebGlType](toCode: String) extends WebGlExpression[T]
+case class ComplexBinaryExp(op: SpireBinaryOperator,
+                            left: WebGlExpression[WebGlTypeVec2.type],
+                            right: WebGlExpression[WebGlTypeVec2.type]) extends WebGlExpression[WebGlTypeVec2.type] {
+  import mathParser.algebra._
+  override def toCode: String = op match {
+    case Plus => left.toCode + "+" + right.toCode
+    case Minus => left.toCode + "-" + right.toCode
+    case Times => s"complex_product(vec2(${left.toCode}), vec2(${right.toCode}))"
+    case Divided => s"complex_divide(vec2(${left.toCode}), vec2(${right.toCode}))"
+    case Power if right == FloatLiteral(2.0f) => s"complex_sq(vec2(${left.toCode}))"
+    case Power => s"complex_power(vec2(${left.toCode}), vec2(${right.toCode}))"
+  }
+}
+
+case class ComplexUnitaryExp(op: SpireUnitaryOperator,
+                             child: WebGlExpression[WebGlTypeVec2.type]) extends WebGlExpression[WebGlTypeVec2.type] {
+  import mathParser.algebra._
+  override def toCode: String = op match {
+    case Neg => s"-(${child.toCode})"
+    case Sin => s"complex_sin(vec2(${child.toCode}))"
+    case Cos => s"complex_cos(vec2(${child.toCode}))"
+    case Tan => s"complex_tan(vec2(${child.toCode}))"
+    case Asin => ???
+    case Acos => ???
+    case Atan => ???
+    case Sinh => ???
+    case Cosh => ???
+    case Tanh => ???
+    case Exp => s"complex_exp(vec2(${child.toCode}))"
+    case Log => s"complex_log(vec2(${child.toCode}))"
+  }
+}
+

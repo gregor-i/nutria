@@ -4,11 +4,10 @@ import com.raquo.snabbdom.simple._
 import com.raquo.snabbdom.simple.implicits._
 import nutria.core._
 import nutria.frontend.shaderBuilder.FractalRenderer
-import nutria.frontend.util.{Hooks, SnabbdomHelper}
+import nutria.frontend.util.SnabbdomHelper
 import nutria.frontend.viewer.Viewer
 import nutria.frontend.{LenseUtils, NutriaService, common}
 import org.scalajs.dom
-import org.scalajs.dom.html.Canvas
 import org.scalajs.dom.raw.HTMLElement
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -58,6 +57,13 @@ object LibraryUi extends SnabbdomHelper {
                   }
               },
               "save"
+            ),
+            tags.button(
+              attrs.className := "button",
+              events.onClick := {event =>
+                dom.console.log(FractalRenderer.fragmentShaderSource(fractal.program))
+              },
+              "log source"
             )
           ))
       )

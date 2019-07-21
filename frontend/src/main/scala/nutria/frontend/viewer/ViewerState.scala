@@ -14,6 +14,5 @@ object ViewerState {
   val editOptional: Optional[ViewerState, FractalEntity] = edit.composePrism(monocle.std.option.some)
 
   val viewport = ViewerState.fractalEntity
-    .composeLens(FractalEntity.program)
-    .composeLens(FractalProgram.viewport)
+    .composeLens(FractalEntity.view)
 }

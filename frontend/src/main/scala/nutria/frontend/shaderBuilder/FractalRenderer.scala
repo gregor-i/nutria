@@ -1,7 +1,7 @@
 package nutria.frontend.shaderBuilder
 
-import nutria.core.FractalProgram
 import nutria.core.viewport.Viewport
+import nutria.core.{FractalEntity, FractalProgram}
 import nutria.frontend.util.Untyped
 import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
@@ -9,27 +9,47 @@ import org.scalajs.dom.raw.{WebGLProgram, WebGLRenderingContext}
 
 import scala.scalajs.js
 import scala.scalajs.js.typedarray.Float32Array
-import scala.util.Try
+import scala.util.{Failure, Try}
 
 object FractalRenderer {
 
-  def render(canvas: Canvas, state: FractalProgram, resize: Boolean): Boolean = {
+  def render(canvas: Canvas, entity: FractalEntity, resize: Boolean): Boolean =
+    render(canvas, entity.program, entity.view, resize)
+
+  def render(canvas: Canvas, program: FractalProgram, viewport: Viewport, resize: Boolean): Boolean = {
+    val ctx = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
+
+    if (resize) {
+      canvas.width = (canvas.clientWidth * dom.window.devicePixelRatio).toInt
+      canvas.height = (canvas.clientHeight * dom.window.devicePixelRatio).toInt
+    }
+
     Try {
-      if (Untyped(canvas).state != Untyped(state.asInstanceOf[js.Object])) {
-        val ctx = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
-        val (program, compileDuration) = messure {
-          constructProgram(ctx, state)
-        }
-        if (resize) {
-          canvas.width = (canvas.clientWidth * dom.window.devicePixelRatio).toInt
-          canvas.height = (canvas.clientHeight * dom.window.devicePixelRatio).toInt
-        }
-        render(ctx, state.view, program)
-        Untyped(canvas).state = state.asInstanceOf[js.Object]
-        dom.console.log(s"compile duration: ${compileDuration}ms")
-      } else {
-        dom.console.log("state unchanged, skipping render")
+      (Untyped(canvas).program, Untyped(canvas).webGlProgram, Untyped(canvas).viewport) match {
+        case (cachedProgram, _, cachedViewport) if cachedProgram == Untyped(program.asInstanceOf[js.Object])
+          && cachedViewport == Untyped(viewport.asInstanceOf[js.Object]) =>
+        // dom.console.log("program and viewport unchanged, skipping render")
+
+
+        case (cachedProgram, cachedWebGlProgram, _) if cachedProgram == Untyped(program.asInstanceOf[js.Object]) =>
+          render(ctx, viewport, cachedWebGlProgram.asInstanceOf[WebGLProgram])
+          Untyped(canvas).viewport = viewport.asInstanceOf[js.Object]
+        // dom.console.log("program unchanged, rendering with cached webgl program")
+
+        case _ =>
+          val (webGlProgram, compileDuration) = messure {
+            constructProgram(ctx, program)
+          }
+          render(ctx, viewport, webGlProgram)
+          Untyped(canvas).program = program.asInstanceOf[js.Object]
+          Untyped(canvas).webGlProgram = webGlProgram.asInstanceOf[js.Object]
+          Untyped(canvas).viewport = viewport.asInstanceOf[js.Object]
+        // dom.console.log(s"compile duration: ${compileDuration}ms")
       }
+    }.recover{
+      case error =>
+        dom.console.error(error.getMessage)
+        Failure(error)
     }.isSuccess
   }
 
@@ -51,9 +71,9 @@ object FractalRenderer {
     gl.compileShader(fragmentShader)
 
     if (!gl.getShaderParameter(vertexShader, WebGLRenderingContext.COMPILE_STATUS).asInstanceOf[Boolean]) {
-      throw new Exception("failed to compile vertex shader:\n" + gl.getShaderInfoLog(vertexShader))
+      throw new Exception("failed to compile vertex shader:\n" + vertexShaderSource + "\n" + gl.getShaderInfoLog(vertexShader))
     } else if (!gl.getShaderParameter(fragmentShader, WebGLRenderingContext.COMPILE_STATUS).asInstanceOf[Boolean]) {
-      throw new Exception("failed to compile fragment shader:\n" + gl.getShaderInfoLog(fragmentShader))
+      throw new Exception("failed to compile fragment shader:\n" + fragmentShaderSource(program) + "\n" + gl.getShaderInfoLog(fragmentShader))
     } else {
       val program = gl.createProgram()
       gl.attachShader(program, vertexShader)

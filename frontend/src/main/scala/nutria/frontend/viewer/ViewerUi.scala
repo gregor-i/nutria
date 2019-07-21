@@ -42,8 +42,8 @@ object ViewerUi {
   def renderCanvas(implicit state: ViewerState, update: ViewerState => Unit): VNode =
     tags.canvas(
       attrs.className := "full-size",
-      Hooks.insertHook { vnode => FractalRenderer.render(vnode.elm.get.asInstanceOf[Canvas], state.fractalEntity.program, true) },
-      Hooks.postPatchHook { (_, newNode) => FractalRenderer.render(newNode.elm.get.asInstanceOf[Canvas], state.fractalEntity.program, true) },
+      Hooks.insertHook { vnode => FractalRenderer.render(vnode.elm.get.asInstanceOf[Canvas], state.fractalEntity, true) },
+      Hooks.postPatchHook { (_, newNode) => FractalRenderer.render(newNode.elm.get.asInstanceOf[Canvas], state.fractalEntity, true) },
       SnabbdomHelper.seq(canvasMouseEvents)
     )
 
@@ -55,9 +55,9 @@ object ViewerUi {
 
     def endEvent(startPosition: Point): PointerEvent => Unit = { event =>
       val boundingBox = event.target.asInstanceOf[Element].getBoundingClientRect()
-      val translateA = state.fractalEntity.program.view.A * ((-event.pageX + startPosition._1) / boundingBox.width)
-      val translateB = state.fractalEntity.program.view.B * ((event.pageY - startPosition._2) / boundingBox.height)
-      val newView = state.fractalEntity.program.view.translate(translateA + translateB)
+      val translateA = state.fractalEntity.view.A * ((-event.pageX + startPosition._1) / boundingBox.width)
+      val translateB = state.fractalEntity.view.B * ((event.pageY - startPosition._2) / boundingBox.height)
+      val newView = state.fractalEntity.view.translate(translateA + translateB)
       event.target.asInstanceOf[js.Dynamic].style.left = "0px"
       event.target.asInstanceOf[js.Dynamic].style.top = "0px"
       update(ViewerState.viewport.set(newView)(state).copy(dragStartPosition = None))

@@ -26,28 +26,28 @@ object FractalProgramToWebGl {
     val zDer = RefVec2("z_der")
     val zDerNew = RefVec2("z_der_new")
 
-    val iterationLangNames: PartialFunction[ZAndLambda, String] = {
-      case Z => z.name
-      case Lambda => inputVar.name
+    val iterationLangNames: PartialFunction[ZAndLambda, RefExp[WebGlTypeVec2.type]] = {
+      case Z => RefExp(z)
+      case Lambda => RefExp(inputVar)
     }
 
-    val iterationDerLangNames: PartialFunction[ZAndZDerAndLambda, String] = {
-      case Z => z.name
-      case ZDer => zDer.name
-      case Lambda => inputVar.name
+    val iterationDerLangNames: PartialFunction[ZAndZDerAndLambda, RefExp[WebGlTypeVec2.type]] = {
+      case Z => RefExp(z)
+      case ZDer => RefExp(zDer)
+      case Lambda => RefExp(inputVar)
     }
 
-    val initialLangNames: PartialFunction[Lambda.type, String] = {
-      case Lambda => inputVar.name
+    val initialLangNames: PartialFunction[Lambda.type, RefExp[WebGlTypeVec2.type]] = {
+      case Lambda => RefExp(inputVar)
     }
 
     s"""{
        |  int l = 0;
-       |  ${WebGlType.declare(z, PureStringExpression(NewtonLang.toWebGlCode(initalZ, initialLangNames)))}
-       |  ${WebGlType.declare(zDer, PureStringExpression(NewtonLang.toWebGlCode(initalZDer, initialLangNames)))}
+       |  ${WebGlType.declare(z, WebGlExpression.toExpression(initalZ, initialLangNames))}
+       |  ${WebGlType.declare(zDer, WebGlExpression.toExpression(initalZDer, initialLangNames))}
        |  for(int i = 0; i < ${f.maxIterations}; i++){
-       |    ${WebGlType.declare(zNew, PureStringExpression(NewtonLang.toWebGlCode(iterationZ, iterationLangNames)))}
-       |    ${WebGlType.declare(zDerNew, PureStringExpression(NewtonLang.toWebGlCode(iterationZDer, iterationDerLangNames)))}
+       |    ${WebGlType.declare(zNew, WebGlExpression.toExpression(iterationZ, iterationLangNames))}
+       |    ${WebGlType.declare(zDerNew, WebGlExpression.toExpression(iterationZDer, iterationDerLangNames))}
        |    ${WebGlType.assign(z, RefExp(zNew))}
        |    ${WebGlType.assign(zDer, RefExp(zDerNew))}
        |    if(dot(z,z) > float(${f.escapeRadius * f.escapeRadius}))
@@ -71,34 +71,42 @@ object FractalProgramToWebGl {
 
   def newtonIteration(n: NewtonIteration)(inputVar: RefVec2, outputVar: RefVec4): String = {
     import nutria.core.newton._
-    val iteration = NewtonLang.functionLang.optimize(NewtonLang.functionLang.parse(n.function).getOrElse(throw new Exception(n.function)))
-    val derived = NewtonLang.functionLang.optimize(NewtonLang.functionLang.derive(iteration)(X))
+    val iteration = Language.fLang.optimize(Language.fLang.parse(n.function).get)
+    val derived = Language.fLang.optimize(Language.fLang.derive(iteration)(X))
 
-    val initial = NewtonLang.initialLang.optimize(NewtonLang.initialLang.parse(n.initial).getOrElse(throw new Exception(n.initial)))
+    val initial = Language.c0Lang.optimize(Language.c0Lang.parse(n.initial).get)
 
     val z = RefVec2("z")
     val fzlast = RefVec2("fzlast")
     val fz = RefVec2("fz")
     val fderz = RefVec2("fderz")
 
-    val functionLangNames: PartialFunction[XAndLambda, String] = {
-      case X => "z"
-      case Lambda => "p"
+    val functionLangNames: PartialFunction[XAndLambda, Ref[WebGlTypeVec2.type]] = {
+      case X => z
+      case Lambda => inputVar
     }
 
-    val initialLangNames: PartialFunction[Lambda.type, String] = {
-      case Lambda => "p"
+    val initialLangNames: PartialFunction[Lambda.type, RefExp[WebGlTypeVec2.type]] = {
+      case Lambda => RefExp(inputVar)
     }
 
     s"""{
        |  int l = 0;
-       |  ${WebGlType.declare(z, PureStringExpression(NewtonLang.toWebGlCode(initial, initialLangNames)))}
-       |  ${WebGlType.declare(fz, PureStringExpression(NewtonLang.toWebGlCode(iteration, functionLangNames)))}
+       |  ${WebGlType.declare(z, WebGlExpression.toExpression(initial, initialLangNames))}
+       |  ${WebGlType.declare(fz, WebGlType.zero[WebGlTypeVec2.type])}
+       |  {
+       |  ${WebGlStatement.assign(fz, iteration, functionLangNames).map(_.toCode).mkString("\n")}
+       |  }
        |  ${WebGlType.declare(fzlast, RefExp(fz))}
        |  for(int i = 0;i< ${n.maxIterations}; i++){
        |    ${WebGlType.assign(fzlast, RefExp(fz))}
-       |    ${WebGlType.assign(fz, PureStringExpression(NewtonLang.toWebGlCode(iteration, functionLangNames)))}
-       |    ${WebGlType.declare(fderz, PureStringExpression(NewtonLang.toWebGlCode(derived, functionLangNames)))}
+       |    {
+       |    ${WebGlStatement.assign(fz, iteration, functionLangNames).map(_.toCode).mkString("\n")}
+       |    }
+       |    ${WebGlType.declare(fderz, WebGlType.zero[WebGlTypeVec2.type])}
+       |    {
+       |    ${WebGlStatement.assign(fderz, derived, functionLangNames).map(_.toCode).mkString("\n")}
+       |    }
        |    ${z.name} -= ${FloatLiteral(n.overshoot.toFloat).toCode} * complex_divide(${fz.name}, ${fderz.name});
        |    if(length(${fz.name}) < ${FloatLiteral(n.threshold.toFloat).toCode})
        |      break;
@@ -124,24 +132,25 @@ object FractalProgramToWebGl {
 
   def divergingSeries(n: DivergingSeries)(inputVar: RefVec2, outputVar: RefVec4): String = {
     import nutria.core.divergingSeries._
-    val inital = DivergingSeriesLang.initialLang.optimize(DivergingSeriesLang.initialLang.parse(n.initial).getOrElse(throw new Exception(n.initial)))
-    val iteration = DivergingSeriesLang.functionLang.optimize(DivergingSeriesLang.functionLang.parse(n.iteration).getOrElse(throw new Exception(n.iteration)))
-
-    val functionLangNames: PartialFunction[ZAndLambda, String] = {
-      case Z => "z"
-      case Lambda => "p"
-    }
-
-    val initialLangNames: PartialFunction[Lambda.type, String] = {
-      case Lambda => "p"
-    }
+    val initial = Language.c0Lang.optimize(Language.c0Lang.parse(n.initial).get)
+    val iteration = Language.fLang.optimize(Language.fLang.parse(n.iteration).get)
 
     val z = RefVec2("z")
+
+    val functionLangNames: PartialFunction[ZAndLambda, RefExp[WebGlTypeVec2.type]] = {
+      case Z => RefExp(z)
+      case Lambda => RefExp(inputVar)
+    }
+
+    val initialLangNames: PartialFunction[Lambda.type, RefExp[WebGlTypeVec2.type]] = {
+      case Lambda => RefExp(inputVar)
+    }
+
     s"""{
        |  int l = 0;
-       |  ${WebGlType.declare(z, PureStringExpression(DivergingSeriesLang.toWebGlCode(inital, initialLangNames)))}
+       |  ${WebGlType.declare(z, WebGlExpression.toExpression(initial, initialLangNames))}
        |  for(int i = 0;i< ${n.maxIterations}; i++){
-       |    ${WebGlType.assign(z, PureStringExpression(DivergingSeriesLang.toWebGlCode(iteration, functionLangNames)))}
+       |    ${WebGlType.assign(z, WebGlExpression.toExpression(iteration, functionLangNames))}
        |    if(length(${z.name}) > ${FloatLiteral(n.escapeRadius.toFloat).toCode})
        |      break;
        |    l ++;
