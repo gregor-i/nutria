@@ -2,8 +2,8 @@ import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
 // global settings
 version in ThisBuild := "0.0.1"
-scalaVersion in ThisBuild := "2.12.10"
-scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
+scalaVersion in ThisBuild := "2.13.1"
+scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation", "-Ymacro-annotations")
 
 // projects
 lazy val core = crossProject(JSPlatform, JVMPlatform)
@@ -83,15 +83,13 @@ def circe =
     "io.circe" %%% "circe-refined" % "0.12.2",
   )
 
-def monocle = Seq(
+def monocle =
   libraryDependencies ++= Seq(
     "com.github.julien-truffaut" %%% "monocle-core" % "2.0.0",
     "com.github.julien-truffaut" %%% "monocle-macro" % "2.0.0",
     "com.github.julien-truffaut" %%% "monocle-unsafe" % "2.0.0",
     "com.github.julien-truffaut" %%% "monocle-refined" % "2.0.0",
-  ),
-  addCompilerPlugin("org.scalamacros" %% "paradise" % "2.1.1" cross CrossVersion.full)
-)
+  )
 
 def refinedTypes =
   libraryDependencies += "eu.timepit" %%% "refined" % "0.9.10"
