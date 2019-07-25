@@ -19,3 +19,6 @@ project/plugins/project/
 *.iml
 
 service/public/js/*.js
+
+processor/**/*.png
+viewer/**/*.png
