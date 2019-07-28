@@ -102,4 +102,7 @@ case class Viewport(origin: Point, A: Point, B: Point) {
       Viewport(origin + B * (0.5 - mu / 2), A, B * mu)
     }
   }
+
+  def flipB: Viewport =
+    Viewport(origin + B, A, B * -1.0)
 }

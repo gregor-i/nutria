@@ -1,7 +1,8 @@
 package nutria.core
 
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import io.circe.{Decoder, Encoder}
+import io.circe.{Decoder, Encoder, JsonObject}
+import io.circe.syntax._
 
 @monocle.macros.Lenses()
 case class FractalEntity(program: FractalProgram,
@@ -61,3 +62,19 @@ object FractalEntity {
 }
 
 
+case class FractalEntityWithId(id: String,
+                               entity: FractalEntity)
+
+object FractalEntityWithId {
+  implicit val encoder: Encoder[FractalEntityWithId] = Encoder[FractalEntityWithId] { row =>
+    Encoder[FractalEntity].apply(row.entity)
+      .deepMerge(JsonObject("id" -> row.id.asJson).asJson)
+  }
+
+  implicit val decode: Decoder[FractalEntityWithId] = Decoder[FractalEntityWithId] { json =>
+    for {
+      entity <- json.as[FractalEntity]
+      id <- json.downField("id").as[String]
+    } yield FractalEntityWithId(id, entity)
+  }
+}

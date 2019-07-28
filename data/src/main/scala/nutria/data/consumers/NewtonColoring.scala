@@ -1,5 +1,6 @@
 package nutria.data.consumers
 
+import nutria.core.Point
 import nutria.data.colors.{HSV, RGBA}
 import nutria.data.sequences.Newton
 import nutria.data.{Color, DoubleSequence}
@@ -9,23 +10,25 @@ import spire.math.Complex
 import scala.util.control.NonFatal
 
 object NewtonColoring {
-  def apply(): DoubleSequence => RGBA =
+  def apply(center: Point = (0.0, 0.0), brightnessFactor: Double = 25d): DoubleSequence => RGBA =
     seq => try {
       val i = seq.size
       val (x, y) = seq.next()
-      val a = Math.atan2(x, y)
+      val a = Math.atan2(x - center._1, y - center._2)
+
+      // todo: smoothing
 
       val H = (a / Math.PI * 180 + 360) % 360
-      val S = Math.exp(-i / 25d)
-      val V = S
+      val S = Math.exp(-i / brightnessFactor)
+      val V = Math.sqrt(x * x + y * y)
 
       HSV.HSV2RGB(H, S, V)
     } catch {
       case NonFatal(_) => RGBA.white
     }
 
-  def smooth(newton: Newton): newton.Sequence => RGBA =
-    NewtonIteration(newton) andThen NewtonIteration.colorTheResult((0, 0))
+  def smooth(newton: Newton, center: Point = (0.0, 0.0), brightnessFactor: Double = 25.0): newton.Sequence => RGBA =
+    NewtonIteration(newton) andThen NewtonIteration.colorTheResult(center, brightnessFactor)
 }
 
 
@@ -63,13 +66,13 @@ object NewtonIteration {
       case NonFatal(ex) => FailedByException
     }
 
-  def colorTheResult(origin: (Double, Double)): Color[NewtonResult] = {
+  def colorTheResult(origin: (Double, Double), brightnessFactor: Double): Color[NewtonResult] = {
     case FailedByException => RGBA.black
     case NotConverged => RGBA.black
     case ConvergedToRoot(iterations, root) =>
       val angle = Math.atan2(root._1 - origin._1, root._2 - origin._2)
       val H = (angle / Math.PI * 180 + 360) % 360
-      val S = Math.exp(-iterations / 25d)
+      val S = Math.exp(-iterations / brightnessFactor)
       val V = S
       HSV.HSV2RGB(H, S, V)
   }

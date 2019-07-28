@@ -5,7 +5,7 @@ import monocle.macros.GenLens
 import nutria.core._
 
 //@monocle.macros.Lenses()
-case class LibraryState(programs: Vector[FractalEntity],
+case class LibraryState(programs: Vector[FractalEntityWithId],
                         edit: Option[FractalEntity] = None)
 
 object LibraryState {

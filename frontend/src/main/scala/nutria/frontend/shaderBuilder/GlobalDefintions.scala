@@ -21,5 +21,11 @@ object GlobalDefintions {
       |#define complex_tan(a) vec2(sin(2.0*a.x), sinh(2.0*a.y)) / (cos(2.0*a.x) + cosh(2.0*a.y))
       |#define complex_log(a) vec2(length(a), atan(a.x, a.y))
       |
+      |vec3 hsv2rgb(vec3 c)
+      |{
+      |    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+      |    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+      |    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+      |}
     """.stripMargin
 }

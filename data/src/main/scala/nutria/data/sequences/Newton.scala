@@ -13,7 +13,7 @@ trait Newton {
 
   def iteration(c: Complex[Double], lambda: Complex[Double]): Complex[Double] = c - f(c, lambda) / f_der(c, lambda)
 
-  final class Sequence(x0: Double, y0: Double, val maxIterations: Int, val threshold: Double) extends DoubleSequence {
+  final class Sequence(x0: Double, y0: Double, val maxIterations: Int, val threshold: Double, overshoot: Double) extends DoubleSequence {
     val lambda = Complex(x0, y0)
     private[this] var c = c0(lambda)
     private[this] var lastC = c
@@ -26,7 +26,7 @@ trait Newton {
 
     def next(): (Double, Double) = {
       lastC = c
-      c = iteration(c, lambda)
+      c = overshoot * iteration(c, lambda)
       i += 1
       (c.real, c.imag)
     }
@@ -39,6 +39,6 @@ trait Newton {
     }
   }
 
-  def apply(maxIterations: Int, threshold: Double = 1e-8): Point => Sequence = p => new Sequence(p._1, p._2, maxIterations, threshold)
+  def apply(maxIterations: Int, threshold: Double = 1e-8, overshoot: Double = 1.0): Point => Sequence = p => new Sequence(p._1, p._2, maxIterations, threshold, overshoot)
 }
 

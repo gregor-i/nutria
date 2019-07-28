@@ -2,7 +2,7 @@ package nutria.frontend
 
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, parser}
-import nutria.core.FractalEntity
+import nutria.core.{FractalEntity, FractalEntityWithId}
 import org.scalajs.dom.XMLHttpRequest
 import org.scalajs.dom.ext.Ajax
 import org.scalajs.dom.ext.Ajax.InputData
@@ -11,18 +11,18 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object NutriaService {
-  def loadFractals(): Future[Vector[FractalEntity]] =
+  def loadFractals(): Future[Vector[FractalEntityWithId]] =
     Ajax.get(url = s"/api/fractals")
       .flatMap(check(200))
-      .flatMap(parse[Vector[FractalEntity]])
+      .flatMap(parse[Vector[FractalEntityWithId]])
 
-  def save(fractalEntity: FractalEntity): Future[Vector[FractalEntity]] =
+  def save(fractalEntity: FractalEntity): Future[Vector[FractalEntityWithId]] =
     Ajax.post(
       url = s"/api/fractals",
       data = encode(fractalEntity)
     )
       .flatMap(check(200))
-      .flatMap(parse[Vector[FractalEntity]])
+      .flatMap(parse[Vector[FractalEntityWithId]])
 
   private def check(excepted: Int)(req: XMLHttpRequest): Future[XMLHttpRequest] =
     if (req.status == excepted)

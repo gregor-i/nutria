@@ -63,19 +63,16 @@ object LibraryUi extends SnabbdomHelper {
       )
     }
 
-  def renderProgramTile(fractal: FractalEntity)
+  def renderProgramTile(fractal: FractalEntityWithId)
                        (implicit state: LibraryState, update: LibraryState => Unit): VNode =
     tags.build("article")(
-      events.onClick := (() => update(state.copy(edit = Some(fractal)))),
-      tags.canvas(
+      events.onClick := (() => update(state.copy(edit = Some(fractal.entity)))),
+      tags.img(
         attrs.widthAttr := 400,
         attrs.heightAttr := 225,
-        Hooks.insertHook { node =>
-          val canvas = node.elm.get.asInstanceOf[Canvas]
-          FractalRenderer.render(canvas, fractal.program, false)
-        }
+        attrs.src := s"/api/fractals/${fractal.id}/image"
       ),
-      attrs.title := fractal.description
+      attrs.title := fractal.entity.description
     )
 
 
