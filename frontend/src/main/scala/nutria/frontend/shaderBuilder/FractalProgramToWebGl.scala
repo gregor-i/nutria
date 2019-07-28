@@ -1,7 +1,10 @@
 package nutria.frontend.shaderBuilder
 
+import mathParser.algebra._
 import mathParser.implicits._
+import mathParser.{BinaryNode, ConstantNode, Optimizer}
 import nutria.core._
+import spire.math.Complex
 
 object FractalProgramToWebGl {
   def apply(fractalProgram: FractalProgram): RefVec4 => String =
@@ -71,7 +74,17 @@ object FractalProgramToWebGl {
 
   def newtonIteration(n: NewtonIteration)(inputVar: RefVec2, outputVar: RefVec4): String = {
     import nutria.core.newton._
-    val iteration = Language.fLang.optimize(Language.fLang.parse(n.function).get)
+    val iteration =
+      Language.fLang.optimize(
+        Language.fLang.optimize(Language.fLang.parse(n.function).get)
+      )(new Optimizer[SpireUnitaryOperator, SpireBinaryOperator, Complex[Double], XAndLambda] {
+        def rules: List[PartialFunction[SpireNode[Complex[Double], XAndLambda], SpireNode[Complex[Double], XAndLambda]]] =
+          List(
+            {
+              case BinaryNode(Power, left, ConstantNode(Complex(2.0, 0.0))) => BinaryNode(Times, left, left)
+            }
+          )
+      })
     val derived = Language.fLang.optimize(Language.fLang.derive(iteration)(X))
 
     val initial = Language.c0Lang.optimize(Language.c0Lang.parse(n.initial).get)

@@ -32,7 +32,7 @@ a:hover{
     font-size: x-large;
 }
 
-.top-bar > div  > * {
+.top-bar > div img {
     margin : 0px 8px;
 }
 

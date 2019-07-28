@@ -37,6 +37,8 @@ object FractalEntity {
     newtonMandelbrotPolynomial(3),
     newtonMandelbrotPolynomial(4),
     newtonMandelbrotPolynomial(5),
+    newtonMandelbrotPolynomial(6),
+    newtonMandelbrotPolynomial(7),
     FractalEntity(
       program = DivergingSeries(
         iteration = "z*z*z + (-0.12 + i*0.80)",
