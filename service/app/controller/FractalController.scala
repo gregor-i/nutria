@@ -1,18 +1,10 @@
 package controller
 
-import java.io.ByteArrayOutputStream
 import java.util.UUID
 
 import io.circe.syntax._
 import javax.inject.Inject
 import nutria.core._
-import nutria.core.viewport.Point
-import nutria.data.colors.RGBA
-import nutria.data.consumers.{CountIterations, NewtonColoring}
-import nutria.data.content.LinearNormalized
-import nutria.data.image.Image
-import nutria.data.sequences.NewtonFractalByString
-import nutria.data.syntax._
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
 import repo.{FractalImageRepo, FractalRepo, FractalRow}
