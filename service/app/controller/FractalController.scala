@@ -57,36 +57,13 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
 
       _ <- fractalImageRepo.get(id).toLeft(())
         .left.map { bytes =>
-        Ok(bytes).as("image/png")
+        Ok(bytes)
+          .as("image/png")
           .withHeaders("ETag" -> etag)
       }
-
-      fractalCalculation = fractal.program match {
-        case series: DivergingSeries =>
-          nutria.data.sequences.DivergingSeries(series)
-            .andThen(CountIterations.double())
-            .andThen(LinearNormalized(0, series.maxIterations))
-            .andThen(f => RGBA(255d * f, 255d * f, 255d * f))
-        case newton: NewtonIteration =>
-          val f = NewtonFractalByString(newton.function, newton.initial)
-          f(newton.maxIterations, newton.threshold, newton.overshoot)
-            .andThen(NewtonColoring.smooth(f))
-        case s: DerivedDivergingSeries =>
-          nutria.data.sequences.DerivedDivergingSeries(s)
-      }
     } yield {
-      val img = fractal.program.view
-        .withDimensions(Dimensions(400, 225))
-        .withContent(fractalCalculation)
-        .multisampled()
-
-      val byteOutputStream = new ByteArrayOutputStream()
-      javax.imageio.ImageIO.write(Image.buffer(img), "png", byteOutputStream)
-      val bytes = byteOutputStream.toByteArray
-      byteOutputStream.close()
-      fractalImageRepo.save(id, bytes)
-      Ok(bytes).as("image/png")
-        .withHeaders("ETag" -> etag)
+      PartialContent(views.xml.RenderingError("processing"))
+        .as("image/svg+xml")
     }).merge
   }
 }
