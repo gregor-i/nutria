@@ -55,8 +55,8 @@ object ViewerUi {
 
     def endEvent(startPosition: Point): PointerEvent => Unit = { event =>
       val boundingBox = event.target.asInstanceOf[Element].getBoundingClientRect()
-      val translateA = state.fractalEntity.view.A * ((-event.pageX + startPosition._1) / boundingBox.width)
-      val translateB = state.fractalEntity.view.B * ((event.pageY - startPosition._2) / boundingBox.height)
+      val translateA = state.fractalEntity.view.A * ((startPosition._1 - event.pageX) / boundingBox.width)
+      val translateB = state.fractalEntity.view.B * ((startPosition._2 - event.pageY) / boundingBox.height)
       val newView = state.fractalEntity.view.translate(translateA + translateB)
       event.target.asInstanceOf[js.Dynamic].style.left = "0px"
       event.target.asInstanceOf[js.Dynamic].style.top = "0px"
@@ -82,7 +82,7 @@ object ViewerUi {
     val wheelEvent = events.onWheel := { event =>
       val boundingBox = event.target.asInstanceOf[Element].getBoundingClientRect()
       val x = (event.clientX - boundingBox.left) / boundingBox.width
-      val y = 1 - (event.clientY - boundingBox.top) / boundingBox.height
+      val y = (event.clientY - boundingBox.top) / boundingBox.height
       val steps = event.asInstanceOf[WheelEvent].deltaY
 
       update(
