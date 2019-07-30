@@ -13,6 +13,8 @@ case class FractalEntity(program: FractalProgram,
 
 
 object FractalEntity {
+  def id(fractalEntity: FractalEntity): String = fractalEntity.hashCode().toHexString
+
   val systemFractals: Vector[FractalEntity] = Vector[FractalEntity](
     FractalEntity(
       program = DivergingSeries.mandelbrot
@@ -67,7 +69,7 @@ object FractalEntity {
   implicit val encoder: Encoder[FractalEntity] = deriveEncoder
 }
 
-
+@monocle.macros.Lenses()
 case class FractalEntityWithId(id: String,
                                entity: FractalEntity)
 

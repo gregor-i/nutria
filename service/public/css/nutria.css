@@ -16,6 +16,10 @@ a:hover{
 
 /* navbar */
 .top-bar {
+    top: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
     display : flex;
     justify-content : space-between;
     background-color : #eee;
@@ -34,6 +38,20 @@ a:hover{
 
 .top-bar > div img {
     margin : 0px 8px;
+}
+
+/* action bar */
+.action-bar {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    display : flex;
+    justify-content : flex-end;
+}
+
+.action-bar > *{
+    margin: 8px 16px;
 }
 
 /* lobby-tile-list */
@@ -79,7 +97,6 @@ a:hover{
     border : 1px solid #dbdbdb;
 }
 
-
 .lobby-tile-list > article > footer > a:not(:last-child) {
     border-right : 0px solid #dbdbdb;
 }
@@ -97,9 +114,4 @@ a:hover{
     height : 100vh;
     overflow : hidden;
     z-index: -1;
-}
-
-canvas {
-    background: url("/img/canvas-fallback.svg") no-repeat center;
-    background-size: contain;
 }

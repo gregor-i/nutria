@@ -1,7 +1,5 @@
 package controller
 
-import java.util.UUID
-
 import io.circe.syntax._
 import javax.inject.Inject
 import nutria.core._
@@ -12,13 +10,14 @@ import repo.{FractalImageRepo, FractalRepo, FractalRow}
 class FractalController @Inject()(fractalRepo: FractalRepo,
                                   fractalImageRepo: FractalImageRepo
                                  ) extends InjectedController with Circe {
-  private def fractals: List[FractalEntityWithId] =
-    fractalRepo.list()
-      .collect { case FractalRow(id, Some(entity)) => FractalEntityWithId(id, entity) }
-      .sortBy(_.id)
 
   def listFractals() = Action {
-    Ok(fractals.asJson)
+    Ok {
+      fractalRepo.list()
+        .collect { case FractalRow(id, Some(entity)) => FractalEntityWithId(id, entity) }
+        .sortBy(_.id)
+        .asJson
+    }
   }
 
   def getFractal(id: String) = Action {
@@ -28,12 +27,17 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
     }
   }
 
+  def deleteFractal(id: String) = Action {
+    fractalRepo.delete(id)
+    Ok
+  }
+
   def postFractal() = Action(circe.tolerantJson[FractalEntity]) { request =>
     fractalRepo.save(FractalRow(
-      id = UUID.randomUUID().toString,
+      id = FractalEntity.id(request.body),
       maybeFractal = Some(request.body)
     ))
-    Ok(fractals.asJson)
+    Ok
   }
 
   def image(id: String) = Action { request =>

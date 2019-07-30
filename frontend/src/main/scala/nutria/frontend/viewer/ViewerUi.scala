@@ -5,24 +5,47 @@ import com.raquo.snabbdom.simple._
 import com.raquo.snabbdom.simple.implicits._
 import nutria.core.Point
 import nutria.core.viewport.Point._
+import nutria.frontend.common.Buttons
 import nutria.frontend.shaderBuilder.FractalRenderer
 import nutria.frontend.util.{Hooks, SnabbdomHelper}
-import nutria.frontend.{LenseUtils, common}
+import nutria.frontend.{LenseUtils, NutriaService, common}
+import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
 import org.scalajs.dom.raw.MouseEvent
 import org.scalajs.dom.{Element, PointerEvent, WheelEvent}
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.scalajs.js
+import scala.util.{Failure, Success}
 
 object ViewerUi {
   def render(implicit state: ViewerState, update: ViewerState => Unit): VNode =
     tags.div(
       common.Header("Nutria Fractal Explorer"),
-      renderCanvas,
-      tags.a("edit",
-        styles.background := "white",
-        events.onClick := (() => update(state.copy(edit = Some(state.fractalEntity))))
+      tags.div(
+        attrs.className := "action-bar",
+        Buttons.edit(
+          attrs.className := "button is-primary",
+          events.onClick := (() => update(state.copy(edit = Some(state.fractalEntity))))
+        ),
+        Buttons.save(
+          attrs.className := (state.saveProcess.map(_.value) match {
+            case Some(None) => "button is-loading"
+            case Some(Some(Success(_))) => "button is-success"
+            case Some(Some(Failure(_))) => "button is-danger"
+            case None => "button"
+          }),
+          attrs.disabled := state.saveProcess.exists(!_.isCompleted),
+          events.onClick := (() =>
+            update(state.copy(saveProcess = Some(NutriaService.save(state.fractalEntity).map(_ => state.fractalEntity))))
+          ),
+        ),
+        Buttons.share(),
+        Buttons.logSource(
+          events.onClick := (() => dom.console.log(FractalRenderer.fragmentShaderSource(state.fractalEntity.program)))
+        )
       ),
+      renderCanvas,
       renderPopup()
     )
 
@@ -35,7 +58,19 @@ object ViewerUi {
           attrs.className := "modal-background",
           events.onClick := (() => update(state.copy(edit = None))),
         ),
-        common.RenderEditFractalEntity(fractal, LenseUtils.lookedUp(fractal, ViewerState.editOptional.asSetter), Seq.empty)
+        common.RenderEditFractalEntity(
+          fractal = fractal,
+          lens = LenseUtils.lookedUp(fractal, ViewerState.editOptional.asSetter),
+          footer = Buttons.group(
+            Buttons.accept(
+              attrs.className := "button is-primary",
+              events.onClick := (() => update(state.copy(fractalEntity = fractal, edit = None)))
+            ),
+            Buttons.cancel(
+              events.onClick := (() => update(state.copy(edit = None)))
+            )
+          )
+        )
       )
     }
 

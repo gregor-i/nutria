@@ -6,9 +6,9 @@ import nutria.core._
 
 //@monocle.macros.Lenses()
 case class LibraryState(programs: Vector[FractalEntityWithId],
-                        edit: Option[FractalEntity] = None)
+                        edit: Option[FractalEntityWithId] = None)
 
 object LibraryState {
-  val editOptional: Optional[LibraryState, FractalEntity] = GenLens[LibraryState](_.edit)
+  val editOptional: Optional[LibraryState, FractalEntityWithId] = GenLens[LibraryState](_.edit)
     .composePrism(monocle.std.option.some)
 }

@@ -11,7 +11,7 @@ import org.scalajs.dom.html.Canvas
 import nutria.frontend.util.SnabbdomHelper.seqNode
 
 object RenderEditFractalEntity {
-  def apply[A](fractal: FractalEntity, lens: Lens[A, FractalEntity], buttons: Seq[VNode])
+  def apply[A](fractal: FractalEntity, lens: Lens[A, FractalEntity], footer: VNode*)
               (implicit state: A, update: A => Unit): VNode = {
     tags.div(attrs.className := "modal-card",
       tags.build("header")(
@@ -24,7 +24,7 @@ object RenderEditFractalEntity {
       ),
       tags.footer(
         attrs.className := "modal-card-foot",
-        seqNode(buttons)
+        seqNode(footer)
       )
     )
   }

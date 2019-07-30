@@ -4,7 +4,7 @@
 
 CREATE TABLE fractal_images (
   fractal_id varchar(255)
-    REFERENCES fractals(id)
+    REFERENCES fractals(id) ON DELETE CASCADE
     UNIQUE,
   creation_time timestamp with time zone
     default current_timestamp,

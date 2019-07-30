@@ -3,12 +3,11 @@ package nutria.frontend.library
 import com.raquo.snabbdom.simple._
 import com.raquo.snabbdom.simple.implicits._
 import nutria.core._
-import nutria.frontend.shaderBuilder.FractalRenderer
+import nutria.frontend.common.Buttons
 import nutria.frontend.util.SnabbdomHelper
 import nutria.frontend.viewer.Viewer
 import nutria.frontend.{LenseUtils, NutriaService, common}
 import org.scalajs.dom
-import org.scalajs.dom.raw.HTMLElement
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -35,44 +34,29 @@ object LibraryUi extends SnabbdomHelper {
           events.onClick := (() => update(state.copy(edit = None))),
         ),
         common.RenderEditFractalEntity(
-          fractal = fractal,
-          lens = LenseUtils.lookedUp(fractal, LibraryState.editOptional.asSetter),
-          buttons = Seq(
-            tags.button(
+          fractal = fractal.entity,
+          lens = LenseUtils.lookedUp(fractal.entity, LibraryState.editOptional.composeLens(FractalEntityWithId.entity).asSetter),
+          footer = Buttons.group(
+            Buttons.explore(
               attrs.className := "button is-link",
-              events.onClick := (() => dom.window.location.assign(Viewer.url(fractal))),
-              "explore"
+              events.onClick := (() => dom.window.location.assign(Viewer.url(fractal.entity)))
             ),
-            tags.button(
-              attrs.className := "button",
-              events.onClick := {event =>
-                event.target.asInstanceOf[HTMLElement].classList.add("is-loading")
-                NutriaService.save(fractal)
-                  .foreach{ newFractals =>
-                    event.target.asInstanceOf[HTMLElement].classList.remove("is-loading")
-                    event.target.asInstanceOf[HTMLElement].classList.add("is-success")
-                    update(LibraryState(
-                      programs = newFractals
-                    ))
-                  }
-              },
-              "save"
-            ),
-            tags.button(
-              attrs.className := "button",
-              events.onClick := {event =>
-                dom.console.log(FractalRenderer.fragmentShaderSource(fractal.program))
-              },
-              "log source"
+            Buttons.delete(
+              attrs.className := "button is-danger",
+              events.onClick := (() => {
+                NutriaService.delete(fractal.id)
+                  .foreach(newFractals => update(state.copy(programs = newFractals, edit = None)))
+              })
             )
-          ))
+          )
+        )
       )
     }
 
   def renderProgramTile(fractal: FractalEntityWithId)
                        (implicit state: LibraryState, update: LibraryState => Unit): VNode =
     tags.build("article")(
-      events.onClick := (() => update(state.copy(edit = Some(fractal.entity)))),
+      events.onClick := (() => update(state.copy(edit = Some(fractal)))),
       tags.img(
         attrs.widthAttr := 400,
         attrs.heightAttr := 225,

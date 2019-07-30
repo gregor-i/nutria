@@ -24,26 +24,26 @@ class SetupDataModule extends SimpleModule(
 )
 
 private class FractalImageScheduler @Inject()(repo: FractalRepo,
-                                              fractalImageRepo: FractalImageRepo) {
+                                              fractalImageRepo: FractalImageRepo,
+                                              actorSystem: ActorSystem) {
 
-  private val executor = Executors.newSingleThreadExecutor()
-  private implicit val ex: ExecutionContext = ExecutionContext.fromExecutor(executor)
-  private implicit val as: ActorSystem = ActorSystem.create("FractalImageScheduler")
+  private implicit val ex: ExecutionContext =
+    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
 
   private val logger = Logger.apply("FractalImageScheduler")
 
-  as.scheduler.scheduleOnce(1.second) {
+  actorSystem.scheduler.scheduleOnce(1.second) {
     logger.info("inserting system fractals")
     FractalEntity.systemFractals.foreach {
       fractal =>
         repo.save(FractalRow(
-          id = fractal.program.hashCode().toHexString,
+          id = FractalEntity.id(fractal),
           maybeFractal = Some(fractal)
         ))
     }
   }
 
-  as.scheduler.schedule(initialDelay = 1.second, interval = 1.minute) {
+  actorSystem.scheduler.schedule(initialDelay = 1.second, interval = 1.minute) {
     repo.list()
       .collect { case FractalRow(id, Some(fractal)) => (id, fractal) }
       .filter { case (id, _) => fractalImageRepo.get(id).isEmpty }
