@@ -1,6 +1,5 @@
 package module
 
-import java.io.ByteArrayOutputStream
 import java.util.concurrent.Executors
 
 import akka.actor.ActorSystem
@@ -68,11 +67,7 @@ private class FractalImageScheduler @Inject()(repo: FractalRepo,
           )
           .multisampled()
 
-        val byteOutputStream = new ByteArrayOutputStream()
-        javax.imageio.ImageIO.write(Image.buffer(img), "png", byteOutputStream)
-        val bytes = byteOutputStream.toByteArray
-        byteOutputStream.close()
-        fractalImageRepo.save(id, bytes)
+        fractalImageRepo.save(id, Image.bytes(img, RGBA.white))
         logger.info(s"calculated fractal ${id}")
       }
   }

@@ -1,6 +1,6 @@
 import nutria.core.viewport.{Dimensions, Viewport}
 import nutria.data.Defaults
-import nutria.data.colors.{Invert, MonoColor}
+import nutria.data.colors.{Invert, MonoColor, RGBA}
 import nutria.data.consumers.CountIterations
 import nutria.data.content.{Content, LinearNormalized}
 import nutria.data.image.{Image, SaveFolder}
@@ -53,7 +53,7 @@ object JuliaSetMap extends ProcessorHelper with Defaults {
         }
       }
 
-      Image.save(combined.map(LinearNormalized(0d, 5000d)).withColor(MonoColor.Blue), file)
+      Image.save(combined.map(LinearNormalized(0d, 5000d)).withColor(MonoColor.Blue), RGBA.white, file)
     }
   }
 
@@ -70,7 +70,7 @@ object JuliaSetMap extends ProcessorHelper with Defaults {
         view
           .withDimensions(Defaults.defaultDimensions.scale(0.1))
           .withContent(new JuliaSet(cx, cy)(500) andThen CountIterations.double() andThen LinearNormalized(0d, 500d))
-          .withColor(MonoColor.Blue), file)
+          .withColor(MonoColor.Blue), RGBA.white, file)
     }
   }
 

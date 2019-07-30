@@ -1,6 +1,6 @@
 import nutria.core.Dimensions
 import nutria.data.Defaults
-import nutria.data.colors.Wikipedia
+import nutria.data.colors.{RGBA, Wikipedia}
 import nutria.data.consumers.CountIterations
 import nutria.data.content.{LinearNormalized, StreamByResolution}
 import nutria.data.fractalFamilies.MandelbrotFamily
@@ -19,6 +19,6 @@ object TestStream extends App with Defaults {
     fractal)
 
   stream.zipWithIndex.foreach {
-    case (img, i) => Image.verboseSave(img, defaultSaveFolder /~ s"i_$i.png")
+    case (img, i) => Image.verboseSave(img, RGBA.white, defaultSaveFolder /~ s"i_$i.png")
   }
 }

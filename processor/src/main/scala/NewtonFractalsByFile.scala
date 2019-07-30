@@ -1,4 +1,5 @@
 import nutria.data.Defaults
+import nutria.data.colors.RGBA
 import nutria.data.consumers.NewtonColoring
 import nutria.data.fractalFamilies.MandelbrotFamily
 import nutria.data.image.Image
@@ -27,7 +28,7 @@ object NewtonFractalsByFile extends ProcessorHelper with Defaults {
         MandelbrotFamily.initialViewport
           .withDimensions(Defaults.defaultDimensions)
           .withContent(newton(50) andThen NewtonColoring.smooth(newton))
-          .cached, saveFolder /~ s"$fileName.png")
+          .cached, RGBA.white, saveFolder /~ s"$fileName.png")
   }
 
 

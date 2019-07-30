@@ -1,6 +1,6 @@
 import nutria.data.Defaults
 import nutria.data.accumulator.Variance
-import nutria.data.colors.WhiteToBlack
+import nutria.data.colors.{RGBA, WhiteToBlack}
 import nutria.data.consumers.CountIterations
 import nutria.data.image.Image
 import nutria.data.sequences.Mandelbrot
@@ -18,6 +18,6 @@ object TimeEscapeVariance extends Defaults with ProcessorHelper {
     Image.save(
       cached
         .linearNormalized
-        .withColor(WhiteToBlack), defaultSaveFolder /~ "TimeEscapeVariance.png")
+        .withColor(WhiteToBlack), RGBA.white, defaultSaveFolder /~ "TimeEscapeVariance.png")
   }
 }

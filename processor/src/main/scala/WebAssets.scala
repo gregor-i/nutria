@@ -28,5 +28,5 @@ object WebAssets extends App with Defaults {
     .withColor(color)
     .cached
 
-  Image.verboseSave(img, defaultSaveFolder / "service" / "public" / "img" /~ "icon.png")
+  Image.verboseSave(img, RGBA.white, defaultSaveFolder / "service" / "public" / "img" /~ "icon.png")
 }

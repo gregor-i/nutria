@@ -1,5 +1,5 @@
 import nutria.core.Viewport
-import nutria.data.colors.{Invert, MonoColor, Wikipedia}
+import nutria.data.colors.{Invert, MonoColor, RGBA, Wikipedia}
 import nutria.data.consumers.CardioidNumeric
 import nutria.data.content.LinearNormalized
 import nutria.data.fractalFamilies.MandelbrotFamily
@@ -29,7 +29,7 @@ object Cardioid extends ProcessorHelper with Defaults {
         .withContent(Mandelbrot(2000) andThen CardioidNumeric(30) andThen LinearNormalized(0d, 0.1))
 
       for ((name, color) <- colors)
-        Image.save(content.map(color), saveFolder / view.toString /~ s"$name.png")
+        Image.save(content.map(color), RGBA.white, saveFolder / view.toString /~ s"$name.png")
     }
   }
 

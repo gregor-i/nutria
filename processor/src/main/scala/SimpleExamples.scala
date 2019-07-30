@@ -1,5 +1,5 @@
 import nutria.data.Defaults
-import nutria.data.colors.Wikipedia
+import nutria.data.colors.{RGBA, Wikipedia}
 import nutria.data.consumers.CountIterations
 import nutria.data.content.LinearNormalized
 import nutria.data.image.Image
@@ -12,13 +12,13 @@ object SimpleExamples extends App with Defaults {
     defaultViewport
       .withDimensions(defaultDimensions)
       .withContent(Mandelbrot(350, 10d) andThen CountIterations.double() andThen LinearNormalized(0d, 350d))
-      .withColor(Wikipedia), defaultSaveFolder /~ "basic.png")
+      .withColor(Wikipedia), RGBA.white, defaultSaveFolder /~ "basic.png")
 
   Image.verboseSave(
     defaultViewport
       .withDimensions(defaultDimensions)
       .withContent(Mandelbrot(350, 10d) andThen CountIterations.smoothed() andThen LinearNormalized(0d, 350d))
-      .withColor(Wikipedia), defaultSaveFolder /~ "basic-smoothed.png")
+      .withColor(Wikipedia), RGBA.white, defaultSaveFolder /~ "basic-smoothed.png")
 
 
   Image.verboseSave(
@@ -26,12 +26,12 @@ object SimpleExamples extends App with Defaults {
       .withDimensions(defaultDimensions)
       .withContent(Mandelbrot(350, 10d) andThen CountIterations.double() andThen LinearNormalized(0d, 350d))
       .multisampled()
-      .withColor(defaultColor), defaultSaveFolder /~ "basic-aa.png")
+      .withColor(defaultColor), RGBA.white, defaultSaveFolder /~ "basic-aa.png")
 
   Image.verboseSave(
     defaultViewport
       .withDimensions(defaultDimensions)
       .withContent(Mandelbrot(350, 10d) andThen CountIterations.smoothed() andThen LinearNormalized(0d, 350d))
       .multisampled()
-      .withColor(defaultColor), defaultSaveFolder /~ "basic-smoothe-aa.png")
+      .withColor(defaultColor), RGBA.white, defaultSaveFolder /~ "basic-smoothe-aa.png")
 }
