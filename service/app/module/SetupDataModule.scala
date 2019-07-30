@@ -1,49 +1,54 @@
 package module
 
 import java.io.ByteArrayOutputStream
+import java.util.concurrent.Executors
 
 import akka.actor.ActorSystem
-import com.google.inject.AbstractModule
-import javax.inject.{Inject, Singleton}
-import nutria.core.{DerivedDivergingSeries, Dimensions, DivergingSeries, FractalEntity, NewtonIteration}
+import javax.inject.Inject
+import nutria.core._
 import nutria.data.colors.RGBA
 import nutria.data.consumers.{CountIterations, NewtonColoring}
 import nutria.data.content.LinearNormalized
 import nutria.data.image.Image
 import nutria.data.sequences.NewtonFractalByString
-import repo.{FractalImageRepo, FractalRepo, FractalRow}
-
-import scala.concurrent.duration._
-import scala.concurrent.ExecutionContext
 import nutria.data.syntax._
 import play.api.Logger
+import play.api.inject.{SimpleModule, bind}
+import repo.{FractalImageRepo, FractalRepo, FractalRow}
 
-class SetupDataModule extends AbstractModule {
-  override def configure(): Unit = {
-    bind(classOf[Initializer]).asEagerSingleton()
-    bind(classOf[FractalImageScheduler]).asEagerSingleton()
+import scala.concurrent.ExecutionContext
+import scala.concurrent.duration._
+
+class SetupDataModule extends SimpleModule(
+  bind[FractalImageScheduler].toSelf.eagerly()
+)
+
+private class FractalImageScheduler @Inject()(repo: FractalRepo,
+                                              fractalImageRepo: FractalImageRepo) {
+
+  private val executor = Executors.newSingleThreadExecutor()
+  private implicit val ex: ExecutionContext = ExecutionContext.fromExecutor(executor)
+  private implicit val as: ActorSystem = ActorSystem.create("FractalImageScheduler")
+
+  private val logger = Logger.apply("FractalImageScheduler")
+
+  as.scheduler.scheduleOnce(1.second) {
+    logger.info("inserting system fractals")
+    FractalEntity.systemFractals.foreach {
+      fractal =>
+        repo.save(FractalRow(
+          id = fractal.program.hashCode().toHexString,
+          maybeFractal = Some(fractal)
+        ))
+    }
   }
-}
 
-@Singleton()
-private class Initializer @Inject()(repo: FractalRepo) {
-  FractalEntity.systemFractals.foreach { fractal =>
-    repo.save(FractalRow(
-      id = fractal.program.hashCode().toHexString,
-      maybeFractal = Some(fractal)
-    ))
-  }
-}
-
-@Singleton()
-private class FractalImageScheduler @Inject()(repo: FractalRepo, fractalImageRepo: FractalImageRepo)
-                                             (implicit as: ActorSystem, ex: ExecutionContext) {
-  as.scheduler.schedule(initialDelay = 0.millis, interval = 1.minute) {
+  as.scheduler.schedule(initialDelay = 1.second, interval = 1.minute) {
     repo.list()
       .collect { case FractalRow(id, Some(fractal)) => (id, fractal) }
       .filter { case (id, _) => fractalImageRepo.get(id).isEmpty }
       .foreach { case (id, fractal) =>
-        Logger.info(s"calculating fractal ${id}")
+        logger.info(s"calculating fractal ${id}")
         val img = fractal.view
           .withDimensions(Dimensions(400, 225))
           .withContent(
@@ -68,7 +73,7 @@ private class FractalImageScheduler @Inject()(repo: FractalRepo, fractalImageRep
         val bytes = byteOutputStream.toByteArray
         byteOutputStream.close()
         fractalImageRepo.save(id, bytes)
-        Logger.info(s"calculated fractal ${id}")
+        logger.info(s"calculated fractal ${id}")
       }
   }
 }

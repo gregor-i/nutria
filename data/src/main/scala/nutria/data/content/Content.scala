@@ -18,7 +18,7 @@ trait Content[A] extends HasDimensions {
 class CachedContent[A](val values: Seq[Seq[A]], val dimensions: Dimensions) extends Content[A] {
   def this(content: Content[A]) =
     this(
-      (0 until content.width).par.map(x => (0 until content.height).map(y => content(x, y))).seq,
+      (0 until content.width).map(x => (0 until content.height).map(y => content(x, y))),
       content.dimensions)
 
   override def apply(x: Int, y: Int): A = values(x)(y)
