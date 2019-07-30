@@ -1,39 +1,40 @@
 import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
+// global settings
 version in ThisBuild := "0.0.1"
-scalaVersion in ThisBuild := "2.12.7"
+scalaVersion in ThisBuild := "2.12.8"
 scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
 
 // projects
-val core = crossProject(JSPlatform, JVMPlatform)
+lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("core"))
   .settings(mathParser, scalaTestAndScalaCheck, spire, circe, monocle)
 
-val data = project
+lazy val data = project
   .dependsOn(core.jvm)
   .settings(scalaTestAndScalaCheck)
   .dependsOn(core.jvm % "compile->compile;test->test")
 
-val processor = project
+lazy val processor = project
   .settings(scalaTestAndScalaCheck)
   .dependsOn(data)
 
-val viewer = project
+lazy val viewer = project
   .dependsOn(data)
 
-val service = project.in(file("service"))
+lazy val service = project.in(file("service"))
   .dependsOn(core.jvm, data)
   .settings(scalaTestAndScalaCheck, circe)
   .enablePlugins(PlayScala)
   .settings(
     libraryDependencies += guice,
-    libraryDependencies += "com.dripower" %% "play-circe" % "2610.0",
-    libraryDependencies += "org.postgresql" % "postgresql" % "42.2.5",
+    libraryDependencies += "com.dripower" %% "play-circe" % "2711.0",
+    libraryDependencies += "org.postgresql" % "postgresql" % "42.2.6",
     libraryDependencies += evolutions,
     libraryDependencies += jdbc,
-    libraryDependencies += "org.playframework.anorm" %% "anorm" % "2.6.2",
-    libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test,
+    libraryDependencies += "org.playframework.anorm" %% "anorm" % "2.6.4",
+    libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % Test,
   )
   .enablePlugins(EmbeddedPostgresPlugin)
   .settings(javaOptions += s"-DDATABASE_URL=${postgresConnectionString.value}")
@@ -50,7 +51,7 @@ val frontend = project.in(file("frontend"))
     libraryDependencies += "com.raquo" %%% "snabbdom" % "0.1.1",
     npmDependencies in Compile += "snabbdom" -> "0.7.0"
   )
-  .settings(mathParser, circe)
+  .settings(scalaTestAndScalaCheck, mathParser, circe)
 
 val integration = taskKey[Seq[java.io.File]]("build the frontend and copy the results into service")
 integration in frontend := {
@@ -70,11 +71,12 @@ compile in Compile := {
   (compile in Compile).value
 }
 
-def spire = libraryDependencies += "org.typelevel" %%% "spire" % "0.16.0"
+// libraries
+def spire = libraryDependencies += "org.typelevel" %%% "spire" % "0.16.2"
 
 def scalaTestAndScalaCheck =
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest" % "3.0.5" % Test,
+    "org.scalatest" %%% "scalatest" % "3.0.8" % Test,
     "org.scalacheck" %%% "scalacheck" % "1.14.0" % Test
   )
 
@@ -85,18 +87,18 @@ def mathParser = Seq(
 
 def circe =
   libraryDependencies ++= Seq(
-    "io.circe" %%% "circe-core" % "0.10.0",
-    "io.circe" %%% "circe-generic" % "0.10.0",
-    "io.circe" %%% "circe-generic-extras" % "0.10.0",
-    "io.circe" %%% "circe-parser" % "0.10.0",
+    "io.circe" %%% "circe-core" % "0.11.1",
+    "io.circe" %%% "circe-generic" % "0.11.1",
+    "io.circe" %%% "circe-generic-extras" % "0.11.1",
+    "io.circe" %%% "circe-parser" % "0.11.1",
   )
 
 def monocle = Seq(
   libraryDependencies ++= Seq(
-    "com.github.julien-truffaut" %%% "monocle-core" % "1.5.0",
-    "com.github.julien-truffaut" %%% "monocle-macro" % "1.5.0",
-    "com.github.julien-truffaut" %%% "monocle-unsafe" % "1.5.0",
-    "com.github.julien-truffaut" %%% "monocle-state" % "1.5.0",
+    "com.github.julien-truffaut" %%% "monocle-core" % "1.6.0",
+    "com.github.julien-truffaut" %%% "monocle-macro" % "1.6.0",
+    "com.github.julien-truffaut" %%% "monocle-unsafe" % "1.6.0",
+    "com.github.julien-truffaut" %%% "monocle-state" % "1.6.0",
   ),
-  addCompilerPlugin("org.scalamacros" %% "paradise" % "2.1.0" cross CrossVersion.full)
+  addCompilerPlugin("org.scalamacros" %% "paradise" % "2.1.1" cross CrossVersion.full)
 )
