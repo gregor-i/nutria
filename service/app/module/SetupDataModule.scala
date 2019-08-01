@@ -46,6 +46,7 @@ private class FractalImageScheduler @Inject()(repo: FractalRepo,
     repo.list()
       .collect { case FractalRow(id, Some(fractal)) => (id, fractal) }
       .filter { case (id, _) => fractalImageRepo.get(id).isEmpty }
+      .filter(!_._2.program.isInstanceOf[FreestyleProgram])
       .foreach { case (id, fractal) =>
         logger.info(s"calculating fractal ${id}")
         val img = fractal.view

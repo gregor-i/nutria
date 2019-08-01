@@ -73,10 +73,19 @@ object NewtonIteration {
   }
 }
 
+@monocle.macros.Lenses()
+case class FreestyleProgram(code: String,
+                            antiAliase: Int = 2) extends FractalProgram
+
+object FreestyleProgram{
+  val default = FreestyleProgram("color = vec4(abs(z.x), abs(z.y), length(z), 1.0);")
+}
+
 object FractalProgram {
   val newtonIteration: Prism[FractalProgram, NewtonIteration] = GenPrism[FractalProgram, NewtonIteration]
   val divergingSeries: Prism[FractalProgram, DivergingSeries] = GenPrism[FractalProgram, DivergingSeries]
   val derivedDivergingSeries: Prism[FractalProgram, DerivedDivergingSeries] = GenPrism[FractalProgram, DerivedDivergingSeries]
+  val freestyleProgram: Prism[FractalProgram, FreestyleProgram] = GenPrism[FractalProgram, FreestyleProgram]
 
   implicit val decoder: Decoder[FractalProgram] = deriveDecoder
   implicit val encoder: Encoder[FractalProgram] = deriveEncoder

@@ -53,13 +53,15 @@ object RenderEditFractalEntity {
         options = Vector(
           "NewtonIteration",
           "DivergingSeries",
-          "DerivedDivergingSeries"
+          "DerivedDivergingSeries",
+          "FreestyleProgram"
         ),
         value = fractal.program.getClass.getSimpleName,
         onChange = {
           case "NewtonIteration" => update((lens composeLens FractalEntity.program).set(NewtonIteration())(state))
           case "DivergingSeries" => update((lens composeLens FractalEntity.program).set(DivergingSeries.mandelbrot)(state))
           case "DerivedDivergingSeries" => update((lens composeLens FractalEntity.program).set(DerivedDivergingSeries.mandelbrot)(state))
+          case "FreestyleProgram" => update((lens composeLens FractalEntity.program).set(FreestyleProgram.default)(state))
         }
       ),
 
@@ -97,6 +99,12 @@ object RenderEditFractalEntity {
             Form.intInput("max iterations", lensFractal composeLens DivergingSeries.maxIterations),
             Form.intInput("anti aliase", lensFractal composeLens DivergingSeries.antiAliase),
             Form.doubleInput("escape radius", lensFractal composeLens DivergingSeries.escapeRadius),
+          )
+        case f: FreestyleProgram =>
+          val lensFractal = lens composeLens FractalEntity.program composeLens LenseUtils.lookedUp(f, FractalProgram.freestyleProgram.asSetter)
+          Seq(
+            Form.mulitlineStringInput("code", lensFractal composeLens FreestyleProgram.code),
+            Form.intInput("anti aliase", lensFractal composeLens FreestyleProgram.antiAliase),
           )
       }),
       Form.stringInput("description", lens composeLens FractalEntity.description),

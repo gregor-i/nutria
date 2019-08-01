@@ -40,6 +40,20 @@ object Form {
       )
     )
 
+  def mulitlineStringInput[S](label: String, lens: Lens[S, String])
+                             (implicit state: S, update: S => Unit) =
+    inputStyle(label,
+      tags.textArea(
+        attrs.className := "textarea",
+        events.onChange := {
+          event =>
+            val value = event.target.asInstanceOf[HTMLInputElement].value
+            update(lens.set(value)(state))
+        },
+        lens.get(state)
+      )
+    )
+
   def intInput[S](label: String, lens: Lens[S, Int])
                  (implicit state: S, update: S => Unit) =
     inputStyle(label,

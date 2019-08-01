@@ -12,6 +12,7 @@ object FractalProgramToWebGl {
       case f: NewtonIteration => AntiAliase(newtonIteration(f), f.antiAliase)
       case f: DivergingSeries => AntiAliase(divergingSeries(f), f.antiAliase)
       case f: DerivedDivergingSeries => AntiAliase(derivedDivergingSeries(f), f.antiAliase)
+      case f: FreestyleProgram => AntiAliase(freestyle(f), f.antiAliase)
     }
 
   def derivedDivergingSeries(f: DerivedDivergingSeries)
@@ -175,4 +176,16 @@ object FractalProgramToWebGl {
        """.stripMargin
   }
 
+
+  def freestyle(f: FreestyleProgram)(inputVar: RefVec2, outputVar: RefVec4): String = {
+    s"""{
+       |vec2 z = ${inputVar.name};
+       |vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
+       |
+       |${f.code}
+       |
+       |${outputVar.name} = color;
+       |}
+     """.stripMargin
+  }
 }
