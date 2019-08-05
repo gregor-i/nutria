@@ -1,33 +1,695 @@
 [
   {
-    "id": "11882a35",
+    "id": "2c99f5c4",
+    "program": {
+      "DivergingSeries": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "escapeRadius": 100.0,
+        "initial": "0",
+        "iteration": "z*z+0.001*log(z) + lambda"
+      }
+    },
+    "view": {
+      "origin": [
+        -1.4239910488170056,
+        -0.011763035633607855
+      ],
+      "A": [
+        0.040060406459627926,
+        0.0
+      ],
+      "B": [
+        0.0,
+        0.020155392000000303
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "fb8e2405",
+    "program": {
+      "DivergingSeries": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "escapeRadius": 100.0,
+        "initial": "0",
+        "iteration": "z*z + lambda"
+      }
+    },
+    "view": {
+      "origin": [
+        -2.5,
+        -1.0
+      ],
+      "A": [
+        3.5,
+        0.0
+      ],
+      "B": [
+        0.0,
+        2.0
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "f6a7251f",
+    "program": {
+      "DivergingSeries": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "escapeRadius": 100.0,
+        "initial": "lambda",
+        "iteration": "z*z*z + (-0.12 + i*0.80)"
+      }
+    },
+    "view": {
+      "origin": [
+        -2.5,
+        -1.0
+      ],
+      "A": [
+        3.5,
+        0.0
+      ],
+      "B": [
+        0.0,
+        2.0
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "c0082fbc",
+    "program": {
+      "DivergingSeries": {
+        "antiAliase": 2,
+        "maxIterations": 50,
+        "escapeRadius": 100.0,
+        "initial": "lambda",
+        "iteration": "z*z + (-0.6 + i*0.6)"
+      }
+    },
+    "view": {
+      "origin": [
+        -2.5,
+        -1.0
+      ],
+      "A": [
+        3.5,
+        0.0
+      ],
+      "B": [
+        0.0,
+        2.0
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "732b7e88",
+    "program": {
+      "DivergingSeries": {
+        "antiAliase": 2,
+        "maxIterations": 500,
+        "escapeRadius": 1001.0,
+        "initial": "lambda",
+        "iteration": "z*z+0.2*exp(z) + lambda"
+      }
+    },
+    "view": {
+      "origin": [
+        -0.47872846731922547,
+        -0.6465915195786512
+      ],
+      "A": [
+        0.06676734409938126,
+        0.0
+      ],
+      "B": [
+        0.0,
+        0.033592320000001195
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "74271827",
+    "program": {
+      "DivergingSeries": {
+        "antiAliase": 2,
+        "maxIterations": 500,
+        "escapeRadius": 1001.0,
+        "initial": "lambda",
+        "iteration": "exp(z) + lambda"
+      }
+    },
+    "view": {
+      "origin": [
+        0.7588783553955626,
+        6.66075020679108
+      ],
+      "A": [
+        0.309108074534176,
+        0.0
+      ],
+      "B": [
+        0.0,
+        0.15552000000000732
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "d753bec9",
+    "program": {
+      "DivergingSeries": {
+        "antiAliase": 2,
+        "maxIterations": 500,
+        "escapeRadius": 1001.0,
+        "initial": "lambda",
+        "iteration": "exp(z) + lambda"
+      }
+    },
+    "view": {
+      "origin": [
+        1.471174448953227,
+        996.911180049271
+      ],
+      "A": [
+        1.4310559006211945,
+        0.0
+      ],
+      "B": [
+        0.0,
+        0.7200000000000385
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "e78d9a5a",
+    "program": {
+      "DivergingSeries": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "escapeRadius": 100.0,
+        "initial": "lambda",
+        "iteration": "z*z*z + (-0.12 + i*0.78) + lambda*z"
+      }
+    },
+    "view": {
+      "origin": [
+        0.27572115019387067,
+        -0.36630476460063605
+      ],
+      "A": [
+        0.005191828677167718,
+        0.0
+      ],
+      "B": [
+        0.0,
+        0.002612138803200008
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "5bc044fb",
+    "program": {
+      "DerivedDivergingSeries": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "escapeRadius": 100.0,
+        "h2": 2.0,
+        "angle": 0.7853981633974483,
+        "initialZ": "lambda",
+        "initialZDer": "1",
+        "iterationZ": "z*z + lambda",
+        "iterationZDer": "z'*z*2 + 1"
+      }
+    },
+    "view": {
+      "origin": [
+        -2.5,
+        -1.0
+      ],
+      "A": [
+        3.5,
+        0.0
+      ],
+      "B": [
+        0.0,
+        2.0
+      ]
+    },
+    "description": "the famous mandelbrot with Normal map effect",
+    "reference": "https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set#Normal_map_effect"
+  },
+  {
+    "id": "ac8e276e",
+    "program": {
+      "DerivedDivergingSeries": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "escapeRadius": 100.0,
+        "h2": 2.0,
+        "angle": 0.7853981633974483,
+        "initialZ": "lambda",
+        "initialZDer": "1",
+        "iterationZ": "z*z + (-0.6 + i*0.6)",
+        "iterationZDer": "z'*z*2 + 1"
+      }
+    },
+    "view": {
+      "origin": [
+        -2.5,
+        -1.0
+      ],
+      "A": [
+        3.5,
+        0.0
+      ],
+      "B": [
+        0.0,
+        2.0
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "9970df8d",
     "program": {
       "NewtonIteration": {
         "antiAliase": 2,
         "maxIterations": 200,
         "threshold": 1.0E-4,
-        "function": "35*x*x*x*x*x*x*x*x*x-180*x*x*x*x*x*x*x+378*x*x*x*x*x-420*x*x*x+315+x + lambda",
+        "function": "exp(x)-i",
         "initial": "lambda",
         "center": [
-          0.25,
+          0.0,
           0.0
         ],
-        "brightnessFactor": 45.0,
+        "brightnessFactor": 25.0,
         "overshoot": 1.0
       }
     },
     "view": {
       "origin": [
-        0.24813792535967855,
-        -0.36580546246323814
+        -2.5,
+        -1.0
       ],
       "A": [
-        1.4310559006211703,
+        3.5,
         0.0
       ],
       "B": [
         0.0,
-        0.7200000000000263
+        2.0
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "cdd9efde",
+    "program": {
+      "NewtonIteration": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "threshold": 1.0E-4,
+        "function": "x*x*x - 1",
+        "initial": "lambda",
+        "center": [
+          0.0,
+          0.0
+        ],
+        "brightnessFactor": 25.0,
+        "overshoot": 1.0
+      }
+    },
+    "view": {
+      "origin": [
+        -2.5,
+        -1.0
+      ],
+      "A": [
+        3.5,
+        0.0
+      ],
+      "B": [
+        0.0,
+        2.0
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "c538d559",
+    "program": {
+      "NewtonIteration": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "threshold": 1.0E-4,
+        "function": "x*x*x -x - 1",
+        "initial": "lambda",
+        "center": [
+          0.0,
+          0.0
+        ],
+        "brightnessFactor": 25.0,
+        "overshoot": 1.0
+      }
+    },
+    "view": {
+      "origin": [
+        -2.5,
+        -1.0
+      ],
+      "A": [
+        3.5,
+        0.0
+      ],
+      "B": [
+        0.0,
+        2.0
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "be136254",
+    "program": {
+      "NewtonIteration": {
+        "antiAliase": 2,
+        "maxIterations": 500,
+        "threshold": 1.0E-5,
+        "function": "x*x*x*x*x + 1",
+        "initial": "exp(lambda)/lambda",
+        "center": [
+          0.0,
+          0.0
+        ],
+        "brightnessFactor": 25.0,
+        "overshoot": 1.0
+      }
+    },
+    "view": {
+      "origin": [
+        -4.604422390913491,
+        -2.974506213216784
+      ],
+      "A": [
+        11.042097998620031,
+        0.0
+      ],
+      "B": [
+        0.0,
+        5.555555555555703
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "cb45143c",
+    "program": {
+      "NewtonIteration": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "threshold": 1.0E-4,
+        "function": "x*x*x + 1/x - 1",
+        "initial": "lambda",
+        "center": [
+          0.0,
+          0.0
+        ],
+        "brightnessFactor": 25.0,
+        "overshoot": 1.0
+      }
+    },
+    "view": {
+      "origin": [
+        -2.5,
+        -1.0
+      ],
+      "A": [
+        3.5,
+        0.0
+      ],
+      "B": [
+        0.0,
+        2.0
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "1e8ba7b7",
+    "program": {
+      "NewtonIteration": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "threshold": 1.0E-4,
+        "function": "x*x*x*x + lambda",
+        "initial": "1",
+        "center": [
+          0.0,
+          0.0
+        ],
+        "brightnessFactor": 25.0,
+        "overshoot": 1.0
+      }
+    },
+    "view": {
+      "origin": [
+        -12.706311498540042,
+        -8.842488279382595
+      ],
+      "A": [
+        30.672494440610635,
+        0.0
+      ],
+      "B": [
+        0.0,
+        15.432098765432224
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "ce49bdbe",
+    "program": {
+      "NewtonIteration": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "threshold": 1.0E-4,
+        "function": "x*x*x*x + lambda",
+        "initial": "lambda*lambda*lambda + 15",
+        "center": [
+          0.0,
+          0.0
+        ],
+        "brightnessFactor": 25.0,
+        "overshoot": 1.0
+      }
+    },
+    "view": {
+      "origin": [
+        -3.7038764237103696,
+        -2.992389255168824
+      ],
+      "A": [
+        11.04209799861978,
+        0.0
+      ],
+      "B": [
+        0.0,
+        5.555555555555577
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "5365105c",
+    "program": {
+      "NewtonIteration": {
+        "antiAliase": 2,
+        "maxIterations": 500,
+        "threshold": 1.0E-5,
+        "function": "x*x*x*x*x*exp(x) + 1",
+        "initial": "exp(lambda)/lambda",
+        "center": [
+          0.0,
+          0.0
+        ],
+        "brightnessFactor": 25.0,
+        "overshoot": 1.0
+      }
+    },
+    "view": {
+      "origin": [
+        -4.165592716979138,
+        -2.765975851707353
+      ],
+      "A": [
+        11.042097998620035,
+        0.0
+      ],
+      "B": [
+        0.0,
+        5.555555555555705
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "d4b852f0",
+    "program": {
+      "NewtonIteration": {
+        "antiAliase": 2,
+        "maxIterations": 500,
+        "threshold": 1.0E-5,
+        "function": " exp(-x*x) + exp(-i*x*x)",
+        "initial": "lambda",
+        "center": [
+          0.0,
+          0.0
+        ],
+        "brightnessFactor": 25.0,
+        "overshoot": 1.0
+      }
+    },
+    "view": {
+      "origin": [
+        -0.42849045804990804,
+        0.1789044397697608
+      ],
+      "A": [
+        0.008653047795279688,
+        0.0
+      ],
+      "B": [
+        0.0,
+        0.0043535646720000935
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "362d2e6b",
+    "program": {
+      "NewtonIteration": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "threshold": 1.0E-4,
+        "function": "((x)^2 + lambda)^2 + lambda",
+        "initial": "1-lambda",
+        "center": [
+          0.0,
+          0.0
+        ],
+        "brightnessFactor": 25.0,
+        "overshoot": 1.0
+      }
+    },
+    "view": {
+      "origin": [
+        -0.2722395082412855,
+        -0.3712554702655976
+      ],
+      "A": [
+        1.4310559006211268,
+        0.0
+      ],
+      "B": [
+        0.0,
+        0.7200000000000044
+      ]
+    },
+    "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
+    "reference": null
+  },
+  {
+    "id": "68a4b3d0",
+    "program": {
+      "NewtonIteration": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "threshold": 1.0E-4,
+        "function": "((x)^2 + lambda)^2 + lambda",
+        "initial": "1-lambda",
+        "center": [
+          0.0,
+          0.0
+        ],
+        "brightnessFactor": 45.0,
+        "overshoot": 1.25
+      }
+    },
+    "view": {
+      "origin": [
+        6.227911891596479,
+        0.08950322108714272
+      ],
+      "A": [
+        0.02403624387577664,
+        0.0
+      ],
+      "B": [
+        0.0,
+        0.012093235200000123
+      ]
+    },
+    "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
+    "reference": null
+  },
+  {
+    "id": "7dbb3729",
+    "program": {
+      "NewtonIteration": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "threshold": 1.0E-4,
+        "function": "((x)^2 + lambda)^2 + lambda",
+        "initial": "lambda",
+        "center": [
+          0.0,
+          0.0
+        ],
+        "brightnessFactor": 25.0,
+        "overshoot": 1.0
+      }
+    },
+    "view": {
+      "origin": [
+        -2.5,
+        -1.0
+      ],
+      "A": [
+        3.5,
+        0.0
+      ],
+      "B": [
+        0.0,
+        2.0
       ]
     },
     "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
@@ -68,14 +730,48 @@
     "reference": null
   },
   {
-    "id": "1e8ba7b7",
+    "id": "99b55feb",
     "program": {
       "NewtonIteration": {
         "antiAliase": 2,
         "maxIterations": 200,
         "threshold": 1.0E-4,
-        "function": "x*x*x*x + lambda",
-        "initial": "1",
+        "function": "((x)^2*x - lambda)^2 + lambda",
+        "initial": "1-lambda",
+        "center": [
+          0.0,
+          0.0
+        ],
+        "brightnessFactor": 45.0,
+        "overshoot": 1.25
+      }
+    },
+    "view": {
+      "origin": [
+        -3.632070470187262,
+        -1.8414040418303106
+      ],
+      "A": [
+        6.625258799171954,
+        0.0
+      ],
+      "B": [
+        0.0,
+        3.333333333333389
+      ]
+    },
+    "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
+    "reference": null
+  },
+  {
+    "id": "64578ce3",
+    "program": {
+      "NewtonIteration": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "threshold": 1.0E-4,
+        "function": "(x * x + lambda - 1) * x - lambda",
+        "initial": "0",
         "center": [
           0.0,
           0.0
@@ -86,16 +782,84 @@
     },
     "view": {
       "origin": [
-        -12.706311498540042,
-        -8.842488279382595
+        -2.5,
+        -1.0
       ],
       "A": [
-        30.672494440610635,
+        3.5,
         0.0
       ],
       "B": [
         0.0,
-        15.432098765432224
+        2.0
+      ]
+    },
+    "description": "",
+    "reference": null
+  },
+  {
+    "id": "75f47b2f",
+    "program": {
+      "NewtonIteration": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "threshold": 1.0E-4,
+        "function": "(x * x + lambda - 1) * x - lambda",
+        "initial": "0",
+        "center": [
+          0.0,
+          0.0
+        ],
+        "brightnessFactor": 25.0,
+        "overshoot": 1.0
+      }
+    },
+    "view": {
+      "origin": [
+        -0.32220601106340535,
+        -1.9296587684993527
+      ],
+      "A": [
+        0.8586335403726716,
+        0.0
+      ],
+      "B": [
+        0.0,
+        0.43200000000000044
+      ]
+    },
+    "description": "newton iteration over mandelbrot polynomial(5) with f(x) = ((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
+    "reference": null
+  },
+  {
+    "id": "6551f977",
+    "program": {
+      "NewtonIteration": {
+        "antiAliase": 2,
+        "maxIterations": 200,
+        "threshold": 1.0E-4,
+        "function": "(x * x + sin(lambda) - 1) * x - lambda",
+        "initial": "0",
+        "center": [
+          0.0,
+          0.0
+        ],
+        "brightnessFactor": 25.0,
+        "overshoot": 1.0
+      }
+    },
+    "view": {
+      "origin": [
+        -2.5,
+        -1.0
+      ],
+      "A": [
+        3.5,
+        0.0
+      ],
+      "B": [
+        0.0,
+        2.0
       ]
     },
     "description": "",
@@ -136,42 +900,14 @@
     "reference": null
   },
   {
-    "id": "2c99f5c4",
-    "program": {
-      "DivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "escapeRadius": 100.0,
-        "initial": "0",
-        "iteration": "z*z+0.001*log(z) + lambda"
-      }
-    },
-    "view": {
-      "origin": [
-        -1.4239910488170056,
-        -0.011763035633607855
-      ],
-      "A": [
-        0.040060406459627926,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.020155392000000303
-      ]
-    },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "362d2e6b",
+    "id": "c5bd6276",
     "program": {
       "NewtonIteration": {
         "antiAliase": 2,
         "maxIterations": 200,
         "threshold": 1.0E-4,
-        "function": "((x)^2 + lambda)^2 + lambda",
-        "initial": "1-lambda",
+        "function": "((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda",
+        "initial": "lambda",
         "center": [
           0.0,
           0.0
@@ -182,19 +918,19 @@
     },
     "view": {
       "origin": [
-        -0.2722395082412855,
-        -0.3712554702655976
+        -2.5,
+        -1.0
       ],
       "A": [
-        1.4310559006211268,
+        3.5,
         0.0
       ],
       "B": [
         0.0,
-        0.7200000000000044
+        2.0
       ]
     },
-    "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
+    "description": "newton iteration over mandelbrot polynomial(5) with f(x) = ((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
     "reference": null
   },
   {
@@ -300,395 +1036,71 @@
     "reference": null
   },
   {
-    "id": "5365105c",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 500,
-        "threshold": 1.0E-5,
-        "function": "x*x*x*x*x*exp(x) + 1",
-        "initial": "exp(lambda)/lambda",
-        "center": [
-          0.0,
-          0.0
-        ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
-      }
-    },
-    "view": {
-      "origin": [
-        -4.165592716979138,
-        -2.765975851707353
-      ],
-      "A": [
-        11.042097998620035,
-        0.0
-      ],
-      "B": [
-        0.0,
-        5.555555555555705
-      ]
-    },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "5bc044fb",
-    "program": {
-      "DerivedDivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "escapeRadius": 100.0,
-        "h2": 2.0,
-        "angle": 0.7853981633974483,
-        "initialZ": "lambda",
-        "initialZDer": "1",
-        "iterationZ": "z*z + lambda",
-        "iterationZDer": "z'*z*2 + 1"
-      }
-    },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "the famous mandelbrot with Normal map effect",
-    "reference": "https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set#Normal_map_effect"
-  },
-  {
-    "id": "64578ce3",
+    "id": "dd517e87",
     "program": {
       "NewtonIteration": {
         "antiAliase": 2,
         "maxIterations": 200,
         "threshold": 1.0E-4,
-        "function": "(x * x + lambda - 1) * x - lambda",
-        "initial": "0",
+        "function": "35*x*x*x*x*x*x*x*x*x-180*x*x*x*x*x*x*x+3798*x*x*x*x*x-420*x*x*x+315+x",
+        "initial": "lambda",
         "center": [
-          0.0,
-          0.0
-        ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
-      }
-    },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "6551f977",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "(x * x + sin(lambda) - 1) * x - lambda",
-        "initial": "0",
-        "center": [
-          0.0,
-          0.0
-        ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
-      }
-    },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "68a4b3d0",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "((x)^2 + lambda)^2 + lambda",
-        "initial": "1-lambda",
-        "center": [
-          0.0,
+          0.25,
           0.0
         ],
         "brightnessFactor": 45.0,
-        "overshoot": 1.25
+        "overshoot": 1.0
       }
     },
     "view": {
       "origin": [
-        6.227911891596479,
-        0.08950322108714272
+        -1.2136789200879365,
+        -0.5758319146496562
       ],
       "A": [
-        0.02403624387577664,
+        2.385093167701948,
         0.0
       ],
       "B": [
         0.0,
-        0.012093235200000123
+        1.2000000000000424
       ]
     },
     "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
     "reference": null
   },
   {
-    "id": "732b7e88",
-    "program": {
-      "DivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 500,
-        "escapeRadius": 1001.0,
-        "initial": "lambda",
-        "iteration": "z*z+0.2*exp(z) + lambda"
-      }
-    },
-    "view": {
-      "origin": [
-        -0.47872846731922547,
-        -0.6465915195786512
-      ],
-      "A": [
-        0.06676734409938126,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.033592320000001195
-      ]
-    },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "74271827",
-    "program": {
-      "DivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 500,
-        "escapeRadius": 1001.0,
-        "initial": "lambda",
-        "iteration": "exp(z) + lambda"
-      }
-    },
-    "view": {
-      "origin": [
-        0.7588783553955626,
-        6.66075020679108
-      ],
-      "A": [
-        0.309108074534176,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.15552000000000732
-      ]
-    },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "75f47b2f",
+    "id": "11882a35",
     "program": {
       "NewtonIteration": {
         "antiAliase": 2,
         "maxIterations": 200,
         "threshold": 1.0E-4,
-        "function": "(x * x + lambda - 1) * x - lambda",
-        "initial": "0",
-        "center": [
-          0.0,
-          0.0
-        ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
-      }
-    },
-    "view": {
-      "origin": [
-        -0.32220601106340535,
-        -1.9296587684993527
-      ],
-      "A": [
-        0.8586335403726716,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.43200000000000044
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(5) with f(x) = ((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
-  },
-  {
-    "id": "7dbb3729",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "((x)^2 + lambda)^2 + lambda",
+        "function": "35*x*x*x*x*x*x*x*x*x-180*x*x*x*x*x*x*x+378*x*x*x*x*x-420*x*x*x+315+x + lambda",
         "initial": "lambda",
         "center": [
-          0.0,
-          0.0
-        ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
-      }
-    },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
-  },
-  {
-    "id": "9970df8d",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "exp(x)-i",
-        "initial": "lambda",
-        "center": [
-          0.0,
-          0.0
-        ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
-      }
-    },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "99b55feb",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "((x)^2*x - lambda)^2 + lambda",
-        "initial": "1-lambda",
-        "center": [
-          0.0,
+          0.25,
           0.0
         ],
         "brightnessFactor": 45.0,
-        "overshoot": 1.25
+        "overshoot": 1.0
       }
     },
     "view": {
       "origin": [
-        -3.632070470187262,
-        -1.8414040418303106
+        0.24813792535967855,
+        -0.36580546246323814
       ],
       "A": [
-        6.625258799171954,
+        1.4310559006211703,
         0.0
       ],
       "B": [
         0.0,
-        3.333333333333389
+        0.7200000000000263
       ]
     },
     "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
-  },
-  {
-    "id": "ac8e276e",
-    "program": {
-      "DerivedDivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "escapeRadius": 100.0,
-        "h2": 2.0,
-        "angle": 0.7853981633974483,
-        "initialZ": "lambda",
-        "initialZDer": "1",
-        "iterationZ": "z*z + (-0.6 + i*0.6)",
-        "iterationZDer": "z'*z*2 + 1"
-      }
-    },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
     "reference": null
   },
   {
@@ -726,100 +1138,29 @@
     "reference": null
   },
   {
-    "id": "be136254",
+    "id": "47f9c8a8",
     "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 500,
-        "threshold": 1.0E-5,
-        "function": "x*x*x*x*x + 1",
-        "initial": "exp(lambda)/lambda",
-        "center": [
-          0.0,
-          0.0
-        ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+      "FreestyleProgram": {
+        "code": "  int l = 0;\n  for(int i = 0;i< 200; i++){\n    vec2 oldz = z;\n    z = z-complex_divide(vec2(complex_product(vec2(complex_product(vec2(z), vec2(z))), vec2(z))-vec2(float(1), float(0))), vec2(complex_product(vec2(complex_product(vec2(vec2(float(2), float(0))), vec2(z))), vec2(z))))+p;\n    if(length(z - oldz) < float(0.0010000000474974513))\n      break;\n    l ++;\n  }\n\n  color = vec4(vec3(float(l) / float(200)), 1.0);",
+        "antiAliase": 2
       }
     },
     "view": {
       "origin": [
-        -4.604422390913491,
-        -2.974506213216784
+        -0.998340655107424,
+        -0.0943403293080435
       ],
       "A": [
-        11.042097998620031,
+        0.3255714426133771,
         0.0
       ],
       "B": [
         0.0,
-        5.555555555555703
+        0.15600298136646437
       ]
     },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "c0082fbc",
-    "program": {
-      "DivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 50,
-        "escapeRadius": 100.0,
-        "initial": "lambda",
-        "iteration": "z*z + (-0.6 + i*0.6)"
-      }
-    },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "c538d559",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "x*x*x -x - 1",
-        "initial": "lambda",
-        "center": [
-          0.0,
-          0.0
-        ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
-      }
-    },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
+    "description": "nova mandelbrot fractal of f(x) = x^3 - 1",
+    "reference": ""
   },
   {
     "id": "c59bb8db",
@@ -845,346 +1186,5 @@
     },
     "description": "",
     "reference": "https://www.shadertoy.com/view/Mds3R8"
-  },
-  {
-    "id": "c5bd6276",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda",
-        "initial": "lambda",
-        "center": [
-          0.0,
-          0.0
-        ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
-      }
-    },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(5) with f(x) = ((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
-  },
-  {
-    "id": "cb45143c",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "x*x*x + 1/x - 1",
-        "initial": "lambda",
-        "center": [
-          0.0,
-          0.0
-        ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
-      }
-    },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "cdd9efde",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "x*x*x - 1",
-        "initial": "lambda",
-        "center": [
-          0.0,
-          0.0
-        ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
-      }
-    },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "ce49bdbe",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "x*x*x*x + lambda",
-        "initial": "lambda*lambda*lambda + 15",
-        "center": [
-          0.0,
-          0.0
-        ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
-      }
-    },
-    "view": {
-      "origin": [
-        -3.7038764237103696,
-        -2.992389255168824
-      ],
-      "A": [
-        11.04209799861978,
-        0.0
-      ],
-      "B": [
-        0.0,
-        5.555555555555577
-      ]
-    },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "d4b852f0",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 500,
-        "threshold": 1.0E-5,
-        "function": " exp(-x*x) + exp(-i*x*x)",
-        "initial": "lambda",
-        "center": [
-          0.0,
-          0.0
-        ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
-      }
-    },
-    "view": {
-      "origin": [
-        -0.42849045804990804,
-        0.1789044397697608
-      ],
-      "A": [
-        0.008653047795279688,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.0043535646720000935
-      ]
-    },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "d753bec9",
-    "program": {
-      "DivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 500,
-        "escapeRadius": 1001.0,
-        "initial": "lambda",
-        "iteration": "exp(z) + lambda"
-      }
-    },
-    "view": {
-      "origin": [
-        1.471174448953227,
-        996.911180049271
-      ],
-      "A": [
-        1.4310559006211945,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.7200000000000385
-      ]
-    },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "dd517e87",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "35*x*x*x*x*x*x*x*x*x-180*x*x*x*x*x*x*x+3798*x*x*x*x*x-420*x*x*x+315+x",
-        "initial": "lambda",
-        "center": [
-          0.25,
-          0.0
-        ],
-        "brightnessFactor": 45.0,
-        "overshoot": 1.0
-      }
-    },
-    "view": {
-      "origin": [
-        -1.2136789200879365,
-        -0.5758319146496562
-      ],
-      "A": [
-        2.385093167701948,
-        0.0
-      ],
-      "B": [
-        0.0,
-        1.2000000000000424
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
-  },
-  {
-    "id": "e78d9a5a",
-    "program": {
-      "DivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "escapeRadius": 100.0,
-        "initial": "lambda",
-        "iteration": "z*z*z + (-0.12 + i*0.78) + lambda*z"
-      }
-    },
-    "view": {
-      "origin": [
-        0.27572115019387067,
-        -0.36630476460063605
-      ],
-      "A": [
-        0.005191828677167718,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.002612138803200008
-      ]
-    },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "f6a7251f",
-    "program": {
-      "DivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "escapeRadius": 100.0,
-        "initial": "lambda",
-        "iteration": "z*z*z + (-0.12 + i*0.80)"
-      }
-    },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "fb8e2405",
-    "program": {
-      "DivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "escapeRadius": 100.0,
-        "initial": "0",
-        "iteration": "z*z + lambda"
-      }
-    },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
-  },
-  {
-    "id": "47f9c8a8",
-    "program": {
-      "FreestyleProgram": {
-        "code": "  int l = 0;\n  for(int i = 0;i< 200; i++){\n    vec2 oldz = z;\n    z = z-complex_divide(vec2(complex_product(vec2(complex_product(vec2(z), vec2(z))), vec2(z))-vec2(float(1), float(0))), vec2(complex_product(vec2(complex_product(vec2(vec2(float(2), float(0))), vec2(z))), vec2(z))))+p;\n    if(length(z - oldz) < float(0.0010000000474974513))\n      break;\n    l ++;\n  }\n\n  color = vec4(vec3(float(l) / float(200)), 1.0);",
-        "antiAliase": 2
-      }
-    },
-    "view": {
-      "origin": [
-        -0.998340655107424,
-        -0.0943403293080435
-      ],
-      "A": [
-        0.3255714426133771,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.15600298136646437
-      ]
-    },
-    "description": "nova mandelbrot fractal of f(x) = x^3 - 1",
-    "reference": ""
   }
 ]
