@@ -127,18 +127,22 @@ object FractalProgramToWebGl {
        |    l ++;
        |  }
        |
-       |  float fract = 0.0;
-       |  if(fz == ${WebGlType.zero[WebGlTypeVec2.type].toCode}){
-       |    fract = float(l - 1);
+       |  if(length(${fz.name}) < ${FloatLiteral(n.threshold.toFloat).toCode}){
+       |    float fract = 0.0;
+       |    if(fz == ${WebGlType.zero[WebGlTypeVec2.type].toCode}){
+       |      fract = float(l - 1);
+       |    }else{
+       |      fract = float(l) - log(${n.threshold} / length(${fz.name})) / log( length(${fzlast.name}) / length(${fz.name}));
+       |    }
+       |
+       |    float H = atan(z.x - ${FloatLiteral(n.center._1.toFloat).toCode}, z.y - ${FloatLiteral(n.center._2.toFloat).toCode}) / float(${2 * Math.PI});
+       |    float V = exp(-fract / ${FloatLiteral(n.brightnessFactor.toFloat).toCode});
+       |    float S = length(z);
+       |
+       |    ${outputVar.name} = vec4(hsv2rgb(vec3(H, S, V)), 1.0);
        |  }else{
-       |    fract = float(l) - log(${n.threshold} / length(${fz.name})) / log( length(${fzlast.name}) / length(${fz.name}));
+       |    ${outputVar.name} = vec4(vec3(0.0), 1.0);
        |  }
-       |
-       |  float H = atan(z.x - ${FloatLiteral(n.center._1.toFloat).toCode}, z.y - ${FloatLiteral(n.center._2.toFloat).toCode}) / float(${2 * Math.PI});
-       |  float V = exp(-fract / ${FloatLiteral(n.brightnessFactor.toFloat).toCode});
-       |  float S = length(z);
-       |
-       |  ${outputVar.name} = vec4(hsv2rgb(vec3(H, S, V)), 1.0);
        |}
        """.stripMargin
   }
