@@ -15,53 +15,6 @@ case class FractalEntity(program: FractalProgram,
 object FractalEntity {
   def id(fractalEntity: FractalEntity): String = fractalEntity.hashCode().toHexString
 
-  val systemFractals: Vector[FractalEntity] = Vector[FractalEntity](
-    FractalEntity(
-      program = DivergingSeries.mandelbrot
-    ),
-    FractalEntity(
-      program = DerivedDivergingSeries.mandelbrot,
-      description = "the famous mandelbrot with Normal map effect",
-      reference = Some("https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set#Normal_map_effect")
-    ),
-    FractalEntity(
-      program = DivergingSeries.juliaSet((-0.6, 0.6))
-    ),
-    FractalEntity(
-      program = DerivedDivergingSeries.juliaSet((-0.6, 0.6))
-    ),
-    newton("x*x*x - 1", "lambda"),
-    newton("x*x*x -x - 1", "lambda"),
-    newton("x*x*x + 1/x - 1", "lambda"),
-    newton("(x * x + lambda - 1) * x - lambda", "0"),
-    newton("exp(x)-i", "lambda"),
-    newton("(x * x + sin(lambda) - 1) * x - lambda", "0"),
-    newtonMandelbrotPolynomial(3),
-    newtonMandelbrotPolynomial(4),
-    newtonMandelbrotPolynomial(5),
-    newtonMandelbrotPolynomial(6),
-    newtonMandelbrotPolynomial(7),
-    FractalEntity(
-      program = DivergingSeries(
-        iteration = "z*z*z + (-0.12 + i*0.80)",
-        initial = "lambda"
-      )
-    )
-  )
-
-  private def newton(f: String, x0: String) =
-    FractalEntity(
-      program = NewtonIteration(function = f, initial = x0)
-    )
-
-  private def newtonMandelbrotPolynomial(n: Int) = {
-    val p = NewtonIteration.mandelbrotPolynomial(n)
-    FractalEntity(
-      program = p,
-      description = s"newton iteration over mandelbrot polynomial($n) with f(x) = ${p.function}, x0 = ${p.initial}",
-    )
-  }
-
   implicit val encodeViewport: Encoder[Viewport] = deriveEncoder
   implicit val decodeViewport: Decoder[Viewport] = deriveDecoder
 

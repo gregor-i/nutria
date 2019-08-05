@@ -1,13 +1,15 @@
 package controller
 
 import javax.inject.Inject
+import module.SystemFractals
 import nutria.core.FractalEntity
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
 import repo.{FractalImageRepo, FractalRepo, FractalRow}
 
 class AdminController @Inject()(fractalRepo: FractalRepo,
-                                fractalImageRepo: FractalImageRepo
+                                fractalImageRepo: FractalImageRepo,
+                                systemFractals: SystemFractals
                                  ) extends InjectedController with Circe {
 
   def deleteFractal(id : String) = Action{
@@ -27,7 +29,7 @@ class AdminController @Inject()(fractalRepo: FractalRepo,
         case FractalRow(id, Some(fractalEntity)) if id != FractalEntity.id(fractalEntity) => id
       }
       .foreach(fractalRepo.delete)
-    FractalEntity.systemFractals
+    systemFractals.systemFractals
         .foreach(entity => fractalRepo.save(
           FractalRow(
             FractalEntity.id(entity),

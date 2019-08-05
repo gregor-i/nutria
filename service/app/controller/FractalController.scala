@@ -4,7 +4,7 @@ import io.circe.syntax._
 import javax.inject.Inject
 import nutria.core._
 import play.api.libs.circe.Circe
-import play.api.mvc.InjectedController
+import play.api.mvc.{Headers, InjectedController}
 import repo.{FractalImageRepo, FractalRepo, FractalRow}
 
 class FractalController @Inject()(fractalRepo: FractalRepo,
@@ -51,11 +51,17 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
         case _ => Right(())
       }
 
+      _ <- fractal.program match {
+        case _: FreestyleProgram => Left(NotImplemented(views.xml.RenderingError("not implemented")).as("image/svg+xml"))
+        case _ => Right(())
+      }
+
       _ <- fractalImageRepo.get(id).toLeft(())
         .left.map { bytes =>
         Ok(bytes)
           .as("image/png")
           .withHeaders("ETag" -> etag)
+          .withHeaders("Cache-Control" -> "public, max-age=31536000") // 1 year
       }
     } yield {
       PartialContent(views.xml.RenderingError("processing"))

@@ -3,7 +3,8 @@ package module
 import java.util.concurrent.Executors
 
 import akka.actor.ActorSystem
-import javax.inject.Inject
+import io.circe.parser
+import javax.inject.{Inject, Singleton}
 import nutria.core._
 import nutria.data.colors.RGBA
 import nutria.data.consumers.{CountIterations, NewtonColoring}
@@ -17,13 +18,26 @@ import repo.{FractalImageRepo, FractalRepo, FractalRow}
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
+import scala.io.Source
 
 class SetupDataModule extends SimpleModule(
+  bind[SystemFractals].toSelf,
   bind[FractalImageScheduler].toSelf.eagerly()
 )
 
+@Singleton
+class SystemFractals {
+  val systemFractals =
+    parser.parse {
+      Source.fromResource("systemfractals.json")
+        .getLines()
+        .mkString
+    }.flatMap(_.as[Vector[FractalEntity]]).right.get
+}
+
 private class FractalImageScheduler @Inject()(repo: FractalRepo,
                                               fractalImageRepo: FractalImageRepo,
+                                              systemFractals: SystemFractals,
                                               actorSystem: ActorSystem) {
 
   private implicit val ex: ExecutionContext =
@@ -31,9 +45,10 @@ private class FractalImageScheduler @Inject()(repo: FractalRepo,
 
   private val logger = Logger.apply("FractalImageScheduler")
 
+
   actorSystem.scheduler.scheduleOnce(1.second) {
     logger.info("inserting system fractals")
-    FractalEntity.systemFractals.foreach {
+    systemFractals.systemFractals.foreach {
       fractal =>
         repo.save(FractalRow(
           id = FractalEntity.id(fractal),
