@@ -1,8 +1,8 @@
 package nutria.core
 
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
-import io.circe.{Decoder, Encoder, JsonObject}
 import io.circe.syntax._
+import io.circe.{Decoder, Encoder, JsonObject}
 
 @monocle.macros.Lenses()
 case class FractalEntity(program: FractalProgram,

@@ -87,8 +87,13 @@ object FractalProgram {
   val derivedDivergingSeries: Prism[FractalProgram, DerivedDivergingSeries] = GenPrism[FractalProgram, DerivedDivergingSeries]
   val freestyleProgram: Prism[FractalProgram, FreestyleProgram] = GenPrism[FractalProgram, FreestyleProgram]
 
+  implicit val ordering: Ordering[FractalProgram] = Ordering.by[FractalProgram, (Int, Int)] {
+    case f: DivergingSeries => (1, f.iteration.hashCode)
+    case f: DerivedDivergingSeries => (2, f.iterationZ.hashCode)
+    case f: NewtonIteration => (3, f.function.length)
+    case f: FreestyleProgram => (4, f.code.length)
+  }
+
   implicit val decoder: Decoder[FractalProgram] = deriveDecoder
   implicit val encoder: Encoder[FractalProgram] = deriveEncoder
 }
-
-
