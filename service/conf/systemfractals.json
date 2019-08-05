@@ -1161,5 +1161,30 @@
     },
     "description": "",
     "reference": null
+  },
+  {
+    "id": "47f9c8a8",
+    "program": {
+      "FreestyleProgram": {
+        "code": "  int l = 0;\n  for(int i = 0;i< 200; i++){\n    vec2 oldz = z;\n    z = z-complex_divide(vec2(complex_product(vec2(complex_product(vec2(z), vec2(z))), vec2(z))-vec2(float(1), float(0))), vec2(complex_product(vec2(complex_product(vec2(vec2(float(2), float(0))), vec2(z))), vec2(z))))+p;\n    if(length(z - oldz) < float(0.0010000000474974513))\n      break;\n    l ++;\n  }\n\n  color = vec4(vec3(float(l) / float(200)), 1.0);",
+        "antiAliase": 2
+      }
+    },
+    "view": {
+      "origin": [
+        -0.998340655107424,
+        -0.0943403293080435
+      ],
+      "A": [
+        0.3255714426133771,
+        0.0
+      ],
+      "B": [
+        0.0,
+        0.15600298136646437
+      ]
+    },
+    "description": "nova mandelbrot fractal of f(x) = x^3 - 1",
+    "reference": ""
   }
 ]
