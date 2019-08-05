@@ -1,35 +1,39 @@
 package nutria.core
 
-import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import eu.timepit.refined._
+import eu.timepit.refined.api.Refined
+import eu.timepit.refined.numeric.Positive
 import io.circe.syntax._
-import io.circe.{Decoder, Encoder, JsonObject}
+import io.circe.{Decoder, Encoder}
+import nutria.core.viewport.DefaultViewport
 
 @monocle.macros.Lenses()
 case class FractalEntity(program: FractalProgram,
                          view: Viewport = DefaultViewport.defaultViewport,
                          description: String = "",
                          reference: Option[String] = None,
+                         antiAliase: Int Refined Positive = refineMV(2)
                         )
 
 
-object FractalEntity {
+object FractalEntity extends CirceCodex {
   def id(fractalEntity: FractalEntity): String = fractalEntity.hashCode().toHexString
 
-  implicit val encodeViewport: Encoder[Viewport] = deriveEncoder
-  implicit val decodeViewport: Decoder[Viewport] = deriveDecoder
+  implicit val encodeViewport: Encoder[Viewport] = semiauto.deriveEncoder
+  implicit val decodeViewport: Decoder[Viewport] = semiauto.deriveDecoder
 
-  implicit val decoder: Decoder[FractalEntity] = deriveDecoder
-  implicit val encoder: Encoder[FractalEntity] = deriveEncoder
+  implicit val decoder: Decoder[FractalEntity] = semiauto.deriveDecoder
+  implicit val encoder: Encoder[FractalEntity] = semiauto.deriveEncoder
 }
 
 @monocle.macros.Lenses()
 case class FractalEntityWithId(id: String,
                                entity: FractalEntity)
 
-object FractalEntityWithId {
+object FractalEntityWithId extends CirceCodex {
   implicit val encoder: Encoder[FractalEntityWithId] = Encoder[FractalEntityWithId] { row =>
     Encoder[FractalEntity].apply(row.entity)
-      .deepMerge(JsonObject("id" -> row.id.asJson).asJson)
+      .mapObject(_.add("id", row.id.asJson))
   }
 
   implicit val decode: Decoder[FractalEntityWithId] = Decoder[FractalEntityWithId] { json =>

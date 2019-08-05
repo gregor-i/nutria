@@ -43,7 +43,7 @@ private class FractalImageScheduler @Inject()(repo: FractalRepo,
   private implicit val ex: ExecutionContext =
     ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
 
-  private val logger = Logger.apply("FractalImageScheduler")
+  private val logger = Logger("FractalImageScheduler")
 
 
   actorSystem.scheduler.scheduleOnce(1.second) {
@@ -71,14 +71,15 @@ private class FractalImageScheduler @Inject()(repo: FractalRepo,
               case series: DivergingSeries =>
                 nutria.data.sequences.DivergingSeries(series)
                   .andThen(CountIterations.double())
-                  .andThen(LinearNormalized(0, series.maxIterations))
+                  .andThen(LinearNormalized(0, series.maxIterations.value))
                   .andThen(f => RGBA(255d * f, 255d * f, 255d * f))
               case newton: NewtonIteration =>
                 val f = NewtonFractalByString(newton.function, newton.initial)
-                f(newton.maxIterations, newton.threshold, newton.overshoot)
+                f(newton.maxIterations.value, newton.threshold.value, newton.overshoot.value)
                   .andThen(NewtonColoring.smooth(f))
               case s: DerivedDivergingSeries =>
                 nutria.data.sequences.DerivedDivergingSeries(s)
+              case _:FreestyleProgram => ???
             }
           )
           .multisampled()

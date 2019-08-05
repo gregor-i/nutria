@@ -42,7 +42,7 @@ object ViewerUi {
         ),
         Buttons.share(),
         Buttons.logSource(
-          events.onClick := (() => dom.console.log(FractalRenderer.fragmentShaderSource(state.fractalEntity.program)))
+          events.onClick := (() => dom.console.log(FractalRenderer.fragmentShaderSource(state.fractalEntity.program, state.fractalEntity.antiAliase)))
         )
       ),
       renderCanvas,

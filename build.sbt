@@ -9,7 +9,7 @@ scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("core"))
-  .settings(mathParser, scalaTestAndScalaCheck, spire, circe, monocle)
+  .settings(mathParser, scalaTestAndScalaCheck, spire, circe, monocle, refinedTypes)
 
 lazy val data = project
   .dependsOn(core.jvm)
@@ -91,6 +91,7 @@ def circe =
     "io.circe" %%% "circe-generic" % "0.11.1",
     "io.circe" %%% "circe-generic-extras" % "0.11.1",
     "io.circe" %%% "circe-parser" % "0.11.1",
+    "io.circe" %%% "circe-refined" % "0.11.1",
   )
 
 def monocle = Seq(
@@ -98,7 +99,10 @@ def monocle = Seq(
     "com.github.julien-truffaut" %%% "monocle-core" % "1.6.0",
     "com.github.julien-truffaut" %%% "monocle-macro" % "1.6.0",
     "com.github.julien-truffaut" %%% "monocle-unsafe" % "1.6.0",
-    "com.github.julien-truffaut" %%% "monocle-state" % "1.6.0",
+    "com.github.julien-truffaut" %%% "monocle-refined" % "1.6.0",
   ),
   addCompilerPlugin("org.scalamacros" %% "paradise" % "2.1.1" cross CrossVersion.full)
 )
+
+def refinedTypes =
+  libraryDependencies += "eu.timepit" %%% "refined" % "0.9.9"

@@ -2,9 +2,16 @@ package nutria.frontend.common
 
 import com.raquo.snabbdom.simple._
 import com.raquo.snabbdom.simple.implicits._
+import eu.timepit.refined.api.{Refined, Validate}
+import eu.timepit.refined.refineV
+import mathParser.algebra.SpireLanguage
 import monocle.Lens
+import nutria.core.languages.StringFunction
 import nutria.frontend.util.SnabbdomHelper.seqNode
 import org.scalajs.dom.raw.{HTMLInputElement, HTMLSelectElement}
+import spire.math.Complex
+
+import scala.util.Try
 
 object Form {
 
@@ -24,6 +31,29 @@ object Form {
         ))
       )
     )
+
+
+  def stringInput[S, V](label: String, lens: Lens[S, StringFunction[V]])
+                    (implicit state: S, update: S => Unit, lang: SpireLanguage[Complex[Double], V]) =
+    inputStyle(label,
+      tags.input(
+        attrs.className := "input",
+        attrs.`type` := "text",
+        attrs.value := lens.get(state).string,
+        events.onChange := {
+          event =>
+            val element = event.target.asInstanceOf[HTMLInputElement]
+            StringFunction(element.value) match {
+              case Some(v) =>
+                element.classList.remove("is-danger")
+                update(lens.set(v)(state))
+              case None =>
+                element.classList.add("is-danger")
+            }
+        }
+      )
+    )
+
 
   def stringInput[S](label: String, lens: Lens[S, String])
                    (implicit state: S, update: S => Unit) =
@@ -54,24 +84,30 @@ object Form {
       )
     )
 
-  def intInput[S](label: String, lens: Lens[S, Int])
-                 (implicit state: S, update: S => Unit) =
+  def intInput[S, V](label: String, lens: Lens[S, Int Refined V])
+                    (implicit state: S, update: S => Unit, validate: Validate[Int, V]) =
     inputStyle(label,
       tags.input(
         attrs.className := "input",
         attrs.`type` := "number",
-        attrs.min := "1",
         attrs.value := lens.get(state).toString,
         events.onChange := {
           event =>
-            val value = event.target.asInstanceOf[HTMLInputElement].valueAsNumber.toInt
-            update(lens.set(value)(state))
+            val element = event.target.asInstanceOf[HTMLInputElement]
+            Try(element.value.toInt).toEither
+              .flatMap(refineV[V](_)(validate)) match {
+              case Right(v) =>
+                element.classList.remove("is-danger")
+                update(lens.set(v)(state))
+              case Left(error) =>
+                element.classList.add("is-danger")
+            }
         }
       )
     )
 
-  def doubleInput[S](label: String, lens: Lens[S, Double])
-                    (implicit state: S, update: S => Unit) =
+  def doubleInput[S, V](label: String, lens: Lens[S, Double Refined V])
+                    (implicit state: S, update: S => Unit, validate: Validate[Double, V]) =
     inputStyle(label,
       tags.input(
         attrs.className := "input",
@@ -79,8 +115,15 @@ object Form {
         attrs.value := lens.get(state).toString,
         events.onChange := {
           event =>
-            val value = event.target.asInstanceOf[HTMLInputElement].value.toDouble
-            update(lens.set(value)(state))
+            val element = event.target.asInstanceOf[HTMLInputElement]
+            Try(element.value.toDouble).toEither
+              .flatMap(refineV[V](_)(validate)) match {
+              case Right(v) =>
+                element.classList.remove("is-danger")
+                update(lens.set(v)(state))
+              case Left(error) =>
+                element.classList.add("is-danger")
+            }
         }
       )
     )

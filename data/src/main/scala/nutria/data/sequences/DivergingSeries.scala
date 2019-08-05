@@ -2,9 +2,8 @@ package nutria.data.sequences
 
 import nutria.core.Point
 import nutria.data.DoubleSequence
-import nutria.core.divergingSeries.Language._
 import mathParser.implicits._
-import nutria.core.divergingSeries.{Lambda, Z}
+import nutria.core.languages.{Lambda, Z}
 import spire.math.Complex
 
 object DivergingSeries {
@@ -27,14 +26,14 @@ object DivergingSeries {
   }
 
   def apply(series: nutria.core.DivergingSeries): Point => Sequence = {
-    val initial = c0Lang.optimize(c0Lang.parse(series.initial).get)
-    val iteration = fLang.optimize(fLang.parse(series.iteration).get)
+    val initial = series.initial.node
+    val iteration = series.iteration.node
 
     p => new Sequence(Complex(p._1, p._2),
-      series.maxIterations,
-      series.escapeRadius * series.escapeRadius,
-      lambda => c0Lang.evaluate(initial)({case Lambda => lambda}),
-      (z, lambda) => fLang.evaluate(iteration)({case Z => z; case Lambda => lambda})
+      series.maxIterations.value,
+      series.escapeRadius.value * series.escapeRadius.value,
+      lambda => nutria.core.languages.lambda.evaluate(initial)({case Lambda => lambda}),
+      (z, lambda) => nutria.core.languages.zAndLambda.evaluate(iteration)({case Z => z; case Lambda => lambda})
     )
   }
 }

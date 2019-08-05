@@ -3,12 +3,13 @@ package nutria.data
 import java.io.File
 
 import nutria.core.Dimensions
+import nutria.core.viewport.DefaultViewport
 import nutria.data.image.SaveFolder
 
 trait Defaults
   extends DefaultColor
     with DefaultDimensions
-    with nutria.core.DefaultViewport
+    with DefaultViewport
     with DefaultSaveFolder
 
 trait DefaultColor {

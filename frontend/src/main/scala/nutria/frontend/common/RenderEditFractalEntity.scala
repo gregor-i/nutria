@@ -58,7 +58,7 @@ object RenderEditFractalEntity {
         ),
         value = fractal.program.getClass.getSimpleName,
         onChange = {
-          case "NewtonIteration" => update((lens composeLens FractalEntity.program).set(NewtonIteration())(state))
+          case "NewtonIteration" => update((lens composeLens FractalEntity.program).set(NewtonIteration.threeRoots)(state))
           case "DivergingSeries" => update((lens composeLens FractalEntity.program).set(DivergingSeries.mandelbrot)(state))
           case "DerivedDivergingSeries" => update((lens composeLens FractalEntity.program).set(DerivedDivergingSeries.mandelbrot)(state))
           case "FreestyleProgram" => update((lens composeLens FractalEntity.program).set(FreestyleProgram.default)(state))
@@ -72,7 +72,6 @@ object RenderEditFractalEntity {
             Form.stringInput("function", lensFractal composeLens NewtonIteration.function),
             Form.stringInput("initial", lensFractal composeLens NewtonIteration.initial),
             Form.intInput("max iterations", lensFractal composeLens NewtonIteration.maxIterations),
-            Form.intInput("anti aliase", lensFractal composeLens NewtonIteration.antiAliase),
             Form.doubleInput("threshold", lensFractal composeLens NewtonIteration.threshold),
             Form.doubleInput("brightness factor", lensFractal composeLens NewtonIteration.brightnessFactor),
             Form.tupleDoubleInput("center", lensFractal composeLens NewtonIteration.center),
@@ -82,7 +81,6 @@ object RenderEditFractalEntity {
           val lensFractal = lens composeLens FractalEntity.program composeLens LenseUtils.lookedUp(f, FractalProgram.derivedDivergingSeries.asSetter)
           Seq(
             Form.intInput("max iterations", lensFractal composeLens DerivedDivergingSeries.maxIterations),
-            Form.intInput("anti aliase", lensFractal composeLens DerivedDivergingSeries.antiAliase),
             Form.doubleInput("escape radius", lensFractal composeLens DerivedDivergingSeries.escapeRadius),
             Form.stringInput("initial Z", lensFractal composeLens DerivedDivergingSeries.initialZ),
             Form.stringInput("initial Z'", lensFractal composeLens DerivedDivergingSeries.initialZDer),
@@ -97,16 +95,15 @@ object RenderEditFractalEntity {
             Form.stringInput("initial", lensFractal composeLens DivergingSeries.initial),
             Form.stringInput("iteration", lensFractal composeLens DivergingSeries.iteration),
             Form.intInput("max iterations", lensFractal composeLens DivergingSeries.maxIterations),
-            Form.intInput("anti aliase", lensFractal composeLens DivergingSeries.antiAliase),
             Form.doubleInput("escape radius", lensFractal composeLens DivergingSeries.escapeRadius),
           )
         case f: FreestyleProgram =>
           val lensFractal = lens composeLens FractalEntity.program composeLens LenseUtils.lookedUp(f, FractalProgram.freestyleProgram.asSetter)
           Seq(
             Form.mulitlineStringInput("code", lensFractal composeLens FreestyleProgram.code),
-            Form.intInput("anti aliase", lensFractal composeLens FreestyleProgram.antiAliase),
           )
       }),
+      Form.intInput("anti aliasing", lens composeLens FractalEntity.antiAliase),
       Form.stringInput("description", lens composeLens FractalEntity.description),
       Form.stringInput("reference", lens composeLens LenseUtils.withDefault(FractalEntity.reference, "")),
     )

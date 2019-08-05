@@ -1,0 +1,24 @@
+package nutria.core.languages
+
+import io.circe.{Decoder, Encoder}
+import nutria.core.CirceCodex
+import mathParser.implicits._
+
+class StringFunction[V] private (val string: String, val node: CNode[V])
+
+object StringFunction extends CirceCodex {
+  def apply[V](string: String)(implicit lang: CLang[ V]): Option[StringFunction[V]] =
+    lang.parse(string).map(lang.optimize).map(node => new StringFunction(string, node))
+
+  def unsafe[V](string: String)(implicit lang: CLang[V]): StringFunction[V] =
+    apply[V](string).get
+
+  implicit def encoder[V]: Encoder[StringFunction[V]] = Encoder[String].contramap(_.string)
+  implicit def decoder[V](implicit lang: CLang[V]): Decoder[StringFunction[V]] =
+    Decoder[String].flatMap { string =>
+      apply[V](string) match {
+        case Some(stringFunction) => Decoder.const(stringFunction)
+        case None => Decoder.failedWithMessage(s"function '$string' could not be parsed")
+      }
+    }
+}

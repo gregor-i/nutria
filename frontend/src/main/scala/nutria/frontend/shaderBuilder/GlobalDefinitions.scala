@@ -1,6 +1,6 @@
 package nutria.frontend.shaderBuilder
 
-object GlobalDefintions {
+object GlobalDefinitions {
   val definitions =
     """
       |// why is this necessary?
