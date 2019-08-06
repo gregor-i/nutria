@@ -33,8 +33,8 @@ object Form {
     )
 
 
-  def stringInput[S, V](label: String, lens: Lens[S, StringFunction[V]])
-                    (implicit state: S, update: S => Unit, lang: SpireLanguage[Complex[Double], V]) =
+  def stringFunctionInput[S, V](label: String, lens: Lens[S, StringFunction[V]])
+                               (implicit state: S, update: S => Unit, lang: SpireLanguage[Complex[Double], V]) =
     inputStyle(label,
       tags.input(
         attrs.className := "input",
