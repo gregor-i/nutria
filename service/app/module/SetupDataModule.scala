@@ -74,7 +74,7 @@ private class FractalImageScheduler @Inject()(repo: FractalRepo,
                   .andThen(LinearNormalized(0, series.maxIterations.value))
                   .andThen(f => RGBA(255d * f, 255d * f, 255d * f))
               case newton: NewtonIteration =>
-                val f = NewtonFractalByString(newton.function, newton.initial)
+                val f = NewtonFractalByString(newton.function.string, newton.initial.string)
                 f(newton.maxIterations.value, newton.threshold.value, newton.overshoot.value)
                   .andThen(NewtonColoring.smooth(f))
               case s: DerivedDivergingSeries =>

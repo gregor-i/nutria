@@ -2,7 +2,6 @@ package nutria.core
 
 import eu.timepit.refined._
 import eu.timepit.refined.api.Refined
-import eu.timepit.refined.auto._
 import eu.timepit.refined.boolean.And
 import eu.timepit.refined.numeric.Interval.Open
 import eu.timepit.refined.numeric.{NonNaN, Positive}
@@ -16,7 +15,7 @@ sealed trait FractalProgram
 
 @monocle.macros.Lenses()
 case class DivergingSeries(maxIterations: Int Refined Positive = refineMV(200),
-                           escapeRadius: Double Refined (Positive And NonNaN) = refineMV(100),
+                           escapeRadius: Double Refined (Positive And NonNaN) = refineMV(100.0),
                            initial: StringFunction[Lambda.type],
                            iteration: StringFunction[ZAndLambda]) extends FractalProgram
 
@@ -29,13 +28,13 @@ object DivergingSeries {
   def juliaSet(c: Point) = DivergingSeries(
     initial = StringFunction.unsafe("lambda"),
     iteration = StringFunction.unsafe(s"z*z + (${c._1} + i*${c._2})"),
-    maxIterations = 50
+    maxIterations = refineMV(50)
   )
 }
 
 @monocle.macros.Lenses()
 case class DerivedDivergingSeries(maxIterations: Int Refined Positive = refineMV(200),
-                                  escapeRadius: Double Refined (Positive And NonNaN) = refineMV(100),
+                                  escapeRadius: Double Refined (Positive And NonNaN) = refineMV(100.0),
                                   h2: Double Refined NonNaN = refineMV(2.0),
                                   angle: Double Refined Open[Witness.`0.0`.T, Witness.`6.28318530718`.T] = refineMV(0.78539816339), // todo: maybe define in degree? this 45°
                                   initialZ: StringFunction[Lambda.type],

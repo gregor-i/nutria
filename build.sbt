@@ -2,7 +2,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
 // global settings
 version in ThisBuild := "0.0.1"
-scalaVersion in ThisBuild := "2.12.8"
+scalaVersion in ThisBuild := "2.12.9"
 scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
 
 // projects
@@ -82,7 +82,7 @@ def scalaTestAndScalaCheck =
 
 def mathParser = Seq(
   resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
-  libraryDependencies += "com.github.gregor-i" %%% "math-parser" % "1.4"
+  libraryDependencies += "com.github.gregor-i" %%% "math-parser" % "1.5"
 )
 
 def circe =

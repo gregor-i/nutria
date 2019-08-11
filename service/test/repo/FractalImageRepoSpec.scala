@@ -1,6 +1,6 @@
 package repo
 
-import nutria.core.FractalEntity
+import module.SystemFractals
 import org.scalatest.{BeforeAndAfterEach, FunSuite, Matchers}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
@@ -9,15 +9,16 @@ import scala.util.Random
 class FractalImageRepoSpec extends FunSuite with Matchers with GuiceOneAppPerSuite with BeforeAndAfterEach {
   val fractalRepo = app.injector.instanceOf[FractalRepo]
   val imageRepo = app.injector.instanceOf[FractalImageRepo]
+  val systemFractals = app.injector.instanceOf[SystemFractals]
 
   val f1 = FractalRow(
     id = "1",
-    maybeFractal = Some(FractalEntity.systemFractals(0))
+    maybeFractal = Some(systemFractals.systemFractals(0))
   )
 
   val f2 = FractalRow(
     id = "2",
-    maybeFractal = Some(FractalEntity.systemFractals(1))
+    maybeFractal = Some(systemFractals.systemFractals(1))
   )
 
   val bytes1 = new Array[Byte](1000)

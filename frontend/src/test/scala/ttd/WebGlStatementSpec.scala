@@ -9,7 +9,7 @@ import org.scalatest._
 class WebGlStatementSpec extends FunSuite with Matchers {
   object X
 
-  val lang = MathParser.complexLanguage.withVariables(List('x -> X))
+  val lang = MathParser.complexLanguage.withVariables(List("x" -> X))
   val varsToCode: PartialFunction[X.type, Ref[WebGlTypeVec2.type]] = {
     case X => Ref("x")
   }

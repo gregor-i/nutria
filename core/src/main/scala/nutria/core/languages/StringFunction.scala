@@ -4,7 +4,13 @@ import io.circe.{Decoder, Encoder}
 import nutria.core.CirceCodex
 import mathParser.implicits._
 
-class StringFunction[V] private (val string: String, val node: CNode[V])
+class StringFunction[V] private (val string: String, val node: CNode[V]) {
+  override def equals(other: Any): Boolean =
+    other match {
+      case o:StringFunction[V] => this.string == o.string && this.node == o.node
+      case _ => false
+    }
+}
 
 object StringFunction extends CirceCodex {
   def apply[V](string: String)(implicit lang: CLang[ V]): Option[StringFunction[V]] =
