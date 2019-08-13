@@ -52,6 +52,9 @@ val frontend = project.in(file("frontend"))
     npmDependencies in Compile += "snabbdom" -> "0.7.0"
   )
   .settings(scalaTestAndScalaCheck, mathParser, circe)
+  .settings(
+    libraryDependencies += "io.circe" %%% "not-java-time" % "0.2.0"
+  )
 
 val integration = taskKey[Seq[java.io.File]]("build the frontend and copy the results into service")
 integration in frontend := {
@@ -87,11 +90,11 @@ def mathParser = Seq(
 
 def circe =
   libraryDependencies ++= Seq(
-    "io.circe" %%% "circe-core" % "0.11.1",
-    "io.circe" %%% "circe-generic" % "0.11.1",
-    "io.circe" %%% "circe-generic-extras" % "0.11.1",
-    "io.circe" %%% "circe-parser" % "0.11.1",
-    "io.circe" %%% "circe-refined" % "0.11.1",
+    "io.circe" %%% "circe-core" % "0.12.0-RC2",
+    "io.circe" %%% "circe-generic" % "0.12.0-RC2",
+    "io.circe" %%% "circe-generic-extras" % "0.12.0-RC2",
+    "io.circe" %%% "circe-parser" % "0.12.0-RC2",
+    "io.circe" %%% "circe-refined" % "0.12.0-RC2",
   )
 
 def monocle = Seq(
