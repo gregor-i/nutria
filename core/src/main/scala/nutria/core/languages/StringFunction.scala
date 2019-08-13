@@ -10,6 +10,8 @@ class StringFunction[V] private (val string: String, val node: CNode[V]) {
       case o:StringFunction[V] => this.string == o.string && this.node == o.node
       case _ => false
     }
+
+  override def hashCode(): Int = string.hashCode ^ node.hashCode()
 }
 
 object StringFunction extends CirceCodex {

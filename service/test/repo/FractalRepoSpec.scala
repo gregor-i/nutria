@@ -1,6 +1,7 @@
 package repo
 
 import module.SystemFractals
+import nutria.core.FractalEntity
 import org.scalatest.{BeforeAndAfterEach, FunSuite, Matchers}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
@@ -8,15 +9,14 @@ class FractalRepoSpec extends FunSuite with Matchers with GuiceOneAppPerSuite wi
   def repo = app.injector.instanceOf[FractalRepo]
   val systemFractals = app.injector.instanceOf[SystemFractals]
 
-  val f1 = FractalRow(
-    id = "1",
-    maybeFractal = Some(systemFractals.systemFractals(0))
-  )
+  def row(fractal: FractalEntity) =
+    FractalRow(
+      id = FractalEntity.id(fractal),
+      maybeFractal = Some(fractal)
+    )
 
-  val f2 = FractalRow(
-    id = "2",
-    maybeFractal = Some(systemFractals.systemFractals(1))
-  )
+  val f1 = row(systemFractals.systemFractals(0))
+  val f2 = row(systemFractals.systemFractals(1))
 
   override def beforeEach = {
     repo.list().foreach(row => repo.delete(row.id))
