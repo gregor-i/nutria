@@ -22,7 +22,8 @@ import scala.io.Source
 
 class SetupDataModule extends SimpleModule(
   bind[SystemFractals].toSelf,
-  bind[FractalImageScheduler].toSelf.eagerly()
+  bind[SetupSystemFractals].toSelf.eagerly(),
+  bind[FractalImageProcess].toSelf.eagerly()
 )
 
 @Singleton
@@ -35,16 +36,12 @@ class SystemFractals {
     }.flatMap(_.as[Vector[FractalEntity]]).right.get
 }
 
-private class FractalImageScheduler @Inject()(repo: FractalRepo,
-                                              fractalImageRepo: FractalImageRepo,
-                                              systemFractals: SystemFractals,
-                                              actorSystem: ActorSystem) {
 
-  private implicit val ex: ExecutionContext =
-    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
-
-  private val logger = Logger("FractalImageScheduler")
-
+private class SetupSystemFractals @Inject()(repo: FractalRepo,
+                                            systemFractals: SystemFractals,
+                                            actorSystem: ActorSystem)
+                                           (implicit ex: ExecutionContext) {
+  private val logger = Logger("SetupSystemFractals")
 
   actorSystem.scheduler.scheduleOnce(1.second) {
     logger.info("inserting system fractals")
@@ -56,6 +53,17 @@ private class FractalImageScheduler @Inject()(repo: FractalRepo,
         ))
     }
   }
+}
+
+private class FractalImageProcess @Inject()(repo: FractalRepo,
+                                            fractalImageRepo: FractalImageRepo,
+                                            systemFractals: SystemFractals,
+                                            actorSystem: ActorSystem) {
+
+  private implicit val ex: ExecutionContext =
+    ExecutionContext.fromExecutor(Executors.newSingleThreadExecutor())
+
+  private val logger = Logger("FractalImageScheduler")
 
   actorSystem.scheduler.schedule(initialDelay = 1.second, interval = 1.minute) {
     repo.list()
