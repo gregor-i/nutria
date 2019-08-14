@@ -17,7 +17,7 @@ case class FractalEntity(program: FractalProgram,
 
 
 object FractalEntity extends CirceCodex {
-  def id(fractalEntity: FractalEntity): String = fractalEntity.hashCode().toHexString
+  def id(fractalEntity: FractalEntity): String = fractalEntity.hashCode().toHexString.padTo(8, '0')
 
   implicit val encodeViewport: Encoder[Viewport] = semiauto.deriveEncoder
   implicit val decodeViewport: Decoder[Viewport] = semiauto.deriveDecoder

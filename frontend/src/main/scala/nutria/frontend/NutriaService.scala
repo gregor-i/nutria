@@ -21,7 +21,7 @@ object NutriaService {
       url = s"/api/fractals",
       data = encode(fractalEntity)
     )
-      .flatMap(check(200))
+      .flatMap(check(201))
       .flatMap(_ => loadFractals())
 
   def delete(fractalId: String): Future[Vector[FractalEntityWithId]] =

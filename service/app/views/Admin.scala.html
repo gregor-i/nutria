@@ -1,0 +1,74 @@
+@(fractals: Seq[(repo.FractalRow, Boolean)])
+<!DOCTYPE html>
+<html>
+<head>
+    @components.head()
+    <title>Nutria</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <script type="text/javascript">
+        function onFinished(){
+            window.location.reload()
+        }
+
+        // POST          /admin/clean-fractals          controller.AdminController.cleanFractals()
+        function cleanFractals(){
+            fetch("/admin/clean-fractals", {method: "POST"})
+                .then(onFinished)
+        }
+
+        // POST          /admin/truncate-images         controller.AdminController.truncateImages()
+        function truncateImages(){
+            fetch("/admin/truncate-images", {method: "POST"})
+                .then(onFinished)
+        }
+
+        //POST          /admin/insert-system-fractals  controller.AdminController.insertSystemFractals()
+        function insertSystemFractals(id){
+            fetch("/admin/insert-system-fractals", {method: "POST"})
+                .then(onFinished)
+        }
+
+        // POST          /admin/delete-fractal/:id      controller.AdminController.deleteFractal(id : String)
+        function deleteFractal(id){
+            fetch("/admin/delete-fractal/" + id, {method: "POST"})
+                .then(onFinished)
+        }
+    </script>
+</head>
+<body>
+    <h1 class="title">Nutria Admin</h1>
+    <h1 class="subtitle">@{fractals.size} Fractals</h1>
+
+    <button class="button is-warning" onclick="insertSystemFractals()">Insert system fractals</button>
+    <button class="button is-danger" onclick="truncateImages()">Truncate Images</button>
+    <button class="button is-danger" onclick="cleanFractals()">Delete not parsable fractals</button>
+
+    <table class="table">
+        <tr>
+            <th>Id</th>
+            <th>Has Image</th>
+            <th>Type</th>
+            <th></th>
+        </tr>
+        @for((fractal, hasImage) <- fractals){
+            <tr>
+                <td>
+                    @{fractal.id}
+                </td>
+                <td>
+                    @hasImage
+                </td>
+                <td>
+                    @{fractal.maybeFractal match{
+                        case None => "not parsable"
+                        case Some(fractal) => fractal.program.toString
+                    }}
+                </td>
+                <td>
+                    <button class="button is-danger" onclick="deleteFractal('@{fractal.id}')">Delete</button>
+                </td>
+            </tr>
+        }
+    </table>
+</body>
+</html>

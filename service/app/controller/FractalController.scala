@@ -37,7 +37,7 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
       id = FractalEntity.id(request.body),
       maybeFractal = Some(request.body)
     ))
-    Ok
+    Created(FractalEntity.id(request.body))
   }
 
   def image(id: String) = Action { request =>

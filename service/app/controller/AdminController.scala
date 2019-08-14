@@ -12,6 +12,14 @@ class AdminController @Inject()(fractalRepo: FractalRepo,
                                 systemFractals: SystemFractals
                                  ) extends InjectedController with Circe {
 
+  def ui() = Action{
+    val list = fractalRepo.list()
+      .sortBy(_.maybeFractal.map(_.program))
+        .map(row => row -> fractalImageRepo.isDefined(row.id))
+
+    Ok(views.html.Admin(list))
+  }
+
   def deleteFractal(id : String) = Action{
     fractalRepo.delete(id)
     Ok
@@ -29,13 +37,17 @@ class AdminController @Inject()(fractalRepo: FractalRepo,
         case FractalRow(id, Some(fractalEntity)) if id != FractalEntity.id(fractalEntity) => id
       }
       .foreach(fractalRepo.delete)
+    Ok
+  }
+
+  def insertSystemFractals = Action {
     systemFractals.systemFractals
-        .foreach(entity => fractalRepo.save(
-          FractalRow(
-            FractalEntity.id(entity),
-            Some(entity)
-          )
-        ))
+      .foreach(entity => fractalRepo.save(
+        FractalRow(
+          FractalEntity.id(entity),
+          Some(entity)
+        )
+      ))
     Ok
   }
 }

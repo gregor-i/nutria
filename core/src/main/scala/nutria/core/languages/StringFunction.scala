@@ -12,6 +12,8 @@ class StringFunction[V] private (val string: String, val node: CNode[V]) {
     }
 
   override def hashCode(): Int = string.hashCode ^ node.hashCode()
+
+  override def toString: String = string
 }
 
 object StringFunction extends CirceCodex {

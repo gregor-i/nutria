@@ -24,6 +24,14 @@ class FractalImageRepo @Inject()(db: Database) {
         """.executeUpdate()
     }
 
+  def isDefined(id: String): Boolean =
+    db.withConnection { implicit con =>
+      SQL"""SELECT 1
+            FROM fractal_images
+            WHERE fractal_id = $id"""
+        .as(SqlParser.scalar[Int].singleOpt).isDefined
+    }
+
   def truncate(): Unit =
     db.withConnection { implicit con =>
       SQL"""TRUNCATE fractal_images"""

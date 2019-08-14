@@ -6,9 +6,11 @@ POST          /api/fractals                  controller.FractalController.postFr
 GET           /api/fractals/:id/image        controller.FractalController.image(id: String)
 
 # Admin
+GET           /admin                         controller.AdminController.ui()
 POST          /admin/truncate-images         controller.AdminController.truncateImages()
-POST          /admin/delete-fractal/:id      controller.AdminController.deleteFractal(id : String)
 POST          /admin/clean-fractals          controller.AdminController.cleanFractals()
+POST          /admin/insert-system-fractals  controller.AdminController.insertSystemFractals()
+POST          /admin/delete-fractal/:id      controller.AdminController.deleteFractal(id : String)
 
 # Frontend
 GET           /                              controller.UiController.index
