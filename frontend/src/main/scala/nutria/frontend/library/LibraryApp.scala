@@ -8,7 +8,7 @@ import org.scalajs.dom.Element
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.scalajs.js.|
 
-class Library(container: Element) extends SnabbdomApp {
+class LibraryApp(container: Element) extends SnabbdomApp {
 
   var node: Element | VNode = container
 

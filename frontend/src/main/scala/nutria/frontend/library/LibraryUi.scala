@@ -5,7 +5,7 @@ import com.raquo.snabbdom.simple.implicits._
 import nutria.core._
 import nutria.frontend.common.Buttons
 import nutria.frontend.util.SnabbdomHelper
-import nutria.frontend.viewer.Viewer
+import nutria.frontend.explorer.ExplorerApp
 import nutria.frontend.{LenseUtils, NutriaService, common}
 import org.scalajs.dom
 
@@ -39,7 +39,7 @@ object LibraryUi extends SnabbdomHelper {
           footer = Buttons.group(
             Buttons.explore(
               attrs.className := "button is-link",
-              events.onClick := (() => dom.window.location.assign(Viewer.url(fractal.entity)))
+              events.onClick := (() => dom.window.location.assign(ExplorerApp.url(fractal.entity)))
             ),
             Buttons.delete(
               attrs.className := "button is-danger",
