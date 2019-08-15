@@ -1,0 +1,185 @@
+package nutria.frontend.explorer
+
+
+import com.raquo.snabbdom.Modifier
+import com.raquo.snabbdom.simple.implicits._
+import com.raquo.snabbdom.simple.{VNode, VNodeData, events}
+import nutria.core.{Point, Viewport}
+import org.scalajs.dom._
+import org.scalajs.dom.html.Canvas
+
+import scala.scalajs.js
+
+object ExplorerEvents {
+  private def toSeq(touchList: TouchList): Seq[Touch] =
+    Seq.tabulate(touchList.length)(touchList.apply)
+
+  private def resetTransformCss(element: Canvas) =
+    element.asInstanceOf[js.Dynamic].style.transform = ""
+
+  private def transformCss(element: Canvas, moves: Seq[(Point, Point)]): Unit = {
+    val (translate, scale, rotate) = Transform.transformations(moves)
+
+    element.asInstanceOf[js.Dynamic].style.transform =
+      s"translate(${translate._1 * 100}%, ${translate._2 * 100}%) " +
+      s"scale($scale)" +
+      s"rotate(${rotate * 180d / Math.PI}deg)"
+  }
+
+  private def toPoint(event: MouseEvent, boundingBox: ClientRect): Point = {
+    val x = (event.clientX - boundingBox.left) / boundingBox.width
+    val y = (event.clientY - boundingBox.top) / boundingBox.height
+    (x, y)
+  }
+
+  private def toPoint(touch: Touch, boundingBox: ClientRect): Point = {
+    val x = (touch.clientX - boundingBox.left) / boundingBox.width
+    val y = (touch.clientY - boundingBox.top) / boundingBox.height
+    (x, y)
+  }
+
+  private def context(event: UIEvent): (Canvas, ClientRect) = {
+    val container = event.currentTarget.asInstanceOf[html.Div]
+    (container.firstElementChild.asInstanceOf[Canvas], container.getBoundingClientRect())
+  }
+
+  private def calcNewView(boundingBox: ClientRect, moves: Seq[(Point, Point)], view: Viewport) =
+    Transform.applyToViewport(moves, view.cover(boundingBox.width, boundingBox.height))
+
+  def canvasWheelEvent(implicit state: ExplorerState, update: ExplorerState => Unit) = events.onWheel := { event =>
+    event.preventDefault()
+    val (_, boundingBox) = context(event)
+    val p = toPoint(event, boundingBox)
+    val steps = event.asInstanceOf[WheelEvent].deltaY
+
+    update(
+      ExplorerState.viewport.modify {
+        _.cover(boundingBox.width, boundingBox.height)
+          .zoomSteps(p, if (steps > 0) -1 else 1)
+      }(state)
+    )
+  }
+
+  def canvasMouseEvents(implicit state: ExplorerState, update: ExplorerState => Unit): Seq[Modifier[VNode, VNodeData]] = {
+    var startPosition = Option.empty[Point]
+
+    val pointerDown =
+      events.build[PointerEvent]("pointerdown") := { event =>
+        if (event.pointerType == "mouse") {
+          event.preventDefault()
+          val (_, boundingBox) = context(event)
+          startPosition = Some(toPoint(event, boundingBox))
+        }
+      }
+
+    def pointerEnd: PointerEvent => Unit = { event =>
+      if (event.pointerType == "mouse") {
+        startPosition match {
+          case Some(from) =>
+            event.preventDefault()
+            val (canvas, boundingBox) = context(event)
+            val to = toPoint(event, boundingBox)
+            val newView = calcNewView(boundingBox, Seq(from -> to), state.fractalEntity.view)
+            resetTransformCss(canvas)
+            update(ExplorerState.viewport.set(newView)(state))
+          case None => ()
+        }
+      }
+    }
+
+    def pointerMove =
+      events.build[PointerEvent]("pointermove") := { event =>
+        if (event.pointerType == "mouse") {
+          startPosition match {
+            case Some(from) =>
+              event.preventDefault()
+              val (canvas, boundingBox) = context(event)
+              val to = toPoint(event, boundingBox)
+              transformCss(
+                element = canvas,
+                moves = Seq(from -> to)
+              )
+            case None => ()
+          }
+        }
+      }
+
+    Seq(
+      pointerDown,
+      pointerMove,
+      events.build[PointerEvent]("pointerup") := pointerEnd,
+      events.build[PointerEvent]("pointercancel") := pointerEnd,
+      events.build[PointerEvent]("pointerout") := pointerEnd
+    )
+  }
+
+  def canvasTouchEvents(implicit state: ExplorerState, update: ExplorerState => Unit) = {
+    var moves = Map.empty[Double, TouchMove]
+
+    val touchStart = events.build[TouchEvent]("touchstart") := { event =>
+      event.preventDefault()
+      val (canvas, boundingBox) = context(event)
+
+      val newTouches =
+        toSeq(event.changedTouches)
+          .map { touch =>
+            val p = toPoint(touch, boundingBox)
+            touch.identifier -> Processing(p ,p)
+          }
+      moves ++= newTouches
+    }
+
+    val touchMove = events.build[TouchEvent]("touchmove") := { event =>
+      event.preventDefault()
+      val (canvas, boundingBox) = context(event)
+      val updates = for {
+        t <- toSeq(event.changedTouches)
+        start <- moves.get(t.identifier).collect {
+          case Processing(start, _) => start
+        }
+      } yield t.identifier -> Processing(start, toPoint(t, boundingBox))
+
+      moves ++= updates
+
+      transformCss(canvas, moves.values.map(_.toMove).toSeq)
+    }
+
+    val touchEnd = events.build[TouchEvent]("touchend") := { event =>
+      event.preventDefault()
+      val (canvas, boundingBox) = context(event)
+
+      val updated = for {
+        t <- toSeq(event.changedTouches)
+        state <- moves.get(t.identifier)
+      } yield state match {
+        case Ended(start, _) => t.identifier -> Ended(start, toPoint(t, boundingBox))
+        case Processing(start, _) => t.identifier -> Ended(start, toPoint(t, boundingBox))
+      }
+
+      moves ++= updated
+
+      if (moves.values.forall(_.isInstanceOf[Ended])) {
+        val newView = calcNewView(
+          boundingBox = event.currentTarget.asInstanceOf[Element].getBoundingClientRect(),
+          moves = moves.values.map(_.toMove).toSeq,
+          view = state.fractalEntity.view
+        )
+
+        resetTransformCss(canvas)
+        update(state.copy(fractalEntity = state.fractalEntity.copy(view = newView)))
+      }
+    }
+
+    Seq(touchStart, touchMove, touchEnd)
+  }
+}
+
+
+private sealed trait TouchMove {
+  def toMove: (Point, Point) = this match {
+    case Processing(from, to) => from -> to
+    case Ended(from, to) => from -> to
+  }
+}
+private case class Processing(start: Point, currently: Point) extends TouchMove
+private case class Ended(start: Point, end: Point) extends TouchMove

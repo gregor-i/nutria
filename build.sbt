@@ -56,17 +56,15 @@ val frontend = project.in(file("frontend"))
     libraryDependencies += "io.circe" %%% "not-java-time" % "0.2.0"
   )
 
-val integration = taskKey[Seq[java.io.File]]("build the frontend and copy the results into service")
+val integration = taskKey[Unit]("build the frontend and copy the results into service")
 integration in frontend := {
   val frontendJs: Seq[Attributed[sbt.File]] = (frontend / Compile / fastOptJS / webpack).value
-  if (frontendJs.size != 1) {
-    throw new IllegalArgumentException("expected only a single js file")
-  } else {
-    val src = frontendJs.head.data
-    val dest = (baseDirectory in service).value / "public" / "js" / "nutria.js"
-    IO.copy(Seq((src, dest)))
-    Seq(dest)
-  }
+  require(frontendJs.size == 1, "expected only a single js file")
+  IO.copyFile(
+    sourceFile = frontendJs.head.data,
+    targetFile = (baseDirectory in service).value / "public" / "js" / "nutria.js"
+  )
+  streams.value.log.info("frontend integrated")
 }
 
 compile in Compile := {
