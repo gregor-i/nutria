@@ -33,6 +33,7 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
   }
 
   def postFractal() = Action(circe.tolerantJson[FractalEntity]) { request =>
+    // todo: check / correct aspect ratio
     fractalRepo.save(FractalRow(
       id = FractalEntity.id(request.body),
       maybeFractal = Some(request.body)

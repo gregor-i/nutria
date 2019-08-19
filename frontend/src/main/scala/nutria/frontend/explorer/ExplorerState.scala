@@ -2,13 +2,12 @@ package nutria.frontend.explorer
 
 import monocle.macros.GenLens
 import monocle.{Lens, Optional}
-import nutria.core.{FractalEntity, FractalProgram}
+import nutria.core.{FractalEntity, Point}
 
 import scala.concurrent.Future
 
 case class ExplorerState(fractalEntity: FractalEntity,
                          edit: Option[FractalEntity] = None,
-                         dragStartPosition: Option[(Double, Double)] = None,
                          saveProcess: Option[Future[FractalEntity]] = None)
 
 object ExplorerState {
