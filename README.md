@@ -14,7 +14,7 @@ That is why the project now focuses on using webgl to render fractals in the bro
 In some situations it is still preferable to render the fractals in the backend.
 That is still possible.
 
-The current development state can be accessed at [heroku](http://nutria-viewer.herokuapp.com).
+The current development state can be accessed at [heroku](http://nutria-explorer.herokuapp.com).
 
 ## Project structure
 - `core` provides the shared models of backend and frontend.
@@ -37,7 +37,6 @@ sbt service/run
 ```
 
 ## todo list:
- - use refined types in `FractalProgram`
  - use open gl to render fractals in backend
 
 ## links:
