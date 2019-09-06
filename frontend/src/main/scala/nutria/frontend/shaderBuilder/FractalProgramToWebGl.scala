@@ -6,6 +6,7 @@ import mathParser.{BinaryNode, ConstantNode, Optimizer}
 import nutria.core._
 import nutria.core.languages.{CLang, CNode, Lambda, X, XAndLambda, Z, ZAndLambda, ZAndZDerAndLambda, ZDer}
 import spire.math.Complex
+import Syntax.EnrichNode
 
 object FractalProgramToWebGl {
   def apply(fractalProgram: FractalProgram): (RefVec2, RefVec4) => String =
@@ -40,11 +41,11 @@ object FractalProgramToWebGl {
 
     s"""{
        |  int l = 0;
-       |  ${WebGlStatement.blockDeclare(z, f.initialZ.node, initialLangNames)}
-       |  ${WebGlStatement.blockDeclare(zDer, f.initialZDer.node, initialLangNames)}
+       |  ${WebGlStatement.blockDeclare(z, f.initialZ.node.optimize(PowerOptimizer.optimizer), initialLangNames)}
+       |  ${WebGlStatement.blockDeclare(zDer, f.initialZDer.node.optimize(PowerOptimizer.optimizer), initialLangNames)}
        |  for(int i = 0; i < ${f.maxIterations}; i++){
-       |    ${WebGlStatement.blockDeclare(zNew, f.iterationZ.node, iterationLangNames)}
-       |    ${WebGlStatement.blockDeclare(zDerNew, f.iterationZDer.node, iterationDerLangNames)}
+       |    ${WebGlStatement.blockDeclare(zNew, f.iterationZ.node.optimize(PowerOptimizer.optimizer), iterationLangNames)}
+       |    ${WebGlStatement.blockDeclare(zDerNew, f.iterationZDer.node.optimize(PowerOptimizer.optimizer), iterationDerLangNames)}
        |    ${WebGlType.assign(z, RefExp(zNew))}
        |    ${WebGlType.assign(zDer, RefExp(zDerNew))}
        |    if(dot(z,z) > float(${f.escapeRadius.value * f.escapeRadius.value}))
@@ -67,18 +68,9 @@ object FractalProgramToWebGl {
 
 
   def newtonIteration(n: NewtonIteration)(inputVar: RefVec2, outputVar: RefVec4): String = {
-    val optimizer = new Optimizer[SpireUnitaryOperator, SpireBinaryOperator, Complex[Double], XAndLambda] {
-      def rules: List[PartialFunction[CNode[XAndLambda], CNode[XAndLambda]]] =
-        List({
-          case BinaryNode(Power, left, ConstantNode(Complex(2.0, 0.0))) => BinaryNode(Times, left, left)
-        })
-    }
-
-    val lang = implicitly[CLang[XAndLambda]]
-    val iteration = lang.optimize(n.function.node)(optimizer)
-    val derived = lang.optimize(lang.derive(iteration)(X))
-
-    val initial = n.initial.node
+    val iteration = n.function.node.optimize(PowerOptimizer.optimizer)
+    val derived = n.function.node.derive(X).optimize(PowerOptimizer.optimizer)
+    val initial = n.initial.node.optimize(PowerOptimizer.optimizer)
 
     val z = RefVec2("z")
     val fzlast = RefVec2("fzlast")
@@ -132,10 +124,6 @@ object FractalProgramToWebGl {
 
 
   def divergingSeries(n: DivergingSeries)(inputVar: RefVec2, outputVar: RefVec4): String = {
-    import nutria.core.languages._
-    val initial = n.initial.node
-    val iteration = n.iteration.node
-
     val z = RefVec2("z")
 
     val functionLangNames: PartialFunction[ZAndLambda, Ref[WebGlTypeVec2.type]] = {
@@ -149,9 +137,9 @@ object FractalProgramToWebGl {
 
     s"""{
        |  int l = 0;
-       |  ${WebGlStatement.blockDeclare(z, initial, initialLangNames)}
+       |  ${WebGlStatement.blockDeclare(z, n.initial.node.optimize(PowerOptimizer.optimizer), initialLangNames)}
        |  for(int i = 0;i< ${n.maxIterations}; i++){
-       |    ${WebGlStatement.blockAssign(z, iteration, functionLangNames)}
+       |    ${WebGlStatement.blockAssign(z, n.iteration.node.optimize(PowerOptimizer.optimizer), functionLangNames)}
        |    if(length(${z.name}) > ${FloatLiteral(n.escapeRadius.value.toFloat).toCode})
        |      break;
        |    l ++;

@@ -328,7 +328,7 @@
         "antiAliase": 2,
         "maxIterations": 200,
         "threshold": 1.0E-4,
-        "function": "x*x*x - 1",
+        "function": "x^3 - 1",
         "initial": "lambda",
         "center": [
           0.0,
@@ -362,7 +362,7 @@
         "antiAliase": 2,
         "maxIterations": 200,
         "threshold": 1.0E-4,
-        "function": "x*x*x -x - 1",
+        "function": "x^3 -x - 1",
         "initial": "lambda",
         "center": [
           0.0,
@@ -396,7 +396,7 @@
         "antiAliase": 2,
         "maxIterations": 500,
         "threshold": 1.0E-5,
-        "function": "x*x*x*x*x + 1",
+        "function": "x^5 + 1",
         "initial": "exp(lambda)/lambda",
         "center": [
           0.0,
@@ -430,7 +430,7 @@
         "antiAliase": 2,
         "maxIterations": 200,
         "threshold": 1.0E-4,
-        "function": "x*x*x + 1/x - 1",
+        "function": "x^3 + 1/x - 1",
         "initial": "lambda",
         "center": [
           0.0,
@@ -464,7 +464,7 @@
         "antiAliase": 2,
         "maxIterations": 200,
         "threshold": 1.0E-4,
-        "function": "x*x*x*x + lambda",
+        "function": "x^4 + lambda",
         "initial": "1",
         "center": [
           0.0,
@@ -498,7 +498,7 @@
         "antiAliase": 2,
         "maxIterations": 200,
         "threshold": 1.0E-4,
-        "function": "x*x*x*x + lambda",
+        "function": "x^4 + lambda",
         "initial": "lambda*lambda*lambda + 15",
         "center": [
           0.0,
@@ -532,7 +532,7 @@
         "antiAliase": 2,
         "maxIterations": 500,
         "threshold": 1.0E-5,
-        "function": "x*x*x*x*x*exp(x) + 1",
+        "function": "x^5*exp(x) + 1",
         "initial": "exp(lambda)/lambda",
         "center": [
           0.0,
@@ -1008,7 +1008,7 @@
         "antiAliase": 2,
         "maxIterations": 200,
         "threshold": 1.0E-4,
-        "function": "35*x*x*x*x*x*x*x*x*x-180*x*x*x*x*x*x*x+378*x*x*x*x*x-420*x*x*x+315*x",
+        "function": "35*x^9-180*x^7+378*x^5-420*x^3+315*x",
         "initial": "lambda",
         "center": [
           0.0,
@@ -1042,7 +1042,7 @@
         "antiAliase": 2,
         "maxIterations": 200,
         "threshold": 1.0E-4,
-        "function": "35*x*x*x*x*x*x*x*x*x-180*x*x*x*x*x*x*x+3798*x*x*x*x*x-420*x*x*x+315+x",
+        "function": "35*x^9-180*x^7+3798*x^5-420*x^3+315+x",
         "initial": "lambda",
         "center": [
           0.25,
@@ -1076,7 +1076,7 @@
         "antiAliase": 2,
         "maxIterations": 200,
         "threshold": 1.0E-4,
-        "function": "35*x*x*x*x*x*x*x*x*x-180*x*x*x*x*x*x*x+378*x*x*x*x*x-420*x*x*x+315+x + lambda",
+        "function": "35*x^9-180*x^7+378*x^5-420*x^3+315+x + lambda",
         "initial": "lambda",
         "center": [
           0.25,
