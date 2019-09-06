@@ -1,7 +1,5 @@
 package nutria.frontend.shaderBuilder
 
-import java.util.UUID
-
 import mathParser.algebra.SpireNode
 import mathParser.{BinaryNode, ConstantNode, UnitaryNode, VariableNode}
 import nutria.frontend.shaderBuilder.WebGlType.TypeProps
@@ -19,10 +17,14 @@ case class Assignment[T <: WebGlType : TypeProps](ref: Ref[T], expr: WebGlExpres
   def toCode: String = s"${ref.name} = ${expr.toCode};"
 }
 
+case class Block(statements: Seq[WebGlStatement]) extends WebGlStatement {
+  def toCode: String = s"{\n${statements.map(_.toCode).mkString("\n")}\n}"
+}
+
 object WebGlStatement {
-  def assign[V](outputVar: Ref[WebGlTypeVec2.type],
-                node: SpireNode[Complex[Double], V],
-                varsToCode: PartialFunction[V, Ref[WebGlTypeVec2.type]]): Seq[WebGlStatement] = {
+  private def flattenNode[V](node: SpireNode[Complex[Double], V],
+                             varsToCode: PartialFunction[V, Ref[WebGlTypeVec2.type]]): (Block, Ref[WebGlTypeVec2.type]) = {
+    // todo: move this to recursion parameters
     var names = Map.empty[SpireNode[Complex[Double], V], Ref[WebGlTypeVec2.type]]
     var statements = List.empty[WebGlStatement]
 
@@ -57,6 +59,20 @@ object WebGlStatement {
       }
 
     val ref = loop(node)
-    statements :+ Assignment(outputVar, RefExp(ref))
+    (Block(statements), ref)
+  }
+
+  def blockDeclare[V](outputVar: Ref[WebGlTypeVec2.type],
+                      node: SpireNode[Complex[Double], V],
+                      varsToCode: PartialFunction[V, Ref[WebGlTypeVec2.type]]): String = {
+    Declaration(outputVar, WebGlType.zero[WebGlTypeVec2.type]).toCode + "\n" +
+      blockAssign(outputVar, node, varsToCode)
+  }
+
+  def blockAssign[V](outputVar: Ref[WebGlTypeVec2.type],
+                     node: SpireNode[Complex[Double], V],
+                     varsToCode: PartialFunction[V, Ref[WebGlTypeVec2.type]]): String = {
+    val (block, ref) = flattenNode(node, varsToCode)
+    Block(block.statements :+ Assignment(outputVar, RefExp(ref)) ).toCode
   }
 }

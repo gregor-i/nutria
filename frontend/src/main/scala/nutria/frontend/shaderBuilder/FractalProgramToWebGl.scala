@@ -23,28 +23,28 @@ object FractalProgramToWebGl {
     val zDer = RefVec2("z_der")
     val zDerNew = RefVec2("z_der_new")
 
-    val iterationLangNames: PartialFunction[ZAndLambda, RefExp[WebGlTypeVec2.type]] = {
-      case Z => RefExp(z)
-      case Lambda => RefExp(inputVar)
+    val iterationLangNames: PartialFunction[ZAndLambda, Ref[WebGlTypeVec2.type]] = {
+      case Z => z
+      case Lambda => inputVar
     }
 
-    val iterationDerLangNames: PartialFunction[ZAndZDerAndLambda, RefExp[WebGlTypeVec2.type]] = {
-      case Z => RefExp(z)
-      case ZDer => RefExp(zDer)
-      case Lambda => RefExp(inputVar)
+    val iterationDerLangNames: PartialFunction[ZAndZDerAndLambda, Ref[WebGlTypeVec2.type]] = {
+      case Z => z
+      case ZDer => zDer
+      case Lambda => inputVar
     }
 
-    val initialLangNames: PartialFunction[Lambda.type, RefExp[WebGlTypeVec2.type]] = {
-      case Lambda => RefExp(inputVar)
+    val initialLangNames: PartialFunction[Lambda.type, Ref[WebGlTypeVec2.type]] = {
+      case Lambda => inputVar
     }
 
     s"""{
        |  int l = 0;
-       |  ${WebGlType.declare(z, WebGlExpression.toExpression(f.initialZ.node, initialLangNames))}
-       |  ${WebGlType.declare(zDer, WebGlExpression.toExpression(f.initialZDer.node, initialLangNames))}
+       |  ${WebGlStatement.blockDeclare(z, f.initialZ.node, initialLangNames)}
+       |  ${WebGlStatement.blockDeclare(zDer, f.initialZDer.node, initialLangNames)}
        |  for(int i = 0; i < ${f.maxIterations}; i++){
-       |    ${WebGlType.declare(zNew, WebGlExpression.toExpression(f.iterationZ.node, iterationLangNames))}
-       |    ${WebGlType.declare(zDerNew, WebGlExpression.toExpression(f.iterationZDer.node, iterationDerLangNames))}
+       |    ${WebGlStatement.blockDeclare(zNew, f.iterationZ.node, iterationLangNames)}
+       |    ${WebGlStatement.blockDeclare(zDerNew, f.iterationZDer.node, iterationDerLangNames)}
        |    ${WebGlType.assign(z, RefExp(zNew))}
        |    ${WebGlType.assign(zDer, RefExp(zDerNew))}
        |    if(dot(z,z) > float(${f.escapeRadius.value * f.escapeRadius.value}))
@@ -90,27 +90,20 @@ object FractalProgramToWebGl {
       case Lambda => inputVar
     }
 
-    val initialLangNames: PartialFunction[Lambda.type, RefExp[WebGlTypeVec2.type]] = {
-      case Lambda => RefExp(inputVar)
+    val initialLangNames: PartialFunction[Lambda.type, Ref[WebGlTypeVec2.type]] = {
+      case Lambda => inputVar
     }
 
     s"""{
        |  int l = 0;
-       |  ${WebGlType.declare(z, WebGlExpression.toExpression(initial, initialLangNames))}
+       |  ${WebGlStatement.blockDeclare(z, initial, initialLangNames)}
        |  ${WebGlType.declare(fz, WebGlType.zero[WebGlTypeVec2.type])}
-       |  {
-       |  ${WebGlStatement.assign(fz, iteration, functionLangNames).map(_.toCode).mkString("\n")}
-       |  }
+       |  ${WebGlStatement.blockAssign(fz, iteration, functionLangNames)}
        |  ${WebGlType.declare(fzlast, RefExp(fz))}
        |  for(int i = 0;i< ${n.maxIterations}; i++){
        |    ${WebGlType.assign(fzlast, RefExp(fz))}
-       |    {
-       |    ${WebGlStatement.assign(fz, iteration, functionLangNames).map(_.toCode).mkString("\n")}
-       |    }
-       |    ${WebGlType.declare(fderz, WebGlType.zero[WebGlTypeVec2.type])}
-       |    {
-       |    ${WebGlStatement.assign(fderz, derived, functionLangNames).map(_.toCode).mkString("\n")}
-       |    }
+       |    ${WebGlStatement.blockAssign(fz, iteration, functionLangNames)}
+       |    ${WebGlStatement.blockDeclare(fderz, derived, functionLangNames)}
        |    ${z.name} -= ${FloatLiteral(n.overshoot.value.toFloat).toCode} * complex_divide(${fz.name}, ${fderz.name});
        |    if(length(${fz.name}) < ${FloatLiteral(n.threshold.value.toFloat).toCode})
        |      break;
@@ -145,20 +138,20 @@ object FractalProgramToWebGl {
 
     val z = RefVec2("z")
 
-    val functionLangNames: PartialFunction[ZAndLambda, RefExp[WebGlTypeVec2.type]] = {
-      case Z => RefExp(z)
-      case Lambda => RefExp(inputVar)
+    val functionLangNames: PartialFunction[ZAndLambda, Ref[WebGlTypeVec2.type]] = {
+      case Z => z
+      case Lambda => inputVar
     }
 
-    val initialLangNames: PartialFunction[Lambda.type, RefExp[WebGlTypeVec2.type]] = {
-      case Lambda => RefExp(inputVar)
+    val initialLangNames: PartialFunction[Lambda.type, Ref[WebGlTypeVec2.type]] = {
+      case Lambda => inputVar
     }
 
     s"""{
        |  int l = 0;
-       |  ${WebGlType.declare(z, WebGlExpression.toExpression(initial, initialLangNames))}
+       |  ${WebGlStatement.blockDeclare(z, initial, initialLangNames)}
        |  for(int i = 0;i< ${n.maxIterations}; i++){
-       |    ${WebGlType.assign(z, WebGlExpression.toExpression(iteration, functionLangNames))}
+       |    ${WebGlStatement.blockAssign(z, iteration, functionLangNames)}
        |    if(length(${z.name}) > ${FloatLiteral(n.escapeRadius.value.toFloat).toCode})
        |      break;
        |    l ++;

@@ -1,21 +1,9 @@
 package nutria.frontend.shaderBuilder
 
-import mathParser.algebra.{SpireBinaryOperator, SpireNode, SpireUnitaryOperator}
-import spire.math.Complex
+import mathParser.algebra.{SpireBinaryOperator, SpireUnitaryOperator}
 
 sealed trait WebGlExpression[T <: WebGlType] {
   def toCode: String
-}
-
-object WebGlExpression{
-  def toExpression[V](node: SpireNode[Complex[Double], V],
-                      varsToCode: PartialFunction[V, RefExp[WebGlTypeVec2.type ]]): WebGlExpression[WebGlTypeVec2.type] =
-    node.fold(
-      ifConstant = c => Vec2(FloatLiteral(c.real.toFloat), FloatLiteral(c.imag.toFloat)),
-      ifBinary = ComplexBinaryExp.apply,
-      ifUnitary = ComplexUnitaryExp.apply,
-      ifVariable = varsToCode,
-    )
 }
 
 case class IntLiteral(value: Int) extends WebGlExpression[WebGlTypeInt.type] {
@@ -57,7 +45,6 @@ case class ComplexBinaryExp(op: SpireBinaryOperator,
     case Minus => left.toCode + "-" + right.toCode
     case Times => s"complex_product(vec2(${left.toCode}), vec2(${right.toCode}))"
     case Divided => s"complex_divide(vec2(${left.toCode}), vec2(${right.toCode}))"
-    case Power if right == FloatLiteral(2.0f) => s"complex_sq(vec2(${left.toCode}))"
     case Power => s"complex_power(vec2(${left.toCode}), vec2(${right.toCode}))"
   }
 }
