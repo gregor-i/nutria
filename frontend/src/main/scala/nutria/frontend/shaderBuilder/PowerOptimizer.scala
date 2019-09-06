@@ -12,7 +12,7 @@ object PowerOptimizer {
    new Optimizer[SpireUnitaryOperator, SpireBinaryOperator, Complex[Double], V] {
 
      val powerReducer: PartialFunction[CNode[V], CNode[V]] = {
-       case BinaryNode(Power, left, ConstantNode(Complex(n, 0.0))) if n % 1.0 == 0.0 =>
+       case BinaryNode(Power, left, ConstantNode(Complex(n, 0.0))) if n % 1.0 == 0.0 && n > 1.0 =>
          val i = n.toInt
          if (i % 2 == 0)
            (left ^ ConstantNode(i / 2)) * (left ^ ConstantNode(i / 2))

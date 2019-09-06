@@ -47,10 +47,11 @@ a:hover{
     position: absolute;
     display : flex;
     justify-content : flex-end;
+    flex-wrap: wrap;
 }
 
 .action-bar > *{
-    margin: 8px 16px;
+    margin: 8px;
 }
 
 /* lobby-tile-list */

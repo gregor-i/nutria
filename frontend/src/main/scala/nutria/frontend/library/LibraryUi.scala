@@ -38,16 +38,20 @@ object LibraryUi extends SnabbdomHelper {
           lens = LenseUtils.lookedUp(fractal.entity, LibraryState.editOptional.composeLens(FractalEntityWithId.entity).asSetter),
           footer = Buttons.group(
             Buttons.explore(
-              attrs.className := "button is-link",
+              attrs.className := "button is-primary",
               events.onClick := (() => dom.window.location.assign(ExplorerApp.url(fractal.entity)))
             ),
-            Buttons.delete(
+            Buttons.cancel(
+              attrs.className := "button",
+              events.onClick := (() => update(state.copy(edit = None)))
+            ),
+            /*Buttons.delete(
               attrs.className := "button is-danger",
               events.onClick := (() => {
                 NutriaService.delete(fractal.id)
                   .foreach(newFractals => update(state.copy(programs = newFractals, edit = None)))
               })
-            )
+            )*/
           )
         )
       )
