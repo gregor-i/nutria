@@ -42,3 +42,7 @@ sbt service/run
 ## links:
 - https://en.wikibooks.org/wiki/Fractals/Iterations_in_the_complex_plane/Mandelbrot_set/centers
 - http://cosinekitty.com/mandel_orbits.html
+
+### Assets:
+- css: https://bulma.io/documentation/form/general/
+- icons: https://material.io/resources/icons/?style=outline
