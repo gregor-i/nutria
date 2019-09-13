@@ -5,6 +5,7 @@
     @components.head()
     <title>Nutria</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <script type="text/javascript" src="/js/nutria.js"></script>
     <script type="text/javascript">
         function onFinished(){
             window.location.reload()
@@ -65,6 +66,7 @@
                     }}
                 </td>
                 <td>
+                    <button class="button is-primary" onclick="putFractalImage('@{fractal.id}')">Render Image</button>
                     <button class="button is-danger" onclick="deleteFractal('@{fractal.id}')">Delete</button>
                 </td>
             </tr>

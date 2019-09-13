@@ -18,6 +18,7 @@ object Main {
     dom.window.location.pathname match {
       case "/viewer" => dom.document.addEventListener[Event]("DOMContentLoaded", (_: Event) => gotoExplorer())
       case "/" => dom.document.addEventListener[Event]("DOMContentLoaded", (_: Event) => gotoLibrary())
+      case "/admin" => Admin.setup()
       case _ => println("unknown path")
     }
   }

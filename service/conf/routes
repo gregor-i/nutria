@@ -3,7 +3,9 @@ GET           /api/fractals                  controller.FractalController.listFr
 GET           /api/fractals/:id              controller.FractalController.getFractal(id: String)
 DELETE        /api/fractals/:id              controller.FractalController.deleteFractal(id: String)
 POST          /api/fractals                  controller.FractalController.postFractal()
-GET           /api/fractals/:id/image        controller.FractalController.image(id: String)
+
+GET           /api/fractals/:id/image        controller.FractalController.getImage(id: String)
+PUT           /api/fractals/:id/image        controller.FractalController.putImage(id: String)
 
 # Admin
 GET           /admin                         controller.AdminController.ui()

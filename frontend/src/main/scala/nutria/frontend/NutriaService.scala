@@ -11,6 +11,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object NutriaService {
+  def loadFractal(fractalId: String): Future[FractalEntity] =
+    Ajax.get(url = s"/api/fractals/${fractalId}")
+      .flatMap(check(200))
+      .flatMap(parse[FractalEntity])
+
   def loadFractals(): Future[Vector[FractalEntityWithId]] =
     Ajax.get(url = s"/api/fractals")
       .flatMap(check(200))
