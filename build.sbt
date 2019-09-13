@@ -2,7 +2,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
 // global settings
 version in ThisBuild := "0.0.1"
-scalaVersion in ThisBuild := "2.12.9"
+scalaVersion in ThisBuild := "2.12.10"
 scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation")
 
 // projects
@@ -30,7 +30,7 @@ lazy val service = project.in(file("service"))
   .settings(
     libraryDependencies += guice,
     libraryDependencies += "com.dripower" %% "play-circe" % "2711.0",
-    libraryDependencies += "org.postgresql" % "postgresql" % "42.2.6",
+    libraryDependencies += "org.postgresql" % "postgresql" % "42.2.7",
     libraryDependencies += evolutions,
     libraryDependencies += jdbc,
     libraryDependencies += "org.playframework.anorm" %% "anorm" % "2.6.4",
@@ -88,11 +88,11 @@ def mathParser = Seq(
 
 def circe =
   libraryDependencies ++= Seq(
-    "io.circe" %%% "circe-core" % "0.12.0-RC2",
-    "io.circe" %%% "circe-generic" % "0.12.0-RC2",
-    "io.circe" %%% "circe-generic-extras" % "0.12.0-RC2",
-    "io.circe" %%% "circe-parser" % "0.12.0-RC2",
-    "io.circe" %%% "circe-refined" % "0.12.0-RC2",
+    "io.circe" %%% "circe-core" % "0.12.1",
+    "io.circe" %%% "circe-generic" % "0.12.1",
+    "io.circe" %%% "circe-generic-extras" % "0.12.1",
+    "io.circe" %%% "circe-parser" % "0.12.1",
+    "io.circe" %%% "circe-refined" % "0.12.1",
   )
 
 def monocle = Seq(
