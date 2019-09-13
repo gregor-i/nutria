@@ -1186,5 +1186,30 @@
     },
     "description": "",
     "reference": "https://www.shadertoy.com/view/Mds3R8"
+  },
+  {
+    "program": {
+      "FreestyleProgram": {
+        "code": "// https://de.wikipedia.org/wiki/Baryzentrische_Koordinaten\n// https://de.wikipedia.org/wiki/Sierpinski-Dreieck\n\n\n#define calc_tri_area(A, B, C) float((((A.x - C.x) * (B.y - C.y)) - ((B.x - C.x) * (A.y - C.y))) / 2.0)\n\nconst float pi = 3.141;\nconst float size = 1.0;\nconst int iterations = 20;\n\nconst vec3 color_outside = vec3(1.0);\nconst vec3 color_inside = vec3(0.0);\n\nvec2 A = vec2(size*sin( 60.0/180.0*pi), size*cos( 60.0/180.0*pi));\nvec2 B = vec2(size*sin(180.0/180.0*pi), size*cos(180.0/180.0*pi));\nvec2 C = vec2(size*sin(300.0/180.0*pi), size*cos(300.0/180.0*pi));\n\nfloat area = calc_tri_area(A, B, C);\nvec3 bary = vec3(calc_tri_area(B, C, z), calc_tri_area(C, A, z), calc_tri_area(A, B, z));\n\nif(bary.x > 0.0 || bary.y > 0.0 || bary.z > 0.0){\n    // outside\n    color = vec4(color_outside, 1.0);\n}else{\n    // inside\n    color = vec4(color_inside, 1.0);\n    for(int i = 0; i < iterations; i++){\n        bary = vec3(calc_tri_area(B, C, z), calc_tri_area(C, A, z), calc_tri_area(A, B, z));\n        // inside\n        if(bary.x / area > 0.5){\n            B = 0.5 * (B + A);\n            C = 0.5 * (C + A);\n        } else if(bary.y / area > 0.5){\n            // in area near B\n            A = 0.5 * (A + B);\n            C = 0.5 * (C + B);\n        }else if(bary.z / area > 0.5){\n            // in area near C\n            A = 0.5 * (A + C);\n            B = 0.5 * (B + C);\n        }else{\n            // in the middle triangle\n            color = vec4(mix(color_outside, color_inside, float(i)/float(iterations)), 1.0);\n            break;\n        }\n        area /= 4.0;\n    }\n}"
+      }
+    },
+    "view": {
+      "origin": [
+        -1.30982501628656,
+        -1.2105252086917273
+      ],
+      "A": [
+        2.523809358319962,
+        0.0
+      ],
+      "B": [
+        0.0,
+        2.006211180124265
+      ]
+    },
+    "description": "",
+    "reference": "https://de.wikipedia.org/wiki/Sierpinski-Dreieck",
+    "antiAliase": 2,
+    "id": "fa49d059"
   }
 ]
