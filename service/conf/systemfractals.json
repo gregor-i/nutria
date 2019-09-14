@@ -1211,5 +1211,30 @@
     "reference": "https://de.wikipedia.org/wiki/Sierpinski-Dreieck",
     "antiAliase": 2,
     "id": "fa49d059"
+  },
+  {
+    "program": {
+      "FreestyleProgram": {
+        "code": "// https://en.wikipedia.org/wiki/Koch_snowflake\n// https://www.shadertoy.com/view/Mlf3RX\n\nconst int iterations = 20;\n\nconst vec3 color_outside = vec3(1.0);\nconst vec3 color_inside = vec3(0.0);\n\nif(z.x < 0.0 || z.x > 1.0 || z.y < -0.5 || z.y > 0.5){\n    color = vec4(color_outside, 1.0);\n}else{\n    z = abs(fract(z)-0.5);\n    for(int i = 0; i < iterations ; i++)\n    {\n        z += vec2(z.y*1.735, -z.x*1.735);\n        z.x = abs(z.x)-0.58;\n        z = -vec2(-z.y, z.x)*.865;\n    }\n\n    if(z.x > 0.0){\n        color = vec4(color_outside, 1.0);\n    }else{\n        color = vec4(color_inside, 1.0);\n    }\n}"
+      }
+    },
+    "view": {
+      "origin": [
+        -0.3999720289024556,
+        -0.5039107933017429
+      ],
+      "A": [
+        1.9378881987578165,
+        0.0
+      ],
+      "B": [
+        0.0,
+        0.9780279503105854
+      ]
+    },
+    "description": "Koch Snowflake",
+    "reference": "https://www.shadertoy.com/view/Mlf3RX",
+    "antiAliase": 2,
+    "id": "d06e08ef"
   }
 ]
