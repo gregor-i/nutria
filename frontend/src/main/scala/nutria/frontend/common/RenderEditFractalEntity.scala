@@ -5,9 +5,6 @@ import com.raquo.snabbdom.simple.{VNode, attrs, styles, tags}
 import monocle.Lens
 import nutria.core._
 import nutria.frontend.LenseUtils
-import nutria.frontend.shaderBuilder.FractalRenderer
-import nutria.frontend.util.Hooks
-import org.scalajs.dom.html.Canvas
 import nutria.frontend.util.SnabbdomHelper.seqNode
 
 object RenderEditFractalEntity {
@@ -35,14 +32,7 @@ object RenderEditFractalEntity {
       attrs.widthAttr := 400,
       attrs.heightAttr := 225,
       styles.width := "100%",
-      Hooks.insertHook { node =>
-        val canvas = node.elm.get.asInstanceOf[Canvas]
-        FractalRenderer.render(canvas, fractal, false)
-      },
-      Hooks.postPatchHook { (_, newNode) =>
-        val canvas = newNode.elm.get.asInstanceOf[Canvas]
-        FractalRenderer.render(canvas, fractal, false)
-      }
+      CanvasHooks(fractal, resize = false)
     )
 
   private def body[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])

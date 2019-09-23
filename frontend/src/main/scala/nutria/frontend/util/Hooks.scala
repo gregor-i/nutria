@@ -16,6 +16,9 @@ object Hooks {
   def postPatchHook(f: (NodeHooks[N, D]#OldNode, NodeHooks[N, D]#NewNode) => Any): Modifier[N, D] =
     apply(_.addPostPatchHook(f))
 
+  def destroyHook(f: NodeHooks[N, D]#OldNode => Any): Modifier[N, D] =
+    apply(_.addDestroyHook(f))
+
   private def hooks(node: N): NodeHooks[N, D] = {
     if (node.data.hooks.isEmpty) {
       node.data.hooks = UndefOr.any2undefOrA(new NodeHooks())

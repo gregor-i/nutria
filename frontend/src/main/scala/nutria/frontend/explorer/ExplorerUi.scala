@@ -2,12 +2,11 @@ package nutria.frontend.explorer
 
 import com.raquo.snabbdom.simple._
 import com.raquo.snabbdom.simple.implicits._
-import nutria.frontend.common.Buttons
+import nutria.frontend.common.{Buttons, CanvasHooks}
 import nutria.frontend.shaderBuilder.FractalRenderer
-import nutria.frontend.util.{Hooks, SnabbdomHelper}
+import nutria.frontend.util.SnabbdomHelper
 import nutria.frontend.{LenseUtils, NutriaService, common}
 import org.scalajs.dom
-import org.scalajs.dom.html.Canvas
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
@@ -76,10 +75,7 @@ object ExplorerUi {
     tags.div(
       attrs.className := "full-size",
       tags.canvas(
-        Hooks.insertHook { vnode =>
-          FractalRenderer.render(vnode.elm.get.asInstanceOf[Canvas], state.fractalEntity, true)
-        },
-        Hooks.postPatchHook { (_, newNode) => FractalRenderer.render(newNode.elm.get.asInstanceOf[Canvas], state.fractalEntity, true) },
+        CanvasHooks(state.fractalEntity, resize = true)
       ),
       SnabbdomHelper.seq(ExplorerEvents.canvasMouseEvents),
       SnabbdomHelper.seq(ExplorerEvents.canvasTouchEvents),
