@@ -31,6 +31,29 @@ object Admin {
       } yield post.responseText)
         .onComplete(println)
     }
+    Untyped(dom.window).putAllFractalImages = () => {
+      (for{
+        fractals  <- NutriaService.loadFractals()
+        canvas  <- Future{
+          val canvas = dom.document.createElement("canvas").asInstanceOf[Canvas]
+          canvas.setAttribute("width", "400")
+          canvas.setAttribute("height", "225")
+          canvas
+        }
+        _ <- Future.sequence{
+          for{
+            fractal <- fractals
+            _ = FractalRenderer.render(canvas, fractal.entity, false)
+            url = Untyped(canvas).toDataURL("image/png").asInstanceOf[String]
+          } yield Ajax.put(
+            url = s"/api/fractals/${fractal.id}/image",
+            headers = Map("Content-Type" -> "image/png"),
+            data = url.stripPrefix("data:image/png;base64,")
+          )
+        }
+      } yield s"${fractals.size} Fractals rendered")
+        .onComplete(println)
+    }
     println("Admin Setup completed")
   }
 }

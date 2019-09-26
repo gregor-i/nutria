@@ -40,9 +40,10 @@
     <h1 class="title">Nutria Admin</h1>
     <h1 class="subtitle">@{fractals.size} Fractals</h1>
 
-    <button class="button is-warning" onclick="insertSystemFractals()">Insert system fractals</button>
-    <button class="button is-danger" onclick="truncateImages()">Truncate Images</button>
-    <button class="button is-danger" onclick="cleanFractals()">Delete not parsable fractals</button>
+    <button class="button is-primary" onclick="insertSystemFractals()">Insert system fractals</button>
+    <button class="button is-primary" onclick="window.putAllFractalImages()">Render all fractal images</button>
+    <button class="button is-warning" onclick="truncateImages()">Truncate Images</button>
+    <button class="button is-warning" onclick="cleanFractals()">Delete not parsable fractals</button>
 
     <table class="table">
         <tr>
@@ -66,8 +67,8 @@
                     }}
                 </td>
                 <td>
-                    <button class="button is-primary" onclick="putFractalImage('@{fractal.id}')">Render Image</button>
-                    <button class="button is-danger" onclick="deleteFractal('@{fractal.id}')">Delete</button>
+                    <button class="button is-primary" onclick="window.putFractalImage('@{fractal.id}')">Render Image</button>
+                    <button class="button is-warning" onclick="deleteFractal('@{fractal.id}')">Delete</button>
                 </td>
             </tr>
         }
