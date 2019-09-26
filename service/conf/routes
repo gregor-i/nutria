@@ -15,8 +15,10 @@ POST          /admin/insert-system-fractals  controller.AdminController.insertSy
 POST          /admin/delete-fractal/:id      controller.AdminController.deleteFractal(id : String)
 
 # Frontend
-GET           /                              controller.UiController.index
-GET           /viewer                        controller.UiController.index
+GET           /                              controller.UiController.slash
+GET           /library                       controller.UiController.library
+GET           /explorer/:fractalId           controller.UiController.explorer(fractalId)
+
 
 # Assets
 GET           /favicon.ico                   controller.UiController.asset(path = "icon.png", folder = "/public/img")

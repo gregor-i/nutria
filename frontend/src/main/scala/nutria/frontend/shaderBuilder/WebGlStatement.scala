@@ -73,6 +73,6 @@ object WebGlStatement {
                      node: SpireNode[Complex[Double], V],
                      varsToCode: PartialFunction[V, Ref[WebGlTypeVec2.type]]): String = {
     val (block, ref) = flattenNode(node, varsToCode)
-    Block(block.statements :+ Assignment(outputVar, RefExp(ref)) ).toCode
+    Block(block.statements :+ Assignment(outputVar, RefExp(ref))).toCode
   }
 }

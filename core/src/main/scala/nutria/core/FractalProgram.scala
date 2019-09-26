@@ -5,9 +5,10 @@ import eu.timepit.refined.api.Refined
 import eu.timepit.refined.boolean.And
 import eu.timepit.refined.numeric.Interval.Open
 import eu.timepit.refined.numeric.{NonNaN, Positive}
-import io.circe.{Decoder, Encoder}
+import io.circe.{Codec, Decoder, Encoder}
 import monocle.Prism
 import monocle.macros.GenPrism
+import nutria.core.FractalEntity.semiauto
 import shapeless.Witness
 import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda, ZAndZDerAndLambda}
 
@@ -108,6 +109,5 @@ object FractalProgram extends CirceCodex {
     case f: FreestyleProgram => (4, f.code.length)
   }
 
-  implicit val decoder: Decoder[FractalProgram] = semiauto.deriveDecoder
-  implicit val encoder: Encoder[FractalProgram] = semiauto.deriveEncoder
+  implicit val codec: Codec[FractalProgram] = semiauto.deriveConfiguredCodec
 }

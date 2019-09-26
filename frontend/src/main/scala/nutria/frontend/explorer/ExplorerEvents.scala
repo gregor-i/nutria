@@ -5,6 +5,7 @@ import com.raquo.snabbdom.Modifier
 import com.raquo.snabbdom.simple.implicits._
 import com.raquo.snabbdom.simple.{VNode, VNodeData, events}
 import nutria.core.{Point, Viewport}
+import nutria.frontend.ExplorerState
 import org.scalajs.dom._
 import org.scalajs.dom.html.Canvas
 
@@ -124,7 +125,7 @@ object ExplorerEvents {
         toSeq(event.changedTouches)
           .map { touch =>
             val p = toPoint(touch, boundingBox)
-            touch.identifier -> Processing(p ,p)
+            touch.identifier -> Processing(p, p)
           }
       moves ++= newTouches
     }

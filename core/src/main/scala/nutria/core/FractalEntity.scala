@@ -4,8 +4,9 @@ import eu.timepit.refined._
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.numeric.Positive
 import io.circe.syntax._
-import io.circe.{Decoder, Encoder}
+import io.circe.{Codec, Decoder, Encoder}
 import nutria.core.viewport.DefaultViewport
+
 
 @monocle.macros.Lenses()
 case class FractalEntity(program: FractalProgram,
@@ -19,11 +20,8 @@ case class FractalEntity(program: FractalProgram,
 object FractalEntity extends CirceCodex {
   def id(fractalEntity: FractalEntity): String = fractalEntity.hashCode().toHexString.padTo(8, '0')
 
-  implicit val encodeViewport: Encoder[Viewport] = semiauto.deriveEncoder
-  implicit val decodeViewport: Decoder[Viewport] = semiauto.deriveDecoder
-
-  implicit val decoder: Decoder[FractalEntity] = semiauto.deriveDecoder
-  implicit val encoder: Encoder[FractalEntity] = semiauto.deriveEncoder
+  implicit val codecViewport: Codec[Viewport] = semiauto.deriveConfiguredCodec
+  implicit val codec: Codec[FractalEntity] = semiauto.deriveConfiguredCodec
 }
 
 @monocle.macros.Lenses()
@@ -31,15 +29,16 @@ case class FractalEntityWithId(id: String,
                                entity: FractalEntity)
 
 object FractalEntityWithId extends CirceCodex {
-  implicit val encoder: Encoder[FractalEntityWithId] = Encoder[FractalEntityWithId] { row =>
-    Encoder[FractalEntity].apply(row.entity)
-      .mapObject(_.add("id", row.id.asJson))
-  }
-
-  implicit val decode: Decoder[FractalEntityWithId] = Decoder[FractalEntityWithId] { json =>
-    for {
-      entity <- json.as[FractalEntity]
-      id <- json.downField("id").as[String]
-    } yield FractalEntityWithId(id, entity)
-  }
+  implicit val codec: Codec[FractalEntityWithId] = Codec.from(
+    decodeA = Decoder[FractalEntityWithId] { json =>
+      for {
+        entity <- json.as[FractalEntity]
+        id <- json.downField("id").as[String]
+      } yield FractalEntityWithId(id, entity)
+    },
+    encodeA = Encoder[FractalEntityWithId] { row =>
+      Encoder[FractalEntity].apply(row.entity)
+        .mapObject(_.add("id", row.id.asJson))
+    }
+  )
 }

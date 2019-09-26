@@ -5,17 +5,16 @@ import nutria.frontend.util.Untyped
 import org.scalajs.dom
 import org.scalajs.dom.ext.Ajax
 import org.scalajs.dom.html.Canvas
+
 import scala.concurrent.ExecutionContext.Implicits.global
-
-
 import scala.concurrent.Future
 
 object Admin {
-  def setup(): Unit ={
+  def setup(): Unit = {
     Untyped(dom.window).putFractalImage = (fractalId: String) => {
-      (for{
-        fractal  <- NutriaService.loadFractal(fractalId)
-        canvas  <- Future{
+      (for {
+        fractal <- NutriaService.loadFractal(fractalId)
+        canvas <- Future {
           val canvas = dom.document.createElement("canvas").asInstanceOf[Canvas]
           canvas.setAttribute("width", "400")
           canvas.setAttribute("height", "225")
@@ -32,16 +31,16 @@ object Admin {
         .onComplete(println)
     }
     Untyped(dom.window).putAllFractalImages = () => {
-      (for{
-        fractals  <- NutriaService.loadFractals()
-        canvas  <- Future{
+      (for {
+        fractals <- NutriaService.loadFractals()
+        canvas <- Future {
           val canvas = dom.document.createElement("canvas").asInstanceOf[Canvas]
           canvas.setAttribute("width", "400")
           canvas.setAttribute("height", "225")
           canvas
         }
-        _ <- Future.sequence{
-          for{
+        _ <- Future.sequence {
+          for {
             fractal <- fractals
             _ = FractalRenderer.render(canvas, fractal.entity, false)
             url = Untyped(canvas).toDataURL("image/png").asInstanceOf[String]

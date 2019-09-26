@@ -7,7 +7,7 @@ object Transform {
   // translation, scale, rotation
   // todo: implement rotation
   def transformations(moves: Seq[(Point, Point)]): (Point, Double, Double) =
-    if (moves.length == 0) {
+    if (moves.isEmpty) {
       ((0d, 0d), 1d, 0d)
     } else {
       val factor = (1d / moves.length)

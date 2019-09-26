@@ -1,25 +1,40 @@
 package nutria.frontend
 
-import nutria.frontend.library.LibraryApp
-import nutria.frontend.explorer.ExplorerApp
 import org.scalajs.dom
 import org.scalajs.dom.{Element, Event}
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.scalajs.js
+
 object Main {
-  def container: Element = dom.document.getElementById("nutria-app")
-
-  def gotoExplorer() =
-    new ExplorerApp(container)
-
-  def gotoLibrary() =
-    new LibraryApp(container)
 
   def main(args: Array[String]): Unit = {
-    dom.window.location.pathname match {
-      case "/" => dom.document.addEventListener[Event]("DOMContentLoaded", (_: Event) => gotoLibrary())
-      case "/viewer" => dom.document.addEventListener[Event]("DOMContentLoaded", (_: Event) => gotoExplorer())
-      case "/admin" => Admin.setup()
-      case _ => println("unknown path")
+    def container: Element = dom.document.getElementById("nutria-app")
+
+    val viewerUrlRegex = "/explorer/([0-9a-f]+)".r
+
+    val stateFuture: Future[NutriaState] = dom.window.location.pathname match {
+      case "/library" =>
+        NutriaService.loadFractals().map(fractals => LibraryState(fractals = fractals))
+      case viewerUrlRegex(fractalId) =>
+        for {
+          fractals <- NutriaService.loadFractals()
+          fractal = fractals.find(_.id == fractalId).get
+        } yield ExplorerState(fractals = fractals, initialEntity = fractal, fractalEntity = fractal.entity)
+      case "/admin" =>
+        Admin.setup()
+        Future.failed(new Exception)
+      case _ =>
+        println("unknown url")
+        Future.failed(new Exception)
     }
+
+
+    dom.document.addEventListener[Event]("DOMContentLoaded", (_: js.Any) =>
+      stateFuture.foreach(state =>
+        new nutria.frontend.NutriaApp(container, state)
+      )
+    )
   }
 }

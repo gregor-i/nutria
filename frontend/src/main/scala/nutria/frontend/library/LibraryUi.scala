@@ -4,20 +4,17 @@ import com.raquo.snabbdom.simple._
 import com.raquo.snabbdom.simple.implicits._
 import nutria.core._
 import nutria.frontend.common.Buttons
-import nutria.frontend.util.SnabbdomHelper
-import nutria.frontend.explorer.ExplorerApp
-import nutria.frontend.{LenseUtils, NutriaService, common}
-import org.scalajs.dom
-
-import scala.concurrent.ExecutionContext.Implicits.global
+import nutria.frontend.util.{LenseUtils, SnabbdomHelper}
+import nutria.frontend.{ExplorerState, LibraryState, NutriaState, common}
 
 object LibraryUi extends SnabbdomHelper {
-  def render(implicit state: LibraryState, update: LibraryState => Unit): VNode = {
+  def render(implicit state: LibraryState, update: NutriaState => Unit): VNode = {
     tags.div(
-      common.Header("Nutria Fractal Library"),
+      key := "library",
+      common.Header("Nutria Fractal Library")(state, update),
       tags.div(
         attrs.className := "lobby-tile-list",
-        seqNode(state.programs.map(renderProgramTile)),
+        seqNode(state.fractals.map(renderProgramTile)),
         seqNode(Seq.fill(5)(dummyTile))
       ),
       renderPopup(),
@@ -25,7 +22,7 @@ object LibraryUi extends SnabbdomHelper {
   }
 
   def renderPopup()
-                 (implicit state: LibraryState, update: LibraryState => Unit): Option[VNode] =
+                 (implicit state: LibraryState, update: NutriaState => Unit): Option[VNode] =
     state.edit.map { fractal =>
       tags.div(
         attrs.className := "modal is-active",
@@ -39,7 +36,7 @@ object LibraryUi extends SnabbdomHelper {
           footer = Buttons.group(
             Buttons.explore(
               attrs.className := "button is-primary",
-              events.onClick := (() => dom.window.location.assign(ExplorerApp.url(fractal.entity)))
+              events.onClick := (() => update(ExplorerState(fractals = state.fractals, fractalEntity = fractal.entity, initialEntity = fractal)))
             ),
             Buttons.cancel(
               attrs.className := "button",
@@ -58,7 +55,7 @@ object LibraryUi extends SnabbdomHelper {
     }
 
   def renderProgramTile(fractal: FractalEntityWithId)
-                       (implicit state: LibraryState, update: LibraryState => Unit): VNode =
+                       (implicit state: LibraryState, update: NutriaState => Unit): VNode =
     tags.build("article")(
       events.onClick := (() => update(state.copy(edit = Some(fractal)))),
       tags.img(

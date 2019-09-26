@@ -4,7 +4,7 @@ import com.raquo.snabbdom.simple.implicits._
 import com.raquo.snabbdom.simple.{VNode, attrs, styles, tags}
 import monocle.Lens
 import nutria.core._
-import nutria.frontend.LenseUtils
+import nutria.frontend.util.LenseUtils
 import nutria.frontend.util.SnabbdomHelper.seqNode
 
 object RenderEditFractalEntity {

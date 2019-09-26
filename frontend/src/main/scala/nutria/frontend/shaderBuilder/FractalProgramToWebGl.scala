@@ -1,12 +1,9 @@
 package nutria.frontend.shaderBuilder
 
-import mathParser.algebra._
 import mathParser.implicits._
-import mathParser.{BinaryNode, ConstantNode, Optimizer}
 import nutria.core._
-import nutria.core.languages.{CLang, CNode, Lambda, X, XAndLambda, Z, ZAndLambda, ZAndZDerAndLambda, ZDer}
-import spire.math.Complex
-import Syntax.EnrichNode
+import nutria.core.languages.{Lambda, X, XAndLambda, Z, ZAndLambda, ZAndZDerAndLambda, ZDer}
+import nutria.frontend.shaderBuilder.Syntax.EnrichNode
 
 object FractalProgramToWebGl {
   def apply(fractalProgram: FractalProgram): (RefVec2, RefVec4) => String =

@@ -1,7 +1,7 @@
 package nutria.frontend.shaderBuilder
 
 import eu.timepit.refined.api.Refined
-import eu.timepit.refined.numeric.{Greater, Positive}
+import eu.timepit.refined.numeric.Positive
 
 
 object AntiAliase {

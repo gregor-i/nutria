@@ -1,8 +1,8 @@
 package nutria.frontend.common
 
 import com.raquo.snabbdom.Modifier
-import com.raquo.snabbdom.simple.implicits._
 import com.raquo.snabbdom.simple._
+import com.raquo.snabbdom.simple.implicits._
 import nutria.frontend.util.SnabbdomHelper
 
 object Buttons extends SnabbdomHelper {

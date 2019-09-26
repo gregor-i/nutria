@@ -5,7 +5,11 @@ import javax.inject.Inject
 import play.api.mvc.InjectedController
 
 class UiController @Inject()(assets: Assets) extends InjectedController {
-  def index = Action(Ok(views.html.Nutria()))
+  def slash = Action(PermanentRedirect("/library"))
+
+  def library = Action(Ok(views.html.Nutria()))
+
+  def explorer(fractalId: String) = Action(Ok(views.html.Nutria()))
 
   def asset(file: String, folder: String) = assets.at(folder, file)
 }

@@ -4,17 +4,18 @@ import com.raquo.snabbdom.simple._
 import com.raquo.snabbdom.simple.implicits._
 import nutria.frontend.common.{Buttons, CanvasHooks}
 import nutria.frontend.shaderBuilder.FractalRenderer
-import nutria.frontend.util.SnabbdomHelper
-import nutria.frontend.{LenseUtils, NutriaService, common}
+import nutria.frontend.util.{LenseUtils, SnabbdomHelper}
+import nutria.frontend.{ExplorerState, NutriaService, NutriaState, common}
 import org.scalajs.dom
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
 
 object ExplorerUi {
-  def render(implicit state: ExplorerState, update: ExplorerState => Unit): VNode =
+  def render(implicit state: ExplorerState, update: NutriaState => Unit): VNode =
     tags.div(
-      common.Header("Nutria Fractal Explorer"),
+      key := "explorer",
+      common.Header("Nutria Fractal Explorer")(state, update),
       renderActionBar(),
       renderCanvas,
       renderPopup()

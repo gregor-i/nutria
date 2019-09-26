@@ -56,7 +56,7 @@ object Form {
 
 
   def stringInput[S](label: String, lens: Lens[S, String])
-                   (implicit state: S, update: S => Unit) =
+                    (implicit state: S, update: S => Unit) =
     inputStyle(label,
       tags.input(
         attrs.className := "input",
@@ -107,7 +107,7 @@ object Form {
     )
 
   def doubleInput[S, V](label: String, lens: Lens[S, Double Refined V])
-                    (implicit state: S, update: S => Unit, validate: Validate[Double, V]) =
+                       (implicit state: S, update: S => Unit, validate: Validate[Double, V]) =
     inputStyle(label,
       tags.input(
         attrs.className := "input",

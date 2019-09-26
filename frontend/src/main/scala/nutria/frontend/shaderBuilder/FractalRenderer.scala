@@ -47,7 +47,7 @@ object FractalRenderer {
           Untyped(canvas).viewport = viewport.asInstanceOf[js.Object]
         // dom.console.log(s"compile duration: ${compileDuration}ms")
       }
-    }.recover{
+    }.recover {
       case error =>
         dom.console.error(error.getMessage)
         Failure(error)
