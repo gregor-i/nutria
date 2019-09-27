@@ -24,7 +24,7 @@ lazy val viewer = project
   .dependsOn(data)
 
 lazy val service = project.in(file("service"))
-  .dependsOn(core.jvm, data)
+  .dependsOn(core.jvm)
   .settings(scalaTestAndScalaCheck, circe)
   .enablePlugins(PlayScala)
   .settings(

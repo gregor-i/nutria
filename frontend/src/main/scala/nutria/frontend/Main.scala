@@ -6,6 +6,7 @@ import org.scalajs.dom.{Element, Event}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.scalajs.js
+import scala.util.{Failure, Success}
 
 object Main {
 
@@ -26,15 +27,15 @@ object Main {
         Admin.setup()
         Future.failed(new Exception)
       case _ =>
-        println("unknown url")
-        Future.failed(new Exception)
+        Future.failed(new Exception("unknown url"))
     }
 
 
     dom.document.addEventListener[Event]("DOMContentLoaded", (_: js.Any) =>
-      stateFuture.foreach(state =>
-        new nutria.frontend.NutriaApp(container, state)
-      )
+      stateFuture.onComplete {
+        case Success(state) => new nutria.frontend.NutriaApp(container, state)
+        case Failure(exception) => println(exception)
+      }
     )
   }
 }

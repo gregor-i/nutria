@@ -1,11 +1,17 @@
 package nutria.core.viewport
 
-import io.circe.Codec
+import io.circe.{Codec, Decoder, Encoder}
 import nutria.core.viewport.Point.PointOps
 import nutria.core.{CirceCodex, Point}
 
 object Viewport extends CirceCodex {
-  implicit val codec: Codec[Viewport] = semiauto.deriveConfiguredCodec
+  implicit val codec: Codec[Viewport] = Codec.from(
+    encodeA = Encoder[Vector[Double]].contramap(view => Vector(view.origin._1, view.origin._2, view.A._1, view.A._2, view.B._1, view.B._2)),
+    decodeA = Decoder[Vector[Double]].emap{
+      case Vector(ox, oy, ax, ay, bx, by) => Right(Viewport((ox, oy), (ax, ay), (bx, by)))
+      case _ => Left("no match")
+    }
+  )
 
   def createViewportByLongs(x0: Long, y0: Long, ax: Long, ay: Long, bx: Long, by: Long) =
     Viewport(Point.createWithLongs(x0, y0),

@@ -1,1240 +1,1036 @@
 [
   {
-    "id": "2c99f5c4",
-    "program": {
-      "DivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "escapeRadius": 100.0,
-        "initial": "0",
-        "iteration": "z*z+0.001*log(z) + lambda"
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "DivergingSeries" : {
+        "colorInside" : "#ffffff",
+        "colorOutside" : "#000000",
+        "escapeRadius" : 100.0,
+        "initial" : "0",
+        "iteration" : "z*z+0.001*log(z) + lambda",
+        "maxIterations" : 200
       }
     },
-    "view": {
-      "origin": [
-        -1.4239910488170056,
-        -0.011763035633607855
-      ],
-      "A": [
-        0.040060406459627926,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.020155392000000303
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -1.4239910488170056,
+      -0.011763035633607855,
+      0.040060406459627926,
+      0.0,
+      0.0,
+      0.020155392000000303
+    ]
   },
   {
-    "id": "fb8e2405",
-    "program": {
-      "DivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "escapeRadius": 100.0,
-        "initial": "0",
-        "iteration": "z*z + lambda"
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "DivergingSeries" : {
+        "colorInside" : "#ffffff",
+        "colorOutside" : "#000000",
+        "escapeRadius" : 100.0,
+        "initial" : "0",
+        "iteration" : "z*z + lambda",
+        "maxIterations" : 200
       }
     },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
   },
   {
-    "id": "f6a7251f",
-    "program": {
-      "DivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "escapeRadius": 100.0,
-        "initial": "lambda",
-        "iteration": "z*z*z + (-0.12 + i*0.80)"
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "DivergingSeries" : {
+        "colorInside" : "#ffffff",
+        "colorOutside" : "#000000",
+        "escapeRadius" : 100.0,
+        "initial" : "lambda",
+        "iteration" : "z*z*z + (-0.12 + i*0.80)",
+        "maxIterations" : 200
       }
     },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
   },
   {
-    "id": "c0082fbc",
-    "program": {
-      "DivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 50,
-        "escapeRadius": 100.0,
-        "initial": "lambda",
-        "iteration": "z*z + (-0.6 + i*0.6)"
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "DivergingSeries" : {
+        "colorInside" : "#ffffff",
+        "colorOutside" : "#000000",
+        "escapeRadius" : 100.0,
+        "initial" : "lambda",
+        "iteration" : "z*z + (-0.6 + i*0.6)",
+        "maxIterations" : 50
       }
     },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
   },
   {
-    "id": "732b7e88",
-    "program": {
-      "DivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 500,
-        "escapeRadius": 1001.0,
-        "initial": "lambda",
-        "iteration": "z*z+0.2*exp(z) + lambda"
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "DivergingSeries" : {
+        "colorInside" : "#ffffff",
+        "colorOutside" : "#000000",
+        "escapeRadius" : 1001.0,
+        "initial" : "lambda",
+        "iteration" : "z*z+0.2*exp(z) + lambda",
+        "maxIterations" : 500
       }
     },
-    "view": {
-      "origin": [
-        -0.47872846731922547,
-        -0.6465915195786512
-      ],
-      "A": [
-        0.06676734409938126,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.033592320000001195
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -0.47872846731922547,
+      -0.6465915195786512,
+      0.06676734409938126,
+      0.0,
+      0.0,
+      0.033592320000001195
+    ]
   },
   {
-    "id": "74271827",
-    "program": {
-      "DivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 500,
-        "escapeRadius": 1001.0,
-        "initial": "lambda",
-        "iteration": "exp(z) + lambda"
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "DivergingSeries" : {
+        "colorInside" : "#ffffff",
+        "colorOutside" : "#000000",
+        "escapeRadius" : 1001.0,
+        "initial" : "lambda",
+        "iteration" : "exp(z) + lambda",
+        "maxIterations" : 500
       }
     },
-    "view": {
-      "origin": [
-        0.7588783553955626,
-        6.66075020679108
-      ],
-      "A": [
-        0.309108074534176,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.15552000000000732
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      0.7588783553955626,
+      6.66075020679108,
+      0.309108074534176,
+      0.0,
+      0.0,
+      0.15552000000000732
+    ]
   },
   {
-    "id": "d753bec9",
-    "program": {
-      "DivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 500,
-        "escapeRadius": 1001.0,
-        "initial": "lambda",
-        "iteration": "exp(z) + lambda"
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "DivergingSeries" : {
+        "colorInside" : "#ffffff",
+        "colorOutside" : "#000000",
+        "escapeRadius" : 1001.0,
+        "initial" : "lambda",
+        "iteration" : "exp(z) + lambda",
+        "maxIterations" : 500
       }
     },
-    "view": {
-      "origin": [
-        1.471174448953227,
-        996.911180049271
-      ],
-      "A": [
-        1.4310559006211945,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.7200000000000385
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      1.471174448953227,
+      996.911180049271,
+      1.4310559006211945,
+      0.0,
+      0.0,
+      0.7200000000000385
+    ]
   },
   {
-    "id": "e78d9a5a",
-    "program": {
-      "DivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "escapeRadius": 100.0,
-        "initial": "lambda",
-        "iteration": "z*z*z + (-0.12 + i*0.78) + lambda*z"
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "DivergingSeries" : {
+        "colorInside" : "#ffffff",
+        "colorOutside" : "#000000",
+        "escapeRadius" : 100.0,
+        "initial" : "lambda",
+        "iteration" : "z*z*z + (-0.12 + i*0.78) + lambda*z",
+        "maxIterations" : 200
       }
     },
-    "view": {
-      "origin": [
-        0.27572115019387067,
-        -0.36630476460063605
-      ],
-      "A": [
-        0.005191828677167718,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.002612138803200008
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      0.27572115019387067,
+      -0.36630476460063605,
+      0.005191828677167718,
+      0.0,
+      0.0,
+      0.002612138803200008
+    ]
   },
   {
-    "id": "5bc044fb",
-    "program": {
-      "DerivedDivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "escapeRadius": 100.0,
-        "h2": 2.0,
-        "angle": 0.7853981633974483,
-        "initialZ": "lambda",
-        "initialZDer": "1",
-        "iterationZ": "z*z + lambda",
-        "iterationZDer": "z'*z*2 + 1"
+    "antiAliase" : 2,
+    "description" : "the famous mandelbrot with Normal map effect",
+    "program" : {
+      "DerivedDivergingSeries" : {
+        "angle" : 0.7853981633974483,
+        "colorInside" : "#00003f",
+        "colorLight" : "#ffffff",
+        "colorShadow" : "#000000",
+        "escapeRadius" : 100.0,
+        "h2" : 2.0,
+        "initialZ" : "lambda",
+        "initialZDer" : "1",
+        "iterationZ" : "z*z + lambda",
+        "iterationZDer" : "z'*z*2 + 1",
+        "maxIterations" : 200
       }
     },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "the famous mandelbrot with Normal map effect",
-    "reference": "https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set#Normal_map_effect"
+    "reference" : [
+      "https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set#Normal_map_effect"
+    ],
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
   },
   {
-    "id": "ac8e276e",
-    "program": {
-      "DerivedDivergingSeries": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "escapeRadius": 100.0,
-        "h2": 2.0,
-        "angle": 0.7853981633974483,
-        "initialZ": "lambda",
-        "initialZDer": "1",
-        "iterationZ": "z*z + (-0.6 + i*0.6)",
-        "iterationZDer": "z'*z*2 + 1"
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "DerivedDivergingSeries" : {
+        "angle" : 0.7853981633974483,
+        "colorInside" : "#00003f",
+        "colorLight" : "#ffffff",
+        "colorShadow" : "#000000",
+        "escapeRadius" : 100.0,
+        "h2" : 2.0,
+        "initialZ" : "lambda",
+        "initialZDer" : "1",
+        "iterationZ" : "z*z + (-0.6 + i*0.6)",
+        "iterationZDer" : "z'*z*2 + 1",
+        "maxIterations" : 200
       }
     },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
   },
   {
-    "id": "9970df8d",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "exp(x)-i",
-        "initial": "lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "exp(x)-i",
+        "initial" : "lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
   },
   {
-    "id": "cdd9efde",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "x^3 - 1",
-        "initial": "lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "x^3 - 1",
+        "initial" : "lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
   },
   {
-    "id": "c538d559",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "x^3 -x - 1",
-        "initial": "lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "x^3 -x - 1",
+        "initial" : "lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
   },
   {
-    "id": "be136254",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 500,
-        "threshold": 1.0E-5,
-        "function": "x^5 + 1",
-        "initial": "exp(lambda)/lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "x^5 + 1",
+        "initial" : "exp(lambda)/lambda",
+        "maxIterations" : 500,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-5
       }
     },
-    "view": {
-      "origin": [
-        -4.604422390913491,
-        -2.974506213216784
-      ],
-      "A": [
-        11.042097998620031,
-        0.0
-      ],
-      "B": [
-        0.0,
-        5.555555555555703
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -4.604422390913491,
+      -2.974506213216784,
+      11.042097998620031,
+      0.0,
+      0.0,
+      5.555555555555703
+    ]
   },
   {
-    "id": "cb45143c",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "x^3 + 1/x - 1",
-        "initial": "lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "x^3 + 1/x - 1",
+        "initial" : "lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
   },
   {
-    "id": "1e8ba7b7",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "x^4 + lambda",
-        "initial": "1",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "x^4 + lambda",
+        "initial" : "1",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -12.706311498540042,
-        -8.842488279382595
-      ],
-      "A": [
-        30.672494440610635,
-        0.0
-      ],
-      "B": [
-        0.0,
-        15.432098765432224
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -12.706311498540042,
+      -8.842488279382595,
+      30.672494440610635,
+      0.0,
+      0.0,
+      15.432098765432224
+    ]
   },
   {
-    "id": "ce49bdbe",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "x^4 + lambda",
-        "initial": "lambda*lambda*lambda + 15",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "x^4 + lambda",
+        "initial" : "lambda*lambda*lambda + 15",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -3.7038764237103696,
-        -2.992389255168824
-      ],
-      "A": [
-        11.04209799861978,
-        0.0
-      ],
-      "B": [
-        0.0,
-        5.555555555555577
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -3.7038764237103696,
+      -2.992389255168824,
+      11.04209799861978,
+      0.0,
+      0.0,
+      5.555555555555577
+    ]
   },
   {
-    "id": "5365105c",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 500,
-        "threshold": 1.0E-5,
-        "function": "x^5*exp(x) + 1",
-        "initial": "exp(lambda)/lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "x^5*exp(x) + 1",
+        "initial" : "exp(lambda)/lambda",
+        "maxIterations" : 500,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-5
       }
     },
-    "view": {
-      "origin": [
-        -4.165592716979138,
-        -2.765975851707353
-      ],
-      "A": [
-        11.042097998620035,
-        0.0
-      ],
-      "B": [
-        0.0,
-        5.555555555555705
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -4.165592716979138,
+      -2.765975851707353,
+      11.042097998620035,
+      0.0,
+      0.0,
+      5.555555555555705
+    ]
   },
   {
-    "id": "d4b852f0",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 500,
-        "threshold": 1.0E-5,
-        "function": " exp(-x*x) + exp(-i*x*x)",
-        "initial": "lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : " exp(-x*x) + exp(-i*x*x)",
+        "initial" : "lambda",
+        "maxIterations" : 500,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-5
       }
     },
-    "view": {
-      "origin": [
-        -0.42849045804990804,
-        0.1789044397697608
-      ],
-      "A": [
-        0.008653047795279688,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.0043535646720000935
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -0.42849045804990804,
+      0.1789044397697608,
+      0.008653047795279688,
+      0.0,
+      0.0,
+      0.0043535646720000935
+    ]
   },
   {
-    "id": "362d2e6b",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "((x)^2 + lambda)^2 + lambda",
-        "initial": "1-lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "((x)^2 + lambda)^2 + lambda",
+        "initial" : "1-lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -0.2722395082412855,
-        -0.3712554702655976
-      ],
-      "A": [
-        1.4310559006211268,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.7200000000000044
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -0.2722395082412855,
+      -0.3712554702655976,
+      1.4310559006211268,
+      0.0,
+      0.0,
+      0.7200000000000044
+    ]
   },
   {
-    "id": "68a4b3d0",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "((x)^2 + lambda)^2 + lambda",
-        "initial": "1-lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 45.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 45.0,
-        "overshoot": 1.25
+        "function" : "((x)^2 + lambda)^2 + lambda",
+        "initial" : "1-lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.25,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        6.227911891596479,
-        0.08950322108714272
-      ],
-      "A": [
-        0.02403624387577664,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.012093235200000123
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      6.227911891596479,
+      0.08950322108714272,
+      0.02403624387577664,
+      0.0,
+      0.0,
+      0.012093235200000123
+    ]
   },
   {
-    "id": "7dbb3729",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "((x)^2 + lambda)^2 + lambda",
-        "initial": "lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "((x)^2 + lambda)^2 + lambda",
+        "initial" : "lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
   },
   {
-    "id": "17072262",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "((x)^2*x - lambda)^2 + lambda",
-        "initial": "1-lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 45.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 45.0,
-        "overshoot": 1.25
+        "function" : "((x)^2*x - lambda)^2 + lambda",
+        "initial" : "1-lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.25,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -0.09013423830314439,
-        -0.14522074300350504
-      ],
-      "A": [
-        0.5151801242236113,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.25920000000000437
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -0.09013423830314439,
+      -0.14522074300350504,
+      0.5151801242236113,
+      0.0,
+      0.0,
+      0.25920000000000437
+    ]
   },
   {
-    "id": "99b55feb",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "((x)^2*x - lambda)^2 + lambda",
-        "initial": "1-lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 45.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 45.0,
-        "overshoot": 1.25
+        "function" : "((x)^2*x - lambda)^2 + lambda",
+        "initial" : "1-lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.25,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -3.632070470187262,
-        -1.8414040418303106
-      ],
-      "A": [
-        6.625258799171954,
-        0.0
-      ],
-      "B": [
-        0.0,
-        3.333333333333389
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -3.632070470187262,
+      -1.8414040418303106,
+      6.625258799171954,
+      0.0,
+      0.0,
+      3.333333333333389
+    ]
   },
   {
-    "id": "64578ce3",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "(x * x + lambda - 1) * x - lambda",
-        "initial": "0",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "(x * x + lambda - 1) * x - lambda",
+        "initial" : "0",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
   },
   {
-    "id": "75f47b2f",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "(x * x + lambda - 1) * x - lambda",
-        "initial": "0",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "newton iteration over mandelbrot polynomial(5) with f(x) = ((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "(x * x + lambda - 1) * x - lambda",
+        "initial" : "0",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -0.32220601106340535,
-        -1.9296587684993527
-      ],
-      "A": [
-        0.8586335403726716,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.43200000000000044
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(5) with f(x) = ((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -0.32220601106340535,
+      -1.9296587684993527,
+      0.8586335403726716,
+      0.0,
+      0.0,
+      0.43200000000000044
+    ]
   },
   {
-    "id": "6551f977",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "(x * x + sin(lambda) - 1) * x - lambda",
-        "initial": "0",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "(x * x + sin(lambda) - 1) * x - lambda",
+        "initial" : "0",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
   },
   {
-    "id": "2b3bbb0d",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "(((x)^2 + lambda)^2 + lambda)^2 + lambda",
-        "initial": "lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "newton iteration over mandelbrot polynomial(4) with f(x) = (((x)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "(((x)^2 + lambda)^2 + lambda)^2 + lambda",
+        "initial" : "lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(4) with f(x) = (((x)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
   },
   {
-    "id": "c5bd6276",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda",
-        "initial": "lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "newton iteration over mandelbrot polynomial(5) with f(x) = ((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda",
+        "initial" : "lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(5) with f(x) = ((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
   },
   {
-    "id": "500e7f12",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 500,
-        "threshold": 0.001,
-        "function": "(((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda",
-        "initial": "lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "newton iteration over mandelbrot polynomial(6) with f(x) = (((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 50.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 50.0,
-        "overshoot": 1.5
+        "function" : "(((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda",
+        "initial" : "lambda",
+        "maxIterations" : 500,
+        "overshoot" : 1.5,
+        "threshold" : 0.001
       }
     },
-    "view": {
-      "origin": [
-        -0.9192773494824024,
-        0.11092392546583849
-      ],
-      "A": [
-        0.11127890683229816,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.05598720000000001
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(6) with f(x) = (((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -0.9192773494824024,
+      0.11092392546583849,
+      0.11127890683229816,
+      0.0,
+      0.0,
+      0.05598720000000001
+    ]
   },
   {
-    "id": "511f86a9",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "(((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda",
-        "initial": "lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "newton iteration over mandelbrot polynomial(6) with f(x) = (((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "(((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda",
+        "initial" : "lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(6) with f(x) = (((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
   },
   {
-    "id": "525bc6fc",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "35*x^9-180*x^7+378*x^5-420*x^3+315*x",
-        "initial": "lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 45.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 45.0,
-        "overshoot": 1.25
+        "function" : "35*x^9-180*x^7+378*x^5-420*x^3+315*x",
+        "initial" : "lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.25,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -2.1546124445395654,
-        -1.0359239146292238
-      ],
-      "A": [
-        3.9751552795032334,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0000000000000644
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -2.1546124445395654,
+      -1.0359239146292238,
+      3.9751552795032334,
+      0.0,
+      0.0,
+      2.0000000000000644
+    ]
   },
   {
-    "id": "dd517e87",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "35*x^9-180*x^7+3798*x^5-420*x^3+315+x",
-        "initial": "lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 45.0,
+        "center" : [
           0.25,
           0.0
         ],
-        "brightnessFactor": 45.0,
-        "overshoot": 1.0
+        "function" : "35*x^9-180*x^7+3798*x^5-420*x^3+315+x",
+        "initial" : "lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -1.2136789200879365,
-        -0.5758319146496562
-      ],
-      "A": [
-        2.385093167701948,
-        0.0
-      ],
-      "B": [
-        0.0,
-        1.2000000000000424
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -1.2136789200879365,
+      -0.5758319146496562,
+      2.385093167701948,
+      0.0,
+      0.0,
+      1.2000000000000424
+    ]
   },
   {
-    "id": "11882a35",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "35*x^9-180*x^7+378*x^5-420*x^3+315+x + lambda",
-        "initial": "lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 45.0,
+        "center" : [
           0.25,
           0.0
         ],
-        "brightnessFactor": 45.0,
-        "overshoot": 1.0
+        "function" : "35*x^9-180*x^7+378*x^5-420*x^3+315+x + lambda",
+        "initial" : "lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        0.24813792535967855,
-        -0.36580546246323814
-      ],
-      "A": [
-        1.4310559006211703,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.7200000000000263
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      0.24813792535967855,
+      -0.36580546246323814,
+      1.4310559006211703,
+      0.0,
+      0.0,
+      0.7200000000000263
+    ]
   },
   {
-    "id": "b81559cf",
-    "program": {
-      "NewtonIteration": {
-        "antiAliase": 2,
-        "maxIterations": 200,
-        "threshold": 1.0E-4,
-        "function": "((((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda",
-        "initial": "lambda",
-        "center": [
+    "antiAliase" : 2,
+    "description" : "newton iteration over mandelbrot polynomial(7) with f(x) = ((((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
           0.0,
           0.0
         ],
-        "brightnessFactor": 25.0,
-        "overshoot": 1.0
+        "function" : "((((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda",
+        "initial" : "lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
       }
     },
-    "view": {
-      "origin": [
-        -2.5,
-        -1.0
-      ],
-      "A": [
-        3.5,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.0
-      ]
-    },
-    "description": "newton iteration over mandelbrot polynomial(7) with f(x) = ((((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
-    "reference": null
+    "reference" : [
+    ],
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
   },
   {
-    "id": "47f9c8a8",
-    "program": {
-      "FreestyleProgram": {
-        "code": "  int l = 0;\n  for(int i = 0;i< 200; i++){\n    vec2 oldz = z;\n    z = z-complex_divide(vec2(complex_product(vec2(complex_product(vec2(z), vec2(z))), vec2(z))-vec2(float(1), float(0))), vec2(complex_product(vec2(complex_product(vec2(vec2(float(2), float(0))), vec2(z))), vec2(z))))+p;\n    if(length(z - oldz) < float(0.0010000000474974513))\n      break;\n    l ++;\n  }\n\n  color = vec4(vec3(float(l) / float(200)), 1.0);",
-        "antiAliase": 2
+    "antiAliase" : 2,
+    "description" : "nova mandelbrot fractal of f(x) = x^3 - 1",
+    "program" : {
+      "FreestyleProgram" : {
+        "code" : "int l = 0;\n  for(int i = 0;i< 200; i++){\n    vec2 oldz = z;\n    z = z-complex_divide(vec2(complex_product(vec2(complex_product(vec2(z), vec2(z))), vec2(z))-vec2(float(1), float(0))), vec2(complex_product(vec2(complex_product(vec2(vec2(float(2), float(0))), vec2(z))), vec2(z))))+p;\n    if(length(z - oldz) < float(0.0010000000474974513))\n      break;\n    l ++;\n  }\n\n  color = vec4(vec3(float(l) / float(200)), 1.0);"
       }
     },
-    "view": {
-      "origin": [
-        -0.998340655107424,
-        -0.0943403293080435
-      ],
-      "A": [
-        0.3255714426133771,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.15600298136646437
-      ]
-    },
-    "description": "nova mandelbrot fractal of f(x) = x^3 - 1",
-    "reference": ""
+    "reference" : [
+      ""
+    ],
+    "view" : [
+      -0.998340655107424,
+      -0.0943403293080435,
+      0.3255714426133771,
+      0.0,
+      0.0,
+      0.15600298136646437
+    ]
   },
   {
-    "id": "c59bb8db",
-    "program": {
-      "FreestyleProgram": {
-        "code": "// https://www.shadertoy.com/view/Mds3R8\n// More info here:  http://www.iquilezles.org/www/articles/lyapunovfractals/lyapunovfractals.htm\n\nfloat x = 0.5;\nfloat h = 0.0;\n\nconst int stepsX = 6;\nconst int stepsY = 6;\n\nfor( int i=0; i<150; i++ )\n{\n    for(int i=0; i<6; i++){\n        x = z.x*x*(1.0-x); h += log2(abs(z.x*(1.0-2.0*x)));\n    }\n\n    for(int i=0; i<6; i++){\n        x = z.y*x*(1.0-x); h += log2(abs(z.y*(1.0-2.0*x)));\n    }\n}\nh /= 150.0*float(stepsX + stepsY);\n\n\nvec3 col = vec3(0.0);\nif( h<0.0 )\n{\n    h = abs(h);\n    col = (0.5 + 0.5*sin( vec3(0.0,0.4,0.7) + 2.5*h )) * pow(h,0.25);\n}\ncolor = vec4(col, 1.0);\n",
-        "antiAliase": 2
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "FreestyleProgram" : {
+        "code" : "float x = 0.5;\nfloat h = 0.0;\n\nconst int stepsX = 6;\nconst int stepsY = 6;\n\nfor( int i=0; i<150; i++ )\n{\n    for(int i=0; i<6; i++){\n        x = z.x*x*(1.0-x); h += log2(abs(z.x*(1.0-2.0*x)));\n    }\n\n    for(int i=0; i<6; i++){\n        x = z.y*x*(1.0-x); h += log2(abs(z.y*(1.0-2.0*x)));\n    }\n}\nh /= 150.0*float(stepsX + stepsY);\n\n\nvec3 col = vec3(0.0);\nif( h<0.0 )\n{\n    h = abs(h);\n    col = (0.5 + 0.5*sin( vec3(0.0,0.4,0.7) + 2.5*h )) * pow(h,0.25);\n}\ncolor = vec4(col, 1.0);\n"
       }
     },
-    "view": {
-      "origin": [
-        2.349623209270729,
-        3.364982282572452
-      ],
-      "A": [
-        1.4310559006211594,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.7222360248447414
-      ]
-    },
-    "description": "",
-    "reference": "https://www.shadertoy.com/view/Mds3R8"
+    "reference" : [
+      "https://www.shadertoy.com/view/Mds3R8",
+      "http://www.iquilezles.org/www/articles/lyapunovfractals/lyapunovfractals.htm"
+    ],
+    "view" : [
+      2.349623209270729,
+      3.364982282572452,
+      1.4310559006211594,
+      0.0,
+      0.0,
+      0.7222360248447414
+    ]
   },
   {
-    "program": {
-      "FreestyleProgram": {
-        "code": "// https://de.wikipedia.org/wiki/Baryzentrische_Koordinaten\n// https://de.wikipedia.org/wiki/Sierpinski-Dreieck\n\n\n#define calc_tri_area(A, B, C) float((((A.x - C.x) * (B.y - C.y)) - ((B.x - C.x) * (A.y - C.y))) / 2.0)\n\nconst float pi = 3.141;\nconst float size = 1.0;\nconst int iterations = 20;\n\nconst vec3 color_outside = vec3(1.0);\nconst vec3 color_inside = vec3(0.0);\n\nvec2 A = vec2(size*sin( 60.0/180.0*pi), size*cos( 60.0/180.0*pi));\nvec2 B = vec2(size*sin(180.0/180.0*pi), size*cos(180.0/180.0*pi));\nvec2 C = vec2(size*sin(300.0/180.0*pi), size*cos(300.0/180.0*pi));\n\nfloat area = calc_tri_area(A, B, C);\nvec3 bary = vec3(calc_tri_area(B, C, z), calc_tri_area(C, A, z), calc_tri_area(A, B, z));\n\nif(bary.x > 0.0 || bary.y > 0.0 || bary.z > 0.0){\n    // outside\n    color = vec4(color_outside, 1.0);\n}else{\n    // inside\n    color = vec4(color_inside, 1.0);\n    for(int i = 0; i < iterations; i++){\n        bary = vec3(calc_tri_area(B, C, z), calc_tri_area(C, A, z), calc_tri_area(A, B, z));\n        // inside\n        if(bary.x / area > 0.5){\n            B = 0.5 * (B + A);\n            C = 0.5 * (C + A);\n        } else if(bary.y / area > 0.5){\n            // in area near B\n            A = 0.5 * (A + B);\n            C = 0.5 * (C + B);\n        }else if(bary.z / area > 0.5){\n            // in area near C\n            A = 0.5 * (A + C);\n            B = 0.5 * (B + C);\n        }else{\n            // in the middle triangle\n            color = vec4(mix(color_outside, color_inside, float(i)/float(iterations)), 1.0);\n            break;\n        }\n        area /= 4.0;\n    }\n}"
+    "antiAliase" : 2,
+    "description" : "",
+    "program" : {
+      "FreestyleProgram" : {
+        "code" : "#define calc_tri_area(A, B, C) float((((A.x - C.x) * (B.y - C.y)) - ((B.x - C.x) * (A.y - C.y))) / 2.0)\n\nconst float pi = 3.141;\nconst float size = 1.0;\nconst int iterations = 20;\n\nconst vec3 color_outside = vec3(1.0);\nconst vec3 color_inside = vec3(0.0);\n\nvec2 A = vec2(size*sin( 60.0/180.0*pi), size*cos( 60.0/180.0*pi));\nvec2 B = vec2(size*sin(180.0/180.0*pi), size*cos(180.0/180.0*pi));\nvec2 C = vec2(size*sin(300.0/180.0*pi), size*cos(300.0/180.0*pi));\n\nfloat area = calc_tri_area(A, B, C);\nvec3 bary = vec3(calc_tri_area(B, C, z), calc_tri_area(C, A, z), calc_tri_area(A, B, z));\n\nif(bary.x > 0.0 || bary.y > 0.0 || bary.z > 0.0){\n    // outside\n    color = vec4(color_outside, 1.0);\n}else{\n    // inside\n    color = vec4(color_inside, 1.0);\n    for(int i = 0; i < iterations; i++){\n        bary = vec3(calc_tri_area(B, C, z), calc_tri_area(C, A, z), calc_tri_area(A, B, z));\n        // inside\n        if(bary.x / area > 0.5){\n            B = 0.5 * (B + A);\n            C = 0.5 * (C + A);\n        } else if(bary.y / area > 0.5){\n            // in area near B\n            A = 0.5 * (A + B);\n            C = 0.5 * (C + B);\n        }else if(bary.z / area > 0.5){\n            // in area near C\n            A = 0.5 * (A + C);\n            B = 0.5 * (B + C);\n        }else{\n            // in the middle triangle\n            color = vec4(mix(color_outside, color_inside, float(i)/float(iterations)), 1.0);\n            break;\n        }\n        area /= 4.0;\n    }\n}"
       }
     },
-    "view": {
-      "origin": [
-        -1.30982501628656,
-        -1.2105252086917273
-      ],
-      "A": [
-        2.523809358319962,
-        0.0
-      ],
-      "B": [
-        0.0,
-        2.006211180124265
-      ]
-    },
-    "description": "",
-    "reference": "https://de.wikipedia.org/wiki/Sierpinski-Dreieck",
-    "antiAliase": 2,
-    "id": "fa49d059"
+    "reference" : [
+      "https://de.wikipedia.org/wiki/Sierpinski-Dreieck",
+      "https://de.wikipedia.org/wiki/Baryzentrische_Koordinaten"
+    ],
+    "view" : [
+      -1.30982501628656,
+      -1.2105252086917273,
+      2.523809358319962,
+      0.0,
+      0.0,
+      2.006211180124265
+    ]
   },
   {
-    "program": {
-      "FreestyleProgram": {
-        "code": "// https://en.wikipedia.org/wiki/Koch_snowflake\n// https://www.shadertoy.com/view/Mlf3RX\n\nconst int iterations = 20;\n\nconst vec3 color_outside = vec3(1.0);\nconst vec3 color_inside = vec3(0.0);\n\nif(z.x < 0.0 || z.x > 1.0 || z.y < -0.5 || z.y > 0.5){\n    color = vec4(color_outside, 1.0);\n}else{\n    z = abs(fract(z)-0.5);\n    for(int i = 0; i < iterations ; i++)\n    {\n        z += vec2(z.y*1.735, -z.x*1.735);\n        z.x = abs(z.x)-0.58;\n        z = -vec2(-z.y, z.x)*.865;\n    }\n\n    if(z.x > 0.0){\n        color = vec4(color_outside, 1.0);\n    }else{\n        color = vec4(color_inside, 1.0);\n    }\n}"
+    "antiAliase" : 2,
+    "description" : "Koch Snowflake",
+    "program" : {
+      "FreestyleProgram" : {
+        "code" : "const int iterations = 20;\n\nconst vec3 color_outside = vec3(1.0);\nconst vec3 color_inside = vec3(0.0);\n\nif(z.x < 0.0 || z.x > 1.0 || z.y < -0.5 || z.y > 0.5){\n    color = vec4(color_outside, 1.0);\n}else{\n    z = abs(fract(z)-0.5);\n    for(int i = 0; i < iterations ; i++)\n    {\n        z += vec2(z.y*1.735, -z.x*1.735);\n        z.x = abs(z.x)-0.58;\n        z = -vec2(-z.y, z.x)*.865;\n    }\n\n    if(z.x > 0.0){\n        color = vec4(color_outside, 1.0);\n    }else{\n        color = vec4(color_inside, 1.0);\n    }\n}"
       }
     },
-    "view": {
-      "origin": [
-        -0.3999720289024556,
-        -0.5039107933017429
-      ],
-      "A": [
-        1.9378881987578165,
-        0.0
-      ],
-      "B": [
-        0.0,
-        0.9780279503105854
-      ]
-    },
-    "description": "Koch Snowflake",
-    "reference": "https://www.shadertoy.com/view/Mlf3RX",
-    "antiAliase": 2,
-    "id": "d06e08ef"
+    "reference" : [
+      "https://en.wikipedia.org/wiki/Koch_snowflake",
+      "https://www.shadertoy.com/view/Mlf3RX"
+    ],
+    "view" : [
+      -0.3999720289024556,
+      -0.5039107933017429,
+      1.9378881987578165,
+      0.0,
+      0.0,
+      0.9780279503105854
+    ]
   }
 ]

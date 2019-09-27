@@ -41,7 +41,7 @@ object NutriaService {
       Future.failed(new Exception(s"unexpected response code: ${req.status}"))
 
   private def parse[A: Decoder](req: XMLHttpRequest): Future[A] =
-    Future(parser.decode[A](req.responseText).right.get)
+    Future.fromTry(parser.decode[A](req.responseText).toTry)
 
   private def encode[A: Encoder](a: A): InputData =
     a.asJson.noSpaces.asInstanceOf[InputData]

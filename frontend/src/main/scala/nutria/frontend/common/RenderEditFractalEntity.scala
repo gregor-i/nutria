@@ -2,7 +2,7 @@ package nutria.frontend.common
 
 import com.raquo.snabbdom.simple.implicits._
 import com.raquo.snabbdom.simple.{VNode, attrs, styles, tags}
-import monocle.Lens
+import monocle.{Iso, Lens}
 import nutria.core._
 import nutria.frontend.util.LenseUtils
 import nutria.frontend.util.SnabbdomHelper.seqNode
@@ -100,6 +100,6 @@ object RenderEditFractalEntity {
       }),
       Form.intInput("anti aliasing", lens composeLens FractalEntity.antiAliase),
       Form.stringInput("description", lens composeLens FractalEntity.description),
-      Form.stringInput("reference", lens composeLens LenseUtils.withDefault(FractalEntity.reference, "")),
+      Form.stringInput("reference", lens composeLens FractalEntity.reference composeIso Iso[List[String], String](_.mkString(" "))(_.split("\\s").filter(_.nonEmpty).toList)) ,
     )
 }
