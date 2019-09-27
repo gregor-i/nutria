@@ -1,7 +1,7 @@
 package nutria.data.consumers
 
-import nutria.core.Point
-import nutria.data.colors.{HSV, RGBA}
+import nutria.core.{Point, RGBA}
+import nutria.data.colors.HSV
 import nutria.data.sequences.Newton
 import nutria.data.{Color, DoubleSequence}
 import spire.implicits._

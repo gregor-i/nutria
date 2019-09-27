@@ -5,8 +5,7 @@ import java.util.concurrent.Executors
 import akka.actor.ActorSystem
 import io.circe.parser
 import javax.inject.{Inject, Singleton}
-import nutria.core._
-import nutria.data.colors.RGBA
+import nutria.core.{RGBA, _}
 import nutria.data.consumers.{CountIterations, NewtonColoring}
 import nutria.data.content.LinearNormalized
 import nutria.data.image.Image

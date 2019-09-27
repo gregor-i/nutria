@@ -2,8 +2,7 @@ package MVC
 
 import java.awt.image.BufferedImage
 
-import nutria.core._
-import nutria.data.colors.RGBA
+import nutria.core.{RGBA, _}
 import nutria.data.content.{FractalCalculation, StreamByResolution}
 import nutria.data.image.SaveFolder
 import nutria.data.{DoubleSequence, Image}

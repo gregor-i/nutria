@@ -6,6 +6,7 @@ import eu.timepit.refined.api.{Refined, Validate}
 import eu.timepit.refined.refineV
 import mathParser.algebra.SpireLanguage
 import monocle.Lens
+import nutria.core.RGBA
 import nutria.core.languages.StringFunction
 import nutria.frontend.util.SnabbdomHelper.seqNode
 import org.scalajs.dom.raw.{HTMLInputElement, HTMLSelectElement}
@@ -128,6 +129,29 @@ object Form {
       )
     )
 
+
+  def colorInput[S](label: String, lens: Lens[S, RGBA])
+                   (implicit state: S, update: S => Unit) =
+    inputStyle(label,
+      tags.input(
+        attrs.className := "input",
+        attrs.`type` := "color",
+        attrs.value := RGBA.toRGBString(lens.get(state)),
+        events.onChange := {
+          event =>
+            val element = event.target.asInstanceOf[HTMLInputElement]
+            RGBA.parseRGBString(element.value).toOption match {
+              case Some(v) =>
+                element.classList.remove("is-danger")
+                update(lens.set(v)(state))
+              case None =>
+                element.classList.add("is-danger")
+            }
+        }
+      )
+    )
+
+
   def tupleDoubleInput[S](label: String, lens: Lens[S, (Double, Double)])
                          (implicit state: S, update: S => Unit) =
     inputStyle(label,
@@ -171,6 +195,4 @@ object Form {
         )
       )
     )
-
-
 }

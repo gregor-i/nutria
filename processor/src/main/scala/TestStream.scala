@@ -1,6 +1,6 @@
-import nutria.core.Dimensions
+import nutria.core.{Dimensions, RGBA}
 import nutria.data.Defaults
-import nutria.data.colors.{RGBA, Wikipedia}
+import nutria.data.colors.Wikipedia
 import nutria.data.consumers.CountIterations
 import nutria.data.content.{LinearNormalized, StreamByResolution}
 import nutria.data.fractalFamilies.MandelbrotFamily

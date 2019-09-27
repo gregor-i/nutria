@@ -1,6 +1,7 @@
+import nutria.core.RGBA
 import nutria.core.viewport.{Dimensions, Viewport}
 import nutria.data.Defaults
-import nutria.data.colors.{Invert, MonoColor, RGBA}
+import nutria.data.colors.{Invert, MonoColor}
 import nutria.data.consumers.CountIterations
 import nutria.data.content.{Content, LinearNormalized}
 import nutria.data.image.{Image, SaveFolder}

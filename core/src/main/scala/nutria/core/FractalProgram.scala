@@ -5,12 +5,11 @@ import eu.timepit.refined.api.Refined
 import eu.timepit.refined.boolean.And
 import eu.timepit.refined.numeric.Interval.Open
 import eu.timepit.refined.numeric.{NonNaN, Positive}
-import io.circe.{Codec, Decoder, Encoder}
+import io.circe.Codec
 import monocle.Prism
 import monocle.macros.GenPrism
-import nutria.core.FractalEntity.semiauto
-import shapeless.Witness
 import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda, ZAndZDerAndLambda}
+import shapeless.Witness
 
 sealed trait FractalProgram
 
@@ -18,7 +17,10 @@ sealed trait FractalProgram
 case class DivergingSeries(maxIterations: Int Refined Positive = refineMV(200),
                            escapeRadius: Double Refined (Positive And NonNaN) = refineMV(100.0),
                            initial: StringFunction[Lambda.type],
-                           iteration: StringFunction[ZAndLambda]) extends FractalProgram
+                           iteration: StringFunction[ZAndLambda],
+                           colorInside: RGBA = RGBA.white,
+                           colorOutside: RGBA = RGBA.black,
+                          ) extends FractalProgram
 
 object DivergingSeries {
   def mandelbrot = DivergingSeries(
@@ -37,13 +39,16 @@ object DivergingSeries {
 case class DerivedDivergingSeries(maxIterations: Int Refined Positive = refineMV(200),
                                   escapeRadius: Double Refined (Positive And NonNaN) = refineMV(100.0),
                                   h2: Double Refined NonNaN = refineMV(2.0),
-                                  angle: Double Refined Open[Witness.`0.0`.T, Witness.`6.28318530718`.T] = refineMV(0.78539816339), // todo: maybe define in degree? this 45°
+                                  angle: Double Refined Open[Witness.`0.0`.T, Witness.`6.28318530718`.T] = refineMV(0.78539816339), // todo: maybe define in degree? this is 45°
                                   initialZ: StringFunction[Lambda.type],
                                   initialZDer: StringFunction[Lambda.type],
                                   iterationZ: StringFunction[ZAndLambda],
-                                  iterationZDer: StringFunction[ZAndZDerAndLambda]) extends FractalProgram
+                                  iterationZDer: StringFunction[ZAndZDerAndLambda],
+                                  colorInside: RGBA = RGBA(0.0, 0.0, 255.0 / 4.0),
+                                  colorLight: RGBA = RGBA.white,
+                                  colorShadow: RGBA = RGBA.black) extends FractalProgram
 
-object DerivedDivergingSeries{
+object DerivedDivergingSeries {
   val mandelbrot = DerivedDivergingSeries(
     initialZ = StringFunction.unsafe("lambda"),
     initialZDer = StringFunction.unsafe("1"),
@@ -92,7 +97,7 @@ object NewtonIteration {
 @monocle.macros.Lenses()
 case class FreestyleProgram(code: String) extends FractalProgram
 
-object FreestyleProgram{
+object FreestyleProgram {
   val default = FreestyleProgram("color = vec4(abs(z.x), abs(z.y), length(z), 1.0);")
 }
 

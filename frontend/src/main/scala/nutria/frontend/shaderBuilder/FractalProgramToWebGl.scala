@@ -51,13 +51,15 @@ object FractalProgramToWebGl {
        |  }
        |
        |  if(l == ${f.maxIterations}){
-       |    ${outputVar.name} = vec4(0.0, 0.0, 0.25, 1.0);
+       |    ${outputVar.name} = vec4(${Vec3.fromRGBA(f.colorInside).toCode}, 1.0);
        |  }else{
        |    const float h2 = float(${f.h2});
        |    const vec2 v = vec2(float(${Math.cos(f.angle.value)}), float(${Math.sin(f.angle.value)}));
        |    vec2 u = normalize(complex_divide(${z.name}, ${zDer.name}));
        |    float t = max((dot(u, v) + h2) / (1.0 + h2), 0.0);
-       |    ${outputVar.name} = mix(vec4(0.0, 0.0, 0.0, 1.0), vec4(1.0, 1.0, 1.0, 1.0), t);
+       |    vec3 color_shadow = ${Vec3.fromRGBA(f.colorShadow).toCode};
+       |    vec3 color_light = ${Vec3.fromRGBA(f.colorLight).toCode};
+       |    ${outputVar.name} = mix(vec4(color_shadow, 1.0), vec4(color_light, 1.0), t);
        |  }
        |}
     """.stripMargin
@@ -142,8 +144,10 @@ object FractalProgramToWebGl {
        |    l ++;
        |  }
        |
+       |  vec3 color_inside = ${Vec3.fromRGBA(n.colorInside).toCode};
+       |  vec3 color_outside = ${Vec3.fromRGBA(n.colorOutside).toCode};
        |  float fract = float(l) / float(${n.maxIterations});
-       |  ${outputVar.name} = vec4(fract, fract, fract, 1.0);
+       |  ${outputVar.name} = vec4(mix(color_inside, color_outside, fract), 1.0);
        |}
        """.stripMargin
   }

@@ -3,7 +3,7 @@ package nutria.data.image
 import java.awt.image.{BufferedImage, DataBufferInt}
 import java.io.{ByteArrayOutputStream, File}
 
-import nutria.data.colors.RGBA
+import nutria.core.RGBA
 
 import scala.util.control.NonFatal
 

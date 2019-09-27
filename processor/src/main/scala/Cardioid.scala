@@ -1,5 +1,5 @@
-import nutria.core.Viewport
-import nutria.data.colors.{Invert, MonoColor, RGBA, Wikipedia}
+import nutria.core.{RGBA, Viewport}
+import nutria.data.colors.{Invert, MonoColor, Wikipedia}
 import nutria.data.consumers.CardioidNumeric
 import nutria.data.content.LinearNormalized
 import nutria.data.fractalFamilies.MandelbrotFamily

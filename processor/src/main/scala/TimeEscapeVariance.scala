@@ -1,6 +1,7 @@
+import nutria.core.RGBA
 import nutria.data.Defaults
 import nutria.data.accumulator.Variance
-import nutria.data.colors.{RGBA, WhiteToBlack}
+import nutria.data.colors.WhiteToBlack
 import nutria.data.consumers.CountIterations
 import nutria.data.image.Image
 import nutria.data.sequences.Mandelbrot

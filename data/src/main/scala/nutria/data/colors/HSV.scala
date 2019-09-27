@@ -1,5 +1,6 @@
 package nutria.data.colors
 
+import nutria.core.RGBA
 import nutria.data.Color
 
 trait HSV[A] extends Color[A] {

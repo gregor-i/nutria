@@ -1,7 +1,7 @@
 
+import nutria.core.RGBA
 import nutria.core.viewport.{Dimensions, Viewport}
 import nutria.data.accumulator.Arithmetic
-import nutria.data.colors.RGBA
 import nutria.data.consumers.CountIterations
 import nutria.data.image.Image
 import nutria.data.sequences.Mandelbrot

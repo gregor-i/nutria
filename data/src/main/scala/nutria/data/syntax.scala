@@ -1,8 +1,7 @@
 package nutria.data
 
-import nutria.core.{Dimensions, Point, Transform, Viewport}
+import nutria.core.{Dimensions, Point, RGBA, Transform, Viewport}
 import nutria.data.accumulator.{Accumulator, Arithmetic}
-import nutria.data.colors.RGBA
 import nutria.data.content.{AntiAliasedFractalContent, AntiAliasedRGBAContent, FunctionContent, HistogramNormalized, LinearNormalized}
 
 object syntax {

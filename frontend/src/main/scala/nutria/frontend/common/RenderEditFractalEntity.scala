@@ -78,6 +78,9 @@ object RenderEditFractalEntity {
             Form.stringFunctionInput("iteration Z'", lensFractal composeLens DerivedDivergingSeries.iterationZDer),
             Form.doubleInput("h2", lensFractal composeLens DerivedDivergingSeries.h2),
             Form.doubleInput("angle [0, 2pi]", lensFractal composeLens DerivedDivergingSeries.angle),
+            Form.colorInput("color inside", lensFractal composeLens DerivedDivergingSeries.colorInside),
+            Form.colorInput("color light", lensFractal composeLens DerivedDivergingSeries.colorLight),
+            Form.colorInput("color shadow", lensFractal composeLens DerivedDivergingSeries.colorShadow),
           )
         case f: DivergingSeries =>
           val lensFractal = lens composeLens FractalEntity.program composeLens LenseUtils.lookedUp(f, FractalProgram.divergingSeries.asSetter)
@@ -86,6 +89,8 @@ object RenderEditFractalEntity {
             Form.stringFunctionInput("iteration", lensFractal composeLens DivergingSeries.iteration),
             Form.intInput("max iterations", lensFractal composeLens DivergingSeries.maxIterations),
             Form.doubleInput("escape radius", lensFractal composeLens DivergingSeries.escapeRadius),
+            Form.colorInput("color inside", lensFractal composeLens DivergingSeries.colorInside),
+            Form.colorInput("color outside", lensFractal composeLens DivergingSeries.colorOutside),
           )
         case f: FreestyleProgram =>
           val lensFractal = lens composeLens FractalEntity.program composeLens LenseUtils.lookedUp(f, FractalProgram.freestyleProgram.asSetter)

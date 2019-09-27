@@ -1,9 +1,8 @@
 package nutria.data.sequences
 
-import nutria.core.Point
+import nutria.core.{Point, RGBA}
 import mathParser.implicits._
 import nutria.core.languages.{Lambda, Z, ZDer}
-import nutria.data.colors.RGBA
 import spire.math.Complex
 
 object DerivedDivergingSeries {

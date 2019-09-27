@@ -1,5 +1,5 @@
+import nutria.core.RGBA
 import nutria.data.Defaults
-import nutria.data.colors.RGBA
 import nutria.data.consumers.NewtonColoring
 import nutria.data.fractalFamilies.MandelbrotFamily
 import nutria.data.image.Image

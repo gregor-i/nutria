@@ -1,6 +1,6 @@
 package nutria.data.content
 
-import nutria.data.colors.RGBA
+import nutria.core.RGBA
 
 case class AntiAliasedRGBAContent(fractalContent: FunctionContent[RGBA], multi: Int)
   extends Content[RGBA] {

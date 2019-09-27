@@ -1,6 +1,7 @@
 package nutria.frontend.shaderBuilder
 
 import mathParser.algebra.{SpireBinaryOperator, SpireUnitaryOperator}
+import nutria.core.RGBA
 
 sealed trait WebGlExpression[T <: WebGlType] {
   def toCode: String
@@ -34,6 +35,15 @@ case class Vec4(a: WebGlExpression[WebGlTypeFloat.type],
 
 case class RefExp[T <: WebGlType](ref: Ref[T]) extends WebGlExpression[T] {
   override def toCode: String = ref.name
+}
+
+object Vec3 {
+  def fromRGBA(rgba: RGBA): Vec3 =
+    Vec3(
+      FloatLiteral((rgba.R/255d).toFloat),
+      FloatLiteral((rgba.G/255d).toFloat),
+      FloatLiteral((rgba.B/255d).toFloat),
+    )
 }
 
 case class ComplexBinaryExp(op: SpireBinaryOperator,
