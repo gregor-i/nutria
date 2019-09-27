@@ -1,23 +1,16 @@
 package nutria.core.viewport
 
-import nutria.core.Point
+import io.circe.Codec
 import nutria.core.viewport.Point.PointOps
+import nutria.core.{CirceCodex, Point}
 
-object Viewport {
+object Viewport extends CirceCodex {
+  implicit val codec: Codec[Viewport] = semiauto.deriveConfiguredCodec
 
   def createViewportByLongs(x0: Long, y0: Long, ax: Long, ay: Long, bx: Long, by: Long) =
     Viewport(Point.createWithLongs(x0, y0),
       Point.createWithLongs(ax, ay),
       Point.createWithLongs(bx, by))
-
-  def createViewportCentered(a: Point, b: Point): Viewport = {
-    val diff = b - a
-    val orth = diff.orth()
-    val U = a - diff - orth
-    val B = orth * 2
-    val A = diff * 3
-    Viewport(U, A, B)
-  }
 
   def createByFocus(FA: Point, FB: Point)(a: Point, b: Point): Viewport = {
     val Fdelta = FB - FA

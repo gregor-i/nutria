@@ -20,7 +20,6 @@ case class FractalEntity(program: FractalProgram,
 object FractalEntity extends CirceCodex {
   def id(fractalEntity: FractalEntity): String = fractalEntity.hashCode().toHexString.padTo(8, '0')
 
-  implicit val codecViewport: Codec[Viewport] = semiauto.deriveConfiguredCodec
   implicit val codec: Codec[FractalEntity] = semiauto.deriveConfiguredCodec
 }
 
