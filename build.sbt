@@ -29,8 +29,8 @@ lazy val service = project.in(file("service"))
   .enablePlugins(PlayScala)
   .settings(
     libraryDependencies += guice,
-    libraryDependencies += "com.dripower" %% "play-circe" % "2711.0",
-    libraryDependencies += "org.postgresql" % "postgresql" % "42.2.7",
+    libraryDependencies += "com.dripower" %% "play-circe" % "2712.0",
+    libraryDependencies += "org.postgresql" % "postgresql" % "42.2.8",
     libraryDependencies += evolutions,
     libraryDependencies += jdbc,
     libraryDependencies += "org.playframework.anorm" %% "anorm" % "2.6.4",
@@ -78,7 +78,7 @@ def spire = libraryDependencies += "org.typelevel" %%% "spire" % "0.16.2"
 def scalaTestAndScalaCheck =
   libraryDependencies ++= Seq(
     "org.scalatest" %%% "scalatest" % "3.0.8" % Test,
-    "org.scalacheck" %%% "scalacheck" % "1.14.0" % Test
+    "org.scalacheck" %%% "scalacheck" % "1.14.2" % Test
   )
 
 def mathParser = Seq(
@@ -97,13 +97,13 @@ def circe =
 
 def monocle = Seq(
   libraryDependencies ++= Seq(
-    "com.github.julien-truffaut" %%% "monocle-core" % "1.6.0",
-    "com.github.julien-truffaut" %%% "monocle-macro" % "1.6.0",
-    "com.github.julien-truffaut" %%% "monocle-unsafe" % "1.6.0",
-    "com.github.julien-truffaut" %%% "monocle-refined" % "1.6.0",
+    "com.github.julien-truffaut" %%% "monocle-core" % "2.0.0",
+    "com.github.julien-truffaut" %%% "monocle-macro" % "2.0.0",
+    "com.github.julien-truffaut" %%% "monocle-unsafe" % "2.0.0",
+    "com.github.julien-truffaut" %%% "monocle-refined" % "2.0.0",
   ),
   addCompilerPlugin("org.scalamacros" %% "paradise" % "2.1.1" cross CrossVersion.full)
 )
 
 def refinedTypes =
-  libraryDependencies += "eu.timepit" %%% "refined" % "0.9.9"
+  libraryDependencies += "eu.timepit" %%% "refined" % "0.9.10"
