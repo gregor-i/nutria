@@ -11,18 +11,6 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .in(file("core"))
   .settings(mathParser, scalaTestAndScalaCheck, spire, circe, monocle, refinedTypes)
 
-lazy val data = project
-  .dependsOn(core.jvm)
-  .settings(scalaTestAndScalaCheck)
-  .dependsOn(core.jvm % "compile->compile;test->test")
-
-lazy val processor = project
-  .settings(scalaTestAndScalaCheck)
-  .dependsOn(data)
-
-lazy val viewer = project
-  .dependsOn(data)
-
 lazy val service = project.in(file("service"))
   .dependsOn(core.jvm)
   .settings(scalaTestAndScalaCheck, circe)
