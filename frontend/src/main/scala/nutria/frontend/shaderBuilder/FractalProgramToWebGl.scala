@@ -154,11 +154,15 @@ object FractalProgramToWebGl {
 
 
   def freestyle(f: FreestyleProgram)(inputVar: RefVec2, outputVar: RefVec4): String = {
+    val code = f.parameters.foldLeft(f.code){(template, parameter) =>
+      template.replaceAllLiterally("${" +parameter.name+  "}", parameter.literal)
+    }
+
     s"""{
        |vec2 z = ${inputVar.name};
        |vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
        |
-       |${f.code}
+       |$code
        |
        |${outputVar.name} = color;
        |}

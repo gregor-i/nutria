@@ -3,7 +3,7 @@ package module
 import akka.actor.ActorSystem
 import io.circe.parser
 import javax.inject.{Inject, Singleton}
-import nutria.core.FractalEntity
+import nutria.core.{FractalEntity, FreestyleProgram, StringParameter}
 import play.api.Logger
 import play.api.inject.{SimpleModule, bind}
 import repo.{FractalRepo, FractalRow}

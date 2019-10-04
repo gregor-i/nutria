@@ -955,7 +955,15 @@
     "description" : "nova mandelbrot fractal of f(x) = x^3 - 1",
     "program" : {
       "FreestyleProgram" : {
-        "code" : "int l = 0;\n  for(int i = 0;i< 200; i++){\n    vec2 oldz = z;\n    z = z-complex_divide(vec2(complex_product(vec2(complex_product(vec2(z), vec2(z))), vec2(z))-vec2(float(1), float(0))), vec2(complex_product(vec2(complex_product(vec2(vec2(float(2), float(0))), vec2(z))), vec2(z))))+p;\n    if(length(z - oldz) < float(0.0010000000474974513))\n      break;\n    l ++;\n  }\n\n  color = vec4(vec3(float(l) / float(200)), 1.0);"
+        "code" : "int l = 0;\n  for(int i = 0;i< ${iterations}; i++){\n    vec2 oldz = z;\n    z = z-complex_divide(vec2(complex_product(vec2(complex_product(vec2(z), vec2(z))), vec2(z))-vec2(float(1), float(0))), vec2(complex_product(vec2(complex_product(vec2(vec2(float(2), float(0))), vec2(z))), vec2(z))))+p;\n    if(length(z - oldz) < float(0.001))\n      break;\n    l ++;\n  }\n\n  color = vec4(vec3(float(l) / float(${iterations})), 1.0);",
+        "parameters" : [
+          {
+            "StringParameter" : {
+              "literal" : "200",
+              "name" : "iterations"
+            }
+          }
+        ]
       }
     },
     "reference" : [
@@ -975,7 +983,27 @@
     "description" : "",
     "program" : {
       "FreestyleProgram" : {
-        "code" : "float x = 0.5;\nfloat h = 0.0;\n\nconst int stepsX = 6;\nconst int stepsY = 6;\n\nfor( int i=0; i<150; i++ )\n{\n    for(int i=0; i<6; i++){\n        x = z.x*x*(1.0-x); h += log2(abs(z.x*(1.0-2.0*x)));\n    }\n\n    for(int i=0; i<6; i++){\n        x = z.y*x*(1.0-x); h += log2(abs(z.y*(1.0-2.0*x)));\n    }\n}\nh /= 150.0*float(stepsX + stepsY);\n\n\nvec3 col = vec3(0.0);\nif( h<0.0 )\n{\n    h = abs(h);\n    col = (0.5 + 0.5*sin( vec3(0.0,0.4,0.7) + 2.5*h )) * pow(h,0.25);\n}\ncolor = vec4(col, 1.0);\n"
+        "code" : "float x = 0.5;\nfloat h = 0.0;\n\nfor( int i=0; i<${iterations}; i++ )\n{\n    for(int i=0; i<${stepsX}; i++){\n        x = z.x*x*(1.0-x); h += log2(abs(z.x*(1.0-2.0*x)));\n    }\n\n    for(int i=0; i<${stepsY}; i++){\n        x = z.y*x*(1.0-x); h += log2(abs(z.y*(1.0-2.0*x)));\n    }\n}\nh /= float(${iterations} * (${stepsX} + ${stepsY}));\n\n\nvec3 col = vec3(0.0);\nif( h<0.0 )\n{\n    h = abs(h);\n    col = (0.5 + 0.5*sin( vec3(0.0,0.4,0.7) + 2.5*h )) * pow(h,0.25);\n}\ncolor = vec4(col, 1.0);\n",
+        "parameters" : [
+          {
+            "StringParameter" : {
+              "literal" : "150",
+              "name" : "iterations"
+            }
+          },
+          {
+            "StringParameter" : {
+              "literal" : "6",
+              "name" : "stepsX"
+            }
+          },
+          {
+            "StringParameter" : {
+              "literal" : "6",
+              "name" : "stepsY"
+            }
+          }
+        ]
       }
     },
     "reference" : [
@@ -996,7 +1024,33 @@
     "description" : "",
     "program" : {
       "FreestyleProgram" : {
-        "code" : "#define calc_tri_area(A, B, C) float((((A.x - C.x) * (B.y - C.y)) - ((B.x - C.x) * (A.y - C.y))) / 2.0)\n\nconst float pi = 3.141;\nconst float size = 1.0;\nconst int iterations = 20;\n\nconst vec3 color_outside = vec3(1.0);\nconst vec3 color_inside = vec3(0.0);\n\nvec2 A = vec2(size*sin( 60.0/180.0*pi), size*cos( 60.0/180.0*pi));\nvec2 B = vec2(size*sin(180.0/180.0*pi), size*cos(180.0/180.0*pi));\nvec2 C = vec2(size*sin(300.0/180.0*pi), size*cos(300.0/180.0*pi));\n\nfloat area = calc_tri_area(A, B, C);\nvec3 bary = vec3(calc_tri_area(B, C, z), calc_tri_area(C, A, z), calc_tri_area(A, B, z));\n\nif(bary.x > 0.0 || bary.y > 0.0 || bary.z > 0.0){\n    // outside\n    color = vec4(color_outside, 1.0);\n}else{\n    // inside\n    color = vec4(color_inside, 1.0);\n    for(int i = 0; i < iterations; i++){\n        bary = vec3(calc_tri_area(B, C, z), calc_tri_area(C, A, z), calc_tri_area(A, B, z));\n        // inside\n        if(bary.x / area > 0.5){\n            B = 0.5 * (B + A);\n            C = 0.5 * (C + A);\n        } else if(bary.y / area > 0.5){\n            // in area near B\n            A = 0.5 * (A + B);\n            C = 0.5 * (C + B);\n        }else if(bary.z / area > 0.5){\n            // in area near C\n            A = 0.5 * (A + C);\n            B = 0.5 * (B + C);\n        }else{\n            // in the middle triangle\n            color = vec4(mix(color_outside, color_inside, float(i)/float(iterations)), 1.0);\n            break;\n        }\n        area /= 4.0;\n    }\n}"
+        "code" : "#define calc_tri_area(A, B, C) float((((A.x - C.x) * (B.y - C.y)) - ((B.x - C.x) * (A.y - C.y))) / 2.0)\n\nconst float pi = 3.141;\n\nvec2 A = vec2(${size}*sin( 60.0/180.0*pi), ${size}*cos( 60.0/180.0*pi));\nvec2 B = vec2(${size}*sin(180.0/180.0*pi), ${size}*cos(180.0/180.0*pi));\nvec2 C = vec2(${size}*sin(300.0/180.0*pi), ${size}*cos(300.0/180.0*pi));\n\nfloat area = calc_tri_area(A, B, C);\nvec3 bary = vec3(calc_tri_area(B, C, z), calc_tri_area(C, A, z), calc_tri_area(A, B, z));\n\nif(bary.x > 0.0 || bary.y > 0.0 || bary.z > 0.0){\n    // outside\n    color = vec4(${color_outside}, 1.0);\n}else{\n    // inside\n    color = vec4(${color_inside}, 1.0);\n    for(int i = 0; i < ${iterations}; i++){\n        bary = vec3(calc_tri_area(B, C, z), calc_tri_area(C, A, z), calc_tri_area(A, B, z));\n        // inside\n        if(bary.x / area > 0.5){\n            B = 0.5 * (B + A);\n            C = 0.5 * (C + A);\n        } else if(bary.y / area > 0.5){\n            // in area near B\n            A = 0.5 * (A + B);\n            C = 0.5 * (C + B);\n        }else if(bary.z / area > 0.5){\n            // in area near C\n            A = 0.5 * (A + C);\n            B = 0.5 * (B + C);\n        }else{\n            // in the middle triangle\n            color = vec4(mix(${color_outside}, ${color_inside}, float(i)/float(${iterations})), 1.0);\n            break;\n        }\n        area /= 4.0;\n    }\n}",
+        "parameters" : [
+          {
+            "StringParameter" : {
+              "literal" : "25",
+              "name" : "iterations"
+            }
+          },
+          {
+            "StringParameter" : {
+              "literal" : "float(1.0)",
+              "name" : "size"
+            }
+          },
+          {
+            "StringParameter" : {
+              "literal" : "vec3(1.0)",
+              "name" : "color_outside"
+            }
+          },
+          {
+            "StringParameter" : {
+              "literal" : "vec3(0.0)",
+              "name" : "color_inside"
+            }
+          }
+        ]
       }
     },
     "reference" : [
@@ -1017,7 +1071,27 @@
     "description" : "Koch Snowflake",
     "program" : {
       "FreestyleProgram" : {
-        "code" : "const int iterations = 20;\n\nconst vec3 color_outside = vec3(1.0);\nconst vec3 color_inside = vec3(0.0);\n\nif(z.x < 0.0 || z.x > 1.0 || z.y < -0.5 || z.y > 0.5){\n    color = vec4(color_outside, 1.0);\n}else{\n    z = abs(fract(z)-0.5);\n    for(int i = 0; i < iterations ; i++)\n    {\n        z += vec2(z.y*1.735, -z.x*1.735);\n        z.x = abs(z.x)-0.58;\n        z = -vec2(-z.y, z.x)*.865;\n    }\n\n    if(z.x > 0.0){\n        color = vec4(color_outside, 1.0);\n    }else{\n        color = vec4(color_inside, 1.0);\n    }\n}"
+        "code" : "if(z.x < 0.0 || z.x > 1.0 || z.y < -0.5 || z.y > 0.5){\n    color = vec4(${color_outside}, 1.0);\n}else{\n    z = abs(fract(z)-0.5);\n    for(int i = 0; i < ${iterations} ; i++)\n    {\n        z += vec2(z.y*1.735, -z.x*1.735);\n        z.x = abs(z.x)-0.58;\n        z = -vec2(-z.y, z.x)*.865;\n    }\n\n    if(z.x > 0.0){\n        color = vec4(${color_outside}, 1.0);\n    }else{\n        color = vec4(${color_inside}, 1.0);\n    }\n}",
+        "parameters" : [
+          {
+            "StringParameter" : {
+              "literal" : "25",
+              "name" : "iterations"
+            }
+          },
+          {
+            "StringParameter" : {
+              "literal" : "vec3(1.0)",
+              "name" : "color_outside"
+            }
+          },
+          {
+            "StringParameter" : {
+              "literal" : "vec3(0.0)",
+              "name" : "color_inside"
+            }
+          }
+        ]
       }
     },
     "reference" : [

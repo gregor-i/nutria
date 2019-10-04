@@ -96,7 +96,9 @@ object RenderEditFractalEntity {
           val lensFractal = lens composeLens FractalEntity.program composeLens LenseUtils.lookedUp(f, FractalProgram.freestyleProgram.asSetter)
           Seq(
             Form.mulitlineStringInput("code", lensFractal composeLens FreestyleProgram.code),
-          )
+          ) ++ f.parameters.indices.map { i =>
+            Form.stringInput(f.parameters(i).name, lensFractal composeLens FreestyleProgram.parameters composeLens LenseUtils.seqAt[Parameter](i) composeLens Parameter.literal)
+          }
       }),
       Form.intInput("anti aliasing", lens composeLens FractalEntity.antiAliase),
       Form.stringInput("description", lens composeLens FractalEntity.description),

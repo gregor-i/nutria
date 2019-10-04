@@ -11,4 +11,6 @@ object LenseUtils {
 
   def withDefault[A, S](p: Lens[S, Option[A]], default: A): Lens[S, A] =
     Lens[S, A](p.get(_).getOrElse(default))(a => p.set(Some(a)))
+
+  def seqAt[A](i: Int): Lens[Seq[A], A] = Lens[Seq[A], A](_.apply(i))(a => seq => seq.updated(i, a))
 }
