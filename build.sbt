@@ -76,11 +76,11 @@ def mathParser = Seq(
 
 def circe =
   libraryDependencies ++= Seq(
-    "io.circe" %%% "circe-core" % "0.12.1",
-    "io.circe" %%% "circe-generic" % "0.12.1",
-    "io.circe" %%% "circe-generic-extras" % "0.12.1",
-    "io.circe" %%% "circe-parser" % "0.12.1",
-    "io.circe" %%% "circe-refined" % "0.12.1",
+    "io.circe" %%% "circe-core" % "0.12.2",
+    "io.circe" %%% "circe-generic" % "0.12.2",
+    "io.circe" %%% "circe-generic-extras" % "0.12.2",
+    "io.circe" %%% "circe-parser" % "0.12.2",
+    "io.circe" %%% "circe-refined" % "0.12.2",
   )
 
 def monocle = Seq(
