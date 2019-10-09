@@ -1,6 +1,6 @@
 package nutria.core
 
-import eu.timepit.refined._
+import eu.timepit.refined.refineMV
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.boolean.And
 import eu.timepit.refined.numeric.Interval.Open
@@ -23,16 +23,11 @@ case class DivergingSeries(maxIterations: Int Refined Positive = refineMV(200),
                           ) extends FractalProgram
 
 object DivergingSeries {
-  def mandelbrot = DivergingSeries(
+  def default = DivergingSeries(
     initial = StringFunction.unsafe("0"),
     iteration = StringFunction.unsafe("z*z + lambda")
   )
 
-  def juliaSet(c: Point) = DivergingSeries(
-    initial = StringFunction.unsafe("lambda"),
-    iteration = StringFunction.unsafe(s"z*z + (${c._1} + i*${c._2})"),
-    maxIterations = refineMV(50)
-  )
 }
 
 @monocle.macros.Lenses()
@@ -49,17 +44,10 @@ case class DerivedDivergingSeries(maxIterations: Int Refined Positive = refineMV
                                   colorShadow: RGBA = RGBA.black) extends FractalProgram
 
 object DerivedDivergingSeries {
-  val mandelbrot = DerivedDivergingSeries(
+  val default = DerivedDivergingSeries(
     initialZ = StringFunction.unsafe("lambda"),
     initialZDer = StringFunction.unsafe("1"),
     iterationZ = StringFunction.unsafe("z*z + lambda"),
-    iterationZDer = StringFunction.unsafe("z'*z*2 + 1")
-  )
-
-  def juliaSet(c: Point) = DerivedDivergingSeries(
-    initialZ = StringFunction.unsafe("lambda"),
-    initialZDer = StringFunction.unsafe("1"),
-    iterationZ = StringFunction.unsafe(s"z*z + (${c._1} + i*${c._2})"),
     iterationZDer = StringFunction.unsafe("z'*z*2 + 1")
   )
 }
@@ -75,20 +63,7 @@ case class NewtonIteration(maxIterations: Int Refined Positive = refineMV(200),
                           ) extends FractalProgram
 
 object NewtonIteration {
-  def mandelbrotPolynomial(n: Int): NewtonIteration = {
-    def loop(n: Int): String =
-      if (n == 1)
-        "x"
-      else
-        s"(${loop(n - 1)})^2 + lambda"
-
-    NewtonIteration(
-      function = StringFunction.unsafe(loop(n)),
-      initial = StringFunction.unsafe("lambda")
-    )
-  }
-
-  val threeRoots = NewtonIteration(
+  val default = NewtonIteration(
     function = StringFunction.unsafe("x*x*x + 1"),
     initial = StringFunction.unsafe("lambda")
   )

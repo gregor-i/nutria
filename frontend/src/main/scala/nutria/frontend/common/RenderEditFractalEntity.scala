@@ -48,9 +48,9 @@ object RenderEditFractalEntity {
         ),
         value = fractal.program.getClass.getSimpleName,
         onChange = {
-          case "NewtonIteration" => update((lens composeLens FractalEntity.program).set(NewtonIteration.threeRoots)(state))
-          case "DivergingSeries" => update((lens composeLens FractalEntity.program).set(DivergingSeries.mandelbrot)(state))
-          case "DerivedDivergingSeries" => update((lens composeLens FractalEntity.program).set(DerivedDivergingSeries.mandelbrot)(state))
+          case "NewtonIteration" => update((lens composeLens FractalEntity.program).set(NewtonIteration.default)(state))
+          case "DivergingSeries" => update((lens composeLens FractalEntity.program).set(DivergingSeries.default)(state))
+          case "DerivedDivergingSeries" => update((lens composeLens FractalEntity.program).set(DerivedDivergingSeries.default)(state))
           case "FreestyleProgram" => update((lens composeLens FractalEntity.program).set(FreestyleProgram.default)(state))
         }
       ),
