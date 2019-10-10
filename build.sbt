@@ -30,13 +30,14 @@ lazy val service = project.in(file("service"))
 val frontend = project.in(file("frontend"))
   .dependsOn(core.js)
   .enablePlugins(ScalaJSPlugin)
+  .settings(scalacOptions += "-P:scalajs:sjsDefinedByDefault")
   .settings(scalaJSUseMainModuleInitializer := true)
   .enablePlugins(ScalaJSBundlerPlugin)
   .settings(skip in packageJSDependencies := false)
   .settings(emitSourceMaps := false)
   .settings(
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.7",
-    libraryDependencies += "com.raquo" %%% "snabbdom" % "0.1.1",
+    libraryDependencies += "com.raquo" %%% "snabbdom" % "0.1.1", // todo: remove
     npmDependencies in Compile += "snabbdom" -> "0.7.0"
   )
   .settings(scalaTestAndScalaCheck, mathParser, circe)
