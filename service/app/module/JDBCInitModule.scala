@@ -3,7 +3,7 @@ package module
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment, Logger}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 // https://bugs.openjdk.java.net/browse/JDK-8146872
 class JDBCInitModule extends Module {
