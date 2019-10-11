@@ -1,13 +1,11 @@
 package nutria.frontend.explorer
 
 
-import com.raquo.snabbdom.Modifier
-import com.raquo.snabbdom.simple.implicits._
-import com.raquo.snabbdom.simple.{VNode, VNodeData, events}
 import nutria.core.{Point, Viewport}
 import nutria.frontend.ExplorerState
 import org.scalajs.dom._
 import org.scalajs.dom.html.Canvas
+import snabbdom.{Snabbdom, SnabbdomNative}
 
 import scala.scalajs.js
 
@@ -23,8 +21,8 @@ object ExplorerEvents {
 
     element.asInstanceOf[js.Dynamic].style.transform =
       s"translate(${translate._1 * 100}%, ${translate._2 * 100}%) " +
-      s"scale($scale)" +
-      s"rotate(${rotate * 180d / Math.PI}deg)"
+        s"scale($scale)" +
+        s"rotate(${rotate * 180d / Math.PI}deg)"
   }
 
   private def toPoint(event: MouseEvent, boundingBox: ClientRect): Point = {
@@ -47,25 +45,29 @@ object ExplorerEvents {
   private def calcNewView(boundingBox: ClientRect, moves: Seq[(Point, Point)], view: Viewport) =
     Transform.applyToViewport(moves, view.cover(boundingBox.width, boundingBox.height))
 
-  def canvasWheelEvent(implicit state: ExplorerState, update: ExplorerState => Unit) = events.onWheel := { event =>
-    event.preventDefault()
-    val (_, boundingBox) = context(event)
-    val p = toPoint(event, boundingBox)
-    val steps = event.asInstanceOf[WheelEvent].deltaY
+  def canvasWheelEvent(implicit state: ExplorerState, update: ExplorerState => Unit): Seq[(String, SnabbdomNative.Eventlistener)] = {
+    val eventHandler =
+      Snabbdom.specificEvent { event: PointerEvent =>
+        event.preventDefault()
+        val (_, boundingBox) = context(event)
+        val p = toPoint(event, boundingBox)
+        val steps = event.asInstanceOf[WheelEvent].deltaY
 
-    update(
-      ExplorerState.viewport.modify {
-        _.cover(boundingBox.width, boundingBox.height)
-          .zoomSteps(p, if (steps > 0) -1 else 1)
-      }(state)
-    )
+        update(
+          ExplorerState.viewport.modify {
+            _.cover(boundingBox.width, boundingBox.height)
+              .zoomSteps(p, if (steps > 0) -1 else 1)
+          }(state)
+        )
+      }
+    Seq("wheel" -> eventHandler)
   }
 
-  def canvasMouseEvents(implicit state: ExplorerState, update: ExplorerState => Unit): Seq[Modifier[VNode, VNodeData]] = {
+  def canvasMouseEvents(implicit state: ExplorerState, update: ExplorerState => Unit): Seq[(String, SnabbdomNative.Eventlistener)] = {
     var startPosition = Option.empty[Point]
 
     val pointerDown =
-      events.build[PointerEvent]("pointerdown") := { event =>
+      Snabbdom.specificEvent { event: PointerEvent =>
         if (event.pointerType == "mouse") {
           event.preventDefault()
           val (_, boundingBox) = context(event)
@@ -73,23 +75,24 @@ object ExplorerEvents {
         }
       }
 
-    def pointerEnd: PointerEvent => Unit = { event =>
-      if (event.pointerType == "mouse") {
-        startPosition match {
-          case Some(from) =>
-            event.preventDefault()
-            val (canvas, boundingBox) = context(event)
-            val to = toPoint(event, boundingBox)
-            val newView = calcNewView(boundingBox, Seq(from -> to), state.fractalEntity.view)
-            resetTransformCss(canvas)
-            update(ExplorerState.viewport.set(newView)(state))
-          case None => ()
+    def pointerEnd =
+      Snabbdom.specificEvent { event: PointerEvent =>
+        if (event.pointerType == "mouse") {
+          startPosition match {
+            case Some(from) =>
+              event.preventDefault()
+              val (canvas, boundingBox) = context(event)
+              val to = toPoint(event, boundingBox)
+              val newView = calcNewView(boundingBox, Seq(from -> to), state.fractalEntity.view)
+              resetTransformCss(canvas)
+              update(ExplorerState.viewport.set(newView)(state))
+            case None => ()
+          }
         }
       }
-    }
 
     def pointerMove =
-      events.build[PointerEvent]("pointermove") := { event =>
+      Snabbdom.specificEvent { event: PointerEvent =>
         if (event.pointerType == "mouse") {
           startPosition match {
             case Some(from) =>
@@ -106,18 +109,18 @@ object ExplorerEvents {
       }
 
     Seq(
-      pointerDown,
-      pointerMove,
-      events.build[PointerEvent]("pointerup") := pointerEnd,
-      events.build[PointerEvent]("pointercancel") := pointerEnd,
-      events.build[PointerEvent]("pointerout") := pointerEnd
+      "pointerdown" -> pointerDown,
+      "pointermove" -> pointerMove,
+      "pointerup" -> pointerEnd,
+      "pointercancel" -> pointerEnd,
+      "pointerout" -> pointerEnd
     )
   }
 
-  def canvasTouchEvents(implicit state: ExplorerState, update: ExplorerState => Unit) = {
+  def canvasTouchEvents(implicit state: ExplorerState, update: ExplorerState => Unit): Seq[(String, SnabbdomNative.Eventlistener)] = {
     var moves = Map.empty[Double, TouchMove]
 
-    val touchStart = events.build[TouchEvent]("touchstart") := { event =>
+    val touchStart = Snabbdom.specificEvent { event: TouchEvent =>
       event.preventDefault()
       val (canvas, boundingBox) = context(event)
 
@@ -130,7 +133,7 @@ object ExplorerEvents {
       moves ++= newTouches
     }
 
-    val touchMove = events.build[TouchEvent]("touchmove") := { event =>
+    val touchMove = Snabbdom.specificEvent { event: TouchEvent =>
       event.preventDefault()
       val (canvas, boundingBox) = context(event)
       val updates = for {
@@ -145,7 +148,7 @@ object ExplorerEvents {
       transformCss(canvas, moves.values.map(_.toMove).toSeq)
     }
 
-    val touchEnd = events.build[TouchEvent]("touchend") := { event =>
+    val touchEnd = Snabbdom.specificEvent { event: TouchEvent =>
       event.preventDefault()
       val (canvas, boundingBox) = context(event)
 
@@ -171,7 +174,11 @@ object ExplorerEvents {
       }
     }
 
-    Seq(touchStart, touchMove, touchEnd)
+    Seq(
+      "touchstart" -> touchStart,
+      "touchmove" -> touchMove,
+      "touchend" -> touchEnd,
+    )
   }
 }
 
@@ -182,5 +189,7 @@ private sealed trait TouchMove {
     case Ended(from, to) => from -> to
   }
 }
+
 private case class Processing(start: Point, currently: Point) extends TouchMove
+
 private case class Ended(start: Point, end: Point) extends TouchMove

@@ -37,7 +37,6 @@ val frontend = project.in(file("frontend"))
   .settings(emitSourceMaps := false)
   .settings(
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.7",
-    libraryDependencies += "com.raquo" %%% "snabbdom" % "0.1.1", // todo: remove
     npmDependencies in Compile += "snabbdom" -> "0.7.0"
   )
   .settings(scalaTestAndScalaCheck, mathParser, circe)

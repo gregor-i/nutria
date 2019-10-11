@@ -1,6 +1,5 @@
 package nutria.frontend
 
-import com.raquo.snabbdom.simple.VNode
 import io.circe.syntax._
 import nutria.core.FractalEntity
 import nutria.frontend.explorer.ExplorerUi
@@ -8,6 +7,7 @@ import nutria.frontend.library.LibraryUi
 import nutria.frontend.util.SnabbdomApp
 import org.scalajs.dom
 import org.scalajs.dom.Element
+import snabbdom.VNode
 
 import scala.scalajs.js
 import scala.scalajs.js.{URIUtils, |}

@@ -1,11 +1,16 @@
 package nutria.frontend.util
 
-import com.raquo.snabbdom
-import com.raquo.snabbdom.Snabbdom
-import com.raquo.snabbdom.simple.{VNode, VNodeData}
+import snabbdom.{Snabbdom, SnabbdomNative}
+
 
 trait SnabbdomApp {
-  val patch = Snabbdom.init[VNode, VNodeData](snabbdom.builtInModules)
+  val patch: SnabbdomNative.PatchFunction = Snabbdom.init(
+    classModule = true,
+    attributesModule = true,
+    styleModule = true,
+    eventlistenersModule = true,
+    propsModule = true
+  )
 }
 
 object SnabbdomApp
