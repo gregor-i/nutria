@@ -17,7 +17,7 @@ POST          /admin/delete-fractal/:id      controller.AdminController.deleteFr
 # Frontend
 GET           /                              controller.UiController.slash
 GET           /library                       controller.UiController.library
-GET           /explorer/:fractalId           controller.UiController.explorer(fractalId)
+GET           /explorer                      controller.UiController.explorer
 
 
 # Assets

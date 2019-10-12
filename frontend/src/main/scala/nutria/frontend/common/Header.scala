@@ -1,8 +1,9 @@
 package nutria.frontend.common
 
-import nutria.frontend.{ExplorerState, LibraryState, NutriaState}
+import nutria.frontend.NutriaState
 import snabbdom.Snabbdom.h
 import snabbdom.{Snabbdom, VNode}
+import org.scalajs.dom
 
 object Header {
   def apply(name: String)(implicit state: NutriaState, update: NutriaState => Unit): VNode =
@@ -14,10 +15,7 @@ object Header {
             "cursor" -> "pointer",
           ),
           attrs = Seq("src" -> "/img/icon.png"),
-          events = Seq("click" -> Snabbdom.event(_ => update(state match {
-            case explorerState: ExplorerState => LibraryState(explorerState.fractals)
-            case libState: LibraryState => libState
-          }))),
+          events = Seq("click" -> Snabbdom.event(_ => dom.window.location.replace("/"))),
         )(),
         h("span")(name)
       )

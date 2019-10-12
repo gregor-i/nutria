@@ -21,7 +21,7 @@ object Form {
         styles = Seq("flexGrow" -> "2"))(
         h("label.label")(label)
       ),
-      h("divfield-body")(
+      h("div.field-body")(
         inputs.map(input =>
           h("div.field")(
             h("p.control")(
@@ -192,10 +192,11 @@ object Form {
   def selectInput(label: String, options: Seq[String], value: String, onChange: String => Unit) =
     inputStyle(label,
       h("div.select is-fullwidth")(
-        h("select")(
+        h("select",
+          events = Seq("change" -> Snabbdom.event { event => onChange(event.target.asInstanceOf[HTMLSelectElement].value) })
+        )(
           options.map(opt => h("option",
-            attrs = Seq("selected" -> (opt == value).toString),
-            events = Seq("change" -> Snabbdom.event { event => onChange(event.target.asInstanceOf[HTMLSelectElement].value) })
+            attrs = Seq("selected" -> (opt == value).toString)
           )(opt)) :_*
         )
       )

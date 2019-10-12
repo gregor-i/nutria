@@ -11,9 +11,9 @@ sealed trait NutriaState
 
 //case class LoadingState(loading: Future[Vector[FractalEntityWithId]]) extends State
 
-case class ExplorerState(fractals: Vector[FractalEntityWithId],
-                         initialEntity: FractalEntityWithId,
-                         fractalEntity: FractalEntity,
+case class ErrorState(message: String) extends NutriaState
+
+case class ExplorerState(fractalEntity: FractalEntity,
                          edit: Option[FractalEntity] = None,
                          saveProcess: Option[Future[FractalEntity]] = None) extends NutriaState
 

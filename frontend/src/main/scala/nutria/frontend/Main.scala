@@ -13,16 +13,28 @@ object Main {
   def main(args: Array[String]): Unit = {
     def container: Element = dom.document.getElementById("nutria-app")
 
-    val viewerUrlRegex = "/explorer/([0-9a-f]+)".r
+    val queryParams = dom.window.location.search
+      .dropWhile(_ == '?')
+      .split('&')
+      .collect {
+        case s"${key}=${value}" => key -> value
+      }
+      .toMap
 
     val stateFuture: Future[NutriaState] = dom.window.location.pathname match {
       case "/library" =>
-        NutriaService.loadFractals().map(fractals => LibraryState(fractals = fractals))
-      case viewerUrlRegex(fractalId) =>
         for {
           fractals <- NutriaService.loadFractals()
-          fractal = fractals.find(_.id == fractalId).get
-        } yield ExplorerState(fractals = fractals, initialEntity = fractal, fractalEntity = fractal.entity)
+          edit = queryParams.get("details").flatMap(d => fractals.find(_.id == d))
+        } yield LibraryState(fractals = fractals, edit = edit)
+      case s"/explorer" =>
+        Future.successful {
+          (for {
+            state <- queryParams.get("state")
+            fractal <- NutriaApp.queryDecoded(state)
+          } yield ExplorerState(fractal)
+            ).getOrElse(ErrorState("Query Parameter is invalid"))
+        }
       case "/admin" =>
         Admin.setup()
         Future.failed(new Exception)

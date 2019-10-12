@@ -9,7 +9,7 @@ class UiController @Inject()(assets: Assets) extends InjectedController {
 
   def library = Action(Ok(views.html.Nutria()))
 
-  def explorer(fractalId: String) = Action(Ok(views.html.Nutria()))
+  def explorer = Action(Ok(views.html.Nutria()))
 
   def asset(file: String, folder: String) = assets.at(folder, file)
 }

@@ -32,7 +32,7 @@ object LibraryUi {
           lens = LenseUtils.lookedUp(fractal.entity, LibraryState.editOptional.composeLens(FractalEntityWithId.entity).asSetter),
           footer = Buttons.group(
             Buttons("Explore", Images.explore, Snabbdom.event { _ =>
-              update(ExplorerState(fractals = state.fractals, fractalEntity = fractal.entity, initialEntity = fractal))
+              update(ExplorerState(fractalEntity = fractal.entity))
             }, `class` = ".is-primary"),
             Buttons("Cancel", Images.cancel, Snabbdom.event { _ =>
               update(state.copy(edit = None))
