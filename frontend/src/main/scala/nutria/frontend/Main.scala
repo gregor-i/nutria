@@ -11,7 +11,7 @@ import scala.util.{Failure, Success}
 object Main {
 
   def main(args: Array[String]): Unit = {
-    def container: Element = dom.document.getElementById("nutria-app")
+    def container: Element = dom.document.body
 
     val queryParams = dom.window.location.search
       .dropWhile(_ == '?')

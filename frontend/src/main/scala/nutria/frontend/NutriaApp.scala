@@ -2,6 +2,7 @@ package nutria.frontend
 
 import io.circe.syntax._
 import nutria.core.FractalEntity
+import nutria.frontend.error.ErrorUi
 import nutria.frontend.explorer.ExplorerUi
 import nutria.frontend.library.LibraryUi
 import nutria.frontend.util.SnabbdomApp
@@ -10,35 +11,40 @@ import org.scalajs.dom.Element
 import snabbdom.VNode
 
 import scala.scalajs.js
-import scala.scalajs.js.{URIUtils, |}
+import scala.scalajs.js.|
 import scala.util.Try
-
 
 class NutriaApp(container: Element, initialState: NutriaState) extends SnabbdomApp {
 
   var node: Element | VNode = container
 
   def renderState(state: NutriaState): Unit = {
-    val (currentPath, currentSearch) = NutriaApp.url(state)
-    val stringSearch = currentSearch.map{case (key, value) => s"$key=$value"} .mkString("&")
-    if (dom.window.location.pathname != currentPath) {
-      if(currentSearch.nonEmpty)
-        dom.window.history.pushState(state.asJson.noSpaces, "", currentPath + "?" + stringSearch)
-      else
-        dom.window.history.pushState(state.asJson.noSpaces, "", currentPath)
-    } else if (dom.window.location.search != stringSearch) {
-      if(currentSearch.nonEmpty)
-        dom.window.history.replaceState(state.asJson.noSpaces, "", currentPath + "?" + stringSearch)
-      else
-        dom.window.history.replaceState(state.asJson.noSpaces, "", currentPath)
+    NutriaApp.url(state) match {
+      case Some((currentPath, currentSearch)) =>
+        val stringSearch = currentSearch.map {
+          case (key, value) => s"$key=$value"
+        }.mkString("&")
+        if (dom.window.location.pathname != currentPath) {
+          if (currentSearch.nonEmpty)
+            dom.window.history.pushState(state.asJson.noSpaces, "", currentPath + "?" + stringSearch)
+          else
+            dom.window.history.pushState(state.asJson.noSpaces, "", currentPath)
+        } else if (dom.window.location.search != stringSearch) {
+          if (currentSearch.nonEmpty)
+            dom.window.history.replaceState(state.asJson.noSpaces, "", currentPath + "?" + stringSearch)
+          else
+            dom.window.history.replaceState(state.asJson.noSpaces, "", currentPath)
+        }
+      case None => ()
     }
-
 
     val ui = state match {
       case exState: ExplorerState =>
         ExplorerUi.render(exState, renderState)
       case libState: LibraryState =>
         LibraryUi.render(libState, renderState)
+      case errorState: ErrorState =>
+        ErrorUi.render(errorState, renderState)
     }
 
     node = patch(node, ui)
@@ -60,10 +66,11 @@ class NutriaApp(container: Element, initialState: NutriaState) extends SnabbdomA
 }
 
 object NutriaApp {
-  def url(state: NutriaState): (String, Map[String, String]) = state match {
-    case libState: LibraryState if libState.edit.isEmpty => ("/library", Map.empty)
-    case libState: LibraryState if libState.edit.isDefined => ("/library", Map("details" -> libState.edit.get.id))
-    case exState: ExplorerState => (s"/explorer", Map("state" -> NutriaApp.queryEncoded(exState.fractalEntity)))
+  def url(state: NutriaState): Option[(String, Map[String, String])] = state match {
+    case libState: LibraryState if libState.edit.isEmpty => Some(("/library", Map.empty))
+    case libState: LibraryState if libState.edit.isDefined => Some(("/library", Map("details" -> libState.edit.get.id)))
+    case exState: ExplorerState => Some((s"/explorer", Map("state" -> NutriaApp.queryEncoded(exState.fractalEntity))))
+    case _: ErrorState => None
   }
 
   def queryEncoded(fractalProgram: FractalEntity): String =

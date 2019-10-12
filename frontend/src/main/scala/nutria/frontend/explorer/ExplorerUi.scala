@@ -12,7 +12,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 object ExplorerUi {
   def render(implicit state: ExplorerState, update: NutriaState => Unit): VNode =
-    h("div",
+    h("body",
       key = "explorer")(
       common.Header("Nutria Fractal Explorer")(state, update),
       renderActionBar(),

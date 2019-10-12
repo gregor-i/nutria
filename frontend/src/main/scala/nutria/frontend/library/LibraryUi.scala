@@ -9,7 +9,7 @@ import snabbdom.{Snabbdom, VNode}
 
 object LibraryUi {
   def render(implicit state: LibraryState, update: NutriaState => Unit): VNode = {
-    h(tag = "div",
+    h(tag = "body",
       key = "library")(
       common.Header("Nutria Fractal Library")(state, update),
       h("div.lobby-tile-list")(
