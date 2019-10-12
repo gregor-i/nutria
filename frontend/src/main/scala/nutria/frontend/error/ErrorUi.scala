@@ -8,7 +8,7 @@ object ErrorUi {
   def render(implicit state: ErrorState, update: NutriaState => Unit): VNode =
     h("body",
       key = "error")(
-      common.Header("Nutria Fractal Explorer")(state, update),
+      common.Header("Nutria Fractal")(state, update),
       h("div.section")(
         h("article.message.is-danger")(
           h("div.message-body")(

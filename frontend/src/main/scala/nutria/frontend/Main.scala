@@ -39,7 +39,9 @@ object Main {
         Admin.setup()
         Future.failed(new Exception)
       case _ =>
-        Future.failed(new Exception("unknown url"))
+        Future.successful{
+          ErrorState("Unkown url")
+        }
     }
 
 

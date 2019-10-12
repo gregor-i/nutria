@@ -1,7 +1,6 @@
 package controller
 
 import java.io.ByteArrayInputStream
-import java.security.MessageDigest
 import java.util.Base64
 
 import io.circe.syntax._
@@ -41,11 +40,12 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
 
   def postFractal() = Action(circe.tolerantJson[FractalEntity]) { request =>
     // todo: check / correct aspect ratio
+    val id = FractalEntity.id(request.body)
     fractalRepo.save(FractalRow(
-      id = FractalEntity.id(request.body),
+      id = id,
       maybeFractal = Some(request.body)
     ))
-    Created(FractalEntity.id(request.body))
+    Created(FractalEntityWithId(id, request.body).asJson)
   }
 
   def getImage(id: String) = Action { request =>
@@ -60,14 +60,14 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
           .as("image/svg+xml")
       }
 
-      bytes <- fractalImageRepo.getImage(id).toRight {
-        PartialContent(views.xml.RenderingError("not rendered"))
-          .as("image/svg+xml")
-      }
-
       _ <- request.headers.get(HeaderNames.IF_NONE_MATCH) match {
         case Some(cachedEtag) if cachedEtag == etag => Left(NotModified)
         case _ => Right(())
+      }
+
+      bytes <- fractalImageRepo.getImage(id).toRight {
+        PartialContent(views.xml.RenderingError("not rendered"))
+          .as("image/svg+xml")
       }
 
     } yield {

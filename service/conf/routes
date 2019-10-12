@@ -14,14 +14,15 @@ POST          /admin/clean-fractals          controller.AdminController.cleanFra
 POST          /admin/insert-system-fractals  controller.AdminController.insertSystemFractals()
 POST          /admin/delete-fractal/:id      controller.AdminController.deleteFractal(id : String)
 
-# Frontend
-GET           /                              controller.UiController.slash
-GET           /library                       controller.UiController.library
-GET           /explorer                      controller.UiController.explorer
-
-
 # Assets
 GET           /favicon.ico                   controller.UiController.asset(path = "icon.png", folder = "/public/img")
 GET           /img/*path                     controller.UiController.asset(path: String, folder = "/public/img")
 GET           /js/*path                      controller.UiController.asset(path: String, folder = "/public/js")
 GET           /css/*path                     controller.UiController.asset(path: String, folder = "/public/css")
+
+
+# Frontend
+GET           /                              controller.UiController.slash
+GET           /library                       controller.UiController.library
+GET           /explorer                      controller.UiController.explorer
+GET           /*path                         controller.UiController.other(path: String)

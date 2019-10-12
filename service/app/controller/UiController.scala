@@ -11,6 +11,8 @@ class UiController @Inject()(assets: Assets) extends InjectedController {
 
   def explorer = Action(Ok(views.html.Nutria()))
 
+  def other(path: String) = Action(Ok(views.html.Nutria()))
+
   def asset(file: String, folder: String) = assets.at(folder, file)
 }
 
