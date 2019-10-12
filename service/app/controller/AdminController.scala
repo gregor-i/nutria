@@ -15,7 +15,6 @@ class AdminController @Inject()(fractalRepo: FractalRepo,
   def ui() = Action{
     val list = fractalRepo.list()
       .sortBy(_.maybeFractal.map(_.program))
-        .map(row => row -> fractalImageRepo.isDefined(row.id))
 
     Ok(views.html.Admin(list))
   }

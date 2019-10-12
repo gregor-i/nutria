@@ -1,6 +1,7 @@
 package controller
 
 import java.io.ByteArrayInputStream
+import java.security.MessageDigest
 import java.util.Base64
 
 import io.circe.syntax._
@@ -9,7 +10,7 @@ import nutria.core._
 import play.api.http.HeaderNames
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
-import repo.{FractalImageRepo, FractalRepo, FractalRow}
+import repo.{FractalImageRepo, FractalRepo, FractalRow, Hasher}
 
 import scala.util.Try
 
@@ -53,22 +54,26 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
         NotFound(views.xml.RenderingError("not found"))
           .as("image/svg+xml")
       }
-      etag = fractal.hashCode().toString
+
+      etag <- fractalImageRepo.getHash(id).toRight {
+        PartialContent(views.xml.RenderingError("not rendered"))
+          .as("image/svg+xml")
+      }
+
+      bytes <- fractalImageRepo.getImage(id).toRight {
+        PartialContent(views.xml.RenderingError("not rendered"))
+          .as("image/svg+xml")
+      }
 
       _ <- request.headers.get(HeaderNames.IF_NONE_MATCH) match {
         case Some(cachedEtag) if cachedEtag == etag => Left(NotModified)
         case _ => Right(())
       }
 
-      bytes <- fractalImageRepo.get(id).toRight {
-        PartialContent(views.xml.RenderingError("processing"))
-          .as("image/svg+xml")
-      }
     } yield {
       Ok(bytes)
         .as("image/png")
         .withHeaders(HeaderNames.ETAG -> etag)
-        .withHeaders(HeaderNames.CACHE_CONTROL -> "public, max-age=31536000") // 1 year
     }).merge
   }
 
@@ -94,7 +99,8 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
         .filter(_.getHeight == 225)
         .toRight(BadRequest("request body is no valid image"))
 
-      _ = fractalImageRepo.save(id, decodedBytes)
+      hash = Hasher(decodedBytes)
+      _ = fractalImageRepo.save(id, hash, decodedBytes)
     } yield Ok).merge
   }
 }

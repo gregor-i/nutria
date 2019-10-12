@@ -6,6 +6,8 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
 import scala.util.Random
 
+import scala.util.chaining._
+
 class FractalImageRepoSpec extends FunSuite with Matchers with GuiceOneAppPerSuite with BeforeAndAfterEach {
   val fractalRepo = app.injector.instanceOf[FractalRepo]
   val imageRepo = app.injector.instanceOf[FractalImageRepo]
@@ -16,34 +18,34 @@ class FractalImageRepoSpec extends FunSuite with Matchers with GuiceOneAppPerSui
     maybeFractal = Some(systemFractals.systemFractals(0))
   )
 
-  val f2 = FractalRow(
-    id = "2",
-    maybeFractal = Some(systemFractals.systemFractals(1))
-  )
-
   val bytes1 = new Array[Byte](1000)
-  Random.nextBytes(bytes1)
+      .tap(Random.nextBytes)
+  val hash1 = Hasher(bytes1)
 
   val bytes2 = new Array[Byte](1000*1000)
-  Random.nextBytes(bytes2)
+    .tap(Random.nextBytes)
+  val hash2 = Hasher(bytes2)
 
   override def beforeEach = {
     fractalRepo.save(f1)
-    fractalRepo.save(f2)
+    imageRepo.truncate()
   }
 
   test("save") {
-    imageRepo.save(f1.id, bytes1)
-    imageRepo.save(f2.id, bytes2)
-    imageRepo.get(f1.id).map(_.toSeq) shouldBe Some(bytes1).map(_.toSeq)
-    imageRepo.get(f2.id).map(_.toSeq) shouldBe Some(bytes2).map(_.toSeq)
+    imageRepo.getImage(f1.id) shouldBe None
+
+    imageRepo.save(f1.id, hash1, bytes1)
+    imageRepo.getHash(f1.id) shouldBe Some(hash1)
+    imageRepo.getImage(f1.id).map(_.toSeq) shouldBe Some(bytes1.toSeq)
+
+    imageRepo.save(f1.id, hash2, bytes2)
+    imageRepo.getHash(f1.id) shouldBe Some(hash2)
+    imageRepo.getImage(f1.id).map(_.toSeq) shouldBe Some(bytes2.toSeq)
   }
 
   test("truncate"){
-    imageRepo.save(f1.id, bytes1)
-    imageRepo.save(f2.id, bytes2)
+    imageRepo.save(f1.id, hash1, bytes1)
     imageRepo.truncate()
-    imageRepo.get(f1.id) shouldBe None
-    imageRepo.get(f2.id) shouldBe None
+    imageRepo.getImage(f1.id) shouldBe None
   }
 }

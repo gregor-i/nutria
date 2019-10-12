@@ -1,4 +1,4 @@
-@(fractals: Seq[(repo.FractalRow, Boolean)])
+@(fractals: Seq[repo.FractalRow])
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +23,7 @@
             <th>Type</th>
             <th></th>
         </tr>
-        @for((fractal, hasImage) <- fractals){
+        @for(fractal <- fractals){
             <tr>
                 <td>
                     @{fractal.id}
