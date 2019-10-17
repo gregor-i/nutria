@@ -29,7 +29,9 @@ object LibraryUi {
         )(),
         common.RenderEditFractalEntity(
           fractal = fractal.entity,
+          currentTab = state.tab,
           lens = LenseUtils.lookedUp(fractal.entity, LibraryState.editOptional.composeLens(FractalEntityWithId.entity).asSetter),
+          lensTab = LibraryState.tab,
           footer = Buttons.group(
             Buttons("Explore", Images.explore, Snabbdom.event { _ =>
               update(ExplorerState(fractalEntity = fractal.entity))

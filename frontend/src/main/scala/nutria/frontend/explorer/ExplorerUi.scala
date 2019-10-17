@@ -4,7 +4,7 @@ import nutria.core.FractalEntityWithId
 import nutria.frontend.common.{Buttons, CanvasHooks, Images}
 import nutria.frontend.shaderBuilder.FractalRenderer
 import nutria.frontend.util.LenseUtils
-import nutria.frontend.{ExplorerState, NutriaService, NutriaState, common}
+import nutria.frontend.{ExplorerState, General, LibraryState, NutriaService, NutriaState, common}
 import org.scalajs.dom
 import org.scalajs.dom.MouseEvent
 import org.scalajs.dom.raw.HTMLElement
@@ -52,7 +52,9 @@ object ExplorerUi {
         )(),
         common.RenderEditFractalEntity(
           fractal = fractal,
+          currentTab = General,
           lens = LenseUtils.lookedUp(fractal, ExplorerState.editOptional.asSetter),
+          lensTab = ExplorerState.tab,
           footer = Buttons.group(
             Buttons("Accept", Images.check, Snabbdom.event { _ =>
               update(state.copy(fractalEntity = fractal, edit = None))

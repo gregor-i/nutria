@@ -21,7 +21,7 @@ lazy val service = project.in(file("service"))
     libraryDependencies += "org.postgresql" % "postgresql" % "42.2.8",
     libraryDependencies += evolutions,
     libraryDependencies += jdbc,
-    libraryDependencies += "org.playframework.anorm" %% "anorm" % "2.6.4",
+    libraryDependencies += "org.playframework.anorm" %% "anorm" % "2.6.5",
     libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % Test,
   )
   .enablePlugins(EmbeddedPostgresPlugin)

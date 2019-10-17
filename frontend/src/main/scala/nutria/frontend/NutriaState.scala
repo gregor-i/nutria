@@ -15,10 +15,12 @@ case class ErrorState(message: String) extends NutriaState
 
 case class ExplorerState(fractalEntity: FractalEntity,
                          edit: Option[FractalEntity] = None,
+                         tab: Tab = Tab.default,
                          saveProcess: Option[Future[FractalEntity]] = None) extends NutriaState
 
 case class LibraryState(fractals: Vector[FractalEntityWithId],
-                        edit: Option[FractalEntityWithId] = None) extends NutriaState
+                        edit: Option[FractalEntityWithId] = None,
+                        tab: Tab = Tab.default) extends NutriaState
 
 
 object ExplorerState {
@@ -26,10 +28,12 @@ object ExplorerState {
   val edit: Lens[ExplorerState, Option[FractalEntity]] = GenLens[ExplorerState](_.edit)
   val editOptional: Optional[ExplorerState, FractalEntity] = edit.composePrism(monocle.std.option.some)
   val viewport: Lens[ExplorerState, Viewport] = ExplorerState.fractalEntity.composeLens(FractalEntity.view)
+  val tab: Lens[ExplorerState, Tab] = GenLens[ExplorerState](_.tab)
 }
 
 object LibraryState {
   val editOptional: Optional[LibraryState, FractalEntityWithId] = GenLens[LibraryState](_.edit).composePrism(monocle.std.option.some)
+  val tab: Lens[LibraryState, Tab] = GenLens[LibraryState](_.tab)
 }
 
 object NutriaState extends CirceCodex {

@@ -196,7 +196,7 @@ object Form {
           events = Seq("change" -> Snabbdom.event { event => onChange(event.target.asInstanceOf[HTMLSelectElement].value) })
         )(
           options.map(opt => h("option",
-            attrs = Seq("selected" -> (opt == value).toString)
+            attrs = if(opt == value) Seq("selected" -> "") else Seq.empty
           )(opt)) :_*
         )
       )

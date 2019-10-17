@@ -1,9 +1,10 @@
 package snabbdom
 
 import org.scalajs.dom.Event
+import snabbdom.SnabbdomNative.Child
 
 import scala.scalajs.js
-import scala.scalajs.js.Dictionary
+import scala.scalajs.js.{Dictionary, |}
 
 object Snabbdom {
   def init(classModule: Boolean = false,
@@ -34,7 +35,7 @@ object Snabbdom {
         events: Seq[(String, SnabbdomNative.Eventlistener)] = Seq.empty,
         hooks: Seq[(String, SnabbdomNative.Hook)] = Seq.empty
        )(
-         children: SnabbdomNative.Child*
+         children: (Child | Seq[Child])*
        ): VNode = {
 
     SnabbdomNative.h(tag = tag,
@@ -48,7 +49,10 @@ object Snabbdom {
         on = Dictionary(events: _*),
         hook = Dictionary(hooks: _*)
       ),
-      js.Array(children: _*))
+      js.Array(children.flatMap[Child]{
+        case seq: Seq[_] => seq.asInstanceOf[Seq[Child]]
+        case elem => Seq(elem).asInstanceOf[Seq[Child]]
+      }: _*))
   }
 
   def event(f: Event => Unit): SnabbdomNative.Eventlistener = f: js.Function1[Event, Unit]

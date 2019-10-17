@@ -26,7 +26,9 @@ object Main {
         for {
           fractals <- NutriaService.loadFractals()
           edit = queryParams.get("details").flatMap(d => fractals.find(_.id == d))
-        } yield LibraryState(fractals = fractals, edit = edit)
+          tab = queryParams.get("tab").flatMap(Tab.fromString).getOrElse(Tab.default)
+        } yield LibraryState(fractals = fractals, edit = edit, tab = tab)
+
       case s"/explorer" =>
         Future.successful {
           (for {
@@ -35,9 +37,11 @@ object Main {
           } yield ExplorerState(fractal)
             ).getOrElse(ErrorState("Query Parameter is invalid"))
         }
+
       case "/admin" =>
         Admin.setup()
         Future.failed(new Exception)
+
       case _ =>
         Future.successful{
           ErrorState("Unkown url")
