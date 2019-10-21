@@ -5,7 +5,7 @@ import nutria.core._
 import nutria.frontend._
 import nutria.frontend.util.LenseUtils
 import snabbdom.Snabbdom.h
-import snabbdom.VNode
+import snabbdom.{Snabbdom, VNode}
 
 object RenderEditFractalEntity {
   def apply[A](fractal: FractalEntity, currentTab: Tab, lens: Lens[A, FractalEntity], lensTab: Lens[A, Tab], footer: VNode*)
@@ -40,7 +40,7 @@ object RenderEditFractalEntity {
   private def snapshotsBody[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])
                               (implicit state: A, update: A => Unit) =
     List(
-      h("canvas",
+      h("canvas.fractal-tile",
         attrs = Seq(
           "width" -> Dimensions.thumbnailDimensions.scale(1.5).width.toString,
           "height" -> Dimensions.thumbnailDimensions.scale(1.5).height.toString,
@@ -48,6 +48,7 @@ object RenderEditFractalEntity {
         styles = Seq(
           "width" -> "100%"
         ),
+        events = Seq("click" -> Snabbdom.event(_ => update(ExplorerState(fractal).asInstanceOf[A]))), // todo: remove hacky cast
         hooks = CanvasHooks(fractal, resize = false)
       )()
     )

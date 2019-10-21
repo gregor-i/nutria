@@ -4,16 +4,6 @@ body{
     padding: 0px;
 }
 
-a{
-    color: #3273dc;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-a:hover{
-    color: #363636;
-}
-
 /* navbar */
 .top-bar {
     top: 0;
@@ -46,44 +36,25 @@ a:hover{
     margin: 8px;
 }
 
-.lobby-tile-list > article {
-    flex-grow : 1;
+.fractal-tile{
     box-shadow : rgba(0, 0, 0, 0.32) 8px 8px 8px 0px;
-    margin : 8px;
+    background : white;
+}
+
+.fractal-tile:hover{
+    box-shadow : rgba(0, 0, 0, 0.32) 8px 8px 8px 0px, hsl(217, 71%, 53%) 0px 0px 8px 2px;
     background : white;
 }
 
 
-.lobby-tile-list > article canvas,
+.lobby-tile-list > article {
+    flex-grow : 1;
+    margin : 8px;
+}
+
 .lobby-tile-list > article img {
     width : 100%;
     display : block;
-}
-
-.lobby-tile-list > article > form {
-    padding : 1.5rem;
-    border: 1px solid #dbdbdb;
-}
-
-.lobby-tile-list > article > footer {
-    align-items : stretch;
-    display : flex;
-    border-top : 1px solid #dbdbdb;
-}
-
-.lobby-tile-list > article > footer > a {
-    align-items : center;
-    display : flex;
-    flex-basis : 0;
-    flex-grow : 1;
-    flex-shrink : 0;
-    justify-content : center;
-    padding : .75rem;
-    border : 1px solid #dbdbdb;
-}
-
-.lobby-tile-list > article > footer > a:not(:last-child) {
-    border-right : 0px solid #dbdbdb;
 }
 
 .lobby-tile-list > .dummy-tile {

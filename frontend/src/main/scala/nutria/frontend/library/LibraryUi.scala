@@ -4,7 +4,7 @@ import nutria.core._
 import nutria.core.viewport.Dimensions
 import nutria.frontend.common.{Buttons, Images}
 import nutria.frontend.util.LenseUtils
-import nutria.frontend.{ExplorerState, LibraryState, NutriaState, common}
+import nutria.frontend.{ExplorerState, LibraryState, NutriaService, NutriaState, common}
 import snabbdom.Snabbdom.h
 import snabbdom.{Snabbdom, VNode}
 
@@ -34,19 +34,16 @@ object LibraryUi {
           lens = LenseUtils.lookedUp(fractal.entity, LibraryState.editOptional.composeLens(FractalEntityWithId.entity).asSetter),
           lensTab = LibraryState.tab,
           footer = Buttons.group(
-            Buttons("Explore", Images.explore, Snabbdom.event { _ =>
-              update(ExplorerState(fractalEntity = fractal.entity))
-            }, `class` = ".is-primary"),
-            Buttons("Cancel", Images.cancel, Snabbdom.event { _ =>
+            Buttons("Apply Changes", Images.upload, Snabbdom.event { _ =>
+              org.scalajs.dom.window.alert("currently disabled")
+            }, `class` = ".is-primary", disabled = true),
+
+            Buttons("Delete", Images.delete, Snabbdom.event { _ =>
+              org.scalajs.dom.window.alert("currently disabled")
+            }, `class` = ".is-danger", disabled = true),
+            Buttons("Close", Images.cancel, Snabbdom.event { _ =>
               update(state.copy(edit = None))
             })
-            /*Buttons.delete(
-              attrs.className := "button is-danger",
-              events.onClick := (() => {
-                NutriaService.delete(fractal.id)
-                  .foreach(newFractals => update(state.copy(programs = newFractals, edit = None)))
-              })
-            )*/
           )
         )
       )
@@ -54,7 +51,7 @@ object LibraryUi {
 
   def renderProgramTile(fractal: FractalEntityWithId)
                        (implicit state: LibraryState, update: NutriaState => Unit): VNode =
-    h("article",
+    h("article.fractal-tile",
       attrs = Seq("title" -> fractal.entity.description),
       events = Seq("click" -> Snabbdom.event(_ => update(state.copy(edit = Some(fractal)))))
     )(
