@@ -9,16 +9,19 @@ import nutria.core.viewport.DefaultViewport
 
 
 @monocle.macros.Lenses()
-case class FractalEntity(program: FractalProgram,
+case class FractalEntity(title: String = "",
+                         program: FractalProgram,
                          view: Viewport = DefaultViewport.defaultViewport,
                          description: String = "",
                          reference: List[String] = List.empty,
-                         antiAliase: Int Refined Positive = refineMV(2)
+                         antiAliase: Int Refined Positive = refineMV(1)
                         )
 
 
 object FractalEntity extends CirceCodex {
   def id(fractalEntity: FractalEntity): String = fractalEntity.hashCode().toHexString.padTo(8, '0')
+
+  implicit val ordering: Ordering[FractalEntity] = FractalProgram.ordering.on(_.program)
 
   implicit val codec: Codec[FractalEntity] = semiauto.deriveConfiguredCodec
 }
@@ -28,6 +31,8 @@ case class FractalEntityWithId(id: String,
                                entity: FractalEntity)
 
 object FractalEntityWithId extends CirceCodex {
+  implicit val ordering: Ordering[FractalEntityWithId] = FractalProgram.ordering.on(_.entity.program)
+
   implicit val codec: Codec[FractalEntityWithId] = Codec.from(
     decodeA = Decoder[FractalEntityWithId] { json =>
       for {

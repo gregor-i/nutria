@@ -12,7 +12,7 @@ class SystemFractalsSpec extends FunSuite {
 
   def write(fractals: Vector[FractalEntity]): Unit = {
     val fw = new FileWriter("conf/systemfractals.json")
-    fw.append(fractals.asJson.spaces2SortKeys)
+    fw.append(fractals.sorted.asJson.spaces2SortKeys)
     fw.close()
   }
 

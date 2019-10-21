@@ -13,12 +13,13 @@
 
     <button class="button is-primary" onclick="window.insertSystemFractals()">Insert system fractals</button>
     <button class="button is-primary" onclick="window.putAllFractalImages()">Render all fractal images</button>
-    <button class="button is-warning" onclick="window.truncateImages()">Truncate Images</button>
+    <button class="button is-warning" onclick="window.truncateFractals()">Truncate Fractals</button>
     <button class="button is-warning" onclick="window.cleanFractals()">Delete not parsable fractals</button>
 
     <table class="table">
         <tr>
             <th>Id</th>
+            <th>Title</th>
             <th>Image</th>
             <th>Type</th>
             <th></th>
@@ -29,12 +30,18 @@
                     @{fractal.id}
                 </td>
                 <td>
+                    @{fractal.maybeFractal match{
+                    case None => "not parsable"
+                    case Some(fractal) => fractal.title
+                    }}
+                </td>
+                <td>
                     <img src="/api/fractals/@{fractal.id}/image" style="width:80px; height: 45px;" />
                 </td>
                 <td>
                     @{fractal.maybeFractal match{
                         case None => "not parsable"
-                        case Some(fractal) => fractal.program.toString
+                        case Some(fractal) => fractal.program.getClass.getSimpleName
                     }}
                 </td>
                 <td>

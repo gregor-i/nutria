@@ -21,7 +21,7 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
     Ok {
       fractalRepo.list()
         .collect { case FractalRow(id, Some(entity)) => FractalEntityWithId(id, entity) }
-        .sortBy(_.entity.program)
+        .sorted
         .asJson
     }
   }

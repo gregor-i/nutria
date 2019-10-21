@@ -24,11 +24,6 @@ class AdminController @Inject()(fractalRepo: FractalRepo,
     Ok
   }
 
-  def truncateImages() = Action{
-    fractalImageRepo.truncate()
-    Ok
-  }
-
   def cleanFractals() = Action{
     fractalRepo.list()
       .collect{
@@ -36,6 +31,11 @@ class AdminController @Inject()(fractalRepo: FractalRepo,
         case FractalRow(id, Some(fractalEntity)) if id != FractalEntity.id(fractalEntity) => id
       }
       .foreach(fractalRepo.delete)
+    Ok
+  }
+
+  def truncateFractals = Action {
+    fractalRepo.list().map(_.id).foreach(fractalRepo.delete)
     Ok
   }
 

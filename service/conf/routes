@@ -9,7 +9,7 @@ PUT           /api/fractals/:id/image        controller.FractalController.putIma
 
 # Admin
 GET           /admin                         controller.AdminController.ui()
-POST          /admin/truncate-images         controller.AdminController.truncateImages()
+POST          /admin/truncate-fractals       controller.AdminController.truncateFractals()
 POST          /admin/clean-fractals          controller.AdminController.cleanFractals()
 POST          /admin/insert-system-fractals  controller.AdminController.insertSystemFractals()
 POST          /admin/delete-fractal/:id      controller.AdminController.deleteFractal(id : String)

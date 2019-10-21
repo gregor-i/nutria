@@ -11,8 +11,10 @@ object RenderEditFractalEntity {
   def apply[A](fractal: FractalEntity, currentTab: Tab, lens: Lens[A, FractalEntity], lensTab: Lens[A, Tab], footer: VNode*)
               (implicit state: A, update: A => Unit): VNode = {
     h("div.modal-card")(
-      h("header.modal-card-head", styles = Seq("padding" -> "0"))(
-        header(fractal, lens)
+      h("header.modal-card-head")(
+        h("p.modal-card-title")(
+          if (fractal.title.trim.isEmpty) "<no title given>" else fractal.title
+        )
       ),
       h("section.modal-card-body", styles = Seq("padding-top" -> "0"))(
         h("div.tabs.is-centered.is-fullwidth")(h("ul")(
@@ -38,7 +40,16 @@ object RenderEditFractalEntity {
   private def snapshotsBody[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])
                               (implicit state: A, update: A => Unit) =
     List(
-      h("span")("Snapshots")
+      h("canvas",
+        attrs = Seq(
+          "width" -> Dimensions.thumbnailDimensions.scale(1.5).width.toString,
+          "height" -> Dimensions.thumbnailDimensions.scale(1.5).height.toString,
+        ),
+        styles = Seq(
+          "width" -> "100%"
+        ),
+        hooks = CanvasHooks(fractal, resize = false)
+      )()
     )
 
   private def parametersBody[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])
@@ -108,7 +119,7 @@ object RenderEditFractalEntity {
         }
       )
     ) ++ (fractal.program match {
-      case f:FreestyleProgram =>
+      case f: FreestyleProgram =>
         val lensFractal = lens composeLens FractalEntity.program composeLens LenseUtils.lookedUp(f, FractalProgram.freestyleProgram.asSetter)
         Seq(
           Form.mulitlineStringInput("template", lensFractal composeLens FreestyleProgram.code),
@@ -120,22 +131,10 @@ object RenderEditFractalEntity {
   private def generalBody[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])
                             (implicit state: A, update: A => Unit) =
     Seq(
-      Form.stringInput("description", lens composeLens FractalEntity.description),
-      Form.stringInput("reference", lens composeLens FractalEntity.reference composeIso Iso[List[String], String](_.mkString(" "))(_.split("\\s").filter(_.nonEmpty).toList)),
-      Form.intInput("anti aliasing", lens composeLens FractalEntity.antiAliase),
+      Form.stringInput("Title", lens composeLens FractalEntity.title),
+      Form.stringInput("Description", lens composeLens FractalEntity.description),
+      Form.stringInput("References", lens composeLens FractalEntity.reference composeIso Iso[List[String], String](_.mkString(" "))(_.split("\\s").filter(_.nonEmpty).toList)),
+      Form.intInput("Anti Aliasing", lens composeLens FractalEntity.antiAliase),
     )
 
-
-  private def header[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])
-                       (implicit state: A, update: A => Unit): VNode =
-    h("canvas",
-      attrs = Seq(
-        "width" -> Dimensions.thumbnailDimensions.scale(1.5).width.toString,
-        "height" -> Dimensions.thumbnailDimensions.scale(1.5).height.toString,
-      ),
-      styles = Seq(
-        "width" -> "100%"
-      ),
-      hooks = CanvasHooks(fractal, resize = false)
-    )()
 }

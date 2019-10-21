@@ -15,7 +15,7 @@ object Admin {
     Untyped(dom.window).putFractalImage = putFractalImage
     Untyped(dom.window).putAllFractalImages = putAllFractalImages
     Untyped(dom.window).cleanFractals = cleanFractals
-    Untyped(dom.window).truncateImages = truncateImages
+    Untyped(dom.window).truncateFractals = truncateFractals
     Untyped(dom.window).insertSystemFractals = insertSystemFractals
     Untyped(dom.window).deleteFractal = deleteFractal
     println("Admin Setup completed")
@@ -67,8 +67,8 @@ object Admin {
     Ajax.post(url = "/admin/clean-fractals")
       .flatMap(_ => onFinished)
 
-  val truncateImages: Unit => Future[Unit] = _ =>
-    Ajax.post(url = "/admin/truncate-images")
+  val truncateFractals: Unit => Future[Unit] = _ =>
+    Ajax.post(url = "/admin/truncate-fractals")
       .flatMap(_ => onFinished)
 
   val insertSystemFractals: Unit => Future[Unit] = _ =>
