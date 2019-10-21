@@ -130,8 +130,8 @@ object RenderEditFractalEntity {
                        (implicit state: A, update: A => Unit): VNode =
     h("canvas",
       attrs = Seq(
-        "width" -> (400.0*1.5).toString,
-        "height" -> (225.0*1.5).toString,
+        "width" -> Dimensions.thumbnailDimensions.scale(1.5).width.toString,
+        "height" -> Dimensions.thumbnailDimensions.scale(1.5).height.toString,
       ),
       styles = Seq(
         "width" -> "100%"

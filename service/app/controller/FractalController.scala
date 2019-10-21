@@ -95,8 +95,8 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
       }
         .toOption
         .filter(_ != null)
-        .filter(_.getWidth == 400)
-        .filter(_.getHeight == 225)
+        .filter(_.getWidth == Dimensions.thumbnailDimensions.width)
+        .filter(_.getHeight == Dimensions.thumbnailDimensions.height)
         .toRight(BadRequest("request body is no valid image"))
 
       hash = Hasher(decodedBytes)

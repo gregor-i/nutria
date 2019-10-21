@@ -1,8 +1,9 @@
 package nutria.frontend.library
 
 import nutria.core._
+import nutria.core.viewport.Dimensions
 import nutria.frontend.common.{Buttons, Images}
-import nutria.frontend.util.{LenseUtils}
+import nutria.frontend.util.LenseUtils
 import nutria.frontend.{ExplorerState, LibraryState, NutriaState, common}
 import snabbdom.Snabbdom.h
 import snabbdom.{Snabbdom, VNode}
@@ -59,8 +60,8 @@ object LibraryUi {
     )(
       h("img",
         attrs = Seq(
-          "width" -> "400",
-          "height" -> "225",
+          "width" -> Dimensions.thumbnailDimensions.width.toString,
+          "height" -> Dimensions.thumbnailDimensions.height.toString,
           "src" -> s"/api/fractals/${fractal.id}/image"
         )
       )()
@@ -72,7 +73,7 @@ object LibraryUi {
       h("div")(
         h("canvas",
           attrs = Seq(
-            "width" -> "400",
+            "width" -> Dimensions.thumbnailDimensions.width.toString,
             "height" -> "0",
           ),
           styles = Seq(

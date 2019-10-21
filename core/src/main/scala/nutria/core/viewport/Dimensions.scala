@@ -9,3 +9,7 @@ trait HasDimensions {
   def width: Int = dimensions.width
   def height: Int = dimensions.height
 }
+
+object Dimensions{
+  val thumbnailDimensions = Dimensions(400, 225)
+}

@@ -2,6 +2,7 @@ package nutria.frontend
 
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, parser}
+import nutria.core.viewport.Dimensions
 import nutria.core.{FractalEntity, FractalEntityWithId}
 import nutria.frontend.shaderBuilder.FractalRenderer
 import nutria.frontend.util.Untyped
@@ -37,8 +38,8 @@ object NutriaService {
     for {
       canvas <- Future {
         val canvas = dom.document.createElement("canvas").asInstanceOf[Canvas]
-        canvas.setAttribute("width", "400")
-        canvas.setAttribute("height", "225")
+        canvas.setAttribute("width", Dimensions.thumbnailDimensions.width.toString)
+        canvas.setAttribute("height", Dimensions.thumbnailDimensions.height.toString)
         canvas
       }
       _ = FractalRenderer.render(canvas, fractal.entity, false)

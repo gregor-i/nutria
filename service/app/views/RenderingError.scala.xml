@@ -1,5 +1,7 @@
 @(error: String)
-<svg xmlns="http://www.w3.org/2000/svg" width="400" height="225">
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="@{nutria.core.viewport.Dimensions.thumbnailDimensions.width.toString}"
+     height="@{nutria.core.viewport.Dimensions.thumbnailDimensions.height.toString}">
     <rect width="100%" height="100%" fill="#fff"/>
     <path fill="none" d="M122-4.5h156v156H122v-156z"/>
     <path fill="gray"
