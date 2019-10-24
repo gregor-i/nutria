@@ -19,6 +19,7 @@ GET           /favicon.ico                   controller.UiController.asset(path 
 GET           /img/*path                     controller.UiController.asset(path: String, folder = "/public/img")
 GET           /js/*path                      controller.UiController.asset(path: String, folder = "/public/js")
 GET           /css/*path                     controller.UiController.asset(path: String, folder = "/public/css")
+GET           /fonts/*path                   controller.UiController.asset(path: String, folder = "/public/fonts")
 
 
 # Frontend

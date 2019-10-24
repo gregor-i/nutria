@@ -1,4 +1,22 @@
 {
-  "name": "nutria",
-  "version": "1.0.0"
+  "dependencies": {
+    "bulma": "^0.7.2",
+    "font-awesome": "^4.7.0",
+    "snabbdom": "^0.7.2"
+  },
+  "devDependencies": {
+    "browserify": "^16.2.3",
+    "clean-css-cli": "^4.2.1"
+  },
+  "scripts": {
+    "watch": "nodemon --watch frontend -e css,svg --exec \"npm run build\"",
+    "build": "npm run build-dependencies && npm run build-css && npm run build-fonts && npm run build-js ",
+    "build-js": "???",
+    "build-css": "cleancss frontend/src/main/css/*.css -o service/public/css/nutria.css",
+    "build-fonts": "???",
+    "cp": "npm run cp-bulma && npm run cp-snabbdom && npm run cp-fas",
+    "cp-bulma": "cp node_modules/bulma/css/bulma.min.css service/public/css/bulma.css",
+    "cp-fas" : "cp node_modules/font-awesome/css/font-awesome.min.css service/public/css/font-awesome.css && cp -r node_modules/font-awesome/fonts service/public",
+    "cp-snabbdom": "cp node_modules/snabbdom/dist/snabbdom.min.js service/public/js/snabbdom.js"
+  }
 }

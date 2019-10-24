@@ -1,3 +1,4 @@
+# java
 *.class
 *.log
 
@@ -5,12 +6,14 @@
 .cache
 .history
 .lib/
-dist/*
 target/
 lib_managed/
 src_managed/
 project/boot/
 project/plugins/project/
+
+# js
+node_modules/
 
 # Scala-IDE specific
 .scala_dependencies
@@ -19,6 +22,5 @@ project/plugins/project/
 *.iml
 
 service/public/js/*.js
-
-processor/**/*.png
-viewer/**/*.png
+service/public/css/*.css
+service/public/fonts/
