@@ -42,8 +42,8 @@ object RenderEditFractalEntity {
     List(
       h("canvas.fractal-tile",
         attrs = Seq(
-          "width" -> Dimensions.thumbnailDimensions.scale(1.5).width.toString,
-          "height" -> Dimensions.thumbnailDimensions.scale(1.5).height.toString,
+          "width" -> Dimensions.thumbnailDimensions.width.toString,
+          "height" -> Dimensions.thumbnailDimensions.height.toString,
         ),
         styles = Seq(
           "width" -> "100%"

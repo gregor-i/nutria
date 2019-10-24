@@ -1,4 +1,5 @@
 import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
+import scala.sys.process._
 
 // global settings
 version in ThisBuild := "0.0.1"
@@ -9,7 +10,7 @@ scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation", "-Ymacro-annotati
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("core"))
-  .settings(mathParser, scalaTestAndScalaCheck, spire, circe, monocle, refinedTypes)
+  .settings(mathParser, scalaTestAndScalaCheck, circe, monocle, refinedTypes)
 
 lazy val service = project.in(file("service"))
   .dependsOn(core.jvm)
@@ -32,27 +33,22 @@ val frontend = project.in(file("frontend"))
   .enablePlugins(ScalaJSPlugin)
   .settings(scalacOptions += "-P:scalajs:sjsDefinedByDefault")
   .settings(scalaJSUseMainModuleInitializer := true)
-  .enablePlugins(ScalaJSBundlerPlugin)
-  .settings(skip in packageJSDependencies := false)
+  .settings(skip in packageJSDependencies := true)
   .settings(emitSourceMaps := false)
+  .settings(scalaJSModuleKind := ModuleKind.CommonJSModule)
   .settings(
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.7",
-    npmDependencies in Compile += "snabbdom" -> "0.7.0"
-  )
-  .settings(scalaTestAndScalaCheck, mathParser, circe)
-  .settings(
+    scalaTestAndScalaCheck,
+    mathParser,
+    circe,
     libraryDependencies += "io.circe" %%% "not-java-time" % "0.2.0"
   )
 
 val integration = taskKey[Unit]("build the frontend and copy the results into service")
 integration in frontend := {
-  val frontendJs: Seq[Attributed[sbt.File]] = (frontend / Compile / fastOptJS / webpack).value
-  require(frontendJs.size == 1, "expected only a single js file")
-  IO.copyFile(
-    sourceFile = frontendJs.head.data,
-    targetFile = (baseDirectory in service).value / "public" / "js" / "nutria.js"
-  )
-  streams.value.log.info("frontend integrated")
+  (frontend / Compile / fastOptJS).value
+  val exitCode = "npm run build-js".!
+  require(exitCode == 0)
 }
 
 compile in Compile := {
@@ -61,8 +57,6 @@ compile in Compile := {
 }
 
 // libraries
-def spire = libraryDependencies += "org.typelevel" %%% "spire" % "0.16.2"
-
 def scalaTestAndScalaCheck =
   libraryDependencies ++= Seq(
     "org.scalatest" %%% "scalatest" % "3.0.8" % Test,

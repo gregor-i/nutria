@@ -1,11 +1,9 @@
 package nutria.frontend
 
-import nutria.core.viewport.Dimensions
-import nutria.frontend.shaderBuilder.FractalRenderer
+import nutria.core.FractalEntityWithId
 import nutria.frontend.util.Untyped
 import org.scalajs.dom
 import org.scalajs.dom.ext.Ajax
-import org.scalajs.dom.html.Canvas
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -22,43 +20,18 @@ object Admin {
   }
 
   val putFractalImage: String => Future[Unit] = (fractalId: String) =>
+
     for {
       fractal <- NutriaService.loadFractal(fractalId)
-      canvas <- Future {
-        val canvas = dom.document.createElement("canvas").asInstanceOf[Canvas]
-        canvas.setAttribute("width", Dimensions.thumbnailDimensions.width.toString)
-        canvas.setAttribute("height", Dimensions.thumbnailDimensions.height.toString)
-        canvas
-      }
-      _ = FractalRenderer.render(canvas, fractal, false)
-      url = Untyped(canvas).toDataURL("image/png").asInstanceOf[String]
-      _ <- Ajax.put(
-        url = s"/api/fractals/${fractalId}/image",
-        headers = Map("Content-Type" -> "image/png"),
-        data = url.stripPrefix("data:image/png;base64,")
-      )
+      _ <- NutriaService.saveImage(FractalEntityWithId(fractalId, fractal))
       _ <- onFinished
     } yield ()
 
   val putAllFractalImages: Unit => Future[Unit] = _ =>
     for {
       fractals <- NutriaService.loadFractals()
-      canvas <- Future {
-        val canvas = dom.document.createElement("canvas").asInstanceOf[Canvas]
-        canvas.setAttribute("width", Dimensions.thumbnailDimensions.width.toString)
-        canvas.setAttribute("height", Dimensions.thumbnailDimensions.height.toString)
-        canvas
-      }
       _ <- Future.sequence {
-        for {
-          fractal <- fractals
-          _ = FractalRenderer.render(canvas, fractal.entity, false)
-          url = Untyped(canvas).toDataURL("image/png").asInstanceOf[String]
-        } yield Ajax.put(
-          url = s"/api/fractals/${fractal.id}/image",
-          headers = Map("Content-Type" -> "image/png"),
-          data = url.stripPrefix("data:image/png;base64,")
-        )
+        fractals.map(NutriaService.saveImage)
       }
       _ <- onFinished
     } yield ()

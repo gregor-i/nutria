@@ -2,15 +2,10 @@ package nutria.frontend
 
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, parser}
-import nutria.core.viewport.Dimensions
 import nutria.core.{FractalEntity, FractalEntityWithId}
-import nutria.frontend.shaderBuilder.FractalRenderer
-import nutria.frontend.util.Untyped
-import org.scalajs.dom
 import org.scalajs.dom.XMLHttpRequest
 import org.scalajs.dom.ext.Ajax
 import org.scalajs.dom.ext.Ajax.InputData
-import org.scalajs.dom.html.Canvas
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -35,21 +30,13 @@ object NutriaService {
       .flatMap(parse[FractalEntityWithId])
 
   def saveImage(fractal: FractalEntityWithId): Future[Unit] =
-    for {
-      canvas <- Future {
-        val canvas = dom.document.createElement("canvas").asInstanceOf[Canvas]
-        canvas.setAttribute("width", Dimensions.thumbnailDimensions.width.toString)
-        canvas.setAttribute("height", Dimensions.thumbnailDimensions.height.toString)
-        canvas
-      }
-      _ = FractalRenderer.render(canvas, fractal.entity, false)
-      url = Untyped(canvas).toDataURL("image/png").asInstanceOf[String]
-      _ <- Ajax.put(
-        url = s"/api/fractals/${fractal.id}/image",
-        headers = Map("Content-Type" -> "image/png"),
-        data = url.stripPrefix("data:image/png;base64,")
-      ).flatMap(check(200))
-    } yield ()
+    Ajax.put(
+      url = s"/api/fractals/${fractal.id}/image",
+      headers = Map("Content-Type" -> "image/png"),
+      data = RenderThumbnailImage(fractal.entity)
+    )
+      .flatMap(check(200))
+      .map(_ => ())
 
   def delete(fractalId: String): Future[Vector[FractalEntityWithId]] =
     Ajax.delete(url = s"/api/fractals/${fractalId}")

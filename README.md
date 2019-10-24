@@ -23,7 +23,9 @@ It also contains to code to generate webgl shaders to render fractals.
 [sbt](http://www.scala-sbt.org/) and [npm](https://www.npmjs.com/) are required for building.
 
 ```bash
-# compiling frontend:
+# frontend compilation
+npm install
+npm run build
 sbt frontend/integration
 
 # starting backend:
@@ -36,7 +38,3 @@ sbt service/run
 ## links:
 - https://en.wikibooks.org/wiki/Fractals/Iterations_in_the_complex_plane/Mandelbrot_set/centers
 - http://cosinekitty.com/mandel_orbits.html
-
-### Assets:
-- css: https://bulma.io/documentation/form/general/
-- icons: https://material.io/resources/icons/?style=outline
