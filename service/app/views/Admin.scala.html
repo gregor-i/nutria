@@ -9,7 +9,6 @@
     <h1 class="subtitle">@{fractals.size} Fractals</h1>
 
     <button class="button is-primary" onclick="window.insertSystemFractals()">Insert system fractals</button>
-    <button class="button is-primary" onclick="window.putAllFractalImages()">Render all fractal images</button>
     <button class="button is-warning" onclick="window.truncateFractals()">Truncate Fractals</button>
     <button class="button is-warning" onclick="window.cleanFractals()">Delete not parsable fractals</button>
 
@@ -17,7 +16,6 @@
         <tr>
             <th>Id</th>
             <th>Title</th>
-            <th>Image</th>
             <th>Type</th>
             <th></th>
         </tr>
@@ -33,16 +31,12 @@
                     }}
                 </td>
                 <td>
-                    <img src="/api/fractals/@{fractal.id}/image" style="width:80px; height: 45px;" />
-                </td>
-                <td>
                     @{fractal.maybeFractal match{
                         case None => "not parsable"
                         case Some(fractal) => fractal.program.getClass.getSimpleName
                     }}
                 </td>
                 <td>
-                    <button class="button is-primary" onclick="window.putFractalImage('@{fractal.id}')">Render Image</button>
                     <button class="button is-warning" onclick="window.deleteFractal('@{fractal.id}')">Delete</button>
                 </td>
             </tr>

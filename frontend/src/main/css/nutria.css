@@ -52,9 +52,12 @@ body{
     margin : 8px;
 }
 
-.lobby-tile-list > article img {
+.fractal-tile img,
+.fractal-tile canvas{
     width : 100%;
     display : block;
+    background: url('/img/rendering.svg');
+    background-size: contain;
 }
 
 .lobby-tile-list > .dummy-tile {

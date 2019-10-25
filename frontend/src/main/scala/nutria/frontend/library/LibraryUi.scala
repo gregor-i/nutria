@@ -2,9 +2,9 @@ package nutria.frontend.library
 
 import nutria.core._
 import nutria.core.viewport.Dimensions
-import nutria.frontend.common.{Buttons, Images}
+import nutria.frontend.common.{Buttons, CanvasHooks, FractalImage, Images}
 import nutria.frontend.util.LenseUtils
-import nutria.frontend.{ExplorerState, LibraryState, NutriaService, NutriaState, common}
+import nutria.frontend.{LibraryState, NutriaState, common}
 import snabbdom.Snabbdom.h
 import snabbdom.{Snabbdom, VNode}
 
@@ -55,13 +55,7 @@ object LibraryUi {
       attrs = Seq("title" -> fractal.entity.description),
       events = Seq("click" -> Snabbdom.event(_ => update(state.copy(edit = Some(fractal)))))
     )(
-      h("img",
-        attrs = Seq(
-          "width" -> Dimensions.thumbnailDimensions.width.toString,
-          "height" -> Dimensions.thumbnailDimensions.height.toString,
-          "src" -> s"/api/fractals/${fractal.id}/image"
-        )
-      )()
+      FractalImage(fractal.entity, Dimensions.thumbnailDimensions)
     )
 
 

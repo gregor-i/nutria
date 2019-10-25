@@ -29,15 +29,6 @@ object NutriaService {
       .flatMap(check(201))
       .flatMap(parse[FractalEntityWithId])
 
-  def saveImage(fractal: FractalEntityWithId): Future[Unit] =
-    Ajax.put(
-      url = s"/api/fractals/${fractal.id}/image",
-      headers = Map("Content-Type" -> "image/png"),
-      data = RenderThumbnailImage(fractal.entity)
-    )
-      .flatMap(check(200))
-      .map(_ => ())
-
   def delete(fractalId: String): Future[Vector[FractalEntityWithId]] =
     Ajax.delete(url = s"/api/fractals/${fractalId}")
       .flatMap(check(200))

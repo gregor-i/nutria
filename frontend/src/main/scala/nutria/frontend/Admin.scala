@@ -10,31 +10,12 @@ import scala.concurrent.Future
 
 object Admin {
   def setup(): Unit = {
-    Untyped(dom.window).putFractalImage = putFractalImage
-    Untyped(dom.window).putAllFractalImages = putAllFractalImages
     Untyped(dom.window).cleanFractals = cleanFractals
     Untyped(dom.window).truncateFractals = truncateFractals
     Untyped(dom.window).insertSystemFractals = insertSystemFractals
     Untyped(dom.window).deleteFractal = deleteFractal
     println("Admin Setup completed")
   }
-
-  val putFractalImage: String => Future[Unit] = (fractalId: String) =>
-
-    for {
-      fractal <- NutriaService.loadFractal(fractalId)
-      _ <- NutriaService.saveImage(FractalEntityWithId(fractalId, fractal))
-      _ <- onFinished
-    } yield ()
-
-  val putAllFractalImages: Unit => Future[Unit] = _ =>
-    for {
-      fractals <- NutriaService.loadFractals()
-      _ <- Future.sequence {
-        fractals.map(NutriaService.saveImage)
-      }
-      _ <- onFinished
-    } yield ()
 
   val cleanFractals: Unit => Future[Unit] = _ =>
     Ajax.post(url = "/admin/clean-fractals")

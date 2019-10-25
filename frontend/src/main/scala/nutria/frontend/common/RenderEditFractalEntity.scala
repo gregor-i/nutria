@@ -40,17 +40,9 @@ object RenderEditFractalEntity {
   private def snapshotsBody[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])
                               (implicit state: A, update: A => Unit) =
     List(
-      h("canvas.fractal-tile",
-        attrs = Seq(
-          "width" -> Dimensions.thumbnailDimensions.width.toString,
-          "height" -> Dimensions.thumbnailDimensions.height.toString,
-        ),
-        styles = Seq(
-          "width" -> "100%"
-        ),
+      h("article.fractal-tile",
         events = Seq("click" -> Snabbdom.event(_ => update(ExplorerState(fractal).asInstanceOf[A]))), // todo: remove hacky cast
-        hooks = CanvasHooks(fractal, resize = false)
-      )()
+      )(FractalImage(fractal, Dimensions.thumbnailDimensions))
     )
 
   private def parametersBody[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])

@@ -1,17 +1,12 @@
 package nutria.frontend.explorer
 
-import nutria.core.FractalEntityWithId
 import nutria.frontend.common.{Buttons, CanvasHooks, Images}
 import nutria.frontend.shaderBuilder.FractalRenderer
 import nutria.frontend.util.LenseUtils
-import nutria.frontend.{ExplorerState, General, LibraryState, NutriaService, NutriaState, common}
+import nutria.frontend._
 import org.scalajs.dom
-import org.scalajs.dom.MouseEvent
-import org.scalajs.dom.raw.HTMLElement
 import snabbdom.Snabbdom.h
 import snabbdom.{Snabbdom, VNode}
-
-import scala.concurrent.ExecutionContext.Implicits.global
 
 object ExplorerUi {
   def render(implicit state: ExplorerState, update: NutriaState => Unit): VNode =
@@ -29,12 +24,8 @@ object ExplorerUi {
       Buttons("Edit", Images.edit, Snabbdom.event { _ =>
         update(state.copy(edit = Some(state.fractalEntity)))
       }, `class` = ".is-primary"),
-      Buttons("Save", Images.upload, Snabbdom.specificEvent[MouseEvent] { event =>
-        for{
-          saved <- NutriaService.save(state.fractalEntity)
-          _ <- NutriaService.saveImage(saved)
-          _ = dom.window.alert("successful saved")
-        } yield ()
+      Buttons("Save", Images.upload, Snabbdom.event { _ =>
+        NutriaService.save(state.fractalEntity)
       }),
       Buttons("Log Source", Images.info, Snabbdom.event { _ =>
         dom.console.log(FractalRenderer.fragmentShaderSource(state.fractalEntity.program, state.fractalEntity.antiAliase))
