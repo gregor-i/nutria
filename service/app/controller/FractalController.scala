@@ -5,9 +5,9 @@ import javax.inject.Inject
 import nutria.core._
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
-import repo.{FractalRepo, FractalRow}
+import repo.{CachedFractalRepo, FractalRow}
 
-class FractalController @Inject()(fractalRepo: FractalRepo) extends InjectedController with Circe {
+class FractalController @Inject()(fractalRepo: CachedFractalRepo) extends InjectedController with Circe {
 
   def listFractals() = Action {
     Ok {

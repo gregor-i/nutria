@@ -3,10 +3,10 @@ package module
 import akka.actor.ActorSystem
 import io.circe.parser
 import javax.inject.{Inject, Singleton}
-import nutria.core.{FractalEntity, FreestyleProgram, StringParameter}
+import nutria.core.FractalEntity
 import play.api.Logger
 import play.api.inject.{SimpleModule, bind}
-import repo.{FractalRepo, FractalRow}
+import repo.{CachedFractalRepo, FractalRow}
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
@@ -30,7 +30,7 @@ class SystemFractals {
     }
 }
 
-private class SetupSystemFractals @Inject()(repo: FractalRepo,
+private class SetupSystemFractals @Inject()(repo: CachedFractalRepo,
                                             systemFractals: SystemFractals,
                                             actorSystem: ActorSystem)
                                            (implicit ex: ExecutionContext) {

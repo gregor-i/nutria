@@ -5,9 +5,9 @@ import module.SystemFractals
 import nutria.core.FractalEntity
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
-import repo.{FractalRepo, FractalRow}
+import repo.{CachedFractalRepo, FractalRow}
 
-class AdminController @Inject()(fractalRepo: FractalRepo,
+class AdminController @Inject()(fractalRepo: CachedFractalRepo,
                                 systemFractals: SystemFractals
                                  ) extends InjectedController with Circe {
 

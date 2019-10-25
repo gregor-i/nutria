@@ -48,3 +48,24 @@ class FractalRepo @Inject()(db: Database) {
         .executeUpdate()
     }
 }
+
+@Singleton()
+class CachedFractalRepo @Inject()(repo:FractalRepo){
+  private var cached: List[FractalRow] = repo.list()
+
+  def get(id: String): Option[FractalRow] = cached.find(_.id == id)
+
+  def list(): List[FractalRow] = cached
+
+  def save(row: FractalRow): Unit = {
+    repo.save(row)
+    cached = repo.list()
+    ()
+  }
+
+  def delete(id: String): Unit ={
+    repo.delete(id)
+    cached = repo.list()
+    ()
+  }
+}
