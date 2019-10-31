@@ -43,7 +43,7 @@ object ExplorerUi {
         )(),
         common.RenderEditFractalEntity(
           fractal = fractal,
-          currentTab = General,
+          currentTab = state.tab,
           lens = LenseUtils.lookedUp(fractal, ExplorerState.editOptional.asSetter),
           lensTab = ExplorerState.tab,
           footer = Buttons.group(
