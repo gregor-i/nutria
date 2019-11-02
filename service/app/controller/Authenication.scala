@@ -3,28 +3,24 @@ package controller
 import io.circe.Json
 import io.circe.generic.auto._
 import io.lemonlabs.uri.Url
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
 import play.api.libs.circe.Circe
 import play.api.libs.ws.WSClient
 import play.api.mvc.InjectedController
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.chaining._
 
-
-@Singleton()
-class Authenication @Inject()(wsClient: WSClient, conf: Configuration)(implicit ex: ExecutionContext) extends InjectedController with Circe {
+class Authenication(clientId: String, clientSecret: String, callbackUrl: String, wsClient: WSClient)
+                   (implicit ex: ExecutionContext) extends InjectedController with Circe {
   // https://developers.google.com/identity/protocols/OAuth2WebServer
 
-  val clientId: String = conf.get[String]("auth.google.clientId")
-  val clientSecret: String = conf.get[String]("auth.google.clientSecret")
 
-  def requestTokenUrl(): String =
+  val requestTokenUrl: String =
     Url(scheme = "https", host = "accounts.google.com", path = "/o/oauth2/v2/auth")
       .addParam("client_id" -> clientId)
       .addParam("scope" -> "profile email")
       .addParam("response_type" -> "code")
-      .addParam("redirect_uri" -> "http://localhost:9000/auth/google")
+      .addParam("redirect_uri" -> callbackUrl)
       .toStringPunycode
 
   def getAccessToken(code: String): Future[AuthResponse] =
@@ -38,12 +34,10 @@ class Authenication @Inject()(wsClient: WSClient, conf: Configuration)(implicit 
       ))
       .filter(_.status == 200)
       .flatMap { response =>
-        println("https://oauth2.googleapis.com/token", response.body)
-
-        io.circe.parser.parse(response.body).flatMap(_.as[AuthResponse]) match {
-          case Right(json) => Future.successful(json)
-          case Left(failure) => Future.failed(failure)
-        }
+        io.circe.parser.parse(response.body)
+          .flatMap(_.as[AuthResponse])
+          .toTry
+          .pipe(Future.fromTry)
       }
 
   def getUserInfo(token: String): Future[Json] =
@@ -52,15 +46,14 @@ class Authenication @Inject()(wsClient: WSClient, conf: Configuration)(implicit 
       .execute()
       .filter(_.status == 200)
       .flatMap { response =>
-        io.circe.parser.parse(response.body) match {
-          case Right(json) => Future.successful(json)
-          case Left(failure) => Future.failed(failure)
-        }
+        io.circe.parser.parse(response.body)
+          .toTry
+          .pipe(Future.fromTry)
       }
 
 
   def authenticate() = Action { _ =>
-    Redirect(requestTokenUrl())
+    Redirect(requestTokenUrl)
   }
 
   def callback(provider: String) = Action.async { request =>
@@ -69,7 +62,8 @@ class Authenication @Inject()(wsClient: WSClient, conf: Configuration)(implicit 
         for {
           authResponse <- getAccessToken(code)
           userData <- getUserInfo(authResponse.access_token)
-        } yield Ok(userData.spaces4)
+          _ = println(userData)
+        } yield Redirect("/") //.withSession(userData.spaces4)
       case None => Future.successful(BadRequest)
     }
   }
