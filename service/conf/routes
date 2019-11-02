@@ -4,8 +4,8 @@ GET           /api/fractals/:id              controller.FractalController.getFra
 DELETE        /api/fractals/:id              controller.FractalController.deleteFractal(id: String)
 POST          /api/fractals                  controller.FractalController.postFractal()
 
-GET           /auth                          controller.Authenication.authenticate()
-GET           /auth/google                   controller.Authenication.callback(provider = "google")
+GET           /auth/google                   module.auth.AuthenticationController.authenticate()
+GET           /auth/logout                   module.auth.AuthenticationController.logout()
 
 # Admin
 GET           /admin                         controller.AdminController.ui()

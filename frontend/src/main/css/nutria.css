@@ -25,7 +25,7 @@ body{
     font-size: x-large;
 }
 
-.top-bar > div img {
+.top-bar > div > .brand-icon {
     margin : 0px 8px;
 }
 

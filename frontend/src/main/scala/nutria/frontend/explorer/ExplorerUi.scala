@@ -4,15 +4,16 @@ import nutria.frontend.common.{Buttons, CanvasHooks, Images}
 import nutria.frontend.shaderBuilder.FractalRenderer
 import nutria.frontend.util.LenseUtils
 import nutria.frontend._
+import nutria.frontend.shared.UserInfo
 import org.scalajs.dom
 import snabbdom.Snabbdom.h
 import snabbdom.{Snabbdom, VNode}
 
 object ExplorerUi {
-  def render(implicit state: ExplorerState, update: NutriaState => Unit): VNode =
+  def render(implicit state: ExplorerState, user: Option[UserInfo], update: NutriaState => Unit): VNode =
     h("body",
       key = "explorer")(
-      common.Header("Nutria Fractal Explorer")(state, update),
+      common.Header("Nutria Fractal Explorer", user)(state, update),
       renderActionBar(),
       renderCanvas,
       renderPopup().getOrElse[VNode](h("span", styles = Seq("display" -> "none"))())
