@@ -5,6 +5,7 @@ import nutria.core.FractalEntity
 import nutria.frontend.error.ErrorUi
 import nutria.frontend.explorer.ExplorerUi
 import nutria.frontend.library.LibraryUi
+import nutria.frontend.shared.DecodeCookie
 import nutria.frontend.util.SnabbdomApp
 import org.scalajs.dom
 import org.scalajs.dom.Element
@@ -38,13 +39,15 @@ class NutriaApp(container: Element, initialState: NutriaState) extends SnabbdomA
       case None => ()
     }
 
+    val user = DecodeCookie[shared.UserInfo]("user")
+
     val ui = state match {
       case exState: ExplorerState =>
-        ExplorerUi.render(exState, renderState)
+        ExplorerUi.render(exState, user, renderState)
       case libState: LibraryState =>
-        LibraryUi.render(libState, renderState)
+        LibraryUi.render(libState, user, renderState)
       case errorState: ErrorState =>
-        ErrorUi.render(errorState, renderState)
+        ErrorUi.render(errorState, user, renderState)
     }
 
     node = patch(node, ui)

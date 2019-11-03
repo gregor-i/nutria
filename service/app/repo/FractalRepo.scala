@@ -50,12 +50,17 @@ class FractalRepo @Inject()(db: Database) {
 }
 
 @Singleton()
-class CachedFractalRepo @Inject()(repo:FractalRepo){
-  private var cached: List[FractalRow] = repo.list()
+class CachedFractalRepo @Inject()(repo: FractalRepo) {
+  private var cached: List[FractalRow] = null
 
-  def get(id: String): Option[FractalRow] = cached.find(_.id == id)
+  def get(id: String): Option[FractalRow] =
+    list().find(_.id == id)
 
-  def list(): List[FractalRow] = cached
+  def list(): List[FractalRow] = {
+    if (cached == null)
+      cached = repo.list()
+    cached
+  }
 
   def save(row: FractalRow): Unit = {
     repo.save(row)
@@ -63,7 +68,7 @@ class CachedFractalRepo @Inject()(repo:FractalRepo){
     ()
   }
 
-  def delete(id: String): Unit ={
+  def delete(id: String): Unit = {
     repo.delete(id)
     cached = repo.list()
     ()

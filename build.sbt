@@ -17,7 +17,9 @@ lazy val service = project.in(file("service"))
   .settings(scalaTestAndScalaCheck, circe)
   .enablePlugins(PlayScala)
   .settings(
+    libraryDependencies += ws,
     libraryDependencies += guice,
+    libraryDependencies += "io.lemonlabs" %% "scala-uri" % "1.5.1",
     libraryDependencies += "com.dripower" %% "play-circe" % "2712.0",
     libraryDependencies += "org.postgresql" % "postgresql" % "42.2.8",
     libraryDependencies += evolutions,
