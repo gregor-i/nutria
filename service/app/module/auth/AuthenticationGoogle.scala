@@ -37,7 +37,7 @@ class AuthenticationGoogle @Inject()(conf: Configuration,
         "code" -> code,
         "client_id" -> clientId,
         "client_secret" -> clientSecret,
-        "redirect_uri" -> "http://localhost:9000/auth/google",
+        "redirect_uri" -> callbackUrl,
         "grant_type" -> "authorization_code"
       ))
       .pipe(checkStatus(200))
