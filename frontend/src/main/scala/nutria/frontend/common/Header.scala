@@ -38,7 +38,12 @@ object Header {
   private def loggedInActions(user: UserInfo) =
     h("div.buttons.has-addons")(
       h("a.button.is-outlined")(
-        h("span.icon")(h("img.is-rounded", attrs = Seq("src" -> user.picture))()),
+        h("span.icon")(
+          h("img",
+            attrs = Seq("src" -> user.picture),
+            styles = Seq("border-radius" -> "50%")
+          )()
+        ),
         h("span")(s"Profile")
       ),
       h("a.button.is-outlined", attrs = Seq("href" -> "/auth/logout"))(
