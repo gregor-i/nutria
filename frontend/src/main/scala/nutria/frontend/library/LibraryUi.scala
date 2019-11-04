@@ -3,14 +3,13 @@ package nutria.frontend.library
 import nutria.core._
 import nutria.core.viewport.Dimensions
 import nutria.frontend.common.{Buttons, CanvasHooks, FractalImage, Images}
-import nutria.frontend.shared.UserInfo
 import nutria.frontend.util.LenseUtils
 import nutria.frontend.{LibraryState, NutriaState, common}
 import snabbdom.Snabbdom.h
 import snabbdom.{Snabbdom, VNode}
 
 object LibraryUi {
-  def render(implicit state: LibraryState, user: Option[UserInfo], update: NutriaState => Unit): VNode = {
+  def render(implicit state: LibraryState, user: Option[User], update: NutriaState => Unit): VNode = {
     h(tag = "body",
       key = "library")(
       common.Header("Nutria Fractal Library", user)(state, update),

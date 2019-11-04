@@ -7,13 +7,15 @@ import play.api.Configuration
 import play.api.libs.circe.Circe
 import play.api.libs.ws.{WSClient, WSResponse}
 import play.api.mvc.{Cookie, InjectedController}
+import repo.UserRepo
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.chaining._
 // https://developers.google.com/identity/protocols/OAuth2WebServer
 @Singleton
 class AuthenticationGoogle @Inject()(conf: Configuration,
-                                     wsClient: WSClient)
+                                     wsClient: WSClient,
+                                     userRepo: UserRepo)
                                     (implicit ex: ExecutionContext)
   extends InjectedController
     with Circe
@@ -48,14 +50,14 @@ class AuthenticationGoogle @Inject()(conf: Configuration,
           .pipe(Future.fromTry)
       }
 
-  private def getUserInfo(token: String): Future[UserInfo] =
+  private def getUserInfo(token: String): Future[GoogleUserInfo] =
     wsClient.url("https://www.googleapis.com/oauth2/v2/userinfo")
       .withHttpHeaders("Authorization" -> s"Bearer $token")
       .execute()
       .pipe(checkStatus(200))
       .flatMap { response =>
         io.circe.parser.parse(response.body)
-          .flatMap(_.as[UserInfo])
+          .flatMap(_.as[GoogleUserInfo])
           .toTry
           .pipe(Future.fromTry)
       }
@@ -76,7 +78,8 @@ class AuthenticationGoogle @Inject()(conf: Configuration,
         for {
           authResponse <- getAccessToken(code)
           userData <- getUserInfo(authResponse.access_token)
-          userCookie = Cookie(name = "user", value = EncodeCookie(userData), httpOnly = false)
+          user = userRepo.upsertWithGoogleData(userData)
+          userCookie = Cookie(name = "user", value = EncodeCookie(user), httpOnly = false)
         } yield Redirect("/")
           .withCookies(userCookie)
           .bakeCookies()

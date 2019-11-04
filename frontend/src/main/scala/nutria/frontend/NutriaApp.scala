@@ -1,11 +1,10 @@
 package nutria.frontend
 
 import io.circe.syntax._
-import nutria.core.FractalEntity
+import nutria.core.{FractalEntity, User}
 import nutria.frontend.error.ErrorUi
 import nutria.frontend.explorer.ExplorerUi
 import nutria.frontend.library.LibraryUi
-import nutria.frontend.shared.DecodeCookie
 import nutria.frontend.util.SnabbdomApp
 import org.scalajs.dom
 import org.scalajs.dom.Element
@@ -39,7 +38,7 @@ class NutriaApp(container: Element, initialState: NutriaState) extends SnabbdomA
       case None => ()
     }
 
-    val user = DecodeCookie[shared.UserInfo]("user")
+    val user = DecodeCookie[User]("user")
 
     val ui = state match {
       case exState: ExplorerState =>

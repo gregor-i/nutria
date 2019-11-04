@@ -1,12 +1,12 @@
 package nutria.frontend.error
 
+import nutria.core.User
 import nutria.frontend._
-import nutria.frontend.shared.UserInfo
 import snabbdom.Snabbdom.h
 import snabbdom.VNode
 
 object ErrorUi {
-  def render(implicit state: ErrorState, user: Option[UserInfo], update: NutriaState => Unit): VNode =
+  def render(implicit state: ErrorState, user: Option[User], update: NutriaState => Unit): VNode =
     h("body",
       key = "error")(
       common.Header("Nutria Fractal", user)(state, update),

@@ -1,13 +1,13 @@
 package nutria.frontend.common
 
 import nutria.frontend.NutriaState
-import nutria.frontend.shared.UserInfo
+import nutria.core.User
 import org.scalajs.dom
 import snabbdom.Snabbdom.h
 import snabbdom.{Snabbdom, VNode}
 
 object Header {
-  def apply(pageTitle: String, user: Option[UserInfo])(implicit state: NutriaState, update: NutriaState => Unit): VNode =
+  def apply(pageTitle: String, user: Option[User])(implicit state: NutriaState, update: NutriaState => Unit): VNode =
     h("div.top-bar")(
       h("div")(
         brandIcon,
@@ -35,9 +35,9 @@ object Header {
       )
     )
 
-  private def loggedInActions(user: UserInfo) =
+  private def loggedInActions(user: User) =
     h("div.buttons.has-addons")(
-      h("a.button.is-outlined")(
+      h("a.button.is-outlined", events = Seq("click" -> Snabbdom.event{_ => println(user)}))(
         h("span.icon")(
           h("img",
             attrs = Seq("src" -> user.picture),

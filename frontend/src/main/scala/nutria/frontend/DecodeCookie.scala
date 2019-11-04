@@ -1,4 +1,4 @@
-package nutria.frontend.shared
+package nutria.frontend
 
 import org.scalajs.dom
 
