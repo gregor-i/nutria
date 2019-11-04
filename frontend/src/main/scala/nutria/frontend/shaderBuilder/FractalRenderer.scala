@@ -10,6 +10,7 @@ import org.scalajs.dom.html.Canvas
 import org.scalajs.dom.raw.{WebGLProgram, WebGLRenderingContext}
 
 import scala.scalajs.js
+import scala.scalajs.js.Dynamic
 import scala.scalajs.js.typedarray.Float32Array
 import scala.util.{Failure, Try}
 
@@ -18,7 +19,7 @@ object FractalRenderer {
   def render(canvas: Canvas, entity: FractalEntity, resize: Boolean): Boolean = {
     val viewport = entity.view
     val program = entity.program
-    val ctx = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
+    val ctx = canvas.getContext("webgl", Dynamic.literal(preserveDrawingBuffer = true)).asInstanceOf[WebGLRenderingContext]
 
     if (resize) {
       canvas.width = (canvas.clientWidth * dom.window.devicePixelRatio).toInt

@@ -30,7 +30,7 @@ private sealed trait Strategy {
 private object OffscrencanvasStrategy extends Strategy {
   private lazy val untypedWindow = Untyped(dom.window)
   private lazy val offscreenCanvas = Dynamic.newInstance(untypedWindow.OffscreenCanvas)(0, 0)
-  private lazy val webglCtx = Untyped(offscreenCanvas).getContext("webgl").asInstanceOf[WebGLRenderingContext]
+  private lazy val webglCtx = Untyped(offscreenCanvas).getContext("webgl", Dynamic.literal(preserveDrawingBuffer = true)).asInstanceOf[WebGLRenderingContext]
 
   override def render(fractalEntity: FractalEntity, dimensions: Dimensions): VNode =
     h("canvas",

@@ -108,6 +108,7 @@ object ExplorerEvents {
         }
       }
 
+//    fixme: use mousedown instead?
     Seq(
       "pointerdown" -> pointerDown,
       "pointermove" -> pointerMove,
