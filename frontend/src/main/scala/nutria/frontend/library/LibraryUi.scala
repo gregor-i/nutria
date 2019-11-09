@@ -15,7 +15,8 @@ object LibraryUi {
       common.Header("Nutria Fractal Library", user)(state, update),
       h("div.lobby-tile-list")(
         (state.fractals.map(renderProgramTile) ++ Seq.fill(5)(dummyTile) ++ renderPopup().toSeq): _*
-      )
+      ),
+      common.Footer()
     )
   }
 
