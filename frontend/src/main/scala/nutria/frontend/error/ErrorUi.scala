@@ -6,10 +6,10 @@ import snabbdom.Snabbdom.h
 import snabbdom.VNode
 
 object ErrorUi {
-  def render(implicit state: ErrorState, user: Option[User], update: NutriaState => Unit): VNode =
+  def render(implicit state: ErrorState, update: NutriaState => Unit): VNode =
     h("body",
       key = "error")(
-      common.Header("Nutria Fractal", user)(state, update),
+      common.Header("Nutria Fractal")(state, update),
       h("div.section")(
         h("article.message.is-danger")(
           h("div.message-body")(

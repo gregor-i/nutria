@@ -5,17 +5,33 @@ import javax.inject.Inject
 import nutria.core._
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
-import repo.{CachedFractalRepo, FractalRow}
+import repo.{FractalRepo, FractalRow}
 
-class FractalController @Inject()(fractalRepo: CachedFractalRepo) extends InjectedController with Circe {
+class FractalController @Inject()(fractalRepo: FractalRepo,
+                                  authenticator: Authenticator) extends InjectedController with Circe {
 
-  def listFractals() = Action {
+  def listPublicFractals() = Action {
     Ok {
-      fractalRepo.list()
-        .collect { case FractalRow(id, Some(entity)) => FractalEntityWithId(id, entity) }
+      fractalRepo.listPublic()
+        .collect(fractalRowToFractalEntity)
         .sorted
         .asJson
     }
+  }
+
+  def listUserFractals(userId: String) = Action { req =>
+    authenticator.byUserId(req)(userId) {
+      Ok {
+        fractalRepo.listByUser(userId)
+          .collect(fractalRowToFractalEntity)
+          .sorted
+          .asJson
+      }
+    }
+  }
+
+  val fractalRowToFractalEntity: PartialFunction[FractalRow, FractalEntityWithId] = {
+    case FractalRow(id, owner, published, Some(entity)) => FractalEntityWithId(id, owner, published, entity)
   }
 
   def getFractal(id: String) = Action {
@@ -35,8 +51,10 @@ class FractalController @Inject()(fractalRepo: CachedFractalRepo) extends Inject
     val id = FractalEntity.id(request.body)
     fractalRepo.save(FractalRow(
       id = id,
+      owner = ???,
+      published = ???,
       maybeFractal = Some(request.body)
     ))
-    Created(FractalEntityWithId(id, request.body).asJson)
+    Created(FractalEntityWithId(id, ???, ???, request.body).asJson)
   }
 }

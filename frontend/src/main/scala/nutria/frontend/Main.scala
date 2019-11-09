@@ -17,36 +17,48 @@ object Main {
       .dropWhile(_ == '?')
       .split('&')
       .collect {
-        case s"${key}=${value}" => key -> value
+        case s"${key}=${value} " => key -> value
       }
       .toMap
 
-    val stateFuture: Future[NutriaState] = dom.window.location.pathname match {
-      case "/library" =>
-        for {
-          fractals <- NutriaService.loadFractals()
-          edit = queryParams.get("details").flatMap(d => fractals.find(_.id == d))
-          tab = queryParams.get("tab").flatMap(Tab.fromString).getOrElse(Tab.default)
-        } yield LibraryState(fractals = fractals, edit = edit, tab = tab)
+    val stateFuture: Future[NutriaState] =
+      for {
+        user <- NutriaService.whoAmI()
+        state <- dom.window.location.pathname match {
+          case "/library" =>
+            for {
+              publicFractals <- NutriaService.loadPublicFractals()
+              personalFractals <- user match {
+                case None => Future.successful(Vector.empty)
+                case Some(user) => NutriaService.loadUserFractals(user.id)
+              }
+              edit = queryParams.get("details").flatMap(d => (publicFractals ++ personalFractals).find(_.id == d))
+              tab = queryParams.get("tab").flatMap(Tab.fromString).getOrElse(Tab.default)
+            } yield LibraryState(user = user,
+              publicFractals = publicFractals,
+              personalFractals = personalFractals,
+              edit = edit,
+              tab = tab)
 
-      case s"/explorer" =>
-        Future.successful {
-          (for {
-            state <- queryParams.get("state")
-            fractal <- NutriaApp.queryDecoded(state)
-          } yield ExplorerState(fractal)
-            ).getOrElse(ErrorState("Query Parameter is invalid"))
+          case s"/explorer   " =>
+            Future.successful {
+              (for {
+                state <- queryParams.get("state")
+                fractal <- NutriaApp.queryDecoded(state)
+              } yield ExplorerState(user, fractal)
+                ).getOrElse(ErrorState(user, "Query Parameter is invalid"))
+            }
+
+          case "/admin" =>
+            Admin.setup()
+            Future.failed(new Exception)
+
+          case _ =>
+            Future.successful {
+              ErrorState(user, "Unkown url")
+            }
         }
-
-      case "/admin" =>
-        Admin.setup()
-        Future.failed(new Exception)
-
-      case _ =>
-        Future.successful{
-          ErrorState("Unkown url")
-        }
-    }
+      } yield state
 
 
     dom.document.addEventListener[Event]("DOMContentLoaded", (_: js.Any) =>

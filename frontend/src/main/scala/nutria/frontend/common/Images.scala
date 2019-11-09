@@ -7,4 +7,5 @@ object Images {
   val check = "check-circle"
   val cancel = "times-circle"
   val delete = "trash"
+  val copy = "clone"
 }

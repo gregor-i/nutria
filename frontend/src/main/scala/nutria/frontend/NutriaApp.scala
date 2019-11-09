@@ -38,15 +38,14 @@ class NutriaApp(container: Element, initialState: NutriaState) extends SnabbdomA
       case None => ()
     }
 
-    val user = DecodeCookie[User]("user")
 
     val ui = state match {
       case exState: ExplorerState =>
-        ExplorerUi.render(exState, user, renderState)
+        ExplorerUi.render(exState, renderState)
       case libState: LibraryState =>
-        LibraryUi.render(libState, user, renderState)
+        LibraryUi.render(libState, renderState)
       case errorState: ErrorState =>
-        ErrorUi.render(errorState, user, renderState)
+        ErrorUi.render(errorState, renderState)
     }
 
     node = patch(node, ui)

@@ -5,9 +5,9 @@ import module.SystemFractals
 import nutria.core.FractalEntity
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
-import repo.{CachedFractalRepo, FractalRow}
+import repo.{FractalRepo, FractalRow}
 
-class AdminController @Inject()(fractalRepo: CachedFractalRepo,
+class AdminController @Inject()(fractalRepo: FractalRepo,
                                 systemFractals: SystemFractals,
                                 authenticator: Authenticator
                                ) extends InjectedController with Circe {
@@ -32,8 +32,8 @@ class AdminController @Inject()(fractalRepo: CachedFractalRepo,
     authenticator.adminUser(req) {
       fractalRepo.list()
         .collect {
-          case FractalRow(id, None) => id
-          case FractalRow(id, Some(fractalEntity)) if id != FractalEntity.id(fractalEntity) => id
+          case FractalRow(id, _, _, None) => id
+          case FractalRow(id, _, _, Some(fractalEntity)) if id != FractalEntity.id(fractalEntity) => id
         }
         .foreach(fractalRepo.delete)
       Ok
@@ -52,8 +52,10 @@ class AdminController @Inject()(fractalRepo: CachedFractalRepo,
       systemFractals.systemFractals
         .foreach(entity => fractalRepo.save(
           FractalRow(
-            FractalEntity.id(entity),
-            Some(entity)
+            id = FractalEntity.id(entity),
+            owner = None,
+            published = true,
+            maybeFractal = Some(entity)
           )
         ))
       Ok

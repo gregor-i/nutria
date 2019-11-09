@@ -6,6 +6,8 @@ import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
 import repo.UserRepo
 
+import scala.util.chaining._
+
 @Singleton
 class UserController @Inject()(userRepo: UserRepo, authenticator: Authenticator) extends InjectedController with Circe {
   def get(userId: String) = Action { req =>
@@ -15,5 +17,11 @@ class UserController @Inject()(userRepo: UserRepo, authenticator: Authenticator)
         case None => NotFound
       }
     }
+  }
+
+  def me() = Action{ req =>
+    authenticator.userFromCookie(req)
+      .asJson
+      .pipe(Ok(_))
   }
 }

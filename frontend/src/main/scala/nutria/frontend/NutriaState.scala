@@ -7,18 +7,23 @@ import nutria.core.{FractalEntity, _}
 
 import scala.concurrent.Future
 
-sealed trait NutriaState
+sealed trait NutriaState{
+  def user: Option[User]
+}
 
 //case class LoadingState(loading: Future[Vector[FractalEntityWithId]]) extends State
 
-case class ErrorState(message: String) extends NutriaState
+case class ErrorState(user: Option[User], message: String) extends NutriaState
 
-case class ExplorerState(fractalEntity: FractalEntity,
+case class ExplorerState(user: Option[User],
+                         fractalEntity: FractalEntity,
                          edit: Option[FractalEntity] = None,
                          tab: Tab = Tab.default,
                          saveProcess: Option[Future[FractalEntity]] = None) extends NutriaState
 
-case class LibraryState(fractals: Vector[FractalEntityWithId],
+case class LibraryState(user: Option[User],
+                        publicFractals: Vector[FractalEntityWithId],
+                        personalFractals: Vector[FractalEntityWithId],
                         edit: Option[FractalEntityWithId] = None,
                         tab: Tab = Tab.default) extends NutriaState
 

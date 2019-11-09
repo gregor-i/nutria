@@ -7,13 +7,13 @@ import snabbdom.Snabbdom.h
 import snabbdom.{Snabbdom, VNode}
 
 object Header {
-  def apply(pageTitle: String, user: Option[User])(implicit state: NutriaState, update: NutriaState => Unit): VNode =
+  def apply(pageTitle: String)(implicit state: NutriaState, update: NutriaState => Unit): VNode =
     h("div.top-bar")(
       h("div")(
         brandIcon,
         h("span")(pageTitle)
       ),
-      user.fold(loggedOutActions)(loggedInActions)
+      state.user.fold(loggedOutActions)(loggedInActions)
     )
 
   private val brandIcon = h("img.brand-icon",

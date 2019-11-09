@@ -2,7 +2,7 @@ package nutria.frontend
 
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, parser}
-import nutria.core.{FractalEntity, FractalEntityWithId}
+import nutria.core.{FractalEntity, FractalEntityWithId, User}
 import org.scalajs.dom.XMLHttpRequest
 import org.scalajs.dom.ext.Ajax
 import org.scalajs.dom.ext.Ajax.InputData
@@ -11,13 +11,23 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object NutriaService {
+  def whoAmI() : Future[Option[User]] =
+    Ajax.get(url = s"/api/users/me")
+      .flatMap(check(200))
+      .flatMap(parse[Option[User]])
+
   def loadFractal(fractalId: String): Future[FractalEntity] =
     Ajax.get(url = s"/api/fractals/${fractalId}")
       .flatMap(check(200))
       .flatMap(parse[FractalEntity])
 
-  def loadFractals(): Future[Vector[FractalEntityWithId]] =
+  def loadPublicFractals(): Future[Vector[FractalEntityWithId]] =
     Ajax.get(url = s"/api/fractals")
+      .flatMap(check(200))
+      .flatMap(parse[Vector[FractalEntityWithId]])
+
+  def loadUserFractals(userId: String): Future[Vector[FractalEntityWithId]] =
+    Ajax.get(url = s"/api/users/${userId}/fractals")
       .flatMap(check(200))
       .flatMap(parse[Vector[FractalEntityWithId]])
 
@@ -32,7 +42,7 @@ object NutriaService {
   def delete(fractalId: String): Future[Vector[FractalEntityWithId]] =
     Ajax.delete(url = s"/api/fractals/${fractalId}")
       .flatMap(check(200))
-      .flatMap(_ => loadFractals())
+      .flatMap(_ => loadPublicFractals())
 
   private def check(excepted: Int)(req: XMLHttpRequest): Future[XMLHttpRequest] =
     if (req.status == excepted)

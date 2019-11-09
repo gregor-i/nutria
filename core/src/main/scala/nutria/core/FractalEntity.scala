@@ -28,6 +28,8 @@ object FractalEntity extends CirceCodex {
 
 @monocle.macros.Lenses()
 case class FractalEntityWithId(id: String,
+                               owner: Option[String],
+                               published: Boolean,
                                entity: FractalEntity)
 
 object FractalEntityWithId extends CirceCodex {
@@ -38,11 +40,15 @@ object FractalEntityWithId extends CirceCodex {
       for {
         entity <- json.as[FractalEntity]
         id <- json.downField("id").as[String]
-      } yield FractalEntityWithId(id, entity)
+        owner <- json.downField("owner").as[Option[String]]
+        published <- json.downField("published").as[Boolean]
+      } yield FractalEntityWithId(id, owner, published, entity)
     },
     encodeA = Encoder[FractalEntityWithId] { row =>
       Encoder[FractalEntity].apply(row.entity)
         .mapObject(_.add("id", row.id.asJson))
+        .mapObject(_.add("owner", row.owner.asJson))
+        .mapObject(_.add("published", row.published.asJson))
     }
   )
 }

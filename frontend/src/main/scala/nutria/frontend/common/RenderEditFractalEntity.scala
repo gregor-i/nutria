@@ -8,7 +8,7 @@ import snabbdom.Snabbdom.h
 import snabbdom.{Snabbdom, VNode}
 
 object RenderEditFractalEntity {
-  def apply[A](fractal: FractalEntity, currentTab: Tab, lens: Lens[A, FractalEntity], lensTab: Lens[A, Tab], footer: VNode*)
+  def apply[A <: NutriaState](fractal: FractalEntity, currentTab: Tab, lens: Lens[A, FractalEntity], lensTab: Lens[A, Tab], footer: VNode*)
               (implicit state: A, update: A => Unit): VNode = {
     h("div.modal-card")(
       h("header.modal-card-head")(
@@ -37,11 +37,11 @@ object RenderEditFractalEntity {
     )
   }
 
-  private def snapshotsBody[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])
+  private def snapshotsBody[A <: NutriaState](fractal: FractalEntity, lens: Lens[A, FractalEntity])
                               (implicit state: A, update: A => Unit) =
     List(
       h("article.fractal-tile",
-        events = Seq("click" -> Snabbdom.event(_ => update(ExplorerState(fractal).asInstanceOf[A]))), // todo: remove hacky cast
+        events = Seq("click" -> Snabbdom.event(_ => update(ExplorerState(state.user, fractal).asInstanceOf[A]))), // todo: remove hacky cast
       )(FractalImage(fractal, Dimensions.thumbnailDimensions))
     )
 
