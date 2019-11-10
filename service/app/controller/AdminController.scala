@@ -1,5 +1,7 @@
 package controller
 
+import java.util.UUID
+
 import javax.inject.Inject
 import module.SystemFractals
 import nutria.core.FractalEntity
@@ -33,7 +35,6 @@ class AdminController @Inject()(fractalRepo: FractalRepo,
       fractalRepo.list()
         .collect {
           case FractalRow(id, _, _, None) => id
-          case FractalRow(id, _, _, Some(fractalEntity)) if id != FractalEntity.id(fractalEntity) => id
         }
         .foreach(fractalRepo.delete)
       Ok
@@ -52,7 +53,7 @@ class AdminController @Inject()(fractalRepo: FractalRepo,
       systemFractals.systemFractals
         .foreach(entity => fractalRepo.save(
           FractalRow(
-            id = FractalEntity.id(entity),
+            id = UUID.randomUUID().toString,
             owner = None,
             published = true,
             maybeFractal = Some(entity)

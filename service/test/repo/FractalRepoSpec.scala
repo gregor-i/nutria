@@ -13,7 +13,7 @@ class FractalRepoSpec extends FunSuite with Matchers with GuiceOneAppPerSuite wi
 
   def row(fractal: FractalEntity) =
     FractalRow(
-      id = FractalEntity.id(fractal),
+      id = UUID.randomUUID().toString,
       owner = None,
       published = false,
       maybeFractal = Some(fractal)

@@ -60,36 +60,18 @@ class FractalRepo @Inject()(db: Database) {
         """.executeUpdate()
     }
 
-  def delete(id: String): Unit =
+  def delete(userId: String, fractalId: String): Unit =
+  db.withConnection { implicit con =>
+    SQL"""DELETE FROM fractals
+            WHERE id = $fractalId AND owner = $userId"""
+      .executeUpdate()
+  }
+
+  def delete(fractalId: String): Unit =
     db.withConnection { implicit con =>
       SQL"""DELETE FROM fractals
-            WHERE id = $id"""
+            WHERE id = $fractalId"""
         .executeUpdate()
     }
 }
 
-@Singleton()
-class CachedFractalRepo @Inject()(repo: FractalRepo) {
-  private var cached: List[FractalRow] = null
-
-  def get(id: String): Option[FractalRow] =
-    list().find(_.id == id)
-
-  def list(): List[FractalRow] = {
-    if (cached == null)
-      cached = repo.list()
-    cached
-  }
-
-  def save(row: FractalRow): Unit = {
-    repo.save(row)
-    cached = repo.list()
-    ()
-  }
-
-  def delete(id: String): Unit = {
-    repo.delete(id)
-    cached = repo.list()
-    ()
-  }
-}

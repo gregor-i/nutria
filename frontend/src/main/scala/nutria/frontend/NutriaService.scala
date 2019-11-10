@@ -39,10 +39,18 @@ object NutriaService {
       .flatMap(check(201))
       .flatMap(parse[FractalEntityWithId])
 
-  def delete(fractalId: String): Future[Vector[FractalEntityWithId]] =
-    Ajax.delete(url = s"/api/fractals/${fractalId}")
+  def deleteUserFractal(userId: String, fractalId: String): Future[Vector[FractalEntityWithId]] =
+    Ajax.delete(url = s"/api/users/${userId}/fractals/${fractalId}")
       .flatMap(check(200))
       .flatMap(_ => loadPublicFractals())
+
+  def updateUserFractal(fractalEntity: FractalEntityWithId): Future[Unit] =
+    Ajax.put(
+      url = s"/api/users/${fractalEntity.owner.get}/fractals/${fractalEntity.id}",
+      data = encode(fractalEntity)
+    )
+      .flatMap(check(202))
+      .map(_ => ())
 
   private def check(excepted: Int)(req: XMLHttpRequest): Future[XMLHttpRequest] =
     if (req.status == excepted)

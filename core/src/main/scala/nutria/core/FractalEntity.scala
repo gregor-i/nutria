@@ -19,8 +19,6 @@ case class FractalEntity(title: String = "",
 
 
 object FractalEntity extends CirceCodex {
-  def id(fractalEntity: FractalEntity): String = fractalEntity.hashCode().toHexString.padTo(8, '0')
-
   implicit val ordering: Ordering[FractalEntity] = FractalProgram.ordering.on(_.program)
 
   implicit val codec: Codec[FractalEntity] = semiauto.deriveConfiguredCodec

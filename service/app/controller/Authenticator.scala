@@ -27,6 +27,13 @@ class Authenticator @Inject()(conf: Configuration) extends Results {
     }
   }
 
+  def withUser[A](req: Request[A])(ifAuthorized: User => Result): Result = {
+    userFromCookie(req) match {
+      case None => Unauthorized
+      case Some(user) => ifAuthorized(user)
+    }
+  }
+
   // todo: take from session instead. the user cookie might be tempered with ...
   def userFromCookie[A](req: Request[A]): Option[User] =
     req.cookies.get("user")

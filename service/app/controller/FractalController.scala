@@ -1,5 +1,7 @@
 package controller
 
+import java.util.UUID
+
 import io.circe.syntax._
 import javax.inject.Inject
 import nutria.core._
@@ -7,6 +9,7 @@ import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
 import repo.{FractalRepo, FractalRow}
 
+import scala.util.chaining._
 class FractalController @Inject()(fractalRepo: FractalRepo,
                                   authenticator: Authenticator) extends InjectedController with Circe {
 
@@ -41,20 +44,39 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
     }
   }
 
-  def deleteFractal(id: String) = Action {
-    fractalRepo.delete(id)
-    Ok
+  def updateUserFractal(userId: String, fractalId: String) =
+    Action(circe.tolerantJson[FractalEntityWithId]) { req =>
+      authenticator.byUserId(req)(userId) {
+        fractalRepo.save(FractalRow(
+          id = fractalId,
+          owner = Some(userId),
+          published = false,
+          maybeFractal = Some(req.body.entity)
+        ))
+        Accepted
+      }
+    }
+
+  def deleteUserFractal(userId: String, fractalId: String) = Action {req =>
+    authenticator.byUserId(req)(userId){
+      fractalRepo.delete(userId, fractalId)
+      Ok
+    }
   }
 
   def postFractal() = Action(circe.tolerantJson[FractalEntity]) { request =>
-    // todo: check / correct aspect ratio
-    val id = FractalEntity.id(request.body)
-    fractalRepo.save(FractalRow(
-      id = id,
-      owner = ???,
-      published = ???,
-      maybeFractal = Some(request.body)
-    ))
-    Created(FractalEntityWithId(id, ???, ???, request.body).asJson)
+    authenticator.withUser(request) { user =>
+      // todo: check / correct aspect ratio
+      val id = UUID.randomUUID().toString
+      fractalRepo.save(FractalRow(
+        id = id,
+        owner = Some(user.id),
+        published = false,
+        maybeFractal = Some(request.body)
+      ))
+      FractalEntityWithId(id, Some(user.id), published = false, request.body)
+        .asJson
+        .pipe(Created(_))
+    }
   }
 }

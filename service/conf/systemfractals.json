@@ -1145,5 +1145,30 @@
       0.0,
       2.006211180124265
     ]
+  },
+  {
+    "title": "Mandelbrot exterior distance estimator",
+    "program": {
+      "FreestyleProgram": {
+        "code": "int l = 0;\nvec2 z_der = vec2(float(0), float(0));\n{\n   vec2 local_var_1 = vec2(float(1), float(0));\n   z_der = local_var_1;\n}\nfor(int i = 0; i < 200; i++){\n  vec2 z_new = vec2(float(0), float(0));\n  {\n    vec2 local_var_1 = complex_product(vec2(z), vec2(z));\n    vec2 local_var_2 = local_var_1+p;\n    z_new = local_var_2;\n  }\n  vec2 z_der_new = vec2(float(0), float(0));\n  {\n    vec2 local_var_1 = complex_product(vec2(z_der), vec2(z));\n    vec2 local_var_2 = vec2(float(2), float(0));\n    vec2 local_var_3 = complex_product(vec2(local_var_1), vec2(local_var_2));\n    vec2 local_var_4 = vec2(float(1), float(0));\n    vec2 local_var_5 = local_var_3+local_var_4;\n    z_der_new = local_var_5;\n  }\n  z = z_new;\n  z_der = z_der_new;\n  if(dot(z,z) > float(10000))\n    break;\n  l ++;\n}\n\nif(l == 200){\n  color = vec4(vec3(0.0), 1.0);\n}else{\n  float z_length = length(z);\n  float z_der_length = length(z_der);\n  float d = 2.0 * z_length / z_der_length * log(z_length);\n  color = vec4(vec3(d*1000.0), 1.0); // todo: do something smart here to calculate the factor\n  //color = mix(vec4(color_shadow, 1.0), vec4(color_light, 1.0), d);\n}\n",
+        "parameters": []
+      }
+    },
+    "view": [
+      -1.7645988375864934,
+      -1.0131959357824767,
+      2.4334365753315907,
+      0.0,
+      0.0,
+      1.9999999999999718
+    ],
+    "description": "",
+    "reference": [
+      "https://en.wikibooks.org/wiki/Fractals/Iterations_in_the_complex_plane/demm"
+    ],
+    "antiAliase": 1,
+    "id": "7fa54c79-e13e-422f-b0ca-eb85b7ef428d",
+    "owner": "0ed7f86c-5305-3a3b-ad53-15410e6c7ac9",
+    "published": false
   }
 ]

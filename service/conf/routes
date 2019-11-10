@@ -1,33 +1,34 @@
 # API
-GET           /api/fractals                  controller.FractalController.listPublicFractals()
-GET           /api/fractals/:id              controller.FractalController.getFractal(id: String)
-DELETE        /api/fractals/:id              controller.FractalController.deleteFractal(id: String)
-POST          /api/fractals                  controller.FractalController.postFractal()
+GET           /api/fractals                                     controller.FractalController.listPublicFractals()
+GET           /api/fractals/:id                                 controller.FractalController.getFractal(id: String)
+POST          /api/fractals                                     controller.FractalController.postFractal()
 
-GET           /api/users/:userId/fractals    controller.FractalController.listUserFractals(userId: String)
-GET           /api/users/me                  controller.UserController.me()
-GET           /api/users/:id                 controller.UserController.get(id: String)
+GET           /api/users/:userId/fractals                       controller.FractalController.listUserFractals(userId: String)
+PUT           /api/users/:userId/fractals/:fractalId            controller.FractalController.updateUserFractal(userId: String, fractalId: String)
+DELETE        /api/users/:userId/fractals/:fractalId            controller.FractalController.deleteUserFractal(userId: String, fractalId: String)
+GET           /api/users/me                                     controller.UserController.me()
+GET           /api/users/:id                                    controller.UserController.get(id: String)
 
-GET           /auth/google                   module.auth.AuthenticationController.authenticate()
-GET           /auth/logout                   module.auth.AuthenticationController.logout()
+GET           /auth/google                                      module.auth.AuthenticationController.authenticate()
+GET           /auth/logout                                      module.auth.AuthenticationController.logout()
 
 # Admin
-GET           /admin                         controller.AdminController.ui()
-POST          /admin/truncate-fractals       controller.AdminController.truncateFractals()
-POST          /admin/clean-fractals          controller.AdminController.cleanFractals()
-POST          /admin/insert-system-fractals  controller.AdminController.insertSystemFractals()
-POST          /admin/delete-fractal/:id      controller.AdminController.deleteFractal(id : String)
+GET           /admin                                            controller.AdminController.ui()
+POST          /admin/truncate-fractals                          controller.AdminController.truncateFractals()
+POST          /admin/clean-fractals                             controller.AdminController.cleanFractals()
+POST          /admin/insert-system-fractals                     controller.AdminController.insertSystemFractals()
+POST          /admin/delete-fractal/:id                         controller.AdminController.deleteFractal(id : String)
 
 # Assets
-GET           /favicon.ico                   controller.UiController.asset(path = "icon.png", folder = "/public/img")
-GET           /img/*path                     controller.UiController.asset(path: String, folder = "/public/img")
-GET           /js/*path                      controller.UiController.asset(path: String, folder = "/public/js")
-GET           /css/*path                     controller.UiController.asset(path: String, folder = "/public/css")
-GET           /fonts/*path                   controller.UiController.asset(path: String, folder = "/public/fonts")
+GET           /favicon.ico                                      controller.UiController.asset(path = "icon.png", folder = "/public/img")
+GET           /img/*path                                        controller.UiController.asset(path: String, folder = "/public/img")
+GET           /js/*path                                         controller.UiController.asset(path: String, folder = "/public/js")
+GET           /css/*path                                        controller.UiController.asset(path: String, folder = "/public/css")
+GET           /fonts/*path                                      controller.UiController.asset(path: String, folder = "/public/fonts")
 
 
 # Frontend
-GET           /                              controller.UiController.slash
-GET           /library                       controller.UiController.library
-GET           /explorer                      controller.UiController.explorer
-GET           /*path                         controller.UiController.other(path: String)
+GET           /                                                 controller.UiController.slash
+GET           /library                                          controller.UiController.library
+GET           /explorer                                         controller.UiController.explorer
+GET           /*path                                            controller.UiController.other(path: String)
