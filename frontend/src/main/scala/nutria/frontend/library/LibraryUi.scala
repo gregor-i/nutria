@@ -50,7 +50,7 @@ object LibraryUi {
 
   private def popupActions(fractal: FractalEntityWithId)
                           (implicit state: LibraryState, update: NutriaState => Unit) =
-  if (fractal.owner.isDefined && fractal.owner == state.user.map(_.id)) {
+  if (state.user.map(_.id).contains(fractal.owner)) {
     Buttons.group(
       Buttons("Apply Changes", Images.upload, Snabbdom.event { _ =>
         (for {

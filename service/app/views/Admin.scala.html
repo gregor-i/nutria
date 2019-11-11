@@ -15,14 +15,29 @@
     <table class="table">
         <tr>
             <th>Id</th>
-            <th>Title</th>
+            <th>Owner</th>
+            <th>Published</th>
             <th>Type</th>
+            <th>Title</th>
+            <th>Description</th>
             <th></th>
         </tr>
         @for(fractal <- fractals){
             <tr>
                 <td>
                     @{fractal.id}
+                </td>
+                <td>
+                    @{fractal.owner.toString}
+                </td>
+                <td>
+                    @{fractal.published}
+                </td>
+                <td>
+                    @{fractal.maybeFractal match{
+                    case None => "not parsable"
+                    case Some(fractal) => fractal.program.getClass.getSimpleName
+                    }}
                 </td>
                 <td>
                     @{fractal.maybeFractal match{
@@ -32,8 +47,8 @@
                 </td>
                 <td>
                     @{fractal.maybeFractal match{
-                        case None => "not parsable"
-                        case Some(fractal) => fractal.program.getClass.getSimpleName
+                    case None => "not parsable"
+                    case Some(fractal) => fractal.description
                     }}
                 </td>
                 <td>

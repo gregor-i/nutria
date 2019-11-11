@@ -49,7 +49,7 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
       authenticator.byUserId(req)(userId) {
         fractalRepo.save(FractalRow(
           id = fractalId,
-          owner = Some(userId),
+          owner = userId,
           published = false,
           maybeFractal = Some(req.body.entity)
         ))
@@ -70,11 +70,11 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
       val id = UUID.randomUUID().toString
       fractalRepo.save(FractalRow(
         id = id,
-        owner = Some(user.id),
+        owner = user.id,
         published = false,
         maybeFractal = Some(request.body)
       ))
-      FractalEntityWithId(id, Some(user.id), published = false, request.body)
+      FractalEntityWithId(id, user.id, published = false, request.body)
         .asJson
         .pipe(Created(_))
     }

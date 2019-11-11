@@ -7,13 +7,13 @@ import javax.inject.{Inject, Singleton}
 import nutria.core.FractalEntity
 import play.api.db.Database
 
-case class FractalRow(id: String, owner: Option[String], published: Boolean, maybeFractal: Option[FractalEntity])
+case class FractalRow(id: String, owner: String, published: Boolean, maybeFractal: Option[FractalEntity])
 
 @Singleton()
 class FractalRepo @Inject()(db: Database) {
   private val rowParser: RowParser[FractalRow] = for {
     id <- SqlParser.str("id")
-    owner <- SqlParser.str("owner").?
+    owner <- SqlParser.str("owner")
     published <- SqlParser.bool("published")
     maybeFractal <- SqlParser.str("fractal").map(data => decode[FractalEntity](data).toOption)
   } yield FractalRow(id, owner, published, maybeFractal)
