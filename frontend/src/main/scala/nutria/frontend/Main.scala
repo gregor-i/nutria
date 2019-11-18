@@ -28,15 +28,10 @@ object Main {
           case "/library" =>
             for {
               publicFractals <- NutriaService.loadPublicFractals()
-              personalFractals <- user match {
-                case None => Future.successful(Vector.empty)
-                case Some(user) => NutriaService.loadUserFractals(user.id)
-              }
-              edit = queryParams.get("details").flatMap(d => (publicFractals ++ personalFractals).find(_.id == d))
+              edit = queryParams.get("details").flatMap(d => publicFractals.find(_.id == d))
               tab = queryParams.get("tab").flatMap(Tab.fromString).getOrElse(Tab.default)
             } yield LibraryState(user = user,
               publicFractals = publicFractals,
-              personalFractals = personalFractals,
               edit = edit,
               tab = tab)
 

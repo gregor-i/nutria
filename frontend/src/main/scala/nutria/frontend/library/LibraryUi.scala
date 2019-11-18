@@ -14,11 +14,6 @@ object LibraryUi {
     h(tag = "body",
       key = "library")(
       common.Header("Nutria Fractal Library")(state, update),
-      h("h2.title")("Your Fractals:"),
-      h("div.lobby-tile-list")(
-        state.personalFractals.map(renderProgramTile),
-        Seq.fill(5)(dummyTile)
-      ),
       h("h2.title")("Public Fractals:"),
       h("div.lobby-tile-list")(
         state.publicFractals.map(renderProgramTile),
@@ -55,15 +50,15 @@ object LibraryUi {
       Buttons("Apply Changes", Images.upload, Snabbdom.event { _ =>
         (for {
           _ <- NutriaService.updateUserFractal(fractal)
-          personalFractals <- NutriaService.loadUserFractals(state.user.get.id)
-        } yield state.copy(personalFractals = personalFractals))
+          publicFractals <- NutriaService.loadPublicFractals()
+        } yield state.copy(publicFractals = publicFractals))
           .foreach(update)
       }, `class` = ".is-primary"),
       Buttons("Delete", Images.delete, Snabbdom.event { _ =>
         (for {
           _ <- NutriaService.deleteUserFractal(state.user.get.id, fractal.id)
-          personalFractals <- NutriaService.loadUserFractals(state.user.get.id)
-        } yield state.copy(personalFractals = personalFractals, edit = None))
+          publicFractals <- NutriaService.loadPublicFractals()
+        } yield state.copy(publicFractals = publicFractals, edit = None))
           .foreach(update)
       }, `class` = ".is-danger"),
       Buttons("Close", Images.cancel, Snabbdom.event { _ =>

@@ -1,0 +1,35 @@
+.lobby-tile-list{
+    display : flex;
+    flex-wrap : wrap;
+    margin: 8px;
+}
+
+.fractal-tile{
+    box-shadow : rgba(0, 0, 0, 0.32) 8px 8px 8px 0px;
+    background : white;
+}
+
+.fractal-tile:hover{
+    box-shadow : rgba(0, 0, 0, 0.32) 8px 8px 8px 0px, hsl(217, 71%, 53%) 0px 0px 8px 2px;
+    background : white;
+}
+
+
+.lobby-tile-list > article {
+    flex-grow : 1;
+    margin : 8px;
+}
+
+.fractal-tile img,
+.fractal-tile canvas{
+    width : 100%;
+    display : block;
+    background: url('/img/rendering.svg');
+    background-size: contain;
+}
+
+.lobby-tile-list > .dummy-tile {
+    height: 0px;
+    margin : 0px 8px;
+    border : 0px;
+}

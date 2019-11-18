@@ -50,7 +50,7 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
         fractalRepo.save(FractalRow(
           id = fractalId,
           owner = userId,
-          published = false,
+          published = true,
           maybeFractal = Some(req.body.entity)
         ))
         Accepted
@@ -71,10 +71,10 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
       fractalRepo.save(FractalRow(
         id = id,
         owner = user.id,
-        published = false,
+        published = true,
         maybeFractal = Some(request.body)
       ))
-      FractalEntityWithId(id, user.id, published = false, request.body)
+      FractalEntityWithId(id, user.id, published = true, request.body)
         .asJson
         .pipe(Created(_))
     }

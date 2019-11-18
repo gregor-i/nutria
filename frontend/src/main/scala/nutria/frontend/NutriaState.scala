@@ -23,7 +23,6 @@ case class ExplorerState(user: Option[User],
 
 case class LibraryState(user: Option[User],
                         publicFractals: Vector[FractalEntityWithId],
-                        personalFractals: Vector[FractalEntityWithId],
                         edit: Option[FractalEntityWithId] = None,
                         tab: Tab = Tab.default) extends NutriaState
 

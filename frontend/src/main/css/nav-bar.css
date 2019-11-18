@@ -1,0 +1,23 @@
+.top-bar {
+    top: 0;
+    left: 0;
+    right: 0;
+    display : flex;
+    justify-content : space-between;
+    background-color : #eee;
+    box-shadow : 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+    height : 52px;
+}
+
+.top-bar > div {
+    display : flex;
+    align-items : center;
+}
+
+.top-bar > div > span {
+    font-size: x-large;
+}
+
+.top-bar > div > .brand-icon {
+    margin : 0px 8px;
+}
