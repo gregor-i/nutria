@@ -1,3 +1,9 @@
+.fractal-tile-list{
+    display : flex;
+    flex-wrap : wrap;
+    margin: 8px;
+}
+
 .lobby-tile-list{
     display : flex;
     flex-wrap : wrap;
@@ -15,7 +21,12 @@
 }
 
 
-.lobby-tile-list > article {
+.fractal-tile-list > .fractal-tile {
+    flex-grow : 1;
+    margin : 8px;
+}
+
+.lobby-tile-list > .fractal-tile {
     flex-grow : 1;
     margin : 8px;
 }

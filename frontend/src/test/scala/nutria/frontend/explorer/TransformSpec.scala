@@ -4,6 +4,7 @@ import nutria.core.viewport.Point._
 import nutria.core.viewport.Dimensions
 import nutria.core.viewport
 import nutria.core.{Point, Viewport}
+import nutria.frontend.ui.Transform
 import org.scalatest.{FunSuite, Matchers}
 
 class TransformSpec extends FunSuite with Matchers {

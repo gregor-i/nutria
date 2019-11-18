@@ -1,8 +1,9 @@
-package nutria.frontend.common
+package nutria.frontend.ui.common
 
 import monocle.{Iso, Lens}
 import nutria.core._
 import nutria.frontend._
+import nutria.frontend.ui.LibraryUi
 import nutria.frontend.util.LenseUtils
 import snabbdom.Snabbdom.h
 import snabbdom.{Snabbdom, VNode}
@@ -37,15 +38,15 @@ object RenderEditFractalEntity {
     )
   }
 
-  private def snapshotsBody[A <: NutriaState](fractal: FractalEntity, lens: Lens[A, FractalEntity])
+  def snapshotsBody[A <: NutriaState](fractal: FractalEntity, lens: Lens[A, FractalEntity])
                               (implicit state: A, update: A => Unit) =
     List(
       h("article.fractal-tile",
         events = Seq("click" -> Snabbdom.event(_ => update(ExplorerState(state.user, fractal).asInstanceOf[A]))), // todo: remove hacky cast
       )(FractalImage(fractal, Dimensions.thumbnailDimensions))
-    )
+    ) ++ List.fill(5)(LibraryUi.dummyTile)
 
-  private def parametersBody[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])
+  def parametersBody[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])
                                (implicit state: A, update: A => Unit) =
     fractal.program match {
       case f: NewtonIteration =>
@@ -92,7 +93,7 @@ object RenderEditFractalEntity {
         }
     }
 
-  private def templateBody[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])
+  def templateBody[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])
                              (implicit state: A, update: A => Unit) =
     List(
       Form.selectInput(
@@ -121,7 +122,7 @@ object RenderEditFractalEntity {
     })
 
 
-  private def generalBody[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])
+  def generalBody[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])
                             (implicit state: A, update: A => Unit) =
     Seq(
       Form.stringInput("Title", lens composeLens FractalEntity.title),

@@ -16,10 +16,10 @@ object NutriaService {
       .flatMap(check(200))
       .flatMap(parse[Option[User]])
 
-  def loadFractal(fractalId: String): Future[FractalEntity] =
+  def loadFractal(fractalId: String): Future[FractalEntityWithId] =
     Ajax.get(url = s"/api/fractals/${fractalId}")
       .flatMap(check(200))
-      .flatMap(parse[FractalEntity])
+      .flatMap(parse[FractalEntityWithId])
 
   def loadPublicFractals(): Future[Vector[FractalEntityWithId]] =
     Ajax.get(url = s"/api/fractals")

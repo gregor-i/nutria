@@ -1,6 +1,5 @@
-package nutria.frontend.error
+package nutria.frontend.ui
 
-import nutria.core.User
 import nutria.frontend._
 import snabbdom.Snabbdom.h
 import snabbdom.VNode

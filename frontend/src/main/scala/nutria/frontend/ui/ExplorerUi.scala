@@ -1,10 +1,9 @@
-package nutria.frontend.explorer
+package nutria.frontend.ui
 
-import nutria.core.User
-import nutria.frontend.common.{Buttons, CanvasHooks, Images}
+import nutria.frontend._
+import nutria.frontend.ui.common.{Buttons, CanvasHooks, Images}
 import nutria.frontend.shaderBuilder.FractalRenderer
 import nutria.frontend.util.LenseUtils
-import nutria.frontend._
 import org.scalajs.dom
 import snabbdom.Snabbdom.h
 import snabbdom.{Snabbdom, VNode}

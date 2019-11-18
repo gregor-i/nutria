@@ -1,4 +1,4 @@
-package nutria.frontend.explorer
+package nutria.frontend.ui
 
 import nutria.core.viewport.Point._
 import nutria.core.{Point, Viewport}

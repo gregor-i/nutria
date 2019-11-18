@@ -28,14 +28,10 @@ object Main {
           case "/library" =>
             for {
               publicFractals <- NutriaService.loadPublicFractals()
-              edit = queryParams.get("details").flatMap(d => publicFractals.find(_.id == d))
-              tab = queryParams.get("tab").flatMap(Tab.fromString).getOrElse(Tab.default)
             } yield LibraryState(user = user,
-              publicFractals = publicFractals,
-              edit = edit,
-              tab = tab)
+              publicFractals = publicFractals)
 
-          case s"/explorer   " =>
+          case "/explorer" =>
             Future.successful {
               (for {
                 state <- queryParams.get("state")
@@ -43,6 +39,11 @@ object Main {
               } yield ExplorerState(user, fractal)
                 ).getOrElse(ErrorState(user, "Query Parameter is invalid"))
             }
+
+          case s"/details/${fractalsId}" =>
+            for{
+              remoteFractal <- NutriaService.loadFractal(fractalsId)
+            } yield DetailsState(user, remoteFractal, remoteFractal.entity) // todo: load from query as fallback
 
           case "/admin" =>
             Admin.setup()

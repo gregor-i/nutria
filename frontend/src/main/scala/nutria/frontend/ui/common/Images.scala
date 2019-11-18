@@ -1,4 +1,4 @@
-package nutria.frontend.common
+package nutria.frontend.ui.common
 
 object Images {
   val upload = "upload"

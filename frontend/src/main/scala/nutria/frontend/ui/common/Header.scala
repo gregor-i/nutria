@@ -1,4 +1,4 @@
-package nutria.frontend.common
+package nutria.frontend.ui.common
 
 import nutria.frontend.NutriaState
 import nutria.core.User

@@ -1,4 +1,4 @@
-package nutria.frontend.common
+package nutria.frontend.ui.common
 
 import eu.timepit.refined.api.{Refined, Validate}
 import eu.timepit.refined.refineV

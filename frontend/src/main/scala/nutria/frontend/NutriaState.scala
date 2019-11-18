@@ -22,10 +22,16 @@ case class ExplorerState(user: Option[User],
                          saveProcess: Option[Future[FractalEntity]] = None) extends NutriaState
 
 case class LibraryState(user: Option[User],
-                        publicFractals: Vector[FractalEntityWithId],
-                        edit: Option[FractalEntityWithId] = None,
-                        tab: Tab = Tab.default) extends NutriaState
+                        publicFractals: Vector[FractalEntityWithId]) extends NutriaState
 
+case class DetailsState(user: Option[User],
+                        remoteFractal: FractalEntityWithId,
+                        fractal: FractalEntity) extends NutriaState
+
+object DetailsState {
+  val remoteFractal: Lens[DetailsState, FractalEntityWithId] = GenLens[DetailsState](_.remoteFractal)
+  val fractalEntity: Lens[DetailsState, FractalEntity] = GenLens[DetailsState](_.fractal)
+}
 
 object ExplorerState {
   val fractalEntity: Lens[ExplorerState, FractalEntity] = GenLens[ExplorerState](_.fractalEntity)
@@ -33,11 +39,6 @@ object ExplorerState {
   val editOptional: Optional[ExplorerState, FractalEntity] = edit.composePrism(monocle.std.option.some)
   val viewport: Lens[ExplorerState, Viewport] = ExplorerState.fractalEntity.composeLens(FractalEntity.view)
   val tab: Lens[ExplorerState, Tab] = GenLens[ExplorerState](_.tab)
-}
-
-object LibraryState {
-  val editOptional: Optional[LibraryState, FractalEntityWithId] = GenLens[LibraryState](_.edit).composePrism(monocle.std.option.some)
-  val tab: Lens[LibraryState, Tab] = GenLens[LibraryState](_.tab)
 }
 
 object NutriaState extends CirceCodex {

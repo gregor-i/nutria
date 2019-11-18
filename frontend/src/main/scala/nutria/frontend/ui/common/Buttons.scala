@@ -1,4 +1,4 @@
-package nutria.frontend.common
+package nutria.frontend.ui.common
 
 import snabbdom.Snabbdom.h
 import snabbdom.{SnabbdomNative, VNode}

@@ -1,5 +1,4 @@
-package nutria.frontend.explorer
-
+package nutria.frontend.ui
 
 import nutria.core.{Point, Viewport}
 import nutria.frontend.ExplorerState

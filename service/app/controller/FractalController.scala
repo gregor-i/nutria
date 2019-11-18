@@ -38,7 +38,15 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
   }
 
   def getFractal(id: String) = Action {
-    fractalRepo.get(id).flatMap(_.maybeFractal) match {
+    (for {
+      fratalRow <- fractalRepo.get(id)
+      fratalEntity <- fratalRow.maybeFractal
+    } yield FractalEntityWithId(
+      id = id,
+      owner = fratalRow.owner,
+      published = fratalRow.published,
+      entity = fratalEntity)
+      ) match {
       case Some(fractal) => Ok(fractal.asJson)
       case _ => NotFound
     }

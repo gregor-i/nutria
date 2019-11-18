@@ -1,10 +1,8 @@
 package nutria.frontend
 
 import io.circe.syntax._
-import nutria.core.{FractalEntity, User}
-import nutria.frontend.error.ErrorUi
-import nutria.frontend.explorer.ExplorerUi
-import nutria.frontend.library.LibraryUi
+import nutria.core.FractalEntity
+import nutria.frontend.ui.{ErrorUi, ExplorerUi, LibraryUi, Ui}
 import nutria.frontend.util.SnabbdomApp
 import org.scalajs.dom
 import org.scalajs.dom.Element
@@ -38,17 +36,7 @@ class NutriaApp(container: Element, initialState: NutriaState) extends SnabbdomA
       case None => ()
     }
 
-
-    val ui = state match {
-      case exState: ExplorerState =>
-        ExplorerUi.render(exState, renderState)
-      case libState: LibraryState =>
-        LibraryUi.render(libState, renderState)
-      case errorState: ErrorState =>
-        ErrorUi.render(errorState, renderState)
-    }
-
-    node = patch(node, ui)
+    node = patch(node, Ui(state, renderState))
   }
 
   dom.window.onpopstate = event => {
@@ -68,14 +56,15 @@ class NutriaApp(container: Element, initialState: NutriaState) extends SnabbdomA
 
 object NutriaApp {
   def url(state: NutriaState): Option[(String, Map[String, String])] = state match {
-    case libState: LibraryState if libState.edit.isEmpty => Some(("/library", Map.empty))
-    case libState: LibraryState if libState.edit.isDefined => Some(("/library", Map("details" -> libState.edit.get.id)))
+    case _: LibraryState => Some(("/library", Map.empty))
     case exState: ExplorerState => Some((s"/explorer", Map("state" -> NutriaApp.queryEncoded(exState.fractalEntity))))
+    case details: DetailsState => Some((s"/details/${details.remoteFractal.id}", Map("fractal" -> NutriaApp.queryEncoded(details.fractal))))
     case _: ErrorState => None
   }
 
   def queryEncoded(fractalProgram: FractalEntity): String =
     dom.window.btoa(fractalProgram.asJson.noSpaces)
+
   def queryDecoded(string: String): Option[FractalEntity]=
     (for{
       decoded <- Try(dom.window.atob(string)).toEither

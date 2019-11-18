@@ -1,4 +1,4 @@
-package nutria.frontend.common
+package nutria.frontend.ui.common
 
 import nutria.core.FractalEntity
 import nutria.frontend.shaderBuilder.FractalRenderer
