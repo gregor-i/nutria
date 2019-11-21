@@ -1,5 +1,7 @@
 [
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -25,6 +27,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -50,6 +54,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -75,6 +81,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -100,6 +108,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -125,6 +135,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -150,31 +162,16 @@
     ]
   },
   {
-    "antiAliase" : 1,
-    "description" : "",
-    "program" : {
-      "DivergingSeries" : {
-        "colorInside" : "#ffffff",
-        "colorOutside" : "#000000",
-        "escapeRadius" : 1001.0,
-        "initial" : "lambda",
-        "iteration" : "exp(z) + lambda",
-        "maxIterations" : 500
-      }
-    },
-    "reference" : [
+    "alternativeViewports" : [
+      [
+        0.7588783553955626,
+        6.66075020679108,
+        0.309108074534176,
+        0.0,
+        0.0,
+        0.15552000000000732
+      ]
     ],
-    "title" : "Exp",
-    "view" : [
-      0.7588783553955626,
-      6.66075020679108,
-      0.309108074534176,
-      0.0,
-      0.0,
-      0.15552000000000732
-    ]
-  },
-  {
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -200,6 +197,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -230,6 +229,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "the famous mandelbrot with Normal map effect",
     "program" : {
@@ -261,35 +262,8 @@
     ]
   },
   {
-    "antiAliase" : 1,
-    "description" : "",
-    "program" : {
-      "NewtonIteration" : {
-        "brightnessFactor" : 25.0,
-        "center" : [
-          0.0,
-          0.0
-        ],
-        "function" : "x^3 - 1",
-        "initial" : "lambda",
-        "maxIterations" : 200,
-        "overshoot" : 1.0,
-        "threshold" : 1.0E-4
-      }
-    },
-    "reference" : [
+    "alternativeViewports" : [
     ],
-    "title" : "Three Roots",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
-    ]
-  },
-  {
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -319,6 +293,39 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
+    "antiAliase" : 1,
+    "description" : "",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
+          0.0,
+          0.0
+        ],
+        "function" : "x^3 - 1",
+        "initial" : "lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
+      }
+    },
+    "reference" : [
+    ],
+    "title" : "Three Roots",
+    "view" : [
+      -2.5,
+      -1.0,
+      3.5,
+      0.0,
+      0.0,
+      2.0
+    ]
+  },
+  {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -348,6 +355,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -377,35 +386,8 @@
     ]
   },
   {
-    "antiAliase" : 1,
-    "description" : "",
-    "program" : {
-      "NewtonIteration" : {
-        "brightnessFactor" : 25.0,
-        "center" : [
-          0.0,
-          0.0
-        ],
-        "function" : "x^4 + lambda",
-        "initial" : "1",
-        "maxIterations" : 200,
-        "overshoot" : 1.0,
-        "threshold" : 1.0E-4
-      }
-    },
-    "reference" : [
+    "alternativeViewports" : [
     ],
-    "title" : "Playing with Newton Fractals",
-    "view" : [
-      -12.706311498540042,
-      -8.842488279382595,
-      30.672494440610635,
-      0.0,
-      0.0,
-      15.432098765432224
-    ]
-  },
-  {
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -435,6 +417,39 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
+    "antiAliase" : 1,
+    "description" : "",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
+          0.0,
+          0.0
+        ],
+        "function" : "x^4 + lambda",
+        "initial" : "1",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
+      }
+    },
+    "reference" : [
+    ],
+    "title" : "Playing with Newton Fractals",
+    "view" : [
+      -12.706311498540042,
+      -8.842488279382595,
+      30.672494440610635,
+      0.0,
+      0.0,
+      15.432098765432224
+    ]
+  },
+  {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -464,6 +479,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -493,6 +510,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -522,35 +541,8 @@
     ]
   },
   {
-    "antiAliase" : 1,
-    "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
-    "program" : {
-      "NewtonIteration" : {
-        "brightnessFactor" : 25.0,
-        "center" : [
-          0.0,
-          0.0
-        ],
-        "function" : "((x)^2 + lambda)^2 + lambda",
-        "initial" : "1-lambda",
-        "maxIterations" : 200,
-        "overshoot" : 1.0,
-        "threshold" : 1.0E-4
-      }
-    },
-    "reference" : [
+    "alternativeViewports" : [
     ],
-    "title" : "Mandelbrot Polynomial",
-    "view" : [
-      -0.2722395082412855,
-      -0.3712554702655976,
-      1.4310559006211268,
-      0.0,
-      0.0,
-      0.7200000000000044
-    ]
-  },
-  {
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -580,6 +572,39 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
+    "antiAliase" : 1,
+    "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
+    "program" : {
+      "NewtonIteration" : {
+        "brightnessFactor" : 25.0,
+        "center" : [
+          0.0,
+          0.0
+        ],
+        "function" : "((x)^2 + lambda)^2 + lambda",
+        "initial" : "1-lambda",
+        "maxIterations" : 200,
+        "overshoot" : 1.0,
+        "threshold" : 1.0E-4
+      }
+    },
+    "reference" : [
+    ],
+    "title" : "Mandelbrot Polynomial",
+    "view" : [
+      -0.2722395082412855,
+      -0.3712554702655976,
+      1.4310559006211268,
+      0.0,
+      0.0,
+      0.7200000000000044
+    ]
+  },
+  {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -609,35 +634,16 @@
     ]
   },
   {
-    "antiAliase" : 1,
-    "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
-    "program" : {
-      "NewtonIteration" : {
-        "brightnessFactor" : 45.0,
-        "center" : [
-          0.0,
-          0.0
-        ],
-        "function" : "((x)^2*x - lambda)^2 + lambda",
-        "initial" : "1-lambda",
-        "maxIterations" : 200,
-        "overshoot" : 1.25,
-        "threshold" : 1.0E-4
-      }
-    },
-    "reference" : [
+    "alternativeViewports" : [
+      [
+        -0.09013423830314439,
+        -0.14522074300350504,
+        0.5151801242236113,
+        0.0,
+        0.0,
+        0.25920000000000437
+      ]
     ],
-    "title" : "Mandelbrot Polynomial",
-    "view" : [
-      -0.09013423830314439,
-      -0.14522074300350504,
-      0.5151801242236113,
-      0.0,
-      0.0,
-      0.25920000000000437
-    ]
-  },
-  {
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -667,6 +673,16 @@
     ]
   },
   {
+    "alternativeViewports" : [
+      [
+        -0.32220601106340535,
+        -1.9296587684993527,
+        0.8586335403726716,
+        0.0,
+        0.0,
+        0.43200000000000044
+      ]
+    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -696,35 +712,8 @@
     ]
   },
   {
-    "antiAliase" : 1,
-    "description" : "newton iteration over mandelbrot polynomial(5) with f(x) = ((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
-    "program" : {
-      "NewtonIteration" : {
-        "brightnessFactor" : 25.0,
-        "center" : [
-          0.0,
-          0.0
-        ],
-        "function" : "(x * x + lambda - 1) * x - lambda",
-        "initial" : "0",
-        "maxIterations" : 200,
-        "overshoot" : 1.0,
-        "threshold" : 1.0E-4
-      }
-    },
-    "reference" : [
+    "alternativeViewports" : [
     ],
-    "title" : "Mandelbrot Polynomial",
-    "view" : [
-      -0.32220601106340535,
-      -1.9296587684993527,
-      0.8586335403726716,
-      0.0,
-      0.0,
-      0.43200000000000044
-    ]
-  },
-  {
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -754,6 +743,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -783,6 +774,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -812,6 +805,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(4) with f(x) = (((x)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -841,6 +836,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -870,6 +867,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(5) with f(x) = ((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -899,6 +898,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(6) with f(x) = (((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -928,6 +929,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(6) with f(x) = (((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -957,6 +960,8 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(7) with f(x) = ((((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -986,35 +991,8 @@
     ]
   },
   {
-    "antiAliase" : 1,
-    "description" : "nova mandelbrot fractal of f(x) = x^3 - 1",
-    "program" : {
-      "FreestyleProgram" : {
-        "code" : "int l = 0;\n  for(int i = 0;i< ${iterations}; i++){\n    vec2 oldz = z;\n    z = z-complex_divide(vec2(complex_product(vec2(complex_product(vec2(z), vec2(z))), vec2(z))-vec2(float(1), float(0))), vec2(complex_product(vec2(complex_product(vec2(vec2(float(2), float(0))), vec2(z))), vec2(z))))+p;\n    if(length(z - oldz) < float(0.001))\n      break;\n    l ++;\n  }\n\n  color = vec4(vec3(float(l) / float(${iterations})), 1.0);",
-        "parameters" : [
-          {
-            "StringParameter" : {
-              "literal" : "200",
-              "name" : "iterations"
-            }
-          }
-        ]
-      }
-    },
-    "reference" : [
-      ""
+    "alternativeViewports" : [
     ],
-    "title" : "Nova Fractal",
-    "view" : [
-      -0.998340655107424,
-      -0.0943403293080435,
-      0.3255714426133771,
-      0.0,
-      0.0,
-      0.15600298136646437
-    ]
-  },
-  {
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -1057,6 +1035,39 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
+    "antiAliase" : 1,
+    "description" : "nova mandelbrot fractal of f(x) = x^3 - 1",
+    "program" : {
+      "FreestyleProgram" : {
+        "code" : "int l = 0;\n  for(int i = 0;i< ${iterations}; i++){\n    vec2 oldz = z;\n    z = z-complex_divide(vec2(complex_product(vec2(complex_product(vec2(z), vec2(z))), vec2(z))-vec2(float(1), float(0))), vec2(complex_product(vec2(complex_product(vec2(vec2(float(2), float(0))), vec2(z))), vec2(z))))+p;\n    if(length(z - oldz) < float(0.001))\n      break;\n    l ++;\n  }\n\n  color = vec4(vec3(float(l) / float(${iterations})), 1.0);",
+        "parameters" : [
+          {
+            "StringParameter" : {
+              "literal" : "200",
+              "name" : "iterations"
+            }
+          }
+        ]
+      }
+    },
+    "reference" : [
+      ""
+    ],
+    "title" : "Nova Fractal",
+    "view" : [
+      -0.998340655107424,
+      -0.0943403293080435,
+      0.3255714426133771,
+      0.0,
+      0.0,
+      0.15600298136646437
+    ]
+  },
+  {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -1099,6 +1110,33 @@
     ]
   },
   {
+    "alternativeViewports" : [
+    ],
+    "antiAliase" : 1,
+    "description" : "",
+    "program" : {
+      "FreestyleProgram" : {
+        "code" : "int l = 0;\nvec2 z_der = vec2(float(0), float(0));\n{\n   vec2 local_var_1 = vec2(float(1), float(0));\n   z_der = local_var_1;\n}\nfor(int i = 0; i < 200; i++){\n  vec2 z_new = vec2(float(0), float(0));\n  {\n    vec2 local_var_1 = complex_product(vec2(z), vec2(z));\n    vec2 local_var_2 = local_var_1+p;\n    z_new = local_var_2;\n  }\n  vec2 z_der_new = vec2(float(0), float(0));\n  {\n    vec2 local_var_1 = complex_product(vec2(z_der), vec2(z));\n    vec2 local_var_2 = vec2(float(2), float(0));\n    vec2 local_var_3 = complex_product(vec2(local_var_1), vec2(local_var_2));\n    vec2 local_var_4 = vec2(float(1), float(0));\n    vec2 local_var_5 = local_var_3+local_var_4;\n    z_der_new = local_var_5;\n  }\n  z = z_new;\n  z_der = z_der_new;\n  if(dot(z,z) > float(10000))\n    break;\n  l ++;\n}\n\nif(l == 200){\n  color = vec4(vec3(0.0), 1.0);\n}else{\n  float z_length = length(z);\n  float z_der_length = length(z_der);\n  float d = 2.0 * z_length / z_der_length * log(z_length);\n  color = vec4(vec3(d*1000.0), 1.0); // todo: do something smart here to calculate the factor\n  //color = mix(vec4(color_shadow, 1.0), vec4(color_light, 1.0), d);\n}\n",
+        "parameters" : [
+        ]
+      }
+    },
+    "reference" : [
+      "https://en.wikibooks.org/wiki/Fractals/Iterations_in_the_complex_plane/demm"
+    ],
+    "title" : "Mandelbrot exterior distance estimator",
+    "view" : [
+      -1.7645988375864934,
+      -1.0131959357824767,
+      2.4334365753315907,
+      0.0,
+      0.0,
+      1.9999999999999718
+    ]
+  },
+  {
+    "alternativeViewports" : [
+    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -1145,30 +1183,5 @@
       0.0,
       2.006211180124265
     ]
-  },
-  {
-    "title": "Mandelbrot exterior distance estimator",
-    "program": {
-      "FreestyleProgram": {
-        "code": "int l = 0;\nvec2 z_der = vec2(float(0), float(0));\n{\n   vec2 local_var_1 = vec2(float(1), float(0));\n   z_der = local_var_1;\n}\nfor(int i = 0; i < 200; i++){\n  vec2 z_new = vec2(float(0), float(0));\n  {\n    vec2 local_var_1 = complex_product(vec2(z), vec2(z));\n    vec2 local_var_2 = local_var_1+p;\n    z_new = local_var_2;\n  }\n  vec2 z_der_new = vec2(float(0), float(0));\n  {\n    vec2 local_var_1 = complex_product(vec2(z_der), vec2(z));\n    vec2 local_var_2 = vec2(float(2), float(0));\n    vec2 local_var_3 = complex_product(vec2(local_var_1), vec2(local_var_2));\n    vec2 local_var_4 = vec2(float(1), float(0));\n    vec2 local_var_5 = local_var_3+local_var_4;\n    z_der_new = local_var_5;\n  }\n  z = z_new;\n  z_der = z_der_new;\n  if(dot(z,z) > float(10000))\n    break;\n  l ++;\n}\n\nif(l == 200){\n  color = vec4(vec3(0.0), 1.0);\n}else{\n  float z_length = length(z);\n  float z_der_length = length(z_der);\n  float d = 2.0 * z_length / z_der_length * log(z_length);\n  color = vec4(vec3(d*1000.0), 1.0); // todo: do something smart here to calculate the factor\n  //color = mix(vec4(color_shadow, 1.0), vec4(color_light, 1.0), d);\n}\n",
-        "parameters": []
-      }
-    },
-    "view": [
-      -1.7645988375864934,
-      -1.0131959357824767,
-      2.4334365753315907,
-      0.0,
-      0.0,
-      1.9999999999999718
-    ],
-    "description": "",
-    "reference": [
-      "https://en.wikibooks.org/wiki/Fractals/Iterations_in_the_complex_plane/demm"
-    ],
-    "antiAliase": 1,
-    "id": "7fa54c79-e13e-422f-b0ca-eb85b7ef428d",
-    "owner": "0ed7f86c-5305-3a3b-ad53-15410e6c7ac9",
-    "published": false
   }
 ]

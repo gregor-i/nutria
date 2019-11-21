@@ -12,6 +12,7 @@ import nutria.core.viewport.DefaultViewport
 case class FractalEntity(title: String = "",
                          program: FractalProgram,
                          view: Viewport = DefaultViewport.defaultViewport,
+                         alternativeViewports: List[Viewport] = List.empty,
                          description: String = "",
                          reference: List[String] = List.empty,
                          antiAliase: Int Refined Positive = refineMV(1)

@@ -14,7 +14,7 @@ class FractalRepoSpec extends FunSuite with Matchers with GuiceOneAppPerSuite wi
   def row(fractal: FractalEntity) =
     FractalRow(
       id = UUID.randomUUID().toString,
-      owner = None,
+      owner = UUID.randomUUID().toString,
       published = false,
       maybeFractal = Some(fractal)
     )
@@ -53,10 +53,10 @@ class FractalRepoSpec extends FunSuite with Matchers with GuiceOneAppPerSuite wi
   test("listByUser") {
     val owner1 = UUID.randomUUID().toString
     val owner2 = UUID.randomUUID().toString
-    repo.save(f1.copy(owner = Some(owner1)))
-    repo.save(f2.copy(owner = Some(owner2)))
-    repo.listByUser(owner1) shouldBe List(f1.copy(owner = Some(owner1)))
-    repo.listByUser(owner2) shouldBe List(f2.copy(owner = Some(owner2)))
+    repo.save(f1.copy(owner = owner1))
+    repo.save(f2.copy(owner = owner2))
+    repo.listByUser(owner1) shouldBe List(f1.copy(owner = owner1))
+    repo.listByUser(owner2) shouldBe List(f2.copy(owner = owner2))
   }
 
   test("delete") {

@@ -39,12 +39,17 @@ object RenderEditFractalEntity {
   }
 
   def snapshotsBody[A <: NutriaState](fractal: FractalEntity, lens: Lens[A, FractalEntity])
-                              (implicit state: A, update: A => Unit) =
-    List(
+                              (implicit state: A, update: A => Unit) = {
+    val viewports = fractal.view :: fractal.alternativeViewports
+
+    val tiles = viewports.map { viewport =>
       h("article.fractal-tile",
         events = Seq("click" -> Snabbdom.event(_ => update(ExplorerState(state.user, fractal).asInstanceOf[A]))), // todo: remove hacky cast
-      )(FractalImage(fractal, Dimensions.thumbnailDimensions))
-    ) ++ List.fill(5)(LibraryUi.dummyTile)
+      )(FractalImage(fractal.copy(view = viewport), Dimensions.thumbnailDimensions))
+    }
+
+    tiles ++ List.fill(5)(LibraryUi.dummyTile)
+  }
 
   def parametersBody[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])
                                (implicit state: A, update: A => Unit) =
