@@ -13,7 +13,7 @@ object LibraryUi {
       key = "library")(
       common.Header("Nutria Fractal Library")(state, update),
       h("h2.title")("Public Fractals:"),
-      h("div.lobby-tile-list")(
+      h("div.fractal-tile-list")(
         state.publicFractals.map(renderProgramTile),
         Seq.fill(5)(dummyTile)
       ),
@@ -38,16 +38,11 @@ object LibraryUi {
 
   val dummyTile =
     h("article.dummy-tile")(
-      h("div")(
-        h("canvas",
-          attrs = Seq(
-            "width" -> Dimensions.thumbnailDimensions.width.toString,
-            "height" -> "0",
-          ),
-          styles = Seq(
-            "display" -> "block",
-          )
-        )()
-      )
+      h("canvas",
+        attrs = Seq(
+          "width" -> Dimensions.thumbnailDimensions.width.toString,
+          "height" -> "0",
+        )
+      )()
     )
 }

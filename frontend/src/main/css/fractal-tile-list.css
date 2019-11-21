@@ -1,0 +1,36 @@
+.fractal-tile-list{
+    display : flex;
+    flex-wrap : wrap;
+    margin: 8px;
+}
+
+.fractal-tile-list > .fractal-tile,
+.fractal-tile-list > .dummy-tile {
+    flex-grow : 1;
+    margin : 8px;
+}
+
+.fractal-tile-list > .fractal-tile {
+    box-shadow : rgba(0, 0, 0, 0.32) 8px 8px 8px 0px;
+    background : white;
+}
+
+.fractal-tile-list > .fractal-tile:hover{
+    box-shadow : rgba(0, 0, 0, 0.32) 8px 8px 8px 0px, hsl(217, 71%, 53%) 0px 0px 8px 2px;
+    background : white;
+}
+
+.fractal-tile-list > .dummy-tile {
+    height: 0px;
+    border : 0px;
+}
+
+.fractal-tile-list > .dummy-tile > img,
+.fractal-tile-list > .dummy-tile > canvas,
+.fractal-tile-list > .fractal-tile > img,
+.fractal-tile-list > .fractal-tile > canvas{
+    width : 100%;
+    display : block;
+    background: url('/img/rendering.svg');
+    background-size: contain;
+}
