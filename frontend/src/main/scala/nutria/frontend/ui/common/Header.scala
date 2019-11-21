@@ -22,7 +22,7 @@ object Header {
       "cursor" -> "pointer",
     ),
     attrs = Seq("src" -> "/img/icon.png"),
-    events = Seq("click" -> Snabbdom.event(_ => dom.window.location.replace("/"))),
+    events = Seq("click" -> Snabbdom.event(_ => dom.window.location.assign("/"))),
   )()
 
   private val loggedOutActions =
