@@ -6,12 +6,15 @@ import monocle.{Lens, Optional}
 import nutria.core.{FractalEntity, _}
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 sealed trait NutriaState{
   def user: Option[User]
 }
 
-//case class LoadingState(loading: Future[Vector[FractalEntityWithId]]) extends State
+case class LoadingState(loading: Future[NutriaState]) extends NutriaState {
+  def user: None.type = None
+}
 
 case class ErrorState(user: Option[User], message: String) extends NutriaState
 
@@ -42,8 +45,21 @@ object ExplorerState {
 }
 
 object NutriaState extends CirceCodex {
+  def libraryState(): Future[LibraryState] =
+    for {
+      user <- NutriaService.whoAmI()
+      publicFractals <- NutriaService.loadPublicFractals()
+    } yield LibraryState(user = user,
+      publicFractals = publicFractals)
+
+
   implicit val encodeSaveProcess: Codec[Option[Future[FractalEntity]]] = Codec.from(
     decodeA = Decoder.decodeNone.map(none => none: Option[Future[FractalEntity]]),
+    encodeA = Encoder.encodeNone.contramap(_ => None)
+  )
+
+  implicit val encodeFuture: Codec[Future[NutriaState]] = Codec.from(
+    decodeA = Decoder.decodeNone.map(_ => Future.failed(new Exception)),
     encodeA = Encoder.encodeNone.contramap(_ => None)
   )
 

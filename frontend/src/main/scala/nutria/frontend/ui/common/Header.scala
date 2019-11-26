@@ -1,8 +1,7 @@
 package nutria.frontend.ui.common
 
-import nutria.frontend.NutriaState
 import nutria.core.User
-import org.scalajs.dom
+import nutria.frontend.{LoadingState, NutriaState}
 import snabbdom.Snabbdom.h
 import snabbdom.{Snabbdom, VNode}
 
@@ -16,13 +15,14 @@ object Header {
       state.user.fold(loggedOutActions)(loggedInActions)
     )
 
-  private val brandIcon = h("img.brand-icon",
+  private def brandIcon(implicit state: NutriaState, update: NutriaState => Unit) =
+    h("img.brand-icon",
     styles = Seq(
       "height" -> "100%",
       "cursor" -> "pointer",
     ),
     attrs = Seq("src" -> "/img/icon.png"),
-    events = Seq("click" -> Snabbdom.event(_ => dom.window.location.assign("/"))),
+      events = Seq("click" -> Snabbdom.event(_ => update(LoadingState(NutriaState.libraryState())))),
   )()
 
   private val loggedOutActions =

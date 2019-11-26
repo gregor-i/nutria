@@ -2,15 +2,18 @@ package nutria.frontend
 
 import io.circe.syntax._
 import nutria.core.FractalEntity
-import nutria.frontend.ui.{ErrorUi, ExplorerUi, LibraryUi, Ui}
+import nutria.frontend.ui.Ui
 import nutria.frontend.util.SnabbdomApp
 import org.scalajs.dom
 import org.scalajs.dom.Element
 import snabbdom.VNode
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.scalajs.js
 import scala.scalajs.js.|
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
+
+import scala.util.chaining._
 
 class NutriaApp(container: Element, initialState: NutriaState) extends SnabbdomApp {
 
@@ -36,6 +39,14 @@ class NutriaApp(container: Element, initialState: NutriaState) extends SnabbdomA
       case None => ()
     }
 
+    state match {
+      case LoadingState(future) => future.onComplete {
+        case Success(newState) => renderState(newState)
+        case Failure(exception) => renderState(ErrorState(state.user, s"unexpected problem while initializing app: ${exception.getMessage}"))
+      }
+      case _ => ()
+    }
+
     node = patch(node, Ui(state, renderState))
   }
 
@@ -46,7 +57,7 @@ class NutriaApp(container: Element, initialState: NutriaState) extends SnabbdomA
       decoded <- json.as[NutriaState]
     } yield decoded) match {
       case Right(state) => renderState(state)
-      case Left(error) => dom.console.error("unexpected problem in window.onpopstate", error.asInstanceOf[js.Any])
+      case Left(error) => renderState(ErrorState(None, "unexpected problem in window.onpopstate"))
     }
   }
 
@@ -60,15 +71,18 @@ object NutriaApp {
     case exState: ExplorerState => Some((s"/explorer", Map("state" -> NutriaApp.queryEncoded(exState.fractalEntity))))
     case details: DetailsState => Some((s"/details/${details.remoteFractal.id}", Map("fractal" -> NutriaApp.queryEncoded(details.fractal))))
     case _: ErrorState => None
+    case _: LoadingState => None
   }
 
   def queryEncoded(fractalProgram: FractalEntity): String =
     dom.window.btoa(fractalProgram.asJson.noSpaces)
+  //    java.util.Base64.getEncoder.encodeToString(fractalProgram.asJson.noSpaces.getBytes())
 
   def queryDecoded(string: String): Option[FractalEntity]=
     (for{
       decoded <- Try(dom.window.atob(string)).toEither
-      json <- io.circe.parser.parse(decoded)
+//      decoded <- Try(java.util.Base64.getDecoder.decode(string)).toEither
+      json <- io.circe.parser.parse(new String(decoded))
       decoded <- json.as[FractalEntity]
     } yield decoded).toOption
 }

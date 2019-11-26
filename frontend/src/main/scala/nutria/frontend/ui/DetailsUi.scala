@@ -35,7 +35,7 @@ object DetailsUi {
     val fractal = state.fractal
     if (state.user.map(_.id).contains(state.remoteFractal.owner)) {
       Buttons.group(
-        Buttons("Apply Changes", Images.upload, Snabbdom.event { _ =>
+        Buttons("Save Changes", Images.upload, Snabbdom.event { _ =>
           val updatedFractal = state.remoteFractal.copy(entity = fractal)
           (for {
             _ <- NutriaService.updateUserFractal(updatedFractal)

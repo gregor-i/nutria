@@ -17,7 +17,7 @@ object Main {
       .dropWhile(_ == '?')
       .split('&')
       .collect {
-        case s"${key}=${value} " => key -> value
+        case s"${key}=${value}" => key -> value
       }
       .toMap
 
@@ -26,10 +26,7 @@ object Main {
         user <- NutriaService.whoAmI()
         state <- dom.window.location.pathname match {
           case "/library" =>
-            for {
-              publicFractals <- NutriaService.loadPublicFractals()
-            } yield LibraryState(user = user,
-              publicFractals = publicFractals)
+            NutriaState.libraryState()
 
           case "/explorer" =>
             Future.successful {
@@ -47,7 +44,7 @@ object Main {
 
           case "/admin" =>
             Admin.setup()
-            Future.failed(new Exception)
+            return
 
           case _ =>
             Future.successful {
@@ -58,10 +55,7 @@ object Main {
 
 
     dom.document.addEventListener[Event]("DOMContentLoaded", (_: js.Any) =>
-      stateFuture.onComplete {
-        case Success(state) => new nutria.frontend.NutriaApp(container, state)
-        case Failure(exception) => println(exception)
-      }
+      new nutria.frontend.NutriaApp(container, LoadingState(stateFuture))
     )
   }
 }
