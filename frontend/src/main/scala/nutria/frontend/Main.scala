@@ -11,6 +11,12 @@ import scala.util.{Failure, Success}
 object Main {
 
   def main(args: Array[String]): Unit = {
+    if(dom.window.location.pathname == "/admin"){
+      Admin.setup()
+      return
+    }
+
+
     def container: Element = dom.document.body
 
     val queryParams = dom.window.location.search
@@ -41,10 +47,6 @@ object Main {
             for{
               remoteFractal <- NutriaService.loadFractal(fractalsId)
             } yield DetailsState(user, remoteFractal, remoteFractal.entity) // todo: load from query as fallback
-
-          case "/admin" =>
-            Admin.setup()
-            return
 
           case _ =>
             Future.successful {

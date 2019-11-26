@@ -12,16 +12,15 @@ object LibraryUi {
     h(tag = "body",
       key = "library")(
       common.Header("Nutria Fractal Library")(state, update),
-      h("h2.title")("Public Fractals:"),
       h("div.fractal-tile-list")(
-        state.publicFractals.map(renderProgramTile),
-        Seq.fill(5)(dummyTile)
+        state.publicFractals.map(renderFractalTile),
+        fiveDummyTiles
       ),
       common.Footer()
     )
   }
 
-  def renderProgramTile(fractal: FractalEntityWithId)
+  def renderFractalTile(fractal: FractalEntityWithId)
                        (implicit state: LibraryState, update: NutriaState => Unit): VNode =
     h("article.fractal-tile",
       attrs = Seq("title" -> fractal.entity.description),
@@ -36,6 +35,7 @@ object LibraryUi {
     )
 
 
+  val fiveDummyTiles = Seq.fill(5)(dummyTile)
   val dummyTile =
     h("article.dummy-tile")(
       h("canvas",
