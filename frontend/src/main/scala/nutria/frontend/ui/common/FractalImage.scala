@@ -53,19 +53,32 @@ private object ImgStrategy extends Strategy {
   private lazy val canvas: Canvas = dom.document.createElement("canvas").asInstanceOf[Canvas]
   private lazy val webglCtx = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
 
+  private val interval = dom.window.setInterval(() => {
+    if (buffer.nonEmpty) {
+      val task = buffer.dequeue()
+      val webGlProgram = FractalRenderer.constructProgram(webglCtx, task.entity.program, task.entity.antiAliase)
+      canvas.width = task.dimensions.width
+      canvas.height = task.dimensions.height
+      FractalRenderer.render(webglCtx, task.entity.view, webGlProgram)
+      task.img.src = canvas.toDataURL("image/png")
+    }
+  }, 100)
+
+  private case class Task(img: Image, entity: FractalEntity, dimensions: Dimensions)
+
+  private val buffer = scala.collection.mutable.Queue.empty[Task]
+
   override def render(fractalEntity: FractalEntity, dimensions: Dimensions): VNode =
     h("img",
-      attrs = Seq("width" -> dimensions.width.toString, "height" -> dimensions.height.toString),
+      attrs = Seq(
+        "width" -> dimensions.width.toString,
+        "height" -> dimensions.height.toString,
+        "src" -> "/img/rendering.svg"
+      ),
       hooks = Seq[(String, SnabbdomNative.Hook)](
         "insert" -> Snabbdom.hook { node =>
           val img = node.elm.get.asInstanceOf[Image]
-          dom.window.setTimeout(() => {
-            canvas.width = dimensions.width
-            canvas.height = dimensions.height
-            val webGlProgram = FractalRenderer.constructProgram(webglCtx, fractalEntity.program, fractalEntity.antiAliase)
-            FractalRenderer.render(webglCtx, fractalEntity.view, webGlProgram)
-            img.src = canvas.toDataURL("image/png")
-          }, 5)
+          buffer.enqueue(Task(img, fractalEntity, dimensions))
         }
       )
     )()
