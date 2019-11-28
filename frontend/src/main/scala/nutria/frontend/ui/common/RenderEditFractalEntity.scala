@@ -48,7 +48,7 @@ object RenderEditFractalEntity {
       )(FractalImage(fractal.copy(view = viewport), Dimensions.thumbnailDimensions))
     }
 
-    tiles ++ List.fill(5)(LibraryUi.dummyTile)
+    tiles ++ LibraryUi.dummyTiles
   }
 
   def parametersBody[A](fractal: FractalEntity, lens: Lens[A, FractalEntity])

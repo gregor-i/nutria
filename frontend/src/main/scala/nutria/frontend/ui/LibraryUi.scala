@@ -14,7 +14,7 @@ object LibraryUi {
       common.Header("Nutria Fractal Library")(state, update),
       h("div.fractal-tile-list")(
         state.publicFractals.map(renderFractalTile),
-        fiveDummyTiles
+        dummyTiles
       ),
       common.Footer()
     )
@@ -35,8 +35,7 @@ object LibraryUi {
     )
 
 
-  val fiveDummyTiles = Seq.fill(5)(dummyTile)
-  val dummyTile =
+  private val dummyTile =
     h("article.dummy-tile")(
       h("canvas",
         attrs = Seq(
@@ -45,4 +44,6 @@ object LibraryUi {
         )
       )()
     )
+
+  val dummyTiles = Seq.fill(8)(dummyTile)
 }
