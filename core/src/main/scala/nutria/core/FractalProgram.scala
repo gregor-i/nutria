@@ -15,7 +15,7 @@ sealed trait FractalProgram
 
 @monocle.macros.Lenses()
 case class DivergingSeries(maxIterations: Int Refined Positive = refineMV(200),
-                           escapeRadius: Double Refined (Positive And NonNaN) = refineMV(100.0),
+                           escapeRadius: Double Refined Positive = refineMV(100.0),
                            initial: StringFunction[Lambda.type],
                            iteration: StringFunction[ZAndLambda],
                            colorInside: RGBA = RGBA.white,
@@ -32,7 +32,7 @@ object DivergingSeries {
 
 @monocle.macros.Lenses()
 case class DerivedDivergingSeries(maxIterations: Int Refined Positive = refineMV(200),
-                                  escapeRadius: Double Refined (Positive And NonNaN) = refineMV(100.0),
+                                  escapeRadius: Double Refined Positive = refineMV(100.0),
                                   h2: Double Refined NonNaN = refineMV(2.0),
                                   angle: Double Refined Open[Witness.`0.0`.T, Witness.`6.28318530718`.T] = refineMV(0.78539816339), // todo: maybe define in degree? this is 45°
                                   initialZ: StringFunction[Lambda.type],
@@ -54,11 +54,11 @@ object DerivedDivergingSeries {
 
 @monocle.macros.Lenses()
 case class NewtonIteration(maxIterations: Int Refined Positive = refineMV(200),
-                           threshold: Double Refined (Positive And NonNaN) = refineMV(1e-4),
+                           threshold: Double Refined Positive = refineMV(1e-4),
                            function: StringFunction[XAndLambda],
                            initial: StringFunction[Lambda.type],
                            center: Point = (0.0, 0.0),
-                           brightnessFactor: Double Refined (Positive And NonNaN) = refineMV(25.0),
+                           brightnessFactor: Double Refined Positive = refineMV(25.0),
                            overshoot: Double Refined NonNaN = refineMV(1.0)
                           ) extends FractalProgram
 
