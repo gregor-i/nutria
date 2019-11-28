@@ -12,9 +12,7 @@ object Buttons {
       events = Seq("click" -> onclick),
       attrs = if (disabled) Seq("disabled" -> "true") else Seq.empty
     )(
-      h("span.icon")(
-        h(s"i.fa.fa-$icon")()
-      ),
+      Icons.icon(icon),
       h("span")(text)
     )
 

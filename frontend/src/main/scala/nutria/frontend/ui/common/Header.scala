@@ -28,9 +28,7 @@ object Header {
   private val loggedOutActions =
     h("div")(
       h("a.button", attrs = Seq("href" -> "/auth/google"))(
-        h("span.icon")(
-          h("i.fa.fa-sign-in")()
-        ),
+        Icons.icon("sign-in"),
         h("span")("Log in with Google")
       )
     )
@@ -47,9 +45,7 @@ object Header {
         h("span")(s"Profile")
       ),
       h("a.button.is-outlined", attrs = Seq("href" -> "/auth/logout"))(
-        h("span.icon")(
-          h("i.fa.fa-sign-out")()
-        ),
+        Icons.icon("sign-out"),
         h("span")(s"Log out"),
       )
     )

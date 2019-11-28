@@ -1,12 +1,12 @@
 package nutria.frontend
 
 import io.circe.{Codec, Decoder, Encoder}
+import monocle.Lens
 import monocle.macros.GenLens
-import monocle.{Lens, Optional}
 import nutria.core.{FractalEntity, _}
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 sealed trait NutriaState{
   def user: Option[User]
@@ -19,10 +19,8 @@ case class LoadingState(loading: Future[NutriaState]) extends NutriaState {
 case class ErrorState(user: Option[User], message: String) extends NutriaState
 
 case class ExplorerState(user: Option[User],
-                         fractalEntity: FractalEntity,
-                         edit: Option[FractalEntity] = None,
-                         tab: Tab = Tab.default,
-                         saveProcess: Option[Future[FractalEntity]] = None) extends NutriaState
+                         fractalId: Option[String],
+                         fractalEntity: FractalEntity) extends NutriaState
 
 case class LibraryState(user: Option[User],
                         publicFractals: Vector[FractalEntityWithId]) extends NutriaState
@@ -38,10 +36,7 @@ object DetailsState {
 
 object ExplorerState {
   val fractalEntity: Lens[ExplorerState, FractalEntity] = GenLens[ExplorerState](_.fractalEntity)
-  val edit: Lens[ExplorerState, Option[FractalEntity]] = GenLens[ExplorerState](_.edit)
-  val editOptional: Optional[ExplorerState, FractalEntity] = edit.composePrism(monocle.std.option.some)
   val viewport: Lens[ExplorerState, Viewport] = ExplorerState.fractalEntity.composeLens(FractalEntity.view)
-  val tab: Lens[ExplorerState, Tab] = GenLens[ExplorerState](_.tab)
 }
 
 object NutriaState extends CirceCodex {

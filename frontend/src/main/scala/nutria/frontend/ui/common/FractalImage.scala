@@ -34,6 +34,7 @@ private object OffscrencanvasStrategy extends Strategy {
 
   override def render(fractalEntity: FractalEntity, dimensions: Dimensions): VNode =
     h("canvas",
+      key = fractalEntity.hashCode(),
       attrs = Seq("width" -> dimensions.width.toString, "height" -> dimensions.height.toString),
       hooks = Seq[(String, SnabbdomNative.Hook)](
         "insert" -> Snabbdom.hook { node =>
@@ -53,7 +54,7 @@ private object ImgStrategy extends Strategy {
   private lazy val canvas: Canvas = dom.document.createElement("canvas").asInstanceOf[Canvas]
   private lazy val webglCtx = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
 
-  private val interval = dom.window.setInterval(() => {
+  dom.window.setInterval(() => {
     if (buffer.nonEmpty) {
       val task = buffer.dequeue()
       val webGlProgram = FractalRenderer.constructProgram(webglCtx, task.entity.program, task.entity.antiAliase)
@@ -70,6 +71,7 @@ private object ImgStrategy extends Strategy {
 
   override def render(fractalEntity: FractalEntity, dimensions: Dimensions): VNode =
     h("img",
+      key = fractalEntity.hashCode(),
       attrs = Seq(
         "width" -> dimensions.width.toString,
         "height" -> dimensions.height.toString,
