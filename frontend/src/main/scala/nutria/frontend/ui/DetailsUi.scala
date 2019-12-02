@@ -20,7 +20,7 @@ object DetailsUi {
     )
 
   def body(implicit state: DetailsState, update: NutriaState => Unit) =
-    h("div", styles = Seq("margin" -> "auto", "max-width" -> "848px"))(
+    h("div.details-body")(
       h("h2.title")("General Settings:"),
       general(state.fractal, DetailsState.fractalEntity),
       h("h2.title")("Template Settings:"),

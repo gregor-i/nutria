@@ -38,7 +38,7 @@ class NutriaApp(container: Element, initialState: NutriaState) extends SnabbdomA
     state match {
       case LoadingState(future) => future.onComplete {
         case Success(newState) => renderState(newState)
-        case Failure(exception) => renderState(ErrorState(state.user, s"unexpected problem while initializing app: ${exception.getMessage}"))
+        case Failure(exception) => renderState(ErrorState(s"unexpected problem while initializing app: ${exception.getMessage}"))
       }
       case _ => ()
     }
@@ -53,7 +53,7 @@ class NutriaApp(container: Element, initialState: NutriaState) extends SnabbdomA
       decoded <- json.as[NutriaState]
     } yield decoded) match {
       case Right(state) => renderState(state)
-      case Left(error) => renderState(ErrorState(None, "unexpected problem in window.onpopstate"))
+      case Left(error) => renderState(ErrorState("unexpected problem in window.onpopstate"))
     }
   }
 

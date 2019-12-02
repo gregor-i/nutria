@@ -12,11 +12,15 @@ sealed trait NutriaState{
   def user: Option[User]
 }
 
-case class LoadingState(loading: Future[NutriaState]) extends NutriaState {
+trait NoUser{ _: NutriaState =>
   def user: None.type = None
 }
 
-case class ErrorState(user: Option[User], message: String) extends NutriaState
+case class LoadingState(loading: Future[NutriaState]) extends NutriaState with NoUser
+
+case class ErrorState(message: String) extends NutriaState with NoUser
+
+case class GreetingState(randomFractal: FractalEntity) extends NutriaState with NoUser
 
 case class ExplorerState(user: Option[User],
                          fractalId: Option[String],

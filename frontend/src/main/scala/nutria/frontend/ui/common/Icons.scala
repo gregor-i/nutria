@@ -12,6 +12,10 @@ object Icons {
   val delete = "trash"
   val copy = "clone"
   val snapshot = "camera"
+  val explore = "compass"
+  val library = "image"
+  val login = "sign-in"
+  val logout = "sign-out"
 
   def icon(name: String) =
     Snabbdom.h("span.icon")(
