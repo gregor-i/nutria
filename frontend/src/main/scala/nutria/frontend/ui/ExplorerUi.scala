@@ -17,6 +17,16 @@ object ExplorerUi {
       renderCanvas,
     )
 
+  // Actions to implement:
+  //  With Fractal Id
+  //    Fractal is owned by me
+  //      Add Snapshot to fractal
+  //    else
+  //      fork and take snapshot
+  //    back to fractal details
+  //  return to start position
+  //  render high res image and save
+
 //  def renderActionBar()
 //                     (implicit state: ExplorerState, update: ExplorerState => Unit): VNode =
 //    h("div.action-bar")(
