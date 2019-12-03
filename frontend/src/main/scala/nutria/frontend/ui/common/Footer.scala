@@ -1,29 +1,21 @@
 package nutria.frontend.ui.common
 
-import snabbdom.Snabbdom.h
+import snabbdom.Builder
 
 object Footer {
-  def apply() = h("footer.footer")(
-    h("div.content.has-text-centered")(
-      purpose,
-      licence
-    )
-  )
+  def apply() =
+    Builder("footer").classes("footer")
+      .child(
+        Builder.div
+          .classes("content", "has-text-centered")
+          .prop("innerHtml", licence)
+      )
+    .toVNode
 
-  private val purpose = h("p")(
-    h("strong")("nutria"),
-    " is a project dedicated to the purpose of ",
-    h("i")("exploring, understanding, implementing"),
-    " and ultimately ",
-    h("i")("rendering"),
-    " ",
-    h("a", attrs = Seq("href" -> "https://en.wikipedia.org/wiki/Fractal"))("fractals.")
-  )
-
-  private val licence = h("p")(
-    "It is licenced under ",
-    h("a", attrs = Seq("href" -> "https://raw.githubusercontent.com/gregor-i/nutria/master/LICENSE.md"))("GNU GENERAL PUBLIC LICENSE"),
-    " and its source code is published on ",
-    h("a", attrs = Seq("href" -> "https://github.com/gregor-i/nutria"))("github")
-  )
+  private val licence =
+    """<p>
+      |  This project is licenced under <a href="https://raw.githubusercontent.com/gregor-i/nutria/master/LICENSE.md">GNU GENERAL PUBLIC LICENSE</a>
+      |  and its source code is published on <a href="https://github.com/gregor-i/nutria">github</a>
+      |</p>
+      |""".stripMargin
 }

@@ -1,7 +1,7 @@
 package snabbdom
 
 import org.scalajs.dom.Event
-import snabbdom.SnabbdomNative.Child
+import snabbdom.SnabbdomFacade.Child
 
 import scala.scalajs.js
 import scala.scalajs.js.{Dictionary, |}
@@ -12,8 +12,8 @@ object Snabbdom {
            attributesModule: Boolean = false,
            datasetModule: Boolean = false,
            styleModule: Boolean = false,
-           eventlistenersModule: Boolean = false) = {
-    SnabbdomNative.init(
+           eventlistenersModule: Boolean = false) =
+    SnabbdomFacade.init(
       js.Array(
         Some(ClassModule).filter(_ => classModule),
         Some(PropsModule).filter(_ => propsModule),
@@ -21,24 +21,23 @@ object Snabbdom {
         Some(DatasetModule).filter(_ => datasetModule),
         Some(StyleModule).filter(_ => styleModule),
         Some(EventListenerModule).filter(_ => eventlistenersModule),
-      ).flatMap(_.toSeq)
+      ).collect { case Some(module) => module }
     )
-  }
 
   def h(tag: String,
-        key: SnabbdomNative.Key = js.undefined,
+        key: SnabbdomFacade.Key = js.undefined,
         classes: Seq[(String, Boolean)] = Seq.empty,
         props: Seq[(String, js.Any)] = Seq.empty,
         attrs: Seq[(String, String)] = Seq.empty,
         dataset: Seq[(String, String)] = Seq.empty,
         styles: Seq[(String, String)] = Seq.empty,
-        events: Seq[(String, SnabbdomNative.Eventlistener)] = Seq.empty,
-        hooks: Seq[(String, SnabbdomNative.Hook)] = Seq.empty
+        events: Seq[(String, SnabbdomFacade.Eventlistener)] = Seq.empty,
+        hooks: Seq[(String, SnabbdomFacade.Hook)] = Seq.empty
        )(
          children: (Child | Seq[Child])*
        ): VNode = {
 
-    SnabbdomNative.h(tag = tag,
+    SnabbdomFacade.h(sel = tag,
       props = new Data(
         key = key,
         `class` = Dictionary(classes: _*),
@@ -49,16 +48,18 @@ object Snabbdom {
         on = Dictionary(events: _*),
         hook = Dictionary(hooks: _*)
       ),
-      js.Array(children.flatMap[Child]{
+      js.Array(children.flatMap[Child] {
         case seq: Seq[_] => seq.asInstanceOf[Seq[Child]]
         case elem => Seq(elem).asInstanceOf[Seq[Child]]
       }: _*))
   }
 
-  def event(f: Event => Unit): SnabbdomNative.Eventlistener = f: js.Function1[Event, Unit]
-  def specificEvent[E <: Event](f: E => Unit): SnabbdomNative.Eventlistener = f: js.Function1[E, Unit]
+  def event(f: Event => Unit): SnabbdomFacade.Eventlistener = f: js.Function1[Event, Unit]
 
-  def hook(f: (VNode, VNode) => Unit): SnabbdomNative.Hook = f : js.Function2[VNode, VNode, Unit]
-  def hook(f: VNode => Unit): SnabbdomNative.Hook = f : js.Function1[VNode, Unit]
+  def specificEvent[E <: Event](f: E => Unit): SnabbdomFacade.Eventlistener = f: js.Function1[E, Unit]
+
+  def hook(f: (VNode, VNode) => Unit): SnabbdomFacade.Hook = f: js.Function2[VNode, VNode, Unit]
+
+  def hook(f: VNode => Unit): SnabbdomFacade.Hook = f: js.Function1[VNode, Unit]
 }
 

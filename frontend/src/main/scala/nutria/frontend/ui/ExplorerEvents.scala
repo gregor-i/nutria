@@ -4,7 +4,7 @@ import nutria.core.{Point, Viewport}
 import nutria.frontend.ExplorerState
 import org.scalajs.dom._
 import org.scalajs.dom.html.Canvas
-import snabbdom.{Snabbdom, SnabbdomNative}
+import snabbdom.{Snabbdom, SnabbdomFacade}
 
 import scala.scalajs.js
 
@@ -44,7 +44,7 @@ object ExplorerEvents {
   private def calcNewView(boundingBox: ClientRect, moves: Seq[(Point, Point)], view: Viewport) =
     Transform.applyToViewport(moves, view.cover(boundingBox.width, boundingBox.height))
 
-  def canvasWheelEvent(implicit state: ExplorerState, update: ExplorerState => Unit): Seq[(String, SnabbdomNative.Eventlistener)] = {
+  def canvasWheelEvent(implicit state: ExplorerState, update: ExplorerState => Unit): Seq[(String, SnabbdomFacade.Eventlistener)] = {
     val eventHandler =
       Snabbdom.specificEvent { event: PointerEvent =>
         event.preventDefault()
@@ -62,7 +62,7 @@ object ExplorerEvents {
     Seq("wheel" -> eventHandler)
   }
 
-  def canvasMouseEvents(implicit state: ExplorerState, update: ExplorerState => Unit): Seq[(String, SnabbdomNative.Eventlistener)] = {
+  def canvasMouseEvents(implicit state: ExplorerState, update: ExplorerState => Unit): Seq[(String, SnabbdomFacade.Eventlistener)] = {
     var startPosition = Option.empty[Point]
 
     val pointerDown =
@@ -117,7 +117,7 @@ object ExplorerEvents {
     )
   }
 
-  def canvasTouchEvents(implicit state: ExplorerState, update: ExplorerState => Unit): Seq[(String, SnabbdomNative.Eventlistener)] = {
+  def canvasTouchEvents(implicit state: ExplorerState, update: ExplorerState => Unit): Seq[(String, SnabbdomFacade.Eventlistener)] = {
     var moves = Map.empty[Double, TouchMove]
 
     val touchStart = Snabbdom.specificEvent { event: TouchEvent =>

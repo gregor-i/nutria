@@ -5,32 +5,36 @@ import nutria.core._
 import nutria.frontend._
 import nutria.frontend.ui.common.{Buttons, Form, FractalImage, Icons}
 import nutria.frontend.util.LenseUtils
-import snabbdom.Snabbdom
 import snabbdom.Snabbdom.h
+import snabbdom.{Builder, Snabbdom}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object DetailsUi {
   def render(implicit state: DetailsState, update: NutriaState => Unit) =
-    h("body",
-      key = "explorer")(
-      common.Header("Nutria Fractal Explorer")(state, update),
-      body,
-      common.Footer()
-    )
+    Builder.body
+      .key("explorer")
+      .children(
+        common.Header("Nutria Fractal Explorer")(state, update),
+        body(state, update),
+        common.Footer()
+      ).toVNode
 
   def body(implicit state: DetailsState, update: NutriaState => Unit) =
-    h("div", styles = Seq("margin" -> "auto", "max-width" -> "848px"))(
-      h("h2.title")("General Settings:"),
-      general(state.fractal, DetailsState.fractalEntity),
-      h("h2.title")("Template Settings:"),
-      template(state.fractal, DetailsState.fractalEntity),
-      h("h2.title")("Parameter Settings:"),
-      parameter(state.fractal, DetailsState.fractalEntity),
-      h("h2.title")("Snapshots:"),
-      snapshots(state.fractal, DetailsState.fractalEntity),
-      actions()
-    )
+    Builder.div
+      .style("margin", "auto")
+      .style("max-width", "848px")
+      .children(
+        Builder.h2.classes("title").child("General Settings:").toVNode,
+        general(state.fractal, DetailsState.fractalEntity),
+        Builder.h2.classes("title").child("Template Settings:").toVNode,
+        template(state.fractal, DetailsState.fractalEntity),
+        Builder.h2.classes("title").child("Parameter Settings:").toVNode,
+        parameter(state.fractal, DetailsState.fractalEntity),
+        Builder.h2.classes("title").child("Snapshots:").toVNode,
+        snapshots(state.fractal, DetailsState.fractalEntity),
+        actions(),
+      ).toVNode
 
   def general(fractal: FractalEntity, lens: Lens[DetailsState, FractalEntity])
              (implicit state: DetailsState, update: NutriaState => Unit) =
@@ -139,13 +143,18 @@ object DetailsUi {
     state.user match {
       case Some(user) if user.id == state.remoteFractal.owner =>
         Buttons.group(
-          Buttons("Save Changes as new Fractal", Icons.save, Snabbdom.event { _ =>
-            val updatedFractal = state.remoteFractal.copy(entity = fractal)
-            (for {
-              fractalWithId <- NutriaService.save(updatedFractal.entity)
-            } yield DetailsState(state.user, fractalWithId, fractalWithId.entity))
-              .foreach(update)
-          }, `class` = ".is-primary"),
+          Builder("button")
+            .classes("is-primary")
+            .event("click", Snabbdom.event { _ =>
+              val updatedFractal = state.remoteFractal.copy(entity = fractal)
+              (for {
+                fractalWithId <- NutriaService.save(updatedFractal.entity)
+              } yield DetailsState(state.user, fractalWithId, fractalWithId.entity))
+                .foreach(update)
+            })
+            .child(Icons.icon(Icons.save))
+            .child(Builder.span.child("Save Changes as new Fractal"))
+            .toVNode,
           Buttons("Apply Changes", Icons.save, Snabbdom.event { _ =>
             val updatedFractal = state.remoteFractal.copy(entity = fractal)
             (for {

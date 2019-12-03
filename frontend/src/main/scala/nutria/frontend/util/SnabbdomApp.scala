@@ -1,10 +1,10 @@
 package nutria.frontend.util
 
-import snabbdom.{Snabbdom, SnabbdomNative}
+import snabbdom.{Snabbdom, SnabbdomFacade}
 
 
 trait SnabbdomApp {
-  val patch: SnabbdomNative.PatchFunction = Snabbdom.init(
+  val patch: SnabbdomFacade.PatchFunction = Snabbdom.init(
     classModule = true,
     attributesModule = true,
     styleModule = true,

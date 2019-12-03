@@ -10,7 +10,7 @@ import scala.scalajs.js.{Dictionary, UndefOr, |}
 
 @js.native
 @JSImport("snabbdom", JSImport.Namespace)
-object SnabbdomNative extends js.Object {
+object SnabbdomFacade extends js.Object {
 
   type PatchFunction = js.Function2[VNode | dom.Element, VNode, VNode]
 
@@ -20,44 +20,34 @@ object SnabbdomNative extends js.Object {
   type Child = String | VNode
   type Key = UndefOr[String | Double | Int]
 
-  def h(tag: String, props: Data, children: js.Array[Child]): VNode = js.native
+  def h(sel: String, props: Data, children: js.Array[Child]): VNode = js.native
 
   def init(modules: js.Array[_]): PatchFunction = js.native
 }
 
 @JSImport("snabbdom/modules/class.js", JSImport.Default)
 @js.native
-object ClassModule extends js.Object
+private object ClassModule extends js.Object
 
 @JSImport("snabbdom/modules/attributes.js", JSImport.Default)
 @js.native
-object AttrsModule extends js.Object
+private object AttrsModule extends js.Object
 
 @JSImport("snabbdom/modules/dataset.js", JSImport.Default)
 @js.native
-object DatasetModule extends js.Object
+private object DatasetModule extends js.Object
 
 @JSImport("snabbdom/modules/eventlisteners.js", JSImport.Default)
 @js.native
-object EventListenerModule extends js.Object
+private object EventListenerModule extends js.Object
 
 @JSImport("snabbdom/modules/props.js", JSImport.Default)
 @js.native
-object PropsModule extends js.Object
+private object PropsModule extends js.Object
 
 @JSImport("snabbdom/modules/style.js", JSImport.Default)
 @js.native
-object StyleModule extends js.Object
-
-class Data(val key: SnabbdomNative.Key,
-           val `class`: Dictionary[Boolean],
-           val props: Dictionary[js.Any],
-           val attrs: Dictionary[String],
-           val dataset: Dictionary[String],
-           val style: Dictionary[String],
-           val on: Dictionary[SnabbdomNative.Eventlistener],
-           val hook: Dictionary[SnabbdomNative.Hook]
-          ) extends js.Object
+private object StyleModule extends js.Object
 
 @JSGlobal
 @js.native
@@ -69,3 +59,13 @@ abstract class VNode extends js.Object {
   def elm: UndefOr[HTMLElement]
   def key: UndefOr[String | Double | Int]
 }
+
+private[snabbdom]  class Data(val key: SnabbdomFacade.Key,
+                              val `class`: Dictionary[Boolean],
+                              val props: Dictionary[js.Any],
+                              val attrs: Dictionary[String],
+                              val dataset: Dictionary[String],
+                              val style: Dictionary[String],
+                              val on: Dictionary[SnabbdomFacade.Eventlistener],
+                              val hook: Dictionary[SnabbdomFacade.Hook]
+                             ) extends js.Object

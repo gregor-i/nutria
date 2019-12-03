@@ -7,7 +7,7 @@ import org.scalajs.dom
 import org.scalajs.dom.html.{Canvas, Image}
 import org.scalajs.dom.raw.WebGLRenderingContext
 import snabbdom.Snabbdom.h
-import snabbdom.{Snabbdom, SnabbdomNative, VNode}
+import snabbdom.{Snabbdom, SnabbdomFacade, VNode}
 
 import scala.scalajs.js.Dynamic
 
@@ -36,7 +36,7 @@ private object OffscrencanvasStrategy extends Strategy {
     h("canvas",
       key = fractalEntity.hashCode(),
       attrs = Seq("width" -> dimensions.width.toString, "height" -> dimensions.height.toString),
-      hooks = Seq[(String, SnabbdomNative.Hook)](
+      hooks = Seq[(String, SnabbdomFacade.Hook)](
         "insert" -> Snabbdom.hook { node =>
           val canvas = node.elm.get.asInstanceOf[Canvas]
           dom.window.setTimeout(() => {
@@ -77,7 +77,7 @@ private object ImgStrategy extends Strategy {
         "height" -> dimensions.height.toString,
         "src" -> "/img/rendering.svg"
       ),
-      hooks = Seq[(String, SnabbdomNative.Hook)](
+      hooks = Seq[(String, SnabbdomFacade.Hook)](
         "insert" -> Snabbdom.hook { node =>
           val img = node.elm.get.asInstanceOf[Image]
           buffer.enqueue(Task(img, fractalEntity, dimensions))
