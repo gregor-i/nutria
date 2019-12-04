@@ -153,7 +153,7 @@ object DetailsUi {
                 .foreach(update)
             })
             .child(Icons.icon(Icons.save))
-            .child(Builder.span.child("Save Changes as new Fractal"))
+            .child(Builder.span("Save Changes as new Fractal"))
             .toVNode,
           Buttons("Apply Changes", Icons.save, Snabbdom.event { _ =>
             val updatedFractal = state.remoteFractal.copy(entity = fractal)

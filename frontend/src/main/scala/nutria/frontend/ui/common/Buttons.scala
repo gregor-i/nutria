@@ -1,6 +1,5 @@
 package nutria.frontend.ui.common
 
-import snabbdom.Snabbdom.h
 import snabbdom.{Builder, SnabbdomFacade, VNode}
 
 object Buttons {
@@ -17,7 +16,8 @@ object Buttons {
       .toVNode
 
   def group(buttons: VNode*): VNode =
-    h("div.field.has-addons")(
-      buttons.map(h("p.control")(_)): _*
-    )
+    Builder.div
+      .classes("field", "has-addons")
+      .child(buttons.map(button => Builder.p.classes("control").child(button)))
+      .toVNode
 }

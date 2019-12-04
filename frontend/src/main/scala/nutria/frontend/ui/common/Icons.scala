@@ -1,20 +1,22 @@
 package nutria.frontend.ui.common
 
-import snabbdom.Snabbdom
+import snabbdom.{Builder, VNode}
 
 object Icons {
-  val upload = "upload"
-  val save = "save"
-  val edit = "edit"
-  val info = "info-circle"
-  val check = "check-circle"
-  val cancel = "times-circle"
-  val delete = "trash"
-  val copy = "clone"
-  val snapshot = "camera"
+  val upload = "fa-upload"
+  val save = "fa-save"
+  val edit = "fa-edit"
+  val info = "fa-info-circle"
+  val check = "fa-check-circle"
+  val cancel = "fa-times-circle"
+  val delete = "fa-trash"
+  val copy = "fa-clone"
+  val snapshot = "fa-camera"
 
-  def icon(name: String) =
-    Snabbdom.h("span.icon")(
-      Snabbdom.h(s"i.fa.fa-${name}")()
-    )
+  def icon(icon: String): VNode =
+    Builder.span.classes("icon")
+      .child(
+        Builder.i.classes("fa", icon)
+      )
+      .toVNode
 }

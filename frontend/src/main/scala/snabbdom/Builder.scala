@@ -62,7 +62,11 @@ case class Builder(
       case elem => Seq(elem).asInstanceOf[Iterable[Child]]
     } : Iterable[Child])
 
-
+  def apply(nodes: (Child | Iterable[Child])*): Builder =
+    child(nodes.flatMap[Child]{
+      case seq: Iterable[_] => seq.asInstanceOf[Iterable[Child]]
+      case elem => Seq(elem).asInstanceOf[Iterable[Child]]
+    } : Iterable[Child])
 
   def toVNode: VNode = SnabbdomFacade.h(
     sel = sel,
@@ -87,4 +91,5 @@ object Builder {
   val p = Builder("p")
   val span = Builder("span")
   val a = Builder("a")
+  val i = Builder("i")
 }
