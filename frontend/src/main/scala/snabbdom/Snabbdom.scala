@@ -35,24 +35,18 @@ object Snabbdom {
         hooks: Seq[(String, SnabbdomFacade.Hook)] = Seq.empty
        )(
          children: (Child | Seq[Child])*
-       ): VNode = {
-
-    SnabbdomFacade.h(sel = tag,
-      props = new Data(
-        key = key,
-        `class` = Dictionary(classes: _*),
-        props = Dictionary(props: _*),
-        attrs = Dictionary(attrs: _*),
-        dataset = Dictionary(dataset: _*),
-        style = Dictionary(styles: _*),
-        on = Dictionary(events: _*),
-        hook = Dictionary(hooks: _*)
-      ),
-      js.Array(children.flatMap[Child] {
-        case seq: Seq[_] => seq.asInstanceOf[Seq[Child]]
-        case elem => Seq(elem).asInstanceOf[Seq[Child]]
-      }: _*))
-  }
+       ): VNode =
+    Builder(tag)
+      .key(key)
+      .classes(classes)
+      .props(props)
+      .attrs(attrs)
+      .dataset(dataset)
+      .styles(styles)
+      .events(events)
+      .hooks(hooks)
+      .apply(children: _*)
+      .toVNode
 
   def event(f: Event => Unit): SnabbdomFacade.Eventlistener = f: js.Function1[Event, Unit]
 

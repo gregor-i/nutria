@@ -4,10 +4,9 @@ import snabbdom.Builder
 
 object Footer {
   def apply() =
-    Builder("footer").classes("footer")
+    Builder("footer.footer")
       .child(
-        Builder.div
-          .classes("content", "has-text-centered")
+        Builder("div.content.has-text-centered")
           .prop("innerHtml", licence)
       )
     .toVNode

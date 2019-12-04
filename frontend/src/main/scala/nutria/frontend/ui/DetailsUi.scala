@@ -12,7 +12,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 object DetailsUi {
   def render(implicit state: DetailsState, update: NutriaState => Unit) =
-    Builder.body
+    Builder("body")
       .key("explorer")
       .children(
         common.Header("Nutria Fractal Explorer")(state, update),
@@ -21,17 +21,17 @@ object DetailsUi {
       ).toVNode
 
   def body(implicit state: DetailsState, update: NutriaState => Unit) =
-    Builder.div
+    Builder("div")
       .style("margin", "auto")
       .style("max-width", "848px")
       .children(
-        Builder.h2.classes("title").child("General Settings:").toVNode,
+        Builder("h2.title").child("General Settings:").toVNode,
         general(state.fractal, DetailsState.fractalEntity),
-        Builder.h2.classes("title").child("Template Settings:").toVNode,
+        Builder("h2.title").child("Template Settings:").toVNode,
         template(state.fractal, DetailsState.fractalEntity),
-        Builder.h2.classes("title").child("Parameter Settings:").toVNode,
+        Builder("h2.title").child("Parameter Settings:").toVNode,
         parameter(state.fractal, DetailsState.fractalEntity),
-        Builder.h2.classes("title").child("Snapshots:").toVNode,
+        Builder("h2.title").child("Snapshots:").toVNode,
         snapshots(state.fractal, DetailsState.fractalEntity),
         actions(),
       ).toVNode
@@ -144,7 +144,7 @@ object DetailsUi {
       case Some(user) if user.id == state.remoteFractal.owner =>
         Buttons.group(
           Builder("button")
-            .classes("is-primary")
+            .`class`("is-primary")
             .event("click", Snabbdom.event { _ =>
               val updatedFractal = state.remoteFractal.copy(entity = fractal)
               (for {
@@ -153,7 +153,7 @@ object DetailsUi {
                 .foreach(update)
             })
             .child(Icons.icon(Icons.save))
-            .child(Builder.span("Save Changes as new Fractal"))
+            .child(Builder("span")("Save Changes as new Fractal"))
             .toVNode,
           Buttons("Apply Changes", Icons.save, Snabbdom.event { _ =>
             val updatedFractal = state.remoteFractal.copy(entity = fractal)

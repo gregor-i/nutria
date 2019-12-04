@@ -14,9 +14,9 @@ object Icons {
   val snapshot = "fa-camera"
 
   def icon(icon: String): VNode =
-    Builder.span.classes("icon")
+    Builder("span.icon")
       .child(
-        Builder.i.classes("fa", icon)
+        Builder("i.fa").`class`(icon)
       )
       .toVNode
 }

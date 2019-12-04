@@ -8,16 +8,15 @@ object Buttons {
             `class`: String = "",
             disabled: Boolean = false) =
     Builder("button")
-      .classes(`class`)
+      .`class`(`class`)
       .event("click", onclick)
       .attr("disabled", disabled.toString)
       .child(Icons.icon(icon))
-      .child(Builder.span.child(text))
+      .child(Builder("span").child(text))
       .toVNode
 
   def group(buttons: VNode*): VNode =
-    Builder.div
-      .classes("field", "has-addons")
-      .child(buttons.map(button => Builder.p.classes("control").child(button)))
+    Builder("div.field.has-addons")
+      .child(buttons.map(button => Builder("p").`class`("control").child(button).toVNode))
       .toVNode
 }

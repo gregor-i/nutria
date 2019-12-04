@@ -17,7 +17,7 @@ case class Builder(
                     private val hooks: Seq[(String, SnabbdomFacade.Hook)] = Seq.empty,
                     private val children: Seq[Child] = Seq.empty
                   ) {
-  def key(key: String): Builder =
+  def key(key: SnabbdomFacade.Key): Builder =
     copy(key = key)
 
   def `class`(className: String, active: Boolean): Builder =
@@ -26,26 +26,45 @@ case class Builder(
   def `class`(className: String): Builder =
     `class`(className,active =  true)
 
-  def classes(classNames: String*): Builder =
-    copy(classes = classes ++ classNames.map(_ -> true))
+  def classes(classes: Seq[(String, Boolean)]): Builder =
+    copy(classes = this.classes ++ classes)
 
   def prop(propName: String, value: js.Any): Builder =
     copy(props = props :+ (propName -> value))
 
+  def props(props: Seq[(String, js.Any)]): Builder =
+    copy(props = this.props ++ props)
+
   def attr(attrName: String, value: String): Builder =
     copy(attrs = attrs :+ (attrName -> value))
+
+  def attrs(attrs: Seq[(String, String)]): Builder =
+    copy(attrs = this.attrs ++ attrs)
 
   def data(datasetName: String, value: String): Builder =
     copy(dataset = dataset :+ (datasetName -> value))
 
+  def dataset(dataset: Seq[(String, String)]): Builder =
+  copy(dataset = this.dataset ++ dataset)
+
   def style(styleName: String, value: String): Builder =
     copy(styles = styles :+ (styleName -> value))
+
+  def styles(styles: Seq[(String, String)]): Builder =
+    copy(styles = this.styles ++ styles)
 
   def event(on: String, listener: SnabbdomFacade.Eventlistener): Builder =
     copy(events = events :+ (on -> listener))
 
+  def events(events: Seq[(String, SnabbdomFacade.Eventlistener)]): Builder =
+  copy(events = this.events ++ events)
+
   def hook(hookName: String, hook: SnabbdomFacade.Hook): Builder =
     copy(hooks = hooks :+ (hookName -> hook))
+
+  def hooks(hooks: Seq[(String, SnabbdomFacade.Hook)]) : Builder =
+    copy(hooks = this.hooks ++ hooks)
+
 
   def child(child: Child): Builder =
     copy(children = children :+ child)
@@ -81,15 +100,4 @@ case class Builder(
     ),
     children = js.Array(children: _*)
   )
-}
-
-object Builder {
-  val body = Builder("body")
-  val h1 = Builder("h1")
-  val h2 = Builder("h2")
-  val div = Builder("div")
-  val p = Builder("p")
-  val span = Builder("span")
-  val a = Builder("a")
-  val i = Builder("i")
 }
