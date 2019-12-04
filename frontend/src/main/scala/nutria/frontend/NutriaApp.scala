@@ -22,6 +22,7 @@ class NutriaApp(container: Element, initialState: NutriaState) extends SnabbdomA
           case (key, value) => s"$key=$value"
         }.mkString("&")
         if (dom.window.location.pathname != currentPath) {
+          dom.window.scroll(0, 0)
           if (currentSearch.nonEmpty)
             dom.window.history.pushState(state.asJson.noSpaces, "", currentPath + "?" + stringSearch)
           else
