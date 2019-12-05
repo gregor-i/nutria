@@ -61,13 +61,13 @@ compile in Compile := {
 // libraries
 def scalaTestAndScalaCheck =
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest" % "3.0.8" % Test,
+    "org.scalatest" %%% "scalatest" % "3.1.0" % Test,
     "org.scalacheck" %%% "scalacheck" % "1.14.2" % Test
   )
 
 def mathParser = Seq(
   resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
-  libraryDependencies += "com.github.gregor-i" %%% "math-parser" % "1.5.1"
+  libraryDependencies += "com.github.gregor-i" %%% "math-parser" % "1.5.2"
 )
 
 def circe =

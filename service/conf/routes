@@ -28,7 +28,5 @@ GET           /fonts/*path                                      controller.UiCon
 
 
 # Frontend
-GET           /                                                 controller.UiController.slash
-GET           /library                                          controller.UiController.library
-GET           /explorer                                         controller.UiController.explorer
-GET           /*path                                            controller.UiController.other(path: String)
+GET           /                                                 controller.UiController.frontend(path = "")
+GET           /*path                                            controller.UiController.frontend(path: String)

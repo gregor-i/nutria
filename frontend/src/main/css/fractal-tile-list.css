@@ -1,13 +1,18 @@
 .fractal-tile-list{
     display : flex;
     flex-wrap : wrap;
-    margin: 8px;
 }
 
 .fractal-tile-list > .fractal-tile,
 .fractal-tile-list > .dummy-tile {
     flex-grow : 1;
-    margin : 8px;
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.fractal-tile-list > .fractal-tile {
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .fractal-tile-list > .fractal-tile {

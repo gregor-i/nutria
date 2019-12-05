@@ -3,9 +3,10 @@ package tdd
 import mathParser.MathParser
 import mathParser.implicits._
 import nutria.frontend.shaderBuilder._
-import org.scalatest._
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class WebGlStatementSpec extends FunSuite with Matchers {
+class WebGlStatementSpec extends AnyFunSuite with Matchers {
   object X
 
   val lang = MathParser.complexLanguage.withVariables(List("x" -> X))

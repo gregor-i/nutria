@@ -1,12 +1,12 @@
 package nutria.frontend
 
 import io.circe.syntax._
-import nutria.core.FractalEntity
+import nutria.core.{DivergingSeries, FractalEntity}
 import org.scalajs.dom
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.Try
+import scala.util.{Random, Try}
 
 object Router {
   def stateFromUrl(location: dom.Location): Future[NutriaState] = {
@@ -21,6 +21,12 @@ object Router {
     for {
       user <- NutriaService.whoAmI()
       state <- location.pathname match {
+        case "/" =>
+          for {
+            remoteFractals <- NutriaService.loadPublicFractals()
+            randomFractal = remoteFractals((Math.random()*remoteFractals.length).toInt)
+          } yield GreetingState(randomFractal.entity)
+
         case "/library" =>
           NutriaState.libraryState()
 
@@ -40,12 +46,12 @@ object Router {
               state <- queryParams.get("state")
               fractal <- queryDecoded(state)
             } yield ExplorerState(user, None, fractal)
-              ).getOrElse(ErrorState(user, "Query Parameter is invalid"))
+              ).getOrElse(ErrorState("Query Parameter is invalid"))
           }
 
         case _ =>
           Future.successful {
-            ErrorState(user, "Unkown url")
+            ErrorState("Unkown url")
           }
       }
     } yield state
@@ -55,11 +61,13 @@ object Router {
     case _: LibraryState =>
       Some(("/library", Map.empty))
     case details: DetailsState =>
-      Some((s"/fractal/${details.remoteFractal.id}/details", Map("fractal" -> queryEncoded(details.fractal))))
+      Some((s"/fractals/${details.remoteFractal.id}/details", Map("fractal" -> queryEncoded(details.fractal))))
     case ExplorerState(_, Some(fractalId), fractal)=>
-      Some((s"/fractal/${fractalId}/explorer", Map("state" -> queryEncoded(fractal))))
+      Some((s"/fractals/${fractalId}/explorer", Map("state" -> queryEncoded(fractal))))
     case exState: ExplorerState =>
       Some((s"/explorer", Map("state" -> queryEncoded(exState.fractalEntity))))
+    case _: GreetingState =>
+      Some(("/", Map.empty))
     case _: ErrorState =>
       None
     case _: LoadingState =>

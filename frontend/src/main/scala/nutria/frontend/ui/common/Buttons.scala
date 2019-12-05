@@ -7,7 +7,7 @@ object Buttons {
             onclick: SnabbdomFacade.Eventlistener,
             `class`: String = "",
             disabled: Boolean = false) =
-    Builder("button")
+    Builder("button.button")
       .`class`(`class`)
       .event("click", onclick)
       .attr("disabled", disabled.toString)

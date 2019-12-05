@@ -21,9 +21,7 @@ object DetailsUi {
       ).toVNode
 
   def body(implicit state: DetailsState, update: NutriaState => Unit) =
-    Builder("div")
-      .style("margin", "auto")
-      .style("max-width", "848px")
+    Builder("div.details-body")
       .children(
         Builder("h2.title").child("General Settings:").toVNode,
         general(state.fractal, DetailsState.fractalEntity),
@@ -143,7 +141,7 @@ object DetailsUi {
     state.user match {
       case Some(user) if user.id == state.remoteFractal.owner =>
         Buttons.group(
-          Builder("button")
+          Builder("button.button")
             .`class`("is-primary")
             .event("click", Snabbdom.event { _ =>
               val updatedFractal = state.remoteFractal.copy(entity = fractal)
@@ -168,7 +166,7 @@ object DetailsUi {
               publicFractals <- NutriaService.loadPublicFractals()
             } yield LibraryState(user = state.user, publicFractals = publicFractals))
               .foreach(update)
-          }, `class` = ".is-danger")
+          }, `class` = "is-danger")
         )
 
       case Some(_) =>
@@ -179,11 +177,11 @@ object DetailsUi {
             } yield DetailsState(state.user, fractalWithId, fractalWithId.entity))
               .foreach(update)
           },
-            `class` = ".is-primary")
+            `class` = "is-primary")
         )
 
       case None =>
-        Buttons("Login to fork this fractal", "sign-in", Snabbdom.event(_ => ()), `class` = ".is-primary")
+        Buttons("Login to fork this fractal", "sign-in", Snabbdom.event(_ => ()), `class` = "is-primary")
     }
   }
 }

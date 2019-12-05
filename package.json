@@ -1,10 +1,10 @@
 {
   "dependencies": {
-    "browserify": "^16.2.3",
-    "bulma": "^0.7.2",
-    "clean-css-cli": "^4.2.1",
-    "font-awesome": "^4.7.0",
-    "snabbdom": "^0.7.2"
+    "bulma": "^0.8",
+    "font-awesome": "^4",
+    "snabbdom": "^0.7",
+    "browserify": "^16",
+    "clean-css-cli": "^4"
   },
   "scripts": {
     "watch": "nodemon --watch frontend -e css,svg --exec \"npm run build\"",

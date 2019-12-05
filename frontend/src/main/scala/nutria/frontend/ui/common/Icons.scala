@@ -12,6 +12,10 @@ object Icons {
   val delete = "fa-trash"
   val copy = "fa-clone"
   val snapshot = "fa-camera"
+  val explore = "fa-compass"
+  val library = "fa-image"
+  val login = "fa-sign-in"
+  val logout = "fa-sign-out"
 
   def icon(icon: String): VNode =
     Builder("span.icon")

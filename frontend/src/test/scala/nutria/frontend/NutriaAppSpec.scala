@@ -1,15 +1,15 @@
 package nutria.frontend
 
-import nutria.core.{FractalEntity, FractalProgram, NewtonIteration}
-import org.scalajs.dom
-import org.scalatest.{FunSuite, Matchers}
+import nutria.core.{FractalEntity, NewtonIteration}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class NutriaAppSpec extends FunSuite with Matchers{
+class NutriaAppSpec extends AnyFunSuite with Matchers{
 
   test("queryEncoded and queryDecoded") {
     val fractal = FractalEntity(program = NewtonIteration.default)
-    val encoded = NutriaApp.queryEncoded(fractal)
-    val decoded = NutriaApp.queryDecoded(encoded)
+    val encoded = Router.queryEncoded(fractal)
+    val decoded = Router.queryDecoded(encoded)
     decoded shouldBe Some(fractal)
   }
 }

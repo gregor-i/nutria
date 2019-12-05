@@ -12,9 +12,11 @@ object LibraryUi {
     h(tag = "body",
       key = "library")(
       common.Header("Nutria Fractal Library")(state, update),
-      h("div.fractal-tile-list")(
-        state.publicFractals.map(renderFractalTile),
-        dummyTiles
+      h("div.library-body")(
+        h("div.fractal-tile-list")(
+          state.publicFractals.map(renderFractalTile),
+          dummyTiles
+        ),
       ),
       common.Footer()
     )
