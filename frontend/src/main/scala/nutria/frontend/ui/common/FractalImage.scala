@@ -15,9 +15,9 @@ object FractalImage {
   // TODO: somehow OffscrencanvasStrategy doesn't work on chromium ....
   private val strategy = ImgStrategy
   //    if (Untyped(dom.window).OffscreenCanvas.asInstanceOf[UndefOr[_]].isDefined)
-//      OffscrencanvasStrategy
-//    else
-//      ImgStrategy
+  //      OffscrencanvasStrategy
+  //    else
+  //      ImgStrategy
 
   def apply(fractalEntity: FractalEntity, dimensions: Dimensions): VNode =
     strategy.render(fractalEntity, dimensions)

@@ -17,13 +17,13 @@ object Header {
 
   private def brandIcon(implicit state: NutriaState, update: NutriaState => Unit) =
     h("img.brand-icon",
-    styles = Seq(
-      "height" -> "100%",
-      "cursor" -> "pointer",
-    ),
-    attrs = Seq("src" -> "/img/icon.png"),
+      styles = Seq(
+        "height" -> "100%",
+        "cursor" -> "pointer",
+      ),
+      attrs = Seq("src" -> "/img/icon.png"),
       events = Seq("click" -> Snabbdom.event(_ => update(LoadingState(NutriaState.libraryState())))),
-  )()
+    )()
 
   private val loggedOutActions =
     h("div")(
@@ -35,7 +35,7 @@ object Header {
 
   private def loggedInActions(user: User) =
     h("div.buttons.has-addons")(
-      h("a.button.is-outlined", events = Seq("click" -> Snabbdom.event{_ => println(user)}))(
+      h("a.button.is-outlined", events = Seq("click" -> Snabbdom.event { _ => println(user) }))(
         h("span.icon")(
           h("img",
             attrs = Seq("src" -> user.picture),

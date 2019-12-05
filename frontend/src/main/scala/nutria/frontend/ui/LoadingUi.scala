@@ -1,6 +1,6 @@
 package nutria.frontend.ui
 
-import nutria.frontend.{ErrorState, LoadingState, NutriaState}
+import nutria.frontend.{LoadingState, NutriaState}
 import snabbdom.Snabbdom.h
 import snabbdom.VNode
 

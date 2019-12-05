@@ -36,7 +36,7 @@ object Snabbdom {
        )(
          children: (Child | Seq[Child])*
        ): VNode =
-    Builder(tag)
+    Node(tag)
       .key(key)
       .classes(classes)
       .props(props)

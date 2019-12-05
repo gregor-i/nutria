@@ -5,7 +5,7 @@ import snabbdom.SnabbdomFacade.Child
 import scala.scalajs.js
 import scala.scalajs.js.{Dictionary, |}
 
-case class Builder(
+case class Node(
                     private val sel: String,
                     private val key: SnabbdomFacade.Key = js.undefined,
                     private val classes: Seq[(String, Boolean)] = Seq.empty,
@@ -17,71 +17,71 @@ case class Builder(
                     private val hooks: Seq[(String, SnabbdomFacade.Hook)] = Seq.empty,
                     private val children: Seq[Child] = Seq.empty
                   ) {
-  def key(key: SnabbdomFacade.Key): Builder =
+  def key(key: SnabbdomFacade.Key): Node =
     copy(key = key)
 
-  def `class`(className: String, active: Boolean): Builder =
+  def `class`(className: String, active: Boolean): Node =
     copy(classes = classes :+ (className -> active))
 
-  def `class`(className: String): Builder =
+  def `class`(className: String): Node =
     `class`(className,active =  true)
 
-  def classes(classes: Seq[(String, Boolean)]): Builder =
-    copy(classes = this.classes ++ classes)
+  def classes(classes: String*): Node =
+    copy(classes = this.classes ++ classes.map(_ -> true))
 
-  def prop(propName: String, value: js.Any): Builder =
+  def prop(propName: String, value: js.Any): Node =
     copy(props = props :+ (propName -> value))
 
-  def props(props: Seq[(String, js.Any)]): Builder =
+  def props(props: Seq[(String, js.Any)]): Node =
     copy(props = this.props ++ props)
 
-  def attr(attrName: String, value: String): Builder =
+  def attr(attrName: String, value: String): Node =
     copy(attrs = attrs :+ (attrName -> value))
 
-  def attrs(attrs: Seq[(String, String)]): Builder =
+  def attrs(attrs: Seq[(String, String)]): Node =
     copy(attrs = this.attrs ++ attrs)
 
-  def data(datasetName: String, value: String): Builder =
+  def data(datasetName: String, value: String): Node =
     copy(dataset = dataset :+ (datasetName -> value))
 
-  def dataset(dataset: Seq[(String, String)]): Builder =
+  def dataset(dataset: Seq[(String, String)]): Node =
   copy(dataset = this.dataset ++ dataset)
 
-  def style(styleName: String, value: String): Builder =
+  def style(styleName: String, value: String): Node =
     copy(styles = styles :+ (styleName -> value))
 
-  def styles(styles: Seq[(String, String)]): Builder =
+  def styles(styles: Seq[(String, String)]): Node =
     copy(styles = this.styles ++ styles)
 
-  def event(on: String, listener: SnabbdomFacade.Eventlistener): Builder =
+  def event(on: String, listener: SnabbdomFacade.Eventlistener): Node =
     copy(events = events :+ (on -> listener))
 
-  def events(events: Seq[(String, SnabbdomFacade.Eventlistener)]): Builder =
+  def events(events: Seq[(String, SnabbdomFacade.Eventlistener)]): Node =
   copy(events = this.events ++ events)
 
-  def hook(hookName: String, hook: SnabbdomFacade.Hook): Builder =
+  def hook(hookName: String, hook: SnabbdomFacade.Hook): Node =
     copy(hooks = hooks :+ (hookName -> hook))
 
-  def hooks(hooks: Seq[(String, SnabbdomFacade.Hook)]) : Builder =
+  def hooks(hooks: Seq[(String, SnabbdomFacade.Hook)]) : Node =
     copy(hooks = this.hooks ++ hooks)
 
 
-  def child(child: Child): Builder =
+  def child(child: Child): Node =
     copy(children = children :+ child)
 
-  def child(builder: Builder): Builder =
+  def child(builder: Node): Node =
     child(builder.toVNode)
 
-  def child(nodes: Iterable[Child]): Builder =
+  def child(nodes: Iterable[Child]): Node =
     copy(children = children ++ nodes)
 
-  def children(nodes: (Child | Iterable[Child])*): Builder =
+  def children(nodes: (Child | Iterable[Child])*): Node =
     child(nodes.flatMap[Child]{
       case seq: Iterable[_] => seq.asInstanceOf[Iterable[Child]]
       case elem => Seq(elem).asInstanceOf[Iterable[Child]]
     } : Iterable[Child])
 
-  def apply(nodes: (Child | Iterable[Child])*): Builder =
+  def apply(nodes: (Child | Iterable[Child])*): Node =
     child(nodes.flatMap[Child]{
       case seq: Iterable[_] => seq.asInstanceOf[Iterable[Child]]
       case elem => Seq(elem).asInstanceOf[Iterable[Child]]

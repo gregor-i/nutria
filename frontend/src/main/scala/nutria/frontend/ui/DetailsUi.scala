@@ -3,16 +3,16 @@ package nutria.frontend.ui
 import monocle.{Iso, Lens}
 import nutria.core._
 import nutria.frontend._
-import nutria.frontend.ui.common.{Buttons, Form, FractalImage, Icons}
+import nutria.frontend.ui.common._
 import nutria.frontend.util.LenseUtils
 import snabbdom.Snabbdom.h
-import snabbdom.{Builder, Snabbdom}
+import snabbdom.{Node, Snabbdom}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object DetailsUi {
   def render(implicit state: DetailsState, update: NutriaState => Unit) =
-    Builder("body")
+    Node("body")
       .key("explorer")
       .children(
         common.Header("Nutria Fractal Explorer")(state, update),
@@ -21,15 +21,15 @@ object DetailsUi {
       ).toVNode
 
   def body(implicit state: DetailsState, update: NutriaState => Unit) =
-    Builder("div.details-body")
+    Node("div.details-body")
       .children(
-        Builder("h2.title").child("General Settings:").toVNode,
+        Node("h2.title").child("General Settings:").toVNode,
         general(state.fractal, DetailsState.fractalEntity),
-        Builder("h2.title").child("Template Settings:").toVNode,
+        Node("h2.title").child("Template Settings:").toVNode,
         template(state.fractal, DetailsState.fractalEntity),
-        Builder("h2.title").child("Parameter Settings:").toVNode,
+        Node("h2.title").child("Parameter Settings:").toVNode,
         parameter(state.fractal, DetailsState.fractalEntity),
-        Builder("h2.title").child("Snapshots:").toVNode,
+        Node("h2.title").child("Snapshots:").toVNode,
         snapshots(state.fractal, DetailsState.fractalEntity),
         actions(),
       ).toVNode
@@ -140,48 +140,50 @@ object DetailsUi {
 
     state.user match {
       case Some(user) if user.id == state.remoteFractal.owner =>
-        Buttons.group(
-          Builder("button.button")
-            .`class`("is-primary")
-            .event("click", Snabbdom.event { _ =>
-              val updatedFractal = state.remoteFractal.copy(entity = fractal)
-              (for {
-                fractalWithId <- NutriaService.save(updatedFractal.entity)
-              } yield DetailsState(state.user, fractalWithId, fractalWithId.entity))
-                .foreach(update)
-            })
-            .child(Icons.icon(Icons.save))
-            .child(Builder("span")("Save Changes as new Fractal"))
+        ButtonGroup(
+          Button("Save Changes as new Fractal", Icons.save, Snabbdom.event { _ =>
+            val updatedFractal = state.remoteFractal.copy(entity = fractal)
+            (for {
+              fractalWithId <- NutriaService.save(updatedFractal.entity)
+            } yield DetailsState(state.user, fractalWithId, fractalWithId.entity))
+              .foreach(update)
+          })
+            .classes("is-primary")
             .toVNode,
-          Buttons("Apply Changes", Icons.save, Snabbdom.event { _ =>
+          Button("Apply Changes", Icons.save, Snabbdom.event { _ =>
             val updatedFractal = state.remoteFractal.copy(entity = fractal)
             (for {
               _ <- NutriaService.updateUserFractal(updatedFractal)
             } yield state.copy(remoteFractal = updatedFractal))
               .foreach(update)
-          }, `class` = ".is-warning"),
-          Buttons("Delete", Icons.delete, Snabbdom.event { _ =>
+          })
+            .classes("is-warning")
+            .toVNode,
+          Button("Delete", Icons.delete, Snabbdom.event { _ =>
             (for {
               _ <- NutriaService.deleteUserFractal(state.user.get.id, state.remoteFractal.id)
               publicFractals <- NutriaService.loadPublicFractals()
             } yield LibraryState(user = state.user, publicFractals = publicFractals))
               .foreach(update)
-          }, `class` = "is-danger")
+          })
+            .classes("is-danger")
+            .toVNode
         )
+          .toVNode
 
       case Some(_) =>
-        Buttons.group(
-          Buttons("Fork", Icons.copy, Snabbdom.event { _ =>
-            (for {
-              fractalWithId <- NutriaService.save(fractal)
-            } yield DetailsState(state.user, fractalWithId, fractalWithId.entity))
-              .foreach(update)
-          },
-            `class` = "is-primary")
-        )
+        Button("Fork", Icons.copy, Snabbdom.event { _ =>
+          (for {
+            fractalWithId <- NutriaService.save(fractal)
+          } yield DetailsState(state.user, fractalWithId, fractalWithId.entity))
+            .foreach(update)
+        })
+          .classes("is-primary").toVNode
 
       case None =>
-        Buttons("Login to fork this fractal", "sign-in", Snabbdom.event(_ => ()), `class` = "is-primary")
+        Button("Login to fork this fractal", "sign-in", Snabbdom.event(_ => ()))
+          .classes("is-primary")
+          .toVNode
     }
   }
 }

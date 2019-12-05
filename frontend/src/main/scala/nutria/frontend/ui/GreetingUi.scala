@@ -1,6 +1,6 @@
 package nutria.frontend.ui
 
-import nutria.frontend.ui.common.{CanvasHooks, Icons}
+import nutria.frontend.ui.common.{Button, ButtonGroup, CanvasHooks, Icons}
 import nutria.frontend.{ExplorerState, GreetingState, LoadingState, NutriaState}
 import snabbdom.Snabbdom.h
 import snabbdom.{Snabbdom, VNode}
@@ -37,15 +37,17 @@ object GreetingUi {
       h("div.modal-content")(
         h("div.box")(
           h("div.content", props = Seq("innerHTML" -> greetingContent))(),
-          h("div.buttons.is-right")(
-            h("button.button.is-primary", events = Seq("click" ->
+          ButtonGroup(
+            Button(
+              "Start exploring!",
+              Icons.library,
               Snabbdom.event { _ =>
                 update(LoadingState(NutriaState.libraryState()))
-              }))(
-              Icons.icon(Icons.library),
-              h("span")("Start exploring!")
-            )
+              })
+              .toVNode
           )
+            .classes("is-right")
+            .toVNode
         )
       )
     )

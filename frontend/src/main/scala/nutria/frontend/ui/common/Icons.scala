@@ -1,6 +1,6 @@
 package nutria.frontend.ui.common
 
-import snabbdom.{Builder, VNode}
+import snabbdom.{Node, VNode}
 
 object Icons {
   val upload = "fa-upload"
@@ -18,9 +18,9 @@ object Icons {
   val logout = "fa-sign-out"
 
   def icon(icon: String): VNode =
-    Builder("span.icon")
+    Node("span.icon")
       .child(
-        Builder("i.fa").`class`(icon)
+        Node("i.fa").`class`(icon)
       )
       .toVNode
 }

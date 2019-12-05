@@ -1,19 +1,16 @@
 package nutria.frontend.ui
 
 import nutria.frontend._
-import nutria.frontend.ui.common.{Buttons, CanvasHooks, Icons}
-import nutria.frontend.shaderBuilder.FractalRenderer
-import nutria.frontend.util.LenseUtils
-import org.scalajs.dom
+import nutria.frontend.ui.common.CanvasHooks
 import snabbdom.Snabbdom.h
-import snabbdom.{Snabbdom, VNode}
+import snabbdom.VNode
 
 object ExplorerUi {
-  def render(implicit state: ExplorerState,  update: NutriaState => Unit): VNode =
+  def render(implicit state: ExplorerState, update: NutriaState => Unit): VNode =
     h("body",
       key = "explorer")(
       common.Header("Nutria Fractal Explorer")(state, update),
-//      renderActionBar(),
+      //      renderActionBar(),
       renderCanvas,
     )
 
@@ -27,19 +24,19 @@ object ExplorerUi {
   //  return to start position
   //  render high res image and save
 
-//  def renderActionBar()
-//                     (implicit state: ExplorerState, update: ExplorerState => Unit): VNode =
-//    h("div.action-bar")(
-//      Buttons("Edit", Images.edit, Snabbdom.event { _ =>
-//        update(state.copy(edit = Some(state.fractalEntity)))
-//      }, `class` = ".is-primary"),
-//      Buttons("Save", Images.upload, Snabbdom.event { _ =>
-//        NutriaService.save(state.fractalEntity)
-//      }),
-//      Buttons("Log Source", Images.info, Snabbdom.event { _ =>
-//        dom.console.log(FractalRenderer.fragmentShaderSource(state.fractalEntity.program, state.fractalEntity.antiAliase))
-//      })
-//    )
+  //  def renderActionBar()
+  //                     (implicit state: ExplorerState, update: ExplorerState => Unit): VNode =
+  //    h("div.action-bar")(
+  //      Buttons("Edit", Images.edit, Snabbdom.event { _ =>
+  //        update(state.copy(edit = Some(state.fractalEntity)))
+  //      }, `class` = ".is-primary"),
+  //      Buttons("Save", Images.upload, Snabbdom.event { _ =>
+  //        NutriaService.save(state.fractalEntity)
+  //      }),
+  //      Buttons("Log Source", Images.info, Snabbdom.event { _ =>
+  //        dom.console.log(FractalRenderer.fragmentShaderSource(state.fractalEntity.program, state.fractalEntity.antiAliase))
+  //      })
+  //    )
 
   def renderCanvas(implicit state: ExplorerState, update: ExplorerState => Unit): VNode =
     h("div.full-size",

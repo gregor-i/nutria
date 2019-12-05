@@ -1,15 +1,15 @@
 package nutria.frontend.ui.common
 
-import snabbdom.Builder
+import snabbdom.Node
 
 object Footer {
   def apply() =
-    Builder("footer.footer")
+    Node("footer.footer")
       .child(
-        Builder("div.content.has-text-centered")
+        Node("div.content.has-text-centered")
           .prop("innerHtml", licence)
       )
-    .toVNode
+      .toVNode
 
   private val licence =
     """<p>
