@@ -41,14 +41,14 @@ object Router {
           for {
             remoteFractal <- NutriaService.loadFractal(fractalId)
             image = FractalImage(remoteFractal.entity.program, remoteFractal.entity.views.value.head, remoteFractal.entity.antiAliase)
-          } yield ExplorerState(user, Some(remoteFractal.id), image)
+          } yield ExplorerState(user, Some(remoteFractal.id), owned = user.exists(_.id == remoteFractal.owner), image)
 
         case "/explorer" =>
           Future.successful {
             (for {
               state <- queryParams.get("state")
               fractal <- queryDecoded[FractalImage](state)
-            } yield ExplorerState(user, None, fractal)
+            } yield ExplorerState(user, None, owned = false, fractal)
               ).getOrElse(ErrorState("Query Parameter is invalid"))
           }
 

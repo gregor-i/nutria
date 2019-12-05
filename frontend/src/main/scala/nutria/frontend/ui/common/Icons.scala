@@ -10,7 +10,7 @@ object Icons {
   val check = "fa-check-circle"
   val cancel = "fa-times-circle"
   val delete = "fa-trash"
-  val copy = "fa-clone"
+  val copy = "fa-clone" // fork
   val snapshot = "fa-camera"
   val explore = "fa-compass"
   val library = "fa-image"

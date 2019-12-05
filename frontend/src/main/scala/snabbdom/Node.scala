@@ -74,6 +74,9 @@ case class Node(
   def child(builder: Node): Node =
     child(builder.toVNode)
 
+  def childOptional(nodes: Option[Node]): Node =
+    copy(children = children ++ nodes.map(_.toVNode))
+
   def child(nodes: Iterable[Child]): Node =
     copy(children = children ++ nodes)
 

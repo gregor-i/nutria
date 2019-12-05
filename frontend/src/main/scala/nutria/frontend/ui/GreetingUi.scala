@@ -1,9 +1,9 @@
 package nutria.frontend.ui
 
-import nutria.frontend.ui.common.{Button, ButtonGroup, CanvasHooks, Icons}
+import nutria.frontend.ui.common.{Button,  CanvasHooks, Icons}
 import nutria.frontend.{ExplorerState, GreetingState, LoadingState, NutriaState}
 import snabbdom.Snabbdom.h
-import snabbdom.{Snabbdom, VNode}
+import snabbdom.{Node, Snabbdom, VNode}
 
 object GreetingUi {
   def render(implicit state: GreetingState, update: NutriaState => Unit): VNode = {
@@ -32,12 +32,13 @@ object GreetingUi {
         styles = Seq("opacity" -> "0.5"),
         events = Seq("click" ->
           Snabbdom.event { _ =>
-            update(ExplorerState(state.user, None, state.randomFractal))
+            update(ExplorerState(state.user, None, owned = false, state.randomFractal))
           }))(),
       h("div.modal-content")(
         h("div.box")(
           h("div.content", props = Seq("innerHTML" -> greetingContent))(),
-          ButtonGroup(
+          Node("div.buttons")
+          .child(
             Button(
               "Start exploring!",
               Icons.library,
@@ -45,7 +46,6 @@ object GreetingUi {
                 update(LoadingState(NutriaState.libraryState()))
               })
               .classes("is-primary")
-              .toVNode
           )
             .classes("is-right")
             .toVNode

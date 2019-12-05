@@ -29,6 +29,7 @@ case class GreetingState(randomFractal: FractalImage,
 
 case class ExplorerState(user: Option[User],
                          fractalId: Option[String],
+                         owned: Boolean,
                          fractalImage: FractalImage,
                          navbarExpanded: Boolean = false) extends NutriaState
 
@@ -39,7 +40,9 @@ case class LibraryState(user: Option[User],
 case class DetailsState(user: Option[User],
                         remoteFractal: FractalEntityWithId,
                         fractal: FractalEntity,
-                        navbarExpanded: Boolean = false) extends NutriaState
+                        navbarExpanded: Boolean = false) extends NutriaState{
+  def dirty: Boolean = remoteFractal.entity != fractal
+}
 
 object DetailsState {
   val remoteFractal: Lens[DetailsState, FractalEntityWithId] = GenLens[DetailsState](_.remoteFractal)
@@ -59,6 +62,15 @@ object NutriaState extends CirceCodex {
     } yield LibraryState(user = user,
       publicFractals = publicFractals)
 
+  def detailsState(fractalId: String): Future[DetailsState] =
+    for{
+      user <- NutriaService.whoAmI()
+      fractal <- NutriaService.loadFractal(fractalId)
+    } yield DetailsState(
+      user = user,
+      remoteFractal = fractal,
+      fractal = fractal.entity
+    )
 
   // todo: remove?
   implicit val encodeSaveProcess: Codec[Option[Future[FractalEntity]]] = Codec.from(
