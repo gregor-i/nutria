@@ -38,7 +38,7 @@ object Snabbdom {
        ): VNode =
     Node(tag)
       .key(key)
-      .classes(classes)
+      .classes(classes.collect{ case (c, true) => c} :_*)
       .props(props)
       .attrs(attrs)
       .dataset(dataset)

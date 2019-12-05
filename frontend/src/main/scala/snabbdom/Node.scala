@@ -65,8 +65,10 @@ case class Node(
   def hooks(hooks: Seq[(String, SnabbdomFacade.Hook)]) : Node =
     copy(hooks = this.hooks ++ hooks)
 
+  def text(child: String): Node =
+    copy(children = children :+ child)
 
-  def child(child: Child): Node =
+  def child(child: VNode): Node =
     copy(children = children :+ child)
 
   def child(builder: Node): Node =

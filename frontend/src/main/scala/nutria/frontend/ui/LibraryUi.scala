@@ -11,7 +11,7 @@ object LibraryUi {
   def render(implicit state: LibraryState, update: NutriaState => Unit): VNode = {
     h(tag = "body",
       key = "library")(
-      common.Header("Nutria Fractal Library")(state, update),
+      common.Header(state, update),
       h("div.library-body")(
         h("div.fractal-tile-list")(
           state.publicFractals.map(renderFractalTile),

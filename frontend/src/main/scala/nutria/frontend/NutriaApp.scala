@@ -37,7 +37,7 @@ class NutriaApp(container: Element, initialState: NutriaState) extends SnabbdomA
     }
 
     state match {
-      case LoadingState(future) => future.onComplete {
+      case LoadingState(future, _) => future.onComplete {
         case Success(newState) => renderState(newState)
         case Failure(exception) => renderState(ErrorState(s"unexpected problem while initializing app: ${exception.getMessage}"))
       }

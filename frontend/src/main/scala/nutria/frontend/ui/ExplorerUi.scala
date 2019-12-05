@@ -9,7 +9,7 @@ object ExplorerUi {
   def render(implicit state: ExplorerState, update: NutriaState => Unit): VNode =
     h("body",
       key = "explorer")(
-      common.Header("Nutria Fractal Explorer")(state, update),
+      common.Header(state, update),
       //      renderActionBar(),
       renderCanvas,
     )

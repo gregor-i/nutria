@@ -15,7 +15,7 @@ object DetailsUi {
     Node("body")
       .key("explorer")
       .children(
-        common.Header("Nutria Fractal Explorer")(state, update),
+        common.Header(state, update),
         body(state, update),
         common.Footer()
       ).toVNode
@@ -23,13 +23,13 @@ object DetailsUi {
   def body(implicit state: DetailsState, update: NutriaState => Unit) =
     Node("div.details-body")
       .children(
-        Node("h2.title").child("General Settings:").toVNode,
+        Node("h2.title").text("General Settings:").toVNode,
         general(state.fractal, DetailsState.fractalEntity),
-        Node("h2.title").child("Template Settings:").toVNode,
+        Node("h2.title").text("Template Settings:").toVNode,
         template(state.fractal, DetailsState.fractalEntity),
-        Node("h2.title").child("Parameter Settings:").toVNode,
+        Node("h2.title").text("Parameter Settings:").toVNode,
         parameter(state.fractal, DetailsState.fractalEntity),
-        Node("h2.title").child("Snapshots:").toVNode,
+        Node("h2.title").text("Snapshots:").toVNode,
         snapshots(state.fractal, DetailsState.fractalEntity),
         actions(),
       ).toVNode

@@ -8,30 +8,38 @@ import nutria.core.{FractalEntity, _}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-sealed trait NutriaState{
+sealed trait NutriaState {
   def user: Option[User]
+  def navbarExpanded: Boolean
 }
 
-trait NoUser{ _: NutriaState =>
+trait NoUser {
+  _: NutriaState =>
   def user: None.type = None
 }
 
-case class LoadingState(loading: Future[NutriaState]) extends NutriaState with NoUser
+case class LoadingState(loading: Future[NutriaState],
+                        navbarExpanded: Boolean = false) extends NutriaState with NoUser
 
-case class ErrorState(message: String) extends NutriaState with NoUser
+case class ErrorState(message: String,
+                      navbarExpanded: Boolean = false) extends NutriaState with NoUser
 
-case class GreetingState(randomFractal: FractalEntity) extends NutriaState with NoUser
+case class GreetingState(randomFractal: FractalEntity,
+                         navbarExpanded: Boolean = false) extends NutriaState with NoUser
 
 case class ExplorerState(user: Option[User],
                          fractalId: Option[String],
-                         fractalEntity: FractalEntity) extends NutriaState
+                         fractalEntity: FractalEntity,
+                         navbarExpanded: Boolean = false) extends NutriaState
 
 case class LibraryState(user: Option[User],
-                        publicFractals: Vector[FractalEntityWithId]) extends NutriaState
+                        publicFractals: Vector[FractalEntityWithId],
+                        navbarExpanded: Boolean = false) extends NutriaState
 
 case class DetailsState(user: Option[User],
                         remoteFractal: FractalEntityWithId,
-                        fractal: FractalEntity) extends NutriaState
+                        fractal: FractalEntity,
+                        navbarExpanded: Boolean = false) extends NutriaState
 
 object DetailsState {
   val remoteFractal: Lens[DetailsState, FractalEntityWithId] = GenLens[DetailsState](_.remoteFractal)
@@ -67,4 +75,14 @@ object NutriaState extends CirceCodex {
   implicit val codecExplorerState: Codec[ExplorerState] = semiauto.deriveConfiguredCodec
 
   implicit val codec: Codec[NutriaState] = semiauto.deriveConfiguredCodec
+
+  def setNavbarExtended(nutriaState: NutriaState, navbarExpanded: Boolean): NutriaState =
+    nutriaState match {
+      case state:LoadingState => state.copy(navbarExpanded = navbarExpanded)
+      case state:ErrorState => state.copy(navbarExpanded = navbarExpanded)
+      case state:GreetingState => state.copy(navbarExpanded = navbarExpanded)
+      case state:ExplorerState => state.copy(navbarExpanded = navbarExpanded)
+      case state:LibraryState => state.copy(navbarExpanded = navbarExpanded)
+      case state:DetailsState => state.copy(navbarExpanded = navbarExpanded)
+    }
 }

@@ -7,7 +7,7 @@ object Footer {
     Node("footer.footer")
       .child(
         Node("div.content.has-text-centered")
-          .prop("innerHtml", licence)
+          .prop("innerHTML", licence)
       )
       .toVNode
 

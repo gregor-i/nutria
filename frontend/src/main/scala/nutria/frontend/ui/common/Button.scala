@@ -8,5 +8,5 @@ object Button {
     Node("button.button")
       .event("click", onclick)
       .child(Icons.icon(icon))
-      .child(Node("span").child(text))
+      .child(Node("span").text(text))
 }

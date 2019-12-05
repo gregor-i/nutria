@@ -1,12 +1,12 @@
 package nutria.frontend
 
 import io.circe.syntax._
-import nutria.core.{DivergingSeries, FractalEntity}
+import nutria.core.FractalEntity
 import org.scalajs.dom
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.{Random, Try}
+import scala.util.Try
 
 object Router {
   def stateFromUrl(location: dom.Location): Future[NutriaState] = {
@@ -24,7 +24,7 @@ object Router {
         case "/" =>
           for {
             remoteFractals <- NutriaService.loadPublicFractals()
-            randomFractal = remoteFractals((Math.random()*remoteFractals.length).toInt)
+            randomFractal = remoteFractals((Math.random() * remoteFractals.length).toInt)
           } yield GreetingState(randomFractal.entity)
 
         case "/library" =>
@@ -36,7 +36,7 @@ object Router {
           } yield DetailsState(user, remoteFractal, remoteFractal.entity)
 
         case s"/fractals/${fractalId}/explorer" =>
-          for{
+          for {
             remoteFractal <- NutriaService.loadFractal(fractalId)
           } yield ExplorerState(user, Some(remoteFractal.id), remoteFractal.entity)
 
@@ -62,10 +62,11 @@ object Router {
       Some(("/library", Map.empty))
     case details: DetailsState =>
       Some((s"/fractals/${details.remoteFractal.id}/details", Map("fractal" -> queryEncoded(details.fractal))))
-    case ExplorerState(_, Some(fractalId), fractal)=>
-      Some((s"/fractals/${fractalId}/explorer", Map("state" -> queryEncoded(fractal))))
     case exState: ExplorerState =>
-      Some((s"/explorer", Map("state" -> queryEncoded(exState.fractalEntity))))
+      exState.fractalId match {
+        case Some(fractalId) => Some((s"/fractals/${fractalId}/explorer", Map("state" -> queryEncoded(exState.fractalEntity))))
+        case None => Some((s"/explorer", Map("state" -> queryEncoded(exState.fractalEntity))))
+      }
     case _: GreetingState =>
       Some(("/", Map.empty))
     case _: ErrorState =>
