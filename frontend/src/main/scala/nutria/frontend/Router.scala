@@ -1,7 +1,8 @@
 package nutria.frontend
 
+import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
-import nutria.core.FractalEntity
+import nutria.core.{FractalEntity, FractalImage}
 import org.scalajs.dom
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -24,8 +25,9 @@ object Router {
         case "/" =>
           for {
             remoteFractals <- NutriaService.loadPublicFractals()
-            randomFractal = remoteFractals((Math.random() * remoteFractals.length).toInt)
-          } yield GreetingState(randomFractal.entity)
+            allImages = FractalImage.allImages(remoteFractals.map(_.entity))
+            randomFractal = allImages((Math.random() * allImages.length).toInt) // todo: the service should provide an endpoint for this
+          } yield GreetingState(randomFractal)
 
         case "/library" =>
           NutriaState.libraryState()
@@ -38,13 +40,14 @@ object Router {
         case s"/fractals/${fractalId}/explorer" =>
           for {
             remoteFractal <- NutriaService.loadFractal(fractalId)
-          } yield ExplorerState(user, Some(remoteFractal.id), remoteFractal.entity)
+            image = FractalImage(remoteFractal.entity.program, remoteFractal.entity.views.value.head, remoteFractal.entity.antiAliase)
+          } yield ExplorerState(user, Some(remoteFractal.id), image)
 
         case "/explorer" =>
           Future.successful {
             (for {
               state <- queryParams.get("state")
-              fractal <- queryDecoded(state)
+              fractal <- queryDecoded[FractalImage](state)
             } yield ExplorerState(user, None, fractal)
               ).getOrElse(ErrorState("Query Parameter is invalid"))
           }
@@ -64,8 +67,8 @@ object Router {
       Some((s"/fractals/${details.remoteFractal.id}/details", Map("fractal" -> queryEncoded(details.fractal))))
     case exState: ExplorerState =>
       exState.fractalId match {
-        case Some(fractalId) => Some((s"/fractals/${fractalId}/explorer", Map("state" -> queryEncoded(exState.fractalEntity))))
-        case None => Some((s"/explorer", Map("state" -> queryEncoded(exState.fractalEntity))))
+        case Some(fractalId) => Some((s"/fractals/${fractalId}/explorer", Map("state" -> queryEncoded(exState.fractalImage))))
+        case None => Some((s"/explorer", Map("state" -> queryEncoded(exState.fractalImage))))
       }
     case _: GreetingState =>
       Some(("/", Map.empty))
@@ -75,13 +78,13 @@ object Router {
       None
   }
 
-  def queryEncoded(fractalProgram: FractalEntity): String =
-    dom.window.btoa(fractalProgram.asJson.noSpaces)
+  def queryEncoded[T : Encoder](t: T): String =
+    dom.window.btoa(t.asJson.noSpaces)
 
-  def queryDecoded(string: String): Option[FractalEntity] =
+  def queryDecoded[T : Decoder](string: String): Option[T] =
     (for {
       decoded <- Try(dom.window.atob(string)).toEither
       json <- io.circe.parser.parse(new String(decoded))
-      decoded <- json.as[FractalEntity]
+      decoded <- json.as[T]
     } yield decoded).toOption
 }

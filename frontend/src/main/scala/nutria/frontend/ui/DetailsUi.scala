@@ -120,14 +120,13 @@ object DetailsUi {
 
   def snapshots(fractal: FractalEntity, lens: Lens[DetailsState, FractalEntity])
                (implicit state: DetailsState, update: NutriaState => Unit) = {
-    val viewports = fractal.view :: fractal.alternativeViewports
-
-    val tiles = viewports.map { viewport =>
+    val tiles = fractal.views.value.map { viewport =>
+      val img = FractalImage(fractal.program, viewport, fractal.antiAliase)
       h("article.fractal-tile",
         events = Seq("click" -> Snabbdom.event { _ =>
-          update(ExplorerState(state.user, None, fractal))
+          update(ExplorerState(state.user, None, img))
         }),
-      )(FractalImage(fractal.copy(view = viewport), Dimensions.thumbnailDimensions))
+      )(ui.common.FractalTile( img, Dimensions.thumbnailDimensions))
     }
 
     h("div.fractal-tile-list")(

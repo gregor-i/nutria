@@ -24,12 +24,12 @@ case class LoadingState(loading: Future[NutriaState],
 case class ErrorState(message: String,
                       navbarExpanded: Boolean = false) extends NutriaState with NoUser
 
-case class GreetingState(randomFractal: FractalEntity,
+case class GreetingState(randomFractal: FractalImage,
                          navbarExpanded: Boolean = false) extends NutriaState with NoUser
 
 case class ExplorerState(user: Option[User],
                          fractalId: Option[String],
-                         fractalEntity: FractalEntity,
+                         fractalImage: FractalImage,
                          navbarExpanded: Boolean = false) extends NutriaState
 
 case class LibraryState(user: Option[User],
@@ -47,8 +47,8 @@ object DetailsState {
 }
 
 object ExplorerState {
-  val fractalEntity: Lens[ExplorerState, FractalEntity] = GenLens[ExplorerState](_.fractalEntity)
-  val viewport: Lens[ExplorerState, Viewport] = ExplorerState.fractalEntity.composeLens(FractalEntity.view)
+  val fractalImage: Lens[ExplorerState, FractalImage] = GenLens[ExplorerState](_.fractalImage)
+  val viewport: Lens[ExplorerState, Viewport] = ExplorerState.fractalImage.composeLens(FractalImage.view)
 }
 
 object NutriaState extends CirceCodex {
@@ -60,20 +60,25 @@ object NutriaState extends CirceCodex {
       publicFractals = publicFractals)
 
 
+  // todo: remove?
   implicit val encodeSaveProcess: Codec[Option[Future[FractalEntity]]] = Codec.from(
     decodeA = Decoder.decodeNone.map(none => none: Option[Future[FractalEntity]]),
     encodeA = Encoder.encodeNone.contramap(_ => None)
   )
 
+  // todo: remove?
   implicit val encodeFuture: Codec[Future[NutriaState]] = Codec.from(
     decodeA = Decoder.decodeNone.map(_ => Future.failed(new Exception)),
     encodeA = Encoder.encodeNone.contramap(_ => None)
   )
 
+  // todo: remove?
   implicit val codecLibraryState: Codec[LibraryState] = semiauto.deriveConfiguredCodec
 
+  // todo: remove?
   implicit val codecExplorerState: Codec[ExplorerState] = semiauto.deriveConfiguredCodec
 
+  // todo: remove?
   implicit val codec: Codec[NutriaState] = semiauto.deriveConfiguredCodec
 
   def setNavbarExtended(nutriaState: NutriaState, navbarExpanded: Boolean): NutriaState =

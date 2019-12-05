@@ -3,7 +3,7 @@ package nutria.frontend.shaderBuilder
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.numeric.Positive
 import nutria.core.viewport.Viewport
-import nutria.core.{FractalEntity, FractalProgram}
+import nutria.core.{FractalEntity, FractalImage, FractalProgram}
 import nutria.frontend.util.Untyped
 import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
@@ -16,7 +16,7 @@ import scala.util.{Failure, Try}
 
 object FractalRenderer {
 
-  def render(canvas: Canvas, entity: FractalEntity, resize: Boolean): Boolean = {
+  def render(canvas: Canvas, entity: FractalImage, resize: Boolean): Boolean = {
     val viewport = entity.view
     val program = entity.program
     val ctx = canvas.getContext("webgl", Dynamic.literal(preserveDrawingBuffer = true)).asInstanceOf[WebGLRenderingContext]

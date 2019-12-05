@@ -44,6 +44,7 @@ object GreetingUi {
               Snabbdom.event { _ =>
                 update(LoadingState(NutriaState.libraryState()))
               })
+              .classes("is-primary")
               .toVNode
           )
             .classes("is-right")

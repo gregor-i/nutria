@@ -2,7 +2,7 @@ package nutria.frontend.ui
 
 import nutria.core._
 import nutria.core.viewport.Dimensions
-import nutria.frontend.ui.common.FractalImage
+import nutria.frontend.ui.common.FractalTile
 import nutria.frontend.{DetailsState, LibraryState, NutriaState}
 import snabbdom.Snabbdom.h
 import snabbdom.{Snabbdom, VNode}
@@ -33,7 +33,7 @@ object LibraryUi {
           fractal = fractal.entity)
       )))
     )(
-      FractalImage(fractal.entity, Dimensions.thumbnailDimensions)
+      FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnailDimensions)
     )
 
 

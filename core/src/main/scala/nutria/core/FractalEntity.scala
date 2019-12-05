@@ -2,6 +2,7 @@ package nutria.core
 
 import eu.timepit.refined._
 import eu.timepit.refined.api.Refined
+import eu.timepit.refined.collection.NonEmpty
 import eu.timepit.refined.numeric.Positive
 import io.circe.syntax._
 import io.circe.{Codec, Decoder, Encoder}
@@ -11,8 +12,7 @@ import nutria.core.viewport.DefaultViewport
 @monocle.macros.Lenses()
 case class FractalEntity(title: String = "",
                          program: FractalProgram,
-                         view: Viewport = DefaultViewport.defaultViewport,
-                         alternativeViewports: List[Viewport] = List.empty,
+                         views: List[Viewport] Refined NonEmpty = refineV[NonEmpty](List(DefaultViewport.defaultViewport)).toOption.get,
                          description: String = "",
                          reference: List[String] = List.empty,
                          antiAliase: Int Refined Positive = refineMV(1)

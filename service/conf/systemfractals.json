@@ -1,7 +1,5 @@
 [
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -17,18 +15,18 @@
     "reference" : [
     ],
     "title" : "Mandelbrot-Mutation",
-    "view" : [
-      -0.47872846731922547,
-      -0.6465915195786512,
-      0.06676734409938126,
-      0.0,
-      0.0,
-      0.033592320000001195
+    "views" : [
+      [
+        -0.47872846731922547,
+        -0.6465915195786512,
+        0.06676734409938126,
+        0.0,
+        0.0,
+        0.033592320000001195
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -44,18 +42,18 @@
     "reference" : [
     ],
     "title" : "Juliaset on (-0.6, 0.6)",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -71,18 +69,18 @@
     "reference" : [
     ],
     "title" : "Juliaset on (-0.12, 0.86)",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -98,18 +96,18 @@
     "reference" : [
     ],
     "title" : "Mandelbrot",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -125,18 +123,18 @@
     "reference" : [
     ],
     "title" : "Juliaset-Mandelbrot-Mix",
-    "view" : [
-      0.27572115019387067,
-      -0.36630476460063605,
-      0.005191828677167718,
-      0.0,
-      0.0,
-      0.002612138803200008
+    "views" : [
+      [
+        0.27572115019387067,
+        -0.36630476460063605,
+        0.005191828677167718,
+        0.0,
+        0.0,
+        0.002612138803200008
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -152,26 +150,18 @@
     "reference" : [
     ],
     "title" : "Mandelbrot-Mutation",
-    "view" : [
-      -1.4239910488170056,
-      -0.011763035633607855,
-      0.040060406459627926,
-      0.0,
-      0.0,
-      0.020155392000000303
+    "views" : [
+      [
+        -1.4239910488170056,
+        -0.011763035633607855,
+        0.040060406459627926,
+        0.0,
+        0.0,
+        0.020155392000000303
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-      [
-        0.7588783553955626,
-        6.66075020679108,
-        0.309108074534176,
-        0.0,
-        0.0,
-        0.15552000000000732
-      ]
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -187,18 +177,26 @@
     "reference" : [
     ],
     "title" : "Exp",
-    "view" : [
-      1.471174448953227,
-      996.911180049271,
-      1.4310559006211945,
-      0.0,
-      0.0,
-      0.7200000000000385
+    "views" : [
+      [
+        1.471174448953227,
+        996.911180049271,
+        1.4310559006211945,
+        0.0,
+        0.0,
+        0.7200000000000385
+      ],
+      [
+        0.7588783553955626,
+        6.66075020679108,
+        0.309108074534176,
+        0.0,
+        0.0,
+        0.15552000000000732
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -219,18 +217,18 @@
     "reference" : [
     ],
     "title" : "Juliaset on (-0.6, 0.6)  with Normal Map Effect",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "the famous mandelbrot with Normal map effect",
     "program" : {
@@ -252,18 +250,18 @@
       "https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set#Normal_map_effect"
     ],
     "title" : "Mandelbrot with Normal Map Effect",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -283,18 +281,18 @@
     "reference" : [
     ],
     "title" : "Playing with Newton Fractals",
-    "view" : [
-      -4.604422390913491,
-      -2.974506213216784,
-      11.042097998620031,
-      0.0,
-      0.0,
-      5.555555555555703
+    "views" : [
+      [
+        -4.604422390913491,
+        -2.974506213216784,
+        11.042097998620031,
+        0.0,
+        0.0,
+        5.555555555555703
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -314,18 +312,18 @@
     "reference" : [
     ],
     "title" : "Three Roots",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -345,18 +343,18 @@
     "reference" : [
     ],
     "title" : "Playing with Newton Fractals",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -376,18 +374,18 @@
     "reference" : [
     ],
     "title" : "Playing with Newton Fractals",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -407,18 +405,18 @@
     "reference" : [
     ],
     "title" : "Playing with Newton Fractals",
-    "view" : [
-      -3.7038764237103696,
-      -2.992389255168824,
-      11.04209799861978,
-      0.0,
-      0.0,
-      5.555555555555577
+    "views" : [
+      [
+        -3.7038764237103696,
+        -2.992389255168824,
+        11.04209799861978,
+        0.0,
+        0.0,
+        5.555555555555577
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -438,18 +436,18 @@
     "reference" : [
     ],
     "title" : "Playing with Newton Fractals",
-    "view" : [
-      -12.706311498540042,
-      -8.842488279382595,
-      30.672494440610635,
-      0.0,
-      0.0,
-      15.432098765432224
+    "views" : [
+      [
+        -12.706311498540042,
+        -8.842488279382595,
+        30.672494440610635,
+        0.0,
+        0.0,
+        15.432098765432224
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -469,18 +467,18 @@
     "reference" : [
     ],
     "title" : "Playing with Newton Fractals",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -500,18 +498,18 @@
     "reference" : [
     ],
     "title" : "Playing with Newton Fractals",
-    "view" : [
-      -4.165592716979138,
-      -2.765975851707353,
-      11.042097998620035,
-      0.0,
-      0.0,
-      5.555555555555705
+    "views" : [
+      [
+        -4.165592716979138,
+        -2.765975851707353,
+        11.042097998620035,
+        0.0,
+        0.0,
+        5.555555555555705
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -531,18 +529,18 @@
     "reference" : [
     ],
     "title" : "Playing with Newton Fractals",
-    "view" : [
-      -0.42849045804990804,
-      0.1789044397697608,
-      0.008653047795279688,
-      0.0,
-      0.0,
-      0.0043535646720000935
+    "views" : [
+      [
+        -0.42849045804990804,
+        0.1789044397697608,
+        0.008653047795279688,
+        0.0,
+        0.0,
+        0.0043535646720000935
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -562,18 +560,18 @@
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial",
-    "view" : [
-      6.227911891596479,
-      0.08950322108714272,
-      0.02403624387577664,
-      0.0,
-      0.0,
-      0.012093235200000123
+    "views" : [
+      [
+        6.227911891596479,
+        0.08950322108714272,
+        0.02403624387577664,
+        0.0,
+        0.0,
+        0.012093235200000123
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -593,18 +591,18 @@
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial",
-    "view" : [
-      -0.2722395082412855,
-      -0.3712554702655976,
-      1.4310559006211268,
-      0.0,
-      0.0,
-      0.7200000000000044
+    "views" : [
+      [
+        -0.2722395082412855,
+        -0.3712554702655976,
+        1.4310559006211268,
+        0.0,
+        0.0,
+        0.7200000000000044
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -624,26 +622,18 @@
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-      [
-        -0.09013423830314439,
-        -0.14522074300350504,
-        0.5151801242236113,
-        0.0,
-        0.0,
-        0.25920000000000437
-      ]
-    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -663,26 +653,26 @@
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial",
-    "view" : [
-      -3.632070470187262,
-      -1.8414040418303106,
-      6.625258799171954,
-      0.0,
-      0.0,
-      3.333333333333389
+    "views" : [
+      [
+        -3.632070470187262,
+        -1.8414040418303106,
+        6.625258799171954,
+        0.0,
+        0.0,
+        3.333333333333389
+      ],
+      [
+        -0.09013423830314439,
+        -0.14522074300350504,
+        0.5151801242236113,
+        0.0,
+        0.0,
+        0.25920000000000437
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-      [
-        -0.32220601106340535,
-        -1.9296587684993527,
-        0.8586335403726716,
-        0.0,
-        0.0,
-        0.43200000000000044
-      ]
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -702,18 +692,26 @@
     "reference" : [
     ],
     "title" : "Fake Mandelbrot",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ],
+      [
+        -0.32220601106340535,
+        -1.9296587684993527,
+        0.8586335403726716,
+        0.0,
+        0.0,
+        0.43200000000000044
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -733,18 +731,18 @@
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial",
-    "view" : [
-      -2.1546124445395654,
-      -1.0359239146292238,
-      3.9751552795032334,
-      0.0,
-      0.0,
-      2.0000000000000644
+    "views" : [
+      [
+        -2.1546124445395654,
+        -1.0359239146292238,
+        3.9751552795032334,
+        0.0,
+        0.0,
+        2.0000000000000644
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -764,18 +762,18 @@
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial",
-    "view" : [
-      -1.2136789200879365,
-      -0.5758319146496562,
-      2.385093167701948,
-      0.0,
-      0.0,
-      1.2000000000000424
+    "views" : [
+      [
+        -1.2136789200879365,
+        -0.5758319146496562,
+        2.385093167701948,
+        0.0,
+        0.0,
+        1.2000000000000424
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -795,18 +793,18 @@
     "reference" : [
     ],
     "title" : "Playing with Fake Mandelbrot",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(4) with f(x) = (((x)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -826,18 +824,18 @@
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial (4)",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(3) with f(x) = ((x)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -857,18 +855,18 @@
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial (3)",
-    "view" : [
-      0.24813792535967855,
-      -0.36580546246323814,
-      1.4310559006211703,
-      0.0,
-      0.0,
-      0.7200000000000263
+    "views" : [
+      [
+        0.24813792535967855,
+        -0.36580546246323814,
+        1.4310559006211703,
+        0.0,
+        0.0,
+        0.7200000000000263
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(5) with f(x) = ((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -888,18 +886,18 @@
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial (5)",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(6) with f(x) = (((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -919,18 +917,18 @@
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial (6)",
-    "view" : [
-      -0.9192773494824024,
-      0.11092392546583849,
-      0.11127890683229816,
-      0.0,
-      0.0,
-      0.05598720000000001
+    "views" : [
+      [
+        -0.9192773494824024,
+        0.11092392546583849,
+        0.11127890683229816,
+        0.0,
+        0.0,
+        0.05598720000000001
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(6) with f(x) = (((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -950,18 +948,18 @@
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial (6)",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "newton iteration over mandelbrot polynomial(7) with f(x) = ((((((x)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda)^2 + lambda, x0 = lambda",
     "program" : {
@@ -981,18 +979,18 @@
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial (7)",
-    "view" : [
-      -2.5,
-      -1.0,
-      3.5,
-      0.0,
-      0.0,
-      2.0
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -1025,18 +1023,18 @@
       "https://www.shadertoy.com/view/Mlf3RX"
     ],
     "title" : "Koch Snowflake",
-    "view" : [
-      -0.3999720289024556,
-      -0.5039107933017429,
-      1.9378881987578165,
-      0.0,
-      0.0,
-      0.9780279503105854
+    "views" : [
+      [
+        -0.3999720289024556,
+        -0.5039107933017429,
+        1.9378881987578165,
+        0.0,
+        0.0,
+        0.9780279503105854
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "nova mandelbrot fractal of f(x) = x^3 - 1",
     "program" : {
@@ -1056,18 +1054,18 @@
       ""
     ],
     "title" : "Nova Fractal",
-    "view" : [
-      -0.998340655107424,
-      -0.0943403293080435,
-      0.3255714426133771,
-      0.0,
-      0.0,
-      0.15600298136646437
+    "views" : [
+      [
+        -0.998340655107424,
+        -0.0943403293080435,
+        0.3255714426133771,
+        0.0,
+        0.0,
+        0.15600298136646437
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -1100,18 +1098,18 @@
       "http://www.iquilezles.org/www/articles/lyapunovfractals/lyapunovfractals.htm"
     ],
     "title" : "Lyapunov Fractal",
-    "view" : [
-      2.349623209270729,
-      3.364982282572452,
-      1.4310559006211594,
-      0.0,
-      0.0,
-      0.7222360248447414
+    "views" : [
+      [
+        2.349623209270729,
+        3.364982282572452,
+        1.4310559006211594,
+        0.0,
+        0.0,
+        0.7222360248447414
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -1125,18 +1123,18 @@
       "https://en.wikibooks.org/wiki/Fractals/Iterations_in_the_complex_plane/demm"
     ],
     "title" : "Mandelbrot exterior distance estimator",
-    "view" : [
-      -1.7645988375864934,
-      -1.0131959357824767,
-      2.4334365753315907,
-      0.0,
-      0.0,
-      1.9999999999999718
+    "views" : [
+      [
+        -1.7645988375864934,
+        -1.0131959357824767,
+        2.4334365753315907,
+        0.0,
+        0.0,
+        1.9999999999999718
+      ]
     ]
   },
   {
-    "alternativeViewports" : [
-    ],
     "antiAliase" : 1,
     "description" : "",
     "program" : {
@@ -1175,13 +1173,15 @@
       "https://de.wikipedia.org/wiki/Baryzentrische_Koordinaten"
     ],
     "title" : "Sierpinski Triangle",
-    "view" : [
-      -1.30982501628656,
-      -1.2105252086917273,
-      2.523809358319962,
-      0.0,
-      0.0,
-      2.006211180124265
+    "views" : [
+      [
+        -1.30982501628656,
+        -1.2105252086917273,
+        2.523809358319962,
+        0.0,
+        0.0,
+        2.006211180124265
+      ]
     ]
   }
 ]

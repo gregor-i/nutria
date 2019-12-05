@@ -1,12 +1,12 @@
 package nutria.frontend.ui.common
 
-import nutria.core.FractalEntity
+import nutria.core.{FractalEntity, FractalImage}
 import nutria.frontend.shaderBuilder.FractalRenderer
 import org.scalajs.dom.html.Canvas
 import snabbdom.{Snabbdom, SnabbdomFacade}
 
 object CanvasHooks {
-  def apply(fractal: FractalEntity, resize: Boolean): Seq[(String, SnabbdomFacade.Hook)] =
+  def apply(fractal: FractalImage, resize: Boolean): Seq[(String, SnabbdomFacade.Hook)] =
     Seq[(String, SnabbdomFacade.Hook)](
       "insert" -> Snabbdom.hook { node =>
         val canvas = node.elm.get.asInstanceOf[Canvas]

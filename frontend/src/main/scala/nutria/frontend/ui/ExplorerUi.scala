@@ -43,7 +43,7 @@ object ExplorerUi {
       events = ExplorerEvents.canvasMouseEvents ++ ExplorerEvents.canvasWheelEvent ++ ExplorerEvents.canvasTouchEvents
     )(
       h("canvas",
-        hooks = CanvasHooks(state.fractalEntity, resize = true)
+        hooks = CanvasHooks(state.fractalImage, resize = true)
       )()
     )
 }
