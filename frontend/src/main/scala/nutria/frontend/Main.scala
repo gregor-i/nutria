@@ -15,10 +15,8 @@ object Main {
 
     def container: Element = dom.document.body
 
-    val stateFuture = Router.stateFromUrl(dom.window.location)
-
     dom.document.addEventListener[Event]("DOMContentLoaded", (_: js.Any) =>
-      new nutria.frontend.NutriaApp(container, LoadingState(stateFuture))
+      new nutria.frontend.NutriaApp(container)
     )
   }
 }

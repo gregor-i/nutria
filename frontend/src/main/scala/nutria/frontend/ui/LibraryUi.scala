@@ -33,7 +33,7 @@ object LibraryUi {
           fractal = fractal.entity)
       )))
     )(
-      FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnailDimensions)
+      FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnailDimensions).toVNode
     )
 
 

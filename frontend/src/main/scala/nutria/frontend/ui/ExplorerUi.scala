@@ -50,7 +50,7 @@ object ExplorerUi {
 
   def buttonBackToDetails(fractalId: String)
                          (implicit state: ExplorerState, update: NutriaState => Unit) =
-    Button("Edit Parameters", Icons.snapshot, Snabbdom.event { _ =>
+    Button("Edit Parameters", Icons.edit, Snabbdom.event { _ =>
       update(LoadingState(NutriaState.detailsState(fractalId)))
     })
 
@@ -60,7 +60,8 @@ object ExplorerUi {
     Button("Save this image", Icons.snapshot, Snabbdom.event { _ =>
       for {
         remoteFractal <- NutriaService.loadFractal(fractalId)
-        updated = remoteFractal.entity.copy(views = refineV[NonEmpty](remoteFractal.entity.views.value :+ state.fractalImage.view).toOption.get)
+        views = (remoteFractal.entity.views.value :+ state.fractalImage.view).distinct
+        updated = remoteFractal.entity.copy(views = refineV[NonEmpty](views).toOption.get)
         _ <- NutriaService.updateUserFractal(remoteFractal.copy(entity = updated))
       } yield ()
     })

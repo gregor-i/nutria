@@ -1,16 +1,15 @@
 package nutria.frontend
 
-import io.circe.{Decoder, Encoder}
 import io.circe.syntax._
-import nutria.core.{FractalEntity, FractalImage}
+import io.circe.{Decoder, Encoder}
+import nutria.core.FractalImage
 import org.scalajs.dom
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 import scala.util.Try
 
 object Router {
-  def stateFromUrl(location: dom.Location): Future[NutriaState] = {
+  def stateFromUrl(location: dom.Location): NutriaState = {
     val queryParams = location.search
       .dropWhile(_ == '?')
       .split('&')
@@ -19,39 +18,48 @@ object Router {
       }
       .toMap
 
-    for {
-      user <- NutriaService.whoAmI()
-      state <- location.pathname match {
-        case "/" =>
+
+    location.pathname match {
+      case "/" =>
+        LoadingState(
           NutriaState.greetingState()
+        )
 
-        case "/library" =>
+      case "/library" =>
+        LoadingState(
           NutriaState.libraryState()
+        )
 
-        case s"/fractals/${fractalsId}/details" =>
+      case s"/fractals/${fractalsId}/details" =>
+        LoadingState(
           NutriaState.detailsState(fractalsId)
+        )
 
-        case s"/fractals/${fractalId}/explorer" =>
+      case s"/fractals/${fractalId}/explorer" =>
+        LoadingState(
           for {
+            user <- NutriaService.whoAmI()
             remoteFractal <- NutriaService.loadFractal(fractalId)
             image = FractalImage(remoteFractal.entity.program, remoteFractal.entity.views.value.head, remoteFractal.entity.antiAliase)
           } yield ExplorerState(user, Some(remoteFractal.id), owned = user.exists(_.id == remoteFractal.owner), image)
+        )
 
-        case "/explorer" =>
-          Future.successful {
-            (for {
-              state <- queryParams.get("state")
-              fractal <- queryDecoded[FractalImage](state)
-            } yield ExplorerState(user, None, owned = false, fractal)
-              ).getOrElse(ErrorState("Query Parameter is invalid"))
-          }
+      case "/explorer" =>
+        LoadingState(
+          NutriaService.whoAmI()
+            .map { user =>
+              (for {
 
-        case _ =>
-          Future.successful {
-            ErrorState("Unkown url")
-          }
-      }
-    } yield state
+                state <- queryParams.get("state")
+                fractal <- queryDecoded[FractalImage](state)
+              } yield ExplorerState(user, None, owned = false, fractal)
+                ).getOrElse(ErrorState("Query Parameter is invalid"))
+            }
+        )
+
+      case _ =>
+        ErrorState("Unkown url")
+    }
   }
 
   def stateToUrl(state: NutriaState): Option[(String, Map[String, String])] = state match {
@@ -72,10 +80,10 @@ object Router {
       None
   }
 
-  def queryEncoded[T : Encoder](t: T): String =
+  def queryEncoded[T: Encoder](t: T): String =
     dom.window.btoa(t.asJson.noSpaces)
 
-  def queryDecoded[T : Decoder](string: String): Option[T] =
+  def queryDecoded[T: Decoder](string: String): Option[T] =
     (for {
       decoded <- Try(dom.window.atob(string)).toEither
       json <- io.circe.parser.parse(new String(decoded))

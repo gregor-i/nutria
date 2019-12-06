@@ -10,7 +10,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.scalajs.js.|
 import scala.util.{Failure, Success}
 
-class NutriaApp(container: Element, initialState: NutriaState) extends SnabbdomApp {
+class NutriaApp(container: Element) extends SnabbdomApp {
 
   var node: Element | VNode = container
 
@@ -47,11 +47,8 @@ class NutriaApp(container: Element, initialState: NutriaState) extends SnabbdomA
   }
 
   dom.window.onpopstate = _ =>
-    Router.stateFromUrl(dom.window.location).onComplete {
-      case Success(newState) => renderState(newState)
-      case Failure(exception) => renderState(ErrorState(s"unexpected problem while initializing app: ${exception.getMessage}"))
-    }
+    renderState(Router.stateFromUrl(dom.window.location))
 
-  renderState(initialState)
+  renderState(Router.stateFromUrl(dom.window.location))
 
 }

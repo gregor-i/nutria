@@ -16,6 +16,7 @@ object Icons {
   val library = "fa-image"
   val login = "fa-sign-in"
   val logout = "fa-sign-out"
+  val up = "fa-arrow-up"
 
   def icon(icon: String): VNode =
     Node("span.icon")

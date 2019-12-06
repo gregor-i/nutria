@@ -1,10 +1,14 @@
 package nutria.frontend.ui
 
+import eu.timepit.refined._
+import eu.timepit.refined.auto._
+import eu.timepit.refined.collection.NonEmpty
 import monocle.{Iso, Lens}
 import nutria.core._
 import nutria.frontend._
 import nutria.frontend.ui.common._
 import nutria.frontend.util.LenseUtils
+import org.scalajs.dom
 import snabbdom.{Node, Snabbdom, VNode}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -126,10 +130,39 @@ object DetailsUi {
       val img = FractalImage(fractal.program, viewport, fractal.antiAliase)
 
       Node("article.fractal-tile")
-        .event("click", Snabbdom.event { _ =>
-          update(ExplorerState(state.user, fractalId, owned = owned, img))
-        })
-        .child(FractalTile(img, Dimensions.thumbnailDimensions))
+        .classes("is-relative")
+        .child(
+          FractalTile(img, Dimensions.thumbnailDimensions)
+            .event("click", Snabbdom.event { _ =>
+              update(ExplorerState(state.user, fractalId, owned = owned, img))
+            })
+        )
+        .child(
+          Node("div.buttons")
+            .style("position", "absolute")
+            .style("right", "4px")
+            .style("top", "4px")
+            .child(
+              Button.icon(Icons.up, Snabbdom.event { _ =>
+                val newViewports = fractal.views.value.filter(_ == viewport) ++ fractal.views.value.filter(_ != viewport)
+                refineV[NonEmpty](newViewports) match {
+                  case Right(newViews) => update(state.copy(fractal = fractal.copy(views = newViews)))
+                  case Left(_) => ???
+                }
+              })
+                .classes("is-outlined")
+            )
+            .child(
+              Button.icon(Icons.delete, Snabbdom.event { _ =>
+                val newViewports = fractal.views.value.filter(_ != viewport)
+                refineV[NonEmpty](newViewports) match {
+                  case Right(newViews) => update(state.copy(fractal = fractal.copy(views = newViews)))
+                  case Left(_) => dom.window.alert("the last snapshot can't be deleted.")
+                }
+              })
+                .classes("is-danger", "is-outlined")
+            )
+        )
         .toVNode
     }
 
@@ -175,7 +208,7 @@ object DetailsUi {
             })
               .classes("is-danger")
           )
-    .toVNode
+          .toVNode
 
       case Some(_) =>
         Button("Fork", Icons.copy, Snabbdom.event { _ =>

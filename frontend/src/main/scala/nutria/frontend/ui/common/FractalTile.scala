@@ -1,13 +1,12 @@
 package nutria.frontend.ui.common
 
-import nutria.core.{Dimensions, FractalEntity, FractalImage, FractalProgram, Viewport}
+import nutria.core.{Dimensions, FractalImage}
 import nutria.frontend.shaderBuilder.FractalRenderer
 import nutria.frontend.util.Untyped
 import org.scalajs.dom
 import org.scalajs.dom.html.{Canvas, Image}
 import org.scalajs.dom.raw.WebGLRenderingContext
-import snabbdom.Snabbdom.h
-import snabbdom.{Snabbdom, SnabbdomFacade, VNode}
+import snabbdom.{Node, Snabbdom}
 
 import scala.scalajs.js.Dynamic
 
@@ -19,12 +18,12 @@ object FractalTile {
   //    else
   //      ImgStrategy
 
-  def apply(fractalImage: FractalImage, dimensions: Dimensions): VNode =
+  def apply(fractalImage: FractalImage, dimensions: Dimensions): Node =
     strategy.render(fractalImage, dimensions)
 }
 
 private sealed trait Strategy {
-  def render(fractalImage: FractalImage, dimensions: Dimensions): VNode
+  def render(fractalImage: FractalImage, dimensions: Dimensions): Node
 }
 
 private object OffscrencanvasStrategy extends Strategy {
@@ -32,22 +31,21 @@ private object OffscrencanvasStrategy extends Strategy {
   private lazy val offscreenCanvas = Dynamic.newInstance(untypedWindow.OffscreenCanvas)(0, 0)
   private lazy val webglCtx = Untyped(offscreenCanvas).getContext("webgl", Dynamic.literal(preserveDrawingBuffer = true)).asInstanceOf[WebGLRenderingContext]
 
-  override def render(fractalImage: FractalImage, dimensions: Dimensions): VNode =
-    h("canvas",
-      key = fractalImage.hashCode(),
-      attrs = Seq("width" -> dimensions.width.toString, "height" -> dimensions.height.toString),
-      hooks = Seq[(String, SnabbdomFacade.Hook)](
-        "insert" -> Snabbdom.hook { node =>
-          val canvas = node.elm.get.asInstanceOf[Canvas]
-          dom.window.setTimeout(() => {
-            val webGlProgram = FractalRenderer.constructProgram(webglCtx, fractalImage.program, fractalImage.antiAliase)
-            offscreenCanvas.width = dimensions.width
-            offscreenCanvas.height = dimensions.height
-            FractalRenderer.render(webglCtx, fractalImage.view, webGlProgram)
-            canvas.getContext("bitmaprenderer").transferFromImageBitmap(offscreenCanvas.transferToImageBitmap())
-          }, 5)
-        }
-      ))()
+  override def render(fractalImage: FractalImage, dimensions: Dimensions): Node =
+    Node("canvas")
+      .key(fractalImage.hashCode)
+      .attr("width", dimensions.width.toString)
+      .attr("height", dimensions.height.toString)
+      .hook("insert", Snabbdom.hook { node =>
+        val canvas = node.elm.get.asInstanceOf[Canvas]
+        dom.window.setTimeout(() => {
+          val webGlProgram = FractalRenderer.constructProgram(webglCtx, fractalImage.program, fractalImage.antiAliase)
+          offscreenCanvas.width = dimensions.width
+          offscreenCanvas.height = dimensions.height
+          FractalRenderer.render(webglCtx, fractalImage.view, webGlProgram)
+          canvas.getContext("bitmaprenderer").transferFromImageBitmap(offscreenCanvas.transferToImageBitmap())
+        }, 5)
+      })
 }
 
 private object ImgStrategy extends Strategy {
@@ -69,19 +67,14 @@ private object ImgStrategy extends Strategy {
 
   private val buffer = scala.collection.mutable.Queue.empty[Task]
 
-  override def render(fractalImage: FractalImage, dimensions: Dimensions): VNode =
-    h("img",
-      key = fractalImage.hashCode(),
-      attrs = Seq(
-        "width" -> dimensions.width.toString,
-        "height" -> dimensions.height.toString,
-        "src" -> "/img/rendering.svg"
-      ),
-      hooks = Seq[(String, SnabbdomFacade.Hook)](
-        "insert" -> Snabbdom.hook { node =>
-          val img = node.elm.get.asInstanceOf[Image]
-          buffer.enqueue(Task(img, fractalImage, dimensions))
-        }
-      )
-    )()
+  override def render(fractalImage: FractalImage, dimensions: Dimensions): Node =
+    Node("img")
+      .key(fractalImage.hashCode)
+      .attr("width", dimensions.width.toString)
+      .attr("height", dimensions.height.toString)
+      .attr("src", "/img/rendering.svg")
+      .hook("insert", Snabbdom.hook { node =>
+        val img = node.elm.get.asInstanceOf[Image]
+        buffer.enqueue(Task(img, fractalImage, dimensions))
+      })
 }
