@@ -1,6 +1,5 @@
 package nutria.frontend
 
-import io.circe.{Codec, Decoder, Encoder}
 import monocle.Lens
 import monocle.macros.GenLens
 import nutria.core.{FractalEntity, _}
@@ -76,27 +75,6 @@ object NutriaState extends CirceCodex {
       remoteFractal = fractal,
       fractal = fractal.entity
     )
-
-  // todo: remove?
-  implicit val encodeSaveProcess: Codec[Option[Future[FractalEntity]]] = Codec.from(
-    decodeA = Decoder.decodeNone.map(none => none: Option[Future[FractalEntity]]),
-    encodeA = Encoder.encodeNone.contramap(_ => None)
-  )
-
-  // todo: remove?
-  implicit val encodeFuture: Codec[Future[NutriaState]] = Codec.from(
-    decodeA = Decoder.decodeNone.map(_ => Future.failed(new Exception)),
-    encodeA = Encoder.encodeNone.contramap(_ => None)
-  )
-
-  // todo: remove?
-  implicit val codecLibraryState: Codec[LibraryState] = semiauto.deriveConfiguredCodec
-
-  // todo: remove?
-  implicit val codecExplorerState: Codec[ExplorerState] = semiauto.deriveConfiguredCodec
-
-  // todo: remove?
-  implicit val codec: Codec[NutriaState] = semiauto.deriveConfiguredCodec
 
   def setNavbarExtended(nutriaState: NutriaState, navbarExpanded: Boolean): NutriaState =
     nutriaState match {
