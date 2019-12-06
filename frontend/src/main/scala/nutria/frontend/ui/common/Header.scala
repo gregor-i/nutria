@@ -68,7 +68,7 @@ object Header {
   private val loginItem =
     Node("div.navbar-item")
       .child(
-        Node("a.button")
+        Node("a.button.is-rounded")
           .attr("href", "/auth/google")
           .child(Icons.icon(Icons.login))
           .child(Node("span").text("Log in"))
@@ -77,7 +77,7 @@ object Header {
   private def logoutItem(user: User) =
     Node("div.navbar-item")
       .child(
-        Node("a.button.is-outlined")
+        Node("a.button.is-rounded")
           .attr("href", "/auth/logout")
           .child(Icons.icon(Icons.logout))
           .child(Node("span").text(s"Log out")),
