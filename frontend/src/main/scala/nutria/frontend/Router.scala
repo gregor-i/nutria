@@ -23,19 +23,13 @@ object Router {
       user <- NutriaService.whoAmI()
       state <- location.pathname match {
         case "/" =>
-          for {
-            remoteFractals <- NutriaService.loadPublicFractals()
-            allImages = FractalImage.allImages(remoteFractals.map(_.entity))
-            randomFractal = allImages((Math.random() * allImages.length).toInt) // todo: the service should provide an endpoint for this
-          } yield GreetingState(randomFractal)
+          NutriaState.greetingState()
 
         case "/library" =>
           NutriaState.libraryState()
 
         case s"/fractals/${fractalsId}/details" =>
-          for {
-            remoteFractal <- NutriaService.loadFractal(fractalsId)
-          } yield DetailsState(user, remoteFractal, remoteFractal.entity)
+          NutriaState.detailsState(fractalsId)
 
         case s"/fractals/${fractalId}/explorer" =>
           for {

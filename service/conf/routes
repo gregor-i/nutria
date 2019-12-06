@@ -1,5 +1,6 @@
 # API
 GET           /api/fractals                                     controller.FractalController.listPublicFractals()
+GET           /api/fractals/random                              controller.FractalController.getRandomFractal()
 GET           /api/fractals/:id                                 controller.FractalController.getFractal(id: String)
 POST          /api/fractals                                     controller.FractalController.postFractal()
 

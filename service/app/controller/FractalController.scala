@@ -5,11 +5,14 @@ import java.util.UUID
 import io.circe.syntax._
 import javax.inject.Inject
 import nutria.core._
+import nutria.core.viewport.DefaultViewport
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
 import repo.{FractalRepo, FractalRow}
 
+import scala.util.Random
 import scala.util.chaining._
+
 class FractalController @Inject()(fractalRepo: FractalRepo,
                                   authenticator: Authenticator) extends InjectedController with Circe {
 
@@ -39,16 +42,25 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
 
   def getFractal(id: String) = Action {
     (for {
-      fratalRow <- fractalRepo.get(id)
-      fratalEntity <- fratalRow.maybeFractal
-    } yield FractalEntityWithId(
-      id = id,
-      owner = fratalRow.owner,
-      published = fratalRow.published,
-      entity = fratalEntity)
-      ) match {
+      fractalRow <- fractalRepo.get(id)
+      fractalEntity = fractalRowToFractalEntity.lift.apply(fractalRow)
+    } yield fractalEntity) match {
       case Some(fractal) => Ok(fractal.asJson)
       case _ => NotFound
+    }
+  }
+
+  def getRandomFractal() = Action {
+    val random = new Random()
+    val entities = fractalRepo.listPublic()
+      .collect(fractalRowToFractalEntity)
+    if (entities.isEmpty) {
+      val defaultImage = FractalImage(program = NewtonIteration.default, view = DefaultViewport.defaultViewport)
+      Ok(defaultImage.asJson)
+    } else {
+      val images = FractalImage.allImages(entities.map(_.entity))
+      val randomImage = images(random.nextInt(images.length))
+      Ok(randomImage.asJson)
     }
   }
 
@@ -65,8 +77,8 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
       }
     }
 
-  def deleteUserFractal(userId: String, fractalId: String) = Action {req =>
-    authenticator.byUserId(req)(userId){
+  def deleteUserFractal(userId: String, fractalId: String) = Action { req =>
+    authenticator.byUserId(req)(userId) {
       fractalRepo.delete(userId, fractalId)
       Ok
     }

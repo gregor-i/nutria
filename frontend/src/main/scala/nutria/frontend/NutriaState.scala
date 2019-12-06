@@ -62,6 +62,11 @@ object NutriaState extends CirceCodex {
     } yield LibraryState(user = user,
       publicFractals = publicFractals)
 
+  def greetingState(): Future[GreetingState] =
+    for {
+      randomFractal <- NutriaService.loadRandomFractal()
+    } yield GreetingState(randomFractal)
+
   def detailsState(fractalId: String): Future[DetailsState] =
     for{
       user <- NutriaService.whoAmI()

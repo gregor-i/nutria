@@ -2,7 +2,7 @@ package nutria.frontend
 
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, parser}
-import nutria.core.{FractalEntity, FractalEntityWithId, User}
+import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage, User}
 import org.scalajs.dom.XMLHttpRequest
 import org.scalajs.dom.ext.Ajax
 import org.scalajs.dom.ext.Ajax.InputData
@@ -11,7 +11,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object NutriaService {
-  def whoAmI() : Future[Option[User]] =
+  def whoAmI(): Future[Option[User]] =
     Ajax.get(url = s"/api/users/me")
       .flatMap(check(200))
       .flatMap(parse[Option[User]])
@@ -25,6 +25,11 @@ object NutriaService {
     Ajax.get(url = s"/api/fractals")
       .flatMap(check(200))
       .flatMap(parse[Vector[FractalEntityWithId]])
+
+  def loadRandomFractal(): Future[FractalImage] =
+    Ajax.get(url = "/api/fractals/random")
+      .flatMap(check(200))
+      .flatMap(parse[FractalImage])
 
   def loadUserFractals(userId: String): Future[Vector[FractalEntityWithId]] =
     Ajax.get(url = s"/api/users/${userId}/fractals")
