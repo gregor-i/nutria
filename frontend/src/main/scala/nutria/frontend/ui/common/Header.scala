@@ -4,6 +4,8 @@ import nutria.core.User
 import nutria.frontend.{LoadingState, NutriaState}
 import snabbdom.{Node, Snabbdom, VNode}
 
+import org.scalajs.dom
+
 object Header {
 
   def apply(implicit state: NutriaState, update: NutriaState => Unit): VNode = {
@@ -24,7 +26,15 @@ object Header {
                 .text("Library")
                 .event("click", Snabbdom.event(_ => update(LoadingState(NutriaState.libraryState()))))
               )
-            //.child(Node("a.navbar-item").text("Profile"))
+              .child(Node("a.navbar-item")
+                .text("My Fractals")
+                .event("click", Snabbdom.event{_ =>
+                  state.user match {
+                    case Some(user) => update(LoadingState(NutriaState.userLibraryState(user.id)))
+                    case None => dom.window.location.href = Header.loginHref
+                  }
+                })
+              )
           )
           .child(
             Node("div.navbar-end")

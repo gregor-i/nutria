@@ -36,6 +36,11 @@ case class LibraryState(user: Option[User],
                         publicFractals: Vector[FractalEntityWithId],
                         navbarExpanded: Boolean = false) extends NutriaState
 
+case class UserLibraryState(user: Option[User],
+                            aboutUser: String,
+                            userFractals: Vector[FractalEntityWithId],
+                            navbarExpanded: Boolean = false) extends NutriaState
+
 case class DetailsState(user: Option[User],
                         remoteFractal: FractalEntityWithId,
                         fractalToEdit: FractalEntityWithId,
@@ -61,6 +66,12 @@ object NutriaState extends CirceCodex {
     } yield LibraryState(user = user,
       publicFractals = publicFractals)
 
+  def userLibraryState(userId: String): Future[UserLibraryState] =
+    for{
+      user <- NutriaService.whoAmI()
+      userFractals <- NutriaService.loadUserFractals(userId)
+    } yield UserLibraryState(user = user, aboutUser = userId, userFractals = userFractals)
+
   def greetingState(): Future[GreetingState] =
     for {
       randomFractal <- NutriaService.loadRandomFractal()
@@ -83,6 +94,7 @@ object NutriaState extends CirceCodex {
       case state:GreetingState => state.copy(navbarExpanded = navbarExpanded)
       case state:ExplorerState => state.copy(navbarExpanded = navbarExpanded)
       case state:LibraryState => state.copy(navbarExpanded = navbarExpanded)
+      case state:UserLibraryState => state.copy(navbarExpanded = navbarExpanded)
       case state:DetailsState => state.copy(navbarExpanded = navbarExpanded)
     }
 }
