@@ -67,7 +67,6 @@ object DetailsUi {
       Form.stringInput("Description", startLens composeLens FractalEntity.description),
       Form.booleanInput("Published", DetailsState.fractalToEdit composeLens FractalEntityWithId.published),
       Form.stringInput("References", startLens composeLens FractalEntity.reference composeIso Iso[List[String], String](_.mkString(" "))(_.split("\\s").filter(_.nonEmpty).toList)),
-      Form.intInput("Anti Aliasing", startLens composeLens FractalEntity.antiAliase),
     )
   }
 
@@ -108,9 +107,10 @@ object DetailsUi {
 
   def parameter()
                (implicit state: DetailsState, update: NutriaState => Unit) = {
-    val toEditProgram = DetailsState.fractalToEdit composeLens FractalEntityWithId.entity composeLens FractalEntity.program
+    val startLens = DetailsState.fractalToEdit composeLens FractalEntityWithId.entity
+    val toEditProgram = startLens composeLens FractalEntity.program
 
-    state.fractalToEdit.entity.program match {
+    val params = state.fractalToEdit.entity.program match {
       case f: NewtonIteration =>
         val lensFractal = toEditProgram composeLens LenseUtils.lookedUp(f, FractalProgram.newtonIteration.asSetter)
         Seq(
@@ -154,6 +154,10 @@ object DetailsUi {
             Form.stringInput(f.parameters(i).name, lensFractal composeLens FreestyleProgram.parameters composeLens LenseUtils.seqAt[Parameter](i) composeLens Parameter.literal)
         }
     }
+
+    val antiAlias = Form.intInput("Anti Aliasing", startLens composeLens FractalEntity.antiAliase)
+
+    params :+ antiAlias
   }
 
   def snapshots()
