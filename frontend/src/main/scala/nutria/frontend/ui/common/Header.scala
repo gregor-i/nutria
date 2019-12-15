@@ -39,6 +39,8 @@ object Header {
       .toVNode
   }
 
+  val loginHref: String = "/auth/google"
+
   private val brand =
     Node("div.navbar-item")
       .child(
@@ -78,7 +80,7 @@ object Header {
     Node("div.navbar-item")
       .child(
         Node("a.button.is-rounded")
-          .attr("href", "/auth/logout")
+          .attr("href", loginHref)
           .child(Icons.icon(Icons.logout))
           .child(Node("span").text(s"Log out")),
       )

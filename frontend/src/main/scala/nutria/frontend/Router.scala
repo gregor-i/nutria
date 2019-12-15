@@ -66,7 +66,7 @@ object Router {
     case _: LibraryState =>
       Some(("/library", Map.empty))
     case details: DetailsState =>
-      Some((s"/fractals/${details.remoteFractal.id}/details", Map("fractal" -> queryEncoded(details.fractal))))
+      Some((s"/fractals/${details.remoteFractal.id}/details", Map.empty))
     case exState: ExplorerState =>
       exState.fractalId match {
         case Some(fractalId) => Some((s"/fractals/${fractalId}/explorer", Map("state" -> queryEncoded(exState.fractalImage))))

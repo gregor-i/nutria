@@ -30,7 +30,7 @@ object LibraryUi {
         DetailsState(
           user = state.user,
           remoteFractal = fractal,
-          fractal = fractal.entity)
+          fractalToEdit = fractal)
       )))
     )(
       FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnailDimensions).toVNode

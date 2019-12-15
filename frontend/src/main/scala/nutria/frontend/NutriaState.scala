@@ -38,14 +38,14 @@ case class LibraryState(user: Option[User],
 
 case class DetailsState(user: Option[User],
                         remoteFractal: FractalEntityWithId,
-                        fractal: FractalEntity,
+                        fractalToEdit: FractalEntityWithId,
                         navbarExpanded: Boolean = false) extends NutriaState{
-  def dirty: Boolean = remoteFractal.entity != fractal
+  def dirty: Boolean = remoteFractal != fractalToEdit
 }
 
 object DetailsState {
   val remoteFractal: Lens[DetailsState, FractalEntityWithId] = GenLens[DetailsState](_.remoteFractal)
-  val fractalEntity: Lens[DetailsState, FractalEntity] = GenLens[DetailsState](_.fractal)
+  val fractalToEdit: Lens[DetailsState, FractalEntityWithId] = GenLens[DetailsState](_.fractalToEdit)
 }
 
 object ExplorerState {
@@ -73,7 +73,7 @@ object NutriaState extends CirceCodex {
     } yield DetailsState(
       user = user,
       remoteFractal = fractal,
-      fractal = fractal.entity
+      fractalToEdit = fractal
     )
 
   def setNavbarExtended(nutriaState: NutriaState, navbarExpanded: Boolean): NutriaState =

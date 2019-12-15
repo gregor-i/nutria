@@ -3,12 +3,12 @@ package nutria.frontend.ui.common
 import eu.timepit.refined.api.{Refined, Validate}
 import eu.timepit.refined.refineV
 import mathParser.algebra.SpireLanguage
-import monocle.Lens
+import monocle.{Getter, Lens}
 import nutria.core.RGBA
 import nutria.core.languages.StringFunction
 import org.scalajs.dom.raw.{HTMLInputElement, HTMLSelectElement}
 import snabbdom.Snabbdom.h
-import snabbdom.{Snabbdom, VNode}
+import snabbdom.{Node, Snabbdom, VNode}
 import spire.math.Complex
 
 import scala.util.Try
@@ -16,21 +16,22 @@ import scala.util.Try
 object Form {
 
   def inputStyle(label: String, inputs: VNode*) =
-    h("div.field.is-horizontal")(
-      h("div.field-label.is-normal",
-        styles = Seq("flexGrow" -> "2"))(
-        h("label.label")(label)
-      ),
-      h("div.field-body")(
-        inputs.map(input =>
-          h("div.field")(
-            h("p.control")(
-              input
-            )
-          )
-        ): _*
+    Node("div.field.is-horizontal")
+      .child(
+        Node("div.field-label.is-normal")
+          .style("flexGrow", "2")
+          .child(Node("label.label").text(label))
       )
-    )
+      .child(
+        Node("div.field-body").child(
+          inputs.map(input =>
+            Node("div.field")
+              .child(Node("p.control").child(input))
+            .toVNode
+          )
+        )
+      )
+    .toVNode
 
 
   def stringFunctionInput[S, V](label: String, lens: Lens[S, StringFunction[V]])
@@ -55,21 +56,18 @@ object Form {
       )()
     )
 
-
   def stringInput[S](label: String, lens: Lens[S, String])
-                    (implicit state: S, update: S => Unit) =
+                       (implicit state: S, update: S => Unit): VNode =
     inputStyle(label,
-      h("input.input",
-        attrs = Seq(
-          "type" -> "text",
-          "value" -> lens.get(state),
-        ),
-        events = Seq("change" -> Snabbdom.event {
+      Node("input.input")
+        .attr("type", "text")
+        .attr("value", lens.get(state))
+        .event("change", Snabbdom.event {
           event =>
             val value = event.target.asInstanceOf[HTMLInputElement].value
             update(lens.set(value)(state))
-        }
-        ))()
+        })
+        .toVNode
     )
 
   def mulitlineStringInput[S](label: String, lens: Lens[S, String])
@@ -84,15 +82,13 @@ object Form {
       )(lens.get(state))
     )
 
-  def intInput[S, V](label: String, lens: Lens[S, Int Refined V])
-                    (implicit state: S, update: S => Unit, validate: Validate[Int, V]) =
+  def intInput[S, T, V](label: String, lens: Lens[S, Refined[Int, V]])
+                       (implicit state: S, update: S => Unit, validate: Validate[Int, V]): VNode = {
     inputStyle(label,
-      h("input.input",
-        attrs = Seq(
-          "type" -> "number",
-          "value" -> lens.get(state).toString,
-        ),
-        events = Seq("change" -> Snabbdom.event {
+      Node("input.input")
+        .attr("type", "number")
+        .attr("value", lens.get(state).value.toString)
+        .event("change", Snabbdom.event {
           event =>
             val element = event.target.asInstanceOf[HTMLInputElement]
             Try(element.value.toInt).toEither
@@ -104,8 +100,9 @@ object Form {
                 element.classList.add("is-danger")
             }
         })
-      )()
+        .toVNode
     )
+  }
 
   def doubleInput[S, V](label: String, lens: Lens[S, Double Refined V])
                        (implicit state: S, update: S => Unit, validate: Validate[Double, V]) =
