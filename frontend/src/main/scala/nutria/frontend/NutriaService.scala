@@ -52,7 +52,7 @@ object NutriaService {
   def updateUserFractal(fractalEntity: FractalEntityWithId): Future[Unit] =
     Ajax.put(
       url = s"/api/users/${fractalEntity.owner}/fractals/${fractalEntity.id}",
-      data = encode(fractalEntity)
+      data = encode(fractalEntity.entity)
     )
       .flatMap(check(202))
       .map(_ => ())

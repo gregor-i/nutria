@@ -19,7 +19,7 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
   def listPublicFractals() = Action {
     Ok {
       fractalRepo.listPublic()
-        .collect(fractalRowToFractalEntity)
+        .collect(fractalRepo.fractalRowToFractalEntity)
         .sorted
         .asJson
     }
@@ -29,21 +29,18 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
     authenticator.byUserId(req)(userId) {
       Ok {
         fractalRepo.listByUser(userId)
-          .collect(fractalRowToFractalEntity)
+          .collect(fractalRepo.fractalRowToFractalEntity)
           .sorted
           .asJson
       }
     }
   }
 
-  val fractalRowToFractalEntity: PartialFunction[FractalRow, FractalEntityWithId] = {
-    case FractalRow(id, owner, published, Some(entity)) => FractalEntityWithId(id, owner, published, entity)
-  }
 
   def getFractal(id: String) = Action {
     (for {
       fractalRow <- fractalRepo.get(id)
-      fractalEntity = fractalRowToFractalEntity.lift.apply(fractalRow)
+      fractalEntity = fractalRepo.fractalRowToFractalEntity.lift.apply(fractalRow)
     } yield fractalEntity) match {
       case Some(fractal) => Ok(fractal.asJson)
       case _ => NotFound
@@ -53,7 +50,7 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
   def getRandomFractal() = Action {
     val random = new Random()
     val entities = fractalRepo.listPublic()
-      .collect(fractalRowToFractalEntity)
+      .collect(fractalRepo.fractalRowToFractalEntity)
     if (entities.isEmpty) {
       val defaultImage = FractalImage(program = NewtonIteration.default, view = DefaultViewport.defaultViewport)
       Ok(defaultImage.asJson)
@@ -65,14 +62,13 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
   }
 
   def updateUserFractal(userId: String, fractalId: String) =
-    Action(circe.tolerantJson[FractalEntityWithId]) { req =>
+    Action(circe.tolerantJson[FractalEntity]) { req =>
       authenticator.byUserId(req)(userId) {
-        fractalRepo.save(FractalRow(
+        fractalRepo.save(
           id = fractalId,
           owner = userId,
-          published = req.body.published,
-          maybeFractal = Some(req.body.entity)
-        ))
+          fractal = req.body
+        )
         Accepted
       }
     }
@@ -88,13 +84,12 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
     authenticator.withUser(request) { user =>
       // todo: check / correct aspect ratio
       val id = UUID.randomUUID().toString
-      fractalRepo.save(FractalRow(
+      fractalRepo.save(
         id = id,
         owner = user.id,
-        published = false,
-        maybeFractal = Some(request.body)
-      ))
-      FractalEntityWithId(id, user.id, published = false, request.body)
+        fractal = request.body
+      )
+      FractalEntityWithId(id, user.id, request.body)
         .asJson
         .pipe(Created(_))
     }

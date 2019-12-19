@@ -53,12 +53,9 @@ class AdminController @Inject()(fractalRepo: FractalRepo,
       val user = authenticator.userFromCookie(req)
       systemFractals.systemFractals
         .foreach(entity => fractalRepo.save(
-          FractalRow(
             id = UUID.randomUUID().toString,
             owner = user.get.id,
-            published = true,
-            maybeFractal = Some(entity)
-          )
+            fractal = entity
         ))
       Ok
     }

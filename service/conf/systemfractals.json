@@ -12,6 +12,7 @@
         "maxIterations" : 500
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Mandelbrot-Mutation",
@@ -39,6 +40,7 @@
         "maxIterations" : 50
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Juliaset on (-0.6, 0.6)",
@@ -66,6 +68,7 @@
         "maxIterations" : 200
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Juliaset on (-0.12, 0.86)",
@@ -93,6 +96,7 @@
         "maxIterations" : 200
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Mandelbrot",
@@ -120,6 +124,7 @@
         "maxIterations" : 200
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Juliaset-Mandelbrot-Mix",
@@ -147,6 +152,7 @@
         "maxIterations" : 200
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Mandelbrot-Mutation",
@@ -174,6 +180,7 @@
         "maxIterations" : 500
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Exp",
@@ -214,6 +221,7 @@
         "maxIterations" : 200
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Juliaset on (-0.6, 0.6)  with Normal Map Effect",
@@ -246,6 +254,7 @@
         "maxIterations" : 200
       }
     },
+    "published" : false,
     "reference" : [
       "https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set#Normal_map_effect"
     ],
@@ -278,6 +287,7 @@
         "threshold" : 1.0E-5
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Playing with Newton Fractals",
@@ -309,6 +319,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Three Roots",
@@ -340,6 +351,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Playing with Newton Fractals",
@@ -371,6 +383,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Playing with Newton Fractals",
@@ -402,6 +415,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Playing with Newton Fractals",
@@ -433,6 +447,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Playing with Newton Fractals",
@@ -464,6 +479,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Playing with Newton Fractals",
@@ -495,6 +511,7 @@
         "threshold" : 1.0E-5
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Playing with Newton Fractals",
@@ -526,6 +543,7 @@
         "threshold" : 1.0E-5
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Playing with Newton Fractals",
@@ -557,6 +575,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial",
@@ -588,6 +607,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial",
@@ -619,6 +639,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial",
@@ -650,6 +671,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial",
@@ -689,6 +711,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Fake Mandelbrot",
@@ -728,6 +751,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial",
@@ -759,6 +783,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial",
@@ -790,6 +815,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Playing with Fake Mandelbrot",
@@ -821,6 +847,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial (4)",
@@ -852,6 +879,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial (3)",
@@ -883,6 +911,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial (5)",
@@ -914,6 +943,7 @@
         "threshold" : 0.001
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial (6)",
@@ -945,6 +975,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial (6)",
@@ -976,6 +1007,7 @@
         "threshold" : 1.0E-4
       }
     },
+    "published" : false,
     "reference" : [
     ],
     "title" : "Mandelbrot Polynomial (7)",
@@ -1018,6 +1050,7 @@
         ]
       }
     },
+    "published" : false,
     "reference" : [
       "https://en.wikipedia.org/wiki/Koch_snowflake",
       "https://www.shadertoy.com/view/Mlf3RX"
@@ -1050,6 +1083,7 @@
         ]
       }
     },
+    "published" : false,
     "reference" : [
       ""
     ],
@@ -1093,6 +1127,7 @@
         ]
       }
     },
+    "published" : false,
     "reference" : [
       "https://www.shadertoy.com/view/Mds3R8",
       "http://www.iquilezles.org/www/articles/lyapunovfractals/lyapunovfractals.htm"
@@ -1119,6 +1154,7 @@
         ]
       }
     },
+    "published" : false,
     "reference" : [
       "https://en.wikibooks.org/wiki/Fractals/Iterations_in_the_complex_plane/demm"
     ],
@@ -1168,6 +1204,7 @@
         ]
       }
     },
+    "published" : false,
     "reference" : [
       "https://de.wikipedia.org/wiki/Sierpinski-Dreieck",
       "https://de.wikipedia.org/wiki/Baryzentrische_Koordinaten"

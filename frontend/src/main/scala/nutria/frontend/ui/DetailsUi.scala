@@ -65,7 +65,7 @@ object DetailsUi {
     Seq(
       Form.stringInput("Title", startLens composeLens FractalEntity.title),
       Form.stringInput("Description", startLens composeLens FractalEntity.description),
-      Form.booleanInput("Published", DetailsState.fractalToEdit composeLens FractalEntityWithId.published),
+      Form.booleanInput("Published", startLens composeLens FractalEntity.published),
       Form.stringInput("References", startLens composeLens FractalEntity.reference composeIso Iso[List[String], String](_.mkString(" "))(_.split("\\s").filter(_.nonEmpty).toList)),
     )
   }

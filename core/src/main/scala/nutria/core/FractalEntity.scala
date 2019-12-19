@@ -15,7 +15,8 @@ case class FractalEntity(title: String = "",
                          views: List[Viewport] Refined NonEmpty = refineV[NonEmpty](List(DefaultViewport.defaultViewport)).toOption.get,
                          description: String = "",
                          reference: List[String] = List.empty,
-                         antiAliase: Int Refined Positive = refineMV(1)
+                         antiAliase: Int Refined Positive = refineMV(1),
+                         published: Boolean = false
                         )
 
 
@@ -28,7 +29,6 @@ object FractalEntity extends CirceCodex {
 @monocle.macros.Lenses()
 case class FractalEntityWithId(id: String,
                                owner: String,
-                               published: Boolean,
                                entity: FractalEntity)
 
 object FractalEntityWithId extends CirceCodex {
@@ -40,14 +40,12 @@ object FractalEntityWithId extends CirceCodex {
         entity <- json.as[FractalEntity]
         id <- json.downField("id").as[String]
         owner <- json.downField("owner").as[String]
-        published <- json.downField("published").as[Boolean]
-      } yield FractalEntityWithId(id, owner, published, entity)
+      } yield FractalEntityWithId(id, owner, entity)
     },
     encodeA = Encoder[FractalEntityWithId] { row =>
       Encoder[FractalEntity].apply(row.entity)
         .mapObject(_.add("id", row.id.asJson))
         .mapObject(_.add("owner", row.owner.asJson))
-        .mapObject(_.add("published", row.published.asJson))
     }
   )
 }

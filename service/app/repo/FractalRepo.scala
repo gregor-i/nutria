@@ -6,6 +6,7 @@ import io.circe.syntax._
 import javax.inject.{Inject, Singleton}
 import nutria.core.FractalEntity
 import play.api.db.Database
+import nutria.core.FractalEntityWithId
 
 case class FractalRow(id: String, owner: String, published: Boolean, maybeFractal: Option[FractalEntity])
 
@@ -17,6 +18,11 @@ class FractalRepo @Inject()(db: Database) {
     published <- SqlParser.bool("published")
     maybeFractal <- SqlParser.str("fractal").map(data => decode[FractalEntity](data).toOption)
   } yield FractalRow(id, owner, published, maybeFractal)
+
+  val fractalRowToFractalEntity: PartialFunction[FractalRow, FractalEntityWithId] = {
+    case FractalRow(id, owner, published, Some(entity)) =>
+      FractalEntityWithId(id, owner, entity.copy(published = published))
+  }
 
   def list(): List[FractalRow] =
     db.withConnection { implicit con =>
@@ -49,14 +55,14 @@ class FractalRepo @Inject()(db: Database) {
         .as(rowParser.*)
     }
 
-  def save(row: FractalRow): Unit =
+  def save(id: String, owner: String, fractal: FractalEntity): Unit =
     db.withConnection { implicit con =>
-      val data = row.maybeFractal.asJson.noSpaces
+      val data = fractal.asJson.noSpaces
       SQL"""INSERT INTO fractals (id, owner, published, fractal)
-            VALUES (${row.id}, ${row.owner}, ${row.published}, $data)
+            VALUES (${id}, ${owner}, ${fractal.published}, $data)
             ON CONFLICT (id) DO UPDATE
             SET fractal = $data,
-                published = ${row.published}
+                published = ${fractal.published}
         """.executeUpdate()
     }
 
