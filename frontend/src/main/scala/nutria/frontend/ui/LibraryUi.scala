@@ -6,26 +6,27 @@ import nutria.frontend._
 import common._
 import nutria.frontend.ui.common.FractalTile
 import nutria.frontend.{DetailsState, LibraryState, NutriaState}
-import snabbdom.Snabbdom.h
 import snabbdom._
 
 object LibraryUi {
-  def render(implicit state: LibraryState, update: NutriaState => Unit): VNode = {
-    h(tag = "body",
-      key = "gallery")(
+  def render(implicit state: LibraryState, update: NutriaState => Unit): Node =
+    Node("body")
+    .key("gallery")
+    .children(
       common.Header(state, update),
-      h("div.container.is-fluid")(
-        h("div.fractal-tile-list")(
+      Node("div.container.is-fluid")
+      .child(
+        Node("div.fractal-tile-list")
+        .children(
           state.publicFractals.map(renderFractalTile),
           dummyTiles
-        ),
+        )
       ),
       common.Footer()
     )
-  }
 
   def renderFractalTile(fractal: FractalEntityWithId)
-                       (implicit state: LibraryState, update: NutriaState => Unit): VNode =
+                       (implicit state: LibraryState, update: NutriaState => Unit): Node =
     Node("article.fractal-tile.is-relative")
       .attr("title", fractal.entity.description)
     .child(
@@ -65,17 +66,14 @@ object LibraryUi {
               .classes("is-outlined")
             )
         )
-        .toVNode
 
   private val dummyTile =
-    h("article.dummy-tile")(
-      h("canvas",
-        attrs = Seq(
-          "width" -> Dimensions.thumbnailDimensions.width.toString,
-          "height" -> "0",
-        )
-      )()
-    )
+    Node("article.dummy-tile")
+    .child(
+      Node("canvas")
+      .attr("width", Dimensions.thumbnailDimensions.width.toString)
+      .attr("height", "0")
+      )
 
   val dummyTiles = Seq.fill(8)(dummyTile)
 }

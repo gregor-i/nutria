@@ -21,35 +21,35 @@ object DetailsUi {
         common.Header(state, update),
         body(state, update),
         common.Footer()
-      ).toVNode
+      )
 
   def body(implicit state: DetailsState, update: NutriaState => Unit) =
     Node("div.container")
       .children(
-        Node("h1.title.is-1").text(state.remoteFractal.entity.title).toVNode,
-        Node("h2.subtitle.is-").text("ID: " + state.remoteFractal.id).toVNode,
+        Node("h1.title.is-1").text(state.remoteFractal.entity.title),
+        Node("h2.subtitle.is-").text("ID: " + state.remoteFractal.id),
       )
       .child(
         Node("section.section").children(
-          Node("h4.title.is-4").text("General Settings:").toVNode,
+          Node("h4.title.is-4").text("General Settings:"),
           general()
         )
       )
       .child(
         Node("section.section").children(
-          Node("h4.title.is-4").text("Template Settings:").toVNode,
+          Node("h4.title.is-4").text("Template Settings:"),
           template()
         )
       )
       .child(
         Node("section.section").children(
-          Node("h4.title.is-4").text("Parameter Settings:").toVNode,
+          Node("h4.title.is-4").text("Parameter Settings:"),
           parameter()
         )
       )
       .child(
         Node("section.section").children(
-          Node("h4.title.is-4").text("Snapshots:").toVNode,
+          Node("h4.title.is-4").text("Snapshots:"),
           snapshots()
         )
       )
@@ -57,7 +57,6 @@ object DetailsUi {
         Node("section.section")
           .child(actions())
       )
-      .toVNode
 
   def general()
              (implicit state: DetailsState, update: NutriaState => Unit) = {
@@ -203,16 +202,14 @@ object DetailsUi {
                 .classes("is-outlined")
             )
         )
-        .toVNode
     }
 
     Node("div.fractal-tile-list")
       .child(tiles)
       .child(LibraryUi.dummyTiles)
-      .toVNode
   }
 
-  private def actions()(implicit state: DetailsState, update: NutriaState => Unit): VNode = {
+  private def actions()(implicit state: DetailsState, update: NutriaState => Unit): Node = {
     val buttons: Seq[Node] = state.user match {
       case Some(user) if user.id == state.remoteFractal.owner =>
         Seq(buttonDelete, buttonSaveAsNew, buttonSaveAsOld)
@@ -225,8 +222,7 @@ object DetailsUi {
     }
 
     Node("div.field.is-grouped.is-grouped-right")
-      .child(buttons.map(button => Node("p.control").child(button).toVNode))
-      .toVNode
+      .child(buttons.map(button => Node("p.control").child(button)))
   }
 
   private def buttonSaveAsNew(implicit state: DetailsState, update: NutriaState => Unit) =

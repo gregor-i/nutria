@@ -68,29 +68,20 @@ case class Node(
   def text(child: String): Node =
     copy(children = children :+ child)
 
-  def child(child: VNode): Node =
-    copy(children = children :+ child)
+  def child(node: Node): Node =
+    copy(children = children :+ node.toVNode)
 
-  def child(builder: Node): Node =
-    child(builder.toVNode)
+  def child(nodes: Iterable[Node]): Node =
+    copy(children = children ++ nodes.map(_.toVNode))
 
   def childOptional(nodes: Option[Node]): Node =
     copy(children = children ++ nodes.map(_.toVNode))
 
-  def child(nodes: Iterable[Child]): Node =
-    copy(children = children ++ nodes)
-
-  def children(nodes: (Child | Iterable[Child])*): Node =
-    child(nodes.flatMap[Child]{
-      case seq: Iterable[_] => seq.asInstanceOf[Iterable[Child]]
-      case elem => Seq(elem).asInstanceOf[Iterable[Child]]
-    } : Iterable[Child])
-
-  def apply(nodes: (Child | Iterable[Child])*): Node =
-    child(nodes.flatMap[Child]{
-      case seq: Iterable[_] => seq.asInstanceOf[Iterable[Child]]
-      case elem => Seq(elem).asInstanceOf[Iterable[Child]]
-    } : Iterable[Child])
+  def children(nodes: (Node | Iterable[Node])*): Node =
+    child(nodes.flatMap[Node]{
+      case seq: Iterable[_] => seq.asInstanceOf[Iterable[Node]]
+      case elem => Seq(elem).asInstanceOf[Iterable[Node]]
+    } : Iterable[Node])
 
   def toVNode: VNode = SnabbdomFacade.h(
     sel = sel,

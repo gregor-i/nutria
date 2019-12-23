@@ -4,7 +4,6 @@ import nutria.core._
 import nutria.core.viewport.Dimensions
 import nutria.frontend.ui.common.FractalTile
 import nutria.frontend.{DetailsState, UserLibraryState, NutriaState}
-import snabbdom.Snabbdom.h
 import snabbdom.{Snabbdom, VNode}
 import nutria.frontend.ui.common._
 import snabbdom.{Node, VNode}
@@ -13,22 +12,22 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object UserLibraryUi {
-  def render(implicit state: UserLibraryState, update: NutriaState => Unit): VNode = {
-    h(tag = "body",
-      key = "user-gallery")(
-      common.Header(state, update),
-      h("div.container.is-fluid")(
-        h("div.fractal-tile-list")(
-          state.userFractals.map(renderFractalTile),
-          dummyTiles
-        ),
-      ),
-      common.Footer()
+  def render(implicit state: UserLibraryState, update: NutriaState => Unit): Node =
+    Node("body")
+    .key("user-gallery")
+    .child(common.Header(state, update))
+    .child(
+      Node("div.container.is-fluid")
+      .child(
+        Node("div.fractal-tile-list")
+        .child(state.userFractals.map(renderFractalTile))
+        .child(dummyTiles)
+      )
     )
-  }
+    .child(common.Footer())
 
   def renderFractalTile(fractal: FractalEntityWithId)
-                       (implicit state: UserLibraryState, update: NutriaState => Unit): VNode =
+                       (implicit state: UserLibraryState, update: NutriaState => Unit): Node =
     Node("article.fractal-tile.is-relative")
     .attr("title", fractal.entity.description)
     .child(
@@ -39,7 +38,6 @@ object UserLibraryUi {
                 remoteFractal = fractal,
                 fractalToEdit = fractal)
             )))
-      .toVNode
     )
     .child(
       Node("div.buttons.overlay-bottom-right.padding")
@@ -65,7 +63,6 @@ object UserLibraryUi {
             .classes("is-outlined")
         )
     )
-    .toVNode
 
   private def reload(implicit state: UserLibraryState): Future[UserLibraryState] =
     for {
@@ -74,14 +71,11 @@ object UserLibraryUi {
 
 
   private val dummyTile =
-    h("article.dummy-tile")(
-      h("canvas",
-        attrs = Seq(
-          "width" -> Dimensions.thumbnailDimensions.width.toString,
-          "height" -> "0",
-        )
-      )()
-    )
+    Node("article.dummy-tile")
+    .child(Node("canvas")
+        .attr("width", Dimensions.thumbnailDimensions.width.toString)
+        .attr("height", "0")
+      )
 
-  val dummyTiles = Seq.fill(8)(dummyTile)
+  val dummyTiles: Seq[Node] = Seq.fill(8)(dummyTile)
 }

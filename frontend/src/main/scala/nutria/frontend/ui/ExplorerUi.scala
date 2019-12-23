@@ -4,18 +4,16 @@ import eu.timepit.refined.collection.NonEmpty
 import eu.timepit.refined.refineV
 import nutria.frontend._
 import nutria.frontend.ui.common.{Button, CanvasHooks, Icons}
-import snabbdom.Snabbdom.h
 import snabbdom.{Node, Snabbdom, VNode}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object ExplorerUi {
-  def render(implicit state: ExplorerState, update: NutriaState => Unit): VNode =
-    h("body",
-      key = "explorer")(
-      common.Header(state, update),
-      renderCanvas,
-    )
+  def render(implicit state: ExplorerState, update: NutriaState => Unit): Node =
+    Node("body")
+    .key("explorer")
+    .child(common.Header(state, update))
+    .child(renderCanvas)
 
   // Actions to implement:
   //  With Fractal Id
@@ -28,7 +26,7 @@ object ExplorerUi {
   //  render high res image and save
 
   def renderActionBar()
-                     (implicit state: ExplorerState, update: NutriaState => Unit): VNode =
+                     (implicit state: ExplorerState, update: NutriaState => Unit): Node =
     Node("div.buttons.overlay-bottom-right.padding")
       .childOptional(
         state.fractalId match {
@@ -43,8 +41,6 @@ object ExplorerUi {
           case None => None
         }
       )
-      .toVNode
-
 
   def buttonBackToDetails(fractalId: String)
                          (implicit state: ExplorerState, update: NutriaState => Unit) =
@@ -80,16 +76,14 @@ object ExplorerUi {
       .classes("is-primary")
 
 
-  def renderCanvas(implicit state: ExplorerState, update: NutriaState => Unit): VNode =
+  def renderCanvas(implicit state: ExplorerState, update: NutriaState => Unit): Node =
     Node("div.full-size")
     .events(ExplorerEvents.canvasMouseEvents)
      .events(ExplorerEvents.canvasWheelEvent)
      .events(ExplorerEvents.canvasTouchEvents)
      .child(
-      h("canvas",
-        hooks = CanvasHooks(state.fractalImage, resize = true)
-      )()
+      Node("canvas")
+      .hooks(CanvasHooks(state.fractalImage, resize = true))
     )
     .child(renderActionBar())
-    .toVNode
 }

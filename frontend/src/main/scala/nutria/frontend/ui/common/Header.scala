@@ -8,7 +8,7 @@ import org.scalajs.dom
 
 object Header {
 
-  def apply(implicit state: NutriaState, update: NutriaState => Unit): VNode = {
+  def apply(implicit state: NutriaState, update: NutriaState => Unit): Node = {
     Node("nav.navbar.is-light")
       .attr("role", "navigation")
       .attr("aria-label", "main navigation")
@@ -46,7 +46,6 @@ object Header {
               )
           )
       )
-      .toVNode
   }
 
   val loginHref: String = "/auth/google"

@@ -24,10 +24,9 @@ object Icons {
   val upvote = "fa-thumbs-o-up"
   val downvote = "fa-thumbs-o-down"
 
-  def icon(icon: String): VNode =
+  def icon(icon: String): Node =
     Node("span.icon")
       .child(
         Node("i.fa").`class`(icon)
       )
-      .toVNode
 }

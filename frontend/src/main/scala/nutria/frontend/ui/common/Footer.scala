@@ -9,7 +9,6 @@ object Footer {
         Node("div.content.has-text-centered")
           .prop("innerHTML", licence)
       )
-      .toVNode
 
   private val licence =
     """<p>

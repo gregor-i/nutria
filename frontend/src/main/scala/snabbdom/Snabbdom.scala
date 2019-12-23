@@ -24,30 +24,6 @@ object Snabbdom {
       ).collect { case Some(module) => module }
     )
 
-  def h(tag: String,
-        key: SnabbdomFacade.Key = js.undefined,
-        classes: Seq[(String, Boolean)] = Seq.empty,
-        props: Seq[(String, js.Any)] = Seq.empty,
-        attrs: Seq[(String, String)] = Seq.empty,
-        dataset: Seq[(String, String)] = Seq.empty,
-        styles: Seq[(String, String)] = Seq.empty,
-        events: Seq[(String, SnabbdomFacade.Eventlistener)] = Seq.empty,
-        hooks: Seq[(String, SnabbdomFacade.Hook)] = Seq.empty
-       )(
-         children: (Child | Seq[Child])*
-       ): VNode =
-    Node(tag)
-      .key(key)
-      .classes(classes.collect{ case (c, true) => c} :_*)
-      .props(props)
-      .attrs(attrs)
-      .dataset(dataset)
-      .styles(styles)
-      .events(events)
-      .hooks(hooks)
-      .apply(children: _*)
-      .toVNode
-
   def event(f: Event => Unit): SnabbdomFacade.Eventlistener = f: js.Function1[Event, Unit]
 
   def specificEvent[E <: Event](f: E => Unit): SnabbdomFacade.Eventlistener = f: js.Function1[E, Unit]

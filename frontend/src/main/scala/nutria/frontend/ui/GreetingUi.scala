@@ -2,16 +2,14 @@ package nutria.frontend.ui
 
 import nutria.frontend.ui.common.{Button,  CanvasHooks, Icons}
 import nutria.frontend.{ExplorerState, GreetingState, LoadingState, NutriaState}
-import snabbdom.Snabbdom.h
 import snabbdom.{Node, Snabbdom, VNode}
 
 object GreetingUi {
-  def render(implicit state: GreetingState, update: NutriaState => Unit): VNode = {
-    h("body")(
-      renderCanvas,
-      content
-    )
-  }
+  def render(implicit state: GreetingState, update: NutriaState => Unit): Node =
+    Node("body")
+    .key("error")
+    .child(      renderCanvas)
+      .child(content)
 
   private val greetingContent =
     """<h1>Nutria - Fractal Explorer</h1>
@@ -27,16 +25,19 @@ object GreetingUi {
     """.stripMargin
 
   private def content(implicit state: GreetingState, update: NutriaState => Unit) = {
-    h("div.modal.is-active")(
-      h("div.modal-background",
-        styles = Seq("opacity" -> "0.5"),
-        events = Seq("click" ->
+    Node("div.modal.is-active")
+    .children(
+      Node("div.modal-background")
+      .style("opacity", "0.5")
+        .event("click",
           Snabbdom.event { _ =>
             update(ExplorerState(state.user, None, owned = false, state.randomFractal))
-          }))(),
-      h("div.modal-content")(
-        h("div.box")(
-          h("div.content", props = Seq("innerHTML" -> greetingContent))(),
+          }),
+      Node("div.modal-content")
+      .child(
+        Node("div.box")
+        .children(
+          Node("div.content").prop("innerHTML", greetingContent),
           Node("div.buttons")
           .child(
             Button(
@@ -48,16 +49,14 @@ object GreetingUi {
               .classes("is-primary")
           )
             .classes("is-right")
-            .toVNode
         )
       )
-    )
+      )
   }
 
-  private def renderCanvas(implicit state: GreetingState, update: ExplorerState => Unit): VNode =
-    h("div.full-size")(
-      h("canvas",
-        hooks = CanvasHooks(state.randomFractal, resize = true)
-      )()
+  private def renderCanvas(implicit state: GreetingState, update: ExplorerState => Unit): Node =
+    Node("div.full-size")
+    .child(
+      Node("canvas").hooks(CanvasHooks(state.randomFractal, resize = true))
     )
 }

@@ -43,7 +43,7 @@ class NutriaApp(container: Element) extends SnabbdomApp {
       case _ => ()
     }
 
-    node = patch(node, Ui(state, renderState))
+    node = patch(node, Ui(state, renderState).toVNode)
   }
 
   dom.window.onpopstate = _ =>
