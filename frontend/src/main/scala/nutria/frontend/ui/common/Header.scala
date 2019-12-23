@@ -23,11 +23,11 @@ object Header {
           .child(
             Node("div.navbar-start")
               .child(Node("a.navbar-item")
-                .text("Library")
+                .text("Public Gallery")
                 .event("click", Snabbdom.event(_ => update(LoadingState(NutriaState.libraryState()))))
               )
               .child(Node("a.navbar-item")
-                .text("My Fractals")
+                .text("My Gallery")
                 .event("click", Snabbdom.event{_ =>
                   state.user match {
                     case Some(user) => update(LoadingState(NutriaState.userLibraryState(user.id)))
@@ -50,6 +50,7 @@ object Header {
   }
 
   val loginHref: String = "/auth/google"
+  val logoutHref: String = "/auth/logout"
 
   private val brand =
     Node("div.navbar-item")
@@ -81,7 +82,7 @@ object Header {
     Node("div.navbar-item")
       .child(
         Node("a.button.is-rounded")
-          .attr("href", "/auth/google")
+          .attr("href", loginHref)
           .child(Icons.icon(Icons.login))
           .child(Node("span").text("Log in"))
       )
@@ -90,7 +91,7 @@ object Header {
     Node("div.navbar-item")
       .child(
         Node("a.button.is-rounded")
-          .attr("href", loginHref)
+          .attr("href", logoutHref)
           .child(Icons.icon(Icons.logout))
           .child(Node("span").text(s"Log out")),
       )

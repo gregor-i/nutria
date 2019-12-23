@@ -14,7 +14,7 @@ object ErrorUi {
           h("div.message-body")(
             h("div.title")("An unexpected error occured."),
             h("div.subtitle")(state.message),
-            h("a", attrs = Seq("href" -> "/"))("return to lobby"),
+            h("a", attrs = Seq("href" -> "/"))("return to landing page"),
           )
         )
       )

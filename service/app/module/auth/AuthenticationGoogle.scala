@@ -79,7 +79,7 @@ class AuthenticationGoogle @Inject()(conf: Configuration,
           authResponse <- getAccessToken(code)
           userData <- getUserInfo(authResponse.access_token)
           user = userRepo.upsertWithGoogleData(userData)
-          userCookie = Cookie(name = "user", value = EncodeCookie(user), httpOnly = false)
+          userCookie = Cookie(name = "user", value = EncodeCookie(user))
         } yield Redirect("/")
           .withCookies(userCookie)
           .bakeCookies()
@@ -88,7 +88,7 @@ class AuthenticationGoogle @Inject()(conf: Configuration,
 
   def logout() = Action { _ =>
     Redirect("/")
-      .withCookies(Cookie(name = "user", value = "", httpOnly = false))
+      .withCookies(Cookie(name = "user", value = ""))
       .bakeCookies()
   }
 }

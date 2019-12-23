@@ -8,7 +8,7 @@ import play.api.mvc.{Cookie, InjectedController}
 
 @Singleton
 class AuthenticationDummy() extends InjectedController with AuthenticationController {
-  private def userCookie = Cookie(name = "user", value = EncodeCookie(AuthenticationDummy.user), httpOnly = false)
+  private def userCookie = Cookie(name = "user", value = EncodeCookie(AuthenticationDummy.user))
 
   def authenticate() = Action { _ =>
     Redirect("/")
@@ -18,7 +18,7 @@ class AuthenticationDummy() extends InjectedController with AuthenticationContro
 
   def logout() = Action { _ =>
     Redirect("/")
-      .withCookies(userCookie.copy(value = ""))
+      .withCookies(Cookie(name = "user", value = ""))
       .bakeCookies()
   }
 }

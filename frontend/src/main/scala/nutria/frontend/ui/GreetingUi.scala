@@ -22,7 +22,7 @@ object GreetingUi {
       |</p>
       |
       |<h2>What is Nutria?</h2>
-      |<p>Nutria is basically a library of fractals and it contains a convenient tool to explore such fractals.</p>
+      |<p>Nutria is basically a gallery of fractals and it contains a convenient tool to explore such fractals.</p>
       |<p>Fractals usually have a lot of parameters. Nutria allows you to try out new configurations for these parameters which will might yield completely new images.</p>
     """.stripMargin
 

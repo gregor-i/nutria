@@ -25,12 +25,12 @@ object Router {
           NutriaState.greetingState()
         )
 
-      case "/library" =>
+      case "/gallery" =>
         LoadingState(
           NutriaState.libraryState()
         )
 
-      case s"/user/${userId}/library" =>
+      case s"/user/${userId}/gallery" =>
         LoadingState(
           NutriaState.userLibraryState(userId)
         )
@@ -69,9 +69,9 @@ object Router {
 
   def stateToUrl(state: NutriaState): Option[(String, Map[String, String])] = state match {
     case _: LibraryState =>
-      Some(("/library", Map.empty))
+      Some(("/gallery", Map.empty))
     case state: UserLibraryState =>
-      Some((s"/user/${state.aboutUser}/library", Map.empty))
+      Some((s"/user/${state.aboutUser}/gallery", Map.empty))
     case details: DetailsState =>
       Some((s"/fractals/${details.remoteFractal.id}/details", Map.empty))
     case exState: ExplorerState =>

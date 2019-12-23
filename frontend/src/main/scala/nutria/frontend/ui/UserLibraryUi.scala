@@ -15,7 +15,7 @@ import scala.concurrent.Future
 object UserLibraryUi {
   def render(implicit state: UserLibraryState, update: NutriaState => Unit): VNode = {
     h(tag = "body",
-      key = "library")(
+      key = "user-gallery")(
       common.Header(state, update),
       h("div.container.is-fluid")(
         h("div.fractal-tile-list")(

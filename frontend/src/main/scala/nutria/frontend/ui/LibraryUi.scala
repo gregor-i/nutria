@@ -12,7 +12,7 @@ import snabbdom._
 object LibraryUi {
   def render(implicit state: LibraryState, update: NutriaState => Unit): VNode = {
     h(tag = "body",
-      key = "library")(
+      key = "gallery")(
       common.Header(state, update),
       h("div.container.is-fluid")(
         h("div.fractal-tile-list")(
