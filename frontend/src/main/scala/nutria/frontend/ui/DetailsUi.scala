@@ -173,8 +173,7 @@ object DetailsUi {
     val tiles = fractal.views.value.map { viewport =>
       val img = FractalImage(fractal.program, viewport, fractal.antiAliase)
 
-      Node("article.fractal-tile")
-        .classes("is-relative")
+      Node("article.fractal-tile.is-relative")
         .child(
           FractalTile(img, Dimensions.thumbnailDimensions)
             .event("click", Snabbdom.event { _ =>
@@ -182,10 +181,7 @@ object DetailsUi {
             })
         )
         .child(
-          Node("div.buttons")
-            .style("position", "absolute")
-            .style("right", "4px")
-            .style("top", "4px")
+          Node("div.buttons.overlay-top-right.padding")
             .child(
               Button.icon(Icons.up, Snabbdom.event { _ =>
                 val newViewports = fractal.views.value.filter(_ == viewport) ++ fractal.views.value.filter(_ != viewport)
@@ -204,7 +200,7 @@ object DetailsUi {
                   case Left(_) => dom.window.alert("the last snapshot can't be deleted.")
                 }
               })
-                .classes("is-danger", "is-outlined")
+                .classes("is-outlined")
             )
         )
         .toVNode

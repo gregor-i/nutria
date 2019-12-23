@@ -18,6 +18,12 @@ object Icons {
   val logout = "fa-sign-out"
   val up = "fa-arrow-up"
 
+  val publish = "fa-unlock"
+  val unpublish = "fa-lock"
+
+  val upvote = "fa-thumbs-o-up"
+  val downvote = "fa-thumbs-o-down"
+
   def icon(icon: String): VNode =
     Node("span.icon")
       .child(

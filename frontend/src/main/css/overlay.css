@@ -1,0 +1,9 @@
+.overlay-top-right {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.padding {
+    padding: 4px;
+}

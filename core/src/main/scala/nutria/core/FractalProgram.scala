@@ -86,8 +86,8 @@ object FractalProgram extends CirceCodex {
   implicit val ordering: Ordering[FractalProgram] = Ordering.by[FractalProgram, (Int, Int)] {
     case f: DivergingSeries => (1, f.iteration.hashCode)
     case f: DerivedDivergingSeries => (2, f.iterationZ.hashCode)
-    case f: NewtonIteration => (3, f.function.string.length)
-    case f: FreestyleProgram => (4, f.code.length)
+    case f: NewtonIteration => (3, f.function.hashCode)
+    case f: FreestyleProgram => (4, f.code.hashCode)
   }
 
   implicit val codec: Codec[FractalProgram] = semiauto.deriveConfiguredCodec
