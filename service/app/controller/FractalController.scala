@@ -48,7 +48,8 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
   }
 
   def getRandomFractal() = Action {
-    val random = new Random()
+    val seed = java.time.Instant.now.truncatedTo(java.time.temporal.ChronoUnit.DAYS).toEpochMilli
+    val random = new Random(seed = seed)
     val entities = fractalRepo.listPublic()
       .collect(fractalRepo.fractalRowToFractalEntity)
     if (entities.isEmpty) {
