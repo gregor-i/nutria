@@ -14,7 +14,6 @@ object ExplorerUi {
     h("body",
       key = "explorer")(
       common.Header(state, update),
-      renderActionBar(),
       renderCanvas,
     )
 
@@ -30,8 +29,7 @@ object ExplorerUi {
 
   def renderActionBar()
                      (implicit state: ExplorerState, update: NutriaState => Unit): VNode =
-    Node("div.buttons")
-      .classes("action-bar")
+    Node("div.buttons.overlay-bottom-right.padding")
       .childOptional(
         state.fractalId match {
           case Some(fractalId) if state.owned => Some(buttonAddViewport(fractalId))
@@ -82,12 +80,16 @@ object ExplorerUi {
       .classes("is-primary")
 
 
-  def renderCanvas(implicit state: ExplorerState, update: ExplorerState => Unit): VNode =
-    h("div.full-size",
-      events = ExplorerEvents.canvasMouseEvents ++ ExplorerEvents.canvasWheelEvent ++ ExplorerEvents.canvasTouchEvents
-    )(
+  def renderCanvas(implicit state: ExplorerState, update: NutriaState => Unit): VNode =
+    Node("div.full-size")
+    .events(ExplorerEvents.canvasMouseEvents)
+     .events(ExplorerEvents.canvasWheelEvent)
+     .events(ExplorerEvents.canvasTouchEvents)
+     .child(
       h("canvas",
         hooks = CanvasHooks(state.fractalImage, resize = true)
       )()
     )
+    .child(renderActionBar())
+    .toVNode
 }

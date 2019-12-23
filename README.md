@@ -1,15 +1,14 @@
-# nutria
+# Nutria - Fractal Explorer
+## What is a fractal?
+Giving an accurate definition of a fractal is not really easy, but for the purpose of this projects it enough to say that a fractal is an image with infinite depth.
+That means you can zoom into it and will always continue to unfold its structure.
 
-nutria is a project dedicated to the purpose of _exploring_, _understanding_, _implementing_ and 
-ultimately _rendering_ fractals.
+## What is Nutria?
+Nutria is basically a gallery of fractals and it contains a convenient tool to explore such fractals.
 
-[wikipedia about fractals](https://en.wikipedia.org/wiki/Fractal).
+Fractals usually have a lot of parameters. Nutria allows you to try out new configurations for these parameters which might yield completely new images.
 
-The project is currently in a state of big restructuring. 
-Before it rendered the fractals on the CPU using scala. 
-That has the disadvantage of being slow. 
-
-That is why the project now focuses on using webgl to render fractals in the browser.
+## Deployment
 
 The current development state can be accessed at [heroku](http://nutria-explorer.herokuapp.com).
 
@@ -33,17 +32,17 @@ sbt service/run
 ```
 
 ## todo list:
- - ~~store multiple viewports for a single fractal entity. still have a main viewport for library.~~
+ - ~~store multiple viewports for a single fractal entity. still have a main viewport for gallery.~~
  - ~~details page instead of edit dialog for single fractal entities~~
  - use open gl to render fractals in backend (todo: reconsider)
  - save high quality screenshots to disk and to server
  - create a user profile to
-   - list your (unpublished) fractals
+   - ~~list your (unpublished) fractals~~
    - ~~create/ modify your own fractals~~
-   - publish
+   - ~~publish~~
    - ~~fork existing fractals~~
-   - up / down vote published fractals in library
- - delete viewport in details 
+   - up / down vote published fractals in gallery
+ - ~~delete viewport in details~~ 
  - migrate all existing `FractalProgram`s to `FreeStyleProgram` with the right parameter (typed)
  - for login/logout: redirect to the page, where the action was invoked
 

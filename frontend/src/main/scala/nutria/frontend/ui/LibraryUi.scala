@@ -30,15 +30,11 @@ object LibraryUi {
       .attr("title", fractal.entity.description)
     .child(
       FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnailDimensions)
-      .event("click", Snabbdom.event(_ => update(
-              DetailsState(
-                user = state.user,
-                remoteFractal = fractal,
-                fractalToEdit = fractal)
-            )))
-    )
+      .event("click", Snabbdom.event(_ =>
+                      update(ExplorerState(user = state.user, fractalId = Some(fractal.id), owned = state.user.exists(_.id == fractal.owner), fractalImage = FractalImage.firstImage(fractal.entity)))
+)    ))
         .child(
-          Node("div.buttons.overlay-top-right.padding")
+          Node("div.buttons.overlay-bottom-right.padding")
 /*            .child(
               Button.icon(Icons.upvote, Snabbdom.event { _ =>
 ()
@@ -70,10 +66,6 @@ object LibraryUi {
             )
         )
         .toVNode
-
-
-
-
 
   private val dummyTile =
     h("article.dummy-tile")(

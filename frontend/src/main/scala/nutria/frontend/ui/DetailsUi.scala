@@ -181,7 +181,7 @@ object DetailsUi {
             })
         )
         .child(
-          Node("div.buttons.overlay-top-right.padding")
+          Node("div.buttons.overlay-bottom-right.padding")
             .child(
               Button.icon(Icons.up, Snabbdom.event { _ =>
                 val newViewports = fractal.views.value.filter(_ == viewport) ++ fractal.views.value.filter(_ != viewport)

@@ -42,7 +42,7 @@ object UserLibraryUi {
       .toVNode
     )
     .child(
-      Node("div.buttons.overlay-top-right.padding")
+      Node("div.buttons.overlay-bottom-right.padding")
         .child(
           Button.icon(if(fractal.entity.published) Icons.unpublish else Icons.publish, Snabbdom.event { _ =>
             (for{
