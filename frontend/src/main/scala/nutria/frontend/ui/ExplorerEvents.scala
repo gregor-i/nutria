@@ -44,13 +44,16 @@ object ExplorerEvents {
   private def calcNewView(boundingBox: ClientRect, moves: Seq[(Point, Point)], view: Viewport) =
     Transform.applyToViewport(moves, view.cover(boundingBox.width, boundingBox.height))
 
-  def canvasWheelEvent(implicit state: ExplorerState, update: ExplorerState => Unit): Seq[(String, SnabbdomFacade.Eventlistener)] = {
+  def canvasWheelEvent(
+      implicit state: ExplorerState,
+      update: ExplorerState => Unit
+  ): Seq[(String, SnabbdomFacade.Eventlistener)] = {
     val eventHandler =
       Snabbdom.specificEvent { event: PointerEvent =>
         event.preventDefault()
         val (_, boundingBox) = context(event)
-        val p = toPoint(event, boundingBox)
-        val steps = event.asInstanceOf[WheelEvent].deltaY
+        val p                = toPoint(event, boundingBox)
+        val steps            = event.asInstanceOf[WheelEvent].deltaY
 
         update(
           ExplorerState.viewport.modify {
@@ -62,7 +65,10 @@ object ExplorerEvents {
     Seq("wheel" -> eventHandler)
   }
 
-  def canvasMouseEvents(implicit state: ExplorerState, update: ExplorerState => Unit): Seq[(String, SnabbdomFacade.Eventlistener)] = {
+  def canvasMouseEvents(
+      implicit state: ExplorerState,
+      update: ExplorerState => Unit
+  ): Seq[(String, SnabbdomFacade.Eventlistener)] = {
     var startPosition = Option.empty[Point]
 
     val pointerDown =
@@ -81,8 +87,8 @@ object ExplorerEvents {
             case Some(from) =>
               event.preventDefault()
               val (canvas, boundingBox) = context(event)
-              val to = toPoint(event, boundingBox)
-              val newView = calcNewView(boundingBox, Seq(from -> to), state.fractalImage.view)
+              val to                    = toPoint(event, boundingBox)
+              val newView               = calcNewView(boundingBox, Seq(from -> to), state.fractalImage.view)
               resetTransformCss(canvas)
               update(ExplorerState.viewport.set(newView)(state))
             case None => ()
@@ -97,7 +103,7 @@ object ExplorerEvents {
             case Some(from) =>
               event.preventDefault()
               val (canvas, boundingBox) = context(event)
-              val to = toPoint(event, boundingBox)
+              val to                    = toPoint(event, boundingBox)
               transformCss(
                 element = canvas,
                 moves = Seq(from -> to)
@@ -109,15 +115,18 @@ object ExplorerEvents {
 
     //    fixme: use mousedown instead?
     Seq(
-      "pointerdown" -> pointerDown,
-      "pointermove" -> pointerMove,
-      "pointerup" -> pointerEnd,
+      "pointerdown"   -> pointerDown,
+      "pointermove"   -> pointerMove,
+      "pointerup"     -> pointerEnd,
       "pointercancel" -> pointerEnd,
-      "pointerout" -> pointerEnd
+      "pointerout"    -> pointerEnd
     )
   }
 
-  def canvasTouchEvents(implicit state: ExplorerState, update: ExplorerState => Unit): Seq[(String, SnabbdomFacade.Eventlistener)] = {
+  def canvasTouchEvents(
+      implicit state: ExplorerState,
+      update: ExplorerState => Unit
+  ): Seq[(String, SnabbdomFacade.Eventlistener)] = {
     var moves = Map.empty[Double, TouchMove]
 
     val touchStart = Snabbdom.specificEvent { event: TouchEvent =>
@@ -153,10 +162,10 @@ object ExplorerEvents {
       val (canvas, boundingBox) = context(event)
 
       val updated = for {
-        t <- toSeq(event.changedTouches)
+        t     <- toSeq(event.changedTouches)
         state <- moves.get(t.identifier)
       } yield state match {
-        case Ended(start, _) => t.identifier -> Ended(start, toPoint(t, boundingBox))
+        case Ended(start, _)      => t.identifier -> Ended(start, toPoint(t, boundingBox))
         case Processing(start, _) => t.identifier -> Ended(start, toPoint(t, boundingBox))
       }
 
@@ -176,17 +185,16 @@ object ExplorerEvents {
 
     Seq(
       "touchstart" -> touchStart,
-      "touchmove" -> touchMove,
-      "touchend" -> touchEnd,
+      "touchmove"  -> touchMove,
+      "touchend"   -> touchEnd
     )
   }
 }
 
-
 private sealed trait TouchMove {
   def toMove: (Point, Point) = this match {
     case Processing(from, to) => from -> to
-    case Ended(from, to) => from -> to
+    case Ended(from, to)      => from -> to
   }
 }
 

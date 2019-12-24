@@ -6,10 +6,10 @@ case class Dimensions(width: Int, height: Int) {
 
 trait HasDimensions {
   val dimensions: Dimensions
-  def width: Int = dimensions.width
+  def width: Int  = dimensions.width
   def height: Int = dimensions.height
 }
 
-object Dimensions{
+object Dimensions {
   val thumbnailDimensions = Dimensions(400, 225)
 }

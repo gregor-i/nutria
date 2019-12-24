@@ -9,14 +9,17 @@ import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
 import repo.{FractalRepo, FractalRow}
 
-class AdminController @Inject()(fractalRepo: FractalRepo,
-                                systemFractals: SystemFractals,
-                                authenticator: Authenticator
-                               ) extends InjectedController with Circe {
+class AdminController @Inject() (
+    fractalRepo: FractalRepo,
+    systemFractals: SystemFractals,
+    authenticator: Authenticator
+) extends InjectedController
+    with Circe {
 
   def ui() = Action { req =>
     authenticator.adminUser(req) {
-      val list = fractalRepo.list()
+      val list = fractalRepo
+        .list()
         .sortBy(_.maybeFractal.map(_.program))
 
       Ok(views.html.Admin(list))
@@ -32,7 +35,8 @@ class AdminController @Inject()(fractalRepo: FractalRepo,
 
   def cleanFractals() = Action { req =>
     authenticator.adminUser(req) {
-      fractalRepo.list()
+      fractalRepo
+        .list()
         .collect {
           case FractalRow(id, _, _, None) => id
         }
@@ -52,11 +56,14 @@ class AdminController @Inject()(fractalRepo: FractalRepo,
     authenticator.adminUser(req) {
       val user = authenticator.userFromCookie(req)
       systemFractals.systemFractals
-        .foreach(entity => fractalRepo.save(
-            id = UUID.randomUUID().toString,
-            owner = user.get.id,
-            fractal = entity
-        ))
+        .foreach(
+          entity =>
+            fractalRepo.save(
+              id = UUID.randomUUID().toString,
+              owner = user.get.id,
+              fractal = entity
+            )
+        )
       Ok
     }
   }

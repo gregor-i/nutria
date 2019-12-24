@@ -10,16 +10,16 @@ object Transform {
     if (moves.isEmpty) {
       ((0d, 0d), 1d, 0d)
     } else {
-      val factor = (1d / moves.length)
+      val factor     = (1d / moves.length)
       val fromCenter = moves.map(_._1).reduce(_ + _) * factor
-      val toCenter = moves.map(_._2).reduce(_ + _) * factor
-      val translate = toCenter - fromCenter
+      val toCenter   = moves.map(_._2).reduce(_ + _) * factor
+      val translate  = toCenter - fromCenter
       if (moves.length == 1) {
         (translate, 1d, 0d)
       } else {
         val fromScale = moves.map(p => (p._1 - fromCenter).norm()).sum * factor
-        val toScale = moves.map(p => (p._2 - toCenter).norm()).sum * factor
-        val scale = toScale / fromScale
+        val toScale   = moves.map(p => (p._2 - toCenter).norm()).sum * factor
+        val scale     = toScale / fromScale
         (translate, scale, 0d)
       }
     }

@@ -15,10 +15,10 @@ object SnabbdomFacade extends js.Object {
   type PatchFunction = js.Function2[VNode | dom.Element, VNode, VNode]
 
   // note: remove is not considered
-  type Hook = js.Function0[Unit] | js.Function1[VNode, Unit] | js.Function2[VNode, VNode, Unit]
+  type Hook          = js.Function0[Unit] | js.Function1[VNode, Unit] | js.Function2[VNode, VNode, Unit]
   type Eventlistener = js.Function1[_ <: Event, Unit]
-  type Child = String | VNode
-  type Key = UndefOr[String | Double | Int]
+  type Child         = String | VNode
+  type Key           = UndefOr[String | Double | Int]
 
   def h(sel: String, props: Data, children: js.Array[Child]): VNode = js.native
 
@@ -60,12 +60,13 @@ abstract class VNode extends js.Object {
   def key: UndefOr[String | Double | Int]
 }
 
-private[snabbdom]  class Data(val key: SnabbdomFacade.Key,
-                              val `class`: Dictionary[Boolean],
-                              val props: Dictionary[js.Any],
-                              val attrs: Dictionary[String],
-                              val dataset: Dictionary[String],
-                              val style: Dictionary[String],
-                              val on: Dictionary[SnabbdomFacade.Eventlistener],
-                              val hook: Dictionary[SnabbdomFacade.Hook]
-                             ) extends js.Object
+private[snabbdom] class Data(
+    val key: SnabbdomFacade.Key,
+    val `class`: Dictionary[Boolean],
+    val props: Dictionary[js.Any],
+    val attrs: Dictionary[String],
+    val dataset: Dictionary[String],
+    val style: Dictionary[String],
+    val on: Dictionary[SnabbdomFacade.Eventlistener],
+    val hook: Dictionary[SnabbdomFacade.Hook]
+) extends js.Object

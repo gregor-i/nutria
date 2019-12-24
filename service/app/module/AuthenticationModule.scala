@@ -1,6 +1,6 @@
 package module
 
-import module.auth.{ AuthenticationController, AuthenticationDummy, AuthenticationGoogle}
+import module.auth.{AuthenticationController, AuthenticationDummy, AuthenticationGoogle}
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment, Mode}
 

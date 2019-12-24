@@ -12,8 +12,7 @@ class JDBCInitModule extends Module {
 
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = {
     def isLoaded =
-      java.sql.DriverManager.getDrivers
-        .asScala
+      java.sql.DriverManager.getDrivers.asScala
         .exists(_.isInstanceOf[org.postgresql.Driver])
 
     if (!isLoaded) {

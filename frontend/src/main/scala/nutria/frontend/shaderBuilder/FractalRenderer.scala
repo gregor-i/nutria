@@ -18,8 +18,10 @@ object FractalRenderer {
 
   def render(canvas: Canvas, entity: FractalImage, resize: Boolean): Boolean = {
     val viewport = entity.view
-    val program = entity.program
-    val ctx = canvas.getContext("webgl", Dynamic.literal(preserveDrawingBuffer = true)).asInstanceOf[WebGLRenderingContext]
+    val program  = entity.program
+    val ctx = canvas
+      .getContext("webgl", Dynamic.literal(preserveDrawingBuffer = true))
+      .asInstanceOf[WebGLRenderingContext]
 
     if (resize) {
       canvas.width = (canvas.clientWidth * dom.window.devicePixelRatio).toInt
@@ -28,12 +30,13 @@ object FractalRenderer {
 
     Try {
       (Untyped(canvas).program, Untyped(canvas).webGlProgram, Untyped(canvas).viewport) match {
-        case (cachedProgram, _, cachedViewport) if cachedProgram == Untyped(program.asInstanceOf[js.Object])
-          && cachedViewport == Untyped(viewport.asInstanceOf[js.Object]) =>
+        case (cachedProgram, _, cachedViewport)
+            if cachedProgram == Untyped(program.asInstanceOf[js.Object])
+              && cachedViewport == Untyped(viewport.asInstanceOf[js.Object]) =>
         // dom.console.log("program and viewport unchanged, skipping render")
 
-
-        case (cachedProgram, cachedWebGlProgram, _) if cachedProgram == Untyped(program.asInstanceOf[js.Object]) =>
+        case (cachedProgram, cachedWebGlProgram, _)
+            if cachedProgram == Untyped(program.asInstanceOf[js.Object]) =>
           render(ctx, viewport, cachedWebGlProgram.asInstanceOf[WebGLProgram])
           Untyped(canvas).viewport = viewport.asInstanceOf[js.Object]
         // dom.console.log("program unchanged, rendering with cached webgl program")
@@ -57,13 +60,17 @@ object FractalRenderer {
 
   def messure[A](op: => A): (A, Long) = {
     val start = System.currentTimeMillis()
-    val res = op
-    val end = System.currentTimeMillis()
+    val res   = op
+    val end   = System.currentTimeMillis()
     (res, end - start)
   }
 
   @throws[Exception]
-  def constructProgram(gl: WebGLRenderingContext, program: FractalProgram, antiAliase: Int Refined Positive): WebGLProgram = {
+  def constructProgram(
+      gl: WebGLRenderingContext,
+      program: FractalProgram,
+      antiAliase: Int Refined Positive
+  ): WebGLProgram = {
     val vertexShader = gl.createShader(WebGLRenderingContext.VERTEX_SHADER)
     gl.shaderSource(vertexShader, vertexShaderSource)
     gl.compileShader(vertexShader)
@@ -72,10 +79,19 @@ object FractalRenderer {
     gl.shaderSource(fragmentShader, fragmentShaderSource(program, antiAliase))
     gl.compileShader(fragmentShader)
 
-    if (!gl.getShaderParameter(vertexShader, WebGLRenderingContext.COMPILE_STATUS).asInstanceOf[Boolean]) {
-      throw new Exception("failed to compile vertex shader:\n" + vertexShaderSource + "\n" + gl.getShaderInfoLog(vertexShader))
-    } else if (!gl.getShaderParameter(fragmentShader, WebGLRenderingContext.COMPILE_STATUS).asInstanceOf[Boolean]) {
-      throw new Exception("failed to compile fragment shader:\n" + gl.getShaderInfoLog(fragmentShader))
+    if (!gl
+          .getShaderParameter(vertexShader, WebGLRenderingContext.COMPILE_STATUS)
+          .asInstanceOf[Boolean]) {
+      throw new Exception(
+        "failed to compile vertex shader:\n" + vertexShaderSource + "\n" + gl
+          .getShaderInfoLog(vertexShader)
+      )
+    } else if (!gl
+                 .getShaderParameter(fragmentShader, WebGLRenderingContext.COMPILE_STATUS)
+                 .asInstanceOf[Boolean]) {
+      throw new Exception(
+        "failed to compile fragment shader:\n" + gl.getShaderInfoLog(fragmentShader)
+      )
     } else {
       val program = gl.createProgram()
       gl.attachShader(program, vertexShader)
@@ -86,24 +102,25 @@ object FractalRenderer {
     }
   }
 
-  def render(gl: WebGLRenderingContext,
-             view: Viewport,
-             program: WebGLProgram): Unit = {
+  def render(gl: WebGLRenderingContext, view: Viewport, program: WebGLProgram): Unit = {
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
 
     val buffer = gl.createBuffer()
     gl.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, buffer)
     gl.bufferData(
       WebGLRenderingContext.ARRAY_BUFFER,
-      new Float32Array(scala.scalajs.js.typedarray.floatArray2Float32Array(Array(
-        -1.0f, -1.0f, // left  down
-        1.0f, -1.0f, // right down
-        -1.0f, 1.0f, // left  up
-
-        -1.0f, 1.0f, // left  up
-        1.0f, -1.0f, // right down
-        1.0f, 1.0f // right up
-      ))),
+      new Float32Array(
+        scala.scalajs.js.typedarray.floatArray2Float32Array(
+          Array(
+            -1.0f, -1.0f, // left  down
+            1.0f, -1.0f,  // right down
+            -1.0f, 1.0f,  // left  up
+            -1.0f, 1.0f,  // left  up
+            1.0f, -1.0f,  // right down
+            1.0f, 1.0f    // right up
+          )
+        )
+      ),
       WebGLRenderingContext.STATIC_DRAW
     )
 
@@ -111,7 +128,11 @@ object FractalRenderer {
     gl.enableVertexAttribArray(positionLocation)
     gl.vertexAttribPointer(positionLocation, 2, WebGLRenderingContext.FLOAT, false, 0, 0)
 
-    gl.uniform2f(gl.getUniformLocation(program, "u_resolution"), gl.drawingBufferWidth, gl.drawingBufferHeight)
+    gl.uniform2f(
+      gl.getUniformLocation(program, "u_resolution"),
+      gl.drawingBufferWidth,
+      gl.drawingBufferHeight
+    )
 
     val v = view
       .cover(gl.drawingBufferWidth, gl.drawingBufferHeight)
@@ -140,7 +161,6 @@ object FractalRenderer {
        |}
     """.stripMargin
   }
-
 
   val vertexShaderSource =
     """attribute vec2 a_position;

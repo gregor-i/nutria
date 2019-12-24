@@ -23,22 +23,26 @@ object Form {
       )
       .child(
         Node("div.field-body").child(
-          inputs.map(input =>
-            Node("div.field")
-              .child(Node("p.control").child(input))
+          inputs.map(
+            input =>
+              Node("div.field")
+                .child(Node("p.control").child(input))
           )
         )
       )
 
-
-  def stringFunctionInput[S, V](label: String, lens: Lens[S, StringFunction[V]])
-                               (implicit state: S, update: S => Unit, lang: SpireLanguage[Complex[Double], V]) =
-    inputStyle(label,
+  def stringFunctionInput[S, V](
+      label: String,
+      lens: Lens[S, StringFunction[V]]
+  )(implicit state: S, update: S => Unit, lang: SpireLanguage[Complex[Double], V]) =
+    inputStyle(
+      label,
       Node("input.input")
         .attr("type", "text")
         .attr("value", lens.get(state).string)
-        .event("change", snabbdom.Snabbdom.event {
-          event =>
+        .event(
+          "change",
+          snabbdom.Snabbdom.event { event =>
             val element = event.target.asInstanceOf[HTMLInputElement]
             StringFunction(element.value) match {
               case Some(v) =>
@@ -47,43 +51,52 @@ object Form {
               case None =>
                 element.classList.add("is-danger")
             }
-        })
+          }
+        )
     )
 
-  def stringInput[S](label: String, lens: Lens[S, String])
-                    (implicit state: S, update: S => Unit): Node =
-    inputStyle(label,
+  def stringInput[S](
+      label: String,
+      lens: Lens[S, String]
+  )(implicit state: S, update: S => Unit): Node =
+    inputStyle(
+      label,
       Node("input.input")
         .attr("type", "text")
         .attr("value", lens.get(state))
-        .event("change", Snabbdom.event {
-          event =>
-            val value = event.target.asInstanceOf[HTMLInputElement].value
-            update(lens.set(value)(state))
+        .event("change", Snabbdom.event { event =>
+          val value = event.target.asInstanceOf[HTMLInputElement].value
+          update(lens.set(value)(state))
         })
     )
 
-  def mulitlineStringInput[S](label: String, lens: Lens[S, String])
-                             (implicit state: S, update: S => Unit) =
-    inputStyle(label,
+  def mulitlineStringInput[S](
+      label: String,
+      lens: Lens[S, String]
+  )(implicit state: S, update: S => Unit) =
+    inputStyle(
+      label,
       Node("textArea.textarea")
         .style("min-height", "400px")
-        .event("change", Snabbdom.event {
-          event =>
-            val value = event.target.asInstanceOf[HTMLInputElement].value
-            update(lens.set(value)(state))
+        .event("change", Snabbdom.event { event =>
+          val value = event.target.asInstanceOf[HTMLInputElement].value
+          update(lens.set(value)(state))
         })
         .text(lens.get(state))
     )
 
-  def intInput[S, T, V](label: String, lens: Lens[S, Refined[Int, V]])
-                       (implicit state: S, update: S => Unit, validate: Validate[Int, V]): Node = {
-    inputStyle(label,
+  def intInput[S, T, V](
+      label: String,
+      lens: Lens[S, Refined[Int, V]]
+  )(implicit state: S, update: S => Unit, validate: Validate[Int, V]): Node = {
+    inputStyle(
+      label,
       Node("input.input")
         .attr("type", "number")
         .attr("value", lens.get(state).value.toString)
-        .event("change", Snabbdom.event {
-          event =>
+        .event(
+          "change",
+          Snabbdom.event { event =>
             val element = event.target.asInstanceOf[HTMLInputElement]
             Try(element.value.toInt).toEither
               .flatMap(refineV[V](_)(validate)) match {
@@ -93,18 +106,23 @@ object Form {
               case Left(error) =>
                 element.classList.add("is-danger")
             }
-        })
+          }
+        )
     )
   }
 
-  def doubleInput[S, V](label: String, lens: Lens[S, Double Refined V])
-                       (implicit state: S, update: S => Unit, validate: Validate[Double, V]) =
-    inputStyle(label,
+  def doubleInput[S, V](
+      label: String,
+      lens: Lens[S, Double Refined V]
+  )(implicit state: S, update: S => Unit, validate: Validate[Double, V]) =
+    inputStyle(
+      label,
       Node("input.input")
         .attr("type", "number")
         .attr("value", lens.get(state).toString)
-        .event("change", Snabbdom.event {
-          event =>
+        .event(
+          "change",
+          Snabbdom.event { event =>
             val element = event.target.asInstanceOf[HTMLInputElement]
             Try(element.value.toDouble).toEither
               .flatMap(refineV[V](_)(validate)) match {
@@ -114,18 +132,19 @@ object Form {
               case Left(error) =>
                 element.classList.add("is-danger")
             }
-        })
+          }
+        )
     )
 
-
-  def colorInput[S](label: String, lens: Lens[S, RGBA])
-                   (implicit state: S, update: S => Unit) =
-    inputStyle(label,
+  def colorInput[S](label: String, lens: Lens[S, RGBA])(implicit state: S, update: S => Unit) =
+    inputStyle(
+      label,
       Node("input.input")
         .attr("type", "color")
         .attr("value", RGBA.toRGBString(lens.get(state)))
-        .event("change", Snabbdom.event {
-          event =>
+        .event(
+          "change",
+          Snabbdom.event { event =>
             val element = event.target.asInstanceOf[HTMLInputElement]
             RGBA.parseRGBString(element.value).toOption match {
               case Some(v) =>
@@ -134,50 +153,55 @@ object Form {
               case None =>
                 element.classList.add("is-danger")
             }
-        })
+          }
+        )
     )
 
-
-  def tupleDoubleInput[S](label: String, lens: Lens[S, (Double, Double)])
-                         (implicit state: S, update: S => Unit) =
-    inputStyle(label,
+  def tupleDoubleInput[S](
+      label: String,
+      lens: Lens[S, (Double, Double)]
+  )(implicit state: S, update: S => Unit) =
+    inputStyle(
+      label,
       Node("input.input")
         .attr("type", "number")
         .attr("value", lens.get(state)._1.toString)
-        .event("change", Snabbdom.event {
-          event =>
-            val value = event.target.asInstanceOf[HTMLInputElement].value.toDouble
-            update(lens.modify(t => (value, t._2))(state))
+        .event("change", Snabbdom.event { event =>
+          val value = event.target.asInstanceOf[HTMLInputElement].value.toDouble
+          update(lens.modify(t => (value, t._2))(state))
         }),
       Node("input.input")
         .attr("type", "number")
         .attr("value", lens.get(state)._2.toString)
-        .event("change", Snabbdom.event {
-          event =>
-            val value = event.target.asInstanceOf[HTMLInputElement].value.toDouble
-            update(lens.modify(t => (t._1, value))(state))
+        .event("change", Snabbdom.event { event =>
+          val value = event.target.asInstanceOf[HTMLInputElement].value.toDouble
+          update(lens.modify(t => (t._1, value))(state))
         })
     )
 
-  def booleanInput[S](label: String, lens: Lens[S, Boolean])
-                     (implicit state: S, update: S => Unit) =
-    selectInput(label = label,
+  def booleanInput[S](label: String, lens: Lens[S, Boolean])(implicit state: S, update: S => Unit) =
+    selectInput(
+      label = label,
       options = Seq("true", "false"),
       value = lens.get(state).toString,
       onChange = newValue => update(lens.set(newValue == "true")(state))
     )
 
   def selectInput(label: String, options: Seq[String], value: String, onChange: String => Unit) =
-    inputStyle(label,
+    inputStyle(
+      label,
       Node("div.select is-fullwidth")
         .child(
           Node("select")
-            .event("change", Snabbdom.event { event => onChange(event.target.asInstanceOf[HTMLSelectElement].value) })
+            .event("change", Snabbdom.event { event =>
+              onChange(event.target.asInstanceOf[HTMLSelectElement].value)
+            })
             .child(
-              options.map(opt =>
-                Node("option")
-                  .attr(if (opt == value) "selected" else "not-selected", "")
-                  .text(opt)
+              options.map(
+                opt =>
+                  Node("option")
+                    .attr(if (opt == value) "selected" else "not-selected", "")
+                    .text(opt)
               )
             )
         )

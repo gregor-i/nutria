@@ -23,18 +23,31 @@ object LibraryUi {
         common.Footer()
       )
 
-  def renderFractalTile(fractal: FractalEntityWithId)
-                       (implicit state: LibraryState, update: NutriaState => Unit): Node =
+  def renderFractalTile(
+      fractal: FractalEntityWithId
+  )(implicit state: LibraryState, update: NutriaState => Unit): Node =
     Node("article.fractal-tile.is-relative")
       .attr("title", fractal.entity.description)
       .child(
         FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnailDimensions)
-          .event("click", Snabbdom.event(_ =>
-            update(ExplorerState(user = state.user, fractalId = Some(fractal.id), owned = state.user.exists(_.id == fractal.owner), fractalImage = FractalImage.firstImage(fractal.entity)))
-          )))
+          .event(
+            "click",
+            Snabbdom.event(
+              _ =>
+                update(
+                  ExplorerState(
+                    user = state.user,
+                    fractalId = Some(fractal.id),
+                    owned = state.user.exists(_.id == fractal.owner),
+                    fractalImage = FractalImage.firstImage(fractal.entity)
+                  )
+                )
+            )
+          )
+      )
       .child(
         Node("div.buttons.overlay-bottom-right.padding")
-          /*            .child(
+        /*            .child(
                         Button.icon(Icons.upvote, Snabbdom.event { _ =>
           ()
                         })
@@ -47,20 +60,29 @@ object LibraryUi {
                           .classes("is-outlined")
                       ) */
           .child(
-            Button.icon(Icons.explore, Snabbdom.event { _ =>
-              update(ExplorerState(user = state.user, fractalId = Some(fractal.id), owned = state.user.exists(_.id == fractal.owner), fractalImage = FractalImage.firstImage(fractal.entity)))
-            })
+            Button
+              .icon(
+                Icons.explore,
+                Snabbdom.event { _ =>
+                  update(
+                    ExplorerState(
+                      user = state.user,
+                      fractalId = Some(fractal.id),
+                      owned = state.user.exists(_.id == fractal.owner),
+                      fractalImage = FractalImage.firstImage(fractal.entity)
+                    )
+                  )
+                }
+              )
               .classes("is-outlined")
           )
           .child(
-            Button.icon(Icons.edit, Snabbdom.event { _ =>
-              update(
-                DetailsState(
-                  user = state.user,
-                  remoteFractal = fractal,
-                  fractalToEdit = fractal)
-              )
-            })
+            Button
+              .icon(Icons.edit, Snabbdom.event { _ =>
+                update(
+                  DetailsState(user = state.user, remoteFractal = fractal, fractalToEdit = fractal)
+                )
+              })
               .classes("is-outlined")
           )
       )

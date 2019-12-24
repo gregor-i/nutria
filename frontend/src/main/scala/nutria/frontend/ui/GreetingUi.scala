@@ -29,10 +29,9 @@ object GreetingUi {
       .children(
         Node("div.modal-background")
           .style("opacity", "0.5")
-          .event("click",
-            Snabbdom.event { _ =>
-              update(ExplorerState(state.user, None, owned = false, state.randomFractal))
-            }),
+          .event("click", Snabbdom.event { _ =>
+            update(ExplorerState(state.user, None, owned = false, state.randomFractal))
+          }),
         Node("div.modal-content")
           .child(
             Node("div.box")
@@ -40,13 +39,9 @@ object GreetingUi {
                 Node("div.content").prop("innerHTML", greetingContent),
                 Node("div.buttons")
                   .child(
-                    Button(
-                      "Start exploring!",
-                      Icons.library,
-                      Snabbdom.event { _ =>
-                        update(LoadingState(NutriaState.libraryState()))
-                      })
-                      .classes("is-primary")
+                    Button("Start exploring!", Icons.library, Snabbdom.event { _ =>
+                      update(LoadingState(NutriaState.libraryState()))
+                    }).classes("is-primary")
                   )
                   .classes("is-right")
               )

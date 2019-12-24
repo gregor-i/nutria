@@ -8,7 +8,7 @@ import org.scalatest.FunSuite
 
 class SystemFractalsSpec extends FunSuite {
 
-  def read:Vector[FractalEntity] = (new module.SystemFractals).systemFractals
+  def read: Vector[FractalEntity] = (new module.SystemFractals).systemFractals
 
   def write(fractals: Vector[FractalEntity]): Unit = {
     val fw = new FileWriter("conf/systemfractals.json")

@@ -13,17 +13,15 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.chaining._
 // https://developers.google.com/identity/protocols/OAuth2WebServer
 @Singleton
-class AuthenticationGoogle @Inject()(conf: Configuration,
-                                     wsClient: WSClient,
-                                     userRepo: UserRepo)
-                                    (implicit ex: ExecutionContext)
-  extends InjectedController
+class AuthenticationGoogle @Inject() (conf: Configuration, wsClient: WSClient, userRepo: UserRepo)(
+    implicit ex: ExecutionContext
+) extends InjectedController
     with Circe
     with AuthenticationController {
 
-  val clientId: String = conf.get[String]("auth.google.clientId")
+  val clientId: String     = conf.get[String]("auth.google.clientId")
   val clientSecret: String = conf.get[String]("auth.google.clientSecret")
-  val callbackUrl: String = conf.get[String]("auth.google.callbackUrl")
+  val callbackUrl: String  = conf.get[String]("auth.google.callbackUrl")
 
   private val requestTokenUrl: String =
     Url(scheme = "https", host = "accounts.google.com", path = "/o/oauth2/v2/auth")
@@ -34,29 +32,35 @@ class AuthenticationGoogle @Inject()(conf: Configuration,
       .toStringPunycode
 
   private def getAccessToken(code: String): Future[AuthResponse] =
-    wsClient.url("https://www.googleapis.com/oauth2/v4/token")
-      .post(Map(
-        "code" -> code,
-        "client_id" -> clientId,
-        "client_secret" -> clientSecret,
-        "redirect_uri" -> callbackUrl,
-        "grant_type" -> "authorization_code"
-      ))
+    wsClient
+      .url("https://www.googleapis.com/oauth2/v4/token")
+      .post(
+        Map(
+          "code"          -> code,
+          "client_id"     -> clientId,
+          "client_secret" -> clientSecret,
+          "redirect_uri"  -> callbackUrl,
+          "grant_type"    -> "authorization_code"
+        )
+      )
       .pipe(checkStatus(200))
       .flatMap { response =>
-        io.circe.parser.parse(response.body)
+        io.circe.parser
+          .parse(response.body)
           .flatMap(_.as[AuthResponse])
           .toTry
           .pipe(Future.fromTry)
       }
 
   private def getUserInfo(token: String): Future[GoogleUserInfo] =
-    wsClient.url("https://www.googleapis.com/oauth2/v2/userinfo")
+    wsClient
+      .url("https://www.googleapis.com/oauth2/v2/userinfo")
       .withHttpHeaders("Authorization" -> s"Bearer $token")
       .execute()
       .pipe(checkStatus(200))
       .flatMap { response =>
-        io.circe.parser.parse(response.body)
+        io.circe.parser
+          .parse(response.body)
           .flatMap(_.as[GoogleUserInfo])
           .toTry
           .pipe(Future.fromTry)
@@ -67,7 +71,9 @@ class AuthenticationGoogle @Inject()(conf: Configuration,
       if (resp.status == expected)
         Future.successful(resp)
       else
-        Future.failed(new Exception(s"unexpected status code. expected: ${expected}, actual: ${resp.status}"))
+        Future.failed(
+          new Exception(s"unexpected status code. expected: ${expected}, actual: ${resp.status}")
+        )
     }
 
   def authenticate() = Action.async { request =>
@@ -77,8 +83,8 @@ class AuthenticationGoogle @Inject()(conf: Configuration,
       case Some(Seq(code)) =>
         for {
           authResponse <- getAccessToken(code)
-          userData <- getUserInfo(authResponse.access_token)
-          user = userRepo.upsertWithGoogleData(userData)
+          userData     <- getUserInfo(authResponse.access_token)
+          user       = userRepo.upsertWithGoogleData(userData)
           userCookie = Cookie(name = "user", value = EncodeCookie(user))
         } yield Redirect("/")
           .withCookies(userCookie)

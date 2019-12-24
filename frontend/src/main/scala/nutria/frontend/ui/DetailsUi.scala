@@ -27,7 +27,7 @@ object DetailsUi {
     Node("div.container")
       .children(
         Node("h1.title.is-1").text(state.remoteFractal.entity.title),
-        Node("h2.subtitle.is-").text("ID: " + state.remoteFractal.id),
+        Node("h2.subtitle.is-").text("ID: " + state.remoteFractal.id)
       )
       .child(
         Node("section.section").children(
@@ -58,19 +58,22 @@ object DetailsUi {
           .child(actions())
       )
 
-  def general()
-             (implicit state: DetailsState, update: NutriaState => Unit) = {
+  def general()(implicit state: DetailsState, update: NutriaState => Unit) = {
     val startLens = DetailsState.fractalToEdit composeLens FractalEntityWithId.entity
     Seq(
       Form.stringInput("Title", startLens composeLens FractalEntity.title),
       Form.stringInput("Description", startLens composeLens FractalEntity.description),
       Form.booleanInput("Published", startLens composeLens FractalEntity.published),
-      Form.stringInput("References", startLens composeLens FractalEntity.reference composeIso Iso[List[String], String](_.mkString(" "))(_.split("\\s").filter(_.nonEmpty).toList)),
+      Form.stringInput(
+        "References",
+        startLens composeLens FractalEntity.reference composeIso Iso[List[String], String](
+          _.mkString(" ")
+        )(_.split("\\s").filter(_.nonEmpty).toList)
+      )
     )
   }
 
-  def template()
-              (implicit state: DetailsState, update: NutriaState => Unit) = {
+  def template()(implicit state: DetailsState, update: NutriaState => Unit) = {
     val toEditProgram = DetailsState.fractalToEdit composeLens FractalEntityWithId.entity composeLens FractalEntity.program
 
     val fractal = state.fractalToEdit
@@ -87,16 +90,20 @@ object DetailsUi {
       onChange = {
         case "NewtonIteration" => update(toEditProgram.set(NewtonIteration.default)(state))
         case "DivergingSeries" => update(toEditProgram.set(DivergingSeries.default)(state))
-        case "DerivedDivergingSeries" => update(toEditProgram.set(DerivedDivergingSeries.default)(state))
+        case "DerivedDivergingSeries" =>
+          update(toEditProgram.set(DerivedDivergingSeries.default)(state))
         case "FreestyleProgram" => update(toEditProgram.set(FreestyleProgram.default)(state))
       }
     )
 
     val freeStyleParamters = fractal.entity.program match {
       case f: FreestyleProgram =>
-        val lensFractal = toEditProgram composeLens LenseUtils.lookedUp(f, FractalProgram.freestyleProgram.asSetter)
+        val lensFractal = toEditProgram composeLens LenseUtils.lookedUp(
+          f,
+          FractalProgram.freestyleProgram.asSetter
+        )
         Seq(
-          Form.mulitlineStringInput("template", lensFractal composeLens FreestyleProgram.code),
+          Form.mulitlineStringInput("template", lensFractal composeLens FreestyleProgram.code)
         )
       case _ => Seq.empty
     }
@@ -104,53 +111,90 @@ object DetailsUi {
     Seq(selectFractalTemplate) ++ freeStyleParamters
   }
 
-  def parameter()
-               (implicit state: DetailsState, update: NutriaState => Unit) = {
-    val startLens = DetailsState.fractalToEdit composeLens FractalEntityWithId.entity
+  def parameter()(implicit state: DetailsState, update: NutriaState => Unit) = {
+    val startLens     = DetailsState.fractalToEdit composeLens FractalEntityWithId.entity
     val toEditProgram = startLens composeLens FractalEntity.program
 
     val params = state.fractalToEdit.entity.program match {
       case f: NewtonIteration =>
-        val lensFractal = toEditProgram composeLens LenseUtils.lookedUp(f, FractalProgram.newtonIteration.asSetter)
+        val lensFractal = toEditProgram composeLens LenseUtils.lookedUp(
+          f,
+          FractalProgram.newtonIteration.asSetter
+        )
         Seq(
           Form.stringFunctionInput("function", lensFractal composeLens NewtonIteration.function),
           Form.stringFunctionInput("initial", lensFractal composeLens NewtonIteration.initial),
           Form.intInput("max iterations", lensFractal composeLens NewtonIteration.maxIterations),
           Form.doubleInput("threshold", lensFractal composeLens NewtonIteration.threshold),
-          Form.doubleInput("brightness factor", lensFractal composeLens NewtonIteration.brightnessFactor),
+          Form.doubleInput(
+            "brightness factor",
+            lensFractal composeLens NewtonIteration.brightnessFactor
+          ),
           Form.tupleDoubleInput("center", lensFractal composeLens NewtonIteration.center),
-          Form.doubleInput("overshoot", lensFractal composeLens NewtonIteration.overshoot),
+          Form.doubleInput("overshoot", lensFractal composeLens NewtonIteration.overshoot)
         )
       case f: DerivedDivergingSeries =>
-        val lensFractal = toEditProgram composeLens LenseUtils.lookedUp(f, FractalProgram.derivedDivergingSeries.asSetter)
+        val lensFractal = toEditProgram composeLens LenseUtils.lookedUp(
+          f,
+          FractalProgram.derivedDivergingSeries.asSetter
+        )
         Seq(
-          Form.intInput("max iterations", lensFractal composeLens DerivedDivergingSeries.maxIterations),
-          Form.doubleInput("escape radius", lensFractal composeLens DerivedDivergingSeries.escapeRadius),
-          Form.stringFunctionInput("initial Z", lensFractal composeLens DerivedDivergingSeries.initialZ),
-          Form.stringFunctionInput("initial Z'", lensFractal composeLens DerivedDivergingSeries.initialZDer),
-          Form.stringFunctionInput("iteration Z", lensFractal composeLens DerivedDivergingSeries.iterationZ),
-          Form.stringFunctionInput("iteration Z'", lensFractal composeLens DerivedDivergingSeries.iterationZDer),
+          Form.intInput(
+            "max iterations",
+            lensFractal composeLens DerivedDivergingSeries.maxIterations
+          ),
+          Form.doubleInput(
+            "escape radius",
+            lensFractal composeLens DerivedDivergingSeries.escapeRadius
+          ),
+          Form.stringFunctionInput(
+            "initial Z",
+            lensFractal composeLens DerivedDivergingSeries.initialZ
+          ),
+          Form.stringFunctionInput(
+            "initial Z'",
+            lensFractal composeLens DerivedDivergingSeries.initialZDer
+          ),
+          Form.stringFunctionInput(
+            "iteration Z",
+            lensFractal composeLens DerivedDivergingSeries.iterationZ
+          ),
+          Form.stringFunctionInput(
+            "iteration Z'",
+            lensFractal composeLens DerivedDivergingSeries.iterationZDer
+          ),
           Form.doubleInput("h2", lensFractal composeLens DerivedDivergingSeries.h2),
           Form.doubleInput("angle [0, 2pi]", lensFractal composeLens DerivedDivergingSeries.angle),
-          Form.colorInput("color inside", lensFractal composeLens DerivedDivergingSeries.colorInside),
+          Form
+            .colorInput("color inside", lensFractal composeLens DerivedDivergingSeries.colorInside),
           Form.colorInput("color light", lensFractal composeLens DerivedDivergingSeries.colorLight),
-          Form.colorInput("color shadow", lensFractal composeLens DerivedDivergingSeries.colorShadow),
+          Form
+            .colorInput("color shadow", lensFractal composeLens DerivedDivergingSeries.colorShadow)
         )
       case f: DivergingSeries =>
-        val lensFractal = toEditProgram composeLens LenseUtils.lookedUp(f, FractalProgram.divergingSeries.asSetter)
+        val lensFractal = toEditProgram composeLens LenseUtils.lookedUp(
+          f,
+          FractalProgram.divergingSeries.asSetter
+        )
         Seq(
           Form.stringFunctionInput("initial", lensFractal composeLens DivergingSeries.initial),
           Form.stringFunctionInput("iteration", lensFractal composeLens DivergingSeries.iteration),
           Form.intInput("max iterations", lensFractal composeLens DivergingSeries.maxIterations),
           Form.doubleInput("escape radius", lensFractal composeLens DivergingSeries.escapeRadius),
           Form.colorInput("color inside", lensFractal composeLens DivergingSeries.colorInside),
-          Form.colorInput("color outside", lensFractal composeLens DivergingSeries.colorOutside),
+          Form.colorInput("color outside", lensFractal composeLens DivergingSeries.colorOutside)
         )
       case f: FreestyleProgram =>
-        val lensFractal = toEditProgram composeLens LenseUtils.lookedUp(f, FractalProgram.freestyleProgram.asSetter)
-        f.parameters.indices.map {
-          i =>
-            Form.stringInput(f.parameters(i).name, lensFractal composeLens FreestyleProgram.parameters composeLens LenseUtils.seqAt[Parameter](i) composeLens Parameter.literal)
+        val lensFractal = toEditProgram composeLens LenseUtils.lookedUp(
+          f,
+          FractalProgram.freestyleProgram.asSetter
+        )
+        f.parameters.indices.map { i =>
+          Form.stringInput(
+            f.parameters(i).name,
+            lensFractal composeLens FreestyleProgram.parameters composeLens LenseUtils
+              .seqAt[Parameter](i) composeLens Parameter.literal
+          )
         }
     }
 
@@ -159,14 +203,14 @@ object DetailsUi {
     params :+ antiAlias
   }
 
-  def snapshots()
-               (implicit state: DetailsState, update: NutriaState => Unit) = {
+  def snapshots()(implicit state: DetailsState, update: NutriaState => Unit) = {
     val fractalId = if (state.dirty) None else Some(state.remoteFractal.id)
-    val owned = state.user.exists(_.id == state.remoteFractal.owner)
+    val owned     = state.user.exists(_.id == state.remoteFractal.owner)
 
     val fractal = state.fractalToEdit.entity
 
-    val lensViewports = DetailsState.fractalToEdit.composeLens(FractalEntityWithId.entity)
+    val lensViewports = DetailsState.fractalToEdit
+      .composeLens(FractalEntityWithId.entity)
       .composeLens(FractalEntity.views)
 
     val tiles = fractal.views.value.map { viewport =>
@@ -182,23 +226,32 @@ object DetailsUi {
         .child(
           Node("div.buttons.overlay-bottom-right.padding")
             .child(
-              Button.icon(Icons.up, Snabbdom.event { _ =>
-                val newViewports = fractal.views.value.filter(_ == viewport) ++ fractal.views.value.filter(_ != viewport)
-                refineV[NonEmpty](newViewports) match {
-                  case Right(newViews) => update(lensViewports.set(newViews)(state))
-                  case Left(_) => ???
-                }
-              })
+              Button
+                .icon(
+                  Icons.up,
+                  Snabbdom.event { _ =>
+                    val newViewports = fractal.views.value
+                      .filter(_ == viewport) ++ fractal.views.value.filter(_ != viewport)
+                    refineV[NonEmpty](newViewports) match {
+                      case Right(newViews) => update(lensViewports.set(newViews)(state))
+                      case Left(_)         => ???
+                    }
+                  }
+                )
                 .classes("is-outlined")
             )
             .child(
-              Button.icon(Icons.delete, Snabbdom.event { _ =>
-                val newViewports = fractal.views.value.filter(_ != viewport)
-                refineV[NonEmpty](newViewports) match {
-                  case Right(newViews) => update(lensViewports.set(newViews)(state))
-                  case Left(_) => dom.window.alert("the last snapshot can't be deleted.")
-                }
-              })
+              Button
+                .icon(
+                  Icons.delete,
+                  Snabbdom.event { _ =>
+                    val newViewports = fractal.views.value.filter(_ != viewport)
+                    refineV[NonEmpty](newViewports) match {
+                      case Right(newViews) => update(lensViewports.set(newViews)(state))
+                      case Left(_)         => dom.window.alert("the last snapshot can't be deleted.")
+                    }
+                  }
+                )
                 .classes("is-outlined")
             )
         )
@@ -226,44 +279,59 @@ object DetailsUi {
   }
 
   private def buttonSaveAsNew(implicit state: DetailsState, update: NutriaState => Unit) =
-    Button("Save Changes as new Fractal", Icons.save, Snabbdom.event { _ =>
-      (for {
-        fractalWithId <- NutriaService.save(state.fractalToEdit.entity)
-      } yield state.copy(remoteFractal = fractalWithId, fractalToEdit = fractalWithId))
-        .foreach(update)
-    })
-      .classes("is-light")
+    Button(
+      "Save Changes as new Fractal",
+      Icons.save,
+      Snabbdom.event { _ =>
+        (for {
+          fractalWithId <- NutriaService.save(state.fractalToEdit.entity)
+        } yield state.copy(remoteFractal = fractalWithId, fractalToEdit = fractalWithId))
+          .foreach(update)
+      }
+    ).classes("is-light")
 
   private def buttonSaveAsOld(implicit state: DetailsState, update: NutriaState => Unit) =
-    Button("Apply Changes", Icons.save, Snabbdom.event { _ =>
-      val updatedFractal = state.fractalToEdit.copy(id = state.remoteFractal.id)
-      (for {
-        _ <- NutriaService.updateFractal(updatedFractal)
-      } yield state.copy(remoteFractal = updatedFractal, fractalToEdit = updatedFractal))
-        .foreach(update)
-    })
-      .classes("is-primary")
+    Button(
+      "Apply Changes",
+      Icons.save,
+      Snabbdom.event { _ =>
+        val updatedFractal = state.fractalToEdit.copy(id = state.remoteFractal.id)
+        (for {
+          _ <- NutriaService.updateFractal(updatedFractal)
+        } yield state.copy(remoteFractal = updatedFractal, fractalToEdit = updatedFractal))
+          .foreach(update)
+      }
+    ).classes("is-primary")
 
   private def buttonDelete(implicit state: DetailsState, update: NutriaState => Unit) =
-    Button("Delete", Icons.delete, Snabbdom.event { _ =>
-      (for {
-        _ <- NutriaService.deleteFractal(state.remoteFractal.id)
-        publicFractals <- NutriaService.loadPublicFractals()
-      } yield LibraryState(user = state.user, publicFractals = publicFractals))
-        .foreach(update)
-    })
-      .classes("is-danger", "is-light")
+    Button(
+      "Delete",
+      Icons.delete,
+      Snabbdom.event { _ =>
+        (for {
+          _              <- NutriaService.deleteFractal(state.remoteFractal.id)
+          publicFractals <- NutriaService.loadPublicFractals()
+        } yield LibraryState(user = state.user, publicFractals = publicFractals))
+          .foreach(update)
+      }
+    ).classes("is-danger", "is-light")
 
   private def buttonFork(implicit state: DetailsState, update: NutriaState => Unit) =
-    Button("Fork", Icons.copy, Snabbdom.event { _ =>
-      (for {
-        fractalWithId <- NutriaService.save(state.fractalToEdit.entity)
-      } yield state.copy(remoteFractal = fractalWithId, fractalToEdit = fractalWithId))
-        .foreach(update)
-    })
-      .classes("is-primary")
+    Button(
+      "Fork",
+      Icons.copy,
+      Snabbdom.event { _ =>
+        (for {
+          fractalWithId <- NutriaService.save(state.fractalToEdit.entity)
+        } yield state.copy(remoteFractal = fractalWithId, fractalToEdit = fractalWithId))
+          .foreach(update)
+      }
+    ).classes("is-primary")
 
   private def buttonLogin(implicit state: DetailsState, update: NutriaState => Unit) =
-    Button("Login to update this fractal", "sign-in", Snabbdom.event(_ => dom.window.location.href = Header.loginHref))
-      .classes("is-primary")
+    Button(
+      "Login to update this fractal",
+      "sign-in",
+      Snabbdom.event(_ => dom.window.location.href = Header.loginHref)
+    ).classes("is-primary")
 }

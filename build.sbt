@@ -12,25 +12,27 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .in(file("core"))
   .settings(mathParser, scalaTestAndScalaCheck, circe, monocle, refinedTypes)
 
-lazy val service = project.in(file("service"))
+lazy val service = project
+  .in(file("service"))
   .dependsOn(core.jvm)
   .settings(scalaTestAndScalaCheck, circe)
   .enablePlugins(PlayScala)
   .settings(
     libraryDependencies += ws,
     libraryDependencies += guice,
-    libraryDependencies += "io.lemonlabs" %% "scala-uri" % "1.5.1",
-    libraryDependencies += "com.dripower" %% "play-circe" % "2712.0",
-    libraryDependencies += "org.postgresql" % "postgresql" % "42.2.8",
+    libraryDependencies += "io.lemonlabs"   %% "scala-uri"  % "1.5.1",
+    libraryDependencies += "com.dripower"   %% "play-circe" % "2712.0",
+    libraryDependencies += "org.postgresql" % "postgresql"  % "42.2.8",
     libraryDependencies += evolutions,
     libraryDependencies += jdbc,
-    libraryDependencies += "org.playframework.anorm" %% "anorm" % "2.6.5",
-    libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % Test,
+    libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.5",
+    libraryDependencies += "org.scalatestplus.play"  %% "scalatestplus-play" % "4.0.3" % Test
   )
   .enablePlugins(EmbeddedPostgresPlugin)
   .settings(javaOptions += s"-DDATABASE_URL=${postgresConnectionString.value}")
 
-val frontend = project.in(file("frontend"))
+val frontend = project
+  .in(file("frontend"))
   .dependsOn(core.js)
   .enablePlugins(ScalaJSPlugin)
   .settings(scalacOptions += "-P:scalajs:sjsDefinedByDefault")
@@ -61,7 +63,7 @@ compile in Compile := {
 // libraries
 def scalaTestAndScalaCheck =
   libraryDependencies ++= Seq(
-    "org.scalatest" %%% "scalatest" % "3.1.0" % Test,
+    "org.scalatest"  %%% "scalatest"  % "3.1.0"  % Test,
     "org.scalacheck" %%% "scalacheck" % "1.14.2" % Test
   )
 
@@ -72,19 +74,19 @@ def mathParser = Seq(
 
 def circe =
   libraryDependencies ++= Seq(
-    "io.circe" %%% "circe-core" % "0.12.2",
-    "io.circe" %%% "circe-generic" % "0.12.2",
+    "io.circe" %%% "circe-core"           % "0.12.2",
+    "io.circe" %%% "circe-generic"        % "0.12.2",
     "io.circe" %%% "circe-generic-extras" % "0.12.2",
-    "io.circe" %%% "circe-parser" % "0.12.2",
-    "io.circe" %%% "circe-refined" % "0.12.2",
+    "io.circe" %%% "circe-parser"         % "0.12.2",
+    "io.circe" %%% "circe-refined"        % "0.12.2"
   )
 
 def monocle =
   libraryDependencies ++= Seq(
-    "com.github.julien-truffaut" %%% "monocle-core" % "2.0.0",
-    "com.github.julien-truffaut" %%% "monocle-macro" % "2.0.0",
-    "com.github.julien-truffaut" %%% "monocle-unsafe" % "2.0.0",
-    "com.github.julien-truffaut" %%% "monocle-refined" % "2.0.0",
+    "com.github.julien-truffaut" %%% "monocle-core"    % "2.0.0",
+    "com.github.julien-truffaut" %%% "monocle-macro"   % "2.0.0",
+    "com.github.julien-truffaut" %%% "monocle-unsafe"  % "2.0.0",
+    "com.github.julien-truffaut" %%% "monocle-refined" % "2.0.0"
   )
 
 def refinedTypes =

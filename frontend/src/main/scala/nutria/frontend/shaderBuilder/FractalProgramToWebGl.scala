@@ -8,27 +8,26 @@ import nutria.frontend.shaderBuilder.Syntax.EnrichNode
 object FractalProgramToWebGl {
   def apply(fractalProgram: FractalProgram): (RefVec2, RefVec4) => String =
     fractalProgram match {
-      case f: NewtonIteration => newtonIteration(f)
-      case f: DivergingSeries => divergingSeries(f)
+      case f: NewtonIteration        => newtonIteration(f)
+      case f: DivergingSeries        => divergingSeries(f)
       case f: DerivedDivergingSeries => derivedDivergingSeries(f)
-      case f: FreestyleProgram => freestyle(f)
+      case f: FreestyleProgram       => freestyle(f)
     }
 
-  def derivedDivergingSeries(f: DerivedDivergingSeries)
-                            (inputVar: RefVec2, outputVar: RefVec4) = {
-    val z = RefVec2("z")
-    val zNew = RefVec2("z_new")
-    val zDer = RefVec2("z_der")
+  def derivedDivergingSeries(f: DerivedDivergingSeries)(inputVar: RefVec2, outputVar: RefVec4) = {
+    val z       = RefVec2("z")
+    val zNew    = RefVec2("z_new")
+    val zDer    = RefVec2("z_der")
     val zDerNew = RefVec2("z_der_new")
 
     val iterationLangNames: PartialFunction[ZAndLambda, Ref[WebGlTypeVec2.type]] = {
-      case Z => z
+      case Z      => z
       case Lambda => inputVar
     }
 
     val iterationDerLangNames: PartialFunction[ZAndZDerAndLambda, Ref[WebGlTypeVec2.type]] = {
-      case Z => z
-      case ZDer => zDer
+      case Z      => z
+      case ZDer   => zDer
       case Lambda => inputVar
     }
 
@@ -38,11 +37,27 @@ object FractalProgramToWebGl {
 
     s"""{
        |  int l = 0;
-       |  ${WebGlStatement.blockDeclare(z, f.initialZ.node.optimize(PowerOptimizer.optimizer), initialLangNames)}
-       |  ${WebGlStatement.blockDeclare(zDer, f.initialZDer.node.optimize(PowerOptimizer.optimizer), initialLangNames)}
+       |  ${WebGlStatement.blockDeclare(
+         z,
+         f.initialZ.node.optimize(PowerOptimizer.optimizer),
+         initialLangNames
+       )}
+       |  ${WebGlStatement.blockDeclare(
+         zDer,
+         f.initialZDer.node.optimize(PowerOptimizer.optimizer),
+         initialLangNames
+       )}
        |  for(int i = 0; i < ${f.maxIterations}; i++){
-       |    ${WebGlStatement.blockDeclare(zNew, f.iterationZ.node.optimize(PowerOptimizer.optimizer), iterationLangNames)}
-       |    ${WebGlStatement.blockDeclare(zDerNew, f.iterationZDer.node.optimize(PowerOptimizer.optimizer), iterationDerLangNames)}
+       |    ${WebGlStatement.blockDeclare(
+         zNew,
+         f.iterationZ.node.optimize(PowerOptimizer.optimizer),
+         iterationLangNames
+       )}
+       |    ${WebGlStatement.blockDeclare(
+         zDerNew,
+         f.iterationZDer.node.optimize(PowerOptimizer.optimizer),
+         iterationDerLangNames
+       )}
        |    ${WebGlType.assign(z, RefExp(zNew))}
        |    ${WebGlType.assign(zDer, RefExp(zDerNew))}
        |    if(dot(z,z) > float(${f.escapeRadius.value * f.escapeRadius.value}))
@@ -65,19 +80,18 @@ object FractalProgramToWebGl {
     """.stripMargin
   }
 
-
   def newtonIteration(n: NewtonIteration)(inputVar: RefVec2, outputVar: RefVec4): String = {
     val iteration = n.function.node.optimize(PowerOptimizer.optimizer)
-    val derived = n.function.node.derive(X).optimize(PowerOptimizer.optimizer)
-    val initial = n.initial.node.optimize(PowerOptimizer.optimizer)
+    val derived   = n.function.node.derive(X).optimize(PowerOptimizer.optimizer)
+    val initial   = n.initial.node.optimize(PowerOptimizer.optimizer)
 
-    val z = RefVec2("z")
+    val z      = RefVec2("z")
     val fzlast = RefVec2("fzlast")
-    val fz = RefVec2("fz")
-    val fderz = RefVec2("fderz")
+    val fz     = RefVec2("fz")
+    val fderz  = RefVec2("fderz")
 
     val functionLangNames: PartialFunction[XAndLambda, Ref[WebGlTypeVec2.type]] = {
-      case X => z
+      case X      => z
       case Lambda => inputVar
     }
 
@@ -109,7 +123,9 @@ object FractalProgramToWebGl {
        |      fract = float(l) - log(${n.threshold} / length(${fz.name})) / log( length(${fzlast.name}) / length(${fz.name}));
        |    }
        |
-       |    float H = atan(z.x - ${FloatLiteral(n.center._1.toFloat).toCode}, z.y - ${FloatLiteral(n.center._2.toFloat).toCode}) / float(${2 * Math.PI});
+       |    float H = atan(z.x - ${FloatLiteral(n.center._1.toFloat).toCode}, z.y - ${FloatLiteral(
+         n.center._2.toFloat
+       ).toCode}) / float(${2 * Math.PI});
        |    float V = exp(-fract / ${FloatLiteral(n.brightnessFactor.value.toFloat).toCode});
        |    float S = length(z);
        |
@@ -121,12 +137,11 @@ object FractalProgramToWebGl {
        """.stripMargin
   }
 
-
   def divergingSeries(n: DivergingSeries)(inputVar: RefVec2, outputVar: RefVec4): String = {
     val z = RefVec2("z")
 
     val functionLangNames: PartialFunction[ZAndLambda, Ref[WebGlTypeVec2.type]] = {
-      case Z => z
+      case Z      => z
       case Lambda => inputVar
     }
 
@@ -136,9 +151,17 @@ object FractalProgramToWebGl {
 
     s"""{
        |  int l = 0;
-       |  ${WebGlStatement.blockDeclare(z, n.initial.node.optimize(PowerOptimizer.optimizer), initialLangNames)}
+       |  ${WebGlStatement.blockDeclare(
+         z,
+         n.initial.node.optimize(PowerOptimizer.optimizer),
+         initialLangNames
+       )}
        |  for(int i = 0;i< ${n.maxIterations}; i++){
-       |    ${WebGlStatement.blockAssign(z, n.iteration.node.optimize(PowerOptimizer.optimizer), functionLangNames)}
+       |    ${WebGlStatement.blockAssign(
+         z,
+         n.iteration.node.optimize(PowerOptimizer.optimizer),
+         functionLangNames
+       )}
        |    if(length(${z.name}) > ${FloatLiteral(n.escapeRadius.value.toFloat).toCode})
        |      break;
        |    l ++;
@@ -152,10 +175,9 @@ object FractalProgramToWebGl {
        """.stripMargin
   }
 
-
   def freestyle(f: FreestyleProgram)(inputVar: RefVec2, outputVar: RefVec4): String = {
-    val code = f.parameters.foldLeft(f.code){(template, parameter) =>
-      template.replaceAllLiterally("${" +parameter.name+  "}", parameter.literal)
+    val code = f.parameters.foldLeft(f.code) { (template, parameter) =>
+      template.replaceAllLiterally("${" + parameter.name + "}", parameter.literal)
     }
 
     s"""{

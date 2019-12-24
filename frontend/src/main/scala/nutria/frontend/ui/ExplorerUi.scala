@@ -25,56 +25,74 @@ object ExplorerUi {
   //  return to start position
   //  render high res image and save
 
-  def renderActionBar()
-                     (implicit state: ExplorerState, update: NutriaState => Unit): Node =
+  def renderActionBar()(implicit state: ExplorerState, update: NutriaState => Unit): Node =
     Node("div.buttons.overlay-bottom-right.padding")
       .childOptional(
         state.fractalId match {
           case Some(fractalId) if state.owned => Some(buttonAddViewport(fractalId))
-          case Some(fractalId) => Some(buttonForkAndAddViewport(fractalId))
-          case None => None
+          case Some(fractalId)                => Some(buttonForkAndAddViewport(fractalId))
+          case None                           => None
         }
       )
       .childOptional(
         state.fractalId match {
           case Some(fractalId) => Some(buttonBackToDetails(fractalId))
-          case None => None
+          case None            => None
         }
       )
 
-  def buttonBackToDetails(fractalId: String)
-                         (implicit state: ExplorerState, update: NutriaState => Unit) =
+  def buttonBackToDetails(
+      fractalId: String
+  )(implicit state: ExplorerState, update: NutriaState => Unit) =
     Button("Edit Parameters", Icons.edit, Snabbdom.event { _ =>
       update(LoadingState(NutriaState.detailsState(fractalId)))
     })
 
-  def buttonAddViewport(fractalId: String)
-                       (implicit state: ExplorerState, update: NutriaState => Unit) =
-
-    Button("Save this image", Icons.snapshot, Snabbdom.event { _ =>
-      for {
-        remoteFractal <- NutriaService.loadFractal(fractalId)
-        views = (remoteFractal.entity.views.value :+ state.fractalImage.view).distinct
-        updated = remoteFractal.entity.copy(views = refineV[NonEmpty](views).toOption.get)
-        _ <- NutriaService.updateFractal(remoteFractal.copy(entity = updated))
-      } yield ()
-    })
-      .classes("is-primary")
-
-  def buttonForkAndAddViewport(fractalId: String)
-                              (implicit state: ExplorerState, update: NutriaState => Unit) =
-
-    Button("Fork and Save this image", Icons.copy, Snabbdom.event { _ =>
-      for {
-        remoteFractal <- NutriaService.loadFractal(fractalId)
-        updated = remoteFractal.entity.copy(views = refineV[NonEmpty](remoteFractal.entity.views.value :+ state.fractalImage.view).toOption.get)
-        forkedFractal <- NutriaService.save(updated)
-      } yield {
-        update(ExplorerState(state.user, fractalId = Some(forkedFractal.id), owned = true, fractalImage = state.fractalImage))
+  def buttonAddViewport(
+      fractalId: String
+  )(implicit state: ExplorerState, update: NutriaState => Unit) =
+    Button(
+      "Save this image",
+      Icons.snapshot,
+      Snabbdom.event { _ =>
+        for {
+          remoteFractal <- NutriaService.loadFractal(fractalId)
+          views   = (remoteFractal.entity.views.value :+ state.fractalImage.view).distinct
+          updated = remoteFractal.entity.copy(views = refineV[NonEmpty](views).toOption.get)
+          _ <- NutriaService.updateFractal(remoteFractal.copy(entity = updated))
+        } yield ()
       }
-    })
-      .classes("is-primary")
+    ).classes("is-primary")
 
+  def buttonForkAndAddViewport(
+      fractalId: String
+  )(implicit state: ExplorerState, update: NutriaState => Unit) =
+    Button(
+      "Fork and Save this image",
+      Icons.copy,
+      Snabbdom
+        .event {
+          _ =>
+            for {
+              remoteFractal <- NutriaService.loadFractal(fractalId)
+              updated = remoteFractal.entity.copy(
+                views = refineV[NonEmpty](
+                  remoteFractal.entity.views.value :+ state.fractalImage.view
+                ).toOption.get
+              )
+              forkedFractal <- NutriaService.save(updated)
+            } yield {
+              update(
+                ExplorerState(
+                  state.user,
+                  fractalId = Some(forkedFractal.id),
+                  owned = true,
+                  fractalImage = state.fractalImage
+                )
+              )
+            }
+        }
+    ).classes("is-primary")
 
   def renderCanvas(implicit state: ExplorerState, update: NutriaState => Unit): Node =
     Node("div.full-size")

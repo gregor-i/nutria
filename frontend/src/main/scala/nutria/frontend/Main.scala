@@ -15,8 +15,9 @@ object Main {
 
     def container: Element = dom.document.body
 
-    dom.document.addEventListener[Event]("DOMContentLoaded", (_: js.Any) =>
-      new nutria.frontend.NutriaApp(container)
+    dom.document.addEventListener[Event](
+      "DOMContentLoaded",
+      (_: js.Any) => new nutria.frontend.NutriaApp(container)
     )
   }
 }

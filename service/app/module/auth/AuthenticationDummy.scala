@@ -23,6 +23,11 @@ class AuthenticationDummy() extends InjectedController with AuthenticationContro
   }
 }
 
-object AuthenticationDummy{
-  val user = User(UUID.nameUUIDFromBytes("dummy-id".getBytes).toString, "Dummy Name", "dummy@nutria-explorer.com", "/img/icon.png")
+object AuthenticationDummy {
+  val user = User(
+    UUID.nameUUIDFromBytes("dummy-id".getBytes).toString,
+    "Dummy Name",
+    "dummy@nutria-explorer.com",
+    "/img/icon.png"
+  )
 }

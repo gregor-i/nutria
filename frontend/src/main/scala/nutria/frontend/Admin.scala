@@ -18,21 +18,24 @@ object Admin {
   }
 
   val cleanFractals: Unit => Future[Unit] = _ =>
-    Ajax.post(url = "/admin/clean-fractals")
+    Ajax
+      .post(url = "/admin/clean-fractals")
       .flatMap(_ => onFinished)
 
   val truncateFractals: Unit => Future[Unit] = _ =>
-    Ajax.post(url = "/admin/truncate-fractals")
+    Ajax
+      .post(url = "/admin/truncate-fractals")
       .flatMap(_ => onFinished)
 
   val insertSystemFractals: Unit => Future[Unit] = _ =>
-    Ajax.post(url = "/admin/insert-system-fractals")
+    Ajax
+      .post(url = "/admin/insert-system-fractals")
       .flatMap(_ => onFinished)
 
   val deleteFractal: String => Future[Unit] = id =>
-    Ajax.post(url = s"/admin/delete-fractal/$id")
+    Ajax
+      .post(url = s"/admin/delete-fractal/$id")
       .flatMap(_ => onFinished)
-
 
   def onFinished = Future(dom.window.location.reload())
 }

@@ -11,11 +11,12 @@ object ViewportChooser {
   } yield (Math.sin(a) * r, Math.cos(a) * r)
 
   val chooseViewport = for {
-    origin <- chooseFromUsefullStartPoints
+    origin      <- chooseFromUsefullStartPoints
     originPlusA <- chooseFromUsefullStartPoints
     originPlusB <- chooseFromUsefullStartPoints
   } yield Viewport(
     Point(origin._1, origin._2),
     Point(originPlusA._1 - origin._1, originPlusA._2 - origin._2),
-    Point(originPlusB._1 - origin._1, originPlusB._2 - origin._2))
+    Point(originPlusB._1 - origin._1, originPlusB._2 - origin._2)
+  )
 }

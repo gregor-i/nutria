@@ -13,12 +13,14 @@ import repo.{FractalRepo, FractalRow}
 import scala.util.Random
 import scala.util.chaining._
 
-class FractalController @Inject()(fractalRepo: FractalRepo,
-                                  authenticator: Authenticator) extends InjectedController with Circe {
+class FractalController @Inject() (fractalRepo: FractalRepo, authenticator: Authenticator)
+    extends InjectedController
+    with Circe {
 
   def listPublicFractals() = Action {
     Ok {
-      fractalRepo.listPublic()
+      fractalRepo
+        .listPublic()
         .collect(fractalRepo.fractalRowToFractalEntity)
         .sorted
         .asJson
@@ -28,7 +30,8 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
   def listUserFractals(userId: String) = Action { req =>
     authenticator.byUserId(req)(userId) {
       Ok {
-        fractalRepo.listByUser(userId)
+        fractalRepo
+          .listByUser(userId)
           .collect(fractalRepo.fractalRowToFractalEntity)
           .sorted
           .asJson
@@ -36,27 +39,28 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
     }
   }
 
-
   def getFractal(id: String) = Action {
     (for {
       fractalRow <- fractalRepo.get(id)
       fractalEntity = fractalRepo.fractalRowToFractalEntity.lift.apply(fractalRow)
     } yield fractalEntity) match {
       case Some(fractal) => Ok(fractal.asJson)
-      case _ => NotFound
+      case _             => NotFound
     }
   }
 
   def getRandomFractal() = Action {
-    val seed = java.time.Instant.now.truncatedTo(java.time.temporal.ChronoUnit.DAYS).toEpochMilli
+    val seed   = java.time.Instant.now.truncatedTo(java.time.temporal.ChronoUnit.DAYS).toEpochMilli
     val random = new Random(seed = seed)
-    val entities = fractalRepo.listPublic()
+    val entities = fractalRepo
+      .listPublic()
       .collect(fractalRepo.fractalRowToFractalEntity)
     if (entities.isEmpty) {
-      val defaultImage = FractalImage(program = NewtonIteration.default, view = DefaultViewport.defaultViewport)
+      val defaultImage =
+        FractalImage(program = NewtonIteration.default, view = DefaultViewport.defaultViewport)
       Ok(defaultImage.asJson)
     } else {
-      val images = FractalImage.allImages(entities.map(_.entity))
+      val images      = FractalImage.allImages(entities.map(_.entity))
       val randomImage = images(random.nextInt(images.length))
       Ok(randomImage.asJson)
     }
@@ -67,25 +71,25 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
       fractalRepo.get(fractalId) match {
         case None => NotFound
         case Some(savedFractal) =>
-        authenticator.byUserId(req)(savedFractal.owner){
-        fractalRepo.save(
-                  id = fractalId,
-                  owner = savedFractal.owner,
-                  fractal = req.body
-                )
-                Accepted
-        }
+          authenticator.byUserId(req)(savedFractal.owner) {
+            fractalRepo.save(
+              id = fractalId,
+              owner = savedFractal.owner,
+              fractal = req.body
+            )
+            Accepted
+          }
       }
     }
 
   def deleteFractal(fractalId: String) = Action { req =>
     fractalRepo.get(fractalId) match {
-        case None => NotFound
-        case Some(savedFractal) =>
-            authenticator.byUserId(req)(savedFractal.owner) {
-              fractalRepo.delete(fractalId)
-              Ok
-            }
+      case None => NotFound
+      case Some(savedFractal) =>
+        authenticator.byUserId(req)(savedFractal.owner) {
+          fractalRepo.delete(fractalId)
+          Ok
+        }
     }
   }
 
@@ -98,8 +102,7 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
         owner = user.id,
         fractal = request.body
       )
-      FractalEntityWithId(id, user.id, request.body)
-        .asJson
+      FractalEntityWithId(id, user.id, request.body).asJson
         .pipe(Created(_))
     }
   }

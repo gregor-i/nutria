@@ -6,17 +6,17 @@ import scala.scalajs.js
 import scala.scalajs.js.{Dictionary, |}
 
 case class Node(
-                    private val sel: String,
-                    private val key: SnabbdomFacade.Key = js.undefined,
-                    private val classes: Seq[(String, Boolean)] = Seq.empty,
-                    private val props: Seq[(String, js.Any)] = Seq.empty,
-                    private val attrs: Seq[(String, String)] = Seq.empty,
-                    private val dataset: Seq[(String, String)] = Seq.empty,
-                    private val styles: Seq[(String, String)] = Seq.empty,
-                    private val events: Seq[(String, SnabbdomFacade.Eventlistener)] = Seq.empty,
-                    private val hooks: Seq[(String, SnabbdomFacade.Hook)] = Seq.empty,
-                    private val children: Seq[Child] = Seq.empty
-                  ) {
+    private val sel: String,
+    private val key: SnabbdomFacade.Key = js.undefined,
+    private val classes: Seq[(String, Boolean)] = Seq.empty,
+    private val props: Seq[(String, js.Any)] = Seq.empty,
+    private val attrs: Seq[(String, String)] = Seq.empty,
+    private val dataset: Seq[(String, String)] = Seq.empty,
+    private val styles: Seq[(String, String)] = Seq.empty,
+    private val events: Seq[(String, SnabbdomFacade.Eventlistener)] = Seq.empty,
+    private val hooks: Seq[(String, SnabbdomFacade.Hook)] = Seq.empty,
+    private val children: Seq[Child] = Seq.empty
+) {
   def key(key: SnabbdomFacade.Key): Node =
     copy(key = key)
 
@@ -24,7 +24,7 @@ case class Node(
     copy(classes = classes :+ (className -> active))
 
   def `class`(className: String): Node =
-    `class`(className,active =  true)
+    `class`(className, active = true)
 
   def classes(classes: String*): Node =
     copy(classes = this.classes ++ classes.map(_ -> true))
@@ -45,7 +45,7 @@ case class Node(
     copy(dataset = dataset :+ (datasetName -> value))
 
   def dataset(dataset: Seq[(String, String)]): Node =
-  copy(dataset = this.dataset ++ dataset)
+    copy(dataset = this.dataset ++ dataset)
 
   def style(styleName: String, value: String): Node =
     copy(styles = styles :+ (styleName -> value))
@@ -57,12 +57,12 @@ case class Node(
     copy(events = events :+ (on -> listener))
 
   def events(events: Seq[(String, SnabbdomFacade.Eventlistener)]): Node =
-  copy(events = this.events ++ events)
+    copy(events = this.events ++ events)
 
   def hook(hookName: String, hook: SnabbdomFacade.Hook): Node =
     copy(hooks = hooks :+ (hookName -> hook))
 
-  def hooks(hooks: Seq[(String, SnabbdomFacade.Hook)]) : Node =
+  def hooks(hooks: Seq[(String, SnabbdomFacade.Hook)]): Node =
     copy(hooks = this.hooks ++ hooks)
 
   def text(child: String): Node =
@@ -78,14 +78,15 @@ case class Node(
     copy(children = children ++ nodes.map(_.toVNode))
 
   def children(nodes: (Node | Iterable[Node])*): Node =
-    child(nodes.flatMap[Node]{
+    child(nodes.flatMap[Node] {
       case seq: Iterable[_] => seq.asInstanceOf[Iterable[Node]]
-      case elem => Seq(elem).asInstanceOf[Iterable[Node]]
-    } : Iterable[Node])
+      case elem             => Seq(elem).asInstanceOf[Iterable[Node]]
+    }: Iterable[Node])
 
   def toVNode: VNode = SnabbdomFacade.h(
     sel = sel,
-    props = new Data(key = key,
+    props = new Data(
+      key = key,
       `class` = Dictionary(classes: _*),
       props = Dictionary(props: _*),
       attrs = Dictionary(attrs: _*),

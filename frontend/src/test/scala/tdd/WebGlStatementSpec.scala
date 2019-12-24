@@ -15,16 +15,15 @@ class WebGlStatementSpec extends AnyFunSuite with Matchers {
   }
 
   test("reuse binary declarations") {
-    val node = lang.parse("x*x + x*x").get
+    val node       = lang.parse("x*x + x*x").get
     val statements = WebGlStatement.blockAssign(Ref("y"), node, varsToCode)
 
     statements should include("vec2 local_var_1 = complex_product(vec2(x), vec2(x));")
     statements should include("vec2 local_var_2 = local_var_1+local_var_1;")
   }
 
-
   test("reuse unitary declarations") {
-    val node = lang.parse("sin(x) + sin(x)").get
+    val node       = lang.parse("sin(x) + sin(x)").get
     val statements = WebGlStatement.blockAssign(Ref("y"), node, varsToCode)
 
     statements should include("vec2 local_var_1 = complex_sin(vec2(x));")

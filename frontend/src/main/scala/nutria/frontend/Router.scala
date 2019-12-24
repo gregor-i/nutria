@@ -18,7 +18,6 @@ object Router {
       }
       .toMap
 
-
     location.pathname match {
       case "/" =>
         LoadingState(
@@ -43,22 +42,32 @@ object Router {
       case s"/fractals/${fractalId}/explorer" =>
         LoadingState(
           for {
-            user <- NutriaService.whoAmI()
+            user          <- NutriaService.whoAmI()
             remoteFractal <- NutriaService.loadFractal(fractalId)
-            image = FractalImage(remoteFractal.entity.program, remoteFractal.entity.views.value.head, remoteFractal.entity.antiAliase)
-          } yield ExplorerState(user, Some(remoteFractal.id), owned = user.exists(_.id == remoteFractal.owner), image)
+            image = FractalImage(
+              remoteFractal.entity.program,
+              remoteFractal.entity.views.value.head,
+              remoteFractal.entity.antiAliase
+            )
+          } yield ExplorerState(
+            user,
+            Some(remoteFractal.id),
+            owned = user.exists(_.id == remoteFractal.owner),
+            image
+          )
         )
 
       case "/explorer" =>
         LoadingState(
-          NutriaService.whoAmI()
+          NutriaService
+            .whoAmI()
             .map { user =>
               (for {
 
-                state <- queryParams.get("state")
+                state   <- queryParams.get("state")
                 fractal <- queryDecoded[FractalImage](state)
-              } yield ExplorerState(user, None, owned = false, fractal)
-                ).getOrElse(ErrorState("Query Parameter is invalid"))
+              } yield ExplorerState(user, None, owned = false, fractal))
+                .getOrElse(ErrorState("Query Parameter is invalid"))
             }
         )
 
@@ -76,7 +85,10 @@ object Router {
       Some((s"/fractals/${details.remoteFractal.id}/details", Map.empty))
     case exState: ExplorerState =>
       exState.fractalId match {
-        case Some(fractalId) => Some((s"/fractals/${fractalId}/explorer", Map("state" -> queryEncoded(exState.fractalImage))))
+        case Some(fractalId) =>
+          Some(
+            (s"/fractals/${fractalId}/explorer", Map("state" -> queryEncoded(exState.fractalImage)))
+          )
         case None => Some((s"/explorer", Map("state" -> queryEncoded(exState.fractalImage))))
       }
     case _: GreetingState =>
@@ -93,7 +105,7 @@ object Router {
   def queryDecoded[T: Decoder](string: String): Option[T] =
     (for {
       decoded <- Try(dom.window.atob(string)).toEither
-      json <- io.circe.parser.parse(new String(decoded))
+      json    <- io.circe.parser.parse(new String(decoded))
       decoded <- json.as[T]
     } yield decoded).toOption
 }

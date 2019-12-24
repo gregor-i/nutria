@@ -17,9 +17,11 @@ class NutriaApp(container: Element) extends SnabbdomApp {
   def renderState(state: NutriaState): Unit = {
     Router.stateToUrl(state) match {
       case Some((currentPath, currentSearch)) =>
-        val stringSearch = currentSearch.map {
-          case (key, value) => s"$key=$value"
-        }.mkString("&")
+        val stringSearch = currentSearch
+          .map {
+            case (key, value) => s"$key=$value"
+          }
+          .mkString("&")
         if (dom.window.location.pathname != currentPath) {
           dom.window.scroll(0, 0)
           if (currentSearch.nonEmpty)
@@ -36,18 +38,21 @@ class NutriaApp(container: Element) extends SnabbdomApp {
     }
 
     state match {
-      case LoadingState(future, _) => future.onComplete {
-        case Success(newState) => renderState(newState)
-        case Failure(exception) => renderState(ErrorState(s"unexpected problem while initializing app: ${exception.getMessage}"))
-      }
+      case LoadingState(future, _) =>
+        future.onComplete {
+          case Success(newState) => renderState(newState)
+          case Failure(exception) =>
+            renderState(
+              ErrorState(s"unexpected problem while initializing app: ${exception.getMessage}")
+            )
+        }
       case _ => ()
     }
 
     node = patch(node, Ui(state, renderState).toVNode)
   }
 
-  dom.window.onpopstate = _ =>
-    renderState(Router.stateFromUrl(dom.window.location))
+  dom.window.onpopstate = _ => renderState(Router.stateFromUrl(dom.window.location))
 
   renderState(Router.stateFromUrl(dom.window.location))
 

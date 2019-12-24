@@ -11,17 +11,17 @@ trait CirceCodex {
   implicit val customConfig: Configuration = Configuration.default.withDefaults
 
   implicit final def refinedDecoder[T, P, F[_, _]](
-                                                    implicit
-                                                    underlying: Decoder[T],
-                                                    validate: Validate[T, P],
-                                                    refType: RefType[F]
-                                                  ): Decoder[F[T, P]] =
+      implicit
+      underlying: Decoder[T],
+      validate: Validate[T, P],
+      refType: RefType[F]
+  ): Decoder[F[T, P]] =
     io.circe.refined.refinedDecoder
 
   implicit final def refinedEncoder[T, P, F[_, _]](
-                                                    implicit
-                                                    underlying: Encoder[T],
-                                                    refType: RefType[F]
-                                                  ): Encoder[F[T, P]] =
+      implicit
+      underlying: Encoder[T],
+      refType: RefType[F]
+  ): Encoder[F[T, P]] =
     io.circe.refined.refinedEncoder
 }

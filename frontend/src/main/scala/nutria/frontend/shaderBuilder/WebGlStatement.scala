@@ -9,11 +9,13 @@ sealed trait WebGlStatement {
   def toCode: String
 }
 
-case class Declaration[T <: WebGlType : TypeProps](ref: Ref[T], expr: WebGlExpression[T]) extends WebGlStatement {
+case class Declaration[T <: WebGlType: TypeProps](ref: Ref[T], expr: WebGlExpression[T])
+    extends WebGlStatement {
   def toCode: String = s"${TypeProps[T].webGlType} ${ref.name} = ${expr.toCode};"
 }
 
-case class Assignment[T <: WebGlType : TypeProps](ref: Ref[T], expr: WebGlExpression[T]) extends WebGlStatement {
+case class Assignment[T <: WebGlType: TypeProps](ref: Ref[T], expr: WebGlExpression[T])
+    extends WebGlStatement {
   def toCode: String = s"${ref.name} = ${expr.toCode};"
 }
 
@@ -22,10 +24,12 @@ case class Block(statements: Seq[WebGlStatement]) extends WebGlStatement {
 }
 
 object WebGlStatement {
-  private def flattenNode[V](node: SpireNode[Complex[Double], V],
-                             varsToCode: PartialFunction[V, Ref[WebGlTypeVec2.type]]): (Block, Ref[WebGlTypeVec2.type]) = {
+  private def flattenNode[V](
+      node: SpireNode[Complex[Double], V],
+      varsToCode: PartialFunction[V, Ref[WebGlTypeVec2.type]]
+  ): (Block, Ref[WebGlTypeVec2.type]) = {
     // todo: move this to recursion parameters
-    var names = Map.empty[SpireNode[Complex[Double], V], Ref[WebGlTypeVec2.type]]
+    var names      = Map.empty[SpireNode[Complex[Double], V], Ref[WebGlTypeVec2.type]]
     var statements = List.empty[WebGlStatement]
 
     var nameCounter = 0
@@ -37,21 +41,27 @@ object WebGlStatement {
     def loop(node: SpireNode[Complex[Double], V]): Ref[WebGlTypeVec2.type] =
       node match {
         case c if names.contains(c) => names(c)
-        case c@ConstantNode(Complex(real, imag)) =>
+        case c @ ConstantNode(Complex(real, imag)) =>
           val name = RefVec2(newName)
-          statements = statements :+ Declaration(name, Vec2(FloatLiteral(real.toFloat), FloatLiteral(imag.toFloat)))
+          statements = statements :+ Declaration(
+            name,
+            Vec2(FloatLiteral(real.toFloat), FloatLiteral(imag.toFloat))
+          )
           names = names.updated(c, name)
           name
-        case node@BinaryNode(op, childLeft, childRight) =>
-          val refChildLeft = loop(childLeft)
+        case node @ BinaryNode(op, childLeft, childRight) =>
+          val refChildLeft  = loop(childLeft)
           val refChildRight = loop(childRight)
-          val name = RefVec2(newName)
+          val name          = RefVec2(newName)
           names = names.updated(node, name)
-          statements = statements :+ Declaration(name, ComplexBinaryExp(op, RefExp(refChildLeft), RefExp(refChildRight)))
+          statements = statements :+ Declaration(
+            name,
+            ComplexBinaryExp(op, RefExp(refChildLeft), RefExp(refChildRight))
+          )
           name
         case UnitaryNode(op, child) =>
           val refChild = loop(child)
-          val name = RefVec2(newName)
+          val name     = RefVec2(newName)
           statements = statements :+ Declaration(name, ComplexUnitaryExp(op, RefExp(refChild)))
           names = names.updated(node, name)
           name
@@ -62,16 +72,20 @@ object WebGlStatement {
     (Block(statements), ref)
   }
 
-  def blockDeclare[V](outputVar: Ref[WebGlTypeVec2.type],
-                      node: SpireNode[Complex[Double], V],
-                      varsToCode: PartialFunction[V, Ref[WebGlTypeVec2.type]]): String = {
+  def blockDeclare[V](
+      outputVar: Ref[WebGlTypeVec2.type],
+      node: SpireNode[Complex[Double], V],
+      varsToCode: PartialFunction[V, Ref[WebGlTypeVec2.type]]
+  ): String = {
     Declaration(outputVar, WebGlType.zero[WebGlTypeVec2.type]).toCode + "\n" +
       blockAssign(outputVar, node, varsToCode)
   }
 
-  def blockAssign[V](outputVar: Ref[WebGlTypeVec2.type],
-                     node: SpireNode[Complex[Double], V],
-                     varsToCode: PartialFunction[V, Ref[WebGlTypeVec2.type]]): String = {
+  def blockAssign[V](
+      outputVar: Ref[WebGlTypeVec2.type],
+      node: SpireNode[Complex[Double], V],
+      varsToCode: PartialFunction[V, Ref[WebGlTypeVec2.type]]
+  ): String = {
     val (block, ref) = flattenNode(node, varsToCode)
     Block(block.statements :+ Assignment(outputVar, RefExp(ref))).toCode
   }

@@ -8,14 +8,19 @@ import nutria.core.FractalEntity
 import play.api.db.Database
 import nutria.core.FractalEntityWithId
 
-case class FractalRow(id: String, owner: String, published: Boolean, maybeFractal: Option[FractalEntity])
+case class FractalRow(
+    id: String,
+    owner: String,
+    published: Boolean,
+    maybeFractal: Option[FractalEntity]
+)
 
 @Singleton()
-class FractalRepo @Inject()(db: Database) {
+class FractalRepo @Inject() (db: Database) {
   private val rowParser: RowParser[FractalRow] = for {
-    id <- SqlParser.str("id")
-    owner <- SqlParser.str("owner")
-    published <- SqlParser.bool("published")
+    id           <- SqlParser.str("id")
+    owner        <- SqlParser.str("owner")
+    published    <- SqlParser.bool("published")
     maybeFractal <- SqlParser.str("fractal").map(data => decode[FractalEntity](data).toOption)
   } yield FractalRow(id, owner, published, maybeFractal)
 
@@ -73,4 +78,3 @@ class FractalRepo @Inject()(db: Database) {
         .executeUpdate()
     }
 }
-

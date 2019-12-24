@@ -6,21 +6,25 @@ import nutria.core.{CirceCodex, Point}
 
 object Viewport extends CirceCodex {
   implicit val codec: Codec[Viewport] = Codec.from(
-    encodeA = Encoder[Vector[Double]].contramap(view => Vector(view.origin._1, view.origin._2, view.A._1, view.A._2, view.B._1, view.B._2)),
-    decodeA = Decoder[Vector[Double]].emap{
+    encodeA = Encoder[Vector[Double]].contramap(
+      view => Vector(view.origin._1, view.origin._2, view.A._1, view.A._2, view.B._1, view.B._2)
+    ),
+    decodeA = Decoder[Vector[Double]].emap {
       case Vector(ox, oy, ax, ay, bx, by) => Right(Viewport((ox, oy), (ax, ay), (bx, by)))
-      case _ => Left("no match")
+      case _                              => Left("no match")
     }
   )
 
   def createViewportByLongs(x0: Long, y0: Long, ax: Long, ay: Long, bx: Long, by: Long) =
-    Viewport(Point.createWithLongs(x0, y0),
+    Viewport(
+      Point.createWithLongs(x0, y0),
       Point.createWithLongs(ax, ay),
-      Point.createWithLongs(bx, by))
+      Point.createWithLongs(bx, by)
+    )
 
   def createByFocus(FA: Point, FB: Point)(a: Point, b: Point): Viewport = {
     val Fdelta = FB - FA
-    val angle = Math.acos(Fdelta.y / Fdelta.norm())
+    val angle  = Math.acos(Fdelta.y / Fdelta.norm())
 
     def rotAngle(p: Point): Point = {
       val c = Math.cos(angle)
@@ -29,9 +33,9 @@ object Viewport extends CirceCodex {
       (c * p.x - s * p.y, s * p.x + c * p.y)
     }
 
-    val diff = b - a
-    val norm = diff.norm()
-    val rot = rotAngle(diff)
+    val diff    = b - a
+    val norm    = diff.norm()
+    val rot     = rotAngle(diff)
     val rotOrth = rot.orth()
 
     val A = rot * ((rot * diff) / (norm * norm))
@@ -39,17 +43,19 @@ object Viewport extends CirceCodex {
 
     val TA = A * (1.0 / Fdelta.y)
     val TB = B * (1.0 / Fdelta.x)
-    val U = a - TA * FA.y - TB * FA.x
+    val U  = a - TA * FA.y - TB * FA.x
 
     Viewport(U, TA, TB)
   }
 
   def createByDefaultFocusAndLongs(ax: Long, ay: Long, bx: Long, by: Long): Viewport =
     createByFocus(Point(0.3, 0.1), Point(0.7, 0.3))(
-      Point.createWithLongs(ax, ay), Point.createWithLongs(bx, by))
+      Point.createWithLongs(ax, ay),
+      Point.createWithLongs(bx, by)
+    )
 
   val defaultMovementFactor: Double = 0.20
-  val defaultZoomInFactor: Double = 0.60
+  val defaultZoomInFactor: Double   = 0.60
 }
 
 case class Viewport(origin: Point, A: Point, B: Point) {
@@ -57,9 +63,11 @@ case class Viewport(origin: Point, A: Point, B: Point) {
   import Viewport._
 
   def translate(t: Point): Viewport = Viewport(origin + t, A, B)
-  def right(movementFactor: Double = defaultMovementFactor): Viewport = translate(A * movementFactor)
-  def left(movementFactor: Double = defaultMovementFactor): Viewport = translate(A * -movementFactor)
-  def up(movementFactor: Double = defaultMovementFactor): Viewport = translate(B * -movementFactor)
+  def right(movementFactor: Double = defaultMovementFactor): Viewport =
+    translate(A * movementFactor)
+  def left(movementFactor: Double = defaultMovementFactor): Viewport =
+    translate(A * -movementFactor)
+  def up(movementFactor: Double = defaultMovementFactor): Viewport   = translate(B * -movementFactor)
   def down(movementFactor: Double = defaultMovementFactor): Viewport = translate(B * movementFactor)
   def focus(xRatio: Double, yRatio: Double): Viewport =
     translate(A * (xRatio - 0.5) + (B * (yRatio - 0.5)))
@@ -71,7 +79,10 @@ case class Viewport(origin: Point, A: Point, B: Point) {
       B = B * zoomFactor
     )
 
-  def zoomOut(z: (Double, Double) = (0.5, 0.5), zoomFactor: Double = defaultZoomInFactor): Viewport =
+  def zoomOut(
+      z: (Double, Double) = (0.5, 0.5),
+      zoomFactor: Double = defaultZoomInFactor
+  ): Viewport =
     zoom(z, 1 / zoomFactor)
   def zoomIn(z: (Double, Double) = (0.5, 0.5), zoomFactor: Double = defaultZoomInFactor): Viewport =
     zoom(z, zoomFactor)
@@ -82,7 +93,7 @@ case class Viewport(origin: Point, A: Point, B: Point) {
   // see https://developer.mozilla.org/de/docs/Web/CSS/object-fit
   def cover(width: Double, height: Double): Viewport = {
     val lambda = (width * B.norm) / (height * A.norm)
-    val mu = 1.0 / lambda
+    val mu     = 1.0 / lambda
     if (lambda < 1) {
       Viewport(origin + A * (0.5 - lambda / 2), A * lambda, B)
     } else {
@@ -94,7 +105,7 @@ case class Viewport(origin: Point, A: Point, B: Point) {
   // see https://developer.mozilla.org/de/docs/Web/CSS/object-fit
   def contain(width: Double, height: Double): Viewport = {
     val lambda = (width * B.norm) / (height * A.norm)
-    val mu = 1.0 / lambda
+    val mu     = 1.0 / lambda
     if (lambda > 1) {
       Viewport(origin + A * (0.5 - lambda / 2), A * lambda, B)
     } else {

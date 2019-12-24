@@ -7,8 +7,8 @@ import mathParser.implicits._
 class StringFunction[V] private (val string: String, val node: CNode[V]) {
   override def equals(other: Any): Boolean =
     other match {
-      case o:StringFunction[V] => this.string == o.string && this.node == o.node
-      case _ => false
+      case o: StringFunction[V] => this.string == o.string && this.node == o.node
+      case _                    => false
     }
 
   override def hashCode(): Int = string.hashCode ^ node.hashCode()
@@ -17,7 +17,7 @@ class StringFunction[V] private (val string: String, val node: CNode[V]) {
 }
 
 object StringFunction extends CirceCodex {
-  def apply[V](string: String)(implicit lang: CLang[ V]): Option[StringFunction[V]] =
+  def apply[V](string: String)(implicit lang: CLang[V]): Option[StringFunction[V]] =
     lang.parse(string).map(lang.optimize).map(node => new StringFunction(string, node))
 
   def unsafe[V](string: String)(implicit lang: CLang[V]): StringFunction[V] =
@@ -28,7 +28,7 @@ object StringFunction extends CirceCodex {
     Decoder[String].flatMap { string =>
       apply[V](string) match {
         case Some(stringFunction) => Decoder.const(stringFunction)
-        case None => Decoder.failedWithMessage(s"function '$string' could not be parsed")
+        case None                 => Decoder.failedWithMessage(s"function '$string' could not be parsed")
       }
     }
 }

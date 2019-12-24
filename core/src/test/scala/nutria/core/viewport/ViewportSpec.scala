@@ -17,13 +17,12 @@ class ViewportSpec extends AnyFunSuite with Matchers {
   }
 
   test("Viewport should have invertible move Operations") {
-    forAll(ViewportChooser.chooseViewport, choose(-10d, 10d)) {
-      (viewport, factor) =>
-        beClose(viewport.right(factor).left(factor), viewport)
-        beClose(viewport.left(factor).right(factor), viewport)
-        beClose(viewport.up(factor).down(factor), viewport)
-        beClose(viewport.down(factor).up(factor), viewport)
-        true
+    forAll(ViewportChooser.chooseViewport, choose(-10d, 10d)) { (viewport, factor) =>
+      beClose(viewport.right(factor).left(factor), viewport)
+      beClose(viewport.left(factor).right(factor), viewport)
+      beClose(viewport.up(factor).down(factor), viewport)
+      beClose(viewport.down(factor).up(factor), viewport)
+      true
     }
   }
 

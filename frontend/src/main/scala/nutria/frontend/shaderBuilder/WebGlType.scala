@@ -1,22 +1,22 @@
 package nutria.frontend.shaderBuilder
 
 sealed trait WebGlType
-case object WebGlTypeInt extends WebGlType
+case object WebGlTypeInt   extends WebGlType
 case object WebGlTypeFloat extends WebGlType
-case object WebGlTypeVec3 extends WebGlType
-case object WebGlTypeVec2 extends WebGlType
-case object WebGlTypeVec4 extends WebGlType
+case object WebGlTypeVec3  extends WebGlType
+case object WebGlTypeVec2  extends WebGlType
+case object WebGlTypeVec4  extends WebGlType
 
 object WebGlType {
-  def declare[T <: WebGlType : TypeProps](ref: Ref[T], expr: WebGlExpression[T]): String =
+  def declare[T <: WebGlType: TypeProps](ref: Ref[T], expr: WebGlExpression[T]): String =
     s"${TypeProps[T].webGlType} ${assign(ref, expr)}"
 
-  def assign[T <: WebGlType : TypeProps](ref: Ref[T], expr: WebGlExpression[T]): String =
+  def assign[T <: WebGlType: TypeProps](ref: Ref[T], expr: WebGlExpression[T]): String =
     s"${ref.name} = ${expr.toCode};"
 
-  def zero[T <: WebGlType : TypeProps]: WebGlExpression[T] = TypeProps[T].zero
+  def zero[T <: WebGlType: TypeProps]: WebGlExpression[T] = TypeProps[T].zero
 
-  def reference[T <: WebGlType : TypeProps](name: String): Ref[T] = TypeProps[T].construct(name)
+  def reference[T <: WebGlType: TypeProps](name: String): Ref[T] = TypeProps[T].construct(name)
 
   trait TypeProps[T <: WebGlType] {
     val zero: WebGlExpression[T]
@@ -31,20 +31,21 @@ object WebGlType {
 
   implicit object TypePropsInt extends TypeProps[WebGlTypeInt.type] {
     override val zero: WebGlExpression[WebGlTypeInt.type] = IntLiteral(0)
-    override val webGlType: String = "int"
+    override val webGlType: String                        = "int"
 
     override def construct(name: String): RefInt = RefInt(name)
   }
 
   implicit object TypePropsVec2 extends TypeProps[WebGlTypeVec2.type] {
     override val zero: WebGlExpression[WebGlTypeVec2.type] = Vec2(FloatLiteral(0), FloatLiteral(0))
-    override val webGlType: String = "vec2"
+    override val webGlType: String                         = "vec2"
 
     override def construct(name: String): RefVec2 = RefVec2(name)
   }
 
   implicit object TypePropsVec4 extends TypeProps[WebGlTypeVec4.type] {
-    override val zero: WebGlExpression[WebGlTypeVec4.type] = Vec4(FloatLiteral(0), FloatLiteral(0), FloatLiteral(0), FloatLiteral(0))
+    override val zero: WebGlExpression[WebGlTypeVec4.type] =
+      Vec4(FloatLiteral(0), FloatLiteral(0), FloatLiteral(0), FloatLiteral(0))
     override val webGlType: String = "vec4"
 
     override def construct(name: String): RefVec4 = RefVec4(name)

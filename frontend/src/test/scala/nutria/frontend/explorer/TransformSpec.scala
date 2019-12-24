@@ -8,7 +8,7 @@ import nutria.frontend.ui.Transform
 import org.scalatest.{FunSuite, Matchers}
 
 class TransformSpec extends FunSuite with Matchers {
-  def validate(moves: Seq[(Point, Point)]){
+  def validate(moves: Seq[(Point, Point)]) {
     val oldView = Viewport((-5, -5), (10, 0), (0, 10))
     val newView = Transform.applyToViewport(moves, oldView)
 
@@ -25,13 +25,12 @@ class TransformSpec extends FunSuite with Matchers {
 
   test("applyToViewport: only translate") {
     val onlyTranslate = Seq(
-      (0d, 0d) -> (0.25d, 0.25),
+      (0d, 0d)   -> (0.25d, 0.25),
       (0.5, 0.0) -> (0.75d, 0.25)
     )
 
     validate(onlyTranslate)
   }
-
 
   test("applyToViewport: only scale (zoom out)") {
     val onlyScale = Seq(

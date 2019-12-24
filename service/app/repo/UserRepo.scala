@@ -11,12 +11,12 @@ import play.api.db.Database
 case class UserRow(user: User, googleUserId: Option[String])
 
 @Singleton()
-class UserRepo @Inject()(db: Database) {
+class UserRepo @Inject() (db: Database) {
   private val rowParser: RowParser[UserRow] = for {
-    id <- SqlParser.str("id")
-    name <- SqlParser.str("name")
-    email <- SqlParser.str("email")
-    picture <- SqlParser.str("picture")
+    id           <- SqlParser.str("id")
+    name         <- SqlParser.str("name")
+    email        <- SqlParser.str("email")
+    picture      <- SqlParser.str("picture")
     googleUserId <- SqlParser.str("google_user_id").?
   } yield UserRow(User(id, name, email, picture), googleUserId)
 
@@ -48,13 +48,16 @@ class UserRepo @Inject()(db: Database) {
         """.executeUpdate()
     }
 
-  def upsertWithGoogleData(userInfo: GoogleUserInfo): User ={
+  def upsertWithGoogleData(userInfo: GoogleUserInfo): User = {
     val userRow = getWithGoogleId(userInfo.id) match {
       case Some(userRow) =>
-        userRow.copy(user = userRow.user.copy(name = userInfo.name, email = userInfo.email, picture = userInfo.picture))
+        userRow.copy(
+          user = userRow.user
+            .copy(name = userInfo.name, email = userInfo.email, picture = userInfo.picture)
+        )
       case None =>
         val id = UUID.randomUUID().toString
-        UserRow(User(id, userInfo.name, userInfo.email, userInfo.picture), Some (userInfo.id) )
+        UserRow(User(id, userInfo.name, userInfo.email, userInfo.picture), Some(userInfo.id))
     }
     save(userRow)
     userRow.user

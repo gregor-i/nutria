@@ -21,18 +21,27 @@ object Header {
           .`class`("is-active", state.navbarExpanded)
           .child(
             Node("div.navbar-start")
-              .child(Node("a.navbar-item")
-                .text("Public Gallery")
-                .event("click", Snabbdom.event(_ => update(LoadingState(NutriaState.libraryState()))))
+              .child(
+                Node("a.navbar-item")
+                  .text("Public Gallery")
+                  .event(
+                    "click",
+                    Snabbdom.event(_ => update(LoadingState(NutriaState.libraryState())))
+                  )
               )
-              .child(Node("a.navbar-item")
-                .text("My Gallery")
-                .event("click", Snabbdom.event { _ =>
-                  state.user match {
-                    case Some(user) => update(LoadingState(NutriaState.userLibraryState(user.id)))
-                    case None => dom.window.location.href = Header.loginHref
-                  }
-                })
+              .child(
+                Node("a.navbar-item")
+                  .text("My Gallery")
+                  .event(
+                    "click",
+                    Snabbdom.event { _ =>
+                      state.user match {
+                        case Some(user) =>
+                          update(LoadingState(NutriaState.userLibraryState(user.id)))
+                        case None => dom.window.location.href = Header.loginHref
+                      }
+                    }
+                  )
               )
           )
           .child(
@@ -40,14 +49,14 @@ object Header {
               .child(
                 state.user match {
                   case Some(user) => logoutItem(user)
-                  case None => loginItem
+                  case None       => loginItem
                 }
               )
           )
       )
   }
 
-  val loginHref: String = "/auth/google"
+  val loginHref: String  = "/auth/google"
   val logoutHref: String = "/auth/logout"
 
   private val brand =
@@ -68,7 +77,10 @@ object Header {
 
   private def burgerMenu(implicit state: NutriaState, update: NutriaState => Unit) =
     Node("a.navbar-burger.burger")
-      .event("click", Snabbdom.event(_ => update(NutriaState.setNavbarExtended(state, !state.navbarExpanded))))
+      .event(
+        "click",
+        Snabbdom.event(_ => update(NutriaState.setNavbarExtended(state, !state.navbarExpanded)))
+      )
       .`class`("is-active", state.navbarExpanded)
       .attr("aria-label", "menu")
       .attr("aria-expanded", "false")
@@ -91,6 +103,6 @@ object Header {
         Node("a.button.is-rounded")
           .attr("href", logoutHref)
           .child(Icons.icon(Icons.logout))
-          .child(Node("span").text(s"Log out")),
+          .child(Node("span").text(s"Log out"))
       )
 }

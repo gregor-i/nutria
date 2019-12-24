@@ -9,18 +9,21 @@ import repo.UserRepo
 import scala.util.chaining._
 
 @Singleton
-class UserController @Inject()(userRepo: UserRepo, authenticator: Authenticator) extends InjectedController with Circe {
+class UserController @Inject() (userRepo: UserRepo, authenticator: Authenticator)
+    extends InjectedController
+    with Circe {
   def get(userId: String) = Action { req =>
     authenticator.adminUser(req) {
       userRepo.get(userId) match {
         case Some(user) => Ok(user.user.asJson)
-        case None => NotFound
+        case None       => NotFound
       }
     }
   }
 
-  def me() = Action{ req =>
-    authenticator.userFromCookie(req)
+  def me() = Action { req =>
+    authenticator
+      .userFromCookie(req)
       .asJson
       .pipe(Ok(_))
   }

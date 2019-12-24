@@ -3,15 +3,19 @@ package nutria.frontend.shaderBuilder
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.numeric.Positive
 
-
 object AntiAliase {
-  def apply[T <: WebGlType : WebGlType.TypeProps](block: (RefVec2, Ref[T]) => String, aaFactor: Int Refined Positive): Ref[T] => String =
+  def apply[T <: WebGlType: WebGlType.TypeProps](
+      block: (RefVec2, Ref[T]) => String,
+      aaFactor: Int Refined Positive
+  ): Ref[T] => String =
     if (aaFactor.value > 1)
       antiAliase(block, aaFactor)
     else
       noAntiAliase(block)
 
-  private def noAntiAliase[T <: WebGlType : WebGlType.TypeProps](block: (RefVec2, Ref[T]) => String)(outputVar: Ref[T]) =
+  private def noAntiAliase[T <: WebGlType: WebGlType.TypeProps](
+      block: (RefVec2, Ref[T]) => String
+  )(outputVar: Ref[T]) =
     s"""{
        |  vec2 pos = gl_FragCoord.xy / u_resolution;
        |  vec2 p = u_view_O + pos * u_view_A + pos.y * u_view_B;
@@ -19,9 +23,12 @@ object AntiAliase {
        |}
      """.stripMargin
 
-  private def antiAliase[T <: WebGlType : WebGlType.TypeProps](block: (RefVec2, Ref[T]) => String, aaFactor: Int Refined Positive)(outputVarname: Ref[T]) = {
+  private def antiAliase[T <: WebGlType: WebGlType.TypeProps](
+      block: (RefVec2, Ref[T]) => String,
+      aaFactor: Int Refined Positive
+  )(outputVarname: Ref[T]) = {
     val local = WebGlType.reference[T]("frag_out")
-    val acc = WebGlType.reference[T]("acc")
+    val acc   = WebGlType.reference[T]("acc")
     s"""{
        |  vec2 aa_factor = 1.0 / (float(${aaFactor.value}) * u_resolution);
        |  float aa_offset = float(${(1 - aaFactor.value) / 2.0});

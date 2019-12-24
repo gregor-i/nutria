@@ -23,7 +23,7 @@ object Point {
     @inline final def *(f: Double): Point = (x * f, y * f)
     @inline final def *(p: Point): Double = x * p.x + y * p.y
 
-    @inline final def orth(): Point = (y, -x)
+    @inline final def orth(): Point  = (y, -x)
     @inline final def norm(): Double = Math.sqrt(self * self)
   }
 }
