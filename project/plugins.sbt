@@ -2,7 +2,7 @@
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "0.6.0")
 
 // jvm
-addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.7.4")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.0")
 resolvers += Resolver.bintrayRepo("gregor-i", "maven")
 addSbtPlugin("com.github.gregor-i" % "sbt-embedded-postgres" % "2.0.0-RC1")
 

@@ -22,11 +22,11 @@ lazy val service = project
     libraryDependencies += guice,
     libraryDependencies += "io.lemonlabs"   %% "scala-uri"  % "1.5.1",
     libraryDependencies += "com.dripower"   %% "play-circe" % "2712.0",
-    libraryDependencies += "org.postgresql" % "postgresql"  % "42.2.8",
+    libraryDependencies += "org.postgresql" % "postgresql"  % "42.2.9",
     libraryDependencies += evolutions,
     libraryDependencies += jdbc,
     libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.5",
-    libraryDependencies += "org.scalatestplus.play"  %% "scalatestplus-play" % "4.0.3" % Test
+    libraryDependencies += "org.scalatestplus.play"  %% "scalatestplus-play" % "5.0.0" % Test
   )
   .enablePlugins(EmbeddedPostgresPlugin)
   .settings(javaOptions += s"-DDATABASE_URL=${postgresConnectionString.value}")
@@ -41,7 +41,7 @@ val frontend = project
   .settings(emitSourceMaps := false)
   .settings(scalaJSModuleKind := ModuleKind.CommonJSModule)
   .settings(
-    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.7",
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.8",
     scalaTestAndScalaCheck,
     mathParser,
     circe,
@@ -64,7 +64,7 @@ compile in Compile := {
 def scalaTestAndScalaCheck =
   libraryDependencies ++= Seq(
     "org.scalatest"  %%% "scalatest"  % "3.1.0"  % Test,
-    "org.scalacheck" %%% "scalacheck" % "1.14.2" % Test
+    "org.scalacheck" %%% "scalacheck" % "1.14.3" % Test
   )
 
 def mathParser = Seq(
