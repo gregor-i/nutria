@@ -12,8 +12,8 @@ object Button {
 
   def icon(icon: String,
            onclick: SnabbdomFacade.Eventlistener): Node =
-  Node("button.button")
-    .event("click", onclick)
-    .child(Icons.icon(icon))
-    .style("border-radius", "50%")
+    Node("button.button")
+      .event("click", onclick)
+      .child(Icons.icon(icon))
+      .style("border-radius", "50%")
 }

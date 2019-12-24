@@ -4,16 +4,16 @@ import eu.timepit.refined.collection.NonEmpty
 import eu.timepit.refined.refineV
 import nutria.frontend._
 import nutria.frontend.ui.common.{Button, CanvasHooks, Icons}
-import snabbdom.{Node, Snabbdom, VNode}
+import snabbdom.{Node, Snabbdom}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object ExplorerUi {
   def render(implicit state: ExplorerState, update: NutriaState => Unit): Node =
     Node("body")
-    .key("explorer")
-    .child(common.Header(state, update))
-    .child(renderCanvas)
+      .key("explorer")
+      .child(common.Header(state, update))
+      .child(renderCanvas)
 
   // Actions to implement:
   //  With Fractal Id
@@ -78,12 +78,12 @@ object ExplorerUi {
 
   def renderCanvas(implicit state: ExplorerState, update: NutriaState => Unit): Node =
     Node("div.full-size")
-    .events(ExplorerEvents.canvasMouseEvents)
-     .events(ExplorerEvents.canvasWheelEvent)
-     .events(ExplorerEvents.canvasTouchEvents)
-     .child(
-      Node("canvas")
-      .hooks(CanvasHooks(state.fractalImage, resize = true))
-    )
-    .child(renderActionBar())
+      .events(ExplorerEvents.canvasMouseEvents)
+      .events(ExplorerEvents.canvasWheelEvent)
+      .events(ExplorerEvents.canvasTouchEvents)
+      .child(
+        Node("canvas")
+          .hooks(CanvasHooks(state.fractalImage, resize = true))
+      )
+      .child(renderActionBar())
 }

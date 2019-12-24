@@ -1,14 +1,14 @@
 package nutria.frontend.ui
 
-import nutria.frontend.ui.common.{Button,  CanvasHooks, Icons}
+import nutria.frontend.ui.common.{Button, CanvasHooks, Icons}
 import nutria.frontend.{ExplorerState, GreetingState, LoadingState, NutriaState}
-import snabbdom.{Node, Snabbdom, VNode}
+import snabbdom.{Node, Snabbdom}
 
 object GreetingUi {
   def render(implicit state: GreetingState, update: NutriaState => Unit): Node =
     Node("body")
-    .key("error")
-    .child(      renderCanvas)
+      .key("error")
+      .child(renderCanvas)
       .child(content)
 
   private val greetingContent =
@@ -26,37 +26,37 @@ object GreetingUi {
 
   private def content(implicit state: GreetingState, update: NutriaState => Unit) = {
     Node("div.modal.is-active")
-    .children(
-      Node("div.modal-background")
-      .style("opacity", "0.5")
-        .event("click",
-          Snabbdom.event { _ =>
-            update(ExplorerState(state.user, None, owned = false, state.randomFractal))
-          }),
-      Node("div.modal-content")
-      .child(
-        Node("div.box")
-        .children(
-          Node("div.content").prop("innerHTML", greetingContent),
-          Node("div.buttons")
+      .children(
+        Node("div.modal-background")
+          .style("opacity", "0.5")
+          .event("click",
+            Snabbdom.event { _ =>
+              update(ExplorerState(state.user, None, owned = false, state.randomFractal))
+            }),
+        Node("div.modal-content")
           .child(
-            Button(
-              "Start exploring!",
-              Icons.library,
-              Snabbdom.event { _ =>
-                update(LoadingState(NutriaState.libraryState()))
-              })
-              .classes("is-primary")
+            Node("div.box")
+              .children(
+                Node("div.content").prop("innerHTML", greetingContent),
+                Node("div.buttons")
+                  .child(
+                    Button(
+                      "Start exploring!",
+                      Icons.library,
+                      Snabbdom.event { _ =>
+                        update(LoadingState(NutriaState.libraryState()))
+                      })
+                      .classes("is-primary")
+                  )
+                  .classes("is-right")
+              )
           )
-            .classes("is-right")
-        )
-      )
       )
   }
 
   private def renderCanvas(implicit state: GreetingState, update: ExplorerState => Unit): Node =
     Node("div.full-size")
-    .child(
-      Node("canvas").hooks(CanvasHooks(state.randomFractal, resize = true))
-    )
+      .child(
+        Node("canvas").hooks(CanvasHooks(state.randomFractal, resize = true))
+      )
 }

@@ -1,6 +1,6 @@
 package nutria.frontend.ui.common
 
-import snabbdom.{Node, VNode}
+import snabbdom.Node
 
 object Icons {
   val upload = "fa-upload"

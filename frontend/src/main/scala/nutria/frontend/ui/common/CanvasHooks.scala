@@ -1,6 +1,6 @@
 package nutria.frontend.ui.common
 
-import nutria.core.{FractalEntity, FractalImage}
+import nutria.core.FractalImage
 import nutria.frontend.shaderBuilder.FractalRenderer
 import org.scalajs.dom.html.Canvas
 import snabbdom.{Snabbdom, SnabbdomFacade}

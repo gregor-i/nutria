@@ -2,9 +2,8 @@ package nutria.frontend.ui.common
 
 import nutria.core.User
 import nutria.frontend.{LoadingState, NutriaState}
-import snabbdom.{Node, Snabbdom, VNode}
-
 import org.scalajs.dom
+import snabbdom.{Node, Snabbdom}
 
 object Header {
 
@@ -28,7 +27,7 @@ object Header {
               )
               .child(Node("a.navbar-item")
                 .text("My Gallery")
-                .event("click", Snabbdom.event{_ =>
+                .event("click", Snabbdom.event { _ =>
                   state.user match {
                     case Some(user) => update(LoadingState(NutriaState.userLibraryState(user.id)))
                     case None => dom.window.location.href = Header.loginHref

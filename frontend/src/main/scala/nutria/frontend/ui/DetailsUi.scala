@@ -3,13 +3,13 @@ package nutria.frontend.ui
 import eu.timepit.refined._
 import eu.timepit.refined.auto._
 import eu.timepit.refined.collection.NonEmpty
-import monocle.{Iso, Lens}
+import monocle.Iso
 import nutria.core._
 import nutria.frontend._
 import nutria.frontend.ui.common._
 import nutria.frontend.util.LenseUtils
 import org.scalajs.dom
-import snabbdom.{Node, Snabbdom, VNode}
+import snabbdom.{Node, Snabbdom}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -167,7 +167,7 @@ object DetailsUi {
     val fractal = state.fractalToEdit.entity
 
     val lensViewports = DetailsState.fractalToEdit.composeLens(FractalEntityWithId.entity)
-        .composeLens(FractalEntity.views)
+      .composeLens(FractalEntity.views)
 
     val tiles = fractal.views.value.map { viewport =>
       val img = FractalImage(fractal.program, viewport, fractal.antiAliase)

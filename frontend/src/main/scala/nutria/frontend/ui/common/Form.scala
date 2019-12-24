@@ -3,11 +3,11 @@ package nutria.frontend.ui.common
 import eu.timepit.refined.api.{Refined, Validate}
 import eu.timepit.refined.refineV
 import mathParser.algebra.SpireLanguage
-import monocle.{Getter, Lens}
+import monocle.Lens
 import nutria.core.RGBA
 import nutria.core.languages.StringFunction
 import org.scalajs.dom.raw.{HTMLInputElement, HTMLSelectElement}
-import snabbdom.{Node, Snabbdom, VNode}
+import snabbdom.{Node, Snabbdom}
 import spire.math.Complex
 
 import scala.util.Try
@@ -35,9 +35,9 @@ object Form {
                                (implicit state: S, update: S => Unit, lang: SpireLanguage[Complex[Double], V]) =
     inputStyle(label,
       Node("input.input")
-      .attr("type", "text")
-      .attr("value", lens.get(state).string)
-      .event("change", snabbdom.Snabbdom.event {
+        .attr("type", "text")
+        .attr("value", lens.get(state).string)
+        .event("change", snabbdom.Snabbdom.event {
           event =>
             val element = event.target.asInstanceOf[HTMLInputElement]
             StringFunction(element.value) match {
@@ -48,10 +48,10 @@ object Form {
                 element.classList.add("is-danger")
             }
         })
-      )
+    )
 
   def stringInput[S](label: String, lens: Lens[S, String])
-                       (implicit state: S, update: S => Unit): Node =
+                    (implicit state: S, update: S => Unit): Node =
     inputStyle(label,
       Node("input.input")
         .attr("type", "text")
@@ -73,8 +73,8 @@ object Form {
             val value = event.target.asInstanceOf[HTMLInputElement].value
             update(lens.set(value)(state))
         })
-      .text(lens.get(state))
-      )
+        .text(lens.get(state))
+    )
 
   def intInput[S, T, V](label: String, lens: Lens[S, Refined[Int, V]])
                        (implicit state: S, update: S => Unit, validate: Validate[Int, V]): Node = {
@@ -101,9 +101,9 @@ object Form {
                        (implicit state: S, update: S => Unit, validate: Validate[Double, V]) =
     inputStyle(label,
       Node("input.input")
-      .attr("type", "number")
-      .attr("value", lens.get(state).toString)
-      .event("change", Snabbdom.event {
+        .attr("type", "number")
+        .attr("value", lens.get(state).toString)
+        .event("change", Snabbdom.event {
           event =>
             val element = event.target.asInstanceOf[HTMLInputElement]
             Try(element.value.toDouble).toEither
@@ -122,9 +122,9 @@ object Form {
                    (implicit state: S, update: S => Unit) =
     inputStyle(label,
       Node("input.input")
-      .attr("type", "color")
-      .attr("value", RGBA.toRGBString(lens.get(state)))
-      .event("change", Snabbdom.event {
+        .attr("type", "color")
+        .attr("value", RGBA.toRGBString(lens.get(state)))
+        .event("change", Snabbdom.event {
           event =>
             val element = event.target.asInstanceOf[HTMLInputElement]
             RGBA.parseRGBString(element.value).toOption match {
@@ -142,22 +142,22 @@ object Form {
                          (implicit state: S, update: S => Unit) =
     inputStyle(label,
       Node("input.input")
-      .attr("type", "number")
-      .attr("value", lens.get(state)._1.toString)
-      .event("change", Snabbdom.event {
+        .attr("type", "number")
+        .attr("value", lens.get(state)._1.toString)
+        .event("change", Snabbdom.event {
           event =>
             val value = event.target.asInstanceOf[HTMLInputElement].value.toDouble
             update(lens.modify(t => (value, t._2))(state))
         }),
       Node("input.input")
-      .attr("type", "number")
-      .attr("value", lens.get(state)._2.toString)
-      .event("change", Snabbdom.event {
+        .attr("type", "number")
+        .attr("value", lens.get(state)._2.toString)
+        .event("change", Snabbdom.event {
           event =>
             val value = event.target.asInstanceOf[HTMLInputElement].value.toDouble
             update(lens.modify(t => (t._1, value))(state))
         })
-      )
+    )
 
   def booleanInput[S](label: String, lens: Lens[S, Boolean])
                      (implicit state: S, update: S => Unit) =
@@ -170,16 +170,16 @@ object Form {
   def selectInput(label: String, options: Seq[String], value: String, onChange: String => Unit) =
     inputStyle(label,
       Node("div.select is-fullwidth")
-      .child(
-        Node("select")
-        .event("change", Snabbdom.event { event => onChange(event.target.asInstanceOf[HTMLSelectElement].value) })
-       .child(
-          options.map(opt =>
-          Node("option")
-          .attr(if (opt == value) "selected" else "not-selected",  "")
-          .text(opt)
+        .child(
+          Node("select")
+            .event("change", Snabbdom.event { event => onChange(event.target.asInstanceOf[HTMLSelectElement].value) })
+            .child(
+              options.map(opt =>
+                Node("option")
+                  .attr(if (opt == value) "selected" else "not-selected", "")
+                  .text(opt)
+              )
+            )
         )
-      )
-    )
     )
 }
