@@ -44,14 +44,14 @@ object NutriaService {
       .flatMap(check(201))
       .flatMap(parse[FractalEntityWithId])
 
-  def deleteUserFractal(userId: String, fractalId: String): Future[Vector[FractalEntityWithId]] =
-    Ajax.delete(url = s"/api/users/${userId}/fractals/${fractalId}")
+  def deleteFractal(fractalId: String): Future[Vector[FractalEntityWithId]] =
+    Ajax.delete(url = s"/api/fractals/${fractalId}")
       .flatMap(check(200))
       .flatMap(_ => loadPublicFractals())
 
-  def updateUserFractal(fractalEntity: FractalEntityWithId): Future[Unit] =
+  def updateFractal(fractalEntity: FractalEntityWithId): Future[Unit] =
     Ajax.put(
-      url = s"/api/users/${fractalEntity.owner}/fractals/${fractalEntity.id}",
+      url = s"/api/fractals/${fractalEntity.id}",
       data = encode(fractalEntity.entity)
     )
       .flatMap(check(202))

@@ -66,13 +66,6 @@ class FractalRepo @Inject()(db: Database) {
         """.executeUpdate()
     }
 
-  def delete(userId: String, fractalId: String): Unit =
-  db.withConnection { implicit con =>
-    SQL"""DELETE FROM fractals
-            WHERE id = $fractalId AND owner = $userId"""
-      .executeUpdate()
-  }
-
   def delete(fractalId: String): Unit =
     db.withConnection { implicit con =>
       SQL"""DELETE FROM fractals

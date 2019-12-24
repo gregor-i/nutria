@@ -238,7 +238,7 @@ object DetailsUi {
     Button("Apply Changes", Icons.save, Snabbdom.event { _ =>
       val updatedFractal = state.fractalToEdit.copy(id = state.remoteFractal.id)
       (for {
-        _ <- NutriaService.updateUserFractal(updatedFractal)
+        _ <- NutriaService.updateFractal(updatedFractal)
       } yield state.copy(remoteFractal = updatedFractal, fractalToEdit = updatedFractal))
         .foreach(update)
     })
@@ -247,7 +247,7 @@ object DetailsUi {
   private def buttonDelete(implicit state: DetailsState, update: NutriaState => Unit) =
     Button("Delete", Icons.delete, Snabbdom.event { _ =>
       (for {
-        _ <- NutriaService.deleteUserFractal(state.user.get.id, state.remoteFractal.id)
+        _ <- NutriaService.deleteFractal(state.remoteFractal.id)
         publicFractals <- NutriaService.loadPublicFractals()
       } yield LibraryState(user = state.user, publicFractals = publicFractals))
         .foreach(update)

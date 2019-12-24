@@ -1,12 +1,13 @@
 # API
 GET           /api/fractals                                     controller.FractalController.listPublicFractals()
 GET           /api/fractals/random                              controller.FractalController.getRandomFractal()
-GET           /api/fractals/:id                                 controller.FractalController.getFractal(id: String)
 POST          /api/fractals                                     controller.FractalController.postFractal()
 
+GET           /api/fractals/:fractalId                          controller.FractalController.getFractal(fractalId: String)
+PUT           /api/fractals/:fractalId                          controller.FractalController.updateFractal(fractalId: String)
+DELETE        /api/fractals/:fractalId                          controller.FractalController.deleteFractal(fractalId: String)
+
 GET           /api/users/:userId/fractals                       controller.FractalController.listUserFractals(userId: String)
-PUT           /api/users/:userId/fractals/:fractalId            controller.FractalController.updateUserFractal(userId: String, fractalId: String)
-DELETE        /api/users/:userId/fractals/:fractalId            controller.FractalController.deleteUserFractal(userId: String, fractalId: String)
 GET           /api/users/me                                     controller.UserController.me()
 GET           /api/users/:id                                    controller.UserController.get(id: String)
 

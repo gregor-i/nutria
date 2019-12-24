@@ -67,6 +67,7 @@ object Form {
                              (implicit state: S, update: S => Unit) =
     inputStyle(label,
       Node("textArea.textarea")
+        .style("min-height", "400px")
         .event("change", Snabbdom.event {
           event =>
             val value = event.target.asInstanceOf[HTMLInputElement].value

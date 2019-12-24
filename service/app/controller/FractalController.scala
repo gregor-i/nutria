@@ -62,22 +62,30 @@ class FractalController @Inject()(fractalRepo: FractalRepo,
     }
   }
 
-  def updateUserFractal(userId: String, fractalId: String) =
+  def updateFractal(fractalId: String) =
     Action(circe.tolerantJson[FractalEntity]) { req =>
-      authenticator.byUserId(req)(userId) {
+      fractalRepo.get(fractalId) match {
+        case None => NotFound
+        case Some(savedFractal) =>
+        authenticator.byUserId(req)(savedFractal.owner){
         fractalRepo.save(
-          id = fractalId,
-          owner = userId,
-          fractal = req.body
-        )
-        Accepted
+                  id = fractalId,
+                  owner = savedFractal.owner,
+                  fractal = req.body
+                )
+                Accepted
+        }
       }
     }
 
-  def deleteUserFractal(userId: String, fractalId: String) = Action { req =>
-    authenticator.byUserId(req)(userId) {
-      fractalRepo.delete(userId, fractalId)
-      Ok
+  def deleteFractal(fractalId: String) = Action { req =>
+    fractalRepo.get(fractalId) match {
+        case None => NotFound
+        case Some(savedFractal) =>
+            authenticator.byUserId(req)(savedFractal.owner) {
+              fractalRepo.delete(fractalId)
+              Ok
+            }
     }
   }
 

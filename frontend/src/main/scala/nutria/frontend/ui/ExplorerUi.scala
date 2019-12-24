@@ -56,7 +56,7 @@ object ExplorerUi {
         remoteFractal <- NutriaService.loadFractal(fractalId)
         views = (remoteFractal.entity.views.value :+ state.fractalImage.view).distinct
         updated = remoteFractal.entity.copy(views = refineV[NonEmpty](views).toOption.get)
-        _ <- NutriaService.updateUserFractal(remoteFractal.copy(entity = updated))
+        _ <- NutriaService.updateFractal(remoteFractal.copy(entity = updated))
       } yield ()
     })
       .classes("is-primary")

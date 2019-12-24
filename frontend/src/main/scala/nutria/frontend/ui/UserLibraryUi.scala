@@ -44,7 +44,7 @@ object UserLibraryUi {
         .child(
           Button.icon(if(fractal.entity.published) Icons.unpublish else Icons.publish, Snabbdom.event { _ =>
             (for{
-              _ <- NutriaService.updateUserFractal(FractalEntityWithId.entity.composeLens(FractalEntity.published).modify(!_).apply(fractal))
+              _ <- NutriaService.updateFractal(FractalEntityWithId.entity.composeLens(FractalEntity.published).modify(!_).apply(fractal))
               reloaded <- reload(state)
             } yield reloaded)
                 .foreach(update)
@@ -55,7 +55,7 @@ object UserLibraryUi {
           Button.icon(Icons.delete, Snabbdom.event { _ =>
           // todo: add alert or dialog
             (for{
-              _ <- NutriaService.deleteUserFractal(state.aboutUser, fractal.id)
+              _ <- NutriaService.deleteFractal(fractal.id)
               reloaded <- reload(state)
             } yield reloaded)
                 .foreach(update)
