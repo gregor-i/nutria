@@ -4,7 +4,8 @@
     "font-awesome": "^4",
     "snabbdom": "^0.7",
     "browserify": "^16",
-    "clean-css-cli": "^4"
+    "clean-css-cli": "^4",
+    "sass": "^1.24.0"
   },
   "scripts": {
     "watch": "nodemon --watch frontend -e css,svg --exec \"npm run build\"",
@@ -12,7 +13,7 @@
     "build-js": "browserify frontend/target/scala-2.13/frontend-fastopt.js node_modules/snabbdom/snabbdom.bundle.js -o service/public/js/nutria.js",
     "build-css": "cleancss frontend/src/main/css/*.css -o service/public/css/nutria.css",
     "cp": "npm run cp-bulma && npm run cp-fas",
-    "cp-bulma": "cp node_modules/bulma/css/bulma.min.css service/public/css/bulma.css",
+    "cp-bulma": "sass frontend/src/main/css/bulma.sass service/public/css/bulma.css --no-source-map  --style compressed",
     "cp-fas": "cp node_modules/font-awesome/css/font-awesome.min.css service/public/css/font-awesome.css && cp -r node_modules/font-awesome/fonts service/public"
   }
 }
