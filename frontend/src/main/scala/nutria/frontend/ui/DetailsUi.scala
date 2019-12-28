@@ -219,9 +219,7 @@ object DetailsUi {
       Node("article.fractal-tile.is-relative")
         .child(
           FractalTile(img, Dimensions.thumbnailDimensions)
-            .event("click", Snabbdom.event { _ =>
-              update(ExplorerState(state.user, fractalId, owned = owned, img))
-            })
+            .event("click", Actions.exploreFractal(state.fractalToEdit))
         )
         .child(
           Node("div.buttons.overlay-bottom-right.padding")
@@ -229,14 +227,7 @@ object DetailsUi {
               Button
                 .icon(
                   Icons.up,
-                  Snabbdom.event { _ =>
-                    val newViewports = fractal.views.value
-                      .filter(_ == viewport) ++ fractal.views.value.filter(_ != viewport)
-                    refineV[NonEmpty](newViewports) match {
-                      case Right(newViews) => update(lensViewports.set(newViews)(state))
-                      case Left(_)         => ???
-                    }
-                  }
+                  Actions.moveViewportUp(viewport)
                 )
                 .classes("is-outlined")
             )

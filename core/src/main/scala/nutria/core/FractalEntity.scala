@@ -7,6 +7,7 @@ import eu.timepit.refined.numeric.Positive
 import eu.timepit.refined.numeric.NonNegative
 import io.circe.syntax._
 import io.circe.{Codec, Decoder, Encoder}
+import monocle.Lens
 import nutria.core.viewport.DefaultViewport
 @monocle.macros.Lenses()
 case class FractalEntity(
@@ -43,6 +44,8 @@ object FractalEntity extends CirceCodex {
 case class FractalEntityWithId(id: String, owner: String, entity: FractalEntity)
 
 object FractalEntityWithId extends CirceCodex {
+  val viewports: Lens[FractalEntityWithId, Refined[List[Viewport], NonEmpty]] = FractalEntityWithId.entity.composeLens(FractalEntity.views)
+
   implicit val ordering: Ordering[FractalEntityWithId] =
     FractalProgram.ordering.on(_.entity.program)
 

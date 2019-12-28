@@ -29,9 +29,7 @@ object GreetingUi {
       .children(
         Node("div.modal-background")
           .style("opacity", "0.5")
-          .event("click", Snabbdom.event { _ =>
-            update(ExplorerState(state.user, None, owned = false, state.randomFractal))
-          }),
+          .event("click", Actions.exploreFractal(state.randomFractal)),
         Node("div.modal-content")
           .child(
             Node("div.box")
