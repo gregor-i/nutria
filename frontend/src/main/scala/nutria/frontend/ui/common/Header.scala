@@ -8,7 +8,7 @@ import snabbdom.{Node, Snabbdom}
 object Header {
 
   def apply(implicit state: NutriaState, update: NutriaState => Unit): Node = {
-    Node("nav.navbar.is-light")
+    Node("nav.navbar.is-light.has-shadow")
       .attr("role", "navigation")
       .attr("aria-label", "main navigation")
       .child(
