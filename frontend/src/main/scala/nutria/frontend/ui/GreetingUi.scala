@@ -1,7 +1,7 @@
 package nutria.frontend.ui
 
 import nutria.frontend.ui.common.{Button, CanvasHooks, Icons}
-import nutria.frontend.{ExplorerState, GreetingState, LoadingState, NutriaState}
+import nutria.frontend.{Actions, ExplorerState, GreetingState, LoadingState, NutriaState}
 import snabbdom.{Node, Snabbdom}
 
 object GreetingUi {
@@ -39,9 +39,8 @@ object GreetingUi {
                 Node("div.content").prop("innerHTML", greetingContent),
                 Node("div.buttons")
                   .child(
-                    Button("Start exploring!", Icons.library, Snabbdom.event { _ =>
-                      update(LoadingState(NutriaState.libraryState()))
-                    }).classes("is-primary")
+                    Button("Start exploring!", Icons.library, Actions.loadGallery)
+                      .classes("is-primary")
                   )
                   .classes("is-right")
               )

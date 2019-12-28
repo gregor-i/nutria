@@ -32,57 +32,24 @@ object LibraryUi {
         FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnailDimensions)
           .event(
             "click",
-            Snabbdom.event(
-              _ =>
-                update(
-                  ExplorerState(
-                    user = state.user,
-                    fractalId = Some(fractal.id),
-                    owned = state.user.exists(_.id == fractal.owner),
-                    fractalImage = FractalImage.firstImage(fractal.entity)
-                  )
-                )
-            )
+            Actions.exploreFractal(fractal)
           )
       )
       .child(
         Node("div.buttons.overlay-bottom-right.padding")
-        /*            .child(
-                        Button.icon(Icons.upvote, Snabbdom.event { _ =>
-          ()
-                        })
-                          .classes("is-outlined")
-                      )
-                      .child(
-                        Button.icon(Icons.downvote, Snabbdom.event { _ =>
-          ()
-                        })
-                          .classes("is-outlined")
-                      ) */
+        /* Button.icon(Icons.upvote, Snabbdom.event { _ =>
+           Button.icon(Icons.downvote, Snabbdom.event { _ => */
           .child(
             Button
               .icon(
                 Icons.explore,
-                Snabbdom.event { _ =>
-                  update(
-                    ExplorerState(
-                      user = state.user,
-                      fractalId = Some(fractal.id),
-                      owned = state.user.exists(_.id == fractal.owner),
-                      fractalImage = FractalImage.firstImage(fractal.entity)
-                    )
-                  )
-                }
+                Actions.exploreFractal(fractal)
               )
               .classes("is-outlined")
           )
           .child(
             Button
-              .icon(Icons.edit, Snabbdom.event { _ =>
-                update(
-                  DetailsState(user = state.user, remoteFractal = fractal, fractalToEdit = fractal)
-                )
-              })
+              .icon(Icons.edit, Actions.editFractal(fractal))
               .classes("is-outlined")
           )
       )

@@ -1,12 +1,8 @@
 package nutria.frontend.ui
 
-import eu.timepit.refined.collection.NonEmpty
-import eu.timepit.refined.refineV
 import nutria.frontend._
 import nutria.frontend.ui.common.{Button, CanvasHooks, Icons}
-import snabbdom.{Node, Snabbdom}
-
-import scala.concurrent.ExecutionContext.Implicits.global
+import snabbdom.Node
 
 object ExplorerUi {
   def render(implicit state: ExplorerState, update: NutriaState => Unit): Node =
@@ -44,9 +40,7 @@ object ExplorerUi {
   def buttonBackToDetails(
       fractalId: String
   )(implicit state: ExplorerState, update: NutriaState => Unit) =
-    Button("Edit Parameters", Icons.edit, Snabbdom.event { _ =>
-      update(LoadingState(NutriaState.detailsState(fractalId)))
-    })
+    Button("Edit Parameters", Icons.edit, Actions.loadAndEditFractal(fractalId))
 
   def buttonAddViewport(
       fractalId: String
@@ -54,14 +48,7 @@ object ExplorerUi {
     Button(
       "Save this image",
       Icons.snapshot,
-      Snabbdom.event { _ =>
-        for {
-          remoteFractal <- NutriaService.loadFractal(fractalId)
-          views   = (remoteFractal.entity.views.value :+ state.fractalImage.view).distinct
-          updated = remoteFractal.entity.copy(views = refineV[NonEmpty](views).toOption.get)
-          _ <- NutriaService.updateFractal(remoteFractal.copy(entity = updated))
-        } yield ()
-      }
+      Actions.addViewport(fractalId, state.fractalImage.view)
     ).classes("is-primary")
 
   def buttonForkAndAddViewport(
@@ -70,28 +57,7 @@ object ExplorerUi {
     Button(
       "Fork and Save this image",
       Icons.copy,
-      Snabbdom
-        .event {
-          _ =>
-            for {
-              remoteFractal <- NutriaService.loadFractal(fractalId)
-              updated = remoteFractal.entity.copy(
-                views = refineV[NonEmpty](
-                  remoteFractal.entity.views.value :+ state.fractalImage.view
-                ).toOption.get
-              )
-              forkedFractal <- NutriaService.save(updated)
-            } yield {
-              update(
-                ExplorerState(
-                  state.user,
-                  fractalId = Some(forkedFractal.id),
-                  owned = true,
-                  fractalImage = state.fractalImage
-                )
-              )
-            }
-        }
+      Actions.forkAndAddViewport(fractalId, state.fractalImage.view)
     ).classes("is-primary")
 
   def renderCanvas(implicit state: ExplorerState, update: NutriaState => Unit): Node =
