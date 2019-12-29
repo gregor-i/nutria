@@ -231,11 +231,8 @@ object DetailsUi extends Page[DetailsState] {
       case Some(user) if user.id == state.remoteFractal.owner =>
         Seq(buttonDelete, buttonSaveAsNew, buttonSaveAsOld)
 
-      case Some(_) =>
+      case _ =>
         Seq(buttonFork)
-
-      case None =>
-        Seq(buttonLogin)
     }
 
     Node("div.field.is-grouped.is-grouped-right")
@@ -261,10 +258,6 @@ object DetailsUi extends Page[DetailsState] {
       .classes("is-danger", "is-light")
 
   private def buttonFork(implicit state: DetailsState, update: NutriaState => Unit) =
-    Button("Fork", Icons.copy, Actions.saveAsNewFractal(state.fractalToEdit.entity))
-      .classes("is-primary")
-
-  private def buttonLogin(implicit state: DetailsState, update: NutriaState => Unit) =
-    Button("Login to update this fractal", Icons.login, Actions.login)
+    Button("Copy this Fractal", Icons.copy, Actions.saveAsNewFractal(state.fractalToEdit.entity))
       .classes("is-primary")
 }

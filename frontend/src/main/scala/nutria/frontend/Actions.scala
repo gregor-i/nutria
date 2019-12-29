@@ -196,14 +196,18 @@ object Actions {
       fractalEntity: FractalEntity
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
-      (for {
-        fractalWithId <- NutriaService.save(fractalEntity)
-        _ = Toasts.successToast("Fractal saved.")
-      } yield DetailsState(
-        user = state.user,
-        remoteFractal = fractalWithId,
-        fractalToEdit = fractalWithId
-      )).foreach(update)
+      state.user match {
+        case None => Toasts.dangerToast("log in to save a fractal")
+        case Some(_) =>
+          (for {
+            fractalWithId <- NutriaService.save(fractalEntity)
+            _ = Toasts.successToast("Fractal saved.")
+          } yield DetailsState(
+            user = state.user,
+            remoteFractal = fractalWithId,
+            fractalToEdit = fractalWithId
+          )).foreach(update)
+      }
     }
 
   def login(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
