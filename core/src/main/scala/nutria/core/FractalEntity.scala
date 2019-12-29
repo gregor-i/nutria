@@ -44,7 +44,8 @@ object FractalEntity extends CirceCodex {
 case class FractalEntityWithId(id: String, owner: String, entity: FractalEntity)
 
 object FractalEntityWithId extends CirceCodex {
-  val viewports: Lens[FractalEntityWithId, Refined[List[Viewport], NonEmpty]] = FractalEntityWithId.entity.composeLens(FractalEntity.views)
+  val viewports: Lens[FractalEntityWithId, Refined[List[Viewport], NonEmpty]] =
+    FractalEntityWithId.entity.composeLens(FractalEntity.views)
 
   implicit val ordering: Ordering[FractalEntityWithId] =
     FractalProgram.ordering.on(_.entity.program)

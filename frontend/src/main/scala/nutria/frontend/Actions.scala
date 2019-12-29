@@ -7,6 +7,8 @@ import eu.timepit.refined.collection.NonEmpty
 import nutria.core.viewport.Viewport
 import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage}
 import eu.timepit.refined.refineV
+import nutria.frontend.ui.common.Header
+import org.scalajs.dom
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -118,20 +120,24 @@ object Actions {
 
   def deleteFractal(
       fractalId: String
-  )(implicit state: UserLibraryState, update: NutriaState => Unit): Eventlistener =
+  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       // todo: add alert or dialog
       (for {
-        _        <- NutriaService.deleteFractal(fractalId)
-        reloaded <- NutriaService.loadUserFractals(state.aboutUser)
-      } yield state.copy(userFractals = reloaded))
-        .foreach(update)
+        remoteFractal <- NutriaService.loadFractal(fractalId)
+        _             <- NutriaService.deleteFractal(fractalId)
+        reloaded      <- NutriaService.loadUserFractals(remoteFractal.owner)
+      } yield UserLibraryState(
+        user = state.user,
+        userFractals = reloaded,
+        aboutUser = remoteFractal.owner
+      )).foreach(update)
     }
 
   def moveViewportUp(
       viewport: Viewport
   )(implicit state: DetailsState, update: NutriaState => Unit): Eventlistener =
-    Snabbdom.event { _ =>
+    event { _ =>
       val lensViewports = DetailsState.fractalToEdit.composeLens(FractalEntityWithId.viewports)
       val views         = lensViewports.get(state).value
       val newViewports  = views.filter(_ == viewport) ++ views.filter(_ != viewport)
@@ -140,4 +146,47 @@ object Actions {
         case Left(_)         => ???
       }
     }
+
+  def deleteViewport(
+      viewport: Viewport
+  )(implicit state: DetailsState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      val lensViewports = DetailsState.fractalToEdit.composeLens(FractalEntityWithId.viewports)
+      val views         = lensViewports.get(state).value
+      val newViewports  = views.filter(_ != viewport)
+      refineV[NonEmpty](newViewports) match {
+        case Right(newViews) => update(lensViewports.set(newViews)(state))
+        case Left(_)         => dom.window.alert("the last snapshot can't be deleted.")
+      }
+    }
+
+  def updateFractal(
+      fractalWithId: FractalEntityWithId
+  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      (for {
+        _ <- NutriaService.updateFractal(fractalWithId)
+      } yield DetailsState(
+        user = state.user,
+        remoteFractal = fractalWithId,
+        fractalToEdit = fractalWithId
+      )).foreach(update)
+    }
+
+  def saveAsNewFractal(
+      fractalEntity: FractalEntity
+  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      (for {
+        fractalWithId <- NutriaService.save(fractalEntity)
+      } yield DetailsState(
+        user = state.user,
+        remoteFractal = fractalWithId,
+        fractalToEdit = fractalWithId
+      )).foreach(update)
+    }
+
+  def login(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+    Snabbdom.event(_ => dom.window.location.href = Header.loginHref)
+
 }

@@ -1,8 +1,5 @@
 package nutria.frontend.ui
 
-import eu.timepit.refined._
-import eu.timepit.refined.auto._
-import eu.timepit.refined.collection.NonEmpty
 import monocle.Iso
 import nutria.core._
 import nutria.frontend._
@@ -204,14 +201,7 @@ object DetailsUi {
   }
 
   def snapshots()(implicit state: DetailsState, update: NutriaState => Unit) = {
-    val fractalId = if (state.dirty) None else Some(state.remoteFractal.id)
-    val owned     = state.user.exists(_.id == state.remoteFractal.owner)
-
     val fractal = state.fractalToEdit.entity
-
-    val lensViewports = DetailsState.fractalToEdit
-      .composeLens(FractalEntityWithId.entity)
-      .composeLens(FractalEntity.views)
 
     val tiles = fractal.views.value.map { viewport =>
       val img = FractalImage(fractal.program, viewport, fractal.antiAliase)
@@ -225,24 +215,12 @@ object DetailsUi {
           Node("div.buttons.overlay-bottom-right.padding")
             .child(
               Button
-                .icon(
-                  Icons.up,
-                  Actions.moveViewportUp(viewport)
-                )
+                .icon(Icons.up, Actions.moveViewportUp(viewport))
                 .classes("is-outlined")
             )
             .child(
               Button
-                .icon(
-                  Icons.delete,
-                  Snabbdom.event { _ =>
-                    val newViewports = fractal.views.value.filter(_ != viewport)
-                    refineV[NonEmpty](newViewports) match {
-                      case Right(newViews) => update(lensViewports.set(newViews)(state))
-                      case Left(_)         => dom.window.alert("the last snapshot can't be deleted.")
-                    }
-                  }
-                )
+                .icon(Icons.delete, Actions.deleteViewport(viewport))
                 .classes("is-outlined")
             )
         )
@@ -273,56 +251,25 @@ object DetailsUi {
     Button(
       "Save Changes as new Fractal",
       Icons.save,
-      Snabbdom.event { _ =>
-        (for {
-          fractalWithId <- NutriaService.save(state.fractalToEdit.entity)
-        } yield state.copy(remoteFractal = fractalWithId, fractalToEdit = fractalWithId))
-          .foreach(update)
-      }
+      Actions.saveAsNewFractal(state.fractalToEdit.entity)
     ).classes("is-light")
 
   private def buttonSaveAsOld(implicit state: DetailsState, update: NutriaState => Unit) =
     Button(
       "Apply Changes",
       Icons.save,
-      Snabbdom.event { _ =>
-        val updatedFractal = state.fractalToEdit.copy(id = state.remoteFractal.id)
-        (for {
-          _ <- NutriaService.updateFractal(updatedFractal)
-        } yield state.copy(remoteFractal = updatedFractal, fractalToEdit = updatedFractal))
-          .foreach(update)
-      }
+      Actions.updateFractal(state.fractalToEdit)
     ).classes("is-primary")
 
   private def buttonDelete(implicit state: DetailsState, update: NutriaState => Unit) =
-    Button(
-      "Delete",
-      Icons.delete,
-      Snabbdom.event { _ =>
-        (for {
-          _              <- NutriaService.deleteFractal(state.remoteFractal.id)
-          publicFractals <- NutriaService.loadPublicFractals()
-        } yield LibraryState(user = state.user, publicFractals = publicFractals))
-          .foreach(update)
-      }
-    ).classes("is-danger", "is-light")
+    Button("Delete", Icons.delete, Actions.deleteFractal(state.fractalToEdit.id))
+      .classes("is-danger", "is-light")
 
   private def buttonFork(implicit state: DetailsState, update: NutriaState => Unit) =
-    Button(
-      "Fork",
-      Icons.copy,
-      Snabbdom.event { _ =>
-        (for {
-          fractalWithId <- NutriaService.save(state.fractalToEdit.entity)
-        } yield state.copy(remoteFractal = fractalWithId, fractalToEdit = fractalWithId))
-          .foreach(update)
-      }
-    ).classes("is-primary")
+    Button("Fork", Icons.copy, Actions.saveAsNewFractal(state.fractalToEdit.entity))
+      .classes("is-primary")
 
   private def buttonLogin(implicit state: DetailsState, update: NutriaState => Unit) =
-    Button(
-      "Login to update this fractal",
-      "sign-in",
-      Snabbdom.event(_ => dom.window.location.href = Header.loginHref)
-    ).classes("is-primary")
+    Button("Login to update this fractal", Icons.login, Actions.login)
+      .classes("is-primary")
 }
