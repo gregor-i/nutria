@@ -10,7 +10,7 @@ object UserLibraryUi extends Page[UserLibraryState] {
   def render(implicit state: UserLibraryState, update: NutriaState => Unit) =
     Seq(
       common.Header(state, update),
-      Node("div.container.is-fluid")
+      Node("div.container")
         .child(
           Node("div.fractal-tile-list")
             .child(state.userFractals.map(renderFractalTile))

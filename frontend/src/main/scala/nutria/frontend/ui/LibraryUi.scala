@@ -10,7 +10,7 @@ object LibraryUi extends Page[LibraryState] {
   def render(implicit state: LibraryState, update: NutriaState => Unit) =
     Seq(
       common.Header(state, update),
-      Node("div.container.is-fluid")
+      Node("div.container")
         .child(
           Node("div.fractal-tile-list")
             .children(

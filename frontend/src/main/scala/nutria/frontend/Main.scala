@@ -13,7 +13,7 @@ object Main {
       return
     }
 
-    def container: Element = dom.document.body
+    def container: Element = dom.document.getElementById("nutria-app")
 
     dom.document.addEventListener[Event](
       "DOMContentLoaded",

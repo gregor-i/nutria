@@ -1,0 +1,15 @@
+#toast-bar{
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+}
+
+#toast-bar > * {
+    max-width: 600px;
+    margin: 8px;
+}

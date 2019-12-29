@@ -7,11 +7,11 @@ import eu.timepit.refined.collection.NonEmpty
 import nutria.core.viewport.Viewport
 import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage}
 import eu.timepit.refined.refineV
+import nutria.frontend.toasts.Toasts
 import nutria.frontend.ui.common.Header
 import org.scalajs.dom
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 object Actions {
   def loadGallery(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
@@ -73,6 +73,7 @@ object Actions {
         views   = (remoteFractal.entity.views.value :+ viewport).distinct
         updated = remoteFractal.entity.copy(views = refineV[NonEmpty](views).toOption.get)
         _ <- NutriaService.updateFractal(remoteFractal.copy(entity = updated))
+        _ = Toasts.successToast("Snapshot saved")
       } yield ()
     }
 
@@ -89,6 +90,7 @@ object Actions {
           ).toOption.get
         )
         forkedFractal <- NutriaService.save(updated)
+        _ = Toasts.successToast("Fractal saved")
       } yield {
         update(
           ExplorerState(
@@ -106,14 +108,23 @@ object Actions {
       fractal: FractalEntityWithId
   )(implicit state: UserLibraryState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
+      val published = fractal.entity.published
       (for {
         _ <- NutriaService.updateFractal(
           FractalEntityWithId.entity
             .composeLens(FractalEntity.published)
-            .modify(!_)
+            .set(!published)
             .apply(fractal)
         )
         reloaded <- NutriaService.loadUserFractals(state.aboutUser)
+        _ = if (published)
+          Toasts.warningToast(
+            "Fractal unpublished. The fractal will no longer be listed in the public gallery."
+          )
+        else
+          Toasts.successToast(
+            "Fractal unpublished. The fractal will be listed in the public gallery."
+          )
       } yield state.copy(userFractals = reloaded))
         .foreach(update)
     }
@@ -122,11 +133,11 @@ object Actions {
       fractalId: String
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
-      // todo: add alert or dialog
       (for {
         remoteFractal <- NutriaService.loadFractal(fractalId)
         _             <- NutriaService.deleteFractal(fractalId)
-        reloaded      <- NutriaService.loadUserFractals(remoteFractal.owner)
+        _ = Toasts.warningToast("Fractal deleted.")
+        reloaded <- NutriaService.loadUserFractals(remoteFractal.owner)
       } yield UserLibraryState(
         user = state.user,
         userFractals = reloaded,
@@ -142,8 +153,12 @@ object Actions {
       val views         = lensViewports.get(state).value
       val newViewports  = views.filter(_ == viewport) ++ views.filter(_ != viewport)
       refineV[NonEmpty](newViewports) match {
-        case Right(newViews) => update(lensViewports.set(newViews)(state))
-        case Left(_)         => ???
+        case Right(newViews) =>
+          Toasts.successToast(
+            "Snapshot moved at the first position. This Snapshot will be used in the galleries."
+          )
+          update(lensViewports.set(newViews)(state))
+        case Left(_) => ???
       }
     }
 
@@ -155,8 +170,11 @@ object Actions {
       val views         = lensViewports.get(state).value
       val newViewports  = views.filter(_ != viewport)
       refineV[NonEmpty](newViewports) match {
-        case Right(newViews) => update(lensViewports.set(newViews)(state))
-        case Left(_)         => dom.window.alert("the last snapshot can't be deleted.")
+        case Right(newViews) =>
+          Toasts.successToast("Snapshot deleted.")
+          update(lensViewports.set(newViews)(state))
+        case Left(_) =>
+          Toasts.dangerToast("The last snapshot can't be deleted.")
       }
     }
 
@@ -166,6 +184,7 @@ object Actions {
     event { _ =>
       (for {
         _ <- NutriaService.updateFractal(fractalWithId)
+        _ = Toasts.successToast("Fractal updated.")
       } yield DetailsState(
         user = state.user,
         remoteFractal = fractalWithId,
@@ -179,6 +198,7 @@ object Actions {
     event { _ =>
       (for {
         fractalWithId <- NutriaService.save(fractalEntity)
+        _ = Toasts.successToast("Fractal saved.")
       } yield DetailsState(
         user = state.user,
         remoteFractal = fractalWithId,
