@@ -3,7 +3,7 @@ package nutria.frontend.ui
 import nutria.core._
 import nutria.core.viewport.Dimensions
 import nutria.frontend.ui.common.{FractalTile, _}
-import nutria.frontend.{DetailsState, LibraryState, NutriaState, _}
+import nutria.frontend.{LibraryState, NutriaState, _}
 import snabbdom._
 
 object LibraryUi {

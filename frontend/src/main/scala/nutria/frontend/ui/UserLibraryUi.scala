@@ -3,11 +3,8 @@ package nutria.frontend.ui
 import nutria.core._
 import nutria.core.viewport.Dimensions
 import nutria.frontend.ui.common.{FractalTile, _}
-import nutria.frontend.{Actions, DetailsState, NutriaService, NutriaState, UserLibraryState}
-import snabbdom.{Node, Snabbdom}
-
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import nutria.frontend.{Actions, NutriaState, UserLibraryState}
+import snabbdom.Node
 
 object UserLibraryUi {
   def render(implicit state: UserLibraryState, update: NutriaState => Unit): Node =

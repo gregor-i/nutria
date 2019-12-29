@@ -5,10 +5,7 @@ import nutria.core._
 import nutria.frontend._
 import nutria.frontend.ui.common._
 import nutria.frontend.util.LenseUtils
-import org.scalajs.dom
-import snabbdom.{Node, Snabbdom}
-
-import scala.concurrent.ExecutionContext.Implicits.global
+import snabbdom.Node
 
 object DetailsUi {
   def render(implicit state: DetailsState, update: NutriaState => Unit) =

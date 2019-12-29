@@ -1,8 +1,8 @@
 package nutria.frontend.ui
 
 import nutria.frontend.ui.common.{Button, CanvasHooks, Icons}
-import nutria.frontend.{Actions, ExplorerState, GreetingState, LoadingState, NutriaState}
-import snabbdom.{Node, Snabbdom}
+import nutria.frontend.{Actions, ExplorerState, GreetingState, NutriaState}
+import snabbdom.Node
 
 object GreetingUi {
   def render(implicit state: GreetingState, update: NutriaState => Unit): Node =
