@@ -7,15 +7,13 @@ import nutria.frontend.ui.common._
 import nutria.frontend.util.LenseUtils
 import snabbdom.Node
 
-object DetailsUi {
+object DetailsUi extends Page[DetailsState] {
   def render(implicit state: DetailsState, update: NutriaState => Unit) =
-    Node("body")
-      .key("explorer")
-      .children(
-        common.Header(state, update),
-        body(state, update),
-        common.Footer()
-      )
+    Seq(
+      common.Header(state, update),
+      body(state, update),
+      common.Footer()
+    )
 
   def body(implicit state: DetailsState, update: NutriaState => Unit) =
     Node("div.container")

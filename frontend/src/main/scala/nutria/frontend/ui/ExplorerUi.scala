@@ -4,12 +4,9 @@ import nutria.frontend._
 import nutria.frontend.ui.common.{Button, CanvasHooks, Icons}
 import snabbdom.Node
 
-object ExplorerUi {
-  def render(implicit state: ExplorerState, update: NutriaState => Unit): Node =
-    Node("body")
-      .key("explorer")
-      .child(common.Header(state, update))
-      .child(renderCanvas)
+object ExplorerUi extends Page[ExplorerState] {
+  def render(implicit state: ExplorerState, update: NutriaState => Unit) =
+    Seq(common.Header(state, update), renderCanvas)
 
   // Actions to implement:
   //  With Fractal Id

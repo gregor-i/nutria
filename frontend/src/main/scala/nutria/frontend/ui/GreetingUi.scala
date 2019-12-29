@@ -4,12 +4,9 @@ import nutria.frontend.ui.common.{Button, CanvasHooks, Icons}
 import nutria.frontend.{Actions, ExplorerState, GreetingState, NutriaState}
 import snabbdom.Node
 
-object GreetingUi {
-  def render(implicit state: GreetingState, update: NutriaState => Unit): Node =
-    Node("body")
-      .key("error")
-      .child(renderCanvas)
-      .child(content)
+object GreetingUi extends Page[GreetingState] {
+  def render(implicit state: GreetingState, update: NutriaState => Unit) =
+    Seq(renderCanvas, content)
 
   private val greetingContent =
     """<h1>Nutria - Fractal Explorer</h1>

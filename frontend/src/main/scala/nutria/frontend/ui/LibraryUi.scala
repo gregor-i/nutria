@@ -6,22 +6,20 @@ import nutria.frontend.ui.common.{FractalTile, _}
 import nutria.frontend.{LibraryState, NutriaState, _}
 import snabbdom._
 
-object LibraryUi {
-  def render(implicit state: LibraryState, update: NutriaState => Unit): Node =
-    Node("body")
-      .key("gallery")
-      .children(
-        common.Header(state, update),
-        Node("div.container.is-fluid")
-          .child(
-            Node("div.fractal-tile-list")
-              .children(
-                state.publicFractals.map(renderFractalTile),
-                dummyTiles
-              )
-          ),
-        common.Footer()
-      )
+object LibraryUi extends Page[LibraryState] {
+  def render(implicit state: LibraryState, update: NutriaState => Unit) =
+    Seq(
+      common.Header(state, update),
+      Node("div.container.is-fluid")
+        .child(
+          Node("div.fractal-tile-list")
+            .children(
+              state.publicFractals.map(renderFractalTile),
+              dummyTiles
+            )
+        ),
+      common.Footer()
+    )
 
   def renderFractalTile(
       fractal: FractalEntityWithId
