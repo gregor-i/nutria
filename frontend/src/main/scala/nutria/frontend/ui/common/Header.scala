@@ -1,7 +1,8 @@
 package nutria.frontend.ui.common
 
 import nutria.core.User
-import nutria.frontend.{LoadingState, NutriaState}
+import nutria.frontend.toasts.Toasts
+import nutria.frontend.{LoadingState, NutriaState, ProfileState}
 import org.scalajs.dom
 import snabbdom.{Node, Snabbdom}
 
@@ -38,7 +39,21 @@ object Header {
                       state.user match {
                         case Some(user) =>
                           update(LoadingState(NutriaState.userLibraryState(user.id)))
-                        case None => dom.window.location.href = Header.loginHref
+                        case None => Toasts.dangerToast("Log in first")
+                      }
+                    }
+                  )
+              )
+              .child(
+                Node("a.navbar-item")
+                  .text("My Profile")
+                  .event(
+                    "click",
+                    Snabbdom.event { _ =>
+                      state.user match {
+                        case Some(user) =>
+                          update(ProfileState(user))
+                        case None => Toasts.dangerToast("Log in first")
                       }
                     }
                   )

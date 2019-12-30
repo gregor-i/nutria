@@ -211,6 +211,18 @@ object Actions {
     }
 
   def login(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
-    Snabbdom.event(_ => dom.window.location.href = Header.loginHref)
+    event(_ => dom.window.location.href = Header.loginHref)
+
+  def deleteUser(
+      userId: String
+  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      (for {
+        _     <- NutriaService.deleteUser(userId)
+        state <- NutriaState.greetingState()
+        _ = Toasts.successToast("Good Bye")
+      } yield state)
+        .foreach(update)
+    }
 
 }

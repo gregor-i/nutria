@@ -28,6 +28,6 @@ object AuthenticationDummy {
     UUID.nameUUIDFromBytes("dummy-id".getBytes).toString,
     "Dummy Name",
     "dummy@nutria-explorer.com",
-    "/img/icon.png"
+    googleUserId = None
   )
 }

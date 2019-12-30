@@ -10,6 +10,7 @@ DELETE        /api/fractals/:fractalId                          controller.Fract
 GET           /api/users/:userId/fractals                       controller.FractalController.listUserFractals(userId: String)
 GET           /api/users/me                                     controller.UserController.me()
 GET           /api/users/:id                                    controller.UserController.get(id: String)
+DELETE        /api/users/:id                                    controller.UserController.delete(id: String)
 
 GET           /auth/google                                      module.auth.AuthenticationController.authenticate()
 GET           /auth/logout                                      module.auth.AuthenticationController.logout()

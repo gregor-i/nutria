@@ -59,6 +59,13 @@ case class DetailsState(
   def dirty: Boolean = remoteFractal != fractalToEdit
 }
 
+case class ProfileState(
+    about: User,
+    navbarExpanded: Boolean = false
+) extends NutriaState {
+  def user: Some[User] = Some(about)
+}
+
 object DetailsState {
   val remoteFractal: Lens[DetailsState, FractalEntityWithId] =
     GenLens[DetailsState](_.remoteFractal)
@@ -109,5 +116,6 @@ object NutriaState extends CirceCodex {
       case state: LibraryState     => state.copy(navbarExpanded = navbarExpanded)
       case state: UserLibraryState => state.copy(navbarExpanded = navbarExpanded)
       case state: DetailsState     => state.copy(navbarExpanded = navbarExpanded)
+      case state: ProfileState     => state.copy(navbarExpanded = navbarExpanded)
     }
 }

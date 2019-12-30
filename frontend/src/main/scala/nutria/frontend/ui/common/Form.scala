@@ -70,6 +70,18 @@ object Form {
         })
     )
 
+  def readonlyStringInput(
+      label: String,
+      value: String
+  ): Node =
+    inputStyle(
+      label,
+      Node("input.input")
+        .attr("type", "text")
+        .attr("disabled", "")
+        .attr("value", value)
+    )
+
   def mulitlineStringInput[S](
       label: String,
       lens: Lens[S, String]

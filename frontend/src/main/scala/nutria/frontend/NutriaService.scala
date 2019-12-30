@@ -65,6 +65,12 @@ object NutriaService {
       .flatMap(check(202))
       .map(_ => ())
 
+  def deleteUser(userId: String): Future[Unit] =
+    Ajax
+      .delete(s"/api/users/${userId}")
+      .flatMap(check(204))
+      .map(_ => ())
+
   private def check(excepted: Int)(req: XMLHttpRequest): Future[XMLHttpRequest] =
     if (req.status == excepted)
       Future.successful(req)

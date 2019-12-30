@@ -15,6 +15,7 @@ object Ui {
         case state: UserLibraryState => UserLibraryUi.render(state, update)
         case state: LoadingState     => LoadingUi.render(state, update)
         case state: GreetingState    => GreetingUi.render(state, update)
+        case state: ProfileState     => ProfileUi.render(state, update)
       })
   }
 }

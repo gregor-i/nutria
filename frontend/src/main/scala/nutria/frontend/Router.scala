@@ -29,6 +29,14 @@ object Router {
           NutriaState.libraryState()
         )
 
+      case s"/user/profile" =>
+        LoadingState(
+          NutriaService.whoAmI().map {
+            case Some(user) => ProfileState(about = user)
+            case None       => ErrorState("You are not logged in")
+          }
+        )
+
       case s"/user/${userId}/gallery" =>
         LoadingState(
           NutriaState.userLibraryState(userId)
@@ -63,7 +71,6 @@ object Router {
             .whoAmI()
             .map { user =>
               (for {
-
                 state   <- queryParams.get("state")
                 fractal <- queryDecoded[FractalImage](state)
               } yield ExplorerState(user, None, owned = false, fractal))
@@ -91,6 +98,7 @@ object Router {
           )
         case None => Some((s"/explorer", Map("state" -> queryEncoded(exState.fractalImage))))
       }
+    case _: ProfileState => Some("/user/profile" -> Map.empty)
     case _: GreetingState =>
       Some(("/", Map.empty))
     case _: ErrorState =>
