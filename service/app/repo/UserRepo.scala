@@ -33,14 +33,14 @@ class UserRepo @Inject() (db: Database) {
         .as(rowParser.singleOpt)
     }
 
-  def save(row: User): Unit =
+  def save(user: User): Unit =
     db.withConnection { implicit con =>
       SQL"""INSERT INTO users (id, name, email, google_user_id)
-            VALUES (${row.id}, ${row.name}, ${row.email}, ${row.googleUserId})
+            VALUES (${user.id}, ${user.name}, ${user.email}, ${user.googleUserId})
             ON CONFLICT (id) DO UPDATE
-            SET name = ${row.name},
-              email = ${row.email},
-              google_user_id = ${row.googleUserId}
+            SET name = ${user.name},
+                email = ${user.email},
+                google_user_id = ${user.googleUserId}
         """.executeUpdate()
     }
 
