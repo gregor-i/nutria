@@ -80,7 +80,7 @@ class AuthenticationGoogle @Inject() (conf: Configuration, wsClient: WSClient, u
     request.queryString.get("code") match {
       case None =>
         Redirect(requestTokenUrl)
-          // todo: consider using the state-parameter to store the return-to
+        // todo: consider using the state-parameter to store the return-to
           .addingToSession("return-to" -> request.getQueryString("return-to").getOrElse("/"))
           .pipe(Future.successful)
 

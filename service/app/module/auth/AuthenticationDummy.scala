@@ -8,7 +8,9 @@ import play.api.mvc.InjectedController
 import repo.UserRepo
 
 @Singleton
-class AuthenticationDummy @Inject()(repo: UserRepo) extends InjectedController with AuthenticationController {
+class AuthenticationDummy @Inject() (repo: UserRepo)
+    extends InjectedController
+    with AuthenticationController {
   val user = User(
     UUID.nameUUIDFromBytes("dummy-id".getBytes).toString,
     "Dummy Name",

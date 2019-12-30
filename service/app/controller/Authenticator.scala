@@ -10,35 +10,29 @@ class Authenticator @Inject() (conf: Configuration, userRepo: UserRepo) extends 
 
   private val adminEmail = conf.get[String]("auth.admin.email")
 
-  def adminUser[A](req: Request[A])(ifAuthorized: => Result): Result = {
+  def adminUser[A](req: Request[A])(ifAuthorized: => Result): Result =
     userFromSessionAndDb(req) match {
       case None                                             => Unauthorized
       case Some(otherUser) if otherUser.email != adminEmail => Forbidden
       case Some(_)                                          => ifAuthorized
     }
-  }
 
-  def byUserId[A](req: Request[A])(userId: String)(ifAuthorized: => Result): Result = {
+  def byUserId[A](req: Request[A])(userId: String)(ifAuthorized: => Result): Result =
     userFromSessionAndDb(req) match {
       case None                                      => Unauthorized
       case Some(otherUser) if otherUser.id != userId => Forbidden
       case Some(_)                                   => ifAuthorized
     }
-  }
 
-  def withUser[A](req: Request[A])(ifAuthorized: User => Result): Result = {
+  def withUser[A](req: Request[A])(ifAuthorized: User => Result): Result =
     userFromSessionAndDb(req) match {
       case None       => Unauthorized
       case Some(user) => ifAuthorized(user)
     }
-  }
-
-  private def userIdFromSession(req: Request[_]): Option[String] =
-    req.session.get("user-id")
 
   private def userFromSessionAndDb(req: Request[_]): Option[User] =
     for {
-      userId <- userIdFromSession(req)
+      userId <- req.session.get("user-id")
       user   <- userRepo.get(userId)
     } yield user
 
