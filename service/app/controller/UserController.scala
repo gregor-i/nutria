@@ -21,21 +21,20 @@ class UserController @Inject() (userRepo: UserRepo, authenticator: Authenticator
     }
   }
 
-  def delete(userId: String) = Action { req =>
+  def delete(userId: String) = Action { implicit req =>
     authenticator.byUserId(req)(userId) {
       println(userRepo.get(userId))
 
       (userRepo.delete(userId) match {
         case 0 => NotFound
         case _ => NoContent
-      }).discardingCookies(DiscardingCookie("user"))
-        .bakeCookies()
+      }).withNewSession
     }
   }
 
   def me() = Action { req =>
     authenticator
-      .userFromCookie(req)
+      .getUser(req)
       .asJson
       .pipe(Ok(_))
   }

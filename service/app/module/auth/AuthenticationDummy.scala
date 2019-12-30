@@ -5,21 +5,18 @@ import java.util.UUID
 import javax.inject.Singleton
 import nutria.core.User
 import play.api.mvc.{Cookie, InjectedController}
+import repo.UserRepo
 
 @Singleton
-class AuthenticationDummy() extends InjectedController with AuthenticationController {
-  private def userCookie = Cookie(name = "user", value = EncodeCookie(AuthenticationDummy.user))
-
-  def authenticate() = Action { _ =>
+class AuthenticationDummy(repo: UserRepo) extends InjectedController with AuthenticationController {
+  def authenticate() = Action { implicit req =>
+    repo.save(AuthenticationDummy.user)
     Redirect("/")
-      .withCookies(userCookie)
-      .bakeCookies()
+      .addingToSession("uesr-id" -> AuthenticationDummy.user.id)
   }
 
   def logout() = Action { _ =>
-    Redirect("/")
-      .withCookies(Cookie(name = "user", value = ""))
-      .bakeCookies()
+    Redirect("/").withNewSession
   }
 }
 

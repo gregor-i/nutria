@@ -54,7 +54,7 @@ class AdminController @Inject() (
 
   def insertSystemFractals = Action { req =>
     authenticator.adminUser(req) {
-      val user = authenticator.userFromCookie(req)
+      val user = authenticator.getUser(req)
       systemFractals.systemFractals
         .foreach(
           entity =>

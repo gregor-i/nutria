@@ -76,7 +76,7 @@ class AuthenticationGoogle @Inject() (conf: Configuration, wsClient: WSClient, u
         )
     }
 
-  def authenticate() = Action.async { request =>
+  def authenticate() = Action.async { implicit request =>
     request.queryString.get("code") match {
       case None => Future.successful(Redirect(requestTokenUrl))
 
@@ -84,17 +84,12 @@ class AuthenticationGoogle @Inject() (conf: Configuration, wsClient: WSClient, u
         for {
           authResponse <- getAccessToken(code)
           userData     <- getUserInfo(authResponse.access_token)
-          user       = userRepo.upsertWithGoogleData(userData)
-          userCookie = Cookie(name = "user", value = EncodeCookie(user))
-        } yield Redirect("/")
-          .withCookies(userCookie)
-          .bakeCookies()
+          user = userRepo.upsertWithGoogleData(userData)
+        } yield Redirect("/").addingToSession("user-id" -> user.id)
     }
   }
 
   def logout() = Action { _ =>
-    Redirect("/")
-      .withCookies(Cookie(name = "user", value = ""))
-      .bakeCookies()
+    Redirect("/").withNewSession
   }
 }
