@@ -78,14 +78,21 @@ class AuthenticationGoogle @Inject() (conf: Configuration, wsClient: WSClient, u
 
   def authenticate() = Action.async { implicit request =>
     request.queryString.get("code") match {
-      case None => Future.successful(Redirect(requestTokenUrl))
+      case None =>
+        Redirect(requestTokenUrl)
+          // todo: consider using the state-parameter to store the return-to
+          .addingToSession("return-to" -> request.getQueryString("return-to").getOrElse("/"))
+          .pipe(Future.successful)
 
       case Some(Seq(code)) =>
         for {
           authResponse <- getAccessToken(code)
           userData     <- getUserInfo(authResponse.access_token)
-          user = userRepo.upsertWithGoogleData(userData)
-        } yield Redirect("/").addingToSession("user-id" -> user.id)
+          user     = userRepo.upsertWithGoogleData(userData)
+          returnTo = request.session.get("return-to").getOrElse("/")
+        } yield Redirect(returnTo)
+          .addingToSession("user-id" -> user.id)
+          .removingFromSession("return-to")
     }
   }
 

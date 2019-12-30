@@ -210,9 +210,6 @@ object Actions {
       }
     }
 
-  def login(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
-    event(_ => dom.window.location.href = Header.loginHref)
-
   def deleteUser(
       userId: String
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =

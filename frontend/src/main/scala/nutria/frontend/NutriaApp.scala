@@ -17,22 +17,12 @@ class NutriaApp(container: Element) extends SnabbdomApp {
   def renderState(state: NutriaState): Unit = {
     Router.stateToUrl(state) match {
       case Some((currentPath, currentSearch)) =>
-        val stringSearch = currentSearch
-          .map {
-            case (key, value) => s"$key=$value"
-          }
-          .mkString("&")
+        val stringSearch = Router.searchToUrl(currentSearch)
         if (dom.window.location.pathname != currentPath) {
           dom.window.scroll(0, 0)
-          if (currentSearch.nonEmpty)
-            dom.window.history.pushState(null, "", currentPath + "?" + stringSearch)
-          else
-            dom.window.history.pushState(null, "", currentPath)
-        } else if (dom.window.location.search != stringSearch) {
-          if (currentSearch.nonEmpty)
-            dom.window.history.replaceState(null, "", currentPath + "?" + stringSearch)
-          else
-            dom.window.history.replaceState(null, "", currentPath)
+          dom.window.history.pushState(null, "", currentPath + stringSearch)
+        } else {
+          dom.window.history.replaceState(null, "", currentPath + stringSearch)
         }
       case None => ()
     }

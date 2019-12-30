@@ -2,7 +2,7 @@ package nutria.frontend.ui.common
 
 import nutria.core.User
 import nutria.frontend.toasts.Toasts
-import nutria.frontend.{LoadingState, NutriaState, ProfileState}
+import nutria.frontend.{LoadingState, NutriaState, ProfileState, Router}
 import org.scalajs.dom
 import snabbdom.{Node, Snabbdom}
 
@@ -71,7 +71,13 @@ object Header {
       )
   }
 
-  val loginHref: String  = "/auth/google"
+  def loginHref(implicit nutriaState: NutriaState): String = {
+    Router.stateToUrl(nutriaState) match {
+      case None                 => "/auth/google"
+      case Some((base, search)) => s"/auth/google?return-to=${base + Router.searchToUrl(search)}"
+    }
+  }
+
   val logoutHref: String = "/auth/logout"
 
   private val brand =
@@ -103,7 +109,7 @@ object Header {
       .child(Node("span").attr("aria-hidden", "true"))
       .child(Node("span").attr("aria-hidden", "true"))
 
-  private val loginItem =
+  private def loginItem(implicit nutriaState: NutriaState) =
     Node("div.navbar-item")
       .child(
         Node("a.button.is-rounded")

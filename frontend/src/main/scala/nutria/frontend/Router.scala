@@ -83,6 +83,18 @@ object Router {
     }
   }
 
+  def searchToUrl(search: Map[String, String]): String = {
+    val stringSearch = search
+      .map {
+        case (key, value) => s"$key=$value"
+      }
+      .mkString("&")
+    if (stringSearch == "")
+      ""
+    else
+      "?" + stringSearch
+  }
+
   def stateToUrl(state: NutriaState): Option[(String, Map[String, String])] = state match {
     case _: LibraryState =>
       Some(("/gallery", Map.empty))
