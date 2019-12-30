@@ -5,6 +5,7 @@ import scala.sys.process._
 version in ThisBuild := "0.0.1"
 scalaVersion in ThisBuild := "2.13.1"
 scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation", "-Ymacro-annotations")
+scalafmtOnCompile in ThisBuild := true
 
 // projects
 lazy val core = crossProject(JSPlatform, JVMPlatform)
