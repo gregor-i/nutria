@@ -16,7 +16,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 object Actions {
   def loadGallery(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
-      update(LoadingState(NutriaState.libraryState()))
+      update(LoadingState(NutriaState.galleryState()))
     }
 
   def exploreFractal(
@@ -106,7 +106,7 @@ object Actions {
 
   def togglePublished(
       fractal: FractalEntityWithId
-  )(implicit state: UserLibraryState, update: NutriaState => Unit): Eventlistener =
+  )(implicit state: UserGalleryState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       val published = fractal.entity.published
       (for {
@@ -138,7 +138,7 @@ object Actions {
         _             <- NutriaService.deleteFractal(fractalId)
         _ = Toasts.warningToast("Fractal deleted.")
         reloaded <- NutriaService.loadUserFractals(remoteFractal.owner)
-      } yield UserLibraryState(
+      } yield UserGalleryState(
         user = state.user,
         userFractals = reloaded,
         aboutUser = remoteFractal.owner

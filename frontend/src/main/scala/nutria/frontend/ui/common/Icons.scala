@@ -13,7 +13,7 @@ object Icons {
   val copy     = "fa-clone" // fork
   val snapshot = "fa-camera"
   val explore  = "fa-compass"
-  val library  = "fa-image"
+  val gallery  = "fa-image"
   val login    = "fa-sign-in"
   val logout   = "fa-sign-out"
   val up       = "fa-arrow-up"

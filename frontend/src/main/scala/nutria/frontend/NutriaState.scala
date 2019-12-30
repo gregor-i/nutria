@@ -37,13 +37,13 @@ case class ExplorerState(
     navbarExpanded: Boolean = false
 ) extends NutriaState
 
-case class LibraryState(
+case class GalleryState(
     user: Option[User],
     publicFractals: Vector[FractalEntityWithId],
     navbarExpanded: Boolean = false
 ) extends NutriaState
 
-case class UserLibraryState(
+case class UserGalleryState(
     user: Option[User],
     aboutUser: String,
     userFractals: Vector[FractalEntityWithId],
@@ -80,17 +80,17 @@ object ExplorerState {
 }
 
 object NutriaState extends CirceCodex {
-  def libraryState(): Future[LibraryState] =
+  def galleryState(): Future[GalleryState] =
     for {
       user           <- NutriaService.whoAmI()
       publicFractals <- NutriaService.loadPublicFractals()
-    } yield LibraryState(user = user, publicFractals = publicFractals)
+    } yield GalleryState(user = user, publicFractals = publicFractals)
 
-  def userLibraryState(userId: String): Future[UserLibraryState] =
+  def userGalleryState(userId: String): Future[UserGalleryState] =
     for {
       user         <- NutriaService.whoAmI()
       userFractals <- NutriaService.loadUserFractals(userId)
-    } yield UserLibraryState(user = user, aboutUser = userId, userFractals = userFractals)
+    } yield UserGalleryState(user = user, aboutUser = userId, userFractals = userFractals)
 
   def greetingState(): Future[GreetingState] =
     for {
@@ -113,8 +113,8 @@ object NutriaState extends CirceCodex {
       case state: ErrorState       => state.copy(navbarExpanded = navbarExpanded)
       case state: GreetingState    => state.copy(navbarExpanded = navbarExpanded)
       case state: ExplorerState    => state.copy(navbarExpanded = navbarExpanded)
-      case state: LibraryState     => state.copy(navbarExpanded = navbarExpanded)
-      case state: UserLibraryState => state.copy(navbarExpanded = navbarExpanded)
+      case state: GalleryState     => state.copy(navbarExpanded = navbarExpanded)
+      case state: UserGalleryState => state.copy(navbarExpanded = navbarExpanded)
       case state: DetailsState     => state.copy(navbarExpanded = navbarExpanded)
       case state: ProfileState     => state.copy(navbarExpanded = navbarExpanded)
     }

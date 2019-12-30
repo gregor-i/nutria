@@ -27,7 +27,7 @@ object Header {
                   .text("Public Gallery")
                   .event(
                     "click",
-                    Snabbdom.event(_ => update(LoadingState(NutriaState.libraryState())))
+                    Snabbdom.event(_ => update(LoadingState(NutriaState.galleryState())))
                   )
               )
               .child(
@@ -38,7 +38,7 @@ object Header {
                     Snabbdom.event { _ =>
                       state.user match {
                         case Some(user) =>
-                          update(LoadingState(NutriaState.userLibraryState(user.id)))
+                          update(LoadingState(NutriaState.userGalleryState(user.id)))
                         case None => Toasts.dangerToast("Log in first")
                       }
                     }

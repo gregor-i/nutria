@@ -223,7 +223,7 @@ object DetailsUi extends Page[DetailsState] {
 
     Node("div.fractal-tile-list")
       .child(tiles)
-      .child(LibraryUi.dummyTiles)
+      .child(GalleryUi.dummyTiles)
   }
 
   private def actions()(implicit state: DetailsState, update: NutriaState => Unit): Node = {

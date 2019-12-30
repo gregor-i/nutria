@@ -34,7 +34,7 @@ object GreetingUi extends Page[GreetingState] {
                 Node("div.content").prop("innerHTML", greetingContent),
                 Node("div.buttons")
                   .child(
-                    Button("Start exploring!", Icons.library, Actions.loadGallery)
+                    Button("Start exploring!", Icons.gallery, Actions.loadGallery)
                       .classes("is-primary")
                   )
                   .classes("is-right")

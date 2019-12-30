@@ -3,11 +3,11 @@ package nutria.frontend.ui
 import nutria.core._
 import nutria.core.viewport.Dimensions
 import nutria.frontend.ui.common.{FractalTile, _}
-import nutria.frontend.{Actions, NutriaState, UserLibraryState}
+import nutria.frontend.{Actions, NutriaState, UserGalleryState}
 import snabbdom.Node
 
-object UserLibraryUi extends Page[UserLibraryState] {
-  def render(implicit state: UserLibraryState, update: NutriaState => Unit) =
+object UserGalleryUi extends Page[UserGalleryState] {
+  def render(implicit state: UserGalleryState, update: NutriaState => Unit) =
     Seq(
       common.Header(state, update),
       Node("div.container")
@@ -21,7 +21,7 @@ object UserLibraryUi extends Page[UserLibraryState] {
 
   def renderFractalTile(
       fractal: FractalEntityWithId
-  )(implicit state: UserLibraryState, update: NutriaState => Unit): Node =
+  )(implicit state: UserGalleryState, update: NutriaState => Unit): Node =
     Node("article.fractal-tile.is-relative")
       .attr("title", fractal.entity.description)
       .child(
