@@ -9,12 +9,6 @@ object ExplorerUi extends Page[ExplorerState] {
     Seq(common.Header(state, update), renderCanvas)
 
   // Actions to implement:
-  //  With Fractal Id
-  //    Fractal is owned by me
-  //      Add Snapshot to fractal     (/)
-  //    else
-  //      fork and take snapshot      (/)
-  //    back to fractal details
   //  return to start position
   //  render high res image and save
 

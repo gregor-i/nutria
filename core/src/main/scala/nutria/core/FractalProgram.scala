@@ -79,6 +79,16 @@ case class FreestyleProgram(code: String, parameters: Seq[Parameter] = Seq.empty
 
 object FreestyleProgram {
   val default = FreestyleProgram("color = vec4(abs(z.x), abs(z.y), length(z), 1.0);")
+
+  val allVaribalesRegex = "\\$\\{([\\w\\d^\\}]+)\\}".r
+
+  def variables(code: String): Seq[String] =
+    allVaribalesRegex
+      .findAllMatchIn(code)
+      .map(_.group(1))
+      .distinct
+      .toSeq
+      .sorted
 }
 
 object FractalProgram extends CirceCodex {

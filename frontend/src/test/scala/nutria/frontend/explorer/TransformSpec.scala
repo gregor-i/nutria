@@ -5,10 +5,11 @@ import nutria.core.viewport.Dimensions
 import nutria.core.viewport
 import nutria.core.{Point, Viewport}
 import nutria.frontend.ui.Transform
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class TransformSpec extends FunSuite with Matchers {
-  def validate(moves: Seq[(Point, Point)]) {
+class TransformSpec extends AnyFunSuite with Matchers {
+  def validate(moves: Seq[(Point, Point)]) = {
     val oldView = Viewport((-5, -5), (10, 0), (0, 10))
     val newView = Transform.applyToViewport(moves, oldView)
 
