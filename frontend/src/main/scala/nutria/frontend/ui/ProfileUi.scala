@@ -12,7 +12,7 @@ object ProfileUi extends Page[ProfileState] {
         .child(
           Node("section.section")
             .child(Node("h1.title.is-1").text("User Profile"))
-            .child(Node("h2.subtitle.is-").text("ID: " + state.about.id))
+            .child(Node("h2.subtitle").text("ID: " + state.about.id))
         )
         .child(
           Node("section.section").children(

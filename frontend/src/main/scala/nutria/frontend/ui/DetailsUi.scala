@@ -20,7 +20,7 @@ object DetailsUi extends Page[DetailsState] {
       .child(
         Node("section.section")
           .child(Node("h1.title.is-1").text(state.remoteFractal.entity.title))
-          .child(Node("h2.subtitle.is-").text("ID: " + state.remoteFractal.id))
+          .child(Node("h2.subtitle").text("ID: " + state.remoteFractal.id))
       )
       .child(
         Node("section.section").children(

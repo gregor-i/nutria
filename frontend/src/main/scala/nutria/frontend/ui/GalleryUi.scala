@@ -12,6 +12,10 @@ object GalleryUi extends Page[GalleryState] {
       common.Header(state, update),
       Node("div.container")
         .child(
+          Node("section.section")
+            .child(Node("h1.title.is-1").text("Fractal Gallery:"))
+        )
+        .child(
           Node("div.fractal-tile-list")
             .children(
               state.publicFractals.map(renderFractalTile),

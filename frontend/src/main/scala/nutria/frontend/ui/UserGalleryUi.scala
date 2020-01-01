@@ -10,7 +10,12 @@ object UserGalleryUi extends Page[UserGalleryState] {
   def render(implicit state: UserGalleryState, update: NutriaState => Unit) =
     Seq(
       common.Header(state, update),
-      Node("div.container")
+      Node("div.container.is-fluid")
+        .child(
+          Node("section.section")
+            .child(Node("h1.title.is-1").text("User Fractal Gallery:"))
+            .child(Node("h2.subtitle").text("user: " + state.aboutUser))
+        )
         .child(
           Node("div.fractal-tile-list")
             .child(state.userFractals.map(renderFractalTile))
