@@ -1,7 +1,6 @@
 package nutria.frontend.ui
 
 import nutria.frontend._
-import nutria.frontend.ui.DetailsUi.general
 import nutria.frontend.ui.common.{Button, Form, Icons}
 import snabbdom.{Node, _}
 
@@ -10,9 +9,10 @@ object ProfileUi extends Page[ProfileState] {
     Seq(
       common.Header(state, update),
       Node("div.container")
-        .children(
-          Node("h1.title.is-1").text("User Profile"),
-          Node("h2.subtitle.is-").text("ID: " + state.about.id)
+        .child(
+          Node("section.section")
+            .child(Node("h1.title.is-1").text("User Profile"))
+            .child(Node("h2.subtitle.is-").text("ID: " + state.about.id))
         )
         .child(
           Node("section.section").children(

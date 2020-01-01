@@ -9,6 +9,10 @@ object Main {
   def main(args: Array[String]): Unit =
     dom.document.addEventListener[Event](
       "DOMContentLoaded",
-      (_: js.Any) => new nutria.frontend.NutriaApp(dom.document.getElementById("nutria-app"))
+      (_: js.Any) => {
+        val container = dom.document.createElement("nutria-app")
+        dom.document.body.appendChild(container)
+        new nutria.frontend.NutriaApp(container)
+      }
     )
 }

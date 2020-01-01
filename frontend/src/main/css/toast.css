@@ -1,4 +1,4 @@
-#toast-bar{
+toast-bar {
     position: fixed;
     left: 0;
     right: 0;
@@ -10,7 +10,7 @@
     z-index: 50;
 }
 
-#toast-bar > * {
+toast-bar > * {
     max-width: 600px;
     margin: 8px;
 }

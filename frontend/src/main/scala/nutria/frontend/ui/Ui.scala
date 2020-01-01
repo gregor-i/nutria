@@ -5,7 +5,7 @@ import snabbdom.Node
 
 object Ui {
   def apply(nutriaState: NutriaState, update: NutriaState => Unit): Node = {
-    Node("div")
+    Node("nutria-app")
       .key(Router.stateToUrl(nutriaState).fold("")(_._1))
       .children(nutriaState match {
         case state: ErrorState       => ErrorUi.render(state, update)

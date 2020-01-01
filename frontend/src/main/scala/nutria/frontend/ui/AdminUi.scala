@@ -15,7 +15,7 @@ object AdminUi extends Page[AdminState] {
     Seq(
       Header.apply,
       Node("div.container")
-        .child(Node("h1.title.is-1").text("Admin:"))
+        .child(Node("section.section").child(Node("h1.title.is-1").text("Admin:")))
         .child(usersTable(state.users))
         .child(fractalsTable(state.fractals))
         .child(actionBar())

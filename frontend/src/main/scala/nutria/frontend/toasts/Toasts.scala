@@ -2,20 +2,16 @@ package nutria.frontend.toasts
 
 import nutria.frontend.util.SnabbdomApp
 import org.scalajs.dom
-import org.scalajs.dom.Element
-import snabbdom.{Node, Snabbdom, SnabbdomFacade, VNode}
-
-import scala.scalajs.js.|
+import snabbdom.{Node, Snabbdom, VNode}
 
 object Toasts extends SnabbdomApp {
   private var counter: Int             = 0
   private var toasts: List[ToastState] = List.empty
 
-  private var node: Element | VNode = dom.document.getElementById("toast-bar") // this is dangerous
+  private var node: Option[VNode] = None
 
   private def render(): Unit = {
-    val ui = Node("div")
-      .prop("id", "toast-bar")
+    val ui = Node("toast-bar")
       .child(toasts.map { toast =>
         Node(s"div.notification${toast.`class`}")
           .key(toast.id)
@@ -30,7 +26,14 @@ object Toasts extends SnabbdomApp {
       })
       .toVNode
 
-    node = patch(node, ui)
+    node match {
+      case None =>
+        val container = dom.document.createElement("toast-bar")
+        dom.document.body.appendChild(container)
+        node = Some(patch(container, ui))
+      case Some(vnode) =>
+        node = Some(patch(vnode, ui))
+    }
   }
 
   def successToast(text: String): Unit = addToast(text, ".is-success")

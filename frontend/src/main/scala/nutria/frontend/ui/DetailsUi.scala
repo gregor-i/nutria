@@ -17,9 +17,10 @@ object DetailsUi extends Page[DetailsState] {
 
   def body(implicit state: DetailsState, update: NutriaState => Unit) =
     Node("div.container")
-      .children(
-        Node("h1.title.is-1").text(state.remoteFractal.entity.title),
-        Node("h2.subtitle.is-").text("ID: " + state.remoteFractal.id)
+      .child(
+        Node("section.section")
+          .child(Node("h1.title.is-1").text(state.remoteFractal.entity.title))
+          .child(Node("h2.subtitle.is-").text("ID: " + state.remoteFractal.id))
       )
       .child(
         Node("section.section").children(
