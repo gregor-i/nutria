@@ -7,7 +7,7 @@ import nutria.core.FractalEntity
 import org.scalatest.{BeforeAndAfterEach, FunSuite, Matchers}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
-class FractalRepoSpec extends FunSuite with Matchers with GuiceOneAppPerSuite with BeforeAndAfterEach {                                              
+class FractalRepoSpec extends FunSuite with Matchers with GuiceOneAppPerSuite with BeforeAndAfterEach {
   def repo           = app.injector.instanceOf[FractalRepo]
   val systemFractals = app.injector.instanceOf[SystemFractals]
 
