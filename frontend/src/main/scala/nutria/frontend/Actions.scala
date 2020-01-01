@@ -7,6 +7,7 @@ import eu.timepit.refined.collection.NonEmpty
 import nutria.core.viewport.Viewport
 import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage}
 import eu.timepit.refined.refineV
+import nutria.frontend.service.NutriaService
 import nutria.frontend.toasts.Toasts
 import nutria.frontend.ui.common.Header
 import org.scalajs.dom
@@ -97,8 +98,7 @@ object Actions {
             state.user,
             fractalId = Some(forkedFractal.id),
             owned = true,
-            fractalImage =
-              FractalImage(remoteFractal.entity.program, viewport, remoteFractal.entity.antiAliase)
+            fractalImage = FractalImage(remoteFractal.entity.program, viewport, remoteFractal.entity.antiAliase)
           )
         )
       }

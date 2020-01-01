@@ -10,11 +10,11 @@ class Authenticator @Inject() (conf: Configuration, userRepo: UserRepo) extends 
 
   private val adminEmail = conf.get[String]("auth.admin.email")
 
-  def adminUser[A](req: Request[A])(ifAuthorized: => Result): Result =
+  def adminUser[A](req: Request[A])(ifAuthorized: User => Result): Result =
     userFromSessionAndDb(req) match {
       case None                                             => Unauthorized
       case Some(otherUser) if otherUser.email != adminEmail => Forbidden
-      case Some(_)                                          => ifAuthorized
+      case Some(admin)                                      => ifAuthorized(admin)
     }
 
   def byUserId[A](req: Request[A])(userId: String)(ifAuthorized: => Result): Result =

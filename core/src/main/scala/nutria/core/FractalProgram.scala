@@ -74,8 +74,7 @@ object NewtonIteration {
 }
 
 @monocle.macros.Lenses()
-case class FreestyleProgram(code: String, parameters: Seq[Parameter] = Seq.empty)
-    extends FractalProgram
+case class FreestyleProgram(code: String, parameters: Seq[Parameter] = Seq.empty) extends FractalProgram
 
 object FreestyleProgram {
   val default = FreestyleProgram("color = vec4(abs(z.x), abs(z.y), length(z), 1.0);")

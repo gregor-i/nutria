@@ -2,7 +2,8 @@ package nutria.frontend
 
 import monocle.Lens
 import monocle.macros.GenLens
-import nutria.core.{FractalEntity, _}
+import nutria.core._
+import nutria.frontend.service.NutriaService
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -17,17 +18,11 @@ trait NoUser {
   def user: None.type = None
 }
 
-case class LoadingState(loading: Future[NutriaState], navbarExpanded: Boolean = false)
-    extends NutriaState
-    with NoUser
+case class LoadingState(loading: Future[NutriaState], navbarExpanded: Boolean = false) extends NutriaState with NoUser
 
-case class ErrorState(message: String, navbarExpanded: Boolean = false)
-    extends NutriaState
-    with NoUser
+case class ErrorState(message: String, navbarExpanded: Boolean = false) extends NutriaState with NoUser
 
-case class GreetingState(randomFractal: FractalImage, navbarExpanded: Boolean = false)
-    extends NutriaState
-    with NoUser
+case class GreetingState(randomFractal: FractalImage, navbarExpanded: Boolean = false) extends NutriaState with NoUser
 
 case class ExplorerState(
     user: Option[User],
@@ -64,6 +59,15 @@ case class ProfileState(
     navbarExpanded: Boolean = false
 ) extends NutriaState {
   def user: Some[User] = Some(about)
+}
+
+case class AdminState(
+    admin: User,
+    users: Vector[User],
+    fractals: Vector[FractalEntityWithId],
+    navbarExpanded: Boolean = false
+) extends NutriaState {
+  def user: Some[User] = Some(admin)
 }
 
 object DetailsState {
@@ -117,5 +121,6 @@ object NutriaState extends CirceCodex {
       case state: UserGalleryState => state.copy(navbarExpanded = navbarExpanded)
       case state: DetailsState     => state.copy(navbarExpanded = navbarExpanded)
       case state: ProfileState     => state.copy(navbarExpanded = navbarExpanded)
+      case state: AdminState       => state.copy(navbarExpanded = navbarExpanded)
     }
 }

@@ -17,6 +17,13 @@ class UserRepo @Inject() (db: Database) {
     googleUserId <- SqlParser.str("google_user_id").?
   } yield User(id, name, email, googleUserId)
 
+  def list(): List[User] =
+    db.withConnection { implicit con =>
+      SQL"""SELECT *
+            FROM users"""
+        .as(rowParser.*)
+    }
+
   def get(id: String): Option[User] =
     db.withConnection { implicit con =>
       SQL"""SELECT *

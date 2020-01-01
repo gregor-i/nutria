@@ -16,11 +16,12 @@ GET           /auth/google                                      module.auth.Auth
 GET           /auth/logout                                      module.auth.AuthenticationController.logout()
 
 # Admin
-GET           /admin                                            controller.AdminController.ui()
-POST          /admin/truncate-fractals                          controller.AdminController.truncateFractals()
-POST          /admin/clean-fractals                             controller.AdminController.cleanFractals()
-POST          /admin/insert-system-fractals                     controller.AdminController.insertSystemFractals()
-POST          /admin/delete-fractal/:id                         controller.AdminController.deleteFractal(id : String)
+GET           /api/admin                                        controller.AdminController.loadState()
+POST          /api/admin/truncate-fractals                      controller.AdminController.truncateFractals()
+POST          /api/admin/clean-fractals                         controller.AdminController.cleanFractals()
+POST          /api/admin/insert-system-fractals                 controller.AdminController.insertSystemFractals()
+POST          /api/admin/delete-fractal/:id                     controller.AdminController.deleteFractal(id : String)
+POST          /api/admin/delete-user/:id                        controller.AdminController.deleteUser(id : String)
 
 # Assets
 GET           /favicon.ico                                      controller.UiController.asset(path = "icon.png", folder = "/public/img")

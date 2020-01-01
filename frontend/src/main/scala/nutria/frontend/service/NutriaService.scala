@@ -1,16 +1,11 @@
-package nutria.frontend
+package nutria.frontend.service
 
-import io.circe.syntax._
-import io.circe.{Decoder, Encoder, parser}
 import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage, User}
-import org.scalajs.dom.XMLHttpRequest
 import org.scalajs.dom.ext.Ajax
-import org.scalajs.dom.ext.Ajax.InputData
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-object NutriaService {
+object NutriaService extends Service {
   def whoAmI(): Future[Option[User]] =
     Ajax
       .get(url = s"/api/users/me")
@@ -70,16 +65,4 @@ object NutriaService {
       .delete(s"/api/users/${userId}")
       .flatMap(check(204))
       .map(_ => ())
-
-  private def check(excepted: Int)(req: XMLHttpRequest): Future[XMLHttpRequest] =
-    if (req.status == excepted)
-      Future.successful(req)
-    else
-      Future.failed(new Exception(s"unexpected response code: ${req.status}"))
-
-  private def parse[A: Decoder](req: XMLHttpRequest): Future[A] =
-    Future.fromTry(parser.decode[A](req.responseText).toTry)
-
-  private def encode[A: Encoder](a: A): InputData =
-    a.asJson.noSpaces.asInstanceOf[InputData]
 }

@@ -3,6 +3,7 @@ package nutria.frontend
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 import nutria.core.FractalImage
+import nutria.frontend.service.{NutriaAdminService, NutriaService}
 import org.scalajs.dom
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -78,6 +79,11 @@ object Router {
             }
         )
 
+      case "/admin" =>
+        LoadingState(
+          NutriaAdminService.load()
+        )
+
       case _ =>
         ErrorState("Unkown url")
     }
@@ -113,6 +119,7 @@ object Router {
     case _: ProfileState => Some("/user/profile" -> Map.empty)
     case _: GreetingState =>
       Some(("/", Map.empty))
+    case _: AdminState => Some("/admin" -> Map.empty)
     case _: ErrorState =>
       None
     case _: LoadingState =>

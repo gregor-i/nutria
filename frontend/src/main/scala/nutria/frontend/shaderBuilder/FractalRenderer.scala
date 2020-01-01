@@ -35,8 +35,7 @@ object FractalRenderer {
               && cachedViewport == Untyped(viewport.asInstanceOf[js.Object]) =>
         // dom.console.log("program and viewport unchanged, skipping render")
 
-        case (cachedProgram, cachedWebGlProgram, _)
-            if cachedProgram == Untyped(program.asInstanceOf[js.Object]) =>
+        case (cachedProgram, cachedWebGlProgram, _) if cachedProgram == Untyped(program.asInstanceOf[js.Object]) =>
           render(ctx, viewport, cachedWebGlProgram.asInstanceOf[WebGLProgram])
           Untyped(canvas).viewport = viewport.asInstanceOf[js.Object]
         // dom.console.log("program unchanged, rendering with cached webgl program")

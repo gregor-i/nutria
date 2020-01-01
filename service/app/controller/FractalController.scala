@@ -13,9 +13,7 @@ import repo.{FractalRepo, FractalRow}
 import scala.util.Random
 import scala.util.chaining._
 
-class FractalController @Inject() (fractalRepo: FractalRepo, authenticator: Authenticator)
-    extends InjectedController
-    with Circe {
+class FractalController @Inject() (fractalRepo: FractalRepo, authenticator: Authenticator) extends InjectedController with Circe {
 
   def listPublicFractals() = Action {
     Ok {

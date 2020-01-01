@@ -27,11 +27,10 @@ class ViewportSpec extends AnyFunSuite with Matchers {
   }
 
   test("Viewport should have invertible zoom Operations") {
-    forAll(ViewportChooser.chooseViewport, choose(-10d, 10d), choose(0d, 1d), choose(0d, 1d)) {
-      (viewport, factor, zoomX, zoomY) =>
-        beClose(viewport.zoomIn((zoomX, zoomY)).zoomOut((zoomX, zoomY)), viewport)
-        beClose(viewport.zoomOut((zoomX, zoomY)).zoomIn((zoomX, zoomY)), viewport)
-        true
+    forAll(ViewportChooser.chooseViewport, choose(-10d, 10d), choose(0d, 1d), choose(0d, 1d)) { (viewport, factor, zoomX, zoomY) =>
+      beClose(viewport.zoomIn((zoomX, zoomY)).zoomOut((zoomX, zoomY)), viewport)
+      beClose(viewport.zoomOut((zoomX, zoomY)).zoomIn((zoomX, zoomY)), viewport)
+      true
     }
   }
 }

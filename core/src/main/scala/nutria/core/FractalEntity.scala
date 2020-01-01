@@ -13,8 +13,7 @@ import nutria.core.viewport.DefaultViewport
 case class FractalEntity(
     title: String = "",
     program: FractalProgram,
-    views: List[Viewport] Refined NonEmpty =
-      refineV[NonEmpty](List(DefaultViewport.defaultViewport)).toOption.get,
+    views: List[Viewport] Refined NonEmpty = refineV[NonEmpty](List(DefaultViewport.defaultViewport)).toOption.get,
     description: String = "",
     reference: List[String] = List.empty,
     antiAliase: Int Refined Positive = refineMV(1),

@@ -3,10 +3,7 @@ package nutria.core.viewport
 import nutria.core.Point
 import nutria.core.viewport.Point.PointOps
 
-final case class Transform(view: Viewport, dimensions: Dimensions)
-    extends HasDimensions
-    with (Point => Point)
-    with ((Double, Double) => Point) {
+final case class Transform(view: Viewport, dimensions: Dimensions) extends HasDimensions with (Point => Point) with ((Double, Double) => Point) {
 
   private val scaleX       = view.A.x / width
   private val scaleY       = view.B.y / height

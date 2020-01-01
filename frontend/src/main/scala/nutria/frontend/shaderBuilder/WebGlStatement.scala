@@ -9,13 +9,11 @@ sealed trait WebGlStatement {
   def toCode: String
 }
 
-case class Declaration[T <: WebGlType: TypeProps](ref: Ref[T], expr: WebGlExpression[T])
-    extends WebGlStatement {
+case class Declaration[T <: WebGlType: TypeProps](ref: Ref[T], expr: WebGlExpression[T]) extends WebGlStatement {
   def toCode: String = s"${TypeProps[T].webGlType} ${ref.name} = ${expr.toCode};"
 }
 
-case class Assignment[T <: WebGlType: TypeProps](ref: Ref[T], expr: WebGlExpression[T])
-    extends WebGlStatement {
+case class Assignment[T <: WebGlType: TypeProps](ref: Ref[T], expr: WebGlExpression[T]) extends WebGlStatement {
   def toCode: String = s"${ref.name} = ${expr.toCode};"
 }
 

@@ -15,8 +15,7 @@ case class FloatLiteral(value: Float) extends WebGlExpression[WebGlTypeFloat.typ
   override def toCode: String = s"float($value)"
 }
 
-case class Vec2(a: WebGlExpression[WebGlTypeFloat.type], b: WebGlExpression[WebGlTypeFloat.type])
-    extends WebGlExpression[WebGlTypeVec2.type] {
+case class Vec2(a: WebGlExpression[WebGlTypeFloat.type], b: WebGlExpression[WebGlTypeFloat.type]) extends WebGlExpression[WebGlTypeVec2.type] {
   override def toCode: String = s"vec2(${a.toCode}, ${b.toCode})"
 }
 
@@ -65,8 +64,7 @@ case class ComplexBinaryExp(
   }
 }
 
-case class ComplexUnitaryExp(op: SpireUnitaryOperator, child: WebGlExpression[WebGlTypeVec2.type])
-    extends WebGlExpression[WebGlTypeVec2.type] {
+case class ComplexUnitaryExp(op: SpireUnitaryOperator, child: WebGlExpression[WebGlTypeVec2.type]) extends WebGlExpression[WebGlTypeVec2.type] {
   import mathParser.algebra._
   override def toCode: String = op match {
     case Neg  => s"-(${child.toCode})"

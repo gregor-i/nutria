@@ -32,20 +32,12 @@ sbt service/run
 ```
 
 ## todo list:
- - ~~store multiple viewports for a single fractal entity. still have a main viewport for gallery.~~
- - ~~details page instead of edit dialog for single fractal entities~~
  - use open gl to render fractals in backend (todo: reconsider)
  - save high quality screenshots to disk and to server
  - create a user profile to
-   - ~~list your (unpublished) fractals~~
-   - ~~create/ modify your own fractals~~
-   - ~~publish~~
-   - ~~fork existing fractals~~
    - up / down vote published fractals in gallery
- - ~~delete viewport in details~~ 
  - migrate all existing `FractalProgram`s to `FreeStyleProgram` with the right parameter (typed)
- - for login/logout: redirect to the page, where the action was invoked
-
+ - define data protection policy 
 
 ## links:
 - https://en.wikibooks.org/wiki/Fractals/Iterations_in_the_complex_plane/Mandelbrot_set/centers

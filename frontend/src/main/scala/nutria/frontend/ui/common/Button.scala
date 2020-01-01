@@ -9,6 +9,11 @@ object Button {
       .child(Icons.icon(icon))
       .child(Node("span").text(text))
 
+  def apply(text: String, onclick: SnabbdomFacade.Eventlistener): Node =
+    Node("button.button")
+      .event("click", onclick)
+      .text(text)
+
   def icon(icon: String, onclick: SnabbdomFacade.Eventlistener): Node =
     Node("button.button")
       .event("click", onclick)
