@@ -33,11 +33,14 @@ sbt service/run
 
 ## todo list:
  - use open gl to render fractals in backend (todo: reconsider)
- - save high quality screenshots to disk and to server
  - create a user profile to
-   - up / down vote published fractals in gallery
+   - up / down vote published fractals in public gallery
  - migrate all existing `FractalProgram`s to `FreeStyleProgram` with the right parameter (typed)
  - define data protection policy 
+ - explorer actions:
+    - return to start position
+    - save high quality screenshots to disk and to server
+    
 
 ## links:
 - https://en.wikibooks.org/wiki/Fractals/Iterations_in_the_complex_plane/Mandelbrot_set/centers

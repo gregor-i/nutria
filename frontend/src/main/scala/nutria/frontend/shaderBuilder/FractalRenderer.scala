@@ -33,35 +33,22 @@ object FractalRenderer {
         case (cachedProgram, _, cachedViewport)
             if cachedProgram == Untyped(program.asInstanceOf[js.Object])
               && cachedViewport == Untyped(viewport.asInstanceOf[js.Object]) =>
-        // dom.console.log("program and viewport unchanged, skipping render")
-
         case (cachedProgram, cachedWebGlProgram, _) if cachedProgram == Untyped(program.asInstanceOf[js.Object]) =>
           render(ctx, viewport, cachedWebGlProgram.asInstanceOf[WebGLProgram])
           Untyped(canvas).viewport = viewport.asInstanceOf[js.Object]
-        // dom.console.log("program unchanged, rendering with cached webgl program")
 
         case _ =>
-          val (webGlProgram, compileDuration) = messure {
-            constructProgram(ctx, program, entity.antiAliase)
-          }
+          val webGlProgram = constructProgram(ctx, program, entity.antiAliase)
           render(ctx, viewport, webGlProgram)
           Untyped(canvas).program = program.asInstanceOf[js.Object]
           Untyped(canvas).webGlProgram = webGlProgram.asInstanceOf[js.Object]
           Untyped(canvas).viewport = viewport.asInstanceOf[js.Object]
-        // dom.console.log(s"compile duration: ${compileDuration}ms")
       }
     }.recover {
       case error =>
         dom.console.error(error.getMessage)
         Failure(error)
     }.isSuccess
-  }
-
-  def messure[A](op: => A): (A, Long) = {
-    val start = System.currentTimeMillis()
-    val res   = op
-    val end   = System.currentTimeMillis()
-    (res, end - start)
   }
 
   @throws[Exception]

@@ -7,6 +7,7 @@ object Ui {
   def apply(nutriaState: NutriaState, update: NutriaState => Unit): Node = {
     Node("nutria-app")
       .key(Router.stateToUrl(nutriaState).fold("")(_._1))
+      .classes(nutriaState.getClass.getSimpleName)
       .children(nutriaState match {
         case state: ErrorState       => ErrorUi.render(state, update)
         case state: DetailsState     => DetailsUi.render(state, update)

@@ -9,8 +9,6 @@ import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage}
 import eu.timepit.refined.refineV
 import nutria.frontend.service.NutriaService
 import nutria.frontend.toasts.Toasts
-import nutria.frontend.ui.common.Header
-import org.scalajs.dom
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

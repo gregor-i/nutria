@@ -4,7 +4,7 @@ import nutria.core.viewport.Point._
 import nutria.core.viewport.Dimensions
 import nutria.core.viewport
 import nutria.core.{Point, Viewport}
-import nutria.frontend.ui.Transform
+import nutria.frontend.ui.explorer.Transform
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
