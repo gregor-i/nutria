@@ -53,12 +53,12 @@ object ExplorerEvents {
         event.preventDefault()
         val (_, boundingBox) = context(event)
         val p                = toPoint(event, boundingBox)
-        val steps            = event.asInstanceOf[WheelEvent].deltaY
+        val steps            = -event.asInstanceOf[WheelEvent].deltaY
 
         update(
           ExplorerState.viewport.modify {
             _.cover(boundingBox.width, boundingBox.height)
-              .zoomSteps(p, if (steps > 0) -1 else 1)
+              .zoomSteps(p, steps)
           }(state)
         )
       }

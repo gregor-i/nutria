@@ -79,14 +79,11 @@ case class Viewport(origin: Point, A: Point, B: Point) {
       B = B * zoomFactor
     )
 
-  def zoomOut(
-      z: (Double, Double) = (0.5, 0.5),
-      zoomFactor: Double = defaultZoomInFactor
-  ): Viewport =
+  def zoomOut(z: (Double, Double) = (0.5, 0.5), zoomFactor: Double = defaultZoomInFactor): Viewport =
     zoom(z, 1 / zoomFactor)
   def zoomIn(z: (Double, Double) = (0.5, 0.5), zoomFactor: Double = defaultZoomInFactor): Viewport =
     zoom(z, zoomFactor)
-  def zoomSteps(z: (Double, Double) = (0.5, 0.5), steps: Int): Viewport =
+  def zoomSteps(z: (Double, Double) = (0.5, 0.5), steps: Double): Viewport =
     zoom(z, Math.pow(defaultZoomInFactor, steps))
 
   // scales up the viewport so that a) the center is unchanged b) the given aspect ratio is preserved.
