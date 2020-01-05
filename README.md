@@ -40,6 +40,9 @@ sbt service/run
  - explorer actions:
     - return to start position
     - save high quality screenshots to disk and to server
+ - Greeting Screen background is not scaled correctly
+ - Some complex number opertations are not implemented
+    - complex number power seems to be incorrect
     
 
 ## links:

@@ -18,7 +18,7 @@ object AntiAliase {
   )(outputVar: Ref[T]) =
     s"""{
        |  vec2 pos = gl_FragCoord.xy / u_resolution;
-       |  vec2 p = u_view_O + pos * u_view_A + pos.y * u_view_B;
+       |  vec2 p = u_view_O + pos.x * u_view_A + pos.y * u_view_B;
        |  ${block(RefVec2("p"), outputVar)}
        |}
      """.stripMargin
@@ -38,7 +38,7 @@ object AntiAliase {
        |  for(int aa_x = 0; aa_x < ${aaFactor.value}; aa_x ++){
        |    for(int aa_y = 0; aa_y < ${aaFactor.value}; aa_y ++){
        |      vec2 aa_pos = pos + vec2(float(aa_x) + aa_offset, float(aa_y) + aa_offset) * aa_factor;
-       |      vec2 p = u_view_O + aa_pos * u_view_A + aa_pos.y * u_view_B;
+       |      vec2 p = u_view_O + aa_pos.x * u_view_A + aa_pos.y * u_view_B;
        |
        |      ${WebGlType.declare(local, WebGlType.zero[T])}
        |      ${block(RefVec2("p"), local)}
