@@ -44,8 +44,5 @@ object GreetingUi extends Page[GreetingState] {
   }
 
   private def renderCanvas(implicit state: GreetingState, update: ExplorerState => Unit): Node =
-    Node("div.full-size")
-      .child(
-        Node("canvas").hooks(CanvasHooks(state.randomFractal, resize = true))
-      )
+    Node("canvas.background").hooks(CanvasHooks(state.randomFractal, resize = true))
 }
