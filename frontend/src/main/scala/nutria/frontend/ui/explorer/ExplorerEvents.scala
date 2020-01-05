@@ -15,14 +15,8 @@ object ExplorerEvents {
   private def resetTransformCss(element: Canvas) =
     element.asInstanceOf[js.Dynamic].style.transform = ""
 
-  private def transformCss(element: Canvas, moves: Seq[(Point, Point)]): Unit = {
-    val (translate, scale, rotate) = Transform.transformations(moves)
-
-    element.asInstanceOf[js.Dynamic].style.transform =
-      s"translate(${translate._1 * 100}%, ${translate._2 * 100}%) " +
-        s"scale($scale)" +
-        s"rotate(${rotate * 180d / Math.PI}deg)"
-  }
+  private def transformCss(element: Canvas, moves: Seq[(Point, Point)]): Unit =
+    element.asInstanceOf[js.Dynamic].style.transform = Transform.transformsCss(moves)
 
   private def toPoint(event: MouseEvent, boundingBox: ClientRect): Point = {
     val x = (event.clientX - boundingBox.left) / boundingBox.width
