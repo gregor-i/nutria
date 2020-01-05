@@ -23,7 +23,13 @@ object Point {
     @inline final def *(f: Double): Point = (x * f, y * f)
     @inline final def *(p: Point): Double = x * p.x + y * p.y
 
-    @inline final def orth(): Point  = (y, -x)
-    @inline final def norm(): Double = Math.sqrt(self * self)
+    @inline final def abs: Double = Math.sqrt(self * self)
+    @inline final def rotate(angle: Double): Point = {
+      val ca = Math.cos(angle)
+      val sa = Math.sin(angle)
+      (x * ca - y * sa, x * sa + y * ca)
+    }
+
+    @inline final def normalized: Point = this * (1.0 / abs)
   }
 }

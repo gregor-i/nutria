@@ -17,8 +17,8 @@ object Transform {
       if (moves.length == 1) {
         (translate, 1d, 0d)
       } else {
-        val fromScale = moves.map(p => (p._1 - fromCenter).norm()).sum * factor
-        val toScale   = moves.map(p => (p._2 - toCenter).norm()).sum * factor
+        val fromScale = moves.map(p => (p._1 - fromCenter).abs).sum * factor
+        val toScale   = moves.map(p => (p._2 - toCenter).abs).sum * factor
         val scale     = toScale / fromScale
         (translate, scale, 0d)
       }

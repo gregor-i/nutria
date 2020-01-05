@@ -15,45 +15,6 @@ object Viewport extends CirceCodex {
     }
   )
 
-  def createViewportByLongs(x0: Long, y0: Long, ax: Long, ay: Long, bx: Long, by: Long) =
-    Viewport(
-      Point.createWithLongs(x0, y0),
-      Point.createWithLongs(ax, ay),
-      Point.createWithLongs(bx, by)
-    )
-
-  def createByFocus(FA: Point, FB: Point)(a: Point, b: Point): Viewport = {
-    val Fdelta = FB - FA
-    val angle  = Math.acos(Fdelta.y / Fdelta.norm())
-
-    def rotAngle(p: Point): Point = {
-      val c = Math.cos(angle)
-      val s = Math.sin(angle)
-
-      (c * p.x - s * p.y, s * p.x + c * p.y)
-    }
-
-    val diff    = b - a
-    val norm    = diff.norm()
-    val rot     = rotAngle(diff)
-    val rotOrth = rot.orth()
-
-    val A = rot * ((rot * diff) / (norm * norm))
-    val B = rotOrth * ((rotOrth * diff) / (norm * norm))
-
-    val TA = A * (1.0 / Fdelta.y)
-    val TB = B * (1.0 / Fdelta.x)
-    val U  = a - TA * FA.y - TB * FA.x
-
-    Viewport(U, TA, TB)
-  }
-
-  def createByDefaultFocusAndLongs(ax: Long, ay: Long, bx: Long, by: Long): Viewport =
-    createByFocus(Point(0.3, 0.1), Point(0.7, 0.3))(
-      Point.createWithLongs(ax, ay),
-      Point.createWithLongs(bx, by)
-    )
-
   val defaultMovementFactor: Double = 0.20
   val defaultZoomInFactor: Double   = 0.60
 }
@@ -86,10 +47,20 @@ case class Viewport(origin: Point, A: Point, B: Point) {
   def zoomSteps(z: (Double, Double) = (0.5, 0.5), steps: Double): Viewport =
     zoom(z, Math.pow(defaultZoomInFactor, steps))
 
+  def rotate(z: (Double, Double) = (0.5, 0.5), angle: Double): Viewport = {
+    val A_rot = A.rotate(angle)
+    val B_rot = B.rotate(angle)
+    Viewport(
+      origin = origin + (A - A_rot) * z.x + (B - B_rot) * z.y,
+      A = A_rot,
+      B = B_rot
+    )
+  }
+
   // scales up the viewport so that a) the center is unchanged b) the given aspect ratio is preserved.
   // see https://developer.mozilla.org/de/docs/Web/CSS/object-fit
   def cover(width: Double, height: Double): Viewport = {
-    val lambda = (width * B.norm) / (height * A.norm)
+    val lambda = (width * B.abs) / (height * A.abs)
     val mu     = 1.0 / lambda
     if (lambda < 1) {
       Viewport(origin + A * (0.5 - lambda / 2), A * lambda, B)
@@ -101,7 +72,7 @@ case class Viewport(origin: Point, A: Point, B: Point) {
   // scales down the viewport so that a) the center is unchanged b) the given aspect ratio is preserved.
   // see https://developer.mozilla.org/de/docs/Web/CSS/object-fit
   def contain(width: Double, height: Double): Viewport = {
-    val lambda = (width * B.norm) / (height * A.norm)
+    val lambda = (width * B.abs) / (height * A.abs)
     val mu     = 1.0 / lambda
     if (lambda > 1) {
       Viewport(origin + A * (0.5 - lambda / 2), A * lambda, B)

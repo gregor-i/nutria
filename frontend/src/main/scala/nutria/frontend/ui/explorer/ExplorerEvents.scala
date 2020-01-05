@@ -58,7 +58,8 @@ object ExplorerEvents {
         update(
           ExplorerState.viewport.modify {
             _.cover(boundingBox.width, boundingBox.height)
-              .zoomSteps(p, steps)
+              .zoomSteps(p, steps / 50)
+              .rotate(p, event.asInstanceOf[WheelEvent].deltaX / 200)
           }(state)
         )
       }
