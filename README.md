@@ -13,10 +13,10 @@ Fractals usually have a lot of parameters. Nutria allows you to try out new conf
 The current development state can be accessed at [heroku](http://nutria-explorer.herokuapp.com).
 
 ## Project structure
-- `core` provides the shared models of backend and frontend.
-- `service` is basically the backend. It serves the frontend and renders thumbnail images.
-- `frontend` contains a UI to list and explore fractals. 
-It also contains to code to generate webgl shaders to render fractals.
+- `core` provides the shared models for backend and frontend.
+- `service` is basically the backend. It serves the frontend and provides an API to store and read the entities.
+- `frontend` contains a UI to list, edit and explore fractals. 
+It also contains code to generate webgl shaders to render fractals.
 
 ## Install instructions
 [sbt](http://www.scala-sbt.org/) and [npm](https://www.npmjs.com/) are required for building.
@@ -32,16 +32,14 @@ sbt service/run
 ```
 
 ## todo list:
- - use open gl to render fractals in backend (todo: reconsider)
- - create a user profile to
-   - up / down vote published fractals in public gallery
+ - up / down vote published fractals in public gallery
  - migrate all existing `FractalProgram`s to `FreeStyleProgram` with the right parameter (typed)
- - define data protection policy 
+ - define a data protection policy 
  - explorer actions:
     - return to start position
-    - save high quality screenshots to disk and to server
+    - save high quality screenshots to disk and to shareable url
  - Some complex number opertations are not implemented
-    - complex number power seems to be incorrect
+ - complex number power seems to be incorrect
     
 
 ## links:

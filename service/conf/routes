@@ -7,6 +7,10 @@ GET           /api/fractals/:fractalId                          controller.Fract
 PUT           /api/fractals/:fractalId                          controller.FractalController.updateFractal(fractalId: String)
 DELETE        /api/fractals/:fractalId                          controller.FractalController.deleteFractal(fractalId: String)
 
+GET           /api/votes                                        controller.VotesController.getAll()
+PUT           /api/votes/:fractalId                             controller.VotesController.vote(fractalId: String)
+DELETE        /api/votes/:fractalId                             controller.VotesController.deleteVote(fractalId: String)
+
 GET           /api/users/:userId/fractals                       controller.FractalController.listUserFractals(userId: String)
 GET           /api/users/me                                     controller.UserController.me()
 GET           /api/users/:id                                    controller.UserController.get(id: String)

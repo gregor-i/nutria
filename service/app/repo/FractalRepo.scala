@@ -22,7 +22,7 @@ class FractalRepo @Inject() (db: Database) {
     owner        <- SqlParser.str("owner")
     published    <- SqlParser.bool("published")
     maybeFractal <- SqlParser.str("fractal").map(data => decode[FractalEntity](data).toOption)
-  } yield FractalRow(id, owner, published, maybeFractal)
+  } yield FractalRow(id, owner, published, maybeFractal.map(_.copy(published = published)))
 
   val fractalRowToFractalEntity: PartialFunction[FractalRow, FractalEntityWithId] = {
     case FractalRow(id, owner, published, Some(entity)) =>

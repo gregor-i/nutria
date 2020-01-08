@@ -17,7 +17,7 @@ class FractalRepoSpec extends AnyFunSuite with Matchers with GuiceOneAppPerSuite
     FractalRow(
       id = UUID.randomUUID().toString,
       owner = UUID.randomUUID().toString,
-      published = false,
+      published = fractal.published,
       maybeFractal = Some(fractal)
     )
 
@@ -28,16 +28,11 @@ class FractalRepoSpec extends AnyFunSuite with Matchers with GuiceOneAppPerSuite
     repo.list().foreach(row => repo.delete(row.id))
   }
 
-  test("save") {
+  test("save & get") {
     repo.save(f1.id, f1.owner, f1.maybeFractal.get)
     repo.save(f2.id, f2.owner, f2.maybeFractal.get)
-  }
-
-  test("get") {
-    repo.save(f1.id, f1.owner, f1.maybeFractal.get)
-    repo.save(f2.id, f2.owner, f2.maybeFractal.get)
-    repo.get(f1.id) shouldBe Some(f1)
-    repo.get(f2.id) shouldBe Some(f2)
+    assert(repo.get(f1.id) === Some(f1))
+    assert(repo.get(f2.id) === Some(f2))
   }
 
   test("list") {
