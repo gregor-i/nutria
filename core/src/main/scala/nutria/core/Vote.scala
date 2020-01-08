@@ -17,4 +17,6 @@ object Verdict extends CirceCodex {
 
 object VoteStatistic extends CirceCodex {
   implicit val codec: Codec[VoteStatistic] = semiauto.deriveConfiguredCodec
+
+  val empty: VoteStatistic = VoteStatistic(0, 0, None)
 }

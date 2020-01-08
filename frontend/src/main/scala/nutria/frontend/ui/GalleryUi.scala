@@ -2,6 +2,7 @@ package nutria.frontend.ui
 
 import nutria.core._
 import nutria.core.viewport.Dimensions
+import nutria.frontend.service.NutriaService
 import nutria.frontend.ui.common.{FractalTile, _}
 import nutria.frontend.{GalleryState, NutriaState, _}
 import snabbdom._
@@ -18,7 +19,7 @@ object GalleryUi extends Page[GalleryState] {
         .child(
           Node("div.fractal-tile-list")
             .children(
-              state.publicFractals.map(renderFractalTile),
+              state.publicFractals.map(fractal => renderFractalTile(fractal, state.votes.getOrElse(fractal.id, VoteStatistic.empty))),
               dummyTiles
             )
         ),
@@ -26,7 +27,8 @@ object GalleryUi extends Page[GalleryState] {
     )
 
   def renderFractalTile(
-      fractal: FractalEntityWithId
+      fractal: FractalEntityWithId,
+      voteStatistic: VoteStatistic
   )(implicit state: GalleryState, update: NutriaState => Unit): Node =
     Node("article.fractal-tile.is-relative")
       .attr("title", fractal.entity.description)
@@ -39,8 +41,18 @@ object GalleryUi extends Page[GalleryState] {
       )
       .child(
         Node("div.buttons.overlay-bottom-right.padding")
-        /* Button.icon(Icons.upvote, Snabbdom.event { _ =>
-           Button.icon(Icons.downvote, Snabbdom.event { _ => */
+          .child(
+            if (!voteStatistic.yourVerdict.contains(UpVote))
+              Button.icon(Icons.upvote, Actions.vote(fractal.id, UpVote))
+            else
+              Button.icon(Icons.upvote, Actions.removeVote(fractal.id)).classes("is-primary")
+          )
+          .child(
+            if (!voteStatistic.yourVerdict.contains(DownVote))
+              Button.icon(Icons.downvote, Actions.vote(fractal.id, DownVote))
+            else
+              Button.icon(Icons.downvote, Actions.removeVote(fractal.id)).classes("is-primary")
+          )
           .child(
             Button
               .icon(

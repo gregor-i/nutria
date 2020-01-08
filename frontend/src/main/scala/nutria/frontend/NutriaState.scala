@@ -35,6 +35,7 @@ case class ExplorerState(
 case class GalleryState(
     user: Option[User],
     publicFractals: Vector[FractalEntityWithId],
+    votes: Map[String, VoteStatistic],
     navbarExpanded: Boolean = false
 ) extends NutriaState
 
@@ -88,7 +89,8 @@ object NutriaState extends CirceCodex {
     for {
       user           <- NutriaService.whoAmI()
       publicFractals <- NutriaService.loadPublicFractals()
-    } yield GalleryState(user = user, publicFractals = publicFractals)
+      votes          <- NutriaService.votes()
+    } yield GalleryState(user = user, publicFractals = publicFractals, votes = votes)
 
   def userGalleryState(userId: String): Future[UserGalleryState] =
     for {

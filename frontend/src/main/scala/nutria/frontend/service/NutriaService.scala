@@ -1,6 +1,6 @@
 package nutria.frontend.service
 
-import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage, User}
+import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage, User, Verdict, VoteStatistic}
 import org.scalajs.dom.ext.Ajax
 
 import scala.concurrent.Future
@@ -63,6 +63,24 @@ object NutriaService extends Service {
   def deleteUser(userId: String): Future[Unit] =
     Ajax
       .delete(s"/api/users/${userId}")
+      .flatMap(check(204))
+      .map(_ => ())
+
+  def votes(): Future[Map[String, VoteStatistic]] =
+    Ajax
+      .get(s"/api/votes")
+      .flatMap(check(200))
+      .flatMap(parse[Map[String, VoteStatistic]])
+
+  def vote(fractalId: String, verdict: Verdict): Future[Unit] =
+    Ajax
+      .put(url = s"/api/votes/${fractalId}", data = encode(verdict))
+      .flatMap(check(204))
+      .map(_ => ())
+
+  def deleteVote(fractalId: String): Future[Unit] =
+    Ajax
+      .delete(url = s"/api/votes/${fractalId}")
       .flatMap(check(204))
       .map(_ => ())
 }

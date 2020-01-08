@@ -5,7 +5,7 @@ import SnabbdomFacade.Eventlistener
 import Snabbdom.event
 import eu.timepit.refined.collection.NonEmpty
 import nutria.core.viewport.Viewport
-import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage}
+import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage, Verdict}
 import eu.timepit.refined.refineV
 import nutria.frontend.service.NutriaService
 import nutria.frontend.toasts.Toasts
@@ -220,4 +220,19 @@ object Actions {
         .foreach(update)
     }
 
+  def vote(fractalId: String, verdict: Verdict)(implicit state: GalleryState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      (for {
+        _     <- NutriaService.vote(fractalId, verdict)
+        votes <- NutriaService.votes()
+      } yield state.copy(votes = votes)).foreach(update)
+    }
+
+  def removeVote(fractalId: String)(implicit state: GalleryState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      (for {
+        _     <- NutriaService.deleteVote(fractalId)
+        votes <- NutriaService.votes()
+      } yield state.copy(votes = votes)).foreach(update)
+    }
 }
