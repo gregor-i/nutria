@@ -9,10 +9,27 @@ import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage, Verdict}
 import eu.timepit.refined.refineV
 import nutria.frontend.service.NutriaService
 import nutria.frontend.toasts.Toasts
+import org.scalajs.dom
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.util.{Failure, Success, Try}
 
 object Actions {
+  private def asyncUpdate(fut: Future[NutriaState])(implicit update: NutriaState => Unit): Unit =
+    fut.onComplete {
+      case Success(value) => update(value)
+      case Failure(exception) =>
+        dom.console.error(s"Unexpected Failure. See: ${exception}")
+        Toasts.dangerToast("The last action was not successful. Please retry the action or reload the page.")
+    }
+
+  private def onlyLoggedIn[A](op: => A)(implicit state: NutriaState) =
+    state.user match {
+      case None    => Toasts.dangerToast("Log in first")
+      case Some(_) => op
+    }
+
   def loadGallery(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       update(LoadingState(NutriaState.galleryState()))
@@ -67,13 +84,17 @@ object Actions {
       viewport: Viewport
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
-      for {
-        remoteFractal <- NutriaService.loadFractal(fractalId)
-        views   = (remoteFractal.entity.views.value :+ viewport).distinct
-        updated = remoteFractal.entity.copy(views = refineV[NonEmpty](views).toOption.get)
-        _ <- NutriaService.updateFractal(remoteFractal.copy(entity = updated))
-        _ = Toasts.successToast("Snapshot saved")
-      } yield ()
+      onlyLoggedIn {
+        asyncUpdate {
+          for {
+            remoteFractal <- NutriaService.loadFractal(fractalId)
+            views   = (remoteFractal.entity.views.value :+ viewport).distinct
+            updated = remoteFractal.entity.copy(views = refineV[NonEmpty](views).toOption.get)
+            _ <- NutriaService.updateFractal(remoteFractal.copy(entity = updated))
+            _ = Toasts.successToast("Snapshot saved")
+          } yield state
+        }
+      }
     }
 
   def forkAndAddViewport(
@@ -81,24 +102,24 @@ object Actions {
       viewport: Viewport
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
-      for {
-        remoteFractal <- NutriaService.loadFractal(fractalId)
-        updated = remoteFractal.entity.copy(
-          views = refineV[NonEmpty](
-            remoteFractal.entity.views.value :+ viewport
-          ).toOption.get
-        )
-        forkedFractal <- NutriaService.save(updated)
-        _ = Toasts.successToast("Fractal saved")
-      } yield {
-        update(
-          ExplorerState(
+      onlyLoggedIn {
+        asyncUpdate {
+          for {
+            remoteFractal <- NutriaService.loadFractal(fractalId)
+            updated = remoteFractal.entity.copy(
+              views = refineV[NonEmpty](
+                remoteFractal.entity.views.value :+ viewport
+              ).toOption.get
+            )
+            forkedFractal <- NutriaService.save(updated)
+            _ = Toasts.successToast("Fractal saved")
+          } yield ExplorerState(
             state.user,
             fractalId = Some(forkedFractal.id),
             owned = true,
             fractalImage = FractalImage(remoteFractal.entity.program, viewport, remoteFractal.entity.antiAliase)
           )
-        )
+        }
       }
     }
 
@@ -106,41 +127,48 @@ object Actions {
       fractal: FractalEntityWithId
   )(implicit state: UserGalleryState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
-      val published = fractal.entity.published
-      (for {
-        _ <- NutriaService.updateFractal(
-          FractalEntityWithId.entity
-            .composeLens(FractalEntity.published)
-            .set(!published)
-            .apply(fractal)
-        )
-        reloaded <- NutriaService.loadUserFractals(state.aboutUser)
-        _ = if (published)
-          Toasts.warningToast(
-            "Fractal unpublished. The fractal will no longer be listed in the public gallery."
-          )
-        else
-          Toasts.successToast(
-            "Fractal unpublished. The fractal will be listed in the public gallery."
-          )
-      } yield state.copy(userFractals = reloaded))
-        .foreach(update)
+      onlyLoggedIn {
+        asyncUpdate {
+          val published = fractal.entity.published
+          for {
+            _ <- NutriaService.updateFractal(
+              FractalEntityWithId.entity
+                .composeLens(FractalEntity.published)
+                .set(!published)
+                .apply(fractal)
+            )
+            reloaded <- NutriaService.loadUserFractals(state.aboutUser)
+            _ = if (published)
+              Toasts.warningToast(
+                "Fractal unpublished. The fractal will no longer be listed in the public gallery."
+              )
+            else
+              Toasts.successToast(
+                "Fractal unpublished. The fractal will be listed in the public gallery."
+              )
+          } yield state.copy(userFractals = reloaded)
+        }
+      }
     }
 
   def deleteFractal(
       fractalId: String
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
-      (for {
-        remoteFractal <- NutriaService.loadFractal(fractalId)
-        _             <- NutriaService.deleteFractal(fractalId)
-        _ = Toasts.warningToast("Fractal deleted.")
-        reloaded <- NutriaService.loadUserFractals(remoteFractal.owner)
-      } yield UserGalleryState(
-        user = state.user,
-        userFractals = reloaded,
-        aboutUser = remoteFractal.owner
-      )).foreach(update)
+      onlyLoggedIn {
+        asyncUpdate {
+          for {
+            remoteFractal <- NutriaService.loadFractal(fractalId)
+            _             <- NutriaService.deleteFractal(fractalId)
+            _ = Toasts.warningToast("Fractal deleted.")
+            reloaded <- NutriaService.loadUserFractals(remoteFractal.owner)
+          } yield UserGalleryState(
+            user = state.user,
+            userFractals = reloaded,
+            aboutUser = remoteFractal.owner
+          )
+        }
+      }
     }
 
   def moveViewportUp(
@@ -180,31 +208,35 @@ object Actions {
       fractalWithId: FractalEntityWithId
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
-      (for {
-        _ <- NutriaService.updateFractal(fractalWithId)
-        _ = Toasts.successToast("Fractal updated.")
-      } yield DetailsState(
-        user = state.user,
-        remoteFractal = fractalWithId,
-        fractalToEdit = fractalWithId
-      )).foreach(update)
+      onlyLoggedIn {
+        asyncUpdate {
+          for {
+            _ <- NutriaService.updateFractal(fractalWithId)
+            _ = Toasts.successToast("Fractal updated.")
+          } yield DetailsState(
+            user = state.user,
+            remoteFractal = fractalWithId,
+            fractalToEdit = fractalWithId
+          )
+        }
+      }
     }
 
   def saveAsNewFractal(
       fractalEntity: FractalEntity
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
-      state.user match {
-        case None => Toasts.dangerToast("log in to save a fractal")
-        case Some(_) =>
-          (for {
+      onlyLoggedIn {
+        asyncUpdate {
+          for {
             fractalWithId <- NutriaService.save(fractalEntity)
             _ = Toasts.successToast("Fractal saved.")
           } yield DetailsState(
             user = state.user,
             remoteFractal = fractalWithId,
             fractalToEdit = fractalWithId
-          )).foreach(update)
+          )
+        }
       }
     }
 
@@ -212,27 +244,38 @@ object Actions {
       userId: String
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
-      (for {
-        _     <- NutriaService.deleteUser(userId)
-        state <- NutriaState.greetingState()
-        _ = Toasts.successToast("Good Bye")
-      } yield state)
-        .foreach(update)
+      onlyLoggedIn {
+        asyncUpdate {
+          for {
+            _     <- NutriaService.deleteUser(userId)
+            state <- NutriaState.greetingState()
+            _ = Toasts.successToast("Good Bye")
+          } yield state
+        }
+      }
     }
 
   def vote(fractalId: String, verdict: Verdict)(implicit state: GalleryState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
-      (for {
-        _     <- NutriaService.vote(fractalId, verdict)
-        votes <- NutriaService.votes()
-      } yield state.copy(votes = votes)).foreach(update)
+      onlyLoggedIn {
+        asyncUpdate {
+          for {
+            _     <- NutriaService.vote(fractalId, verdict)
+            votes <- NutriaService.votes()
+          } yield state.copy(votes = votes)
+        }
+      }
     }
 
   def removeVote(fractalId: String)(implicit state: GalleryState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
-      (for {
-        _     <- NutriaService.deleteVote(fractalId)
-        votes <- NutriaService.votes()
-      } yield state.copy(votes = votes)).foreach(update)
+      onlyLoggedIn {
+        asyncUpdate {
+          for {
+            _     <- NutriaService.deleteVote(fractalId)
+            votes <- NutriaService.votes()
+          } yield state.copy(votes = votes)
+        }
+      }
     }
 }

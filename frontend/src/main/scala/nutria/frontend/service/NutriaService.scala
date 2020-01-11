@@ -45,11 +45,11 @@ object NutriaService extends Service {
       .flatMap(check(201))
       .flatMap(parse[FractalEntityWithId])
 
-  def deleteFractal(fractalId: String): Future[Vector[FractalEntityWithId]] =
+  def deleteFractal(fractalId: String): Future[Unit] =
     Ajax
       .delete(url = s"/api/fractals/${fractalId}")
       .flatMap(check(200))
-      .flatMap(_ => loadPublicFractals())
+      .map(_ => ())
 
   def updateFractal(fractalEntity: FractalEntityWithId): Future[Unit] =
     Ajax
