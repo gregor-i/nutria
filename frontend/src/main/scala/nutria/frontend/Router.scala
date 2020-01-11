@@ -53,17 +53,21 @@ object Router {
           for {
             user          <- NutriaService.whoAmI()
             remoteFractal <- NutriaService.loadFractal(fractalId)
-            image = FractalImage(
-              remoteFractal.entity.program,
-              remoteFractal.entity.views.value.head,
-              remoteFractal.entity.antiAliase
-            )
-          } yield ExplorerState(
-            user,
-            Some(remoteFractal.id),
-            owned = user.exists(_.id == remoteFractal.owner),
-            image
-          )
+          } yield {
+            val fractalFromUrl =
+              queryParams.get("state").flatMap(queryDecoded[FractalImage])
+
+            fractalFromUrl match {
+              case Some(image) =>
+                ExplorerState(
+                  user,
+                  Some(fractalId),
+                  owned = user.exists(_.id == remoteFractal.owner),
+                  fractalImage = image
+                )
+              case None => ErrorState("Query Parameter is invalid")
+            }
+          }
         )
 
       case "/explorer" =>
@@ -71,11 +75,13 @@ object Router {
           NutriaService
             .whoAmI()
             .map { user =>
-              (for {
-                state   <- queryParams.get("state")
-                fractal <- queryDecoded[FractalImage](state)
-              } yield ExplorerState(user, None, owned = false, fractal))
-                .getOrElse(ErrorState("Query Parameter is invalid"))
+              val fractalFromUrl =
+                queryParams.get("state").flatMap(queryDecoded[FractalImage])
+
+              fractalFromUrl match {
+                case Some(fractal) => ExplorerState(user, None, owned = false, fractal)
+                case None          => ErrorState("Query Parameter is invalid")
+              }
             }
         )
 
