@@ -33,6 +33,8 @@ sbt service/run
 
 ## todo list:
  - up / down vote published fractals in public gallery
+   - sort in Public Gallery by votes
+   - Admin Ui for Votes
  - migrate all existing `FractalProgram`s to `FreeStyleProgram` with the right parameter (typed)
  - define a data protection policy 
  - explorer actions:
