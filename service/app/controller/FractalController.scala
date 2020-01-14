@@ -4,36 +4,37 @@ import java.util.UUID
 
 import io.circe.syntax._
 import javax.inject.Inject
+import model.FractalSorting
 import nutria.core._
 import nutria.core.viewport.DefaultViewport
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
-import repo.{FractalRepo, FractalRow}
+import repo.{FractalRepo, FractalRow, VotesRepository}
 
 import scala.util.Random
 import scala.util.chaining._
 
-class FractalController @Inject() (fractalRepo: FractalRepo, authenticator: Authenticator) extends InjectedController with Circe {
+class FractalController @Inject() (fractalRepo: FractalRepo, votesRepo: VotesRepository, authenticator: Authenticator)
+    extends InjectedController
+    with Circe {
 
   def listPublicFractals() = Action {
-    Ok {
-      fractalRepo
-        .listPublic()
-        .collect(fractalRepo.fractalRowToFractalEntity)
-        .sorted
-        .asJson
-    }
+    fractalRepo
+      .listPublic()
+      .collect(fractalRepo.fractalRowToFractalEntity)
+      .sorted(FractalSorting.ordering(votesRepo.getAll()))
+      .asJson
+      .pipe(Ok(_))
   }
 
   def listUserFractals(userId: String) = Action { req =>
     authenticator.byUserId(req)(userId) {
-      Ok {
-        fractalRepo
-          .listByUser(userId)
-          .collect(fractalRepo.fractalRowToFractalEntity)
-          .sorted
-          .asJson
-      }
+      fractalRepo
+        .listByUser(userId)
+        .collect(fractalRepo.fractalRowToFractalEntity)
+        .sorted(FractalSorting.orderingByProgram)
+        .asJson
+        .pipe(Ok(_))
     }
   }
 

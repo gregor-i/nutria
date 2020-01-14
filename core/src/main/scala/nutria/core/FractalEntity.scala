@@ -46,9 +46,6 @@ object FractalEntityWithId extends CirceCodex {
   val viewports: Lens[FractalEntityWithId, Refined[List[Viewport], NonEmpty]] =
     FractalEntityWithId.entity.composeLens(FractalEntity.views)
 
-  implicit val ordering: Ordering[FractalEntityWithId] =
-    FractalProgram.ordering.on(_.entity.program)
-
   implicit val codec: Codec[FractalEntityWithId] = Codec.from(
     decodeA = Decoder[FractalEntityWithId] { json =>
       for {

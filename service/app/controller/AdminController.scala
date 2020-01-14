@@ -5,6 +5,7 @@ import java.util.UUID
 import io.circe.syntax._
 import io.circe.JsonObject
 import javax.inject.Inject
+import model.FractalSorting
 import module.SystemFractals
 import nutria.core.User
 import play.api.libs.circe.Circe
@@ -28,7 +29,7 @@ class AdminController @Inject() (
           "fractals" -> fractalRepo
             .list()
             .collect(fractalRepo.fractalRowToFractalEntity)
-            .sorted
+            .sorted(FractalSorting.orderingByProgram)
             .asJson
         ).asJson
       )
