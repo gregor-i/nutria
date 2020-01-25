@@ -1,0 +1,14 @@
+{
+  "short_name": "Nutria",
+  "name": "Nutria - Explorer",
+  "icons": [
+    {
+      "src": "/img/icon.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "scope":  "/"
+}

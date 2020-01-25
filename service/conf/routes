@@ -29,6 +29,8 @@ POST          /api/admin/delete-user/:id                        controller.Admin
 
 # Assets
 GET           /favicon.ico                                      controller.UiController.asset(path = "icon.png", folder = "/public/img")
+GET           /manifest.json                                    controller.UiController.asset(path = "manifest.json", folder = "/public")
+GET           /js/sw.js                                         controller.UiController.serviceWorker(path = "sw.js", folder = "/public/js")
 GET           /img/*path                                        controller.UiController.asset(path: String, folder = "/public/img")
 GET           /js/*path                                         controller.UiController.asset(path: String, folder = "/public/js")
 GET           /css/*path                                        controller.UiController.asset(path: String, folder = "/public/css")
