@@ -8,9 +8,7 @@
     "sass": "^1.24.0"
   },
   "scripts": {
-    "watch": "nodemon --watch frontend -e css,svg --exec \"npm run build\"",
     "build": "npm run cp && npm run build-css",
-    "build-js": "browserify frontend/target/scala-2.13/frontend-fastopt.js node_modules/snabbdom/snabbdom.bundle.js -o service/public/js/nutria.js",
     "build-css": "cleancss frontend/src/main/css/*.css -o service/public/css/nutria.css",
     "cp": "npm run cp-bulma && npm run cp-fas",
     "cp-bulma": "sass frontend/src/main/css/bulma.sass service/public/css/bulma.css --no-source-map  --style compressed",
