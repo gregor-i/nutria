@@ -21,24 +21,24 @@ object Main {
     "/fonts/fontawesome-webfont.woff2?v=4.7.0",
     "/fonts/FontAwesome.otf?v=4.7.0",
     "/fonts/fontawesome-webfont.ttf?v=4.7.0",
-    "/html/nutria.html",
     "/img/rendering.svg",
     "/img/icon.png",
     "/favicon.ico",
-    "/js/nutria.js"
+    "/js/nutria.js",
+    "/"
   )
 
   def main(args: Array[String]): Unit = {
     self.addEventListener(
       "install",
-      (event: ExtendableEvent) =>
-        event.waitUntil(populateCache(cacheName, staticFiles).toJSPromise)
-
+      (event: ExtendableEvent) => event.waitUntil(populateCache(cacheName, staticFiles).toJSPromise)
     )
 
-    self.addEventListener("activate", (event: ExtendableEvent) =>
-      //invalidateCache()
-      self.clients.claim()
+    self.addEventListener(
+      "activate",
+      (event: ExtendableEvent) =>
+        //invalidateCache()
+        self.clients.claim()
     )
 
     self.addEventListener(

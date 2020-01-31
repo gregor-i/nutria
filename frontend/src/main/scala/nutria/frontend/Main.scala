@@ -1,7 +1,6 @@
 package nutria.frontend
 
 import org.scalajs.dom
-import org.scalajs.dom.{Element, Event}
 
 import scala.scalajs.js
 import org.scalajs.dom.experimental.serviceworkers.toServiceWorkerNavigator
@@ -9,25 +8,14 @@ import org.scalajs.dom.experimental.serviceworkers.toServiceWorkerNavigator
 import scala.scalajs.js.Dynamic
 import scala.util.{Failure, Success}
 import scala.util.chaining._
-
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 object Main {
   def main(args: Array[String]): Unit = {
-    dom.window.navigator
-      .pipe(toServiceWorkerNavigator)
-      .serviceWorker
-      .register("/js/sw.js", Dynamic.literal(scope = "/"))
-      .toFuture
-      .onComplete {
-        case Success(registration) =>
-          dom.console.log("[Service Worker] registration successful")
-          registration.update
-        case Failure(_) =>
-          dom.console.log("[Service Worker] registration failed")
-      }
+    installServiceWorker()
 
-    dom.document.addEventListener[Event](
+    dom.document.addEventListener[dom.Event](
       "DOMContentLoaded",
       (_: js.Any) => {
         val container = dom.document.createElement("nutria-app")
@@ -36,4 +24,20 @@ object Main {
       }
     )
   }
+
+  private def installServiceWorker() =
+    (for {
+      navigator <- Future {
+        dom.window.navigator
+          .pipe(toServiceWorkerNavigator)
+          .serviceWorker
+      }
+      registration <- navigator.register("/js/sw.js", Dynamic.literal(scope = "/")).toFuture
+      _            <- registration.update.toFuture
+    } yield ()).onComplete {
+      case Success(_) =>
+        dom.console.log("[Service Worker] registration successful")
+      case Failure(_) =>
+        dom.console.log("[Service Worker] registration failed")
+    }
 }
