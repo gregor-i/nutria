@@ -113,6 +113,17 @@ object NutriaState extends CirceCodex {
       fractalToEdit = fractal
     )
 
+  def explorerState(fractal: FractalEntityWithId, user: Option[User]): ExplorerState =
+    ExplorerState(
+      user = user,
+      fractalId = Some(fractal.id),
+      owned = user.exists(_.id == fractal.owner),
+      fractalImage = FractalImage.firstImage(fractal.entity)
+    )
+
+  def detailsState(fractal: FractalEntityWithId, user: Option[User]): DetailsState =
+    DetailsState(user = user, remoteFractal = fractal, fractalToEdit = fractal)
+
   def setNavbarExtended(nutriaState: NutriaState, navbarExpanded: Boolean): NutriaState =
     nutriaState match {
       case state: LoadingState     => state.copy(navbarExpanded = navbarExpanded)

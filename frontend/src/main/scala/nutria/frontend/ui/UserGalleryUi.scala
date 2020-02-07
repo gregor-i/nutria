@@ -27,8 +27,8 @@ object UserGalleryUi extends Page[UserGalleryState] {
   def renderFractalTile(
       fractal: FractalEntityWithId
   )(implicit state: UserGalleryState, update: NutriaState => Unit): Node =
-    Node("article.fractal-tile.is-relative")
-      .attr("title", fractal.entity.description)
+    Link(NutriaState.detailsState(fractal, state.user))
+      .classes("fractal-tile", "is-relative")
       .child(
         FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnailDimensions)
           .event("click", Actions.editFractal(fractal))

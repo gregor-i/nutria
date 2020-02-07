@@ -23,12 +23,9 @@ object Header {
           .child(
             Node("div.navbar-start")
               .child(
-                Node("a.navbar-item")
+                Link(LoadingState(NutriaState.galleryState()))
+                  .classes("navbar-item")
                   .text("Public Gallery")
-                  .event(
-                    "click",
-                    Snabbdom.event(_ => update(LoadingState(NutriaState.galleryState())))
-                  )
               )
               .child(
                 Node("a.navbar-item")

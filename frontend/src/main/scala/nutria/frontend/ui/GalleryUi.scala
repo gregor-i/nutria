@@ -54,17 +54,14 @@ object GalleryUi extends Page[GalleryState] {
               Button.icon(Icons.downvote, Actions.removeVote(fractal.id)).classes("is-primary")
           )
           .child(
-            Button
-              .icon(
-                Icons.explore,
-                Actions.exploreFractal(fractal)
-              )
-              .classes("is-outlined")
+            Link(NutriaState.explorerState(fractal, state.user))
+              .classes("button", "is-outlined", "is-rounded")
+              .child(Icons.icon(Icons.explore))
           )
           .child(
-            Button
-              .icon(Icons.edit, Actions.editFractal(fractal))
-              .classes("is-outlined")
+            Link(NutriaState.detailsState(fractal, state.user))
+              .classes("button", "is-outlined", "is-rounded")
+              .child(Icons.icon(Icons.edit))
           )
       )
 
