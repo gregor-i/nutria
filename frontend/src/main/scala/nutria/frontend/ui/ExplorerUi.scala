@@ -1,7 +1,8 @@
 package nutria.frontend.ui
 
+import nutria.core.{FractalEntityWithId, User}
 import nutria.frontend._
-import nutria.frontend.ui.common.{Button, CanvasHooks, Icons}
+import nutria.frontend.ui.common.{Button, CanvasHooks, Icons, Link}
 import nutria.frontend.ui.explorer.ExplorerEvents
 import snabbdom.Node
 
@@ -16,21 +17,24 @@ object ExplorerUi extends Page[ExplorerState] {
   def renderActionBar()(implicit state: ExplorerState, update: NutriaState => Unit): Node =
     Node("div.buttons.overlay-bottom-right.padding")
       .childOptional(
-        state.fractalId match {
-          case Some(fractalId) if state.owned => Some(buttonAddViewport(fractalId))
-          case Some(fractalId)                => Some(buttonForkAndAddViewport(fractalId))
-          case None                           => None
+        state.remoteFractal match {
+          case Some(fractal) if User.isOwner(state.user, fractal) => Some(buttonAddViewport(fractal.id))
+          case Some(fractal)                                      => Some(buttonForkAndAddViewport(fractal.id))
+          case None                                               => None
         }
       )
       .childOptional(
-        state.fractalId match {
-          case Some(fractalId) => Some(buttonBackToDetails(fractalId))
-          case None            => None
+        state.remoteFractal match {
+          case Some(fractal) => Some(buttonBackToDetails(fractal))
+          case None          => None
         }
       )
 
-  def buttonBackToDetails(fractalId: String)(implicit state: ExplorerState, update: NutriaState => Unit) =
-    Button("Edit Parameters", Icons.edit, Actions.loadAndEditFractal(fractalId))
+  def buttonBackToDetails(fractal: FractalEntityWithId)(implicit state: ExplorerState, update: NutriaState => Unit) =
+    Link(Links.detailsState(fractal, state.user))
+      .classes("button")
+      .child(Icons.icon(Icons.edit))
+      .child(Node("span").text("Edit Parameters"))
 
   def buttonAddViewport(fractalId: String)(implicit state: ExplorerState, update: NutriaState => Unit) =
     Button("Save this image", Icons.snapshot, Actions.addViewport(fractalId, state.fractalImage.view)).classes("is-primary")

@@ -22,12 +22,12 @@ object Router {
     location.pathname match {
       case "/" =>
         LoadingState(
-          NutriaState.greetingState()
+          Links.greetingState()
         )
 
       case "/gallery" =>
         LoadingState(
-          NutriaState.galleryState()
+          Links.galleryState()
         )
 
       case s"/user/profile" =>
@@ -40,12 +40,12 @@ object Router {
 
       case s"/user/${userId}/gallery" =>
         LoadingState(
-          NutriaState.userGalleryState(userId)
+          Links.userGalleryState(userId)
         )
 
       case s"/fractals/${fractalsId}/details" =>
         LoadingState(
-          NutriaState.detailsState(fractalsId)
+          Links.detailsState(fractalsId)
         )
 
       case s"/fractals/${fractalId}/explorer" =>
@@ -61,8 +61,7 @@ object Router {
               case Some(image) =>
                 ExplorerState(
                   user,
-                  Some(fractalId),
-                  owned = user.exists(_.id == remoteFractal.owner),
+                  remoteFractal = Some(remoteFractal),
                   fractalImage = image
                 )
               case None => ErrorState("Query Parameter is invalid")
@@ -79,7 +78,7 @@ object Router {
                 queryParams.get("state").flatMap(queryDecoded[FractalImage])
 
               fractalFromUrl match {
-                case Some(fractal) => ExplorerState(user, None, owned = false, fractal)
+                case Some(fractal) => ExplorerState(user, None, fractal)
                 case None          => ErrorState("Query Parameter is invalid")
               }
             }
@@ -115,10 +114,10 @@ object Router {
     case details: DetailsState =>
       Some((s"/fractals/${details.remoteFractal.id}/details", Map.empty))
     case exState: ExplorerState =>
-      exState.fractalId match {
-        case Some(fractalId) =>
+      exState.remoteFractal match {
+        case Some(remoteFractal) =>
           Some(
-            (s"/fractals/${fractalId}/explorer", Map("state" -> queryEncoded(exState.fractalImage)))
+            (s"/fractals/${remoteFractal.id}/explorer", Map("state" -> queryEncoded(exState.fractalImage)))
           )
         case None => Some((s"/explorer", Map("state" -> queryEncoded(exState.fractalImage))))
       }

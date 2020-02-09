@@ -26,8 +26,7 @@ case class GreetingState(randomFractal: FractalImage, navbarExpanded: Boolean = 
 
 case class ExplorerState(
     user: Option[User],
-    fractalId: Option[String],
-    owned: Boolean,
+    remoteFractal: Option[FractalEntityWithId],
     fractalImage: FractalImage,
     navbarExpanded: Boolean = false
 ) extends NutriaState
@@ -85,45 +84,6 @@ object ExplorerState {
 }
 
 object NutriaState extends CirceCodex {
-  def galleryState(): Future[GalleryState] =
-    for {
-      user           <- NutriaService.whoAmI()
-      publicFractals <- NutriaService.loadPublicFractals()
-      votes          <- NutriaService.votes()
-    } yield GalleryState(user = user, publicFractals = publicFractals, votes = votes)
-
-  def userGalleryState(userId: String): Future[UserGalleryState] =
-    for {
-      user         <- NutriaService.whoAmI()
-      userFractals <- NutriaService.loadUserFractals(userId)
-    } yield UserGalleryState(user = user, aboutUser = userId, userFractals = userFractals)
-
-  def greetingState(): Future[GreetingState] =
-    for {
-      randomFractal <- NutriaService.loadRandomFractal()
-    } yield GreetingState(randomFractal)
-
-  def detailsState(fractalId: String): Future[DetailsState] =
-    for {
-      user    <- NutriaService.whoAmI()
-      fractal <- NutriaService.loadFractal(fractalId)
-    } yield DetailsState(
-      user = user,
-      remoteFractal = fractal,
-      fractalToEdit = fractal
-    )
-
-  def explorerState(fractal: FractalEntityWithId, user: Option[User]): ExplorerState =
-    ExplorerState(
-      user = user,
-      fractalId = Some(fractal.id),
-      owned = user.exists(_.id == fractal.owner),
-      fractalImage = FractalImage.firstImage(fractal.entity)
-    )
-
-  def detailsState(fractal: FractalEntityWithId, user: Option[User]): DetailsState =
-    DetailsState(user = user, remoteFractal = fractal, fractalToEdit = fractal)
-
   def setNavbarExtended(nutriaState: NutriaState, navbarExpanded: Boolean): NutriaState =
     nutriaState match {
       case state: LoadingState     => state.copy(navbarExpanded = navbarExpanded)

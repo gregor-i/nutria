@@ -2,7 +2,7 @@ package nutria.frontend.ui.common
 
 import nutria.core.User
 import nutria.frontend.toasts.Toasts
-import nutria.frontend.{LoadingState, NutriaState, ProfileState, Router}
+import nutria.frontend.{Links, LoadingState, NutriaState, ProfileState, Router}
 import org.scalajs.dom
 import snabbdom.{Node, Snabbdom}
 
@@ -23,7 +23,7 @@ object Header {
           .child(
             Node("div.navbar-start")
               .child(
-                Link(LoadingState(NutriaState.galleryState()))
+                Link(LoadingState(Links.galleryState()))
                   .classes("navbar-item")
                   .text("Public Gallery")
               )
@@ -35,7 +35,7 @@ object Header {
                     Snabbdom.event { _ =>
                       state.user match {
                         case Some(user) =>
-                          update(LoadingState(NutriaState.userGalleryState(user.id)))
+                          update(LoadingState(Links.userGalleryState(user.id)))
                         case None => Toasts.dangerToast("Log in first")
                       }
                     }

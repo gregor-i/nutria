@@ -30,11 +30,6 @@ object Actions {
       case Some(_) => op
     }
 
-  def loadGallery(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
-    event { _ =>
-      update(LoadingState(NutriaState.galleryState()))
-    }
-
   def exploreFractal(
       fractal: FractalEntityWithId
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
@@ -42,8 +37,7 @@ object Actions {
       update(
         ExplorerState(
           user = state.user,
-          fractalId = Some(fractal.id),
-          owned = state.user.exists(_.id == fractal.owner),
+          remoteFractal = Some(fractal),
           fractalImage = FractalImage.firstImage(fractal.entity)
         )
       )
@@ -56,8 +50,7 @@ object Actions {
       update(
         ExplorerState(
           user = state.user,
-          owned = false,
-          fractalId = None,
+          remoteFractal = None,
           fractalImage = fractal
         )
       )
@@ -70,13 +63,6 @@ object Actions {
       update(
         DetailsState(user = state.user, remoteFractal = fractal, fractalToEdit = fractal)
       )
-    }
-
-  def loadAndEditFractal(
-      id: String
-  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
-    event { _ =>
-      update(LoadingState(NutriaState.detailsState(id)))
     }
 
   def addViewport(
@@ -115,8 +101,7 @@ object Actions {
             _ = Toasts.successToast("Fractal saved")
           } yield ExplorerState(
             state.user,
-            fractalId = Some(forkedFractal.id),
-            owned = true,
+            remoteFractal = Some(forkedFractal),
             fractalImage = FractalImage(remoteFractal.entity.program, viewport, remoteFractal.entity.antiAliase)
           )
         }
@@ -248,7 +233,7 @@ object Actions {
         asyncUpdate {
           for {
             _     <- NutriaService.deleteUser(userId)
-            state <- NutriaState.greetingState()
+            state <- Links.greetingState()
             _ = Toasts.successToast("Good Bye")
           } yield state
         }
