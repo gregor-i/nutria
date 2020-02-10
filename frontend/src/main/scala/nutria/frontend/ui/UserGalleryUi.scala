@@ -27,11 +27,13 @@ object UserGalleryUi extends Page[UserGalleryState] {
   def renderFractalTile(
       fractal: FractalEntityWithId
   )(implicit state: UserGalleryState, update: NutriaState => Unit): Node =
-    Link(Links.detailsState(fractal, state.user))
-      .classes("fractal-tile", "is-relative")
+    Node("article.fractal-tile.is-relative")
       .child(
-        FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnailDimensions)
-          .event("click", Actions.editFractal(fractal))
+        Link(Links.detailsState(fractal, state.user))
+          .child(
+            FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnailDimensions)
+              .event("click", Actions.editFractal(fractal))
+          )
       )
       .child(
         Node("div.buttons.overlay-bottom-right.padding")

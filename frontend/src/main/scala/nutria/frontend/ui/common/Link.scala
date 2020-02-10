@@ -6,20 +6,22 @@ import snabbdom.{Node, Snabbdom}
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object Link {
-  def apply(newState: NutriaState)(implicit update: NutriaState => Unit): Node = {
-    val href = Router.stateToUrl(newState) match {
-      case None                 => null
-      case Some((path, search)) => path + Router.searchToUrl(search)
-    }
+import scala.util.chaining._
 
+object Link {
+  def apply(newState: NutriaState)(implicit update: NutriaState => Unit): Node =
     Node("a")
-      .attr("href", href)
-      .event("input", Snabbdom.event { e =>
+      .pipe(
+        link =>
+          Router.stateToUrl(newState) match {
+            case None                 => link
+            case Some((path, search)) => link.attr("href", path + Router.searchToUrl(search))
+          }
+      )
+      .event("click", Snabbdom.event { e =>
         e.preventDefault()
         update(newState)
       })
-  }
 
   def async(href: String, state: Future[NutriaState])(implicit update: NutriaState => Unit): Node = {
     Node("a")

@@ -1,0 +1,37 @@
+.fractal-tile-list
+  display : flex
+  flex-wrap : wrap
+
+  & > .fractal-tile,
+  & > .dummy-tile
+    flex-basis: 400px
+    flex-grow : 1
+    margin-left: 8px
+    margin-right: 8px
+
+  & > .fractal-tile
+    margin-top: 8px
+    margin-bottom: 8px
+    border-radius: 8px
+    border: 1px $grey-lighter solid
+    background: white
+
+    &:hover
+      border: 1px $grey-light solid
+
+    & img
+      border-radius: 8px
+      width: 100%
+
+  & > .dummy-tile
+    height: 0px
+    border : 0px
+
+  & > .dummy-tile img,
+  & > .dummy-tile canvas,
+  & > .fractal-tile img,
+  & > .fractal-tile canvas
+    width : 100%
+    display : block
+    background: url('/img/rendering.svg')
+    background-size: contain

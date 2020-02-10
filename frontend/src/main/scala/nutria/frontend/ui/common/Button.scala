@@ -15,8 +15,7 @@ object Button {
       .text(text)
 
   def icon(icon: String, onclick: SnabbdomFacade.Eventlistener): Node =
-    Node("button.button")
+    Node("button.button.is-rounded")
       .event("click", onclick)
       .child(Icons.icon(icon))
-      .style("border-radius", "50%")
 }

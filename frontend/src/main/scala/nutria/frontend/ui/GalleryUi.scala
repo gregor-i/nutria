@@ -31,12 +31,10 @@ object GalleryUi extends Page[GalleryState] {
       voteStatistic: VoteStatistic
   )(implicit state: GalleryState, update: NutriaState => Unit): Node =
     Node("article.fractal-tile.is-relative")
-      .attr("title", fractal.entity.description)
       .child(
-        FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnailDimensions)
-          .event(
-            "click",
-            Actions.exploreFractal(fractal)
+        Link(Links.explorerState(fractal, state.user))
+          .child(
+            FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnailDimensions)
           )
       )
       .child(

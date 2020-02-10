@@ -9,9 +9,8 @@
   },
   "scripts": {
     "build": "npm run cp && npm run build-css",
-    "build-css": "cleancss frontend/src/main/css/*.css -o service/public/css/nutria.css",
-    "cp": "npm run cp-bulma && npm run cp-fas",
-    "cp-bulma": "sass frontend/src/main/css/bulma.sass service/public/css/bulma.css --no-source-map  --style compressed",
+    "build-css": "sass frontend/src/main/css/nutria.sass service/public/css/nutria.css --no-source-map  --style compressed",
+    "cp": "npm run cp-fas",
     "cp-fas": "cp node_modules/font-awesome/css/font-awesome.min.css service/public/css/font-awesome.css && cp -r node_modules/font-awesome/fonts service/public"
   }
 }
