@@ -45,4 +45,9 @@ object Links {
 
   def detailsState(fractal: FractalEntityWithId, user: Option[User]): DetailsState =
     DetailsState(user = user, remoteFractal = fractal, fractalToEdit = fractal)
+
+  def faqState(): Future[FAQState] =
+    for {
+      user <- NutriaService.whoAmI()
+    } yield FAQState(user = user)
 }

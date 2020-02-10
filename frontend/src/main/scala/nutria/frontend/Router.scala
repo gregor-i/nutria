@@ -84,6 +84,11 @@ object Router {
             }
         )
 
+      case "/faq" =>
+        LoadingState(
+          Links.faqState()
+        )
+
       case "/admin" =>
         LoadingState(
           NutriaAdminService.load()
@@ -124,6 +129,7 @@ object Router {
     case _: ProfileState => Some("/user/profile" -> Map.empty)
     case _: GreetingState =>
       Some(("/", Map.empty))
+    case _: FAQState   => Some("/faq"   -> Map.empty)
     case _: AdminState => Some("/admin" -> Map.empty)
     case _: ErrorState =>
       None

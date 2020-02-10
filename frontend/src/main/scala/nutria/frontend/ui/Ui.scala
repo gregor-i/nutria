@@ -16,6 +16,7 @@ object Ui {
         case state: UserGalleryState => UserGalleryUi.render(state, update)
         case state: LoadingState     => LoadingUi.render(state, update)
         case state: GreetingState    => GreetingUi.render(state, update)
+        case state: FAQState         => FAQUi.render(state, update)
         case state: ProfileState     => ProfileUi.render(state, update)
         case state: AdminState       => AdminUi.render(state, update)
       })

@@ -3,9 +3,6 @@ package nutria.frontend
 import monocle.Lens
 import monocle.macros.GenLens
 import nutria.core._
-import nutria.frontend.service.NutriaService
-
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 sealed trait NutriaState {
@@ -70,6 +67,11 @@ case class AdminState(
   def user: Some[User] = Some(admin)
 }
 
+case class FAQState(
+    user: Option[User],
+    navbarExpanded: Boolean = false
+) extends NutriaState
+
 object DetailsState {
   val remoteFractal: Lens[DetailsState, FractalEntityWithId] =
     GenLens[DetailsState](_.remoteFractal)
@@ -95,5 +97,6 @@ object NutriaState extends CirceCodex {
       case state: DetailsState     => state.copy(navbarExpanded = navbarExpanded)
       case state: ProfileState     => state.copy(navbarExpanded = navbarExpanded)
       case state: AdminState       => state.copy(navbarExpanded = navbarExpanded)
+      case state: FAQState         => state.copy(navbarExpanded = navbarExpanded)
     }
 }

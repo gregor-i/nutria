@@ -40,6 +40,7 @@ sbt service/run
  - Some complex number opertations are not implemented
  - complex number power seems to be incorrect
     
+ - evaluate [blockly](https://developers.google.com/blockly) as editor for free style fractals
 
 ## links:
 - https://en.wikibooks.org/wiki/Fractals/Iterations_in_the_complex_plane/Mandelbrot_set/centers

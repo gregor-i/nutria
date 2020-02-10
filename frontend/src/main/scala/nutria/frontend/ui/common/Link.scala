@@ -23,10 +23,10 @@ object Link {
         update(newState)
       })
 
-  def async(href: String, state: Future[NutriaState])(implicit update: NutriaState => Unit): Node = {
+  def async(href: String, state: => Future[NutriaState])(implicit update: NutriaState => Unit): Node = {
     Node("a")
       .attr("href", href)
-      .event("input", Snabbdom.event { e =>
+      .event("click", Snabbdom.event { e =>
         e.preventDefault()
         state.foreach(update)
       })

@@ -35,6 +35,13 @@ object GreetingUi extends Page[GreetingState] {
                 Node("div.buttons")
                   .child(
                     Link
+                      .async("/faq", Links.faqState())
+                      .classes("button", "is-link", "is-outlined")
+                      .child(Icons.icon(Icons.info))
+                      .child(Node("span").text("more information"))
+                  )
+                  .child(
+                    Link
                       .async("/gallery", Links.galleryState())
                       .classes("button", "is-primary")
                       .child(Icons.icon(Icons.gallery))

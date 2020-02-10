@@ -1,9 +1,7 @@
 package nutria.frontend.ui.common
 
 import nutria.core.User
-import nutria.frontend.toasts.Toasts
-import nutria.frontend.{Links, LoadingState, NutriaState, ProfileState, Router}
-import org.scalajs.dom
+import nutria.frontend.{FAQState, Links, NutriaState, ProfileState, Router}
 import snabbdom.{Node, Snabbdom}
 
 object Header {
@@ -23,37 +21,32 @@ object Header {
           .child(
             Node("div.navbar-start")
               .child(
-                Link(LoadingState(Links.galleryState()))
+                Link
+                  .async("/gallery", Links.galleryState())
                   .classes("navbar-item")
                   .text("Public Gallery")
               )
               .child(
-                Node("a.navbar-item")
-                  .text("My Gallery")
-                  .event(
-                    "click",
-                    Snabbdom.event { _ =>
-                      state.user match {
-                        case Some(user) =>
-                          update(LoadingState(Links.userGalleryState(user.id)))
-                        case None => Toasts.dangerToast("Log in first")
-                      }
-                    }
-                  )
+                Link(FAQState(state.user))
+                  .classes("navbar-item")
+                  .text("FAQ")
               )
-              .child(
-                Node("a.navbar-item")
-                  .text("My Profile")
-                  .event(
-                    "click",
-                    Snabbdom.event { _ =>
-                      state.user match {
-                        case Some(user) =>
-                          update(ProfileState(user))
-                        case None => Toasts.dangerToast("Log in first")
-                      }
-                    }
-                  )
+              .childOptional(
+                state.user.map(
+                  user =>
+                    Link
+                      .async(s"/user/${user.id}/gallery", Links.userGalleryState(user.id))
+                      .classes("navbar-item")
+                      .text("My Gallery")
+                )
+              )
+              .childOptional(
+                state.user.map(
+                  user =>
+                    Link(ProfileState(user))
+                      .classes("navbar-item")
+                      .text("My Profile")
+                )
               )
           )
           .child(
