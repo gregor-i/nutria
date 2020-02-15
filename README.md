@@ -38,7 +38,6 @@ sbt service/run
     - return to start position
     - save high quality screenshots to disk and to shareable url
  - Some complex number opertations are not implemented
- - complex number power seems to be incorrect
     
  - evaluate [blockly](https://developers.google.com/blockly) as editor for free style fractals
 

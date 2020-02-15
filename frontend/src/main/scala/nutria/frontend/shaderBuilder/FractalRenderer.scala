@@ -76,7 +76,7 @@ object FractalRenderer {
                  .getShaderParameter(fragmentShader, WebGLRenderingContext.COMPILE_STATUS)
                  .asInstanceOf[Boolean]) {
       throw new Exception(
-        "failed to compile fragment shader:\n" + gl.getShaderInfoLog(fragmentShader)
+        "failed to compile fragment shader:\n" + fragmentShaderSource(program, antiAliase) + "\n" + gl.getShaderInfoLog(fragmentShader)
       )
     } else {
       val program = gl.createProgram()
