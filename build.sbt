@@ -59,7 +59,7 @@ val serviceWorker = project
 val integration = taskKey[Unit]("build the frontend and copy the results into service")
 integration in frontend := {
   val buildFrontend = (frontend / Compile / fastOptJS).value.data
-  val exitCode = s"./node_modules/.bin/browserify ${buildFrontend.toString} node_modules/snabbdom/snabbdom.bundle.js -o service/public/js/nutria.js".!
+  val exitCode = s"./node_modules/.bin/browserify ${buildFrontend.toString} -o service/public/js/nutria.js".!
   require(exitCode == 0)
 }
 

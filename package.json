@@ -1,11 +1,12 @@
 {
   "dependencies": {
-    "bulma": "^0.8",
-    "font-awesome": "^4",
-    "snabbdom": "^0.7",
+    "blockly": "^3.20200123.1",
     "browserify": "^16",
+    "bulma": "^0.8",
     "clean-css-cli": "^4",
-    "sass": "^1.24.0"
+    "font-awesome": "^4",
+    "sass": "^1.24.0",
+    "snabbdom": "^0.7"
   },
   "scripts": {
     "build": "npm run cp && npm run build-css",

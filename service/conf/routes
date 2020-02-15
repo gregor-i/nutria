@@ -35,6 +35,7 @@ GET           /img/*path                                        controller.UiCon
 GET           /js/*path                                         controller.UiController.asset(path: String, folder = "/public/js")
 GET           /css/*path                                        controller.UiController.asset(path: String, folder = "/public/css")
 GET           /fonts/*path                                      controller.UiController.asset(path: String, folder = "/public/fonts")
+GET           /blockly/*path                                    controller.UiController.asset(path: String, folder = "/public/blockly")
 
 
 # Frontend

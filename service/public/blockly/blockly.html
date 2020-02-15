@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nutria - Blockly</title>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+
+    <link rel="manifest" href="/manifest.json">
+
+    <link rel="stylesheet" href="/css/font-awesome.css">
+    <link rel="stylesheet" href="/css/nutria.css"/>
+
+    <script src="/blockly/blockly.js"></script>
+    <script src="/blockly/blocks.js"></script>
+    <script src="/blockly/msg/en.js"></script>
+
+    <script src="/blockly/nutria-blocks.js"></script>
+
+    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+        <category name="Logic" colour="%{BKY_LOGIC_HUE}">
+            <block type="controls_if"></block>
+            <block type="controls_if">
+                <mutation else="1"></mutation>
+            </block>
+            <block type="controls_if">
+                <mutation elseif="1" else="1"></mutation>
+            </block>
+            <block type="logic_compare"></block>
+            <block type="logic_operation"></block>
+            <block type="logic_negate"></block>
+            <block type="logic_boolean"></block>
+            <block type="logic_null"></block>
+            <block type="logic_ternary"></block>
+        </category>
+        <category name="Loops" colour="%{BKY_LOOPS_HUE}">
+            <block type="controls_repeat_ext">
+                <value name="TIMES">
+                    <block type="math_number">
+                        <field name="NUM">10</field>
+                    </block>
+                </value>
+            </block>
+            <block type="controls_flow_statements"></block>
+        </category>
+        <category name="Math" colour="%{BKY_MATH_HUE}">
+            <block type="math_number">
+                <field name="NUM">123</field>
+            </block>
+            <block type="math_arithmetic"></block>
+            <block type="math_single"></block>
+            <block type="math_trig"></block>
+            <block type="math_constant"></block>
+            <block type="math_round"></block>
+        </category>
+        <sep></sep>
+        <category name="Complex numbers">
+            <block type="complex_number" deletable="false" x="70" y="70">
+                <value name="REAL">
+                    <block type="math_number">
+                        <field name="NUM">1</field>
+                    </block>
+                </value>
+                <value name="IMAG">
+                    <block type="math_number">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+            </block>
+        </category>
+        <sep></sep>
+        <category name="Variables" custom="VARIABLE" colour="%{BKY_VARIABLES_HUE}">
+        </category>
+        <category name="Functions" custom="PROCEDURE" colour="%{BKY_PROCEDURES_HUE}">
+        </category>
+    </xml>
+
+    <xml xmlns="https://developers.google.com/blockly/xml" id="defaultXml">
+      <block type="complex_number" deletable="false" x="70" y="70">
+              <value name="REAL">
+                  <block type="math_number">
+                      <field name="NUM">1</field>
+                  </block>
+              </value>
+              <value name="IMAG">
+                  <block type="math_number">
+                      <field name="NUM">0</field>
+                  </block>
+              </value>
+      </block>
+    </xml>
+
+    <script>
+       document.addEventListener("DOMContentLoaded",
+          function(){
+              var toolbox = document.getElementById('toolbox')
+              var defaultXml = document.getElementById("defaultXml");
+
+              var workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
+              Blockly.Xml.domToWorkspace(defaultXml, workspace);
+
+              window.exportWorkspace = function() {
+                var dom = Blockly.Xml.workspaceToDom(workspace);
+                return dom;
+              }
+            }
+        )
+    </script>
+</head>
+<body>
+    <div id="blocklyDiv" style="width:100vw; height: 100vh;"></div>
+
+<!--
+
+// input
+vec2 p = ???
+
+  vec2 z = vec2(float(0), float(0));
+  {
+    vec2 local_var_1 = vec2(float(0), float(0));
+    z = local_var_1;
+  }
+
+  int l = 0;
+  for(int i = 0;i< 200; i++){
+    {
+      vec2 local_var_1 = complex_product(vec2(z), vec2(z));
+      vec2 local_var_2 = local_var_1+p;
+      z = local_var_2;
+    }
+    if(length(z) > float(100))
+      break;
+    l ++;
+  }
+
+  vec3 color_inside = vec3(float(1), float(1), float(1));
+  vec3 color_outside = vec3(float(0), float(0), float(0));
+  float fract = float(l) / float(200);
+
+ // output
+  gl_FragColor = vec4(mix(color_inside, color_outside, fract), 1.0);
+-->
+</body>
+</html>
