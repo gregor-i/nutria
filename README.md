@@ -15,6 +15,7 @@ The current development state can be accessed at [heroku](http://nutria-explorer
 ## Project structure
 - `core` provides the shared models for backend and frontend.
 - `service` is basically the backend. It serves the frontend and provides an API to store and read the entities.
+- `serviceWorker` is an service worker implementation to make nutria a PWA.
 - `frontend` contains a UI to list, edit and explore fractals. 
 It also contains code to generate webgl shaders to render fractals.
 
@@ -32,14 +33,28 @@ sbt service/run
 ```
 
 ## todo list:
- - migrate all existing `FractalProgram`s to `FreeStyleProgram` with the right parameter (typed)
- - define a data protection policy 
- - explorer actions:
-    - return to start position
+ - documentation:
+    - define a data protection policy
+    - more faq
+    - explain actions, icons and parameters
+ - language design:
+    - define a language for generic fractal calculation
+    - migrate all existing `FractalProgram`s to `FreeStyleProgram` with the right parameter (typed)
+    - evaluate [blockly](https://developers.google.com/blockly) as editor for free style fractals
+ - Some complex number operations are not implemented
+    - Asin
+    - Acos
+    - Atan
+    - Sinh
+    - Cosh
+    - Tanh
+ - explorer:
+    - render images in low res and then in higher res to make it more responsive
+    - return to start position actions
     - save high quality screenshots to disk and to shareable url
- - Some complex number opertations are not implemented
-    
- - evaluate [blockly](https://developers.google.com/blockly) as editor for free style fractals
+ - gallery
+    - pagination
+    - web worker to render images
 
 ## links:
 - https://en.wikibooks.org/wiki/Fractals/Iterations_in_the_complex_plane/Mandelbrot_set/centers
