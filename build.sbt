@@ -49,13 +49,6 @@ val frontend = project
     libraryDependencies += "io.circe" %%% "not-java-time" % "0.2.0"
   )
 
-val serviceWorker = project
-  .enablePlugins(ScalaJSPlugin)
-  .settings(scalaJSUseMainModuleInitializer := true)
-  .settings(skip in packageJSDependencies := true)
-  .settings(emitSourceMaps := false)
-  .settings(libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.8")
-
 val integration = taskKey[Unit]("build the frontend and copy the results into service")
 integration in frontend := {
   val buildFrontend = (frontend / Compile / fastOptJS).value.data
@@ -63,15 +56,8 @@ integration in frontend := {
   require(exitCode == 0)
 }
 
-integration in serviceWorker := {
-  val swFile = (serviceWorker / Compile / fastOptJS).value
-
-  IO.copyFile(swFile.data, (service / baseDirectory).value / "public" / "js" / "sw.js")
-}
-
 compile in Compile := {
   (frontend / integration).value
-  (serviceWorker / integration).value
   (compile in Compile).value
 }
 
