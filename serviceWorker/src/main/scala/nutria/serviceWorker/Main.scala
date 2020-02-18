@@ -1,3 +1,5 @@
+package nutria.serviceWorker
+
 import org.scalajs.dom.experimental.Fetch._
 import org.scalajs.dom.experimental._
 import org.scalajs.dom.experimental.serviceworkers.ServiceWorkerGlobalScope.self
@@ -6,14 +8,14 @@ import org.scalajs.dom.experimental.serviceworkers.{ExtendableEvent, FetchEvent}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.scalajs.js
+import scala.scalajs.js.Dynamic
 import scala.scalajs.js.JSConverters._
 import scala.util.chaining._
 
 object Main {
-  val cacheName = "nutria-static"
+  val staticCacheName = "nutria-static"
   val staticFiles = js.Array[RequestInfo](
     "/css/font-awesome.css",
-    "/css/bulma.css",
     "/css/nutria.css",
     "/fonts/fontawesome-webfont.woff?v=4.7.0",
     "/fonts/fontawesome-webfont.svg?v=4.7.0",
@@ -24,14 +26,37 @@ object Main {
     "/img/rendering.svg",
     "/img/icon.png",
     "/favicon.ico",
-    "/js/nutria.js",
-    "/"
+    "/js/nutria.js"
+//    "/js/sw.js"
   )
+
+  val apiCacheName = "nutria-api"
+  def apiCache(): Future[js.Array[RequestInfo]] =
+    for {
+      me             <- nutria.frontend.service.NutriaService.whoAmI()
+      publicFractals <- nutria.frontend.service.NutriaService.loadPublicFractals()
+      personalFractals <- me match {
+        case Some(user) => nutria.frontend.service.NutriaService.loadUserFractals(user.id)
+        case None       => Future.successful(Seq.empty)
+      }
+    } yield {
+      val fractalDetailsRequests = (publicFractals.map(_.id) ++ personalFractals.map(_.id)).distinct
+        .map[RequestInfo](id => s"/api/fractals/${id}")
+      val staticRequests = Seq[RequestInfo]("/api/fractals", "/api/fractals/random", "/api/votes")
+      (fractalDetailsRequests ++ staticRequests).toJSArray
+    }
 
   def main(args: Array[String]): Unit = {
     self.addEventListener(
       "install",
-      (event: ExtendableEvent) => event.waitUntil(populateCache(cacheName, staticFiles).toJSPromise)
+      (event: ExtendableEvent) =>
+        event.waitUntil(
+          (for {
+            _          <- populateCache(staticCacheName, staticFiles)
+            apiRequest <- apiCache()
+            _          <- populateCache(apiCacheName, apiRequest)
+          } yield ()).toJSPromise
+        )
     )
 
     self.addEventListener(
@@ -44,12 +69,11 @@ object Main {
     self.addEventListener(
       "fetch",
       (event: FetchEvent) => {
-        fromCache(cacheName, event.request)
-          .recover(_ => fetch(event.request))
+        val response = fromCache(staticCacheName, event.request)
+          .recoverWith(_ => fromCache(apiCacheName, event.request))
+          .recoverWith(_ => fetch(event.request).toFuture)
           .toJSPromise
-          .asInstanceOf[js.Promise[Response]]
-          .pipe(event.respondWith(_))
-
+          .tap(event.respondWith(_))
       }
     )
   }

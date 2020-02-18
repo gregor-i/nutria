@@ -51,6 +51,7 @@ val frontend = project
 
 val serviceWorker = project
   .enablePlugins(ScalaJSPlugin)
+  .dependsOn(core.js, frontend)
   .settings(scalaJSUseMainModuleInitializer := true)
   .settings(skip in packageJSDependencies := true)
   .settings(emitSourceMaps := false)
