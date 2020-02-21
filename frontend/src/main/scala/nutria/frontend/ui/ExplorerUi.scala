@@ -43,7 +43,7 @@ object ExplorerUi extends Page[ExplorerState] {
     Button("Fork and Save this image", Icons.copy, Actions.forkAndAddViewport(fractalId, state.fractalImage.view)).classes("is-primary")
 
   def renderCanvas(implicit state: ExplorerState, update: NutriaState => Unit): Node =
-    Node("div.interation-panel")
+    Node("div.interaction-panel")
       .events(ExplorerEvents.canvasMouseEvents)
       .events(ExplorerEvents.canvasWheelEvent)
       .events(ExplorerEvents.canvasTouchEvents)
