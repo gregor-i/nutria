@@ -5,6 +5,7 @@ import eu.timepit.refined.numeric.Positive
 import nutria.core.viewport.Viewport
 import nutria.core.{FractalEntity, FractalImage, FractalProgram}
 import nutria.frontend.util.Untyped
+import nutria.macros.StaticContent
 import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
 import org.scalajs.dom.raw.{WebGLProgram, WebGLRenderingContext}
@@ -13,6 +14,8 @@ import scala.scalajs.js
 import scala.scalajs.js.Dynamic
 import scala.scalajs.js.typedarray.Float32Array
 import scala.util.{Failure, Try}
+
+import WebGLRenderingContext._
 
 object FractalRenderer {
 
@@ -54,29 +57,26 @@ object FractalRenderer {
   @throws[Exception]
   def constructProgram(
       gl: WebGLRenderingContext,
-      program: FractalProgram,
+      fractralProgram: FractalProgram,
       antiAliase: Int Refined Positive
   ): WebGLProgram = {
-    val vertexShader = gl.createShader(WebGLRenderingContext.VERTEX_SHADER)
-    gl.shaderSource(vertexShader, vertexShaderSource)
+    val vertexShader = gl.createShader(VERTEX_SHADER)
+    gl.shaderSource(vertexShader, StaticContent("frontend/src/main/glsl/vertex_shader.glsl"))
     gl.compileShader(vertexShader)
 
-    val fragmentShader = gl.createShader(WebGLRenderingContext.FRAGMENT_SHADER)
-    gl.shaderSource(fragmentShader, fragmentShaderSource(program, antiAliase))
+    val fragmentShader = gl.createShader(FRAGMENT_SHADER)
+    gl.shaderSource(fragmentShader, fragmentShaderSource(fractralProgram, antiAliase))
     gl.compileShader(fragmentShader)
 
     if (!gl
-          .getShaderParameter(vertexShader, WebGLRenderingContext.COMPILE_STATUS)
+          .getShaderParameter(vertexShader, COMPILE_STATUS)
           .asInstanceOf[Boolean]) {
-      throw new Exception(
-        "failed to compile vertex shader:\n" + vertexShaderSource + "\n" + gl
-          .getShaderInfoLog(vertexShader)
-      )
+      throw new Exception("failed to compile vertex shader:\n" + gl.getShaderInfoLog(vertexShader))
     } else if (!gl
-                 .getShaderParameter(fragmentShader, WebGLRenderingContext.COMPILE_STATUS)
+                 .getShaderParameter(fragmentShader, COMPILE_STATUS)
                  .asInstanceOf[Boolean]) {
       throw new Exception(
-        "failed to compile fragment shader:\n" + fragmentShaderSource(program, antiAliase) + "\n" + gl.getShaderInfoLog(fragmentShader)
+        "failed to compile fragment shader:\n" + fragmentShaderSource(fractralProgram, antiAliase) + "\n" + gl.getShaderInfoLog(fragmentShader)
       )
     } else {
       val program = gl.createProgram()
@@ -92,9 +92,9 @@ object FractalRenderer {
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
 
     val buffer = gl.createBuffer()
-    gl.bindBuffer(WebGLRenderingContext.ARRAY_BUFFER, buffer)
+    gl.bindBuffer(ARRAY_BUFFER, buffer)
     gl.bufferData(
-      WebGLRenderingContext.ARRAY_BUFFER,
+      ARRAY_BUFFER,
       new Float32Array(
         scala.scalajs.js.typedarray.floatArray2Float32Array(
           Array(
@@ -107,12 +107,12 @@ object FractalRenderer {
           )
         )
       ),
-      WebGLRenderingContext.STATIC_DRAW
+      STATIC_DRAW
     )
 
     val positionLocation = gl.getAttribLocation(program, "a_position")
     gl.enableVertexAttribArray(positionLocation)
-    gl.vertexAttribPointer(positionLocation, 2, WebGLRenderingContext.FLOAT, false, 0, 0)
+    gl.vertexAttribPointer(positionLocation, 2, FLOAT, false, 0, 0)
 
     gl.uniform2f(
       gl.getUniformLocation(program, "u_resolution"),
@@ -120,14 +120,12 @@ object FractalRenderer {
       gl.drawingBufferHeight
     )
 
-    val v = view
-      .cover(gl.drawingBufferWidth, gl.drawingBufferHeight)
-      .flipB
+    val v = view.cover(gl.drawingBufferWidth, gl.drawingBufferHeight).flipB
     gl.uniform2f(gl.getUniformLocation(program, "u_view_O"), v.origin._1, v.origin._2)
     gl.uniform2f(gl.getUniformLocation(program, "u_view_A"), v.A._1, v.A._2)
     gl.uniform2f(gl.getUniformLocation(program, "u_view_B"), v.B._1, v.B._2)
 
-    gl.drawArrays(WebGLRenderingContext.TRIANGLES, 0, 6)
+    gl.drawArrays(TRIANGLES, 0, 6)
   }
 
   def fragmentShaderSource(state: FractalProgram, antiAliase: Int Refined Positive) = {
@@ -135,7 +133,7 @@ object FractalRenderer {
 
     s"""precision highp float;
        |
-       |${GlobalDefinitions.definitions}
+       |${StaticContent("frontend/src/main/glsl/global_definitions.glsl")}
        |
        |uniform vec2 u_resolution;
        |uniform vec2 u_view_O, u_view_A, u_view_B;
@@ -147,11 +145,4 @@ object FractalRenderer {
        |}
     """.stripMargin
   }
-
-  val vertexShaderSource =
-    """attribute vec2 a_position;
-      |void main() {
-      |  gl_Position = vec4(a_position, 0, 1);
-      |}
-    """.stripMargin
 }

@@ -4,7 +4,8 @@ import nutria.core.{FractalEntityWithId, User}
 import nutria.frontend._
 import nutria.frontend.ui.common.{Button, CanvasHooks, Icons, Link}
 import nutria.frontend.ui.explorer.ExplorerEvents
-import snabbdom.Node
+import org.scalajs.dom
+import snabbdom.{Node, Snabbdom}
 
 object ExplorerUi extends Page[ExplorerState] {
   def render(implicit state: ExplorerState, update: NutriaState => Unit) =
