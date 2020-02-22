@@ -1,8 +1,11 @@
 package nutria.frontend
 
+import eu.timepit.refined.api.Refined
+import eu.timepit.refined.numeric.Positive
 import monocle.Lens
-import monocle.macros.GenLens
+import monocle.macros.{GenLens, Lenses}
 import nutria.core._
+
 import scala.concurrent.Future
 
 sealed trait NutriaState {
@@ -21,12 +24,20 @@ case class ErrorState(message: String, navbarExpanded: Boolean = false) extends 
 
 case class GreetingState(randomFractal: FractalImage, navbarExpanded: Boolean = false) extends NutriaState with NoUser
 
+@Lenses
 case class ExplorerState(
     user: Option[User],
     remoteFractal: Option[FractalEntityWithId],
     fractalImage: FractalImage,
+    saveModal: Option[SaveFractalDialog] = None,
     navbarExpanded: Boolean = false
 ) extends NutriaState
+
+@Lenses
+case class SaveFractalDialog(
+    dimensions: Dimensions,
+    antiAliase: Int Refined Positive
+)
 
 case class GalleryState(
     user: Option[User],
@@ -80,9 +91,7 @@ object DetailsState {
 }
 
 object ExplorerState {
-  val fractalImage: Lens[ExplorerState, FractalImage] = GenLens[ExplorerState](_.fractalImage)
-  val viewport: Lens[ExplorerState, Viewport] =
-    ExplorerState.fractalImage.composeLens(FractalImage.view)
+  val viewport: Lens[ExplorerState, Viewport] = ExplorerState.fractalImage.composeLens(FractalImage.view)
 }
 
 object NutriaState extends CirceCodex {

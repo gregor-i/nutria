@@ -1,9 +1,12 @@
 package nutria.frontend.ui
 
-import nutria.core.{FractalEntityWithId, User}
+import monocle.Lens
+import nutria.core.viewport.Dimensions
+import nutria.core.{FractalEntityWithId, FractalProgram, User}
 import nutria.frontend._
-import nutria.frontend.ui.common.{Button, CanvasHooks, Icons, Link}
+import nutria.frontend.ui.common.{Button, CanvasHooks, Form, Icons, Link}
 import nutria.frontend.ui.explorer.ExplorerEvents
+import nutria.frontend.util.LenseUtils
 import org.scalajs.dom
 import snabbdom.{Node, Snabbdom}
 
@@ -11,8 +14,9 @@ object ExplorerUi extends Page[ExplorerState] {
   def render(implicit state: ExplorerState, update: NutriaState => Unit) =
     Seq(
       common.Header(state, update),
-      renderCanvas
-        .child(renderActionBar())
+      renderCanvas,
+      renderActionBar()
+        .childOptional(saveDialog())
     )
 
   def renderActionBar()(implicit state: ExplorerState, update: NutriaState => Unit): Node =
@@ -30,15 +34,19 @@ object ExplorerUi extends Page[ExplorerState] {
           case None          => None
         }
       )
+      .child(
+        Button.icon(Icons.download, Actions.openSaveToDiskModal)
+      )
 
   def buttonBackToDetails(fractal: FractalEntityWithId)(implicit state: ExplorerState, update: NutriaState => Unit) =
     Link(Links.detailsState(fractal, state.user))
-      .classes("button")
+      .classes("button", "is-rounded")
       .child(Icons.icon(Icons.edit))
-      .child(Node("span").text("Edit Parameters"))
 
   def buttonAddViewport(fractalId: String)(implicit state: ExplorerState, update: NutriaState => Unit) =
-    Button("Save this image", Icons.snapshot, Actions.addViewport(fractalId, state.fractalImage.view)).classes("is-primary")
+    Button
+      .icon(Icons.snapshot, Actions.addViewport(fractalId, state.fractalImage.view))
+      .classes("is-primary", "is-rounded")
 
   def buttonForkAndAddViewport(fractalId: String)(implicit state: ExplorerState, update: NutriaState => Unit) =
     Button("Fork and Save this image", Icons.copy, Actions.forkAndAddViewport(fractalId, state.fractalImage.view)).classes("is-primary")
@@ -52,4 +60,38 @@ object ExplorerUi extends Page[ExplorerState] {
         Node("canvas")
           .hooks(CanvasHooks(state.fractalImage, resize = true))
       )
+
+  def saveDialog()(implicit state: ExplorerState, update: NutriaState => Unit): Option[Node] =
+    state.saveModal.map { params =>
+      val lensParams: Lens[ExplorerState, SaveFractalDialog] = ExplorerState.saveModal composeLens LenseUtils.lookedUp(
+        params,
+        monocle.std.all.some.asSetter
+      )
+      val downloadAction = Actions.saveToDisk(state.fractalImage.copy(antiAliase = params.antiAliase), params.dimensions)
+
+      Node("div.modal.is-active")
+        .children(
+          Node("div.modal-background").event("click", Actions.closeSaveToDiskModal),
+          Node("div.modal-content")
+            .child(
+              Node("div.box")
+                .child(
+                  Node("div")
+                    .style("marginBottom", "1.5rem")
+                    .child(Node("h1.title").text("Render high resolution Image"))
+                    .child(Form.intInput("width", lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.width))
+                    .child(Form.intInput("height", lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.height))
+                    .child(Form.intInput("anti alias", lensParams composeLens SaveFractalDialog.antiAliase))
+                )
+                .children(
+                  Node("div.buttons")
+                    .child(
+                      Button("Download", Icons.download, downloadAction)
+                        .classes("is-primary")
+                    )
+                    .classes("is-right")
+                )
+            )
+        )
+    }
 }

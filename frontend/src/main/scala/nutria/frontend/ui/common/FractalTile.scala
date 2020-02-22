@@ -8,7 +8,7 @@ import org.scalajs.dom.html.{Canvas, Image}
 import org.scalajs.dom.raw.WebGLRenderingContext
 import snabbdom.{Node, Snabbdom}
 
-import scala.scalajs.js.Dynamic
+import scala.scalajs.js.{Dynamic, UndefOr}
 
 object FractalTile {
   // TODO: somehow OffscrencanvasStrategy doesn't work on chromium ....
@@ -20,10 +20,14 @@ object FractalTile {
 
   def apply(fractalImage: FractalImage, dimensions: Dimensions): Node =
     strategy.render(fractalImage, dimensions)
+
+  def dataUrl(fractalImage: FractalImage, dimensions: Dimensions): String =
+    strategy.dataUrl(fractalImage, dimensions)
 }
 
 private sealed trait Strategy {
   def render(fractalImage: FractalImage, dimensions: Dimensions): Node
+  def dataUrl(fractalImage: FractalImage, dimensions: Dimensions): String
 }
 
 private object OffscrencanvasStrategy extends Strategy {
@@ -44,10 +48,10 @@ private object OffscrencanvasStrategy extends Strategy {
           val canvas = node.elm.get.asInstanceOf[Canvas]
           dom.window.setTimeout(
             () => {
-              val webGlProgram = FractalRenderer
-                .constructProgram(webglCtx, fractalImage.program, fractalImage.antiAliase)
               offscreenCanvas.width = dimensions.width
               offscreenCanvas.height = dimensions.height
+              val webGlProgram = FractalRenderer
+                .constructProgram(webglCtx, fractalImage.program, fractalImage.antiAliase)
               FractalRenderer.render(webglCtx, fractalImage.view, webGlProgram)
               canvas
                 .getContext("bitmaprenderer")
@@ -57,6 +61,8 @@ private object OffscrencanvasStrategy extends Strategy {
           )
         }
       )
+
+  override def dataUrl(fractalImage: FractalImage, dimensions: Dimensions): String = ???
 }
 
 private object ImgStrategy extends Strategy {
@@ -67,12 +73,7 @@ private object ImgStrategy extends Strategy {
     () => {
       if (buffer.nonEmpty) {
         val task = buffer.dequeue()
-        val webGlProgram = FractalRenderer
-          .constructProgram(webglCtx, task.fractalImage.program, task.fractalImage.antiAliase)
-        canvas.width = task.dimensions.width
-        canvas.height = task.dimensions.height
-        FractalRenderer.render(webglCtx, task.fractalImage.view, webGlProgram)
-        task.img.src = canvas.toDataURL("image/png")
+        task.img.src = dataUrl(task.fractalImage, task.dimensions)
       }
     },
     100
@@ -92,4 +93,13 @@ private object ImgStrategy extends Strategy {
         val img = node.elm.get.asInstanceOf[Image]
         buffer.enqueue(Task(img, fractalImage, dimensions))
       })
+
+  override def dataUrl(fractalImage: FractalImage, dimensions: Dimensions): String = {
+    canvas.width = dimensions.width
+    canvas.height = dimensions.height
+    val webGlProgram = FractalRenderer
+      .constructProgram(webglCtx, fractalImage.program, fractalImage.antiAliase)
+    FractalRenderer.render(webglCtx, fractalImage.view, webGlProgram)
+    canvas.toDataURL("image/png")
+  }
 }

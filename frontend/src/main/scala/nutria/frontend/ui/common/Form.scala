@@ -123,6 +123,25 @@ object Form {
     )
   }
 
+  def intInput[S, T](
+      label: String,
+      lens: Lens[S, Int]
+  )(implicit state: S, update: S => Unit): Node = {
+    inputStyle(
+      label,
+      Node("input.input")
+        .attr("type", "number")
+        .attr("value", lens.get(state).toString)
+        .event(
+          "change",
+          Snabbdom.event { event =>
+            val element = event.target.asInstanceOf[HTMLInputElement]
+            update(lens.set(element.value.toInt)(state))
+          }
+        )
+    )
+  }
+
   def doubleInput[S, V](
       label: String,
       lens: Lens[S, Double Refined V]

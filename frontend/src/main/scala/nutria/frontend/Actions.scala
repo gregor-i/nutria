@@ -9,11 +9,15 @@ import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage, Verdict}
 import eu.timepit.refined.refineV
 import nutria.frontend.service.NutriaService
 import nutria.frontend.toasts.Toasts
+import nutria.frontend.ui.common.FractalTile
 import org.scalajs.dom
+import nutria.core.viewport.Dimensions
+import nutria.frontend.util.Untyped
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Success}
+import org.scalajs.dom.html.Anchor
 
 object Actions {
   private def asyncUpdate(fut: Future[NutriaState])(implicit update: NutriaState => Unit): Unit =
@@ -262,5 +266,38 @@ object Actions {
           } yield state.copy(votes = votes)
         }
       }
+    }
+
+  def openSaveToDiskModal(implicit state: ExplorerState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      update {
+        state.copy(
+          saveModal = Some(
+            SaveFractalDialog(
+              dimensions = Dimensions.fullHD,
+              antiAliase = state.fractalImage.antiAliase
+            )
+          )
+        )
+      }
+    }
+
+  def closeSaveToDiskModal(implicit state: ExplorerState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      update {
+        state.copy(saveModal = None)
+      }
+    }
+
+  def saveToDisk(fractalImage: FractalImage, dimensions: Dimensions)(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      val dataUrl = FractalTile.dataUrl(fractalImage, dimensions)
+
+      val link = dom.document.createElement("a").asInstanceOf[Anchor]
+      Untyped(link).download = "fractal-image.png"
+      link.href = dataUrl
+      dom.document.body.appendChild(link)
+      link.click()
+      dom.document.body.removeChild(link)
     }
 }
