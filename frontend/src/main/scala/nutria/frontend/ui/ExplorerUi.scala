@@ -4,7 +4,7 @@ import monocle.Lens
 import nutria.core.viewport.Dimensions
 import nutria.core.{FractalEntityWithId, FractalProgram, User}
 import nutria.frontend._
-import nutria.frontend.ui.common.{Button, CanvasHooks, Form, Icons, Link}
+import nutria.frontend.ui.common.{Body, Button, CanvasHooks, Form, Header, Icons, Link}
 import nutria.frontend.ui.explorer.ExplorerEvents
 import nutria.frontend.util.LenseUtils
 import org.scalajs.dom
@@ -12,12 +12,11 @@ import snabbdom.{Node, Snabbdom}
 
 object ExplorerUi extends Page[ExplorerState] {
   def render(implicit state: ExplorerState, update: NutriaState => Unit) =
-    Seq(
-      common.Header(state, update),
-      renderCanvas,
-      renderActionBar()
-        .childOptional(saveDialog())
-    )
+    Body()
+      .child(Header())
+      .child(renderCanvas)
+      .child(renderActionBar())
+      .childOptional(saveDialog())
 
   def renderActionBar()(implicit state: ExplorerState, update: NutriaState => Unit): Node =
     Node("div.buttons.overlay-bottom-right.padding")

@@ -14,7 +14,7 @@ import scala.util.Try
 
 object Form {
 
-  def inputStyle(label: String, inputs: Node*) =
+  private def inputStyle(label: String, inputs: Node*) =
     Node("div.field.is-horizontal")
       .child(
         Node("div.field-label.is-normal")

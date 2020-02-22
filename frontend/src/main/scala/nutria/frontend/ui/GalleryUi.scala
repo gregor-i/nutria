@@ -2,29 +2,29 @@ package nutria.frontend.ui
 
 import nutria.core._
 import nutria.core.viewport.Dimensions
-import nutria.frontend.service.NutriaService
 import nutria.frontend.ui.common.{FractalTile, _}
 import nutria.frontend.{GalleryState, NutriaState, _}
 import snabbdom._
 
 object GalleryUi extends Page[GalleryState] {
   def render(implicit state: GalleryState, update: NutriaState => Unit) =
-    Seq(
-      common.Header(state, update),
-      Node("div.container")
-        .child(
-          Node("section.section")
-            .child(Node("h1.title.is-1").text("Fractal Gallery:"))
-        )
-        .child(
-          Node("div.fractal-tile-list")
-            .children(
-              state.publicFractals.map(fractal => renderFractalTile(fractal, state.votes.getOrElse(fractal.id, VoteStatistic.empty))),
-              dummyTiles
-            )
-        ),
-      common.Footer()
-    )
+    Body()
+      .child(Header())
+      .child(
+        Node("div.container")
+          .child(
+            Node("section.section")
+              .child(Node("h1.title.is-1").text("Fractal Gallery:"))
+          )
+          .child(
+            Node("div.fractal-tile-list")
+              .children(
+                state.publicFractals.map(fractal => renderFractalTile(fractal, state.votes.getOrElse(fractal.id, VoteStatistic.empty))),
+                dummyTiles
+              )
+          )
+      )
+      .child(Footer())
 
   def renderFractalTile(
       fractal: FractalEntityWithId,

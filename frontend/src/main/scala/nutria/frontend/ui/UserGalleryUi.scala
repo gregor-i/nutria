@@ -8,21 +8,22 @@ import snabbdom.Node
 
 object UserGalleryUi extends Page[UserGalleryState] {
   def render(implicit state: UserGalleryState, update: NutriaState => Unit) =
-    Seq(
-      common.Header(state, update),
-      Node("div.container")
-        .child(
-          Node("section.section")
-            .child(Node("h1.title.is-1").text("User Fractal Gallery:"))
-            .child(Node("h2.subtitle").text("user: " + state.aboutUser))
-        )
-        .child(
-          Node("div.fractal-tile-list")
-            .child(state.userFractals.map(renderFractalTile))
-            .child(dummyTiles)
-        ),
-      common.Footer()
-    )
+    Body()
+      .child(Header())
+      .child(
+        Node("div.container")
+          .child(
+            Node("section.section")
+              .child(Node("h1.title.is-1").text("User Fractal Gallery:"))
+              .child(Node("h2.subtitle").text("user: " + state.aboutUser))
+          )
+          .child(
+            Node("div.fractal-tile-list")
+              .child(state.userFractals.map(renderFractalTile))
+              .child(dummyTiles)
+          )
+      )
+      .child(Footer())
 
   def renderFractalTile(
       fractal: FractalEntityWithId

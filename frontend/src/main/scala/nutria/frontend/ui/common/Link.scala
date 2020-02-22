@@ -3,9 +3,8 @@ package nutria.frontend.ui.common
 import nutria.frontend.{NutriaState, Router}
 import snabbdom.{Node, Snabbdom}
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-
+import scala.concurrent.Future
 import scala.util.chaining._
 
 object Link {

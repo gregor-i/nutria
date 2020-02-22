@@ -8,7 +8,7 @@ import org.scalajs.dom.html.{Canvas, Image}
 import org.scalajs.dom.raw.WebGLRenderingContext
 import snabbdom.{Node, Snabbdom}
 
-import scala.scalajs.js.{Dynamic, UndefOr}
+import scala.scalajs.js.Dynamic
 
 object FractalTile {
   // TODO: somehow OffscrencanvasStrategy doesn't work on chromium ....

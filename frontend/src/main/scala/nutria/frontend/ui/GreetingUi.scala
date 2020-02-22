@@ -1,19 +1,20 @@
 package nutria.frontend.ui
 
-import nutria.frontend.ui.common.{Button, CanvasHooks, Icons, Link}
+import nutria.frontend.ui.common.{Body, CanvasHooks, Icons, Link}
 import nutria.frontend.{Actions, ExplorerState, GreetingState, Links, NutriaState}
 import nutria.macros.StaticContent
 import snabbdom.Node
 
 object GreetingUi extends Page[GreetingState] {
   def render(implicit state: GreetingState, update: NutriaState => Unit) =
-    Seq(renderCanvas, content)
+    Body()
+      .child(renderCanvas)
+      .child(content)
 
   private def content(implicit state: GreetingState, update: NutriaState => Unit) = {
     Node("div.modal.is-active")
       .children(
         Node("div.modal-background")
-          .style("opacity", "0.5")
           .event("click", Actions.exploreFractal(state.randomFractal)),
         Node("div.modal-content")
           .child(

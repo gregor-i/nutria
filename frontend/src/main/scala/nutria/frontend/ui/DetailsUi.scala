@@ -9,11 +9,10 @@ import snabbdom.Node
 
 object DetailsUi extends Page[DetailsState] {
   def render(implicit state: DetailsState, update: NutriaState => Unit) =
-    Seq(
-      common.Header(state, update),
-      body(state, update),
-      common.Footer()
-    )
+    Body()
+      .child(common.Header())
+      .child(body(state, update))
+      .child(common.Footer())
 
   def body(implicit state: DetailsState, update: NutriaState => Unit) =
     Node("div.container")

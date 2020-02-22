@@ -2,24 +2,24 @@ package nutria.frontend.ui
 
 import nutria.core.{FractalEntityWithId, User}
 import nutria.frontend.service.NutriaAdminService
-import nutria.frontend.ui.common.{Button, Header, Icons}
+import nutria.frontend.service.NutriaAdminService.ex
+import nutria.frontend.ui.common.{Body, Button, Header, Icons}
 import nutria.frontend.{AdminState, NutriaState}
 import snabbdom.{Node, Snabbdom, SnabbdomFacade}
 
 import scala.concurrent.Future
 
-import NutriaAdminService.ex
-
 object AdminUi extends Page[AdminState] {
-  def render(implicit state: AdminState, update: NutriaState => Unit): Seq[Node] =
-    Seq(
-      Header.apply,
-      Node("div.container")
-        .child(Node("section.section").child(Node("h1.title.is-1").text("Admin:")))
-        .child(usersTable(state.users))
-        .child(fractalsTable(state.fractals))
-        .child(actionBar())
-    )
+  def render(implicit state: AdminState, update: NutriaState => Unit): Node =
+    Body()
+      .child(Header())
+      .child(
+        Node("div.container")
+          .child(Node("section.section").child(Node("h1.title.is-1").text("Admin:")))
+          .child(usersTable(state.users))
+          .child(fractalsTable(state.fractals))
+          .child(actionBar())
+      )
 
   private def usersTable(users: Seq[User])(implicit update: NutriaState => Unit): Node =
     Node("section.section")
