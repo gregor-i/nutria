@@ -21,7 +21,7 @@ lazy val service = project
   .settings(
     libraryDependencies += ws,
     libraryDependencies += guice,
-    libraryDependencies += "io.lemonlabs"   %% "scala-uri"  % "2.0.0",
+    libraryDependencies += "io.lemonlabs"   %% "scala-uri"  % "2.1.0",
     libraryDependencies += "com.dripower"   %% "play-circe" % "2812.0",
     libraryDependencies += "org.postgresql" % "postgresql"  % "42.2.10",
     libraryDependencies += evolutions,
@@ -42,7 +42,7 @@ val frontend = project
   .settings(emitSourceMaps := false)
   .settings(scalaJSModuleKind := ModuleKind.CommonJSModule)
   .settings(
-    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.8",
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0",
     scalaTestAndScalaCheck,
     mathParser,
     circe,
@@ -64,7 +64,7 @@ compile in Compile := {
 // libraries
 def scalaTestAndScalaCheck =
   libraryDependencies ++= Seq(
-    "org.scalatest"  %%% "scalatest"  % "3.1.0"  % Test,
+    "org.scalatest"  %%% "scalatest"  % "3.1.1"  % Test,
     "org.scalacheck" %%% "scalacheck" % "1.14.3" % Test
   )
 
@@ -74,7 +74,7 @@ def mathParser = Seq(
 )
 
 def circe = {
-  val version = "0.12.2"
+  val version = "0.13.0"
   libraryDependencies ++= Seq(
     "io.circe" %%% "circe-core"           % version,
     "io.circe" %%% "circe-generic"        % version,
@@ -85,7 +85,7 @@ def circe = {
 }
 
 def monocle = {
-  val version = "2.0.1"
+  val version = "2.0.4"
   libraryDependencies ++= Seq(
     "com.github.julien-truffaut" %%% "monocle-core"    % version,
     "com.github.julien-truffaut" %%% "monocle-macro"   % version,
@@ -95,4 +95,4 @@ def monocle = {
 }
 
 def refinedTypes =
-  libraryDependencies += "eu.timepit" %%% "refined" % "0.9.12"
+  libraryDependencies += "eu.timepit" %%% "refined" % "0.9.13"
