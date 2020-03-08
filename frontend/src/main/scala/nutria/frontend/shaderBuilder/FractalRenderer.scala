@@ -3,7 +3,7 @@ package nutria.frontend.shaderBuilder
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.numeric.Positive
 import nutria.core.viewport.Viewport
-import nutria.core.{FractalEntity, FractalImage, FractalProgram}
+import nutria.core.{FractalImage, FractalProgram}
 import nutria.frontend.util.Untyped
 import nutria.macros.StaticContent
 import org.scalajs.dom
