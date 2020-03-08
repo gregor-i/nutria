@@ -17,11 +17,53 @@ vec2 complex_power(vec2 a, vec2 b){
   return magnitude * vec2(cos(angle), sin(angle));
 }
 
-#define complex_exp(a) exp(a.x) * vec2(cos(a.y), sin(a.y))
+vec2 complex_exp(vec2 z){
+ return exp(z.x) * vec2(cos(z.y), sin(z.y));
+}
+
+vec2 complex_log(vec2 a){
+  return vec2(length(a), atan(a.x, a.y));
+}
+
+// https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Negative_or_complex_square
+vec2 complex_sqrt(vec2 z){
+  float length_z = length(z);
+  float b = sqrt((length_z + z.x) / 2.0);
+  float c = sqrt((length_z - z.x) / 2.0);
+  if (z.y < 0.0)
+    return vec2(b, -c);
+  else
+    return vec2(b, c);
+}
+
 #define complex_sin(a) vec2(sin(a.x)*cosh(a.y), cos(a.x)*sinh(a.y))
 #define complex_cos(a) vec2(cos(a.x)*cosh(a.y), -sin(a.x)*sinh(a.y))
 #define complex_tan(a) vec2(sin(2.0*a.x), sinh(2.0*a.y)) / (cos(2.0*a.x) + cosh(2.0*a.y))
-#define complex_log(a) vec2(length(a), atan(a.x, a.y))
+
+// see: https://github.com/typelevel/spire/blob/0ee38b7abc9a42fe92a63c654498305ec80be454/core/src/main/scala/spire/math/Complex.scala#L255
+// acos(z) = -i*(log(z + i*(sqrt(1 - z*z))))
+vec2 complex_acos(vec2 z){
+  vec2 z2 = complex_product(z, z);
+  vec2 s = complex_sqrt(vec2(1.0 - z2.x, -z2.y));
+  vec2 l = complex_log(vec2(z.x + s.y, z.y + s.x));
+  return vec2(l.x, -l.y);
+}
+
+// asin(z) = -i*(log(sqrt(1 - z*z) + i*z))
+vec2 complex_asin(vec2 z){
+  vec2 z2 = complex_product(z, z);
+  vec2 s = complex_sqrt(vec2(1.0 - z2.x, -z2.y));
+  vec2 l = complex_log(vec2(s.x + -z.y, s.y + z.x));
+  return vec2(l.x, -l.y);
+}
+
+// atan(z) = (i/2) log((i + z)/(i - z))
+vec2 complex_atan(vec2 z){
+  vec2 n = vec2(z.x, z.y + 1.0);
+  vec2 d = vec2(-z.x, 1.0 - z.y);
+  vec2 l = complex_log(complex_divide(n, d));
+  return vec2(l.y / -2.0, l.x / 2.0);
+}
 
 vec3 hsv2rgb(vec3 c)
 {

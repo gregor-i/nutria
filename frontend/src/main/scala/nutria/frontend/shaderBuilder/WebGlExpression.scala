@@ -71,12 +71,12 @@ case class ComplexUnitaryExp(op: SpireUnitaryOperator, child: WebGlExpression[We
     case Sin  => s"complex_sin(vec2(${child.toCode}))"
     case Cos  => s"complex_cos(vec2(${child.toCode}))"
     case Tan  => s"complex_tan(vec2(${child.toCode}))"
-    case Asin => ???
-    case Acos => ???
-    case Atan => ???
-    case Sinh => ???
-    case Cosh => ???
-    case Tanh => ???
+    case Asin => s"complex_asin(vec2(${child.toCode}))"
+    case Acos => s"complex_acos(vec2(${child.toCode}))"
+    case Atan => s"complex_atan(vec2(${child.toCode}))"
+    case Sinh => s"complex_sinh(vec2(${child.toCode}))"
+    case Cosh => s"complex_cosh(vec2(${child.toCode}))"
+    case Tanh => s"complex_tanh(vec2(${child.toCode}))"
     case Exp  => s"complex_exp(vec2(${child.toCode}))"
     case Log  => s"complex_log(vec2(${child.toCode}))"
   }

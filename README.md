@@ -42,9 +42,6 @@ sbt service/run
     - migrate all existing `FractalProgram`s to `FreeStyleProgram` with the right parameter (typed)
     - evaluate [blockly](https://developers.google.com/blockly) as editor for free style fractals
  - Some complex number operations are not implemented
-    - Asin
-    - Acos
-    - Atan
     - Sinh
     - Cosh
     - Tanh
