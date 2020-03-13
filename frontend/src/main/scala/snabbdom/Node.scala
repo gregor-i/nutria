@@ -38,6 +38,12 @@ case class Node(
   def attr(attrName: String, value: String): Node =
     copy(attrs = attrs :+ (attrName -> value))
 
+  def boolAttr(attrName: String, value: Boolean): Node =
+    if (value)
+      copy(attrs = attrs :+ (attrName -> ""))
+    else
+      this
+
   def attrs(attrs: Seq[(String, String)]): Node =
     copy(attrs = this.attrs ++ attrs)
 

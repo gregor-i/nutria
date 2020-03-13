@@ -73,16 +73,11 @@ object DetailsUi extends Page[DetailsState] {
     val selectFractalTemplate = Form.selectInput(
       label = "Type",
       options = Vector(
-        "NewtonIteration",
-        "DivergingSeries",
-        "FreestyleProgram"
+        "NewtonIteration"  -> NewtonIteration.default,
+        "DivergingSeries"  -> DivergingSeries.default,
+        "FreestyleProgram" -> FreestyleProgram.default
       ),
-      value = fractal.entity.program.getClass.getSimpleName,
-      onChange = {
-        case "NewtonIteration"  => update(toEditProgram.set(NewtonIteration.default)(state))
-        case "DivergingSeries"  => update(toEditProgram.set(DivergingSeries.default)(state))
-        case "FreestyleProgram" => update(toEditProgram.set(FreestyleProgram.default)(state))
-      }
+      lens = toEditProgram
     )
 
     val additionalParams = fractal.entity.program match {
@@ -95,16 +90,11 @@ object DetailsUi extends Page[DetailsState] {
         val selectColoringTemplate = Form.selectInput(
           label = "Coloring",
           options = Vector(
-            "TimeEscape",
-            "NormalMap",
-            "OuterDistance"
+            "TimeEscape"    -> TimeEscape(),
+            "NormalMap"     -> NormalMap(),
+            "OuterDistance" -> OuterDistance()
           ),
-          value = f.coloring.getClass.getSimpleName,
-          onChange = {
-            case "TimeEscape"    => update(lensFractal.composeLens(DivergingSeries.coloring).set(TimeEscape())(state))
-            case "NormalMap"     => update(lensFractal.composeLens(DivergingSeries.coloring).set(NormalMap())(state))
-            case "OuterDistance" => update(lensFractal.composeLens(DivergingSeries.coloring).set(OuterDistance())(state))
-          }
+          lens = lensFractal composeLens DivergingSeries.coloring
         )
         Seq(selectColoringTemplate)
       case f: FreestyleProgram =>

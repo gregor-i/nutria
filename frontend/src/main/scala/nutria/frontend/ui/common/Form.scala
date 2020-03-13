@@ -213,28 +213,37 @@ object Form {
   def booleanInput[S](label: String, lens: Lens[S, Boolean])(implicit state: S, update: S => Unit) =
     selectInput(
       label = label,
-      options = Seq("true", "false"),
-      value = lens.get(state).toString,
-      onChange = newValue => update(lens.set(newValue == "true")(state))
+      options = Seq("true" -> true, "false" -> false),
+      lens = lens
     )
 
-  def selectInput(label: String, options: Seq[String], value: String, onChange: String => Unit) =
+  def selectInput[S, A](label: String, options: Seq[(String, A)], lens: Lens[S, A])(implicit state: S, update: S => Unit) = {
+    val currentValue = lens.get(state)
     inputStyle(
       label,
       Node("div.select is-fullwidth")
         .child(
           Node("select")
-            .event("change", Snabbdom.event { event =>
-              onChange(event.target.asInstanceOf[HTMLSelectElement].value)
-            })
+            .event(
+              "change",
+              Snabbdom.event { event =>
+                val selected = event.target.asInstanceOf[HTMLSelectElement].value
+                options
+                  .find(_._1 == selected)
+                  .map(_._2)
+                  .map(lens.set(_)(state))
+                  .foreach(update)
+              }
+            )
             .child(
-              options.map(
-                opt =>
+              options.map {
+                case (stringValue, value) =>
                   Node("option")
-                    .attr(if (opt == value) "selected" else "not-selected", "")
-                    .text(opt)
-              )
+                    .boolAttr("selected", value == currentValue)
+                    .text(stringValue)
+              }
             )
         )
     )
+  }
 }
