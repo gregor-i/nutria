@@ -2,15 +2,12 @@ package nutria.core
 
 import eu.timepit.refined.refineMV
 import eu.timepit.refined.api.Refined
-import eu.timepit.refined.numeric.Interval.Open
 import eu.timepit.refined.numeric.{NonNaN, Positive}
 import io.circe.Codec
 import mathParser.algebra.SpireNode
 import monocle.Prism
 import monocle.macros.GenPrism
-import nutria.core.DivergingSeries.TimeEscape
 import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda, ZAndZDerAndLambda}
-import shapeless.Witness
 import spire.math.Complex
 
 sealed trait FractalProgram
@@ -21,7 +18,7 @@ case class DivergingSeries(
     escapeRadius: Double Refined Positive = refineMV(100.0),
     initial: StringFunction[Lambda.type],
     iteration: StringFunction[ZAndLambda],
-    coloring: DivergingSeries.Coloring = TimeEscape()
+    coloring: DivergingSeriesColoring = TimeEscape()
 ) extends FractalProgram
 
 object DivergingSeries {
@@ -29,23 +26,6 @@ object DivergingSeries {
     initial = StringFunction.unsafe("0"),
     iteration = StringFunction.unsafe("z*z + lambda")
   )
-
-  sealed trait Coloring
-
-  @monocle.macros.Lenses()
-  case class TimeEscape(
-      colorInside: RGBA = RGBA.white,
-      colorOutside: RGBA = RGBA.black
-  ) extends Coloring
-
-  @monocle.macros.Lenses()
-  case class NormalMap(
-      h2: Double Refined NonNaN = refineMV(2.0),
-      angle: Double Refined Open[Witness.`0.0`.T, Witness.`6.28318530718`.T] = refineMV(0.78539816339), // todo: maybe define in degree? this is 45°
-      colorInside: RGBA = RGBA(0.0, 0.0, 255.0 / 4.0),
-      colorLight: RGBA = RGBA.white,
-      colorShadow: RGBA = RGBA.black
-  ) extends Coloring
 
   def deriveIteration(series: DivergingSeries): SpireNode[Complex[Double], ZAndZDerAndLambda] = {
     import mathParser.algebra._
@@ -138,17 +118,11 @@ object FractalProgram extends CirceCodex {
   val freestyleProgram: Prism[FractalProgram, FreestyleProgram] =
     GenPrism[FractalProgram, FreestyleProgram]
 
-  val timeEscapeColoring: Prism[DivergingSeries.Coloring, DivergingSeries.TimeEscape] =
-    GenPrism[DivergingSeries.Coloring, DivergingSeries.TimeEscape]
-  val normalMapColoring: Prism[DivergingSeries.Coloring, DivergingSeries.NormalMap] =
-    GenPrism[DivergingSeries.Coloring, DivergingSeries.NormalMap]
-
   implicit val ordering: Ordering[FractalProgram] = Ordering.by[FractalProgram, (Int, Int)] {
     case f: DivergingSeries  => (1, f.iteration.hashCode)
     case f: NewtonIteration  => (3, f.function.hashCode)
     case f: FreestyleProgram => (4, f.code.hashCode)
   }
 
-  implicit val codec: Codec[FractalProgram]                   = semiauto.deriveConfiguredCodec
-  implicit val codecColoring: Codec[DivergingSeries.Coloring] = semiauto.deriveConfiguredCodec
+  implicit val codec: Codec[FractalProgram] = semiauto.deriveConfiguredCodec
 }

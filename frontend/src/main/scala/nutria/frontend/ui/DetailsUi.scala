@@ -74,16 +74,13 @@ object DetailsUi extends Page[DetailsState] {
       label = "Type",
       options = Vector(
         "NewtonIteration",
-        "DivergingSeries.TimeEscape",
-        "DivergingSeries.NormalMap",
+        "DivergingSeries",
         "FreestyleProgram"
       ),
       value = fractal.entity.program.getClass.getSimpleName,
       onChange = {
-        case "NewtonIteration"            => update(toEditProgram.set(NewtonIteration.default)(state))
-        case "DivergingSeries.TimeEscape" => update(toEditProgram.set(DivergingSeries.default)(state))
-        case "DivergingSeries.NormalMap" =>
-          update(toEditProgram.set(DivergingSeries.default.copy(coloring = DivergingSeries.NormalMap()))(state))
+        case "NewtonIteration"  => update(toEditProgram.set(NewtonIteration.default)(state))
+        case "DivergingSeries"  => update(toEditProgram.set(DivergingSeries.default)(state))
         case "FreestyleProgram" => update(toEditProgram.set(FreestyleProgram.default)(state))
       }
     )
@@ -131,31 +128,46 @@ object DetailsUi extends Page[DetailsState] {
           FractalProgram.divergingSeries.asSetter
         )
 
-        f.coloring match {
-          case coloring: DivergingSeries.NormalMap =>
+        val selectColoringTemplate = Form.selectInput(
+          label = "Coloring",
+          options = Vector(
+            "TimeEscape",
+            "NormalMap"
+          ),
+          value = f.coloring.getClass.getSimpleName,
+          onChange = {
+            case "TimeEscape" => update(lensFractal.composeLens(DivergingSeries.coloring).set(TimeEscape())(state))
+            case "NormalMap"  => update(lensFractal.composeLens(DivergingSeries.coloring).set(NormalMap())(state))
+          }
+        )
+
+        val coloringInputs = f.coloring match {
+          case coloring: NormalMap =>
             val lensColoring = lensFractal composeLens DivergingSeries.coloring composeLens LenseUtils.lookedUp(
               coloring,
-              FractalProgram.normalMapColoring.asSetter
+              DivergingSeriesColoring.normalMapColoring.asSetter
             )
 
             Seq(
-              Form.doubleInput("h2", lensColoring composeLens DivergingSeries.NormalMap.h2),
-              Form.doubleInput("angle [0, 2pi]", lensColoring composeLens DivergingSeries.NormalMap.angle),
+              selectColoringTemplate,
+              Form.doubleInput("h2", lensColoring composeLens NormalMap.h2),
+              Form.doubleInput("angle [0, 2pi]", lensColoring composeLens NormalMap.angle),
               Form
-                .colorInput("color inside", lensColoring composeLens DivergingSeries.NormalMap.colorInside),
-              Form.colorInput("color light", lensColoring composeLens DivergingSeries.NormalMap.colorLight),
+                .colorInput("color inside", lensColoring composeLens NormalMap.colorInside),
+              Form.colorInput("color light", lensColoring composeLens NormalMap.colorLight),
               Form
-                .colorInput("color shadow", lensColoring composeLens DivergingSeries.NormalMap.colorShadow)
+                .colorInput("color shadow", lensColoring composeLens NormalMap.colorShadow)
             )
-          case coloring: DivergingSeries.TimeEscape =>
+          case coloring: TimeEscape =>
             val lensColoring = lensFractal composeLens DivergingSeries.coloring composeLens LenseUtils.lookedUp(
               coloring,
-              FractalProgram.timeEscapeColoring.asSetter
+              DivergingSeriesColoring.timeEscapeColoring.asSetter
             )
 
             Seq(
-              Form.colorInput("color inside", lensColoring composeLens DivergingSeries.TimeEscape.colorInside),
-              Form.colorInput("color outside", lensColoring composeLens DivergingSeries.TimeEscape.colorOutside)
+              selectColoringTemplate,
+              Form.colorInput("color inside", lensColoring composeLens TimeEscape.colorInside),
+              Form.colorInput("color outside", lensColoring composeLens TimeEscape.colorOutside)
             )
         }
 
@@ -164,7 +176,7 @@ object DetailsUi extends Page[DetailsState] {
           Form.stringFunctionInput("iteration", lensFractal composeLens DivergingSeries.iteration),
           Form.intInput("max iterations", lensFractal composeLens DivergingSeries.maxIterations),
           Form.doubleInput("escape radius", lensFractal composeLens DivergingSeries.escapeRadius)
-        )
+        ) ++ coloringInputs
       case f: FreestyleProgram =>
         val lensFractal = toEditProgram composeLens LenseUtils.lookedUp(
           f,

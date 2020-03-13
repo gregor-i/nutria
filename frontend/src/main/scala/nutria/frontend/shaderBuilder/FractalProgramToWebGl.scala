@@ -8,14 +8,14 @@ import nutria.frontend.shaderBuilder.Syntax.EnrichNode
 object FractalProgramToWebGl {
   def apply(fractalProgram: FractalProgram): (RefVec2, RefVec4) => String =
     fractalProgram match {
-      case f: NewtonIteration                                                        => newtonIteration(f)
-      case f: DivergingSeries if f.coloring.isInstanceOf[DivergingSeries.TimeEscape] => divergingSeries(f)
-      case f: DivergingSeries if f.coloring.isInstanceOf[DivergingSeries.NormalMap]  => divergingSeriesNormalMap(f)
-      case f: FreestyleProgram                                                       => freestyle(f)
+      case f: NewtonIteration                                        => newtonIteration(f)
+      case f: DivergingSeries if f.coloring.isInstanceOf[TimeEscape] => divergingSeries(f)
+      case f: DivergingSeries if f.coloring.isInstanceOf[NormalMap]  => divergingSeriesNormalMap(f)
+      case f: FreestyleProgram                                       => freestyle(f)
     }
 
   def divergingSeriesNormalMap(f: DivergingSeries)(inputVar: RefVec2, outputVar: RefVec4) = {
-    val coloring = f.coloring.asInstanceOf[DivergingSeries.NormalMap]
+    val coloring = f.coloring.asInstanceOf[NormalMap]
     val z        = RefVec2("z")
     val zNew     = RefVec2("z_new")
     val zDer     = RefVec2("z_der")
@@ -128,7 +128,7 @@ object FractalProgramToWebGl {
   }
 
   def divergingSeries(n: DivergingSeries)(inputVar: RefVec2, outputVar: RefVec4): String = {
-    val coloring = n.coloring.asInstanceOf[DivergingSeries.TimeEscape]
+    val coloring = n.coloring.asInstanceOf[TimeEscape]
     val z        = RefVec2("z")
 
     val functionLangNames: PartialFunction[ZAndLambda, Ref[WebGlTypeVec2.type]] = {
