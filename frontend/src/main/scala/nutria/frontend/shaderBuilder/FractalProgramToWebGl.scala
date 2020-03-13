@@ -99,6 +99,8 @@ object FractalProgramToWebGl {
     val iterationZDer = DivergingSeries.deriveIteration(f).optimize(PowerOptimizer.optimizer)
 
     s"""{
+       |  float pixel_distance = length((u_view_A + u_view_B) / u_resolution);
+       |  float distance_factor = ${FloatLiteral(coloring.distanceFactor.value.toFloat).toCode} / pixel_distance;
        |  int l = 0;
        |  ${WebGlStatement.blockDeclare(z, initialZ, initialLangNames)}
        |  ${WebGlStatement.blockDeclare(zDer, initialZDer, initialLangNames)}
@@ -118,8 +120,9 @@ object FractalProgramToWebGl {
        |    float z_length = length(z);
        |    float z_der_length = length(z_der);
        |    float d = 2.0 * z_length / z_der_length * log(z_length);
-       |    ${outputVar.name} = vec4(vec3(d*1000.0), 1.0); // todo: do something smart here to calculate the factor
-       |    //color = mix(vec4(color_shadow, 1.0), vec4(color_light, 1.0), d);
+       |    vec3 color_far = ${Vec3.fromRGBA(coloring.colorFar).toCode};
+       |    vec3 color_near = ${Vec3.fromRGBA(coloring.colorNear).toCode};
+       |    ${outputVar.name} = vec4(mix(color_far, color_near, d * distance_factor), 1.0);
        |  }
        |}
     """.stripMargin

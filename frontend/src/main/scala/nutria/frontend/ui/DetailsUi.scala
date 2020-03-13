@@ -1,9 +1,9 @@
 package nutria.frontend.ui
 
-import monocle.Iso
+import monocle.{Iso, Lens, PLens}
 import nutria.core._
 import nutria.frontend._
-import nutria.frontend.ui.common._
+import nutria.frontend.ui.common.{Form, _}
 import nutria.frontend.util.LenseUtils
 import snabbdom.Node
 
@@ -85,19 +85,39 @@ object DetailsUi extends Page[DetailsState] {
       }
     )
 
-    val freeStyleParamters = fractal.entity.program match {
+    val additionalParams = fractal.entity.program match {
+      case f: DivergingSeries =>
+        val lensFractal: Lens[DetailsState, DivergingSeries] = toEditProgram composeLens LenseUtils.lookedUp(
+          f,
+          FractalProgram.divergingSeries.asSetter
+        )
+
+        val selectColoringTemplate = Form.selectInput(
+          label = "Coloring",
+          options = Vector(
+            "TimeEscape",
+            "NormalMap",
+            "OuterDistance"
+          ),
+          value = f.coloring.getClass.getSimpleName,
+          onChange = {
+            case "TimeEscape"    => update(lensFractal.composeLens(DivergingSeries.coloring).set(TimeEscape())(state))
+            case "NormalMap"     => update(lensFractal.composeLens(DivergingSeries.coloring).set(NormalMap())(state))
+            case "OuterDistance" => update(lensFractal.composeLens(DivergingSeries.coloring).set(OuterDistance())(state))
+          }
+        )
+        Seq(selectColoringTemplate)
       case f: FreestyleProgram =>
         val lensFractal = toEditProgram composeLens LenseUtils.lookedUp(
           f,
           FractalProgram.freestyleProgram.asSetter
         )
-        Seq(
-          Form.mulitlineStringInput("template", lensFractal composeLens FreestyleProgram.code)
-        )
+        val templateInput = Form.mulitlineStringInput("template", lensFractal composeLens FreestyleProgram.code)
+        Seq(templateInput)
       case _ => Seq.empty
     }
 
-    Seq(selectFractalTemplate) ++ freeStyleParamters
+    Seq(selectFractalTemplate) ++ additionalParams
   }
 
   def parameter()(implicit state: DetailsState, update: NutriaState => Unit) = {
@@ -128,21 +148,6 @@ object DetailsUi extends Page[DetailsState] {
           FractalProgram.divergingSeries.asSetter
         )
 
-        val selectColoringTemplate = Form.selectInput(
-          label = "Coloring",
-          options = Vector(
-            "TimeEscape",
-            "NormalMap",
-            "OuterDistance"
-          ),
-          value = f.coloring.getClass.getSimpleName,
-          onChange = {
-            case "TimeEscape"    => update(lensFractal.composeLens(DivergingSeries.coloring).set(TimeEscape())(state))
-            case "NormalMap"     => update(lensFractal.composeLens(DivergingSeries.coloring).set(NormalMap())(state))
-            case "OuterDistance" => update(lensFractal.composeLens(DivergingSeries.coloring).set(OuterDistance())(state))
-          }
-        )
-
         val coloringInputs = f.coloring match {
           case coloring: NormalMap =>
             val lensColoring = lensFractal composeLens DivergingSeries.coloring composeLens LenseUtils.lookedUp(
@@ -151,14 +156,11 @@ object DetailsUi extends Page[DetailsState] {
             )
 
             Seq(
-              selectColoringTemplate,
               Form.doubleInput("h2", lensColoring composeLens NormalMap.h2),
               Form.doubleInput("angle [0, 2pi]", lensColoring composeLens NormalMap.angle),
-              Form
-                .colorInput("color inside", lensColoring composeLens NormalMap.colorInside),
+              Form.colorInput("color inside", lensColoring composeLens NormalMap.colorInside),
               Form.colorInput("color light", lensColoring composeLens NormalMap.colorLight),
-              Form
-                .colorInput("color shadow", lensColoring composeLens NormalMap.colorShadow)
+              Form.colorInput("color shadow", lensColoring composeLens NormalMap.colorShadow)
             )
           case coloring: OuterDistance =>
             val lensColoring = lensFractal composeLens DivergingSeries.coloring composeLens LenseUtils.lookedUp(
@@ -167,7 +169,10 @@ object DetailsUi extends Page[DetailsState] {
             )
 
             Seq(
-              selectColoringTemplate
+              Form.colorInput("color inside", lensColoring composeLens OuterDistance.colorInside),
+              Form.colorInput("color near", lensColoring composeLens OuterDistance.colorNear),
+              Form.colorInput("color far", lensColoring composeLens OuterDistance.colorFar),
+              Form.doubleInput("distance factor", lensColoring composeLens OuterDistance.distanceFactor)
             )
           case coloring: TimeEscape =>
             val lensColoring = lensFractal composeLens DivergingSeries.coloring composeLens LenseUtils.lookedUp(
@@ -176,7 +181,6 @@ object DetailsUi extends Page[DetailsState] {
             )
 
             Seq(
-              selectColoringTemplate,
               Form.colorInput("color inside", lensColoring composeLens TimeEscape.colorInside),
               Form.colorInput("color outside", lensColoring composeLens TimeEscape.colorOutside)
             )
@@ -216,7 +220,7 @@ object DetailsUi extends Page[DetailsState] {
       Node("article.fractal-tile.is-relative")
         .child(
           FractalTile(img, Dimensions.thumbnailDimensions)
-            // fixme: the viewport should be used in the link
+          // fixme: the viewport should be used in the link
             .event("click", Actions.exploreFractal(state.fractalToEdit))
         )
         .child(

@@ -2,7 +2,7 @@ package nutria.core
 
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.numeric.Interval.Open
-import eu.timepit.refined.numeric.NonNaN
+import eu.timepit.refined.numeric.{NonNaN, Positive}
 import eu.timepit.refined.refineMV
 import io.circe.Codec
 import monocle.Prism
@@ -26,8 +26,12 @@ case class NormalMap(
     colorShadow: RGBA = RGBA.black
 ) extends DivergingSeriesColoring
 
+@monocle.macros.Lenses()
 case class OuterDistance(
-    colorInside: RGBA = RGBA(0.0, 0.0, 255.0 / 4.0)
+    colorInside: RGBA = RGBA(0.0, 0.0, 255.0 / 4.0),
+    colorFar: RGBA = RGBA.black,
+    colorNear: RGBA = RGBA.white,
+    distanceFactor: Double Refined Positive = refineMV(1.0)
 ) extends DivergingSeriesColoring
 
 object DivergingSeriesColoring extends CirceCodex {
