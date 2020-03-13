@@ -57,14 +57,14 @@ object FractalProgramToWebGl {
        |  }
        |
        |  if(l == ${f.maxIterations}){
-       |    ${outputVar.name} = vec4(${Vec3.fromRGBA(coloring.colorInside).toCode}, 1.0);
+       |    ${outputVar.name} = vec4(${Vec3.fromRGB(coloring.colorInside).toCode}, 1.0);
        |  }else{
        |    const float h2 = float(${coloring.h2});
        |    const vec2 v = vec2(float(${Math.cos(coloring.angle.value)}), float(${Math.sin(coloring.angle.value)}));
        |    vec2 u = normalize(complex_divide(${z.name}, ${zDer.name}));
        |    float t = max((dot(u, v) + h2) / (1.0 + h2), 0.0);
-       |    vec3 color_shadow = ${Vec3.fromRGBA(coloring.colorShadow).toCode};
-       |    vec3 color_light = ${Vec3.fromRGBA(coloring.colorLight).toCode};
+       |    vec3 color_shadow = ${Vec3.fromRGB(coloring.colorShadow).toCode};
+       |    vec3 color_light = ${Vec3.fromRGB(coloring.colorLight).toCode};
        |    ${outputVar.name} = mix(vec4(color_shadow, 1.0), vec4(color_light, 1.0), t);
        |  }
        |}
@@ -115,13 +115,13 @@ object FractalProgramToWebGl {
        |  }
        |
        |  if(l == ${f.maxIterations}){
-       |    ${outputVar.name} = vec4(${Vec3.fromRGBA(coloring.colorInside).toCode}, 1.0);
+       |    ${outputVar.name} = vec4(${Vec3.fromRGB(coloring.colorInside).toCode}, 1.0);
        |  }else{
        |    float z_length = length(z);
        |    float z_der_length = length(z_der);
        |    float d = 2.0 * z_length / z_der_length * log(z_length);
-       |    vec3 color_far = ${Vec3.fromRGBA(coloring.colorFar).toCode};
-       |    vec3 color_near = ${Vec3.fromRGBA(coloring.colorNear).toCode};
+       |    vec3 color_far = ${Vec3.fromRGB(coloring.colorFar).toCode};
+       |    vec3 color_near = ${Vec3.fromRGB(coloring.colorNear).toCode};
        |    ${outputVar.name} = vec4(mix(color_far, color_near, d * distance_factor), 1.0);
        |  }
        |}
@@ -216,8 +216,8 @@ object FractalProgramToWebGl {
        |    l ++;
        |  }
        |
-       |  vec3 color_inside = ${Vec3.fromRGBA(coloring.colorInside).toCode};
-       |  vec3 color_outside = ${Vec3.fromRGBA(coloring.colorOutside).toCode};
+       |  vec3 color_inside = ${Vec3.fromRGB(coloring.colorInside).toCode};
+       |  vec3 color_outside = ${Vec3.fromRGB(coloring.colorOutside).toCode};
        |  float fract = float(l) / float(${n.maxIterations});
        |  ${outputVar.name} = vec4(mix(color_inside, color_outside, fract), 1.0);
        |}

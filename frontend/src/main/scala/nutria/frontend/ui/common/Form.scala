@@ -4,7 +4,7 @@ import eu.timepit.refined.api.{Refined, Validate}
 import eu.timepit.refined.refineV
 import mathParser.algebra.SpireLanguage
 import monocle.Lens
-import nutria.core.RGBA
+import nutria.core.RGB
 import nutria.core.languages.StringFunction
 import org.scalajs.dom.raw.{HTMLInputElement, HTMLSelectElement}
 import snabbdom.{Node, Snabbdom}
@@ -167,17 +167,17 @@ object Form {
         )
     )
 
-  def colorInput[S](label: String, lens: Lens[S, RGBA])(implicit state: S, update: S => Unit) =
+  def colorInput[S](label: String, lens: Lens[S, RGB])(implicit state: S, update: S => Unit) =
     inputStyle(
       label,
       Node("input.input")
         .attr("type", "color")
-        .attr("value", RGBA.toRGBString(lens.get(state)))
+        .attr("value", RGB.toRGBString(lens.get(state)))
         .event(
           "change",
           Snabbdom.event { event =>
             val element = event.target.asInstanceOf[HTMLInputElement]
-            RGBA.parseRGBString(element.value).toOption match {
+            RGB.parseRGBString(element.value).toOption match {
               case Some(v) =>
                 element.classList.remove("is-danger")
                 update(lens.set(v)(state))
