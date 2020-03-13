@@ -26,12 +26,14 @@ case class NormalMap(
     colorShadow: RGBA = RGBA.black
 ) extends DivergingSeriesColoring
 
-object DivergingSeriesColoring extends CirceCodex {
+case class OuterDistance(
+    colorInside: RGBA = RGBA(0.0, 0.0, 255.0 / 4.0)
+) extends DivergingSeriesColoring
 
-  val timeEscapeColoring: Prism[DivergingSeriesColoring, TimeEscape] =
-    GenPrism[DivergingSeriesColoring, TimeEscape]
-  val normalMapColoring: Prism[DivergingSeriesColoring, NormalMap] =
-    GenPrism[DivergingSeriesColoring, NormalMap]
+object DivergingSeriesColoring extends CirceCodex {
+  val timeEscapeColoring: Prism[DivergingSeriesColoring, TimeEscape]       = GenPrism[DivergingSeriesColoring, TimeEscape]
+  val normalMapColoring: Prism[DivergingSeriesColoring, NormalMap]         = GenPrism[DivergingSeriesColoring, NormalMap]
+  val outerDistanceColoring: Prism[DivergingSeriesColoring, OuterDistance] = GenPrism[DivergingSeriesColoring, OuterDistance]
 
   implicit val codecColoring: Codec[DivergingSeriesColoring] = semiauto.deriveConfiguredCodec
 }

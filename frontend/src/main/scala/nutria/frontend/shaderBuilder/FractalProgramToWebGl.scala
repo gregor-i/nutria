@@ -8,10 +8,11 @@ import nutria.frontend.shaderBuilder.Syntax.EnrichNode
 object FractalProgramToWebGl {
   def apply(fractalProgram: FractalProgram): (RefVec2, RefVec4) => String =
     fractalProgram match {
-      case f: NewtonIteration                                        => newtonIteration(f)
-      case f: DivergingSeries if f.coloring.isInstanceOf[TimeEscape] => divergingSeries(f)
-      case f: DivergingSeries if f.coloring.isInstanceOf[NormalMap]  => divergingSeriesNormalMap(f)
-      case f: FreestyleProgram                                       => freestyle(f)
+      case f: NewtonIteration                                           => newtonIteration(f)
+      case f: DivergingSeries if f.coloring.isInstanceOf[TimeEscape]    => divergingSeries(f)
+      case f: DivergingSeries if f.coloring.isInstanceOf[NormalMap]     => divergingSeriesNormalMap(f)
+      case f: DivergingSeries if f.coloring.isInstanceOf[OuterDistance] => divergingSeriesOuterDistance(f)
+      case f: FreestyleProgram                                          => freestyle(f)
     }
 
   def divergingSeriesNormalMap(f: DivergingSeries)(inputVar: RefVec2, outputVar: RefVec4) = {
@@ -65,6 +66,60 @@ object FractalProgramToWebGl {
        |    vec3 color_shadow = ${Vec3.fromRGBA(coloring.colorShadow).toCode};
        |    vec3 color_light = ${Vec3.fromRGBA(coloring.colorLight).toCode};
        |    ${outputVar.name} = mix(vec4(color_shadow, 1.0), vec4(color_light, 1.0), t);
+       |  }
+       |}
+    """.stripMargin
+  }
+
+  def divergingSeriesOuterDistance(f: DivergingSeries)(inputVar: RefVec2, outputVar: RefVec4) = {
+    val coloring = f.coloring.asInstanceOf[OuterDistance]
+    val z        = RefVec2("z")
+    val zNew     = RefVec2("z_new")
+    val zDer     = RefVec2("z_der")
+    val zDerNew  = RefVec2("z_der_new")
+
+    val iterationLangNames: PartialFunction[ZAndLambda, Ref[WebGlTypeVec2.type]] = {
+      case Z      => z
+      case Lambda => inputVar
+    }
+
+    val iterationDerLangNames: PartialFunction[ZAndZDerAndLambda, Ref[WebGlTypeVec2.type]] = {
+      case Z      => z
+      case ZDer   => zDer
+      case Lambda => inputVar
+    }
+
+    val initialLangNames: PartialFunction[Lambda.type, Ref[WebGlTypeVec2.type]] = {
+      case Lambda => inputVar
+    }
+
+    val initialZ      = f.initial.node.optimize(PowerOptimizer.optimizer)
+    val initialZDer   = f.initial.node.derive(Lambda).optimize(PowerOptimizer.optimizer)
+    val iterationZ    = f.iteration.node.optimize(PowerOptimizer.optimizer)
+    val iterationZDer = DivergingSeries.deriveIteration(f).optimize(PowerOptimizer.optimizer)
+
+    s"""{
+       |  int l = 0;
+       |  ${WebGlStatement.blockDeclare(z, initialZ, initialLangNames)}
+       |  ${WebGlStatement.blockDeclare(zDer, initialZDer, initialLangNames)}
+       |  for(int i = 0; i < ${f.maxIterations}; i++){
+       |    ${WebGlStatement.blockDeclare(zNew, iterationZ, iterationLangNames)}
+       |    ${WebGlStatement.blockDeclare(zDerNew, iterationZDer, iterationDerLangNames)}
+       |    ${WebGlType.assign(z, RefExp(zNew))}
+       |    ${WebGlType.assign(zDer, RefExp(zDerNew))}
+       |    if(dot(z,z) > float(${f.escapeRadius.value * f.escapeRadius.value}))
+       |      break;
+       |    l ++;
+       |  }
+       |
+       |  if(l == ${f.maxIterations}){
+       |    ${outputVar.name} = vec4(${Vec3.fromRGBA(coloring.colorInside).toCode}, 1.0);
+       |  }else{
+       |    float z_length = length(z);
+       |    float z_der_length = length(z_der);
+       |    float d = 2.0 * z_length / z_der_length * log(z_length);
+       |    ${outputVar.name} = vec4(vec3(d*1000.0), 1.0); // todo: do something smart here to calculate the factor
+       |    //color = mix(vec4(color_shadow, 1.0), vec4(color_light, 1.0), d);
        |  }
        |}
     """.stripMargin

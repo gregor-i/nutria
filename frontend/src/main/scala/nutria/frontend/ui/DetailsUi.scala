@@ -132,12 +132,14 @@ object DetailsUi extends Page[DetailsState] {
           label = "Coloring",
           options = Vector(
             "TimeEscape",
-            "NormalMap"
+            "NormalMap",
+            "OuterDistance"
           ),
           value = f.coloring.getClass.getSimpleName,
           onChange = {
-            case "TimeEscape" => update(lensFractal.composeLens(DivergingSeries.coloring).set(TimeEscape())(state))
-            case "NormalMap"  => update(lensFractal.composeLens(DivergingSeries.coloring).set(NormalMap())(state))
+            case "TimeEscape"    => update(lensFractal.composeLens(DivergingSeries.coloring).set(TimeEscape())(state))
+            case "NormalMap"     => update(lensFractal.composeLens(DivergingSeries.coloring).set(NormalMap())(state))
+            case "OuterDistance" => update(lensFractal.composeLens(DivergingSeries.coloring).set(OuterDistance())(state))
           }
         )
 
@@ -157,6 +159,15 @@ object DetailsUi extends Page[DetailsState] {
               Form.colorInput("color light", lensColoring composeLens NormalMap.colorLight),
               Form
                 .colorInput("color shadow", lensColoring composeLens NormalMap.colorShadow)
+            )
+          case coloring: OuterDistance =>
+            val lensColoring = lensFractal composeLens DivergingSeries.coloring composeLens LenseUtils.lookedUp(
+              coloring,
+              DivergingSeriesColoring.outerDistanceColoring.asSetter
+            )
+
+            Seq(
+              selectColoringTemplate
             )
           case coloring: TimeEscape =>
             val lensColoring = lensFractal composeLens DivergingSeries.coloring composeLens LenseUtils.lookedUp(
@@ -205,6 +216,7 @@ object DetailsUi extends Page[DetailsState] {
       Node("article.fractal-tile.is-relative")
         .child(
           FractalTile(img, Dimensions.thumbnailDimensions)
+            // fixme: the viewport should be used in the link
             .event("click", Actions.exploreFractal(state.fractalToEdit))
         )
         .child(
