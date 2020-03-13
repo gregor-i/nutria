@@ -8,17 +8,18 @@ import nutria.frontend.shaderBuilder.Syntax.EnrichNode
 object FractalProgramToWebGl {
   def apply(fractalProgram: FractalProgram): (RefVec2, RefVec4) => String =
     fractalProgram match {
-      case f: NewtonIteration        => newtonIteration(f)
-      case f: DivergingSeries        => divergingSeries(f)
-      case f: DerivedDivergingSeries => derivedDivergingSeries(f)
-      case f: FreestyleProgram       => freestyle(f)
+      case f: NewtonIteration                                                        => newtonIteration(f)
+      case f: DivergingSeries if f.coloring.isInstanceOf[DivergingSeries.TimeEscape] => divergingSeries(f)
+      case f: DivergingSeries if f.coloring.isInstanceOf[DivergingSeries.NormalMap]  => divergingSeriesNormalMap(f)
+      case f: FreestyleProgram                                                       => freestyle(f)
     }
 
-  def derivedDivergingSeries(f: DerivedDivergingSeries)(inputVar: RefVec2, outputVar: RefVec4) = {
-    val z       = RefVec2("z")
-    val zNew    = RefVec2("z_new")
-    val zDer    = RefVec2("z_der")
-    val zDerNew = RefVec2("z_der_new")
+  def divergingSeriesNormalMap(f: DivergingSeries)(inputVar: RefVec2, outputVar: RefVec4) = {
+    val coloring = f.coloring.asInstanceOf[DivergingSeries.NormalMap]
+    val z        = RefVec2("z")
+    val zNew     = RefVec2("z_new")
+    val zDer     = RefVec2("z_der")
+    val zDerNew  = RefVec2("z_der_new")
 
     val iterationLangNames: PartialFunction[ZAndLambda, Ref[WebGlTypeVec2.type]] = {
       case Z      => z
@@ -35,29 +36,18 @@ object FractalProgramToWebGl {
       case Lambda => inputVar
     }
 
+    val initialZ      = f.initial.node.optimize(PowerOptimizer.optimizer)
+    val initialZDer   = f.initial.node.derive(Lambda).optimize(PowerOptimizer.optimizer)
+    val iterationZ    = f.iteration.node.optimize(PowerOptimizer.optimizer)
+    val iterationZDer = DivergingSeries.deriveIteration(f).optimize(PowerOptimizer.optimizer)
+
     s"""{
        |  int l = 0;
-       |  ${WebGlStatement.blockDeclare(
-         z,
-         f.initialZ.node.optimize(PowerOptimizer.optimizer),
-         initialLangNames
-       )}
-       |  ${WebGlStatement.blockDeclare(
-         zDer,
-         f.initialZDer.node.optimize(PowerOptimizer.optimizer),
-         initialLangNames
-       )}
+       |  ${WebGlStatement.blockDeclare(z, initialZ, initialLangNames)}
+       |  ${WebGlStatement.blockDeclare(zDer, initialZDer, initialLangNames)}
        |  for(int i = 0; i < ${f.maxIterations}; i++){
-       |    ${WebGlStatement.blockDeclare(
-         zNew,
-         f.iterationZ.node.optimize(PowerOptimizer.optimizer),
-         iterationLangNames
-       )}
-       |    ${WebGlStatement.blockDeclare(
-         zDerNew,
-         f.iterationZDer.node.optimize(PowerOptimizer.optimizer),
-         iterationDerLangNames
-       )}
+       |    ${WebGlStatement.blockDeclare(zNew, iterationZ, iterationLangNames)}
+       |    ${WebGlStatement.blockDeclare(zDerNew, iterationZDer, iterationDerLangNames)}
        |    ${WebGlType.assign(z, RefExp(zNew))}
        |    ${WebGlType.assign(zDer, RefExp(zDerNew))}
        |    if(dot(z,z) > float(${f.escapeRadius.value * f.escapeRadius.value}))
@@ -66,14 +56,14 @@ object FractalProgramToWebGl {
        |  }
        |
        |  if(l == ${f.maxIterations}){
-       |    ${outputVar.name} = vec4(${Vec3.fromRGBA(f.colorInside).toCode}, 1.0);
+       |    ${outputVar.name} = vec4(${Vec3.fromRGBA(coloring.colorInside).toCode}, 1.0);
        |  }else{
-       |    const float h2 = float(${f.h2});
-       |    const vec2 v = vec2(float(${Math.cos(f.angle.value)}), float(${Math.sin(f.angle.value)}));
+       |    const float h2 = float(${coloring.h2});
+       |    const vec2 v = vec2(float(${Math.cos(coloring.angle.value)}), float(${Math.sin(coloring.angle.value)}));
        |    vec2 u = normalize(complex_divide(${z.name}, ${zDer.name}));
        |    float t = max((dot(u, v) + h2) / (1.0 + h2), 0.0);
-       |    vec3 color_shadow = ${Vec3.fromRGBA(f.colorShadow).toCode};
-       |    vec3 color_light = ${Vec3.fromRGBA(f.colorLight).toCode};
+       |    vec3 color_shadow = ${Vec3.fromRGBA(coloring.colorShadow).toCode};
+       |    vec3 color_light = ${Vec3.fromRGBA(coloring.colorLight).toCode};
        |    ${outputVar.name} = mix(vec4(color_shadow, 1.0), vec4(color_light, 1.0), t);
        |  }
        |}
@@ -138,7 +128,8 @@ object FractalProgramToWebGl {
   }
 
   def divergingSeries(n: DivergingSeries)(inputVar: RefVec2, outputVar: RefVec4): String = {
-    val z = RefVec2("z")
+    val coloring = n.coloring.asInstanceOf[DivergingSeries.TimeEscape]
+    val z        = RefVec2("z")
 
     val functionLangNames: PartialFunction[ZAndLambda, Ref[WebGlTypeVec2.type]] = {
       case Z      => z
@@ -167,8 +158,8 @@ object FractalProgramToWebGl {
        |    l ++;
        |  }
        |
-       |  vec3 color_inside = ${Vec3.fromRGBA(n.colorInside).toCode};
-       |  vec3 color_outside = ${Vec3.fromRGBA(n.colorOutside).toCode};
+       |  vec3 color_inside = ${Vec3.fromRGBA(coloring.colorInside).toCode};
+       |  vec3 color_outside = ${Vec3.fromRGBA(coloring.colorOutside).toCode};
        |  float fract = float(l) / float(${n.maxIterations});
        |  ${outputVar.name} = vec4(mix(color_inside, color_outside, fract), 1.0);
        |}

@@ -5,8 +5,12 @@
     "downvotes" : 0,
     "program" : {
       "DivergingSeries" : {
-        "colorInside" : "#ffffff",
-        "colorOutside" : "#000000",
+        "coloring" : {
+          "TimeEscape" : {
+            "colorInside" : "#ffffff",
+            "colorOutside" : "#000000"
+          }
+        },
         "escapeRadius" : 1001.0,
         "initial" : "lambda",
         "iteration" : "z*z+0.2*exp(z) + lambda",
@@ -43,8 +47,12 @@
     "downvotes" : 0,
     "program" : {
       "DivergingSeries" : {
-        "colorInside" : "#ffffff",
-        "colorOutside" : "#000000",
+        "coloring" : {
+          "TimeEscape" : {
+            "colorInside" : "#ffffff",
+            "colorOutside" : "#000000"
+          }
+        },
         "escapeRadius" : 100.0,
         "initial" : "lambda",
         "iteration" : "z*z + (-0.6 + i*0.6)",
@@ -73,8 +81,49 @@
     "downvotes" : 0,
     "program" : {
       "DivergingSeries" : {
-        "colorInside" : "#ffffff",
-        "colorOutside" : "#000000",
+        "coloring" : {
+          "NormalMap" : {
+            "angle" : 0.78539816339,
+            "colorInside" : "#00003f",
+            "colorLight" : "#ffffff",
+            "colorShadow" : "#000000",
+            "h2" : 2.0
+          }
+        },
+        "escapeRadius" : 100.0,
+        "initial" : "lambda",
+        "iteration" : "z*z + (-0.6 + i*0.6)",
+        "maxIterations" : 200
+      }
+    },
+    "published" : true,
+    "reference" : [
+    ],
+    "title" : "Juliaset on (-0.6, 0.6)  with Normal Map Effect",
+    "upvotes" : 0,
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
+    ]
+  },
+  {
+    "antiAliase" : 1,
+    "description" : "",
+    "downvotes" : 0,
+    "program" : {
+      "DivergingSeries" : {
+        "coloring" : {
+          "TimeEscape" : {
+            "colorInside" : "#ffffff",
+            "colorOutside" : "#000000"
+          }
+        },
         "escapeRadius" : 100.0,
         "initial" : "lambda",
         "iteration" : "z*z*z + (-0.12 + i*0.80)",
@@ -135,8 +184,12 @@
     "downvotes" : 0,
     "program" : {
       "DivergingSeries" : {
-        "colorInside" : "#ffffff",
-        "colorOutside" : "#000000",
+        "coloring" : {
+          "TimeEscape" : {
+            "colorInside" : "#ffffff",
+            "colorOutside" : "#000000"
+          }
+        },
         "escapeRadius" : 100.0,
         "initial" : "0",
         "iteration" : "z*z + lambda",
@@ -225,12 +278,54 @@
   },
   {
     "antiAliase" : 1,
+    "description" : "the famous mandelbrot with Normal map effect",
+    "downvotes" : 0,
+    "program" : {
+      "DivergingSeries" : {
+        "coloring" : {
+          "NormalMap" : {
+            "angle" : 0.78539816339,
+            "colorInside" : "#00003f",
+            "colorLight" : "#ffffff",
+            "colorShadow" : "#000000",
+            "h2" : 2.0
+          }
+        },
+        "escapeRadius" : 100.0,
+        "initial" : "lambda",
+        "iteration" : "z*z + lambda",
+        "maxIterations" : 200
+      }
+    },
+    "published" : true,
+    "reference" : [
+      "https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set#Normal_map_effect"
+    ],
+    "title" : "Mandelbrot with Normal Map Effect",
+    "upvotes" : 0,
+    "views" : [
+      [
+        -2.5,
+        -1.0,
+        3.5,
+        0.0,
+        0.0,
+        2.0
+      ]
+    ]
+  },
+  {
+    "antiAliase" : 1,
     "description" : "",
     "downvotes" : 0,
     "program" : {
       "DivergingSeries" : {
-        "colorInside" : "#ffffff",
-        "colorOutside" : "#000000",
+        "coloring" : {
+          "TimeEscape" : {
+            "colorInside" : "#ffffff",
+            "colorOutside" : "#000000"
+          }
+        },
         "escapeRadius" : 100.0,
         "initial" : "lambda",
         "iteration" : "z*z*z + (-0.12 + i*0.78) + lambda*z",
@@ -259,8 +354,12 @@
     "downvotes" : 0,
     "program" : {
       "DivergingSeries" : {
-        "colorInside" : "#ffffff",
-        "colorOutside" : "#000000",
+        "coloring" : {
+          "TimeEscape" : {
+            "colorInside" : "#ffffff",
+            "colorOutside" : "#000000"
+          }
+        },
         "escapeRadius" : 100.0,
         "initial" : "0",
         "iteration" : "z*z+0.001*log(z) + lambda",
@@ -305,8 +404,12 @@
     "downvotes" : 0,
     "program" : {
       "DivergingSeries" : {
-        "colorInside" : "#ffffff",
-        "colorOutside" : "#000000",
+        "coloring" : {
+          "TimeEscape" : {
+            "colorInside" : "#ffffff",
+            "colorOutside" : "#000000"
+          }
+        },
         "escapeRadius" : 100.0,
         "initial" : "lambda",
         "iteration" : "z*z*z + (-0.12 + i*0.79)",
@@ -359,8 +462,12 @@
     "downvotes" : 0,
     "program" : {
       "DivergingSeries" : {
-        "colorInside" : "#ffffff",
-        "colorOutside" : "#000000",
+        "coloring" : {
+          "TimeEscape" : {
+            "colorInside" : "#ffffff",
+            "colorOutside" : "#000000"
+          }
+        },
         "escapeRadius" : 100.0,
         "initial" : "lambda",
         "iteration" : "z*z*z + (-0.12 + i*0.81)",
@@ -404,77 +511,6 @@
         0.0,
         0.0,
         0.22088141962421648
-      ]
-    ]
-  },
-  {
-    "antiAliase" : 1,
-    "description" : "",
-    "downvotes" : 0,
-    "program" : {
-      "DerivedDivergingSeries" : {
-        "angle" : 0.7853981633974483,
-        "colorInside" : "#00003f",
-        "colorLight" : "#ffffff",
-        "colorShadow" : "#000000",
-        "escapeRadius" : 100.0,
-        "h2" : 2.0,
-        "initialZ" : "lambda",
-        "initialZDer" : "1",
-        "iterationZ" : "z*z + (-0.6 + i*0.6)",
-        "iterationZDer" : "z'*z*2 + 1",
-        "maxIterations" : 200
-      }
-    },
-    "published" : true,
-    "reference" : [
-    ],
-    "title" : "Juliaset on (-0.6, 0.6)  with Normal Map Effect",
-    "upvotes" : 0,
-    "views" : [
-      [
-        -2.5,
-        -1.0,
-        3.5,
-        0.0,
-        0.0,
-        2.0
-      ]
-    ]
-  },
-  {
-    "antiAliase" : 1,
-    "description" : "the famous mandelbrot with Normal map effect",
-    "downvotes" : 0,
-    "program" : {
-      "DerivedDivergingSeries" : {
-        "angle" : 0.7853981633974483,
-        "colorInside" : "#00003f",
-        "colorLight" : "#ffffff",
-        "colorShadow" : "#000000",
-        "escapeRadius" : 100.0,
-        "h2" : 2.0,
-        "initialZ" : "lambda",
-        "initialZDer" : "1",
-        "iterationZ" : "z*z + lambda",
-        "iterationZDer" : "z'*z*2 + 1",
-        "maxIterations" : 200
-      }
-    },
-    "published" : true,
-    "reference" : [
-      "https://www.math.univ-toulouse.fr/~cheritat/wiki-draw/index.php/Mandelbrot_set#Normal_map_effect"
-    ],
-    "title" : "Mandelbrot with Normal Map Effect",
-    "upvotes" : 0,
-    "views" : [
-      [
-        -2.5,
-        -1.0,
-        3.5,
-        0.0,
-        0.0,
-        2.0
       ]
     ]
   },
