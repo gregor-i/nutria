@@ -214,10 +214,14 @@ object Form {
     selectInput(
       label = label,
       options = Seq("true" -> true, "false" -> false),
-      lens = lens
+      lens = lens,
+      eqFunction = (a: Boolean, b: Boolean) => a == b
     )
 
-  def selectInput[S, A](label: String, options: Seq[(String, A)], lens: Lens[S, A])(implicit state: S, update: S => Unit) = {
+  def selectInput[S, A](label: String, options: Seq[(String, A)], lens: Lens[S, A], eqFunction: (A, A) => Boolean)(
+      implicit state: S,
+      update: S => Unit
+  ) = {
     val currentValue = lens.get(state)
     inputStyle(
       label,
@@ -239,7 +243,7 @@ object Form {
               options.map {
                 case (stringValue, value) =>
                   Node("option")
-                    .boolAttr("selected", value == currentValue)
+                    .boolAttr("selected", eqFunction(value, currentValue))
                     .text(stringValue)
               }
             )

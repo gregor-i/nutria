@@ -73,11 +73,12 @@ object DetailsUi extends Page[DetailsState] {
     val selectFractalTemplate = Form.selectInput(
       label = "Type",
       options = Vector(
-        "NewtonIteration"  -> NewtonIteration.default,
-        "DivergingSeries"  -> DivergingSeries.default,
-        "FreestyleProgram" -> FreestyleProgram.default
+        "Diverging Series"  -> DivergingSeries.default,
+        "Newton Iteration"  -> NewtonIteration.default,
+        "Freestyle Program" -> FreestyleProgram.default
       ),
-      lens = toEditProgram
+      lens = toEditProgram,
+      eqFunction = (a: FractalProgram, b: FractalProgram) => a.getClass eq b.getClass
     )
 
     val additionalParams = fractal.entity.program match {
@@ -90,11 +91,12 @@ object DetailsUi extends Page[DetailsState] {
         val selectColoringTemplate = Form.selectInput(
           label = "Coloring",
           options = Vector(
-            "TimeEscape"    -> TimeEscape(),
-            "NormalMap"     -> NormalMap(),
-            "OuterDistance" -> OuterDistance()
+            "Time Escape"    -> TimeEscape(),
+            "Normal Map"     -> NormalMap(),
+            "Outer Distance" -> OuterDistance()
           ),
-          lens = lensFractal composeLens DivergingSeries.coloring
+          lens = lensFractal composeLens DivergingSeries.coloring,
+          eqFunction = (a: DivergingSeriesColoring, b: DivergingSeriesColoring) => a.getClass eq b.getClass
         )
         Seq(selectColoringTemplate)
       case f: FreestyleProgram =>

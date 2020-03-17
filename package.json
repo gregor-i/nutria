@@ -4,7 +4,7 @@
     "bulma": "^0.8",
     "clean-css-cli": "^4",
     "font-awesome": "^4",
-    "sass": "^1.26.2",
+    "sass": "^1.26.3",
     "snabbdom": "^0.7"
   },
   "scripts": {
