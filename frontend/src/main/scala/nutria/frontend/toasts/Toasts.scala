@@ -13,8 +13,9 @@ object Toasts extends SnabbdomApp {
   private def render(): Unit = {
     val ui = Node("toast-bar")
       .child(toasts.map { toast =>
-        Node(s"div.notification${toast.`class`}")
+        Node("div.notification")
           .key(toast.id)
+          .classes(toast.`class`)
           .child(Node("button.delete").event("click", Snabbdom.event(_ => removeToast(toast.id))))
           .text(toast.text)
           .style("transition", "0.5s")
@@ -36,9 +37,9 @@ object Toasts extends SnabbdomApp {
     }
   }
 
-  def successToast(text: String): Unit = addToast(text, ".is-success")
-  def dangerToast(text: String): Unit  = addToast(text, ".is-danger")
-  def warningToast(text: String): Unit = addToast(text, ".is-warning")
+  def successToast(text: String): Unit = addToast(text, "is-success")
+  def dangerToast(text: String): Unit  = addToast(text, "is-danger")
+  def warningToast(text: String): Unit = addToast(text, "is-warning")
 
   private def addToast(text: String, `class`: String): Unit = {
     val id    = { counter += 1; counter }
