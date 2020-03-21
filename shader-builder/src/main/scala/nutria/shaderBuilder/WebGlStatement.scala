@@ -1,8 +1,8 @@
-package nutria.frontend.shaderBuilder
+package nutria.shaderBuilder
 
 import mathParser.algebra.SpireNode
 import mathParser.{BinaryNode, ConstantNode, UnitaryNode, VariableNode}
-import nutria.frontend.shaderBuilder.WebGlType.TypeProps
+import nutria.shaderBuilder.WebGlType.TypeProps
 import spire.math.Complex
 
 sealed trait WebGlStatement {

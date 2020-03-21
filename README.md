@@ -12,26 +12,6 @@ Fractals usually have a lot of parameters. Nutria allows you to try out new conf
 
 The current development state can be accessed at [heroku](http://nutria-explorer.herokuapp.com).
 
-## Project structure
-- `core` provides the shared models for backend and frontend.
-- `service` is basically the backend. It serves the frontend and provides an API to store and read the entities.
-- `serviceWorker` is an service worker implementation to make nutria a PWA.
-- `frontend` contains a UI to list, edit and explore fractals. 
-It also contains code to generate webgl shaders to render fractals.
-
-## Install instructions
-[sbt](http://www.scala-sbt.org/) and [npm](https://www.npmjs.com/) are required for building.
-
-```bash
-# frontend compilation
-npm install
-npm run build
-sbt frontend/integration
-
-# starting backend:
-sbt service/run
-```
-
 ## todo list:
  - documentation:
     - define a data protection policy

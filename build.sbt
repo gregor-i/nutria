@@ -13,8 +13,18 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .in(file("core"))
   .settings(mathParser, scalaTestAndScalaCheck, circe, monocle, refinedTypes)
 
-lazy val service = project
-  .in(file("service"))
+lazy val `shader-builder` = project
+  .in(file("shader-builder"))
+  .dependsOn(core.js)
+  .enablePlugins(ScalaJSPlugin)
+  .settings(scalaJSModuleKind := ModuleKind.CommonJSModule)
+  .settings(scalaTestAndScalaCheck, mathParser, circe)
+  .settings(
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0",
+  )
+
+lazy val backend = project
+  .in(file("backend"))
   .dependsOn(core.jvm)
   .settings(scalaTestAndScalaCheck, circe)
   .enablePlugins(PlayScala)
@@ -35,6 +45,7 @@ lazy val service = project
 val frontend = project
   .in(file("frontend"))
   .dependsOn(core.js)
+  .dependsOn(`shader-builder`)
   .enablePlugins(ScalaJSPlugin)
   .settings(scalacOptions += "-P:scalajs:sjsDefinedByDefault")
   .settings(scalaJSUseMainModuleInitializer := true)
@@ -49,10 +60,10 @@ val frontend = project
     libraryDependencies += "io.circe" %%% "not-java-time" % "0.2.0"
   )
 
-val integration = taskKey[Unit]("build the frontend and copy the results into service")
+val integration = taskKey[Unit]("build the frontend and copy the results into backend")
 integration in frontend := {
   val buildFrontend = (frontend / Compile / fastOptJS).value.data
-  val exitCode = s"./node_modules/.bin/browserify ${buildFrontend.toString} -o service/public/js/nutria.js".!
+  val exitCode = s"./node_modules/.bin/browserify ${buildFrontend.toString} -o backend/public/js/nutria.js".!
   require(exitCode == 0)
 }
 

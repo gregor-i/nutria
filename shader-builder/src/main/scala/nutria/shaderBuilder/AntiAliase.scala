@@ -1,4 +1,4 @@
-package nutria.frontend.shaderBuilder
+package nutria.shaderBuilder
 
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.numeric.Positive

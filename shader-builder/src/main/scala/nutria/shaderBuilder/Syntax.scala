@@ -1,4 +1,4 @@
-package nutria.frontend.shaderBuilder
+package nutria.shaderBuilder
 
 import mathParser.{Derive, Language, Node, Optimizer}
 

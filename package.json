@@ -8,9 +8,10 @@
     "snabbdom": "^0.7"
   },
   "scripts": {
-    "build": "npm run cp && npm run build-css",
-    "build-css": "sass frontend/src/main/css/nutria.sass service/public/css/nutria.css --no-source-map  --style compressed",
+    "build": "npm run make-dirs && npm run cp && npm run build-css",
+    "make-dirs": "mkdir -p backend/public/css && mkdir -p backend/public/js",
+    "build-css": "sass frontend/src/main/css/nutria.sass backend/public/css/nutria.css --no-source-map  --style compressed",
     "cp": "npm run cp-fas",
-    "cp-fas": "cp node_modules/font-awesome/css/font-awesome.min.css service/public/css/font-awesome.css && cp -r node_modules/font-awesome/fonts service/public"
+    "cp-fas": "cp node_modules/font-awesome/css/font-awesome.min.css backend/public/css/font-awesome.css && cp -r node_modules/font-awesome/fonts backend/public"
   }
 }

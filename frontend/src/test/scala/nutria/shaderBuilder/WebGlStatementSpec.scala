@@ -1,4 +1,4 @@
-package tdd
+package nutria.shaderBuilder
 
 import mathParser.MathParser
 import mathParser.implicits._

@@ -1,4 +1,4 @@
-package nutria.frontend
+package nutria
 
 package object shaderBuilder {
   type RefInt   = Ref[WebGlTypeInt.type]

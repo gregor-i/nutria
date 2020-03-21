@@ -1,10 +1,9 @@
-package nutria.frontend.shaderBuilder
+package nutria.shaderBuilder
 
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.numeric.Positive
 import nutria.core.viewport.Viewport
 import nutria.core.{FractalImage, FractalProgram}
-import nutria.frontend.util.Untyped
 import nutria.macros.StaticContent
 import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
@@ -61,7 +60,7 @@ object FractalRenderer {
       antiAliase: Int Refined Positive
   ): WebGLProgram = {
     val vertexShader = gl.createShader(VERTEX_SHADER)
-    gl.shaderSource(vertexShader, StaticContent("frontend/src/main/glsl/vertex_shader.glsl"))
+    gl.shaderSource(vertexShader, StaticContent("shader-builder/src/main/glsl/vertex_shader.glsl"))
     gl.compileShader(vertexShader)
 
     val fragmentShader = gl.createShader(FRAGMENT_SHADER)
@@ -133,7 +132,7 @@ object FractalRenderer {
 
     s"""precision highp float;
        |
-       |${StaticContent("frontend/src/main/glsl/global_definitions.glsl")}
+       |${StaticContent("shader-builder/src/main/glsl/global_definitions.glsl")}
        |
        |uniform vec2 u_resolution;
        |uniform vec2 u_view_O, u_view_A, u_view_B;

@@ -1,4 +1,4 @@
-package nutria.frontend.shaderBuilder
+package nutria.shaderBuilder
 
 import mathParser.algebra.{SpireBinaryOperator, SpireUnitaryOperator}
 import nutria.core.RGB

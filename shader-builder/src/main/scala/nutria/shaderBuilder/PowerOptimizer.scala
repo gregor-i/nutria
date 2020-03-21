@@ -1,4 +1,4 @@
-package nutria.frontend.shaderBuilder
+package nutria.shaderBuilder
 
 import mathParser.algebra.SpireLanguage.syntax.EnrichNode
 import mathParser.algebra.{Power, SpireBinaryOperator, SpireLanguage, SpireUnitaryOperator}

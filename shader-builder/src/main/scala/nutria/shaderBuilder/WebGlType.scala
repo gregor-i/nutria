@@ -1,4 +1,4 @@
-package nutria.frontend.shaderBuilder
+package nutria.shaderBuilder
 
 sealed trait WebGlType
 case object WebGlTypeInt   extends WebGlType
