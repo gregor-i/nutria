@@ -13,5 +13,9 @@
     "build-css": "sass frontend/src/main/css/nutria.sass backend/public/css/nutria.css --no-source-map  --style compressed",
     "cp": "npm run cp-fas",
     "cp-fas": "cp node_modules/font-awesome/css/font-awesome.min.css backend/public/css/font-awesome.css && cp -r node_modules/font-awesome/fonts backend/public"
+  },
+  "devDependencies": {
+    "jimp": "^0.9.6",
+    "gl": "^4.4.1"
   }
 }

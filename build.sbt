@@ -23,6 +23,25 @@ lazy val `shader-builder` = project
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0",
   )
 
+val frontend = project
+  .in(file("frontend"))
+  .dependsOn(core.js)
+  .dependsOn(`shader-builder`)
+  .enablePlugins(ScalaJSPlugin)
+  .settings(scalacOptions += "-P:scalajs:sjsDefinedByDefault")
+  .settings(scalaJSUseMainModuleInitializer := true)
+  .settings(skip in packageJSDependencies := true)
+  .settings(emitSourceMaps := false)
+  .settings(scalaJSModuleKind := ModuleKind.CommonJSModule)
+  .settings(
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0",
+    scalaTestAndScalaCheck,
+    mathParser,
+    snabbdom,
+    circe,
+    libraryDependencies += "io.circe" %%% "not-java-time" % "0.2.0"
+  )
+
 lazy val backend = project
   .in(file("backend"))
   .dependsOn(core.jvm)
@@ -42,24 +61,14 @@ lazy val backend = project
   .enablePlugins(EmbeddedPostgresPlugin)
   .settings(javaOptions += s"-DDATABASE_URL=${postgresConnectionString.value}")
 
-val frontend = project
-  .in(file("frontend"))
-  .dependsOn(core.js)
+val `static-renderer` = project
+  .in(file("static-renderer"))
   .dependsOn(`shader-builder`)
   .enablePlugins(ScalaJSPlugin)
-  .settings(scalacOptions += "-P:scalajs:sjsDefinedByDefault")
   .settings(scalaJSUseMainModuleInitializer := true)
-  .settings(skip in packageJSDependencies := true)
-  .settings(emitSourceMaps := false)
   .settings(scalaJSModuleKind := ModuleKind.CommonJSModule)
-  .settings(
-    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0",
-    scalaTestAndScalaCheck,
-    mathParser,
-    snabbdom,
-    circe,
-    libraryDependencies += "io.circe" %%% "not-java-time" % "0.2.0"
-  )
+
+// tasks
 
 val integration = taskKey[Unit]("build the frontend and copy the results into backend")
 integration in frontend := {
