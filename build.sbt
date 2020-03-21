@@ -56,6 +56,7 @@ val frontend = project
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0",
     scalaTestAndScalaCheck,
     mathParser,
+    snabbdom,
     circe,
     libraryDependencies += "io.circe" %%% "not-java-time" % "0.2.0"
   )
@@ -82,6 +83,11 @@ def scalaTestAndScalaCheck =
 def mathParser = Seq(
   resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
   libraryDependencies += "com.github.gregor-i" %%% "math-parser" % "1.5.2"
+)
+
+def snabbdom = Seq(
+  resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
+  libraryDependencies += "com.github.gregor-i" %%% "scalajs-snabbdom" % "1.0"
 )
 
 def circe = {
