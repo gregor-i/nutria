@@ -1,22 +1,16 @@
 package module
 
-import io.circe.parser
+import io.circe
 import javax.inject.Singleton
 import nutria.core.FractalEntity
+import nutria.macros.StaticContent
+import scala.util.chaining._
 
-import scala.io.Source
 @Singleton
 class SystemFractals {
-  val systemFractals =
-    parser
-      .parse {
-        Source
-          .fromResource("systemfractals.json")
-          .getLines()
-          .mkString("\n")
-      }
-      .flatMap(_.as[Vector[FractalEntity]]) match {
-      case Right(x)    => x
-      case Left(error) => throw error
-    }
+  val systemFractals: Vector[FractalEntity] =
+    StaticContent("./backend/conf/systemfractals.json")
+      .pipe(circe.parser.parse)
+      .flatMap(_.as[Vector[FractalEntity]])
+      .fold(error => throw error, right => right)
 }

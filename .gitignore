@@ -24,3 +24,5 @@ node_modules/
 backend/public/js/*.js
 backend/public/css/*.css
 backend/public/fonts/
+
+temp/

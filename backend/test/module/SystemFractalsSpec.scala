@@ -4,9 +4,9 @@ import java.io.FileWriter
 
 import io.circe.syntax._
 import nutria.core.FractalEntity
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class SystemFractalsSpec extends FunSuite {
+class SystemFractalsSpec extends AnyFunSuite {
 
   def read: Vector[FractalEntity] = (new module.SystemFractals).systemFractals
 

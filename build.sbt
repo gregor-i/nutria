@@ -67,6 +67,7 @@ val `static-renderer` = project
   .enablePlugins(ScalaJSPlugin)
   .settings(scalaJSUseMainModuleInitializer := true)
   .settings(scalaJSModuleKind := ModuleKind.CommonJSModule)
+  .settings(scalaTestAndScalaCheck, circe)
 
 // tasks
 
