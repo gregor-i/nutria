@@ -75,12 +75,14 @@ object Header {
       .child(
         Node("img")
           .attr("src", "/img/icon.png")
-          .style("max-height", "36px !important")
+          .style("height", "36px")
+          .style("width", "36px")
+          .style("max-height", "36px")
       )
       .child(
         Node("span")
-          .style("font-size", "28px")
-          .style("line-height", "28px")
+          .style("font-size", "36px")
+          .style("line-height", "36px")
           .style("color", "black")
           .style("margin-left", "4px")
           .text("Nutria")

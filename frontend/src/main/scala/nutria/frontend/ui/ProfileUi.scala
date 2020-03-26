@@ -34,7 +34,7 @@ object ProfileUi extends Page[ProfileState] {
               .child(
                 Node("p.control")
                   .child(
-                    Button("Delete user", Icons.delete, Actions.deleteUser(state.about.id))
+                    Button("Delete profile", Icons.delete, Actions.deleteUser(state.about.id))
                       .classes("is-danger")
                   )
               )
