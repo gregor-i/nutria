@@ -35,14 +35,15 @@ object Actions {
     }
 
   def exploreFractal(
-      fractal: FractalEntityWithId
+      fractal: FractalEntityWithId,
+      image: FractalImage
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       update(
         ExplorerState(
           user = state.user,
           remoteFractal = Some(fractal),
-          fractalImage = FractalImage.firstImage(fractal.entity)
+          fractalImage = image
         )
       )
     }

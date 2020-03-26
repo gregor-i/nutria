@@ -212,8 +212,7 @@ object DetailsUi extends Page[DetailsState] {
       Node("article.fractal-tile.is-relative")
         .child(
           FractalTile(img, Dimensions.thumbnailDimensions)
-          // fixme: the viewport should be used in the link
-            .event("click", Actions.exploreFractal(state.fractalToEdit))
+            .event("click", Actions.exploreFractal(state.fractalToEdit, img))
         )
         .child(
           Node("div.buttons.overlay-bottom-right.padding")
