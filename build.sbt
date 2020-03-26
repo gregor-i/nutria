@@ -50,9 +50,9 @@ lazy val backend = project
   .settings(
     libraryDependencies += ws,
     libraryDependencies += guice,
-    libraryDependencies += "io.lemonlabs"   %% "scala-uri"  % "2.1.0",
+    libraryDependencies += "io.lemonlabs"   %% "scala-uri"  % "2.2.0",
     libraryDependencies += "com.dripower"   %% "play-circe" % "2812.0",
-    libraryDependencies += "org.postgresql" % "postgresql"  % "42.2.10",
+    libraryDependencies += "org.postgresql" % "postgresql"  % "42.2.11",
     libraryDependencies += evolutions,
     libraryDependencies += jdbc,
     libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.5",
