@@ -17,5 +17,8 @@
   "devDependencies": {
     "jimp": "^0.9.6",
     "gl": "^4.4.1"
+  },
+  "engines": {
+    "node": ">= 12.16"
   }
 }

@@ -13,24 +13,24 @@ sealed trait DivergingSeriesColoring
 
 @monocle.macros.Lenses()
 case class TimeEscape(
-    colorInside: RGB = RGB.white,
-    colorOutside: RGB = RGB.black
+    colorInside: RGBA = RGB.white.withAlpha(),
+    colorOutside: RGBA = RGB.black.withAlpha()
 ) extends DivergingSeriesColoring
 
 @monocle.macros.Lenses()
 case class NormalMap(
     h2: Double Refined NonNaN = refineMV(2.0),
     angle: Double Refined Open[Witness.`0.0`.T, Witness.`6.28318530718`.T] = refineMV(0.78539816339), // todo: maybe define in degree? this is 45°
-    colorInside: RGB = RGB(0.0, 0.0, 255.0 / 4.0),
-    colorLight: RGB = RGB.white,
-    colorShadow: RGB = RGB.black
+    colorInside: RGBA = RGB(0.0, 0.0, 255.0 / 4.0).withAlpha(),
+    colorLight: RGBA = RGB.white.withAlpha(),
+    colorShadow: RGBA = RGB.black.withAlpha()
 ) extends DivergingSeriesColoring
 
 @monocle.macros.Lenses()
 case class OuterDistance(
-    colorInside: RGB = RGB(0.0, 0.0, 255.0 / 4.0),
-    colorFar: RGB = RGB.black,
-    colorNear: RGB = RGB.white,
+    colorInside: RGBA = RGB(0.0, 0.0, 255.0 / 4.0).withAlpha(),
+    colorFar: RGBA = RGB.black.withAlpha(),
+    colorNear: RGBA = RGB.white.withAlpha(),
     distanceFactor: Double Refined Positive = refineMV(1.0)
 ) extends DivergingSeriesColoring
 

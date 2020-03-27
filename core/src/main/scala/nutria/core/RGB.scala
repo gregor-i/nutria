@@ -33,4 +33,7 @@ final case class RGB(R: Double, G: Double, B: Double) {
     (0 <= R && R < 256) && (0 <= G && G < 256) && (0 <= B && B < 256),
     s"Requirement for RGB failed. input: R=$R, G=$G, B=$B"
   )
+
+  def withAlpha(A: Double = 1.0): RGBA =
+    RGBA(R, G, B, A)
 }
