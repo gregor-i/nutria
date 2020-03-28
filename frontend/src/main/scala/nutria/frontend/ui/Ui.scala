@@ -6,15 +6,16 @@ import snabbdom.Node
 object Ui {
   def apply(nutriaState: NutriaState, update: NutriaState => Unit): Node =
     nutriaState match {
-      case state: ErrorState       => ErrorUi.render(state, update)
-      case state: DetailsState     => DetailsUi.render(state, update)
-      case state: ExplorerState    => ExplorerUi.render(state, update)
-      case state: GalleryState     => GalleryUi.render(state, update)
-      case state: UserGalleryState => UserGalleryUi.render(state, update)
-      case state: LoadingState     => LoadingUi.render(state, update)
-      case state: GreetingState    => GreetingUi.render(state, update)
-      case state: FAQState         => FAQUi.render(state, update)
-      case state: ProfileState     => ProfileUi.render(state, update)
-      case state: AdminState       => AdminUi.render(state, update)
+      case state: ErrorState            => ErrorUi.render(state, update)
+      case state: DetailsState          => DetailsUi.render(state, update)
+      case state: ExplorerState         => ExplorerUi.render(state, update)
+      case state: GalleryState          => GalleryUi.render(state, update)
+      case state: UserGalleryState      => UserGalleryUi.render(state, update)
+      case state: LoadingState          => LoadingUi.render(state, update)
+      case state: GreetingState         => GreetingUi.render(state, update)
+      case state: FAQState              => FAQUi.render(state, update)
+      case state: ProfileState          => ProfileUi.render(state, update)
+      case state: CreateNewFractalState => CreateNewFractalUI.render(state, update)
+      case state: AdminState            => AdminUi.render(state, update)
     }
 }

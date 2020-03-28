@@ -84,6 +84,11 @@ object Router {
             }
         )
 
+      case "/new-fractal" =>
+        LoadingState {
+          NutriaService.whoAmI().map(user => CreateNewFractalState(user = user, fractal = None))
+        }
+
       case "/faq" =>
         LoadingState(
           Links.faqState()
@@ -126,7 +131,8 @@ object Router {
           )
         case None => Some((s"/explorer", Map("state" -> queryEncoded(exState.fractalImage))))
       }
-    case _: ProfileState => Some("/user/profile" -> Map.empty)
+    case _: ProfileState          => Some("/user/profile" -> Map.empty)
+    case _: CreateNewFractalState => Some("/new-fractal"  -> Map.empty)
     case _: GreetingState =>
       Some(("/", Map.empty))
     case _: FAQState   => Some("/faq"   -> Map.empty)

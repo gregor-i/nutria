@@ -22,6 +22,7 @@ object Icons {
   val unpublish = "fa-lock"
   val upvote    = "fa-thumbs-o-up"
   val downvote  = "fa-thumbs-o-down"
+  val plus      = "fa-plus"
 
   def icon(icon: String): Node =
     Node("span.icon")

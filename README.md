@@ -19,7 +19,7 @@ The current development state can be accessed at [heroku](http://nutria-explorer
     - explain actions, icons and parameters
  - language design:
     - define a language for generic fractal calculation
-    - migrate all existing `FractalProgram`s to `FreeStyleProgram` with the right parameter (typed)
+    - migrate all existing `FractalProgram`s to `FreeStyleProgram` with the right parameters (typed)
     - evaluate [blockly](https://developers.google.com/blockly) as editor for free style fractals
  - explorer:
     - render images in low res and then in higher res to make it more responsive

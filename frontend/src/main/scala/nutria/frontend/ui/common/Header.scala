@@ -61,6 +61,19 @@ object Header {
       )
   }
 
+  def fab(): Node =
+    Node("button.button")
+      .classes("is-large", "is-primary", "is-rounded")
+      .styles(
+        Seq(
+          "position" -> "absolute",
+          "top"      -> "28px",
+          "z-index"  -> "30",
+          "right"    -> "115px",
+          "margin"   -> "0"
+        )
+      )
+
   def loginHref(implicit nutriaState: NutriaState): String = {
     Router.stateToUrl(nutriaState) match {
       case None                 => "/auth/google"

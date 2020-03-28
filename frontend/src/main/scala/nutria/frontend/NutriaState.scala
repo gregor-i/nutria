@@ -62,6 +62,12 @@ case class DetailsState(
   def dirty: Boolean = remoteFractal != fractalToEdit
 }
 
+case class CreateNewFractalState(
+    user: Option[User],
+    fractal: Option[FractalEntity],
+    navbarExpanded: Boolean = false
+) extends NutriaState
+
 case class ProfileState(
     about: User,
     navbarExpanded: Boolean = false
