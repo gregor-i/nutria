@@ -29,8 +29,8 @@ case class NormalMap(
 @monocle.macros.Lenses()
 case class OuterDistance(
     colorInside: RGBA = RGB(0.0, 0.0, 255.0 / 4.0).withAlpha(),
-    colorFar: RGBA = RGB.black.withAlpha(),
-    colorNear: RGBA = RGB.white.withAlpha(),
+    colorFar: RGBA = RGB.white.withAlpha(),
+    colorNear: RGBA = RGB.black.withAlpha(),
     distanceFactor: Double Refined Positive = refineMV(1.0)
 ) extends DivergingSeriesColoring
 

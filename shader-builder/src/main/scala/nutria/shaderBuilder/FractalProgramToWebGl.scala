@@ -119,10 +119,10 @@ object FractalProgramToWebGl {
        |  }else{
        |    float z_length = length(z);
        |    float z_der_length = length(z_der);
-       |    float d = 2.0 * z_length / z_der_length * log(z_length);
+       |    float d = distance_factor * 2.0 * z_length / z_der_length * log(z_length);
        |    vec4 color_far = ${Vec4.fromRGBA(coloring.colorFar).toCode};
        |    vec4 color_near = ${Vec4.fromRGBA(coloring.colorNear).toCode};
-       |    ${outputVar.name} = mix(color_far, color_near, d * distance_factor);
+       |    ${outputVar.name} = mix(color_near, color_far, d);
        |  }
        |}
     """.stripMargin
