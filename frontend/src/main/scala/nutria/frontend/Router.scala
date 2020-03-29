@@ -88,7 +88,7 @@ object Router {
 
       case "/new-fractal" =>
         LoadingState {
-          NutriaService.whoAmI().map(user => CreateNewFractalState(user = user, fractal = None))
+          NutriaService.whoAmI().map(user => CreateNewFractalState(user = user))
         }
 
       case "/faq" =>

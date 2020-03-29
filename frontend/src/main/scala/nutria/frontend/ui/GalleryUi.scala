@@ -15,7 +15,7 @@ object GalleryUi extends Page[GalleryState] {
           .fab()
           .child(Icons.icon(Icons.plus))
           .event("click", Snabbdom.event { _ =>
-            update(CreateNewFractalState(user = state.user, fractal = None))
+            update(CreateNewFractalState(user = state.user))
           })
       )
       .child(

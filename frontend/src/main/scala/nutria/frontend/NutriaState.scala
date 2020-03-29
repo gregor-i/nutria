@@ -5,6 +5,7 @@ import eu.timepit.refined.numeric.Positive
 import monocle.Lens
 import monocle.macros.{GenLens, Lenses}
 import nutria.core._
+import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda}
 
 import scala.concurrent.Future
 
@@ -64,9 +65,22 @@ case class DetailsState(
 
 case class CreateNewFractalState(
     user: Option[User],
-    fractal: Option[FractalEntity],
+    step1: CreateNewFractalState.Step = CreateNewFractalState.InitialStep,
     navbarExpanded: Boolean = false
 ) extends NutriaState
+
+object CreateNewFractalState {
+  sealed trait Step
+  case object InitialStep extends Step
+  case class NewtonIterationStep(
+      function: StringFunction[XAndLambda],
+      initial: StringFunction[Lambda.type]
+  ) extends Step
+  case class DivergingSeriesStep(
+      initial: StringFunction[Lambda.type],
+      iteration: StringFunction[ZAndLambda]
+  ) extends Step
+}
 
 case class ProfileState(
     about: User,

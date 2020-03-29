@@ -19,17 +19,18 @@ class RenderUiSpec extends AnyFunSuite {
       id = i.toString,
       owner = i.toString,
       entity = FractalEntity(
-        program = fractalImage.program,
-      ),
+        program = fractalImage.program
+      )
     )
   }
 
   val states: Seq[NutriaState] = Seq(
-    LoadingState(Future.failed(new Exception)),
-    ErrorState("error message"),
-    GreetingState(randomFractal = fractalImage),
-    ExplorerState(user = None, remoteFractal = None, fractalImage = fractalImage), // window.bota is undefined
-    GalleryState(user = None, publicFractals = publicFractals, votes = Map.empty), // window.bota is undefined
+//    LoadingState(Future.failed(new Exception)),
+//    ErrorState("error message"),
+//    GreetingState(randomFractal = fractalImage),
+//    ExplorerState(user = None, remoteFractal = None, fractalImage = fractalImage),
+//    GalleryState(user = None, publicFractals = publicFractals, votes = Map.empty),
+    CreateNewFractalState(user = None)
   )
 
   for {
@@ -37,7 +38,7 @@ class RenderUiSpec extends AnyFunSuite {
     name = state.getClass.getSimpleName
   } stateRenderingTest(s"$name: (${state.hashCode()})")(
     state = state,
-    fileName = s"./frontend/temp/CreateNewFractalUiSpec/${name}_${state.hashCode()}.html",
+    fileName = s"./frontend/temp/CreateNewFractalUiSpec/${name}_${state.hashCode()}.html"
   )
 
   def stateRenderingTest(testName: String)(state: NutriaState, fileName: String): Unit =
@@ -65,5 +66,7 @@ class RenderUiSpec extends AnyFunSuite {
   }
 
   private def withFixture(html: String): String =
-    StaticContent("frontend/src/test/html/fixture.html").replace("\\$content", html)
+    StaticContent("frontend/src/test/html/fixture.html")
+      .replaceAllLiterally("$content", html)
+      .replaceAllLiterally("src=\"/img", "src=\"../../../backend/public/img")
 }
