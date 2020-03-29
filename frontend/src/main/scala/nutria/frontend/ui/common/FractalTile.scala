@@ -69,7 +69,7 @@ private object ImgStrategy extends Strategy {
   private lazy val canvas: Canvas = dom.document.createElement("canvas").asInstanceOf[Canvas]
   private lazy val webglCtx       = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
 
-  dom.window.setInterval(
+  private lazy val interval = dom.window.setInterval(
     () => {
       if (buffer.nonEmpty) {
         val task = buffer.dequeue()
@@ -91,6 +91,7 @@ private object ImgStrategy extends Strategy {
       .attr("src", "/img/rendering.svg")
       .hook("insert", Snabbdom.hook { node =>
         val img = node.elm.get.asInstanceOf[Image]
+        interval
         buffer.enqueue(Task(img, fractalImage, dimensions))
       })
 

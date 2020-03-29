@@ -15,8 +15,10 @@
     "cp-fas": "cp node_modules/font-awesome/css/font-awesome.min.css backend/public/css/font-awesome.css && cp -r node_modules/font-awesome/fonts backend/public"
   },
   "devDependencies": {
+    "gl": "^4.4.1",
+    "html-formatter": "^0.1.9",
     "jimp": "^0.9.6",
-    "gl": "^4.4.1"
+    "snabbdom-to-html": "^5.1.1"
   },
   "engines": {
     "node": ">= 12.16"

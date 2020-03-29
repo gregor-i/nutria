@@ -103,15 +103,16 @@ object ExplorerState {
 object NutriaState extends CirceCodex {
   def setNavbarExtended(nutriaState: NutriaState, navbarExpanded: Boolean): NutriaState =
     nutriaState match {
-      case state: LoadingState     => state.copy(navbarExpanded = navbarExpanded)
-      case state: ErrorState       => state.copy(navbarExpanded = navbarExpanded)
-      case state: GreetingState    => state.copy(navbarExpanded = navbarExpanded)
-      case state: ExplorerState    => state.copy(navbarExpanded = navbarExpanded)
-      case state: GalleryState     => state.copy(navbarExpanded = navbarExpanded)
-      case state: UserGalleryState => state.copy(navbarExpanded = navbarExpanded)
-      case state: DetailsState     => state.copy(navbarExpanded = navbarExpanded)
-      case state: ProfileState     => state.copy(navbarExpanded = navbarExpanded)
-      case state: AdminState       => state.copy(navbarExpanded = navbarExpanded)
-      case state: FAQState         => state.copy(navbarExpanded = navbarExpanded)
+      case state: LoadingState          => state.copy(navbarExpanded = navbarExpanded)
+      case state: ErrorState            => state.copy(navbarExpanded = navbarExpanded)
+      case state: GreetingState         => state.copy(navbarExpanded = navbarExpanded)
+      case state: ExplorerState         => state.copy(navbarExpanded = navbarExpanded)
+      case state: GalleryState          => state.copy(navbarExpanded = navbarExpanded)
+      case state: UserGalleryState      => state.copy(navbarExpanded = navbarExpanded)
+      case state: DetailsState          => state.copy(navbarExpanded = navbarExpanded)
+      case state: ProfileState          => state.copy(navbarExpanded = navbarExpanded)
+      case state: AdminState            => state.copy(navbarExpanded = navbarExpanded)
+      case state: FAQState              => state.copy(navbarExpanded = navbarExpanded)
+      case state: CreateNewFractalState => state.copy(navbarExpanded = navbarExpanded)
     }
 }

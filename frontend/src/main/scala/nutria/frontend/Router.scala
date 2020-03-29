@@ -7,6 +7,8 @@ import nutria.frontend.service.{NutriaAdminService, NutriaService}
 import org.scalajs.dom
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.scalajs.js
+import scala.scalajs.js.Dynamic
 import scala.util.Try
 
 object Router {
@@ -143,8 +145,15 @@ object Router {
       None
   }
 
-  def queryEncoded[T: Encoder](t: T): String =
-    dom.window.btoa(t.asJson.noSpaces)
+  def queryEncoded[T: Encoder](t: T): String = {
+    val encoded = t.asJson.noSpaces
+    if (!js.isUndefined(Dynamic.global.window) && !js.isUndefined(Dynamic.global.window.btoa)) {
+      dom.window.btoa(encoded)
+    } else {
+      // note: only static rendering has this function undefined
+      ""
+    }
+  }
 
   def queryDecoded[T: Decoder](string: String): Option[T] =
     (for {

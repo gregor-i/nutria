@@ -1,4 +1,4 @@
-package nutria.frontend.explorer
+package nutria.frontend.ui.explorer
 
 import nutria.core.viewport.Point._
 import nutria.core.viewport.Dimensions
@@ -27,7 +27,7 @@ class TransformSpec extends AnyFunSuite with Matchers {
   test("applyToViewport: only translate") {
     val onlyTranslate = Seq(
       (0d, 0d)   -> (0.25d, 0.25),
-      (0.5, 0.0) -> (0.75d, 0.25)
+      (0.5, 0.0) -> (0.75d, 0.25),
     )
 
     validate(onlyTranslate)
@@ -36,7 +36,7 @@ class TransformSpec extends AnyFunSuite with Matchers {
   test("applyToViewport: only scale (zoom out)") {
     val onlyScale = Seq(
       (0d, 0d) -> (0.25, 0.25),
-      (1d, 1d) -> (0.75, 0.75)
+      (1d, 1d) -> (0.75, 0.75),
     )
 
     validate(onlyScale)
@@ -45,7 +45,7 @@ class TransformSpec extends AnyFunSuite with Matchers {
   test("applyToViewport: only scale (zoom in)") {
     val onlyScale = Seq(
       (0.25, 0.25) -> (0d, 0d),
-      (0.75, 0.75) -> (1d, 1d)
+      (0.75, 0.75) -> (1d, 1d),
     )
 
     validate(onlyScale)
