@@ -5,6 +5,11 @@ import nutria.core.viewport.Point.PointOps
 import nutria.core.{CirceCodex, Point}
 
 object Viewport extends CirceCodex {
+  val mandelbrot: Viewport = Viewport(Point(-2.5, -1), Point(3.5, 0), Point(0, 2))
+  val aroundZero: Viewport = Viewport(Point(-2.0, -2.0), Point(4.0, 0), Point(0, 4.0))
+
+  val defaultViewport: Viewport = mandelbrot
+
   implicit val codec: Codec[Viewport] = Codec.from(
     encodeA = Encoder[Vector[Double]].contramap(
       view => Vector(view.origin._1, view.origin._2, view.A._1, view.A._2, view.B._1, view.B._2)

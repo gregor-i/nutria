@@ -211,7 +211,7 @@ object DetailsUi extends Page[DetailsState] {
 
       Node("article.fractal-tile.is-relative")
         .child(
-          FractalTile(img, Dimensions.thumbnailDimensions)
+          FractalTile(img, Dimensions.thumbnail)
             .event("click", Actions.exploreFractal(state.fractalToEdit, img))
         )
         .child(

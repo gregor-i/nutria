@@ -8,12 +8,12 @@ import eu.timepit.refined.numeric.NonNegative
 import io.circe.syntax._
 import io.circe.{Codec, Decoder, Encoder}
 import monocle.Lens
-import nutria.core.viewport.DefaultViewport
+import nutria.core.viewport.Viewport
 @monocle.macros.Lenses()
 case class FractalEntity(
     title: String = "",
     program: FractalProgram,
-    views: List[Viewport] Refined NonEmpty = refineV[NonEmpty](List(DefaultViewport.defaultViewport)).toOption.get,
+    views: List[Viewport] Refined NonEmpty = refineV[NonEmpty](List(Viewport.aroundZero)).toOption.get,
     description: String = "",
     reference: List[String] = List.empty,
     antiAliase: Int Refined Positive = refineMV(1),

@@ -25,7 +25,7 @@ class SystemFractalSpec extends AnyFunSuite with RenderingSuite {
     (fractalImage, index) <- FractalImage.allImages(systemFractals).zipWithIndex
   } renderingTest(s"renders all system fractals ($index)")(
     fractal = fractalImage,
-    dimensions = Dimensions.thumbnailDimensions,
+    dimensions = Dimensions.thumbnail,
     fileName = s"${baseFolder}/${index}.png"
   )
 }

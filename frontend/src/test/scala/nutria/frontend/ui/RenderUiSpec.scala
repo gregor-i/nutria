@@ -25,11 +25,11 @@ class RenderUiSpec extends AnyFunSuite {
   }
 
   val states: Seq[NutriaState] = Seq(
-//    LoadingState(Future.failed(new Exception)),
-//    ErrorState("error message"),
-//    GreetingState(randomFractal = fractalImage),
-//    ExplorerState(user = None, remoteFractal = None, fractalImage = fractalImage),
-//    GalleryState(user = None, publicFractals = publicFractals, votes = Map.empty),
+    LoadingState(Future.failed(new Exception)),
+    ErrorState("error message"),
+    GreetingState(randomFractal = fractalImage),
+    ExplorerState(user = None, remoteFractal = None, fractalImage = fractalImage),
+    GalleryState(user = None, publicFractals = publicFractals, votes = Map.empty),
     CreateNewFractalState(user = None)
   )
 
@@ -38,7 +38,7 @@ class RenderUiSpec extends AnyFunSuite {
     name = state.getClass.getSimpleName
   } stateRenderingTest(s"$name: (${state.hashCode()})")(
     state = state,
-    fileName = s"./frontend/temp/CreateNewFractalUiSpec/${name}_${state.hashCode()}.html"
+    fileName = s"./frontend/temp/${this.getClass.getSimpleName}/${name}_${state.hashCode()}.html"
   )
 
   def stateRenderingTest(testName: String)(state: NutriaState, fileName: String): Unit =

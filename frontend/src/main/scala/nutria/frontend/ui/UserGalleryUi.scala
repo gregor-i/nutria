@@ -32,7 +32,7 @@ object UserGalleryUi extends Page[UserGalleryState] {
       .child(
         Link(Links.detailsState(fractal, state.user))
           .child(
-            FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnailDimensions)
+            FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnail)
               .event("click", Actions.editFractal(fractal))
           )
       )
@@ -60,7 +60,7 @@ object UserGalleryUi extends Page[UserGalleryState] {
     Node("article.dummy-tile")
       .child(
         Node("canvas")
-          .attr("width", Dimensions.thumbnailDimensions.width.toString)
+          .attr("width", Dimensions.thumbnail.width.toString)
           .attr("height", "0")
       )
 

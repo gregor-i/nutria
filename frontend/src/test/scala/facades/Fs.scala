@@ -11,6 +11,6 @@ object Fs extends js.Object {
 }
 
 trait FsPromises extends js.Object {
-  def writeFile(fileName: String, contenet: String): Promise[Unit]
-  def mkdir(folderName: String, opts: js.Object): Promise[Unit]
+  def writeFile(fileName: String, contenet: String): Promise[_]
+  def mkdir(folderName: String, opts: js.Object): Promise[_]
 }

@@ -61,16 +61,17 @@ object Header {
       )
   }
 
-  def fab(): Node =
-    Node("button.button")
-      .classes("is-large", "is-primary", "is-rounded")
+  def fab(node: Node): Node =
+    node
+      .classes("button", "is-large", "is-primary", "is-rounded")
       .styles(
         Seq(
-          "position" -> "absolute",
-          "top"      -> "28px",
-          "z-index"  -> "30",
-          "right"    -> "115px",
-          "margin"   -> "0"
+          "position"   -> "absolute",
+          "top"        -> "28px",
+          "z-index"    -> "30",
+          "right"      -> "115px",
+          "margin"     -> "0",
+          "box-shadow" -> "0 2px 4px rgba(0,0,0,0.2)"
         )
       )
 
@@ -86,8 +87,7 @@ object Header {
   private val brand =
     Node("div.navbar-item")
       .child(
-        Node("img")
-          .attr("src", "/img/icon.png")
+        Images(Images.icon)
           .style("height", "36px")
           .style("width", "36px")
           .style("max-height", "36px")

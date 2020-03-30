@@ -3,7 +3,7 @@ package nutria.frontend.ui
 import eu.timepit.refined.refineMV
 import nutria.core.viewport.Dimensions
 import nutria.core.{DivergingSeries, FractalImage, NewtonIteration}
-import nutria.frontend.ui.common.{Body, FractalTile, Header}
+import nutria.frontend.ui.common.{Body, FractalTile, Header, Images}
 import nutria.frontend.{CreateNewFractalState, NutriaState}
 import snabbdom.Node
 
@@ -21,24 +21,18 @@ object CreateNewFractalUI extends Page[CreateNewFractalState] {
     Node("section.section")
       .child(Node("h2.title.is-2").text("Step 1: Select the fractal type"))
       .child(
-        Node("div.fractal-list")
+        Node("div.fractal-tile-list")
           .child(
-            FractalTile(
-              fractalImage = FractalImage(
-                program = DivergingSeries.default,
-                antiAliase = refineMV(2)
-              ),
-              dimensions = Dimensions.thumbnailDimensions
-            )
+            Node("article.fractal-tile")
+              .child(
+                Images(Images.exampleDivergingSeries)
+              )
           )
           .child(
-            FractalTile(
-              fractalImage = FractalImage(
-                program = NewtonIteration.default,
-                antiAliase = refineMV(2)
-              ),
-              dimensions = Dimensions.thumbnailDimensions
-            )
+            Node("article.fractal-tile")
+              .child(
+                Images(Images.exampleNewtonIteration)
+              )
           )
       )
 }

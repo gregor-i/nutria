@@ -5,18 +5,16 @@ import nutria.core.viewport.Dimensions
 import nutria.frontend.ui.common.{FractalTile, _}
 import nutria.frontend.{GalleryState, NutriaState, _}
 import snabbdom._
+import scala.util.chaining._
 
 object GalleryUi extends Page[GalleryState] {
   def render(implicit state: GalleryState, update: NutriaState => Unit) =
     Body()
       .child(Header())
       .child(
-        Header
-          .fab()
+        Link(CreateNewFractalState(user = state.user))
+          .pipe(Header.fab)
           .child(Icons.icon(Icons.plus))
-          .event("click", Snabbdom.event { _ =>
-            update(CreateNewFractalState(user = state.user))
-          })
       )
       .child(
         Node("div.container")
@@ -42,7 +40,7 @@ object GalleryUi extends Page[GalleryState] {
       .child(
         Link(Links.explorerState(fractal, state.user))
           .child(
-            FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnailDimensions)
+            FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnail)
           )
       )
       .child(
@@ -75,7 +73,7 @@ object GalleryUi extends Page[GalleryState] {
     Node("article.dummy-tile")
       .child(
         Node("canvas")
-          .attr("width", Dimensions.thumbnailDimensions.width.toString)
+          .attr("width", Dimensions.thumbnail.width.toString)
           .attr("height", "0")
       )
 
