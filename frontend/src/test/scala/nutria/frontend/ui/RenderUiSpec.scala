@@ -1,7 +1,8 @@
 package nutria.frontend.ui
 
 import facades.{Fs, HtmlFormatter, SnabbdomToHtml}
-import nutria.core.{DivergingSeries, FractalEntity, FractalEntityWithId, FractalImage}
+import nutria.core.{DivergingSeries, FractalEntity, FractalEntityWithId, FractalImage, NewtonIteration}
+import nutria.frontend.CreateNewFractalState.{FormulaStep}
 import nutria.frontend._
 import nutria.macros.StaticContent
 import org.scalatest.funsuite.AnyFunSuite
@@ -14,31 +15,32 @@ import scala.util.chaining._
 
 class RenderUiSpec extends AnyFunSuite {
   private val fractalImage = FractalImage(program = DivergingSeries.default)
-  private val publicFractals = Vector.tabulate(10) { i =>
-    FractalEntityWithId(
-      id = i.toString,
-      owner = i.toString,
-      entity = FractalEntity(
-        program = fractalImage.program
-      )
+  private val fractalEntity = FractalEntityWithId(
+    id = "id",
+    owner = "owner",
+    entity = FractalEntity(
+      program = fractalImage.program
     )
-  }
+  )
+  private val publicFractals = Vector.fill(10)(fractalEntity)
 
-  val states: Seq[NutriaState] = Seq(
-    LoadingState(Future.failed(new Exception)),
-    ErrorState("error message"),
-    GreetingState(randomFractal = fractalImage),
-    ExplorerState(user = None, remoteFractal = None, fractalImage = fractalImage),
-    GalleryState(user = None, publicFractals = publicFractals, votes = Map.empty),
-    CreateNewFractalState(user = None)
+  val states: Seq[(String, NutriaState)] = Seq(
+    "LoadingState"                    -> LoadingState(Future.failed(new Exception)),
+    "ErrorState"                      -> ErrorState("error message"),
+    "GreetingState"                   -> GreetingState(randomFractal = fractalImage),
+    "ExplorerState"                   -> ExplorerState(user = None, remoteFractal = None, fractalImage = fractalImage),
+    "GalleryState"                    -> GalleryState(user = None, publicFractals = publicFractals, votes = Map.empty),
+    "DetailsState"                    -> DetailsState(user = None, remoteFractal = fractalEntity, fractalToEdit = fractalEntity),
+    "CreateNewFractalState_init"      -> CreateNewFractalState(user = None),
+    "CreateNewFractalState_newton"    -> CreateNewFractalState(user = None, step = FormulaStep(NewtonIteration.default)),
+    "CreateNewFractalState_diverging" -> CreateNewFractalState(user = None, step = FormulaStep(DivergingSeries.default))
   )
 
   for {
-    state <- states
-    name = state.getClass.getSimpleName
-  } stateRenderingTest(s"$name: (${state.hashCode()})")(
+    (name, state) <- states
+  } stateRenderingTest(s"Renders $name")(
     state = state,
-    fileName = s"./frontend/temp/${this.getClass.getSimpleName}/${name}_${state.hashCode()}.html"
+    fileName = s"./frontend/temp/${this.getClass.getSimpleName}/${name}.html"
   )
 
   def stateRenderingTest(testName: String)(state: NutriaState, fileName: String): Unit =
@@ -68,5 +70,5 @@ class RenderUiSpec extends AnyFunSuite {
   private def withFixture(html: String): String =
     StaticContent("frontend/src/test/html/fixture.html")
       .replaceAllLiterally("$content", html)
-      .replaceAllLiterally("src=\"/img", "src=\"../../../backend/public/img")
+      .replaceAllLiterally("src=\"/img", "src=\"img")
 }

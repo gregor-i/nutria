@@ -88,7 +88,7 @@ case class NewtonIteration(
 
 object NewtonIteration {
   val default = NewtonIteration(
-    function = StringFunction.unsafe("x*x*x + 1"),
+    function = StringFunction.unsafe("x^3 + 1"),
     initial = StringFunction.unsafe("lambda")
   )
 }

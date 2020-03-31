@@ -23,8 +23,7 @@ object GreetingUi extends Page[GreetingState] {
                 Node("div.content").prop("innerHTML", StaticContent("frontend/src/main/html/greeting.html")),
                 Node("div.buttons")
                   .child(
-                    Link
-                      .async("/faq", Links.faqState())
+                    Link(Actions.gotoFAQ())
                       .classes("button", "is-link", "is-outlined")
                       .child(Icons.icon(Icons.info))
                       .child(Node("span").text("more information"))

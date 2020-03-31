@@ -2,8 +2,8 @@ package nutria.frontend
 
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.numeric.Positive
-import monocle.Lens
-import monocle.macros.{GenLens, Lenses}
+import monocle.{Lens, Prism}
+import monocle.macros.{GenLens, GenPrism, Lenses}
 import nutria.core._
 import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda}
 
@@ -63,23 +63,21 @@ case class DetailsState(
   def dirty: Boolean = remoteFractal != fractalToEdit
 }
 
+@Lenses
 case class CreateNewFractalState(
     user: Option[User],
-    step1: CreateNewFractalState.Step = CreateNewFractalState.InitialStep,
+    step: CreateNewFractalState.Step = CreateNewFractalState.TypeStep,
     navbarExpanded: Boolean = false
 ) extends NutriaState
 
 object CreateNewFractalState {
   sealed trait Step
-  case object InitialStep extends Step
-  case class NewtonIterationStep(
-      function: StringFunction[XAndLambda],
-      initial: StringFunction[Lambda.type]
-  ) extends Step
-  case class DivergingSeriesStep(
-      initial: StringFunction[Lambda.type],
-      iteration: StringFunction[ZAndLambda]
-  ) extends Step
+  case object TypeStep extends Step
+  @Lenses
+  case class FormulaStep(program: FractalProgram) extends Step
+
+  val formulaStep: Prism[Step, FormulaStep] =
+    GenPrism[Step, FormulaStep]
 }
 
 case class ProfileState(
