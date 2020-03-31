@@ -4,8 +4,8 @@ import eu.timepit.refined.api.{Refined, Validate}
 import eu.timepit.refined.refineV
 import mathParser.algebra.SpireLanguage
 import monocle.Lens
-import nutria.core.{RGB, RGBA}
 import nutria.core.languages.StringFunction
+import nutria.core.{RGB, RGBA}
 import org.scalajs.dom.raw.{HTMLInputElement, HTMLSelectElement}
 import snabbdom.{Node, Snabbdom}
 import spire.math.Complex

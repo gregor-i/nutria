@@ -1,16 +1,12 @@
 package nutria.frontend.ui
 
-import monocle.Lens
 import nutria.core.viewport.Dimensions
-import nutria.core.{FractalEntityWithId, FractalProgram, User}
+import nutria.core.{FractalEntityWithId, User}
 import nutria.frontend._
-import nutria.frontend.ui.common.{Body, Button, CanvasHooks, Form, Header, Icons, Link}
+import nutria.frontend.ui.common._
 import nutria.frontend.ui.explorer.ExplorerEvents
 import nutria.frontend.util.LenseUtils
-import org.scalajs.dom
-import snabbdom.{Node, Snabbdom}
-
-import scala.util.chaining._
+import snabbdom.Node
 
 object ExplorerUi extends Page[ExplorerState] {
   def render(implicit state: ExplorerState, update: NutriaState => Unit) =

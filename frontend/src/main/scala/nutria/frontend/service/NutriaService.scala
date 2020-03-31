@@ -1,6 +1,6 @@
 package nutria.frontend.service
 
-import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage, User, Verdict, VoteStatistic}
+import nutria.core._
 import org.scalajs.dom.ext.Ajax
 
 import scala.concurrent.Future

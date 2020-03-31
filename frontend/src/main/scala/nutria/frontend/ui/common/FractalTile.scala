@@ -1,8 +1,8 @@
 package nutria.frontend.ui.common
 
 import nutria.core.{Dimensions, FractalImage}
-import nutria.shaderBuilder.FractalRenderer
 import nutria.frontend.util.Untyped
+import nutria.shaderBuilder.FractalRenderer
 import org.scalajs.dom
 import org.scalajs.dom.html.{Canvas, Image}
 import org.scalajs.dom.raw.WebGLRenderingContext

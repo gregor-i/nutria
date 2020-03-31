@@ -1,7 +1,7 @@
 package nutria.frontend.service
 
 import io.circe.Decoder
-import nutria.core.{CirceCodex, User}
+import nutria.core.CirceCodex
 import nutria.frontend.{AdminState, ErrorState, NutriaState}
 import org.scalajs.dom.ext.Ajax
 

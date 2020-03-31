@@ -5,6 +5,7 @@ import nutria.core.viewport.Dimensions
 import nutria.frontend.ui.common.{FractalTile, _}
 import nutria.frontend.{GalleryState, NutriaState, _}
 import snabbdom._
+
 import scala.util.chaining._
 
 object GalleryUi extends Page[GalleryState] {

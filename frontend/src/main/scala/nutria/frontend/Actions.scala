@@ -1,23 +1,22 @@
 package nutria.frontend
 
-import snabbdom._
-import SnabbdomFacade.Eventlistener
-import Snabbdom.event
 import eu.timepit.refined.collection.NonEmpty
-import nutria.core.viewport.Viewport
-import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage, Verdict}
 import eu.timepit.refined.refineV
+import nutria.core.viewport.{Dimensions, Viewport}
+import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage, Verdict}
 import nutria.frontend.service.NutriaService
 import nutria.frontend.toasts.Toasts
 import nutria.frontend.ui.common.FractalTile
-import org.scalajs.dom
-import nutria.core.viewport.Dimensions
 import nutria.frontend.util.Untyped
+import org.scalajs.dom
+import org.scalajs.dom.html.Anchor
+import snabbdom.Snabbdom.event
+import snabbdom.SnabbdomFacade.Eventlistener
+import snabbdom._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
-import org.scalajs.dom.html.Anchor
 
 object Actions {
   private def asyncUpdate(fut: Future[NutriaState])(implicit update: NutriaState => Unit): Unit =

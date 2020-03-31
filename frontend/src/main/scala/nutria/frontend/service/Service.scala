@@ -1,11 +1,11 @@
 package nutria.frontend.service
 
+import io.circe.syntax._
 import io.circe.{Decoder, Encoder, parser}
 import org.scalajs.dom.XMLHttpRequest
 import org.scalajs.dom.ext.Ajax.InputData
 
 import scala.concurrent.{ExecutionContext, Future}
-import io.circe.syntax._
 
 trait Service {
   implicit val ex: ExecutionContext = ExecutionContext.global

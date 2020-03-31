@@ -1,7 +1,7 @@
 package nutria.frontend.ui
 
 import nutria.frontend.ui.common.{Body, CanvasHooks, Icons, Link}
-import nutria.frontend.{Actions, ExplorerState, GreetingState, Links, NutriaState}
+import nutria.frontend._
 import nutria.macros.StaticContent
 import snabbdom.Node
 

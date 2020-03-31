@@ -2,10 +2,9 @@ package nutria.frontend
 
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.numeric.Positive
-import monocle.{Lens, Prism}
 import monocle.macros.{GenLens, GenPrism, Lenses}
+import monocle.{Lens, Prism}
 import nutria.core._
-import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda}
 
 import scala.concurrent.Future
 

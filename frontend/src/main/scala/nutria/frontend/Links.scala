@@ -3,9 +3,8 @@ package nutria.frontend
 import nutria.core.{FractalEntityWithId, FractalImage, User}
 import nutria.frontend.service.NutriaService
 
-import scala.concurrent.Future
-
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 object Links {
   def galleryState(): Future[GalleryState] =

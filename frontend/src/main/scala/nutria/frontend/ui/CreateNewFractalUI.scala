@@ -3,10 +3,10 @@ package nutria.frontend.ui
 import monocle.Lens
 import nutria.core.viewport.{Dimensions, Viewport}
 import nutria.core.{DivergingSeries, FractalImage, FractalProgram, NewtonIteration}
-import nutria.frontend.CreateNewFractalState.{FormulaStep, TypeStep}
-import nutria.frontend.ui.common.{Body, Footer, Form, FractalTile, Header, Images, Link}
+import nutria.frontend.CreateNewFractalState.FormulaStep
+import nutria.frontend.ui.common._
 import nutria.frontend.util.LenseUtils
-import nutria.frontend.{Actions, CreateNewFractalState, FAQState, NutriaState}
+import nutria.frontend.{Actions, CreateNewFractalState, NutriaState}
 import nutria.macros.StaticContent
 import snabbdom.Node
 

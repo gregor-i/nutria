@@ -1,8 +1,8 @@
 package nutria.frontend.ui
 
 import nutria.frontend._
-import nutria.frontend.ui.common.{Body, Button, Footer, Form, Header, Icons}
-import snabbdom.{Node, _}
+import nutria.frontend.ui.common._
+import snabbdom.Node
 
 object ProfileUi extends Page[ProfileState] {
   def render(implicit state: ProfileState, update: NutriaState => Unit): Node =
