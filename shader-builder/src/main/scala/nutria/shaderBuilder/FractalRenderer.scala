@@ -70,12 +70,15 @@ object FractalRenderer {
     if (!gl
           .getShaderParameter(vertexShader, COMPILE_STATUS)
           .asInstanceOf[Boolean]) {
-      throw new Exception("failed to compile vertex shader:\n" + gl.getShaderInfoLog(vertexShader))
+      throw new Exception(s"""failed to compile vertex shader:
+           |${gl.getShaderInfoLog(vertexShader)}""".stripMargin)
     } else if (!gl
                  .getShaderParameter(fragmentShader, COMPILE_STATUS)
                  .asInstanceOf[Boolean]) {
       throw new Exception(
-        "failed to compile fragment shader:\n" + fragmentShaderSource(fractralProgram, antiAliase) + "\n" + gl.getShaderInfoLog(fragmentShader)
+        s"""failed to compile fragment shader:
+           |${fragmentShaderSource(fractralProgram, antiAliase)}
+           |${gl.getShaderInfoLog(fragmentShader)}""".stripMargin
       )
     } else {
       val program = gl.createProgram()

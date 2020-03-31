@@ -35,9 +35,9 @@ case class OuterDistance(
 ) extends DivergingSeriesColoring
 
 object DivergingSeriesColoring extends CirceCodex {
-  val timeEscapeColoring: Prism[DivergingSeriesColoring, TimeEscape]       = GenPrism[DivergingSeriesColoring, TimeEscape]
-  val normalMapColoring: Prism[DivergingSeriesColoring, NormalMap]         = GenPrism[DivergingSeriesColoring, NormalMap]
-  val outerDistanceColoring: Prism[DivergingSeriesColoring, OuterDistance] = GenPrism[DivergingSeriesColoring, OuterDistance]
+  val timeEscapeColoring    = GenPrism[DivergingSeriesColoring, TimeEscape]
+  val normalMapColoring     = GenPrism[DivergingSeriesColoring, NormalMap]
+  val outerDistanceColoring = GenPrism[DivergingSeriesColoring, OuterDistance]
 
   implicit val codecColoring: Codec[DivergingSeriesColoring] = semiauto.deriveConfiguredCodec
 }

@@ -19,20 +19,21 @@ object CreateNewFractalUI extends Page[CreateNewFractalState] {
       .child(
         Node("div.container")
           .child(Node("section.section").child(Node("h1.title.is-1").text("Create new Fractal")))
-          .child(select())
+          .child(selectTyp())
+          .childOptional(
+            state.step match {
+              case FormulaStep(series: DivergingSeries) => Some(selectFormulaDivergingSeries(series))
+              case FormulaStep(series: NewtonIteration) => Some(selectFormulaNewtonIteration(series))
+              case _                                    => None
+            }
+          )
       )
       .child(Footer())
 
-  private def select()(implicit state: CreateNewFractalState, update: NutriaState => Unit): Node =
-    state.step match {
-      case TypeStep                             => selectTyp()
-      case FormulaStep(series: DivergingSeries) => selectFormulaDivergingSeries(series)
-      case FormulaStep(series: NewtonIteration) => selectFormulaNewtonIteration(series)
-    }
-
+  // step 1
   private def selectTyp()(implicit state: CreateNewFractalState, update: NutriaState => Unit): Node =
     Node("section.section")
-      .child(Node("h2.title.is-2").text("Step 1: Select the fractal type"))
+      .child(Node("h4.title.is-4").text("Step 1: Select the fractal type"))
       .child(
         Node("div.fractal-tile-list")
           .child(
@@ -47,21 +48,24 @@ object CreateNewFractalUI extends Page[CreateNewFractalState] {
           )
       )
 
-  private def selectFormulaDivergingSeries(series: DivergingSeries)(implicit state: CreateNewFractalState, update: NutriaState => Unit): Node = {
+  // step 2
+  private def selectFormulaDivergingSeries(
+      series: DivergingSeries
+  )(implicit state: CreateNewFractalState, update: NutriaState => Unit): Node = {
     val lens: Lens[CreateNewFractalState, DivergingSeries] = CreateNewFractalState.step
       .composePrism(CreateNewFractalState.formulaStep)
       .composeLens(CreateNewFractalState.FormulaStep.program)
-      .composePrism(FractalProgram.divergingSeries)
-      .asSetter
-      .pipe(LenseUtils.lookedUp(series, _))
+      .pipe(LenseUtils.subclass(_, FractalProgram.divergingSeries, series))
 
     Node("section.section")
       .child(Node("h4.title.is-4").text("Step 2: Select the formula"))
       .child(
         Node("div.content")
-          .child(divergingSeriesIntroduction)
+          .child(
+            Node("p")
+              .prop("innerHTML", StaticContent("frontend/src/main/html/diverging_series_fractal_introduction.html"))
+          )
           .child(languageInformation)
-          .child(Node("p").text("Tweek the formulas until you are happy with the result."))
       )
       .child(
         Form.stringFunctionInput("initial(lambda)", lens.composeLens(DivergingSeries.initial))
@@ -70,34 +74,29 @@ object CreateNewFractalUI extends Page[CreateNewFractalState] {
         Form.stringFunctionInput("iteration(z, lambda)", lens.composeLens(DivergingSeries.iteration))
       )
       .child(
-        FractalTile(FractalImage(program = series, view = Viewport.mandelbrot), dimensions = Dimensions.thumbnail.scale(1.5))
-          .classes("fractal-tile")
+        FractalTile(
+          FractalImage(program = series, view = Viewport.mandelbrot),
+          dimensions = Dimensions.thumbnail.scale(1.5)
+        ).classes("fractal-tile")
           .style("display", "block")
           .style("margin", "8px auto")
       )
-      .child(
-        continueButtons(
-          backState = CreateNewFractalState(state.user),
-          continueState = state // todo
-        )
-      )
   }
 
-  private def selectFormulaNewtonIteration(series: NewtonIteration)(implicit state: CreateNewFractalState, update: NutriaState => Unit): Node = {
+  private def selectFormulaNewtonIteration(
+      series: NewtonIteration
+  )(implicit state: CreateNewFractalState, update: NutriaState => Unit): Node = {
     val lens: Lens[CreateNewFractalState, NewtonIteration] = CreateNewFractalState.step
       .composePrism(CreateNewFractalState.formulaStep)
       .composeLens(CreateNewFractalState.FormulaStep.program)
-      .composePrism(FractalProgram.newtonIteration)
-      .asSetter
-      .pipe(LenseUtils.lookedUp(series, _))
+      .pipe(LenseUtils.subclass(_, FractalProgram.newtonIteration, series))
 
     Node("section.section")
       .child(Node("h4.title.is-4").text("Step 2: Select the formula"))
       .child(
         Node("div.content")
-          .child(newtonIterationIntroduction)
+          .child(Node("p").prop("innerHTML", StaticContent("frontend/src/main/html/newton_fractal_introduction.html")))
           .child(languageInformation)
-          .child(Node("p").text("Tweek the formulas until you are happy with the result."))
       )
       .child(
         Form.stringFunctionInput("initial(lambda)", lens.composeLens(NewtonIteration.initial))
@@ -106,54 +105,22 @@ object CreateNewFractalUI extends Page[CreateNewFractalState] {
         Form.stringFunctionInput("iteration(z, lambda)", lens.composeLens(NewtonIteration.function))
       )
       .child(
-        FractalTile(FractalImage(program = series, view = Viewport.aroundZero), dimensions = Dimensions.thumbnail.scale(1.5))
-          .classes("fractal-tile")
+        FractalTile(
+          FractalImage(program = series, view = Viewport.aroundZero),
+          dimensions = Dimensions.thumbnail.scale(1.5)
+        ).classes("fractal-tile")
           .style("display", "block")
           .style("margin", "8px auto")
       )
-      .child(
-        continueButtons(
-          backState = CreateNewFractalState(state.user),
-          continueState = state // todo
-        )
-      )
   }
-
-  // todo: maybe move to a static html file
-  private val divergingSeriesIntroduction =
-    Node("p")
-      .text("Fractals are described with the use of two mathematical formulas. ")
-      .text("The first formula defines how to start the iteration. It is named ")
-      .child(Node("code").text("initial"))
-      .text(".")
-      .text("The second formula defined how to continue the iteration. It is named ")
-      .child(Node("code").text("initial"))
-      .text(".")
-      .text("For example is the famous Mandelbrot fractal created with ")
-      .child(Node("code").text("initial(lambda) = 0"))
-      .text(" and ")
-      .child(Node("code").text("iteration(z, lambda) = z^2 + lambda"))
-      .text(".")
-
-  // todo: maybe move to a static html file
-  private val newtonIterationIntroduction =
-    Node("p")
-      .text("Newton Fractals are described with the use of two mathematical formulas. ")
-      .text("The first formula defines how to start the iteration. It is named ")
-      .child(Node("code").text("initial"))
-      .text(".")
-      .text("The second formula defined how to continue the iteration. It is named ")
-      .child(Node("code").text("initial"))
-      .text(".")
-      .text("Newton Fractals are based on Newton's Method. ")
-      .text("It is an root finding algorithm and Newton Fractals get interesting when Newton's Method fails. ")
-      .text("More roots to find make the fractal more interesting. ")
 
   private def languageInformation(implicit nutriaState: NutriaState, update: NutriaState => Unit) =
     Node("p")
       .text("For information about the formula language, please take a look into the ")
       .child(Link(Actions.gotoFAQ).text("FAQ"))
       .text(".")
+
+  // step 3
 
   private def continueButtons(
       backState: NutriaState,

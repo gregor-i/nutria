@@ -245,7 +245,10 @@ object Actions {
       }
     }
 
-  def vote(fractalId: String, verdict: Verdict)(implicit state: GalleryState, update: NutriaState => Unit): Eventlistener =
+  def vote(
+      fractalId: String,
+      verdict: Verdict
+  )(implicit state: GalleryState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -290,7 +293,10 @@ object Actions {
       }
     }
 
-  def saveToDisk(fractalImage: FractalImage, dimensions: Dimensions)(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+  def saveToDisk(
+      fractalImage: FractalImage,
+      dimensions: Dimensions
+  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       val dataUrl = FractalTile.dataUrl(fractalImage, dimensions)
 

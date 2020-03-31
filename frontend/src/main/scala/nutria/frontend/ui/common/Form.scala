@@ -225,7 +225,7 @@ object Form {
     val currentValue = lens.get(state)
     inputStyle(
       label,
-      Node("div.select is-fullwidth")
+      Node("div.select.is-fullwidth")
         .child(
           Node("select")
             .event(

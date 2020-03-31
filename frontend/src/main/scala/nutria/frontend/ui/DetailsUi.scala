@@ -7,6 +7,7 @@ import nutria.frontend.ui.common.{Form, _}
 import nutria.frontend.util.LenseUtils
 import snabbdom.Node
 
+import scala.util.chaining._
 object DetailsUi extends Page[DetailsState] {
   def render(implicit state: DetailsState, update: NutriaState => Unit) =
     Body()
@@ -23,25 +24,25 @@ object DetailsUi extends Page[DetailsState] {
       )
       .child(
         Node("section.section").children(
-          Node("h4.title.is-4").text("General Settings:"),
+          Node("h4.title.is-4").text("Administration Attributes:"),
           general()
         )
       )
       .child(
         Node("section.section").children(
-          Node("h4.title.is-4").text("Template Settings:"),
+          Node("h4.title.is-4").text("Primary Attributes:"),
           template()
         )
       )
       .child(
         Node("section.section").children(
-          Node("h4.title.is-4").text("Parameter Settings:"),
+          Node("h4.title.is-4").text("Secondary Attributes:"),
           parameter()
         )
       )
       .child(
         Node("section.section").children(
-          Node("h4.title.is-4").text("Snapshots:"),
+          Node("h4.title.is-4").text("Saved Snapshots:"),
           snapshots()
         )
       )
@@ -55,7 +56,7 @@ object DetailsUi extends Page[DetailsState] {
     Seq(
       Form.stringInput("Title", startLens composeLens FractalEntity.title),
       Form.stringInput("Description", startLens composeLens FractalEntity.description),
-      Form.booleanInput("Published", startLens composeLens FractalEntity.published),
+      Form.readonlyStringInput("Published", state.fractalToEdit.entity.published.toString),
       Form.stringInput(
         "References",
         startLens composeLens FractalEntity.reference composeIso Iso[List[String], String](
@@ -66,27 +67,25 @@ object DetailsUi extends Page[DetailsState] {
   }
 
   def template()(implicit state: DetailsState, update: NutriaState => Unit) = {
-    val toEditProgram = DetailsState.fractalToEdit composeLens FractalEntityWithId.entity composeLens FractalEntity.program
+    val toEditProgram = DetailsState.fractalToEdit
+      .composeLens(FractalEntityWithId.entity)
+      .composeLens(FractalEntity.program)
 
-    val fractal = state.fractalToEdit
+    val program = toEditProgram.get(state)
 
-    val selectFractalTemplate = Form.selectInput(
+    val fractalType = Form.readonlyStringInput(
       label = "Type",
-      options = Vector(
-        "Diverging Series"  -> DivergingSeries.default,
-        "Newton Iteration"  -> NewtonIteration.default,
-        "Freestyle Program" -> FreestyleProgram.default
-      ),
-      lens = toEditProgram,
-      eqFunction = (a: FractalProgram, b: FractalProgram) => a.getClass eq b.getClass
+      value = program match {
+        case _: DivergingSeries  => "Diverging Series"
+        case _: NewtonIteration  => "Newton Iteration"
+        case _: FreestyleProgram => "Freestyle Program"
+      }
     )
 
-    val additionalParams = fractal.entity.program match {
+    val additionalParams = program match {
       case f: DivergingSeries =>
-        val lensFractal: Lens[DetailsState, DivergingSeries] = toEditProgram composeLens LenseUtils.lookedUp(
-          f,
-          FractalProgram.divergingSeries.asSetter
-        )
+        val lensFractal =
+          LenseUtils.subclass(toEditProgram, FractalProgram.divergingSeries, f)
 
         val selectColoringTemplate = Form.selectInput(
           label = "Coloring",
@@ -95,36 +94,39 @@ object DetailsUi extends Page[DetailsState] {
             "Normal Map"     -> NormalMap(),
             "Outer Distance" -> OuterDistance()
           ),
-          lens = lensFractal composeLens DivergingSeries.coloring,
+          lens = lensFractal.composeLens(DivergingSeries.coloring),
           eqFunction = (a: DivergingSeriesColoring, b: DivergingSeriesColoring) => a.getClass eq b.getClass
         )
-        Seq(selectColoringTemplate)
-      case f: FreestyleProgram =>
-        val lensFractal = toEditProgram composeLens LenseUtils.lookedUp(
-          f,
-          FractalProgram.freestyleProgram.asSetter
+        Seq(
+          Form.stringFunctionInput("initial", lensFractal.composeLens(DivergingSeries.initial)),
+          Form.stringFunctionInput("iteration", lensFractal.composeLens(DivergingSeries.iteration)),
+          selectColoringTemplate
         )
+      case f: FreestyleProgram =>
+        val lensFractal = LenseUtils.subclass(toEditProgram, FractalProgram.freestyleProgram, f)
+
         val templateInput = Form.mulitlineStringInput("template", lensFractal composeLens FreestyleProgram.code)
         Seq(templateInput)
-      case _ => Seq.empty
+      case f: NewtonIteration =>
+        val lensFractal = LenseUtils.subclass(toEditProgram, FractalProgram.newtonIteration, f)
+        Seq(
+          Form.stringFunctionInput("function", lensFractal.composeLens(NewtonIteration.function)),
+          Form.stringFunctionInput("initial", lensFractal.composeLens(NewtonIteration.initial))
+        )
     }
 
-    Seq(selectFractalTemplate) ++ additionalParams
+    Seq(fractalType) ++ additionalParams
   }
 
   def parameter()(implicit state: DetailsState, update: NutriaState => Unit) = {
-    val startLens     = DetailsState.fractalToEdit composeLens FractalEntityWithId.entity
-    val toEditProgram = startLens composeLens FractalEntity.program
+    val toEditProgram = DetailsState.fractalToEdit
+      .composeLens(FractalEntityWithId.entity)
+      .composeLens(FractalEntity.program)
 
     val params = state.fractalToEdit.entity.program match {
       case f: NewtonIteration =>
-        val lensFractal = toEditProgram composeLens LenseUtils.lookedUp(
-          f,
-          FractalProgram.newtonIteration.asSetter
-        )
+        val lensFractal = LenseUtils.subclass(toEditProgram, FractalProgram.newtonIteration, f)
         Seq(
-          Form.stringFunctionInput("function", lensFractal composeLens NewtonIteration.function),
-          Form.stringFunctionInput("initial", lensFractal composeLens NewtonIteration.initial),
           Form.intInput("max iterations", lensFractal composeLens NewtonIteration.maxIterations),
           Form.doubleInput("threshold", lensFractal composeLens NewtonIteration.threshold),
           Form.doubleInput(
@@ -135,17 +137,13 @@ object DetailsUi extends Page[DetailsState] {
           Form.doubleInput("overshoot", lensFractal composeLens NewtonIteration.overshoot)
         )
       case f: DivergingSeries =>
-        val lensFractal = toEditProgram composeLens LenseUtils.lookedUp(
-          f,
-          FractalProgram.divergingSeries.asSetter
-        )
+        val lensFractal = LenseUtils.subclass(toEditProgram, FractalProgram.divergingSeries, f)
 
         val coloringInputs = f.coloring match {
           case coloring: NormalMap =>
-            val lensColoring = lensFractal composeLens DivergingSeries.coloring composeLens LenseUtils.lookedUp(
-              coloring,
-              DivergingSeriesColoring.normalMapColoring.asSetter
-            )
+            val lensColoring = lensFractal
+              .composeLens(DivergingSeries.coloring)
+              .pipe(LenseUtils.subclass(_, DivergingSeriesColoring.normalMapColoring, coloring))
 
             Seq(
               Form.doubleInput("h2", lensColoring composeLens NormalMap.h2),
@@ -155,10 +153,9 @@ object DetailsUi extends Page[DetailsState] {
               Form.colorInput("color shadow", lensColoring composeLens NormalMap.colorShadow)
             )
           case coloring: OuterDistance =>
-            val lensColoring = lensFractal composeLens DivergingSeries.coloring composeLens LenseUtils.lookedUp(
-              coloring,
-              DivergingSeriesColoring.outerDistanceColoring.asSetter
-            )
+            val lensColoring = lensFractal
+              .composeLens(DivergingSeries.coloring)
+              .pipe(LenseUtils.subclass(_, DivergingSeriesColoring.outerDistanceColoring, coloring))
 
             Seq(
               Form.colorInput("color inside", lensColoring composeLens OuterDistance.colorInside),
@@ -167,10 +164,9 @@ object DetailsUi extends Page[DetailsState] {
               Form.doubleInput("distance factor", lensColoring composeLens OuterDistance.distanceFactor)
             )
           case coloring: TimeEscape =>
-            val lensColoring = lensFractal composeLens DivergingSeries.coloring composeLens LenseUtils.lookedUp(
-              coloring,
-              DivergingSeriesColoring.timeEscapeColoring.asSetter
-            )
+            val lensColoring = lensFractal
+              .composeLens(DivergingSeries.coloring)
+              .pipe(LenseUtils.subclass(_, DivergingSeriesColoring.timeEscapeColoring, coloring))
 
             Seq(
               Form.colorInput("color inside", lensColoring composeLens TimeEscape.colorInside),
@@ -179,8 +175,6 @@ object DetailsUi extends Page[DetailsState] {
         }
 
         Seq(
-          Form.stringFunctionInput("initial", lensFractal composeLens DivergingSeries.initial),
-          Form.stringFunctionInput("iteration", lensFractal composeLens DivergingSeries.iteration),
           Form.intInput("max iterations", lensFractal composeLens DivergingSeries.maxIterations),
           Form.doubleInput("escape radius", lensFractal composeLens DivergingSeries.escapeRadius)
         ) ++ coloringInputs
@@ -198,7 +192,8 @@ object DetailsUi extends Page[DetailsState] {
         }
     }
 
-    val antiAlias = Form.intInput("Anti Aliasing", startLens composeLens FractalEntity.antiAliase)
+    val antiAlias =
+      Form.intInput("Anti Aliasing", DetailsState.fractalToEdit composeLens FractalEntityWithId.entity composeLens FractalEntity.antiAliase)
 
     params :+ antiAlias
   }

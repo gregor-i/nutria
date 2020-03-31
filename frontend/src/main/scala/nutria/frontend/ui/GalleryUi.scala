@@ -25,7 +25,8 @@ object GalleryUi extends Page[GalleryState] {
           .child(
             Node("div.fractal-tile-list")
               .children(
-                state.publicFractals.map(fractal => renderFractalTile(fractal, state.votes.getOrElse(fractal.id, VoteStatistic.empty))),
+                state.publicFractals
+                  .map(fractal => renderFractalTile(fractal, state.votes.getOrElse(fractal.id, VoteStatistic.empty))),
                 dummyTiles
               )
           )

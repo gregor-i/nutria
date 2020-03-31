@@ -10,6 +10,8 @@ import nutria.frontend.util.LenseUtils
 import org.scalajs.dom
 import snabbdom.{Node, Snabbdom}
 
+import scala.util.chaining._
+
 object ExplorerUi extends Page[ExplorerState] {
   def render(implicit state: ExplorerState, update: NutriaState => Unit) =
     Body()
@@ -48,7 +50,8 @@ object ExplorerUi extends Page[ExplorerState] {
       .classes("is-primary", "is-rounded")
 
   def buttonForkAndAddViewport(fractalId: String)(implicit state: ExplorerState, update: NutriaState => Unit) =
-    Button("Fork and Save this image", Icons.copy, Actions.forkAndAddViewport(fractalId, state.fractalImage.view)).classes("is-primary")
+    Button("Fork and Save this image", Icons.copy, Actions.forkAndAddViewport(fractalId, state.fractalImage.view))
+      .classes("is-primary")
 
   def renderCanvas(implicit state: ExplorerState, update: NutriaState => Unit): Node =
     Node("div.interaction-panel")
@@ -62,10 +65,7 @@ object ExplorerUi extends Page[ExplorerState] {
 
   def saveDialog()(implicit state: ExplorerState, update: NutriaState => Unit): Option[Node] =
     state.saveModal.map { params =>
-      val lensParams: Lens[ExplorerState, SaveFractalDialog] = ExplorerState.saveModal composeLens LenseUtils.lookedUp(
-        params,
-        monocle.std.all.some.asSetter
-      )
+      val lensParams     = LenseUtils.subclass(ExplorerState.saveModal, monocle.std.all.some[SaveFractalDialog], params)
       val downloadAction = Actions.saveToDisk(state.fractalImage.copy(antiAliase = params.antiAliase), params.dimensions)
 
       Node("div.modal.is-active")
@@ -78,8 +78,18 @@ object ExplorerUi extends Page[ExplorerState] {
                   Node("div")
                     .style("marginBottom", "1.5rem")
                     .child(Node("h1.title").text("Render high resolution Image"))
-                    .child(Form.intInput("width", lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.width))
-                    .child(Form.intInput("height", lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.height))
+                    .child(
+                      Form.intInput(
+                        "width",
+                        lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.width
+                      )
+                    )
+                    .child(
+                      Form.intInput(
+                        "height",
+                        lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.height
+                      )
+                    )
                     .child(Form.intInput("anti alias", lensParams composeLens SaveFractalDialog.antiAliase))
                 )
                 .children(

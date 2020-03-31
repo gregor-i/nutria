@@ -25,15 +25,16 @@ class RenderUiSpec extends AnyFunSuite {
   private val publicFractals = Vector.fill(10)(fractalEntity)
 
   val states: Seq[(String, NutriaState)] = Seq(
-    "LoadingState"                    -> LoadingState(Future.failed(new Exception)),
-    "ErrorState"                      -> ErrorState("error message"),
-    "GreetingState"                   -> GreetingState(randomFractal = fractalImage),
-    "ExplorerState"                   -> ExplorerState(user = None, remoteFractal = None, fractalImage = fractalImage),
-    "GalleryState"                    -> GalleryState(user = None, publicFractals = publicFractals, votes = Map.empty),
-    "DetailsState"                    -> DetailsState(user = None, remoteFractal = fractalEntity, fractalToEdit = fractalEntity),
-    "CreateNewFractalState_init"      -> CreateNewFractalState(user = None),
-    "CreateNewFractalState_newton"    -> CreateNewFractalState(user = None, step = FormulaStep(NewtonIteration.default)),
-    "CreateNewFractalState_diverging" -> CreateNewFractalState(user = None, step = FormulaStep(DivergingSeries.default))
+    "Loading"                    -> LoadingState(Future.failed(new Exception)),
+    "Error"                      -> ErrorState("error message"),
+    "FAQ"                        -> FAQState(user = None),
+    "Greeting"                   -> GreetingState(randomFractal = fractalImage),
+    "Explorer"                   -> ExplorerState(user = None, remoteFractal = None, fractalImage = fractalImage),
+    "Gallery"                    -> GalleryState(user = None, publicFractals = publicFractals, votes = Map.empty),
+    "Details_Diverging"          -> DetailsState(user = None, remoteFractal = fractalEntity, fractalToEdit = fractalEntity),
+    "CreateNewFractal_init"      -> CreateNewFractalState(user = None),
+    "CreateNewFractal_newton"    -> CreateNewFractalState(user = None, step = FormulaStep(NewtonIteration.default)),
+    "CreateNewFractal_diverging" -> CreateNewFractalState(user = None, step = FormulaStep(DivergingSeries.default))
   )
 
   for {
@@ -62,7 +63,9 @@ class RenderUiSpec extends AnyFunSuite {
 
   private def write(fileName: String, content: String): Future[Unit] = {
     for {
-      _ <- Fs.promises.mkdir(fileName.reverse.dropWhile(_ != '/').reverse, js.Dynamic.literal(recursive = true)).toFuture
+      _ <- Fs.promises
+        .mkdir(fileName.reverse.dropWhile(_ != '/').reverse, js.Dynamic.literal(recursive = true))
+        .toFuture
       _ <- Fs.promises.writeFile(fileName, content).toFuture
     } yield ()
   }
