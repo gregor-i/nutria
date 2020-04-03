@@ -1,7 +1,7 @@
 package nutria.staticRenderer
 
 import eu.timepit.refined.refineMV
-import nutria.core.viewport.{Viewport, Dimensions, Viewport}
+import nutria.core.viewport.{Viewport, Dimensions}
 import nutria.core.{DivergingSeries, FractalImage, NewtonIteration, OuterDistance, RGB}
 
 import scala.util.chaining._

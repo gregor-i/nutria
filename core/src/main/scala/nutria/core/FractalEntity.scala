@@ -2,18 +2,19 @@ package nutria.core
 
 import eu.timepit.refined._
 import eu.timepit.refined.api.Refined
-import eu.timepit.refined.collection.NonEmpty
 import eu.timepit.refined.numeric.Positive
 import eu.timepit.refined.numeric.NonNegative
 import io.circe.syntax._
 import io.circe.{Codec, Decoder, Encoder}
 import monocle.Lens
-import nutria.core.viewport.Viewport
+import nutria.core.viewport.ViewportList
+import nutria.core.viewport.ViewportList.ViewportList
+
 @monocle.macros.Lenses()
 case class FractalEntity(
     title: String = "",
     program: FractalProgram,
-    views: List[Viewport] Refined NonEmpty = refineV[NonEmpty](List(Viewport.aroundZero)).toOption.get,
+    views: ViewportList = ViewportList.ignoreError(List(Viewport.aroundZero)),
     description: String = "",
     reference: List[String] = List.empty,
     antiAliase: Int Refined Positive = refineMV(1),
@@ -36,6 +37,8 @@ object FractalEntity extends CirceCodex {
     (entity.acceptance, entity.program)
   }
 
+  import viewport.ViewportList.viewportListValidate
+
   implicit val codec: Codec[FractalEntity] = semiauto.deriveConfiguredCodec
 }
 
@@ -43,7 +46,7 @@ object FractalEntity extends CirceCodex {
 case class FractalEntityWithId(id: String, owner: String, entity: FractalEntity)
 
 object FractalEntityWithId extends CirceCodex {
-  val viewports: Lens[FractalEntityWithId, Refined[List[Viewport], NonEmpty]] =
+  val viewports: Lens[FractalEntityWithId, ViewportList] =
     FractalEntityWithId.entity.composeLens(FractalEntity.views)
 
   implicit val codec: Codec[FractalEntityWithId] = Codec.from(

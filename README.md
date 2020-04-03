@@ -25,7 +25,6 @@ The current development state can be accessed at [heroku](http://nutria-explorer
     - render images in low res and then in higher res to make it more responsive
     - return to start position actions
     - save high quality screenshots to disk and to shareable url
-    - save snapshot action: only save new viewports (dont save existing viewports)
  - gallery
     - pagination
     - web worker to render images
