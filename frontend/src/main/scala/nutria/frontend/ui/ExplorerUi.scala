@@ -89,12 +89,12 @@ object ExplorerUi extends Page[ExplorerState] {
                     .child(Form.intInput("anti alias", lensParams composeLens SaveFractalDialog.antiAliase))
                 )
                 .children(
-                  Node("div.buttons")
+                  Button
+                    .list()
                     .child(
                       Button("Download", Icons.download, downloadAction)
                         .classes("is-primary")
                     )
-                    .classes("is-right")
                 )
             )
         )
