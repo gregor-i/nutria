@@ -19,8 +19,8 @@ object DetailsUi extends Page[DetailsState] {
     Node("div.container")
       .child(
         Node("section.section")
-          .child(Node("h1.title.is-1").text(state.remoteFractal.entity.title))
-          .child(Node("h2.subtitle").text("ID: " + state.remoteFractal.id)) // todo: remove
+          .child(Node("h1.title.is-1").text(Option(state.remoteFractal.entity.title).filter(_.nonEmpty).getOrElse("<No Title given>")))
+          .child(Node("h2.subtitle").text(state.remoteFractal.entity.description))
       )
       .child(
         Node("section.section").children(

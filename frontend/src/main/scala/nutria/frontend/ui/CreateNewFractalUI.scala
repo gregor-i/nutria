@@ -1,14 +1,16 @@
 package nutria.frontend.ui
 
+import eu.timepit.refined.collection.NonEmpty
+import eu.timepit.refined.refineV
 import monocle.Lens
 import nutria.core.viewport.{Dimensions, Viewport}
-import nutria.core.{DivergingSeries, FractalImage, FractalProgram, NewtonIteration}
+import nutria.core.{DivergingSeries, FractalEntity, FractalImage, FractalProgram, NewtonIteration}
 import nutria.frontend.CreateNewFractalState.FormulaStep
 import nutria.frontend.ui.common._
 import nutria.frontend.util.LenseUtils
 import nutria.frontend.{Actions, CreateNewFractalState, NutriaState}
 import nutria.macros.StaticContent
-import snabbdom.Node
+import snabbdom.{Node, Snabbdom}
 
 import scala.util.chaining._
 
@@ -81,6 +83,14 @@ object CreateNewFractalUI extends Page[CreateNewFractalState] {
           .style("display", "block")
           .style("margin", "8px auto")
       )
+      .child(
+        finishButton(
+          FractalEntity(
+            program = series,
+            views = refineV[NonEmpty](List(Viewport.mandelbrot)).toOption.get
+          )
+        )
+      )
   }
 
   private def selectFormulaNewtonIteration(
@@ -112,6 +122,14 @@ object CreateNewFractalUI extends Page[CreateNewFractalState] {
           .style("display", "block")
           .style("margin", "8px auto")
       )
+      .child(
+        finishButton(
+          FractalEntity(
+            program = series,
+            views = refineV[NonEmpty](List(Viewport.aroundZero)).toOption.get
+          )
+        )
+      )
   }
 
   private def languageInformation(implicit nutriaState: NutriaState, update: NutriaState => Unit) =
@@ -120,22 +138,13 @@ object CreateNewFractalUI extends Page[CreateNewFractalState] {
       .child(Link(Actions.gotoFAQ).text("FAQ"))
       .text(".")
 
-  // step 3
-
-  private def continueButtons(
-      backState: NutriaState,
-      continueState: NutriaState
+  private def finishButton(
+      fractalEntity: FractalEntity
   )(implicit state: CreateNewFractalState, update: NutriaState => Unit): Node =
-    Node("div")
-      .classes("is-right", "buttons")
+    Button
+      .list()
       .child(
-        Link(backState)
-          .classes("button", "is-secondary")
-          .text("Back")
-      )
-      .child(
-        Link(continueState)
-          .classes("button", "is-primary")
-          .text("Continue")
+        Button("Save Fractal", Icons.save, Actions.saveAsNewFractal(fractalEntity))
+          .classes("is-primary")
       )
 }

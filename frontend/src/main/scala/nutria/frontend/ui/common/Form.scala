@@ -78,7 +78,7 @@ object Form {
       label,
       Node("input.input")
         .attr("type", "text")
-        .attr("disabled", "")
+        .attr("disabled", "disabled")
         .attr("value", value)
     )
 
