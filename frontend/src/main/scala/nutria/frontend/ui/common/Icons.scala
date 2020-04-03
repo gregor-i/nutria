@@ -10,7 +10,7 @@ object Icons {
   val check     = "fa-check-circle"
   val cancel    = "fa-times-circle"
   val delete    = "fa-trash"
-  val copy      = "fa-clone" // fork
+  val copy      = "fa-code-branch"
   val snapshot  = "fa-camera"
   val explore   = "fa-compass"
   val gallery   = "fa-image"
@@ -20,8 +20,8 @@ object Icons {
   val download  = "fa-download"
   val publish   = "fa-unlock"
   val unpublish = "fa-lock"
-  val upvote    = "fa-thumbs-o-up"
-  val downvote  = "fa-thumbs-o-down"
+  val upvote    = "fa-thumbs-up"
+  val downvote  = "fa-thumbs-down"
   val plus      = "fa-plus"
 
   def icon(icon: String): Node =

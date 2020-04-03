@@ -3,13 +3,19 @@ package nutria.frontend.ui
 import nutria.core._
 import nutria.core.viewport.Dimensions
 import nutria.frontend.ui.common.{FractalTile, _}
-import nutria.frontend.{Actions, Links, NutriaState, UserGalleryState}
+import nutria.frontend.{Actions, CreateNewFractalState, Links, NutriaState, UserGalleryState}
 import snabbdom.Node
+import scala.util.chaining._
 
 object UserGalleryUi extends Page[UserGalleryState] {
   def render(implicit state: UserGalleryState, update: NutriaState => Unit) =
     Body()
       .child(Header())
+      .child(
+        Link(CreateNewFractalState(user = state.user))
+          .pipe(Header.fab)
+          .child(Icons.icon(Icons.plus))
+      )
       .child(
         Node("div.container")
           .child(

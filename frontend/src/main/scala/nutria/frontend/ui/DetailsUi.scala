@@ -12,6 +12,15 @@ object DetailsUi extends Page[DetailsState] {
   def render(implicit state: DetailsState, update: NutriaState => Unit) =
     Body()
       .child(common.Header())
+      .childOptional(
+        if (state.dirty)
+          Header
+            .fab(Node("button"))
+            .child(Icons.icon(Icons.save))
+            .event("click", Actions.updateFractal(state.fractalToEdit))
+            .pipe(Some.apply)
+        else None
+      )
       .child(body(state, update))
       .child(common.Footer())
 
@@ -232,7 +241,7 @@ object DetailsUi extends Page[DetailsState] {
   private def actions()(implicit state: DetailsState, update: NutriaState => Unit): Node = {
     val buttons: Seq[Node] = state.user match {
       case Some(user) if user.id == state.remoteFractal.owner =>
-        Seq(buttonDelete, buttonSaveAsNew, buttonSaveAsOld)
+        Seq(buttonDelete, buttonSaveAsOld)
 
       case _ =>
         Seq(buttonFork)
@@ -242,16 +251,9 @@ object DetailsUi extends Page[DetailsState] {
       .child(buttons.map(button => Node("p.control").child(button)))
   }
 
-  private def buttonSaveAsNew(implicit state: DetailsState, update: NutriaState => Unit) =
-    Button(
-      "Save Changes as new Fractal",
-      Icons.save,
-      Actions.saveAsNewFractal(state.fractalToEdit.entity)
-    ).classes("is-light")
-
   private def buttonSaveAsOld(implicit state: DetailsState, update: NutriaState => Unit) =
     Button(
-      "Apply Changes",
+      "Save Changes",
       Icons.save,
       Actions.updateFractal(state.fractalToEdit)
     ).classes("is-primary")

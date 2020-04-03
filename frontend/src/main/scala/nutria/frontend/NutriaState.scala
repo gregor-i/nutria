@@ -2,6 +2,7 @@ package nutria.frontend
 
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.numeric.Positive
+import io.circe.Codec
 import monocle.macros.{GenLens, GenPrism, Lenses}
 import monocle.{Lens, Prism}
 import nutria.core._
@@ -75,6 +76,10 @@ object CreateNewFractalState {
   @Lenses
   case class FormulaStep(program: FractalProgram) extends Step
 
+  object Step extends CirceCodex {
+    implicit val codec: Codec[Step] = semiauto.deriveConfiguredCodec
+  }
+
   val formulaStep: Prism[Step, FormulaStep] =
     GenPrism[Step, FormulaStep]
 }
@@ -111,7 +116,7 @@ object ExplorerState {
   val viewport: Lens[ExplorerState, Viewport] = ExplorerState.fractalImage.composeLens(FractalImage.view)
 }
 
-object NutriaState extends CirceCodex {
+object NutriaState {
   def setNavbarExtended(nutriaState: NutriaState, navbarExpanded: Boolean): NutriaState =
     nutriaState match {
       case state: LoadingState          => state.copy(navbarExpanded = navbarExpanded)

@@ -69,7 +69,7 @@ object Header {
           "position"   -> "absolute",
           "top"        -> "28px",
           "z-index"    -> "30",
-          "right"      -> "115px",
+          "right"      -> "120px",
           "margin"     -> "0",
           "box-shadow" -> "0 2px 4px rgba(0,0,0,0.2)"
         )

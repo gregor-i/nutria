@@ -87,8 +87,15 @@ object Router {
         )
 
       case "/new-fractal" =>
+        val stepFromUrl = queryParams.get("step").flatMap(queryDecoded[CreateNewFractalState.Step])
+
         LoadingState {
-          NutriaService.whoAmI().map(user => CreateNewFractalState(user = user))
+          NutriaService.whoAmI().map { user =>
+            stepFromUrl match {
+              case Some(step) => CreateNewFractalState(user = user, step = step)
+              case None       => ErrorState("Query Parameter is invalid")
+            }
+          }
         }
 
       case "/faq" =>
@@ -133,8 +140,8 @@ object Router {
           )
         case None => Some((s"/explorer", Map("state" -> queryEncoded(exState.fractalImage))))
       }
-    case _: ProfileState          => Some("/user/profile" -> Map.empty)
-    case _: CreateNewFractalState => Some("/new-fractal"  -> Map.empty)
+    case _: ProfileState              => Some("/user/profile" -> Map.empty)
+    case state: CreateNewFractalState => Some("/new-fractal"  -> Map("step" -> queryEncoded(state.step)))
     case _: GreetingState =>
       Some(("/", Map.empty))
     case _: FAQState   => Some("/faq"   -> Map.empty)
