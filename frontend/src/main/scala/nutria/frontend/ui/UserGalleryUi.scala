@@ -15,7 +15,7 @@ object UserGalleryUi extends Page[UserGalleryState] {
           .child(
             Node("section.section")
               .child(Node("h1.title.is-1").text("User Fractal Gallery:"))
-              .child(Node("h2.subtitle").text("user: " + state.aboutUser))
+              .child(Node("h2.subtitle").text("Here are all your fractals listed"))
           )
           .child(
             Node("div.fractal-tile-list")
