@@ -12,14 +12,16 @@ object DetailsUi extends Page[DetailsState] {
   def render(implicit state: DetailsState, update: NutriaState => Unit) =
     Body()
       .child(common.Header())
-      .childOptional(
-        if (state.dirty)
-          Header
-            .fab(Node("button"))
-            .child(Icons.icon(Icons.save))
-            .event("click", Actions.updateFractal(state.fractalToEdit))
-            .pipe(Some.apply)
-        else None
+      .child(
+        Header
+          .fab(Node("button"))
+          .child(Icons.icon(Icons.save))
+          .pipe { node =>
+            if (state.dirty)
+              node.event("click", Actions.updateFractal(state.fractalToEdit))
+            else
+              node.attr("disabled", "disabled")
+          }
       )
       .child(body(state, update))
       .child(common.Footer())
