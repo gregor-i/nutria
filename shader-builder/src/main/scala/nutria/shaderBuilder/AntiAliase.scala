@@ -1,12 +1,11 @@
 package nutria.shaderBuilder
 
-import eu.timepit.refined.api.Refined
-import eu.timepit.refined.numeric.Positive
+import nutria.core.AntiAliase
 
 object AntiAliase {
   def apply[T <: WebGlType: WebGlType.TypeProps](
       block: (RefVec2, Ref[T]) => String,
-      aaFactor: Int Refined Positive
+      aaFactor: AntiAliase
   ): Ref[T] => String =
     if (aaFactor.value > 1)
       antiAliase(block, aaFactor)
@@ -25,7 +24,7 @@ object AntiAliase {
 
   private def antiAliase[T <: WebGlType: WebGlType.TypeProps](
       block: (RefVec2, Ref[T]) => String,
-      aaFactor: Int Refined Positive
+      aaFactor: AntiAliase
   )(outputVarname: Ref[T]) = {
     val local = WebGlType.reference[T]("frag_out")
     val acc   = WebGlType.reference[T]("acc")

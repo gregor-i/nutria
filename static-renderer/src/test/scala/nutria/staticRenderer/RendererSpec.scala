@@ -1,9 +1,9 @@
 package nutria.staticRenderer
 
-import eu.timepit.refined.refineMV
 import nutria.core.{DivergingSeries, FractalImage, NormalMap, OuterDistance, TimeEscape}
 import nutria.core.viewport.Dimensions
 import org.scalatest.funsuite.AnyFunSuite
+import nutria.core.refineUnsafe
 
 class RendererSpec extends AnyFunSuite with RenderingSuite {
   val baseFolder = s"./temp/${getClass.getSimpleName}"
@@ -19,7 +19,7 @@ class RendererSpec extends AnyFunSuite with RenderingSuite {
   renderingTest("renders a Mandelbrot with high anti aliase")(
     fractal = FractalImage(
       program = DivergingSeries.default,
-      antiAliase = refineMV(10)
+      antiAliase = refineUnsafe(10)
     ),
     dimensions = Dimensions.fullHD,
     fileName = s"${baseFolder}/Mandelbrot-high-anti-aliase.png"

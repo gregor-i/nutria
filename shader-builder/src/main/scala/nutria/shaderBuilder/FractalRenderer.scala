@@ -1,9 +1,7 @@
 package nutria.shaderBuilder
 
-import eu.timepit.refined.api.Refined
-import eu.timepit.refined.numeric.Positive
 import nutria.core.viewport.Viewport
-import nutria.core.{FractalImage, FractalProgram}
+import nutria.core.{AntiAliase, FractalImage, FractalProgram}
 import nutria.macros.StaticContent
 import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
@@ -13,7 +11,6 @@ import scala.scalajs.js
 import scala.scalajs.js.Dynamic
 import scala.scalajs.js.typedarray.Float32Array
 import scala.util.{Failure, Try}
-
 import WebGLRenderingContext._
 
 object FractalRenderer {
@@ -57,7 +54,7 @@ object FractalRenderer {
   def constructProgram(
       gl: WebGLRenderingContext,
       fractralProgram: FractalProgram,
-      antiAliase: Int Refined Positive
+      antiAliase: AntiAliase
   ): WebGLProgram = {
     val vertexShader = gl.createShader(VERTEX_SHADER)
     gl.shaderSource(vertexShader, StaticContent("shader-builder/src/main/glsl/vertex_shader.glsl"))
@@ -130,7 +127,7 @@ object FractalRenderer {
     gl.drawArrays(TRIANGLES, 0, 6)
   }
 
-  def fragmentShaderSource(state: FractalProgram, antiAliase: Int Refined Positive) = {
+  def fragmentShaderSource(state: FractalProgram, antiAliase: AntiAliase) = {
     val out = RefVec4("gl_FragColor")
 
     s"""precision highp float;

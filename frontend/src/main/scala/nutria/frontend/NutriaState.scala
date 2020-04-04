@@ -1,7 +1,5 @@
 package nutria.frontend
 
-import eu.timepit.refined.api.Refined
-import eu.timepit.refined.numeric.Positive
 import io.circe.Codec
 import monocle.macros.{GenLens, GenPrism, Lenses}
 import monocle.{Lens, Prism}
@@ -37,7 +35,7 @@ case class ExplorerState(
 @Lenses
 case class SaveFractalDialog(
     dimensions: Dimensions,
-    antiAliase: Int Refined Positive
+    antiAliase: AntiAliase
 )
 
 case class GalleryState(

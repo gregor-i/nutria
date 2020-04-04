@@ -8,13 +8,12 @@ import io.circe.syntax._
 import io.circe.{Codec, Decoder, Encoder}
 import monocle.Lens
 import nutria.core.viewport.ViewportList
-import nutria.core.viewport.ViewportList.ViewportList
 
 @monocle.macros.Lenses()
 case class FractalEntity(
     title: String = "",
     program: FractalProgram,
-    views: ViewportList = ViewportList.ignoreError(List(Viewport.aroundZero)),
+    views: ViewportList = ViewportList.refineUnsafe(List(Viewport.aroundZero)),
     description: String = "",
     reference: List[String] = List.empty,
     antiAliase: Int Refined Positive = refineMV(1),

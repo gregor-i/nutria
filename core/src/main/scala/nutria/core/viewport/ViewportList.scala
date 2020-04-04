@@ -1,18 +1,17 @@
 package nutria.core.viewport
 
-import eu.timepit.refined.api.{Refined, Validate}
+import eu.timepit.refined.api.Validate
 import eu.timepit.refined.boolean.{And, Not}
 import eu.timepit.refined.collection.{Empty, NonEmpty}
-import eu.timepit.refined.refineV
+import nutria.core.ViewportList
 
 case class Distinct()
 
 object ViewportList {
-  type ViewportList = List[Viewport] Refined (NonEmpty And Distinct)
 
-  def apply(list: List[Viewport]): Either[String, ViewportList] = refineV(list)
+  def apply(list: List[Viewport]): Either[String, ViewportList] = nutria.core.refine(list)
 
-  def ignoreError(list: List[Viewport]): ViewportList = apply(list).toOption.get
+  def refineUnsafe(list: List[Viewport]): ViewportList = nutria.core.refineUnsafe(list)
 
   implicit val viewportListValidate: Validate[List[Viewport], NonEmpty And Distinct] =
     Validate.fromPredicate(

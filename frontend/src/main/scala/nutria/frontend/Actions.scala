@@ -76,7 +76,7 @@ object Actions {
           for {
             remoteFractal <- NutriaService.loadFractal(fractalId)
             views   = (remoteFractal.entity.views.value :+ viewport).distinct
-            updated = remoteFractal.entity.copy(views = ViewportList.ignoreError(views))
+            updated = remoteFractal.entity.copy(views = ViewportList.refineUnsafe(views))
             _ <- NutriaService.updateFractal(remoteFractal.copy(entity = updated))
             _ = Toasts.successToast("Snapshot saved")
           } yield state
@@ -94,7 +94,7 @@ object Actions {
           for {
             remoteFractal <- NutriaService.loadFractal(fractalId)
             updated = remoteFractal.entity.copy(
-              views = ViewportList.ignoreError(
+              views = ViewportList.refineUnsafe(
                 (remoteFractal.entity.views.value :+ viewport).distinct
               )
             )

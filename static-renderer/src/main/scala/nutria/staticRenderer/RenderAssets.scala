@@ -1,9 +1,9 @@
 package nutria.staticRenderer
 
-import eu.timepit.refined.refineMV
 import nutria.core.viewport.{Viewport, Dimensions}
 import nutria.core.{DivergingSeries, FractalImage, NewtonIteration, OuterDistance, RGB}
 
+import nutria.core.refineUnsafe
 import scala.util.chaining._
 
 object RenderAssets {
@@ -37,7 +37,7 @@ object RenderAssets {
     val image = FractalImage(
       program = program,
       view = view,
-      antiAliase = refineMV(4)
+      antiAliase = refineUnsafe(4)
     )
 
     Renderer.renderToFile(image, Dimensions.favicon, imgFolder("icon.png"))
@@ -48,7 +48,7 @@ object RenderAssets {
       fractalImage = FractalImage(
         program = DivergingSeries.default,
         view = Viewport.mandelbrot,
-        antiAliase = refineMV(4)
+        antiAliase = refineUnsafe(4)
       ),
       dimensions = Dimensions.thumbnail,
       fileName = imgFolder("example_DivergingSeries.png")
@@ -58,7 +58,7 @@ object RenderAssets {
       fractalImage = FractalImage(
         program = NewtonIteration.default,
         view = Viewport.aroundZero,
-        antiAliase = refineMV(4)
+        antiAliase = refineUnsafe(4)
       ),
       dimensions = Dimensions.thumbnail,
       fileName = imgFolder("example_NewtonIteration.png")

@@ -1,7 +1,5 @@
 package nutria.frontend.ui
 
-import eu.timepit.refined.collection.NonEmpty
-import eu.timepit.refined.refineV
 import monocle.Lens
 import nutria.core.viewport.{Dimensions, Viewport, ViewportList}
 import nutria.core.{DivergingSeries, FractalEntity, FractalImage, FractalProgram, NewtonIteration}
@@ -10,7 +8,7 @@ import nutria.frontend.ui.common._
 import nutria.frontend.util.LenseUtils
 import nutria.frontend.{Actions, CreateNewFractalState, NutriaState}
 import nutria.macros.StaticContent
-import snabbdom.{Node, Snabbdom}
+import snabbdom.Node
 
 import scala.util.chaining._
 
@@ -87,7 +85,7 @@ object CreateNewFractalUI extends Page[CreateNewFractalState] {
         finishButton(
           FractalEntity(
             program = series,
-            views = ViewportList.ignoreError(List(Viewport.mandelbrot))
+            views = ViewportList.refineUnsafe(List(Viewport.mandelbrot))
           )
         )
       )
@@ -126,7 +124,7 @@ object CreateNewFractalUI extends Page[CreateNewFractalState] {
         finishButton(
           FractalEntity(
             program = series,
-            views = ViewportList.ignoreError(List(Viewport.aroundZero))
+            views = ViewportList.refineUnsafe(List(Viewport.aroundZero))
           )
         )
       )
