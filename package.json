@@ -4,7 +4,7 @@
     "bulma": "^0.8",
     "clean-css-cli": "^4",
     "font-awesome": "^4",
-    "sass": "^1.26.3",
+    "sass": "^1",
     "snabbdom": "^0.7"
   },
   "scripts": {
@@ -15,10 +15,10 @@
     "cp-fas": "cp node_modules/font-awesome/css/font-awesome.min.css backend/public/css/font-awesome.css && cp -r node_modules/font-awesome/fonts backend/public"
   },
   "devDependencies": {
-    "gl": "^4.4.1",
-    "html-formatter": "^0.1.9",
-    "jimp": "^0.9.6",
-    "snabbdom-to-html": "^5.1.1"
+    "gl": "^4",
+    "html-formatter": "^0",
+    "jimp": "^0.10.0",
+    "snabbdom-to-html": "^5"
   },
   "engines": {
     "node": ">= 12.16"
