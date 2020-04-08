@@ -30,7 +30,7 @@ case class FractalEntity(
   }
 }
 
-object FractalEntity extends CirceCodex {
+object FractalEntity extends CirceCodec {
   import Ordering.Double.TotalOrdering
   implicit val ordering: Ordering[FractalEntity] = Ordering.by { entity =>
     (entity.acceptance, entity.program)
@@ -44,7 +44,7 @@ object FractalEntity extends CirceCodex {
 @monocle.macros.Lenses()
 case class FractalEntityWithId(id: String, owner: String, entity: FractalEntity)
 
-object FractalEntityWithId extends CirceCodex {
+object FractalEntityWithId extends CirceCodec {
   val viewports: Lens[FractalEntityWithId, ViewportList] =
     FractalEntityWithId.entity.composeLens(FractalEntity.views)
 

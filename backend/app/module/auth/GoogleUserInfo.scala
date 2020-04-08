@@ -1,10 +1,10 @@
 package module.auth
 
 import io.circe.Codec
-import nutria.core.CirceCodex
+import nutria.core.CirceCodec
 
 case class GoogleUserInfo(id: String, name: String, email: String)
 
-object GoogleUserInfo extends CirceCodex {
+object GoogleUserInfo extends CirceCodec {
   implicit val codec: Codec[GoogleUserInfo] = semiauto.deriveConfiguredCodec
 }

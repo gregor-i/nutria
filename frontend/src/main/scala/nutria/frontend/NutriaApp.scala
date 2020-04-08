@@ -1,23 +1,27 @@
 package nutria.frontend
 
-import nutria.frontend.ui.Ui
-import nutria.frontend.util.SnabbdomApp
 import org.scalajs.dom
 import org.scalajs.dom.Element
-import snabbdom.VNode
+import snabbdom.{Snabbdom, SnabbdomFacade, VNode}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.scalajs.js.|
-import scala.util.{Failure, Success}
 
-class NutriaApp(container: Element) extends SnabbdomApp {
+class NutriaApp(container: Element) {
 
   var node: Element | VNode = container
+
+  val patch: SnabbdomFacade.PatchFunction = Snabbdom.init(
+    classModule = true,
+    attributesModule = true,
+    styleModule = true,
+    eventlistenersModule = true,
+    propsModule = true
+  )
 
   def renderState(state: NutriaState): Unit = {
     Router.stateToUrl(state) match {
       case Some((currentPath, currentSearch)) =>
-        val stringSearch = Router.searchToUrl(currentSearch)
+        val stringSearch = Router.queryParamsToUrl(currentSearch)
         if (dom.window.location.pathname != currentPath) {
           dom.window.scroll(0, 0)
           dom.window.history.pushState(null, "", currentPath + stringSearch)
@@ -27,23 +31,10 @@ class NutriaApp(container: Element) extends SnabbdomApp {
       case None => ()
     }
 
-    state match {
-      case LoadingState(future, _) =>
-        future.onComplete {
-          case Success(newState) => renderState(newState)
-          case Failure(exception) =>
-            renderState(
-              ErrorState(s"unexpected problem while initializing app: ${exception.getMessage}")
-            )
-        }
-      case _ => ()
-    }
-
-    node = patch(node, Ui(state, renderState).toVNode)
+    node = patch(node, Pages.ui(state, renderState).toVNode)
   }
 
   dom.window.onpopstate = _ => renderState(Router.stateFromUrl(dom.window.location))
 
   renderState(Router.stateFromUrl(dom.window.location))
-
 }

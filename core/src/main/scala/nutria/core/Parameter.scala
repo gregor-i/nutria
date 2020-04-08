@@ -10,7 +10,7 @@ sealed trait Parameter {
 
 case class StringParameter(name: String, literal: String) extends Parameter
 
-object Parameter extends CirceCodex {
+object Parameter extends CirceCodec {
   val literal = Lens[Parameter, String](_.literal)(
     literal => parameter => StringParameter(parameter.name, literal)
   )

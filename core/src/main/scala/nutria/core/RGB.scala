@@ -4,7 +4,7 @@ import io.circe.{Codec, Decoder, Encoder}
 
 import scala.util.Try
 
-object RGB extends CirceCodex {
+object RGB extends CirceCodec {
   val white = RGB(255, 255, 255)
   val black = RGB(0, 0, 0)
 

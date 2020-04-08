@@ -110,7 +110,7 @@ object FreestyleProgram {
       .sorted
 }
 
-object FractalProgram extends CirceCodex {
+object FractalProgram extends CirceCodec {
   val newtonIteration: Prism[FractalProgram, NewtonIteration] =
     GenPrism[FractalProgram, NewtonIteration]
   val divergingSeries: Prism[FractalProgram, DivergingSeries] =

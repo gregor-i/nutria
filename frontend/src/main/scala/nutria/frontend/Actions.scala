@@ -2,9 +2,10 @@ package nutria.frontend
 
 import nutria.core.viewport.{Dimensions, Viewport, ViewportList}
 import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage, Verdict}
+import nutria.frontend.pages.common.FractalTile
+import nutria.frontend.pages._
 import nutria.frontend.service.NutriaService
 import nutria.frontend.toasts.Toasts
-import nutria.frontend.ui.common.FractalTile
 import nutria.frontend.util.Untyped
 import org.scalajs.dom
 import org.scalajs.dom.html.Anchor

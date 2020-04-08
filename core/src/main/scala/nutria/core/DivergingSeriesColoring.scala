@@ -34,7 +34,7 @@ case class OuterDistance(
     distanceFactor: Double Refined Positive = refineMV(1.0)
 ) extends DivergingSeriesColoring
 
-object DivergingSeriesColoring extends CirceCodex {
+object DivergingSeriesColoring extends CirceCodec {
   val timeEscapeColoring    = GenPrism[DivergingSeriesColoring, TimeEscape]
   val normalMapColoring     = GenPrism[DivergingSeriesColoring, NormalMap]
   val outerDistanceColoring = GenPrism[DivergingSeriesColoring, OuterDistance]

@@ -1,13 +1,14 @@
 package nutria.frontend.service
 
 import io.circe.Decoder
-import nutria.core.CirceCodex
-import nutria.frontend.{AdminState, ErrorState, NutriaState}
+import nutria.core.CirceCodec
+import nutria.frontend.NutriaState
+import nutria.frontend.pages.{AdminState, ErrorState}
 import org.scalajs.dom.ext.Ajax
 
 import scala.concurrent.Future
 
-object NutriaAdminService extends Service with CirceCodex {
+object NutriaAdminService extends Service with CirceCodec {
   private implicit val stateDecoder: Decoder[AdminState] =
     semiauto.deriveConfiguredDecoder[AdminState]
 

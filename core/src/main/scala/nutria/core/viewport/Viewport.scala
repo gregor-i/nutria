@@ -2,9 +2,9 @@ package nutria.core.viewport
 
 import io.circe.{Codec, Decoder, Encoder}
 import nutria.core.viewport.Point.PointOps
-import nutria.core.{CirceCodex, Point}
+import nutria.core.{CirceCodec, Point}
 
-object Viewport extends CirceCodex {
+object Viewport extends CirceCodec {
   val mandelbrot: Viewport = Viewport(Point(-2.5, -1), Point(3.5, 0), Point(0, 2))
   val aroundZero: Viewport = Viewport(Point(-2.0, -2.0), Point(4.0, 0), Point(0, 4.0))
 

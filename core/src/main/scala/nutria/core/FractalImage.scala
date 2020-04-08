@@ -12,7 +12,7 @@ case class FractalImage(
     antiAliase: Int Refined Positive = refineMV(1)
 )
 
-object FractalImage extends CirceCodex {
+object FractalImage extends CirceCodec {
   def allImages(fractalEntities: Seq[FractalEntity]): Seq[FractalImage] =
     for {
       entity <- fractalEntities

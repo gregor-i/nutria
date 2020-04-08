@@ -1,7 +1,7 @@
 package nutria.core.languages
 
 import io.circe.{Decoder, Encoder}
-import nutria.core.CirceCodex
+import nutria.core.CirceCodec
 import mathParser.implicits._
 
 class StringFunction[V] private (val string: String, val node: CNode[V]) {
@@ -16,7 +16,7 @@ class StringFunction[V] private (val string: String, val node: CNode[V]) {
   override def toString: String = string
 }
 
-object StringFunction extends CirceCodex {
+object StringFunction extends CirceCodec {
   def apply[V](string: String)(implicit lang: CLang[V]): Option[StringFunction[V]] =
     lang.parse(string).map(lang.optimize).map(node => new StringFunction(string, node))
 

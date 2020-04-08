@@ -1,10 +1,9 @@
 package nutria.frontend.toasts
 
-import nutria.frontend.util.SnabbdomApp
 import org.scalajs.dom
-import snabbdom.{Node, Snabbdom, VNode}
+import snabbdom.{Node, Snabbdom, SnabbdomFacade, VNode}
 
-object Toasts extends SnabbdomApp {
+object Toasts {
   private var counter: Int             = 0
   private var toasts: List[ToastState] = List.empty
 
@@ -52,6 +51,12 @@ object Toasts extends SnabbdomApp {
     toasts = toasts.filter(_.id != id)
     render()
   }
+
+  val patch: SnabbdomFacade.PatchFunction = Snabbdom.init(
+    classModule = true,
+    styleModule = true,
+    eventlistenersModule = true,
+  )
 
 }
 
