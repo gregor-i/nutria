@@ -55,7 +55,7 @@ object Toasts {
   val patch: SnabbdomFacade.PatchFunction = Snabbdom.init(
     classModule = true,
     styleModule = true,
-    eventlistenersModule = true,
+    eventlistenersModule = true
   )
 
 }

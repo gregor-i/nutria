@@ -29,6 +29,9 @@ case class FractalEntity(
 }
 
 object FractalEntity extends CirceCodec {
+  // do not remove, intellij lies ...
+  import viewport.ViewportList.viewportListValidate
+
   import Ordering.Double.TotalOrdering
   implicit val ordering: Ordering[FractalEntity] = Ordering.by { entity =>
     (entity.acceptance, entity.program)
