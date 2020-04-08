@@ -4,7 +4,7 @@ import eu.timepit.refined.api.{Refined, Validate}
 import eu.timepit.refined.boolean.And
 import eu.timepit.refined.collection.NonEmpty
 import eu.timepit.refined.numeric.Positive
-import nutria.core.viewport.{Distinct, Viewport}
+import nutria.core.viewport.Distinct
 
 package object core {
   type Dimensions = viewport.Dimensions

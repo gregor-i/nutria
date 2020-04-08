@@ -1,6 +1,5 @@
 package nutria.core
 
-import eu.timepit.refined.refineMV
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.numeric.{NonNaN, Positive}
 import io.circe.Codec
@@ -14,8 +13,8 @@ sealed trait FractalProgram
 
 @monocle.macros.Lenses()
 case class DivergingSeries(
-    maxIterations: Int Refined Positive = refineMV(200),
-    escapeRadius: Double Refined Positive = refineMV(100.0),
+    maxIterations: Int Refined Positive = refineUnsafe(200),
+    escapeRadius: Double Refined Positive = refineUnsafe(100.0),
     initial: StringFunction[Lambda.type],
     iteration: StringFunction[ZAndLambda],
     coloring: DivergingSeriesColoring = TimeEscape()
@@ -34,10 +33,9 @@ object DivergingSeries {
     type C = Complex[Double]
     type V = nutria.core.languages.ZAndZDerAndLambda
 
+    import mathParser.algebra.SpireLanguage.syntax._
     import nutria.core.languages._
     import spire.implicits._
-
-    import mathParser.algebra.SpireLanguage.syntax._
 
     // todo: this is a copy of mathparser.derive with few changes ...
     def derive(term: SpireNode[C, V]): SpireNode[C, V] =
@@ -77,13 +75,13 @@ object DivergingSeries {
 
 @monocle.macros.Lenses()
 case class NewtonIteration(
-    maxIterations: Int Refined Positive = refineMV(200),
-    threshold: Double Refined Positive = refineMV(1e-4),
+    maxIterations: Int Refined Positive = refineUnsafe(200),
+    threshold: Double Refined Positive = refineUnsafe(1e-4),
     function: StringFunction[XAndLambda],
     initial: StringFunction[Lambda.type],
     center: Point = (0.0, 0.0),
-    brightnessFactor: Double Refined Positive = refineMV(25.0),
-    overshoot: Double Refined NonNaN = refineMV(1.0)
+    brightnessFactor: Double Refined Positive = refineUnsafe(25.0),
+    overshoot: Double Refined NonNaN = refineUnsafe(1.0)
 ) extends FractalProgram
 
 object NewtonIteration {

@@ -1,9 +1,5 @@
 package nutria.staticRenderer
 
-<<<<<<< Updated upstream
-=======
-import eu.timepit.refined.refineMV
->>>>>>> Stashed changes
 import nutria.core.viewport.{Viewport, Dimensions}
 import nutria.core.{DivergingSeries, FractalImage, NewtonIteration, OuterDistance, RGB}
 

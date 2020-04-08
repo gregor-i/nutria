@@ -1,9 +1,7 @@
 package nutria.core
 
-import eu.timepit.refined._
 import eu.timepit.refined.api.Refined
-import eu.timepit.refined.numeric.Positive
-import eu.timepit.refined.numeric.NonNegative
+import eu.timepit.refined.numeric.{NonNegative, Positive}
 import io.circe.syntax._
 import io.circe.{Codec, Decoder, Encoder}
 import monocle.Lens
@@ -16,10 +14,10 @@ case class FractalEntity(
     views: ViewportList = ViewportList.refineUnsafe(List(Viewport.aroundZero)),
     description: String = "",
     reference: List[String] = List.empty,
-    antiAliase: Int Refined Positive = refineMV(1),
+    antiAliase: Int Refined Positive = refineUnsafe(1),
     published: Boolean = false,
-    upvotes: Int Refined NonNegative = refineMV(0),
-    downvotes: Int Refined NonNegative = refineMV(0)
+    upvotes: Int Refined NonNegative = refineUnsafe(0),
+    downvotes: Int Refined NonNegative = refineUnsafe(0)
 ) {
   def acceptance = {
     val votes = upvotes.value + downvotes.value
@@ -35,8 +33,6 @@ object FractalEntity extends CirceCodec {
   implicit val ordering: Ordering[FractalEntity] = Ordering.by { entity =>
     (entity.acceptance, entity.program)
   }
-
-  import viewport.ViewportList.viewportListValidate
 
   implicit val codec: Codec[FractalEntity] = semiauto.deriveConfiguredCodec
 }

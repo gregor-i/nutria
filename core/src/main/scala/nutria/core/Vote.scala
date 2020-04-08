@@ -1,7 +1,6 @@
 package nutria.core
 
 import io.circe.Codec
-import io.circe.generic.JsonCodec
 
 case class Vote(forFractal: String, byUser: String, verdict: Verdict)
 

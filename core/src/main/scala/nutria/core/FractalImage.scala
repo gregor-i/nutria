@@ -1,6 +1,5 @@
 package nutria.core
 
-import eu.timepit.refined._
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.numeric.Positive
 import io.circe.Codec
@@ -9,7 +8,7 @@ import io.circe.Codec
 case class FractalImage(
     program: FractalProgram,
     view: Viewport = Viewport.defaultViewport,
-    antiAliase: Int Refined Positive = refineMV(1)
+    antiAliase: Int Refined Positive = refineUnsafe(1)
 )
 
 object FractalImage extends CirceCodec {

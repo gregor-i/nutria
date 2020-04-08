@@ -3,6 +3,7 @@ package nutria.core
 import eu.timepit.refined.api.{RefType, Validate}
 import io.circe.generic.extras.Configuration
 import io.circe.{Decoder, Encoder}
+
 import scala.language.higherKinds
 
 trait CirceCodec {
