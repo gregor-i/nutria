@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "browserify": "^16",
-    "bulma": "^0.8",
+    "bulma": "^0.8.2",
     "clean-css-cli": "^4",
     "font-awesome": "^4",
     "sass": "^1",
@@ -15,9 +15,9 @@
     "cp-fas": "cp node_modules/font-awesome/css/font-awesome.min.css backend/public/css/font-awesome.css && cp -r node_modules/font-awesome/fonts backend/public"
   },
   "devDependencies": {
-    "gl": "^4",
+    "gl": "^4.5.0",
     "html-formatter": "^0",
-    "jimp": "^0.10.0",
+    "jimp": "^0.10.1",
     "snabbdom-to-html": "^5"
   },
   "engines": {
