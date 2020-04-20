@@ -3,7 +3,7 @@ package nutria.shaderBuilder
 import mathParser.implicits._
 import nutria.core._
 import nutria.core.languages.{Lambda, X, XAndLambda, Z, ZAndLambda, ZAndZDerAndLambda, ZDer}
-import nutria.shaderBuilder.Syntax.EnrichNode
+import mathParser.Syntax._
 
 object FractalProgramToWebGl {
   def apply(fractalProgram: FractalProgram): (RefVec2, RefVec4) => String =
