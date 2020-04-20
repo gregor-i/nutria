@@ -1,9 +1,8 @@
 package nutria.staticRenderer
 
 import io.circe.parser
-import nutria.core.{AntiAliase, FractalEntity, FractalImage}
+import nutria.core.{AntiAliase, FractalEntity, FractalImage, NewtonIteration, refineUnsafe}
 import nutria.core.viewport.Dimensions
-import nutria.core.refineUnsafe
 import nutria.macros.StaticContent
 import org.scalatest.funsuite.AnyFunSuite
 

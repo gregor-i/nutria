@@ -116,10 +116,10 @@ object FractalProgram extends CirceCodec {
   val freestyleProgram: Prism[FractalProgram, FreestyleProgram] =
     GenPrism[FractalProgram, FreestyleProgram]
 
-  implicit val ordering: Ordering[FractalProgram] = Ordering.by[FractalProgram, (Int, Int)] {
-    case f: DivergingSeries  => (1, f.iteration.hashCode)
-    case f: NewtonIteration  => (3, f.function.hashCode)
-    case f: FreestyleProgram => (4, f.code.hashCode)
+  implicit val ordering: Ordering[FractalProgram] = Ordering.by[FractalProgram, (Int, String)] {
+    case f: DivergingSeries  => (1, f.iteration.string)
+    case f: NewtonIteration  => (2, f.function.string)
+    case f: FreestyleProgram => (3, f.code)
   }
 
   implicit val codec: Codec[FractalProgram] = semiauto.deriveConfiguredCodec
