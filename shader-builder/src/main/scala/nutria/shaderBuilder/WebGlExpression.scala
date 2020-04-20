@@ -15,6 +15,10 @@ case class FloatLiteral(value: Float) extends WebGlExpression[WebGlTypeFloat.typ
   override def toCode: String = s"float($value)"
 }
 
+object FloatLiteral {
+  def apply(d: Double): FloatLiteral = FloatLiteral(d.toFloat)
+}
+
 case class Vec2(a: WebGlExpression[WebGlTypeFloat.type], b: WebGlExpression[WebGlTypeFloat.type]) extends WebGlExpression[WebGlTypeVec2.type] {
   override def toCode: String = s"vec2(${a.toCode}, ${b.toCode})"
 }

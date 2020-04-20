@@ -31,8 +31,3 @@ The current development state can be accessed at [heroku](http://nutria-explorer
  - editor
     - create a wizard for adding new fractals
        - use (static) images for fractal types and colorings
-   
-## links:
-- https://en.wikibooks.org/wiki/Fractals/Iterations_in_the_complex_plane/Mandelbrot_set/centers
-- http://cosinekitty.com/mandel_orbits.html
-- static image rendering: https://github.com/akira-cn/node-canvas-webgl

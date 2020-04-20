@@ -6,7 +6,7 @@ import io.circe.Codec
 import mathParser.algebra.SpireNode
 import monocle.Prism
 import monocle.macros.GenPrism
-import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda, ZAndZDerAndLambda}
+import nutria.core.languages.{Lambda, StringFunction, X, XAndLambda, ZAndLambda, ZAndZDerAndLambda}
 import spire.math.Complex
 
 sealed trait FractalProgram
@@ -76,7 +76,7 @@ object DivergingSeries {
 @monocle.macros.Lenses()
 case class NewtonIteration(
     maxIterations: Int Refined Positive = refineUnsafe(200),
-    threshold: Double Refined Positive = refineUnsafe(1e-4),
+    threshold: Double Refined Positive = refineUnsafe(0.01),
     function: StringFunction[XAndLambda],
     initial: StringFunction[Lambda.type],
     center: Point = (0.0, 0.0),

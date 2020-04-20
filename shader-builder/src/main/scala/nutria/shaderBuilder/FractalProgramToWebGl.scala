@@ -4,6 +4,8 @@ import mathParser.implicits._
 import nutria.core._
 import nutria.core.languages.{Lambda, X, XAndLambda, Z, ZAndLambda, ZAndZDerAndLambda, ZDer}
 import mathParser.Syntax._
+import mathParser.algebra.SpireNode
+import spire.math.Complex
 
 object FractalProgramToWebGl {
   def apply(fractalProgram: FractalProgram): (RefVec2, RefVec4) => String =
@@ -100,7 +102,7 @@ object FractalProgramToWebGl {
 
     s"""{
        |  float pixel_distance = length((u_view_A + u_view_B) / u_resolution);
-       |  float distance_factor = ${FloatLiteral(coloring.distanceFactor.value.toFloat).toCode} / pixel_distance;
+       |  float distance_factor = ${FloatLiteral(coloring.distanceFactor.value).toCode} / pixel_distance;
        |  int l = 0;
        |  ${WebGlStatement.blockDeclare(z, initialZ, initialLangNames)}
        |  ${WebGlStatement.blockDeclare(zDer, initialZDer, initialLangNames)}
@@ -129,14 +131,19 @@ object FractalProgramToWebGl {
   }
 
   def newtonIteration(n: NewtonIteration)(inputVar: RefVec2, outputVar: RefVec4): String = {
-    val iteration = n.function.node.optimize(PowerOptimizer.optimizer)
-    val derived   = n.function.node.derive(X).optimize(PowerOptimizer.optimizer)
-    val initial   = n.initial.node.optimize(PowerOptimizer.optimizer)
 
-    val z      = RefVec2("z")
-    val fzlast = RefVec2("fzlast")
-    val fz     = RefVec2("fz")
-    val fderz  = RefVec2("fderz")
+    def newtonIteration: SpireNode[Complex[Double], XAndLambda] = {
+      val iteration = n.function.node.optimize(PowerOptimizer.optimizer)
+      val derived   = n.function.node.derive(X).optimize(PowerOptimizer.optimizer)
+      import mathParser.algebra.SpireLanguage.syntax._
+      val lang = languages.xAndLambda
+      lang.variable(X) - (lang.constantNode(n.overshoot.value) * iteration / derived)
+    }
+
+    val initial = n.initial.node.optimize(PowerOptimizer.optimizer)
+
+    val z     = RefVec2("z")
+    val zlast = RefVec2("zlast")
 
     val functionLangNames: PartialFunction[XAndLambda, Ref[WebGlTypeVec2.type]] = {
       case X      => z
@@ -150,37 +157,27 @@ object FractalProgramToWebGl {
     s"""{
        |  int l = 0;
        |  ${WebGlStatement.blockDeclare(z, initial, initialLangNames)}
-       |  ${WebGlType.declare(fz, WebGlType.zero[WebGlTypeVec2.type])}
-       |  ${WebGlStatement.blockAssign(fz, iteration, functionLangNames)}
-       |  ${WebGlType.declare(fzlast, RefExp(fz))}
+       |  ${WebGlType.declare(zlast, RefExp(z))}
+       |  float delta;
        |  for(int i = 0;i< ${n.maxIterations}; i++){
-       |    ${WebGlType.assign(fzlast, RefExp(fz))}
-       |    ${WebGlStatement.blockAssign(fz, iteration, functionLangNames)}
-       |    ${WebGlStatement.blockDeclare(fderz, derived, functionLangNames)}
-       |    ${z.name} -= ${FloatLiteral(n.overshoot.value.toFloat).toCode} * complex_divide(${fz.name}, ${fderz.name});
-       |    if(length(${fz.name}) < ${FloatLiteral(n.threshold.value.toFloat).toCode})
+       |    ${WebGlType.assign(zlast, RefExp(z))}
+       |    ${WebGlStatement.blockAssign(z, newtonIteration, functionLangNames)}
+       |    delta = length(z - zlast);
+       |    if(delta < ${FloatLiteral(n.threshold.value).toCode})
        |      break;
        |    l ++;
        |  }
        |
-       |  if(length(${fz.name}) < ${FloatLiteral(n.threshold.value.toFloat).toCode}){
-       |    float fract = 0.0;
-       |    if(fz == ${WebGlType.zero[WebGlTypeVec2.type].toCode}){
-       |      fract = float(l - 1);
-       |    }else{
-       |      fract = float(l) - log(${n.threshold} / length(${fz.name})) / log( length(${fzlast.name}) / length(${fz.name}));
-       |    }
+       |  float fract = float(l);
+       |  if(delta > ${FloatLiteral(n.threshold.value * 0.001).toCode})
+       |    fract = fract + log2(${FloatLiteral(Math.log(n.threshold.value)).toCode}/log(length(z - zlast)));
        |
-       |    float H = atan(z.x - ${FloatLiteral(n.center._1.toFloat).toCode}, z.y - ${FloatLiteral(
-         n.center._2.toFloat
-       ).toCode}) / float(${2 * Math.PI});
-       |    float V = exp(-fract / ${FloatLiteral(n.brightnessFactor.value.toFloat).toCode});
-       |    float S = length(z);
+       |  float H = atan(z.x - ${FloatLiteral(n.center._1).toCode},
+       |                 z.y - ${FloatLiteral(n.center._2).toCode}) / ${FloatLiteral((2 * Math.PI)).toCode};
+       |  float V = exp(-fract / ${FloatLiteral(n.brightnessFactor.value).toCode});
+       |  float S = length(z);
        |
-       |    ${outputVar.name} = vec4(hsv2rgb(vec3(H, S, V)), 1.0);
-       |  }else{
-       |    ${outputVar.name} = vec4(vec3(0.0), 1.0);
-       |  }
+       |  ${outputVar.name} = vec4(hsv2rgb(vec3(H, S, V)), 1.0);
        |}
        """.stripMargin
   }
@@ -211,7 +208,7 @@ object FractalProgramToWebGl {
          n.iteration.node.optimize(PowerOptimizer.optimizer),
          functionLangNames
        )}
-       |    if(length(${z.name}) > ${FloatLiteral(n.escapeRadius.value.toFloat).toCode})
+       |    if(length(${z.name}) > ${FloatLiteral(n.escapeRadius.value).toCode})
        |      break;
        |    l ++;
        |  }

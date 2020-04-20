@@ -1,9 +1,8 @@
 package nutria.staticRenderer
 
-import nutria.core.{DivergingSeries, FractalImage, NormalMap, OuterDistance, TimeEscape}
+import nutria.core.{DivergingSeries, FractalImage, NewtonIteration, NormalMap, OuterDistance, TimeEscape, refineUnsafe}
 import nutria.core.viewport.Dimensions
 import org.scalatest.funsuite.AnyFunSuite
-import nutria.core.refineUnsafe
 
 class RendererSpec extends AnyFunSuite with RenderingSuite {
   val baseFolder = s"./temp/${getClass.getSimpleName}"
@@ -23,6 +22,14 @@ class RendererSpec extends AnyFunSuite with RenderingSuite {
     ),
     dimensions = Dimensions.fullHD,
     fileName = s"${baseFolder}/Mandelbrot-high-anti-aliase.png"
+  )
+
+  renderingTest("renders Newton Iterations")(
+    fractal = FractalImage(
+      NewtonIteration.default
+    ),
+    dimensions = Dimensions.fullHD,
+    fileName = s"${baseFolder}/NewtonIteration-default.png"
   )
 
   for {
