@@ -168,9 +168,10 @@ object FractalProgramToWebGl {
        |    l ++;
        |  }
        |
+       |  float precomputed_const = ${FloatLiteral(1.0 / Math.log(n.threshold.value)).toCode};
        |  float fract = float(l);
-       |  if(delta > ${FloatLiteral(n.threshold.value * 0.001).toCode})
-       |    fract = fract + log2(${FloatLiteral(Math.log(n.threshold.value)).toCode}/log(length(z - zlast)));
+       |  if(delta != 0.0)
+       |    fract = fract - log2(log(pow(delta, precomputed_const)));
        |
        |  float H = atan(z.x - ${FloatLiteral(n.center._1).toCode},
        |                 z.y - ${FloatLiteral(n.center._2).toCode}) / ${FloatLiteral((2 * Math.PI)).toCode};
