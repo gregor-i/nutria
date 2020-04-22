@@ -172,6 +172,8 @@ object FractalProgramToWebGl {
        |  float fract = float(l);
        |  if(delta != 0.0)
        |    fract = fract - log2(log(pow(delta, precomputed_const)));
+       |  else
+       |    fract = fract - 1.0;
        |
        |  float H = atan(z.x - ${FloatLiteral(n.center._1).toCode},
        |                 z.y - ${FloatLiteral(n.center._2).toCode}) / ${FloatLiteral((2 * Math.PI)).toCode};

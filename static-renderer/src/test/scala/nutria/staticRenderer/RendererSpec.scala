@@ -5,8 +5,6 @@ import nutria.core.viewport.Dimensions
 import org.scalatest.funsuite.AnyFunSuite
 
 class RendererSpec extends AnyFunSuite with RenderingSuite {
-  val baseFolder = s"./temp/${getClass.getSimpleName}"
-
   renderingTest("renders high resolution Mandelbrot images")(
     fractal = FractalImage(
       DivergingSeries.default

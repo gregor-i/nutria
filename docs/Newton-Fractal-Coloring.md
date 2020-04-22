@@ -20,5 +20,5 @@ log2( log(epsilon) / log(delta) )
 
 So this works for fine for `0 < delta < epsilon`.
 But `delta = 0` still remains a problem.
-For `lim delta -> 0` the expression will converge to `0`.
+For `lim delta -> 0` the expression will converge to `1`.
 So adding a simple `if(delta = 0) then 0 else expr(delta)` solves also this issue.
