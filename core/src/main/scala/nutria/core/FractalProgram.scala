@@ -76,7 +76,7 @@ object DivergingSeries {
 @monocle.macros.Lenses()
 case class NewtonIteration(
     maxIterations: Int Refined Positive = refineUnsafe(200),
-    threshold: Double Refined Positive = refineUnsafe(0.01),
+    threshold: Double Refined Positive = refineUnsafe(1e-4),
     function: StringFunction[XAndLambda],
     initial: StringFunction[Lambda.type],
     center: Point = (0.0, 0.0),
