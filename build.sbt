@@ -84,11 +84,13 @@ compile in Compile := {
 }
 
 // libraries
-def scalaTestAndScalaCheck =
+def scalaTestAndScalaCheck = Seq(
   libraryDependencies ++= Seq(
     "org.scalatest"  %%% "scalatest"  % "3.1.1"  % Test,
     "org.scalacheck" %%% "scalacheck" % "1.14.3" % Test
-  )
+  ),
+  testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
+)
 
 def mathParser = Seq(
   resolvers += Resolver.bintrayRepo("gregor-i", "maven"),
