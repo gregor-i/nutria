@@ -9,7 +9,7 @@ vec2 complex_product(vec2 a, vec2 b){
  return vec2(a.x*b.x-a.y*b.y, a.x*b.y+a.y*b.x);
 }
 
-vec2 complex_divide(a, b){
+vec2 complex_divide(vec2 a, vec2 b){
   return vec2(((a.x*b.x+a.y*b.y)/(b.x*b.x+b.y*b.y)),((a.y*b.x-a.x*b.y)/(b.x*b.x+b.y*b.y)));
 }
 
