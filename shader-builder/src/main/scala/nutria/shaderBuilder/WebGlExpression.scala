@@ -72,9 +72,9 @@ case class ComplexBinaryExp(
   override def toCode: String = op match {
     case Plus    => left.toCode + "+" + right.toCode
     case Minus   => left.toCode + "-" + right.toCode
-    case Times   => s"complex_product(vec2(${left.toCode}), vec2(${right.toCode}))"
-    case Divided => s"complex_divide(vec2(${left.toCode}), vec2(${right.toCode}))"
-    case Power   => s"complex_power(vec2(${left.toCode}), vec2(${right.toCode}))"
+    case Times   => s"complex_product(${left.toCode}, ${right.toCode})"
+    case Divided => s"complex_divide(${left.toCode}, ${right.toCode})"
+    case Power   => s"complex_power(${left.toCode}, ${right.toCode})"
   }
 }
 
@@ -82,16 +82,16 @@ case class ComplexUnitaryExp(op: SpireUnitaryOperator, child: WebGlExpression[We
   import mathParser.algebra._
   override def toCode: String = op match {
     case Neg  => s"-(${child.toCode})"
-    case Sin  => s"complex_sin(vec2(${child.toCode}))"
-    case Cos  => s"complex_cos(vec2(${child.toCode}))"
-    case Tan  => s"complex_tan(vec2(${child.toCode}))"
-    case Asin => s"complex_asin(vec2(${child.toCode}))"
-    case Acos => s"complex_acos(vec2(${child.toCode}))"
-    case Atan => s"complex_atan(vec2(${child.toCode}))"
-    case Sinh => s"complex_sinh(vec2(${child.toCode}))"
-    case Cosh => s"complex_cosh(vec2(${child.toCode}))"
-    case Tanh => s"complex_tanh(vec2(${child.toCode}))"
-    case Exp  => s"complex_exp(vec2(${child.toCode}))"
-    case Log  => s"complex_log(vec2(${child.toCode}))"
+    case Sin  => s"complex_sin(${child.toCode})"
+    case Cos  => s"complex_cos(${child.toCode})"
+    case Tan  => s"complex_tan(${child.toCode})"
+    case Asin => s"complex_asin(${child.toCode})"
+    case Acos => s"complex_acos(${child.toCode})"
+    case Atan => s"complex_atan(${child.toCode})"
+    case Sinh => s"complex_sinh(${child.toCode})"
+    case Cosh => s"complex_cosh(${child.toCode})"
+    case Tanh => s"complex_tanh(${child.toCode})"
+    case Exp  => s"complex_exp(${child.toCode})"
+    case Log  => s"complex_log(${child.toCode})"
   }
 }

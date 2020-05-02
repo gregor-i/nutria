@@ -3,12 +3,15 @@
 #define cosh(x) 0.5*(exp(x)+(exp(-x)))
 
 // inspired by spire implementation of complex number:
-// and: https://github.com/typelevel/spire/blob/master/core/src/main/scala/spire/math/Complex.scala
+// see: https://github.com/typelevel/spire/blob/master/core/src/main/scala/spire/math/Complex.scala
 
-//Define complex operations
-#define complex_product(a, b) vec2(a.x*b.x-a.y*b.y, a.x*b.y+a.y*b.x)
-#define complex_conjugate(a) vec2(a.x,-a.y)
-#define complex_divide(a, b) vec2(((a.x*b.x+a.y*b.y)/(b.x*b.x+b.y*b.y)),((a.y*b.x-a.x*b.y)/(b.x*b.x+b.y*b.y)))
+vec2 complex_product(vec2 a, vec2 b){
+ return vec2(a.x*b.x-a.y*b.y, a.x*b.y+a.y*b.x);
+}
+
+vec2 complex_divide(a, b){
+  return vec2(((a.x*b.x+a.y*b.y)/(b.x*b.x+b.y*b.y)),((a.y*b.x-a.x*b.y)/(b.x*b.x+b.y*b.y)));
+}
 
 // see: http://mathworld.wolfram.com/ComplexExponentiation.html
 vec2 complex_power(vec2 a, vec2 b){
