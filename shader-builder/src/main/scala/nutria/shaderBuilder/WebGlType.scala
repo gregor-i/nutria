@@ -36,6 +36,13 @@ object WebGlType {
     override def construct(name: String): RefInt = RefInt(name)
   }
 
+  implicit object TypePropsFloat extends TypeProps[WebGlTypeFloat.type] {
+    override val zero: WebGlExpression[WebGlTypeFloat.type] = FloatLiteral(0)
+    override val webGlType: String                          = "float"
+
+    override def construct(name: String): RefFloat = RefFloat(name)
+  }
+
   implicit object TypePropsVec2 extends TypeProps[WebGlTypeVec2.type] {
     override val zero: WebGlExpression[WebGlTypeVec2.type] = Vec2(FloatLiteral(0), FloatLiteral(0))
     override val webGlType: String                         = "vec2"

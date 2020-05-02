@@ -3,15 +3,16 @@ package nutria.shaderBuilder
 import nutria.core.viewport.Viewport
 import nutria.core.{AntiAliase, FractalImage, FractalProgram}
 import nutria.macros.StaticContent
+import nutria.shaderBuilder.templates.MainTemplate
 import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
+import org.scalajs.dom.raw.WebGLRenderingContext._
 import org.scalajs.dom.raw.{WebGLProgram, WebGLRenderingContext}
 
 import scala.scalajs.js
 import scala.scalajs.js.Dynamic
 import scala.scalajs.js.typedarray.Float32Array
 import scala.util.{Failure, Try}
-import WebGLRenderingContext._
 
 object FractalRenderer {
 
@@ -134,12 +135,16 @@ object FractalRenderer {
        |
        |${StaticContent("shader-builder/src/main/glsl/global_definitions.glsl")}
        |
+       |${MainTemplate.constants(state).mkString("\n")}
+       |
+       |${MainTemplate.functions(state).mkString("\n")}
+       |
        |uniform vec2 u_resolution;
        |uniform vec2 u_view_O, u_view_A, u_view_B;
        |
        |void main() {
        |
-       |  ${AntiAliase(FractalProgramToWebGl(state), antiAliase).apply(out)}
+       |  ${AntiAliase(MainTemplate.main(state), antiAliase).apply(out)}
        |
        |}
     """.stripMargin
