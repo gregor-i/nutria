@@ -23,11 +23,11 @@ private[templates] object OuterDistanceTemplate extends Template[DivergingSeries
     )
   }
 
-  override def main(v: DivergingSeries)(inputVar: RefVec2, outputVar: RefVec4): String =
+  override def main(v: DivergingSeries): String =
     s"""{
        |  float pixel_distance = length((u_view_A + u_view_B) / u_resolution);
        |  int l = 0;
-       |  vec2 lambda = ${inputVar.name};
+       |  vec2 lambda = p;
        |  vec2 z = initial(lambda);
        |  vec2 z_derived = initial_derived(lambda);
        |  for(int i = 0; i < max_iterations; i++){
@@ -39,12 +39,12 @@ private[templates] object OuterDistanceTemplate extends Template[DivergingSeries
        |  }
        |
        |  if(l == max_iterations){
-       |    ${outputVar.name} = color_inside;
+       |    return color_inside;
        |  }else{
        |    float z_length = length(z);
        |    float z_der_length = length(z_derived);
        |    float d = distance_factor / pixel_distance * 2.0 * z_length / z_der_length * log(z_length);
-       |    ${outputVar.name} = mix(color_near, color_far, d);
+       |    return mix(color_near, color_far, d);
        |  }
        |}
     """.stripMargin

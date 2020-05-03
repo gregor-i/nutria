@@ -5,6 +5,7 @@ import mathParser.{BinaryNode, ConstantNode, UnitaryNode, VariableNode}
 import nutria.shaderBuilder.WebGlType.TypeProps
 import spire.math.Complex
 
+// todo: reconsider removing
 sealed trait WebGlStatement {
   def toCode: String
 }

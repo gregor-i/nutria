@@ -24,9 +24,9 @@ private[templates] object NormalMapTemplate extends Template[DivergingSeries] {
     )
   }
 
-  override def main(v: DivergingSeries)(inputVar: RefVec2, outputVar: RefVec4): String =
+  override def main(v: DivergingSeries): String =
     s"""{
-       |  vec2 lambda = ${inputVar.name};
+       |  vec2 lambda = p;
        |  vec2 z = initial(lambda);
        |  vec2 z_derived = initial_derived(lambda);
        |  int l = 0;
@@ -39,12 +39,12 @@ private[templates] object NormalMapTemplate extends Template[DivergingSeries] {
        |  }
        |
        |  if(l == max_iterations){
-       |    ${outputVar.name} = color_inside;
+       |    return color_inside;
        |  }else{
        |    const vec2 v = vec2(cos(angle), sin(angle));
        |    vec2 u = normalize(complex_divide(z, z_derived));
        |    float t = max((dot(u, v) + h2) / (1.0 + h2), 0.0);
-       |    ${outputVar.name} = mix(color_shadow, color_light, t);
+       |    return mix(color_shadow, color_light, t);
        |  }
        |}
     """.stripMargin

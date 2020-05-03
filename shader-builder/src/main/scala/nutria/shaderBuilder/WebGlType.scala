@@ -18,6 +18,7 @@ object WebGlType {
 
   def reference[T <: WebGlType: TypeProps](name: String): Ref[T] = TypeProps[T].construct(name)
 
+  // todo: remove unused parts
   trait TypeProps[T <: WebGlType] {
     val zero: WebGlExpression[T]
     val webGlType: String

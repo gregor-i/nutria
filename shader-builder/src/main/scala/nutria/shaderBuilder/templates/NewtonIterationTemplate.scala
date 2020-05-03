@@ -10,16 +10,19 @@ object NewtonIterationTemplate extends Template[NewtonIteration] {
   override def definitions(v: NewtonIteration): Seq[String] = Seq(
     constant("threshold", FloatLiteral(v.threshold.value)),
     constant("overshoot", FloatLiteral(v.overshoot.value)),
+    constant("brightness_factor", FloatLiteral(v.brightnessFactor.value)),
+    constant("center_x", FloatLiteral(v.center._1)),
+    constant("center_y", FloatLiteral(v.center._2)),
     constant("max_iterations", IntLiteral(v.maxIterations.value)),
     function("initial", v.initial.node),
     function("f", v.function.node),
     function("f_derived", v.function.node.derive(X))
   )
 
-  override def main(n: NewtonIteration)(inputVar: RefVec2, outputVar: RefVec4): String =
+  override def main(n: NewtonIteration): String =
     s"""{
        |  int l = 0;
-       |  vec2 lambda = ${inputVar.name};
+       |  vec2 lambda = p;
        |  vec2 z = initial(lambda);
        |  vec2 fz = f(z, lambda);
        |  vec2 fz_last;
@@ -27,29 +30,27 @@ object NewtonIterationTemplate extends Template[NewtonIteration] {
        |    fz_last = fz;
        |    fz = f(z, lambda);
        |    vec2 fz_derived = f_derived(z, lambda);
-       |    z -= ${FloatLiteral(n.overshoot.value.toFloat).toCode} * complex_divide(fz, fz_derived);
-       |    if(length(fz) < ${FloatLiteral(n.threshold.value.toFloat).toCode})
+       |    z -= overshoot * complex_divide(fz, fz_derived);
+       |    if(length(fz) < threshold)
        |      break;
        |    l ++;
        |  }
        |
-       |  if(length(fz) < ${FloatLiteral(n.threshold.value.toFloat).toCode}){
+       |  if(length(fz) < threshold){
        |    float fract = 0.0;
        |    if(fz == vec2(0.0)){
        |      fract = float(l);
        |    }else{
-       |      fract = float(l) + 1.0 - log(${n.threshold} / length(fz)) / log( length(fz_last) / length(fz));
+       |      fract = float(l) + 1.0 - log(threshold / length(fz)) / log( length(fz_last) / length(fz));
        |    }
        |
-       |    float H = atan(z.x - ${FloatLiteral(n.center._1.toFloat).toCode}, z.y - ${FloatLiteral(
-         n.center._2.toFloat
-       ).toCode}) / float(${2 * Math.PI});
-       |    float V = exp(-fract / ${FloatLiteral(n.brightnessFactor.value.toFloat).toCode});
+       |    float H = atan(z.x - center_x, z.y - center_y) / (2.0 * 3.41);
+       |    float V = exp(-fract / brightness_factor);
        |    float S = length(z);
        |
-       |    ${outputVar.name} = vec4(hsv2rgb(vec3(H, S, V)), 1.0);
+       |    return vec4(hsv2rgb(vec3(H, S, V)), 1.0);
        |  }else{
-       |    ${outputVar.name} = vec4(vec3(0.0), 1.0);
+       |    return vec4(vec3(0.0), 1.0);
        |  }
        |}
        """.stripMargin

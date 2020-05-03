@@ -29,10 +29,9 @@ class FreestyleSpec extends AnyFunSuite with RenderingSuite {
         |
         |if(bary.x > 0.0 || bary.y > 0.0 || bary.z > 0.0){
         |  // outside
-        |  color = vec4(color_outside, 1.0);
+        |  return vec4(color_outside, 1.0);
         |}else{
         |  // inside
-        |  color = vec4(color_inside, 1.0);
         |  for(int i = 0; i < iterations; i++){
         |    bary = vec3(calc_tri_area(B, C, p), calc_tri_area(C, A, p), calc_tri_area(A, B, p));
         |    // inside
@@ -49,11 +48,12 @@ class FreestyleSpec extends AnyFunSuite with RenderingSuite {
         |      B = 0.5 * (B + C);
         |    }else{
         |      // in the middle triangle
-        |      color = vec4(mix(color_outside, color_inside, float(i)/float(iterations)), 1.0);
+        |      return vec4(mix(color_outside, color_inside, float(i)/float(iterations)), 1.0);
         |      break;
         |    }
         |    area /= 4.0;
         |  }
+        |  return vec4(color_inside, 1.0);
         |}
         |""".stripMargin
     )
@@ -94,7 +94,7 @@ class FreestyleSpec extends AnyFunSuite with RenderingSuite {
          |  h = abs(h);
          |  col = (0.5 + 0.5*sin( vec3(0.0, 0.4, 0.7) + 2.5*h )) * pow(h,0.25);
          |}
-         |color = vec4(col, 1.0);
+         |return vec4(col, 1.0);
          |
          |""".stripMargin
     )
@@ -117,7 +117,7 @@ class FreestyleSpec extends AnyFunSuite with RenderingSuite {
       code = """
                |vec2 z = p;
                |if(z.x < 0.0 || z.x > 1.0 || z.y < -0.5 || z.y > 0.5){
-               |  color = color_outside;
+               |  return color_outside;
                |}else{
                |  z = abs(fract(z)-0.5);
                |  for(int i = 0; i < iterations ; i++){
@@ -127,9 +127,9 @@ class FreestyleSpec extends AnyFunSuite with RenderingSuite {
                |  }
                |
                |  if(z.x > 0.0){
-               |    color = color_outside;
+               |    return color_outside;
                |  }else{
-               |    color = color_inside;
+               |    return color_inside;
                |  }
                |}
                |""".stripMargin
@@ -160,7 +160,7 @@ class FreestyleSpec extends AnyFunSuite with RenderingSuite {
                |  l ++;
                |}
                |
-               |color = vec4(vec3(float(max_iterations - l) / float(max_iterations)), 1.0);
+               |return vec4(vec3(float(max_iterations - l) / float(max_iterations)), 1.0);
                |
                |""".stripMargin
     )

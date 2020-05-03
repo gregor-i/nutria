@@ -140,7 +140,7 @@ object FractalRenderer {
        |
        |vec4 main_template(vec2 p) {
        |  vec4 result;
-       |  ${MainTemplate.main(state)(RefVec2("p"), RefVec4("result"))}
+       |  ${MainTemplate.main(state)}
        |  return result;
        |}
        |

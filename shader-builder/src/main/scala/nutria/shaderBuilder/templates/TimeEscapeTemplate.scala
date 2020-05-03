@@ -17,10 +17,10 @@ private[templates] object TimeEscapeTemplate extends Template[DivergingSeries] {
     )
   }
 
-  override def main(v: DivergingSeries)(inputVar: RefVec2, outputVar: RefVec4): String =
+  override def main(v: DivergingSeries): String =
     s"""{
        |  int l = 0;
-       |  vec2 lambda = ${inputVar.name};
+       |  vec2 lambda = p;
        |  vec2 z = initial(lambda);
        |  for(int i = 0;i < max_iterations; i++){
        |    z = iteration(z, lambda);
@@ -30,7 +30,7 @@ private[templates] object TimeEscapeTemplate extends Template[DivergingSeries] {
        |  }
        |
        |  float fract = float(l) / float(max_iterations);
-       |  ${outputVar.name} = mix(color_inside, color_outside, fract);
+       |  return mix(color_inside, color_outside, fract);
        |}
        """.stripMargin
 

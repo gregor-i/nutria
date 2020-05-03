@@ -21,15 +21,5 @@ object FreestyleProgramTemplate extends Template[FreestyleProgram] {
       case fp: FunctionParameter => function(fp.name, fp.value.node)
     }
 
-  override def main(v: FreestyleProgram)(inputVar: RefVec2, outputVar: RefVec4): String = {
-
-    s"""{
-     |vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
-     |
-     |${v.code}
-     |
-     |${outputVar.name} = color;
-     |}
-     """.stripMargin
-  }
+  override def main(v: FreestyleProgram): String = v.code
 }
