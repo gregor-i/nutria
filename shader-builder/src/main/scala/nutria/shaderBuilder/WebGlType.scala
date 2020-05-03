@@ -50,6 +50,13 @@ object WebGlType {
     override def construct(name: String): RefVec2 = RefVec2(name)
   }
 
+  implicit object TypePropsVec3 extends TypeProps[WebGlTypeVec3.type] {
+    override val zero: WebGlExpression[WebGlTypeVec3.type] = Vec3(FloatLiteral(0), FloatLiteral(0), FloatLiteral(0))
+    override val webGlType: String                         = "vec3"
+
+    override def construct(name: String): RefVec3 = RefVec3(name)
+  }
+
   implicit object TypePropsVec4 extends TypeProps[WebGlTypeVec4.type] {
     override val zero: WebGlExpression[WebGlTypeVec4.type] =
       Vec4(FloatLiteral(0), FloatLiteral(0), FloatLiteral(0), FloatLiteral(0))
