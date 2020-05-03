@@ -135,9 +135,7 @@ object FractalRenderer {
        |
        |${StaticContent("shader-builder/src/main/glsl/global_definitions.glsl")}
        |
-       |${MainTemplate.constants(state).mkString("\n")}
-       |
-       |${MainTemplate.functions(state).mkString("\n")}
+       |${MainTemplate.definitions(state).mkString("\n")}
        |
        |uniform vec2 u_resolution;
        |uniform vec2 u_view_O, u_view_A, u_view_B;

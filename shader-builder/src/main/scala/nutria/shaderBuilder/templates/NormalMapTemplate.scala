@@ -7,7 +7,7 @@ import nutria.core.{DivergingSeries, NormalMap}
 import nutria.shaderBuilder._
 
 private[templates] object NormalMapTemplate extends Template[DivergingSeries] {
-  override def constants(v: DivergingSeries): Seq[String] = {
+  override def definitions(v: DivergingSeries): Seq[String] = {
     val c = v.coloring.asInstanceOf[NormalMap]
     Seq(
       constant("max_iterations", IntLiteral(v.maxIterations.value)),
@@ -16,17 +16,13 @@ private[templates] object NormalMapTemplate extends Template[DivergingSeries] {
       constant("color_inside", Vec4.fromRGBA(c.colorInside)),
       constant("color_light", Vec4.fromRGBA(c.colorLight)),
       constant("color_shadow", Vec4.fromRGBA(c.colorShadow)),
-      constant("h2", FloatLiteral(c.h2.value))
-    )
-  }
-
-  override def functions(v: DivergingSeries): Seq[String] =
-    Seq(
+      constant("h2", FloatLiteral(c.h2.value)),
       function("initial", v.initial.node.optimize(PowerOptimizer.optimizer)),
       function("iteration", v.iteration.node.optimize(PowerOptimizer.optimizer)),
       function("initial_derived", v.initial.node.derive(Lambda).optimize(PowerOptimizer.optimizer)),
       function("iteration_derived", DivergingSeries.deriveIteration(v).optimize(PowerOptimizer.optimizer))
     )
+  }
 
   override def main(v: DivergingSeries)(inputVar: RefVec2, outputVar: RefVec4): String =
     s"""{

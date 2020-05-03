@@ -7,7 +7,7 @@ import mathParser.Syntax._
 import nutria.core.languages.Z
 
 object FreestyleProgramTemplate extends Template[FreestyleProgram] {
-  override def constants(v: FreestyleProgram): Seq[String] =
+  override def definitions(v: FreestyleProgram): Seq[String] =
     v.parameters.map {
       case IntParameter(name, value)   => constant[WebGlTypeInt.type](name, IntLiteral(value))
       case FloatParameter(name, value) => constant[WebGlTypeFloat.type](name, FloatLiteral(value))
@@ -20,8 +20,6 @@ object FreestyleProgramTemplate extends Template[FreestyleProgram] {
         ).mkString("\n")
       case fp: FunctionParameter => function(fp.name, fp.value.node)
     }
-
-  override def functions(v: FreestyleProgram): Seq[String] = Seq.empty
 
   override def main(v: FreestyleProgram)(inputVar: RefVec2, outputVar: RefVec4): String = {
 

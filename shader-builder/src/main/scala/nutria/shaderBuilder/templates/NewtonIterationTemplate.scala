@@ -7,18 +7,14 @@ import nutria.core.languages.X
 import nutria.shaderBuilder.{FloatLiteral, IntLiteral, RefVec2, RefVec4}
 
 object NewtonIterationTemplate extends Template[NewtonIteration] {
-  override def constants(v: NewtonIteration): Seq[String] = Seq(
+  override def definitions(v: NewtonIteration): Seq[String] = Seq(
     constant("threshold", FloatLiteral(v.threshold.value)),
     constant("overshoot", FloatLiteral(v.overshoot.value)),
-    constant("max_iterations", IntLiteral(v.maxIterations.value))
+    constant("max_iterations", IntLiteral(v.maxIterations.value)),
+    function("initial", v.initial.node),
+    function("f", v.function.node),
+    function("f_derived", v.function.node.derive(X))
   )
-
-  override def functions(v: NewtonIteration): Seq[String] =
-    Seq(
-      function("initial", v.initial.node),
-      function("f", v.function.node),
-      function("f_derived", v.function.node.derive(X))
-    )
 
   override def main(n: NewtonIteration)(inputVar: RefVec2, outputVar: RefVec4): String =
     s"""{

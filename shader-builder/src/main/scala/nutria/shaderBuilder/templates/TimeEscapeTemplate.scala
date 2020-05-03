@@ -5,21 +5,17 @@ import nutria.core.{DivergingSeries, TimeEscape}
 import nutria.shaderBuilder._
 
 private[templates] object TimeEscapeTemplate extends Template[DivergingSeries] {
-  override def constants(v: DivergingSeries): Seq[String] = {
+  override def definitions(v: DivergingSeries): Seq[String] = {
     val c = v.coloring.asInstanceOf[TimeEscape]
     Seq(
       constant("max_iterations", IntLiteral(v.maxIterations.value)),
       constant("escape_radius", FloatLiteral(v.escapeRadius.value)),
       constant("color_inside", Vec4.fromRGBA(c.colorInside)),
-      constant("color_outside", Vec4.fromRGBA(c.colorOutside))
-    )
-  }
-
-  override def functions(v: DivergingSeries): Seq[String] =
-    Seq(
+      constant("color_outside", Vec4.fromRGBA(c.colorOutside)),
       function("initial", v.initial.node.optimize(PowerOptimizer.optimizer)),
       function("iteration", v.iteration.node.optimize(PowerOptimizer.optimizer))
     )
+  }
 
   override def main(v: DivergingSeries)(inputVar: RefVec2, outputVar: RefVec4): String =
     s"""{
