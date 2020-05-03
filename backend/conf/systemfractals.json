@@ -1332,7 +1332,7 @@
     "downvotes" : 0,
     "program" : {
       "FreestyleProgram" : {
-        "code" : "\n#define calc_tri_area(A, B, C) float((((A.x - C.x) * (B.y - C.y)) - ((B.x - C.x) * (A.y - C.y))) / 2.0)\n\nconst float pi = 3.141;\n\nvec2 A = vec2(size*sin( 60.0/180.0*pi), size*cos( 60.0/180.0*pi));\nvec2 B = vec2(size*sin(180.0/180.0*pi), size*cos(180.0/180.0*pi));\nvec2 C = vec2(size*sin(300.0/180.0*pi), size*cos(300.0/180.0*pi));\n\nfloat area = calc_tri_area(A, B, C);\nvec3 bary = vec3(calc_tri_area(B, C, p), calc_tri_area(C, A, p), calc_tri_area(A, B, p));\n\nif(bary.x > 0.0 || bary.y > 0.0 || bary.z > 0.0){\n  // outside\n  color = vec4(color_outside, 1.0);\n}else{\n  // inside\n  color = vec4(color_inside, 1.0);\n  for(int i = 0; i < iterations; i++){\n    bary = vec3(calc_tri_area(B, C, p), calc_tri_area(C, A, p), calc_tri_area(A, B, p));\n    // inside\n    if(bary.x / area > 0.5){\n      B = 0.5 * (B + A);\n      C = 0.5 * (C + A);\n    } else if(bary.y / area > 0.5){\n      // in area near B\n      A = 0.5 * (A + B);\n      C = 0.5 * (C + B);\n    }else if(bary.z / area > 0.5){\n      // in area near C\n      A = 0.5 * (A + C);\n      B = 0.5 * (B + C);\n    }else{\n      // in the middle triangle\n      color = vec4(mix(color_outside, color_inside, float(i)/float(iterations)), 1.0);\n      break;\n    }\n    area /= 4.0;\n  }\n}\n",
+        "code" : "\n#define calc_tri_area(A, B, C) float((((A.x - C.x) * (B.y - C.y)) - ((B.x - C.x) * (A.y - C.y))) / 2.0)\n\nconst float pi = 3.141;\n\nvec2 A = vec2(size*sin( 60.0/180.0*pi), size*cos( 60.0/180.0*pi));\nvec2 B = vec2(size*sin(180.0/180.0*pi), size*cos(180.0/180.0*pi));\nvec2 C = vec2(size*sin(300.0/180.0*pi), size*cos(300.0/180.0*pi));\n\nfloat area = calc_tri_area(A, B, C);\nvec3 bary = vec3(calc_tri_area(B, C, p), calc_tri_area(C, A, p), calc_tri_area(A, B, p));\n\nif(bary.x > 0.0 || bary.y > 0.0 || bary.z > 0.0){\n  // outside\n  return vec4(color_outside, 1.0);\n}else{\n  // inside\n  for(int i = 0; i < iterations; i++){\n    bary = vec3(calc_tri_area(B, C, p), calc_tri_area(C, A, p), calc_tri_area(A, B, p));\n    // inside\n    if(bary.x / area > 0.5){\n      B = 0.5 * (B + A);\n      C = 0.5 * (C + A);\n    } else if(bary.y / area > 0.5){\n      // in area near B\n      A = 0.5 * (A + B);\n      C = 0.5 * (C + B);\n    }else if(bary.z / area > 0.5){\n      // in area near C\n      A = 0.5 * (A + C);\n      B = 0.5 * (B + C);\n    }else{\n      // in the middle triangle\n      return vec4(mix(color_outside, color_inside, float(i)/float(iterations)), 1.0);\n      break;\n    }\n    area /= 4.0;\n  }\n  return vec4(color_inside, 1.0);\n}\n",
         "parameters" : [
           {
             "IntParameter" : {
@@ -1393,7 +1393,7 @@
     "downvotes" : 0,
     "program" : {
       "FreestyleProgram" : {
-        "code" : "\nfloat x = 0.5;\nfloat h = 0.0;\n\nfor( int i=0; i<iterations; i++ ){\n  for(int i=0; i<steps_X; i++){\n    x = p.x*x*(1.0-x); h += log2(abs(p.x*(1.0-2.0*x)));\n  }\n\n  for(int i=0; i<steps_Y; i++){\n    x = p.y*x*(1.0-x); h += log2(abs(p.y*(1.0-2.0*x)));\n  }\n}\n\nh /= float(iterations * (steps_X + steps_Y));\n\nvec3 col = vec3(0.0);\nif( h<0.0 ){\n  h = abs(h);\n  col = (0.5 + 0.5*sin( vec3(0.0, 0.4, 0.7) + 2.5*h )) * pow(h,0.25);\n}\ncolor = vec4(col, 1.0);\n\n",
+        "code" : "\nfloat x = 0.5;\nfloat h = 0.0;\n\nfor( int i=0; i<iterations; i++ ){\n  for(int i=0; i<steps_X; i++){\n    x = p.x*x*(1.0-x); h += log2(abs(p.x*(1.0-2.0*x)));\n  }\n\n  for(int i=0; i<steps_Y; i++){\n    x = p.y*x*(1.0-x); h += log2(abs(p.y*(1.0-2.0*x)));\n  }\n}\n\nh /= float(iterations * (steps_X + steps_Y));\n\nvec3 col = vec3(0.0);\nif( h<0.0 ){\n  h = abs(h);\n  col = (0.5 + 0.5*sin( vec3(0.0, 0.4, 0.7) + 2.5*h )) * pow(h,0.25);\n}\nreturn vec4(col, 1.0);\n\n",
         "parameters" : [
           {
             "IntParameter" : {
@@ -1440,7 +1440,7 @@
     "downvotes" : 0,
     "program" : {
       "FreestyleProgram" : {
-        "code" : "\nvec2 z = p;\nif(z.x < 0.0 || z.x > 1.0 || z.y < -0.5 || z.y > 0.5){\n  color = color_outside;\n}else{\n  z = abs(fract(z)-0.5);\n  for(int i = 0; i < iterations ; i++){\n    z += vec2(z.y*1.735, -z.x*1.735);\n    z.x = abs(z.x)-0.58;\n    z = -vec2(-z.y, z.x)*.865;\n  }\n\n  if(z.x > 0.0){\n    color = color_outside;\n  }else{\n    color = color_inside;\n  }\n}\n",
+        "code" : "\nvec2 z = p;\nif(z.x < 0.0 || z.x > 1.0 || z.y < -0.5 || z.y > 0.5){\n  return color_outside;\n}else{\n  z = abs(fract(z)-0.5);\n  for(int i = 0; i < iterations ; i++){\n    z += vec2(z.y*1.735, -z.x*1.735);\n    z.x = abs(z.x)-0.58;\n    z = -vec2(-z.y, z.x)*.865;\n  }\n\n  if(z.x > 0.0){\n    return color_outside;\n  }else{\n    return color_inside;\n  }\n}\n",
         "parameters" : [
           {
             "IntParameter" : {
@@ -1487,7 +1487,7 @@
     "downvotes" : 0,
     "program" : {
       "FreestyleProgram" : {
-        "code" : "vec2 lambda = p;\nvec2 z = p;\nint l = 0;\nfor(int i = 0; i<max_iterations; i++){\n  vec2 delta = complex_divide(iteration(z, lambda), iteration_derived(z, lambda)) + p;\n  z -= delta;\n  if(length(delta) < float(0.001))\n     break;\n  l ++;\n}\n\ncolor = vec4(vec3(float(max_iterations - l) / float(max_iterations)), 1.0);\n\n",
+        "code" : "vec2 lambda = p;\nvec2 z = p;\nint l = 0;\nfor(int i = 0; i<max_iterations; i++){\n  vec2 delta = complex_divide(iteration(z, lambda), iteration_derived(z, lambda)) + p;\n  z -= delta;\n  if(length(delta) < float(0.001))\n     break;\n  l ++;\n}\n\nreturn vec4(vec3(float(max_iterations - l) / float(max_iterations)), 1.0);\n\n",
         "parameters" : [
           {
             "IntParameter" : {

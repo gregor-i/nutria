@@ -2,6 +2,7 @@ package nutria.shaderBuilder.templates
 
 import mathParser.Syntax._
 import nutria.core.{DivergingSeries, TimeEscape}
+import nutria.macros.StaticContent
 import nutria.shaderBuilder._
 
 private[templates] object TimeEscapeTemplate extends Template[DivergingSeries] {
@@ -18,20 +19,6 @@ private[templates] object TimeEscapeTemplate extends Template[DivergingSeries] {
   }
 
   override def main(v: DivergingSeries): String =
-    s"""{
-       |  int l = 0;
-       |  vec2 lambda = p;
-       |  vec2 z = initial(lambda);
-       |  for(int i = 0;i < max_iterations; i++){
-       |    z = iteration(z, lambda);
-       |    if(dot(z,z) > escape_radius * escape_radius)
-       |      break;
-       |    l ++;
-       |  }
-       |
-       |  float fract = float(l) / float(max_iterations);
-       |  return mix(color_inside, color_outside, fract);
-       |}
-       """.stripMargin
+    StaticContent("shader-builder/src/main/glsl/time_escape.glsl")
 
 }
