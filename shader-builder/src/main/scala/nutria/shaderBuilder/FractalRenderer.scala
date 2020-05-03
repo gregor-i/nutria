@@ -129,20 +129,24 @@ object FractalRenderer {
   }
 
   def fragmentShaderSource(state: FractalProgram, antiAliase: AntiAliase) = {
-    val out = RefVec4("gl_FragColor")
-
     s"""precision highp float;
+       |
+       |uniform vec2 u_resolution;
+       |uniform vec2 u_view_O, u_view_A, u_view_B;
        |
        |${StaticContent("shader-builder/src/main/glsl/global_definitions.glsl")}
        |
        |${MainTemplate.definitions(state).mkString("\n")}
        |
-       |uniform vec2 u_resolution;
-       |uniform vec2 u_view_O, u_view_A, u_view_B;
+       |vec4 main_template(vec2 p) {
+       |  vec4 result;
+       |  ${MainTemplate.main(state)(RefVec2("p"), RefVec4("result"))}
+       |  return result;
+       |}
        |
        |void main() {
        |
-       |  ${AntiAliase(MainTemplate.main(state), antiAliase).apply(out)}
+       |${AntiAliase(antiAliase).apply(RefVec4("gl_FragColor"))}
        |
        |}
     """.stripMargin
