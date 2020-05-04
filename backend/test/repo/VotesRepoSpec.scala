@@ -2,8 +2,7 @@ package repo
 
 import java.util.UUID
 
-import module.SystemFractals
-import nutria.core.{DownVote, FractalEntity, UpVote, Vote}
+import nutria.core.{DownVote, UpVote, Vote}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers

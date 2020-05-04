@@ -1,4 +1,4 @@
-package module
+package nutria
 
 import java.io.FileWriter
 
@@ -6,9 +6,11 @@ import io.circe.syntax._
 import nutria.core.FractalEntity
 import org.scalatest.funsuite.AnyFunSuite
 
+import scala.util.Try
+
 class SystemFractalsSpec extends AnyFunSuite {
 
-  def read: Vector[FractalEntity] = (new module.SystemFractals).systemFractals
+  def read: Vector[FractalEntity] = SystemFractals.systemFractals
 
   def write(fractals: Vector[FractalEntity]): Unit = {
     val fw = new FileWriter("conf/systemfractals.json")
@@ -17,10 +19,10 @@ class SystemFractalsSpec extends AnyFunSuite {
   }
 
   test("SystemFractals can read the json file") {
-    read
+    assert(Try(read).isSuccess)
   }
 
   test("SystemFractals are encoded with the Encoder") {
-    write((new module.SystemFractals).systemFractals)
+    assert(Try(write(SystemFractals.systemFractals)).isSuccess)
   }
 }

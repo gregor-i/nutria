@@ -6,8 +6,7 @@ import io.circe.syntax._
 import io.circe.JsonObject
 import javax.inject.Inject
 import model.FractalSorting
-import module.SystemFractals
-import nutria.core.User
+import nutria.SystemFractals
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
 import repo.{FractalRepo, FractalRow, UserRepo}
@@ -15,7 +14,6 @@ import repo.{FractalRepo, FractalRow, UserRepo}
 class AdminController @Inject() (
     fractalRepo: FractalRepo,
     userRepo: UserRepo,
-    systemFractals: SystemFractals,
     authenticator: Authenticator
 ) extends InjectedController
     with Circe {
@@ -71,7 +69,7 @@ class AdminController @Inject() (
 
   def insertSystemFractals = Action { req =>
     authenticator.adminUser(req) { admin =>
-      systemFractals.systemFractals
+      SystemFractals.systemFractals
         .foreach(
           entity =>
             fractalRepo.save(
