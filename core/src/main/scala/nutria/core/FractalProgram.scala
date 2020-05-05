@@ -2,7 +2,7 @@ package nutria.core
 
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.numeric.{NonNaN, Positive}
-import io.circe.Codec
+import io.circe.{Codec, Decoder, JsonObject}
 import mathParser.algebra.SpireNode
 import monocle.Prism
 import monocle.macros.GenPrism
@@ -92,9 +92,9 @@ object NewtonIteration {
 }
 
 @monocle.macros.Lenses()
-case class FreestyleProgram(code: String, parameters: Seq[Parameter] = Seq.empty) extends FractalProgram
+case class FreestyleProgram(code: String, parameters: Seq[Parameter] = Seq.empty)
 
-object FreestyleProgram {
+object FreestyleProgram extends CirceCodec {
   val default = FreestyleProgram("color = vec4(abs(z.x), abs(z.y), length(z), 1.0);")
 
   val allVaribalesRegex = "\\$\\{([\\w\\d^\\}]+)\\}".r
@@ -106,6 +106,14 @@ object FreestyleProgram {
       .distinct
       .toSeq
       .sorted
+
+  implicit val encode = semiauto.deriveConfiguredEncoder[FreestyleProgram]
+
+  private val autoDecode = semiauto.deriveConfiguredDecoder[FreestyleProgram]
+  private val oldDecode  = autoDecode.at("FreestyleProgram")
+  implicit val decode    = autoDecode.or(oldDecode).or(FractalProgram.codec.map(ToFreestyle.apply))
+
+  implicit val ordering: Ordering[FreestyleProgram] = Ordering.by[FreestyleProgram, String](_.code)
 }
 
 object FractalProgram extends CirceCodec {
@@ -113,13 +121,10 @@ object FractalProgram extends CirceCodec {
     GenPrism[FractalProgram, NewtonIteration]
   val divergingSeries: Prism[FractalProgram, DivergingSeries] =
     GenPrism[FractalProgram, DivergingSeries]
-  val freestyleProgram: Prism[FractalProgram, FreestyleProgram] =
-    GenPrism[FractalProgram, FreestyleProgram]
 
   implicit val ordering: Ordering[FractalProgram] = Ordering.by[FractalProgram, (Int, String)] {
-    case f: DivergingSeries  => (1, f.iteration.string)
-    case f: NewtonIteration  => (2, f.function.string)
-    case f: FreestyleProgram => (3, f.code)
+    case f: DivergingSeries => (1, f.iteration.string)
+    case f: NewtonIteration => (2, f.function.string)
   }
 
   implicit val codec: Codec[FractalProgram] = semiauto.deriveConfiguredCodec

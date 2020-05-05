@@ -18,16 +18,5 @@ class SystemFractalSpec extends RenderingSuite {
       dimensions = dimensions,
       fileName = s"${baseFolder}/${index}.png"
     )
-
-    test(s"using `ToFreestyle` yields the same image ($index)") {
-      Future {
-        val asFreestyle = FractalImage.program.modify(ToFreestyle.apply)(fractalImage)
-
-        val bufferNormal      = Renderer.renderToBuffer(fractalImage, dimensions = dimensions)
-        val bufferToFreestyle = Renderer.renderToBuffer(asFreestyle, dimensions = dimensions)
-
-        assert(bufferNormal.toVector === bufferToFreestyle.toVector)
-      }
-    }
   }
 }

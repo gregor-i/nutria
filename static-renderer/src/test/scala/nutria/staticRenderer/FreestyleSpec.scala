@@ -8,10 +8,10 @@ import org.scalatest.funsuite.{AnyFunSuite, AsyncFunSuite}
 
 class FreestyleSpec extends RenderingSuite {
 
-  private def isSystemFractal(program: FractalProgram) = {
+  private def isSystemFractal(program: FreestyleProgram) = {
     assert(
       SystemFractals.systemFractals.exists(_.program == program),
-      "fractal was not included in systemfractals. Maybe you want to update them?\nJson:\n" + FractalProgram.codec(program).noSpaces
+      "fractal was not included in systemfractals. Maybe you want to update them?\nJson:\n" + FreestyleProgram.encode(program).noSpaces
     )
   }
 

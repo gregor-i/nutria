@@ -5,7 +5,6 @@ import nutria.macros.StaticContent
 object ToFreestyle {
   def apply(fractalProgram: FractalProgram): FreestyleProgram =
     fractalProgram match {
-      case f: FreestyleProgram => f
       case n: NewtonIteration =>
         FreestyleProgram(
           code = StaticContent("shader-builder/src/main/glsl/newton_iteration.glsl"),

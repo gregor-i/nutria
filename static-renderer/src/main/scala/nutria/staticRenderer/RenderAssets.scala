@@ -1,8 +1,7 @@
 package nutria.staticRenderer
 
 import nutria.core.viewport.{Dimensions, Viewport}
-import nutria.core.{DivergingSeries, FractalImage, NewtonIteration, OuterDistance, RGB}
-import nutria.core.refineUnsafe
+import nutria.core.{DivergingSeries, FractalImage, NewtonIteration, OuterDistance, RGB, ToFreestyle, refineUnsafe}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -30,6 +29,7 @@ object RenderAssets {
           colorInside = RGB.black.withAlpha()
         )
       )
+      .pipe(ToFreestyle.apply)
 
     val view = Viewport.mandelbrot
       .pipe { view =>
@@ -50,7 +50,7 @@ object RenderAssets {
 
   private def example_DivergingSeries(): Future[Unit] = Renderer.renderToFile(
     fractalImage = FractalImage(
-      program = DivergingSeries.default,
+      program = DivergingSeries.default.pipe(ToFreestyle.apply),
       view = Viewport.mandelbrot,
       antiAliase = refineUnsafe(4)
     ),
@@ -61,7 +61,7 @@ object RenderAssets {
   private def example_NewtonIteration(): Future[Unit] =
     Renderer.renderToFile(
       fractalImage = FractalImage(
-        program = NewtonIteration.default,
+        program = NewtonIteration.default.pipe(ToFreestyle.apply),
         view = Viewport.aroundZero,
         antiAliase = refineUnsafe(4)
       ),

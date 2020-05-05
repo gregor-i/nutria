@@ -56,7 +56,7 @@ class FractalController @Inject() (fractalRepo: FractalRepo, votesRepo: VotesRep
       .collect(fractalRepo.fractalRowToFractalEntity)
     if (entities.isEmpty) {
       val defaultImage =
-        FractalImage(program = NewtonIteration.default, view = Viewport.aroundZero)
+        FractalImage(program = ToFreestyle(NewtonIteration.default), view = Viewport.aroundZero)
       Ok(defaultImage.asJson)
     } else {
       val images      = FractalImage.allImages(entities.map(_.entity))
