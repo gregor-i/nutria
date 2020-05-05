@@ -13,7 +13,8 @@ object RenderAssets {
   def main(args: Array[String]): Unit =
     for {
       _ <- favicon()
-      _ <- examples()
+      _ <- example_DivergingSeries()
+      _ <- example_NewtonIteration()
       _ = println("execution finished")
     } yield ()
 
@@ -47,27 +48,24 @@ object RenderAssets {
     Renderer.renderToFile(image, Dimensions.favicon, imgFolder("icon.png"))
   }
 
-  private def examples(): Future[Unit] = {
-    for {
-      _ <- Renderer.renderToFile(
-        fractalImage = FractalImage(
-          program = DivergingSeries.default,
-          view = Viewport.mandelbrot,
-          antiAliase = refineUnsafe(4)
-        ),
-        dimensions = Dimensions.thumbnail,
-        fileName = imgFolder("example_DivergingSeries.png")
-      )
+  private def example_DivergingSeries(): Future[Unit] = Renderer.renderToFile(
+    fractalImage = FractalImage(
+      program = DivergingSeries.default,
+      view = Viewport.mandelbrot,
+      antiAliase = refineUnsafe(4)
+    ),
+    dimensions = Dimensions.thumbnail,
+    fileName = imgFolder("example_DivergingSeries.png")
+  )
 
-      _ <- Renderer.renderToFile(
-        fractalImage = FractalImage(
-          program = NewtonIteration.default,
-          view = Viewport.aroundZero,
-          antiAliase = refineUnsafe(4)
-        ),
-        dimensions = Dimensions.thumbnail,
-        fileName = imgFolder("example_NewtonIteration.png")
-      )
-    } yield ()
-  }
+  private def example_NewtonIteration(): Future[Unit] =
+    Renderer.renderToFile(
+      fractalImage = FractalImage(
+        program = NewtonIteration.default,
+        view = Viewport.aroundZero,
+        antiAliase = refineUnsafe(4)
+      ),
+      dimensions = Dimensions.thumbnail,
+      fileName = imgFolder("example_NewtonIteration.png")
+    )
 }

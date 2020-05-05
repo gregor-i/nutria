@@ -1,10 +1,10 @@
 package nutria.shaderBuilder.templates
 
-import nutria.core._
+import nutria.core.{DivergingSeries, _}
 import nutria.shaderBuilder._
 import mathParser.implicits._
 import mathParser.Syntax._
-import nutria.core.languages.Z
+import nutria.core.languages.{Lambda, StringFunction, X, Z}
 
 object FreestyleProgramTemplate extends Template[FreestyleProgram] {
   override def definitions(v: FreestyleProgram): Seq[String] =
@@ -16,9 +16,18 @@ object FreestyleProgramTemplate extends Template[FreestyleProgram] {
       case fp: FunctionParameter if fp.includeDerivative =>
         Seq(
           function(fp.name, fp.value.node),
-          function(fp.name + "_derived", fp.value.node.derive(Z))
+          function(fp.name + "_derived", DivergingSeries.deriveIteration(DivergingSeries.default.copy(iteration = fp.value)))
         ).mkString("\n")
       case fp: FunctionParameter => function(fp.name, fp.value.node)
+
+      case InitialFunctionParameter(name, value, includeDerivative) =>
+        if (includeDerivative)
+          function(name, value.node) + "\n" + function(name + "_derived", value.node.derive(Lambda))
+        else
+          function(name, value.node)
+
+      case NewtonFunctionParameter(name, value, true) =>
+        function(name, value.node) + "\n" + function(name + "_derived", value.node.derive(X))
     }
 
   override def main(v: FreestyleProgram): String = v.code

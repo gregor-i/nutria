@@ -1,7 +1,7 @@
 package nutria.staticRenderer
 
 import nutria.core.viewport.Dimensions
-import nutria.core.FractalImage
+import nutria.core.{FractalImage, ToFreestyle}
 import org.scalatest.funsuite.AnyFunSuite
 import nutria.SystemFractals.systemFractals
 
@@ -12,9 +12,22 @@ class SystemFractalSpec extends RenderingSuite {
 
   for {
     (fractalImage, index) <- FractalImage.allImages(systemFractals).zipWithIndex
-  } renderingTest(s"renders all system fractals ($index)")(
-    fractal = fractalImage,
-    dimensions = Dimensions.thumbnail,
-    fileName = s"${baseFolder}/${index}.png"
-  )
+  } {
+    renderingTest(s"renders all system fractals ($index)")(
+      fractal = fractalImage,
+      dimensions = dimensions,
+      fileName = s"${baseFolder}/${index}.png"
+    )
+
+    test(s"using `ToFreestyle` yields the same image ($index)") {
+      Future {
+        val asFreestyle = FractalImage.program.modify(ToFreestyle.apply)(fractalImage)
+
+        val bufferNormal      = Renderer.renderToBuffer(fractalImage, dimensions = dimensions)
+        val bufferToFreestyle = Renderer.renderToBuffer(asFreestyle, dimensions = dimensions)
+
+        assert(bufferNormal.toVector === bufferToFreestyle.toVector)
+      }
+    }
+  }
 }

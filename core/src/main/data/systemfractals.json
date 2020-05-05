@@ -1496,10 +1496,10 @@
             }
           },
           {
-            "FunctionParameter" : {
+            "NewtonFunctionParameter" : {
               "includeDerivative" : true,
               "name" : "iteration",
-              "value" : "z*z*z - 1"
+              "value" : "x*x*x - 1"
             }
           }
         ]

@@ -1,11 +1,19 @@
 package nutria.staticRenderer
 
-import nutria.core.languages.{StringFunction, ZAndLambda}
+import nutria.SystemFractals
+import nutria.core.languages.{StringFunction, XAndLambda, ZAndLambda}
 import nutria.core.viewport.{Dimensions, Viewport}
 import nutria.core._
 import org.scalatest.funsuite.{AnyFunSuite, AsyncFunSuite}
 
 class FreestyleSpec extends RenderingSuite {
+
+  private def isSystemFractal(program: FractalProgram) = {
+    assert(
+      SystemFractals.systemFractals.exists(_.program == program),
+      "fractal was not included in systemfractals. Maybe you want to update them?\nJson:\n" + FractalProgram.codec(program).noSpaces
+    )
+  }
 
   test("Sierpinski Triangle") {
     val program = FreestyleProgram(
@@ -58,6 +66,8 @@ class FreestyleSpec extends RenderingSuite {
         |""".stripMargin
     )
 
+    isSystemFractal(program)
+
     Renderer
       .renderToFile(
         FractalImage(program, view = Viewport.aroundZero),
@@ -101,6 +111,8 @@ class FreestyleSpec extends RenderingSuite {
          |""".stripMargin
     )
 
+    isSystemFractal(program)
+
     Renderer
       .renderToFile(
         FractalImage(program, view = Viewport.aroundZero),
@@ -139,6 +151,8 @@ class FreestyleSpec extends RenderingSuite {
                |""".stripMargin
     )
 
+    isSystemFractal(program)
+
     Renderer
       .renderToFile(
         FractalImage(program, view = Viewport.aroundZero),
@@ -153,7 +167,7 @@ class FreestyleSpec extends RenderingSuite {
     val program = FreestyleProgram(
       parameters = Seq(
         IntParameter(name = "max_iterations", value = 200),
-        FunctionParameter(name = "iteration", value = StringFunction.unsafe[ZAndLambda]("z*z*z - 1"), includeDerivative = true)
+        NewtonFunctionParameter(name = "iteration", value = StringFunction.unsafe[XAndLambda]("x*x*x - 1"), includeDerivative = true)
       ),
       code = """vec2 lambda = p;
                |vec2 z = p;
@@ -170,6 +184,8 @@ class FreestyleSpec extends RenderingSuite {
                |
                |""".stripMargin
     )
+
+    isSystemFractal(program)
 
     Renderer
       .renderToFile(

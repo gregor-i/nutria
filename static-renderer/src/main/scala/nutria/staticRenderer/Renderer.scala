@@ -12,7 +12,10 @@ import scala.scalajs.js.typedarray.Uint8Array
 object Renderer {
   def renderToFile(fractalImage: FractalImage, dimensions: Dimensions, fileName: String)(implicit ex: ExecutionContext): Future[Unit] = {
     val buffer = renderToBuffer(fractalImage, dimensions)
+    saveToFile(buffer, fileName, dimensions)
+  }
 
+  def saveToFile(buffer: Uint8Array, fileName: String, dimensions: Dimensions)(implicit ex: ExecutionContext): Future[Unit] =
     Jimp
       .read(
         Dynamic.literal(
@@ -23,7 +26,6 @@ object Renderer {
       )
       .toFuture
       .map(_.write(fileName))
-  }
 
   def renderToBuffer(fractalImage: FractalImage, dimensions: Dimensions): Uint8Array = {
     val context = gl(dimensions.width, dimensions.height, Dynamic.literal())
