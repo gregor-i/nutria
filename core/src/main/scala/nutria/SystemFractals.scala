@@ -8,7 +8,7 @@ import scala.util.chaining._
 object SystemFractals {
   val systemFractals: Vector[FractalEntity] =
     StaticContent("./core/src/main/data/systemfractals.json")
-      .pipe(io.circe.parser.parse)
+      .pipe(io.circe.parser.parse(_))
       .flatMap(_.as[Vector[FractalEntity]])
       .fold(error => throw error, right => right)
 }

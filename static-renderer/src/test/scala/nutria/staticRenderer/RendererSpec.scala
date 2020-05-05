@@ -4,7 +4,7 @@ import nutria.core.{DivergingSeries, FractalImage, NewtonIteration, NormalMap, O
 import nutria.core.viewport.Dimensions
 import org.scalatest.funsuite.AnyFunSuite
 
-class RendererSpec extends AnyFunSuite with RenderingSuite {
+class RendererSpec extends RenderingSuite {
   renderingTest("renders high resolution Mandelbrot images")(
     fractal = FractalImage(
       DivergingSeries.default

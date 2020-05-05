@@ -1,9 +1,13 @@
 package nutria.macros
 
-import scala.io.Source
 import scala.language.experimental.macros
+import scala.io.Source
 import scala.reflect.macros.blackbox
 import scala.util.Using
+
+object StaticContent {
+  def apply(file: String): String = macro StaticContentMacro.staticFileContent
+}
 
 private[macros] class StaticContentMacro(val c: blackbox.Context) {
   import c._

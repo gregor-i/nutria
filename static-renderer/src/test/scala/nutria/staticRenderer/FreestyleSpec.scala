@@ -3,9 +3,9 @@ package nutria.staticRenderer
 import nutria.core.languages.{StringFunction, ZAndLambda}
 import nutria.core.viewport.{Dimensions, Viewport}
 import nutria.core._
-import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.funsuite.{AnyFunSuite, AsyncFunSuite}
 
-class FreestyleSpec extends AnyFunSuite with RenderingSuite {
+class FreestyleSpec extends RenderingSuite {
 
   test("Sierpinski Triangle") {
     val program = FreestyleProgram(
@@ -58,11 +58,13 @@ class FreestyleSpec extends AnyFunSuite with RenderingSuite {
         |""".stripMargin
     )
 
-    Renderer.renderToFile(
-      FractalImage(program, view = Viewport.aroundZero),
-      dimensions = Dimensions.fullHD,
-      fileName = s"$baseFolder/sierpinski-triangle.png"
-    )
+    Renderer
+      .renderToFile(
+        FractalImage(program, view = Viewport.aroundZero),
+        dimensions = Dimensions.fullHD,
+        fileName = s"$baseFolder/sierpinski-triangle.png"
+      )
+      .map(_ => succeed)
   }
 
   test("Lyapunov Fractal") {
@@ -99,11 +101,13 @@ class FreestyleSpec extends AnyFunSuite with RenderingSuite {
          |""".stripMargin
     )
 
-    Renderer.renderToFile(
-      FractalImage(program, view = Viewport.aroundZero),
-      dimensions = Dimensions.fullHD,
-      fileName = s"$baseFolder/lyapunov-fractal.png"
-    )
+    Renderer
+      .renderToFile(
+        FractalImage(program, view = Viewport.aroundZero),
+        dimensions = Dimensions.fullHD,
+        fileName = s"$baseFolder/lyapunov-fractal.png"
+      )
+      .map(_ => succeed)
   }
 
   test("Koch Snowflake") {
@@ -135,11 +139,13 @@ class FreestyleSpec extends AnyFunSuite with RenderingSuite {
                |""".stripMargin
     )
 
-    Renderer.renderToFile(
-      FractalImage(program, view = Viewport.aroundZero),
-      dimensions = Dimensions.fullHD,
-      fileName = s"$baseFolder/koch-snowflake.png"
-    )
+    Renderer
+      .renderToFile(
+        FractalImage(program, view = Viewport.aroundZero),
+        dimensions = Dimensions.fullHD,
+        fileName = s"$baseFolder/koch-snowflake.png"
+      )
+      .map(_ => succeed)
   }
 
   test("Nova Fractal") {
@@ -165,10 +171,12 @@ class FreestyleSpec extends AnyFunSuite with RenderingSuite {
                |""".stripMargin
     )
 
-    Renderer.renderToFile(
-      FractalImage(program, view = Viewport.aroundZero),
-      dimensions = Dimensions.fullHD,
-      fileName = s"$baseFolder/nova-fractal.png"
-    )
+    Renderer
+      .renderToFile(
+        FractalImage(program, view = Viewport.aroundZero),
+        dimensions = Dimensions.fullHD,
+        fileName = s"$baseFolder/nova-fractal.png"
+      )
+      .map(_ => succeed)
   }
 }
