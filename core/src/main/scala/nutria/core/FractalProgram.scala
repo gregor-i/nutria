@@ -91,31 +91,7 @@ object NewtonIteration {
   )
 }
 
-@monocle.macros.Lenses()
-case class FreestyleProgram(code: String, parameters: Seq[Parameter] = Seq.empty)
-
-object FreestyleProgram extends CirceCodec {
-  val default = FreestyleProgram("color = vec4(abs(z.x), abs(z.y), length(z), 1.0);")
-
-  val allVaribalesRegex = "\\$\\{([\\w\\d^\\}]+)\\}".r
-
-  def variables(code: String): Seq[String] =
-    allVaribalesRegex
-      .findAllMatchIn(code)
-      .map(_.group(1))
-      .distinct
-      .toSeq
-      .sorted
-
-  implicit val encode = semiauto.deriveConfiguredEncoder[FreestyleProgram]
-
-  private val autoDecode = semiauto.deriveConfiguredDecoder[FreestyleProgram]
-  private val oldDecode  = autoDecode.at("FreestyleProgram")
-  implicit val decode    = autoDecode.or(oldDecode).or(FractalProgram.codec.map(ToFreestyle.apply))
-
-  implicit val ordering: Ordering[FreestyleProgram] = Ordering.by[FreestyleProgram, String](_.code)
-}
-
+@deprecated("go freestyle!")
 object FractalProgram extends CirceCodec {
   val newtonIteration: Prism[FractalProgram, NewtonIteration] =
     GenPrism[FractalProgram, NewtonIteration]
