@@ -2,6 +2,8 @@
 #define sinh(x) 0.5*(exp(x)-(exp(-x)))
 #define cosh(x) 0.5*(exp(x)+(exp(-x)))
 
+#define PI 3.1415926535897932384626433832795
+
 // inspired by spire implementation of complex number:
 // see: https://github.com/typelevel/spire/blob/master/core/src/main/scala/spire/math/Complex.scala
 
