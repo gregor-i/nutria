@@ -128,7 +128,7 @@ object FractalRenderer {
     gl.drawArrays(TRIANGLES, 0, 6)
   }
 
-  def fragmentShaderSource(state: FreestyleProgram, antiAliase: AntiAliase) = {
+  def fragmentShaderSource(state: FreestyleProgram, antiAliase: AntiAliase): String = {
     s"""precision highp float;
        |
        |uniform vec2 u_resolution;

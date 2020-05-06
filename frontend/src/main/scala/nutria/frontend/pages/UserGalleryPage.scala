@@ -34,11 +34,11 @@ object UserGalleryPage extends Page[UserGalleryState] {
   def render(implicit state: UserGalleryState, update: NutriaState => Unit) =
     Body()
       .child(Header())
-      .child(
-        Link(CreateNewFractalState(user = state.user))
-          .pipe(Header.fab)
-          .child(Icons.icon(Icons.plus))
-      )
+      //      .child(
+      //        Link(CreateNewFractalState(user = state.user))
+      //          .pipe(Header.fab)
+      //          .child(Icons.icon(Icons.plus))
+      //      )
       .child(
         Node("div.container")
           .child(

@@ -14,7 +14,7 @@ object Pages {
     GreetingPage,
     FAQPage,
     ProfilePage,
-    CreateNewFractalPage,
+//    CreateNewFractalPage,
     AdminPage
   )
 
