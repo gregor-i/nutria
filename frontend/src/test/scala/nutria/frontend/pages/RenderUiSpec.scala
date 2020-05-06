@@ -18,7 +18,7 @@ class RenderUiSpec extends AnyFunSuite {
     (name, state) <- Data.states
   } stateRenderingTest(s"Renders $name")(
     state = state,
-    fileName = s"./frontend/temp/${this.getClass.getSimpleName}/${name}.html"
+    fileName = s"./temp/${this.getClass.getSimpleName}/${name}.html"
   )
 
   def stateRenderingTest(testName: String)(state: NutriaState, fileName: String): Unit =
