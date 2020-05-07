@@ -8,7 +8,7 @@ object ToFreestyle {
       case n: NewtonIteration =>
         FreestyleProgram(
           code = StaticContent("shader-builder/src/main/glsl/newton_iteration.glsl"),
-          parameters = Seq(
+          parameters = Vector(
             FloatParameter("threshold", n.threshold.value.toFloat),
             FloatParameter("overshoot", n.overshoot.value.toFloat),
             FloatParameter("brightness_factor", n.brightnessFactor.value.toFloat),
@@ -24,7 +24,7 @@ object ToFreestyle {
         val c = n.coloring.asInstanceOf[TimeEscape]
         FreestyleProgram(
           code = StaticContent("shader-builder/src/main/glsl/time_escape.glsl"),
-          parameters = Seq(
+          parameters = Vector(
             IntParameter("max_iterations", n.maxIterations.value),
             FloatParameter("escape_radius", n.escapeRadius.value.toFloat),
             RGBAParameter("color_inside", c.colorInside),
@@ -38,7 +38,7 @@ object ToFreestyle {
         val c = n.coloring.asInstanceOf[NormalMap]
         FreestyleProgram(
           code = StaticContent("shader-builder/src/main/glsl/normal_map.glsl"),
-          parameters = Seq(
+          parameters = Vector(
             IntParameter("max_iterations", n.maxIterations.value),
             FloatParameter("escape_radius", n.escapeRadius.value.toFloat),
             FloatParameter("angle", c.angle.value.toFloat),
@@ -55,7 +55,7 @@ object ToFreestyle {
         val c = n.coloring.asInstanceOf[OuterDistance]
         FreestyleProgram(
           code = StaticContent("shader-builder/src/main/glsl/outer_distance.glsl"),
-          parameters = Seq(
+          parameters = Vector(
             IntParameter("max_iterations", n.maxIterations.value),
             FloatParameter("escape_radius", n.escapeRadius.value.toFloat),
             FloatParameter("distance_factor", c.distanceFactor.value.toFloat),

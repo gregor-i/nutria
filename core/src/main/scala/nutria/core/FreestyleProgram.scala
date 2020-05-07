@@ -1,7 +1,7 @@
 package nutria.core
 
 @monocle.macros.Lenses()
-case class FreestyleProgram(code: String, parameters: Seq[Parameter] = Seq.empty)
+case class FreestyleProgram(code: String, parameters: Vector[Parameter] = Vector.empty)
 
 object FreestyleProgram extends CirceCodec {
   val default = FreestyleProgram("result = vec4(abs(z.x), abs(z.y), length(z), 1.0);")

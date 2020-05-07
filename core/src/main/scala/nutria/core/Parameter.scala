@@ -1,6 +1,7 @@
 package nutria.core
 
 import io.circe.Codec
+import monocle.macros.GenPrism
 import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda}
 
 sealed trait Parameter {
@@ -17,5 +18,13 @@ case class InitialFunctionParameter(name: String, value: StringFunction[Lambda.t
 case class NewtonFunctionParameter(name: String, value: StringFunction[XAndLambda], includeDerivative: Boolean = false)   extends Parameter
 
 object Parameter extends CirceCodec {
+  val IntParameter             = GenPrism[Parameter, IntParameter]
+  val FloatParameter           = GenPrism[Parameter, FloatParameter]
+  val RGBParameter             = GenPrism[Parameter, RGBParameter]
+  val RGBAParameter            = GenPrism[Parameter, RGBAParameter]
+  val FunctionParameter        = GenPrism[Parameter, FunctionParameter]
+  val InitialFunctionParameter = GenPrism[Parameter, InitialFunctionParameter]
+  val NewtonFunctionParameter  = GenPrism[Parameter, NewtonFunctionParameter]
+
   implicit val codec: Codec[Parameter] = semiauto.deriveConfiguredCodec
 }

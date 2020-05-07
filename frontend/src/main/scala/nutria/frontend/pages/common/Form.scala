@@ -167,6 +167,30 @@ object Form {
         )
     )
 
+  def doubleInput[S](
+      label: String,
+      lens: Lens[S, Double]
+  )(implicit state: S, update: S => Unit) =
+    inputStyle(
+      label,
+      Node("input.input")
+        .attr("type", "number")
+        .attr("value", lens.get(state).toString)
+        .event(
+          "change",
+          Snabbdom.event { event =>
+            val element = event.target.asInstanceOf[HTMLInputElement]
+            Try(element.value.toDouble).toEither match {
+              case Right(v) =>
+                element.classList.remove("is-danger")
+                update(lens.set(v)(state))
+              case Left(error) =>
+                element.classList.add("is-danger")
+            }
+          }
+        )
+    )
+
   def colorInput[S](label: String, lens: Lens[S, RGBA])(implicit state: S, update: S => Unit) =
     inputStyle(
       label,

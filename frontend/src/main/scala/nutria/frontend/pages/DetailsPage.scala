@@ -1,8 +1,10 @@
 package nutria.frontend.pages
 
-import monocle.Iso
+import monocle.{Iso, Lens}
+import monocle.function.{At, Index}
 import monocle.macros.Lenses
 import nutria.core._
+import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common.{Form, _}
@@ -25,6 +27,9 @@ case class DetailsState(
 object DetailsState extends LenseUtils {
   val fractalToEdit_entity         = fractalToEdit.composeLens(FractalEntityWithId.entity)
   val fractalToEdit_entity_program = fractalToEdit_entity.composeLens(FractalEntity.program)
+  val fractalToEdit_entity_program_parameter =
+    fractalToEdit_entity_program
+      .composeLens(FreestyleProgram.parameters)
 }
 
 object DetailsPage extends Page[DetailsState] {
@@ -77,7 +82,7 @@ object DetailsPage extends Page[DetailsState] {
       .child(
         Node("section.section").children(
           Node("h4.title.is-4").text("Parameters:"),
-          parameters()
+          parameters(DetailsState.fractalToEdit_entity_program_parameter)
         )
       )
       .child(
@@ -120,10 +125,73 @@ object DetailsPage extends Page[DetailsState] {
     Form.mulitlineStringInput("template", toEditProgram composeLens FreestyleProgram.code)
   }
 
-  def parameters()(implicit state: State, update: NutriaState => Unit) = {
-    state.fractalToEdit.entity.program.parameters.map { parameter =>
-      Form.readonlyStringInput(parameter.name, parameter.value.toString)
-    }
+  def parameters(lens: Lens[State, Vector[Parameter]])(implicit state: State, update: NutriaState => Unit) = {
+    state.fractalToEdit.entity.program.parameters.zipWithIndex
+      .map {
+        case (p: IntParameter, index) =>
+          Form.intInput(
+            p.name,
+            lens
+              .composeOptional(Index.index(index))
+              .composePrism(Parameter.IntParameter)
+              .composeLens(Lens[IntParameter, Int](_.value)(value => _.copy(value = value)))
+              .pipe(LenseUtils.unsafeOptional)
+          )
+        case (p: FloatParameter, index) =>
+          Form.doubleInput(
+            p.name,
+            lens
+              .composeOptional(Index.index(index))
+              .composePrism(Parameter.FloatParameter)
+              .composeLens(Lens[FloatParameter, Double](_.value.toDouble)(value => _.copy(value = value.toFloat)))
+              .pipe(LenseUtils.unsafeOptional)
+          )
+        case (p: RGBParameter, index) =>
+          Form.colorInput(
+            p.name,
+            lens
+              .composeOptional(Index.index(index))
+              .composePrism(Parameter.RGBParameter)
+              .composeLens(Lens[RGBParameter, RGBA](_.value.withAlpha())(value => _.copy(value = value.withoutAlpha)))
+              .pipe(LenseUtils.unsafeOptional)
+          )
+        case (p: RGBAParameter, index) =>
+          Form.colorInput(
+            p.name,
+            lens
+              .composeOptional(Index.index(index))
+              .composePrism(Parameter.RGBAParameter)
+              .composeLens(Lens[RGBAParameter, RGBA](_.value)(value => _.copy(value = value)))
+              .pipe(LenseUtils.unsafeOptional)
+          )
+        case (p: FunctionParameter, index) =>
+          Form.stringFunctionInput(
+            p.name,
+            lens
+              .composeOptional(Index.index(index))
+              .composePrism(Parameter.FunctionParameter)
+              .composeLens(Lens[FunctionParameter, StringFunction[ZAndLambda]](_.value)(value => _.copy(value = value)))
+              .pipe(LenseUtils.unsafeOptional)
+          )
+        case (p: InitialFunctionParameter, index) =>
+          Form.stringFunctionInput(
+            p.name,
+            lens
+              .composeOptional(Index.index(index))
+              .composePrism(Parameter.InitialFunctionParameter)
+              .composeLens(Lens[InitialFunctionParameter, StringFunction[Lambda.type]](_.value)(value => _.copy(value = value)))
+              .pipe(LenseUtils.unsafeOptional)
+          )
+        case (p: NewtonFunctionParameter, index) =>
+          Form.stringFunctionInput(
+            p.name,
+            lens
+              .composeOptional(Index.index(index))
+              .composePrism(Parameter.NewtonFunctionParameter)
+              .composeLens(Lens[NewtonFunctionParameter, StringFunction[XAndLambda]](_.value)(value => _.copy(value = value)))
+              .pipe(LenseUtils.unsafeOptional)
+          )
+      }
   }
 
   def snapshots()(implicit state: State, update: NutriaState => Unit) = {
