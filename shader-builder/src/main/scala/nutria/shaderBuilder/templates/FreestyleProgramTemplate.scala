@@ -1,26 +1,34 @@
 package nutria.shaderBuilder.templates
 
-import nutria.core.FreestyleProgram
-import nutria.shaderBuilder.{RefVec2, RefVec4}
+import nutria.core.{DivergingSeries, _}
+import nutria.shaderBuilder._
+import mathParser.implicits._
+import mathParser.Syntax._
+import nutria.core.languages.{Lambda, StringFunction, X, Z}
 
 object FreestyleProgramTemplate extends Template[FreestyleProgram] {
-  override def constants(v: FreestyleProgram): Seq[String] = Seq.empty
+  override def definitions(v: FreestyleProgram): Seq[String] =
+    v.parameters.map {
+      case IntParameter(name, value)   => constant[WebGlTypeInt.type](name, IntLiteral(value))
+      case FloatParameter(name, value) => constant[WebGlTypeFloat.type](name, FloatLiteral(value))
+      case RGBParameter(name, value)   => constant[WebGlTypeVec3.type](name, Vec3.fromRGB(value))
+      case RGBAParameter(name, value)  => constant[WebGlTypeVec4.type](name, Vec4.fromRGBA(value))
+      case fp: FunctionParameter if fp.includeDerivative =>
+        Seq(
+          function(fp.name, fp.value.node),
+          function(fp.name + "_derived", DivergingSeries.deriveIteration(DivergingSeries.default.copy(iteration = fp.value)))
+        ).mkString("\n")
+      case fp: FunctionParameter => function(fp.name, fp.value.node)
 
-  override def functions(v: FreestyleProgram): Seq[String] = Seq.empty
+      case InitialFunctionParameter(name, value, includeDerivative) =>
+        if (includeDerivative)
+          function(name, value.node) + "\n" + function(name + "_derived", value.node.derive(Lambda))
+        else
+          function(name, value.node)
 
-  override def main(v: FreestyleProgram)(inputVar: RefVec2, outputVar: RefVec4): String = {
-    val code = v.parameters.foldLeft(v.code) { (template, parameter) =>
-      template.replaceAllLiterally("${" + parameter.name + "}", parameter.literal)
+      case NewtonFunctionParameter(name, value, true) =>
+        function(name, value.node) + "\n" + function(name + "_derived", value.node.derive(X))
     }
 
-    s"""{
-     |vec2 z = ${inputVar.name};
-     |vec4 color = vec4(0.0, 0.0, 0.0, 0.0);
-     |
-     |$code
-     |
-     |${outputVar.name} = color;
-     |}
-     """.stripMargin
-  }
+  override def main(v: FreestyleProgram): String = v.code
 }

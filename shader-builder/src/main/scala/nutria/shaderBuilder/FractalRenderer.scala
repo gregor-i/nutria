@@ -1,9 +1,9 @@
 package nutria.shaderBuilder
 
 import nutria.core.viewport.Viewport
-import nutria.core.{AntiAliase, FractalImage, FractalProgram}
+import nutria.core.{AntiAliase, FractalImage, FreestyleProgram}
 import nutria.macros.StaticContent
-import nutria.shaderBuilder.templates.MainTemplate
+import nutria.shaderBuilder.templates.FreestyleProgramTemplate
 import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
 import org.scalajs.dom.raw.WebGLRenderingContext._
@@ -54,7 +54,7 @@ object FractalRenderer {
   @throws[Exception]
   def constructProgram(
       gl: WebGLRenderingContext,
-      fractralProgram: FractalProgram,
+      fractralProgram: FreestyleProgram,
       antiAliase: AntiAliase
   ): WebGLProgram = {
     val vertexShader = gl.createShader(VERTEX_SHADER)
@@ -128,23 +128,25 @@ object FractalRenderer {
     gl.drawArrays(TRIANGLES, 0, 6)
   }
 
-  def fragmentShaderSource(state: FractalProgram, antiAliase: AntiAliase) = {
-    val out = RefVec4("gl_FragColor")
-
+  def fragmentShaderSource(state: FreestyleProgram, antiAliase: AntiAliase): String = {
     s"""precision highp float;
-       |
-       |${StaticContent("shader-builder/src/main/glsl/global_definitions.glsl")}
-       |
-       |${MainTemplate.constants(state).mkString("\n")}
-       |
-       |${MainTemplate.functions(state).mkString("\n")}
        |
        |uniform vec2 u_resolution;
        |uniform vec2 u_view_O, u_view_A, u_view_B;
        |
+       |${StaticContent("shader-builder/src/main/glsl/global_definitions.glsl")}
+       |
+       |${FreestyleProgramTemplate.definitions(state).mkString("\n")}
+       |
+       |vec4 main_template(vec2 p) {
+       |  vec4 result;
+       |  ${FreestyleProgramTemplate.main(state)}
+       |  return result;
+       |}
+       |
        |void main() {
        |
-       |  ${AntiAliase(MainTemplate.main(state), antiAliase).apply(out)}
+       |${AntiAliase(antiAliase).apply(RefVec4("gl_FragColor"))}
        |
        |}
     """.stripMargin

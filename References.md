@@ -4,6 +4,8 @@
 - https://www.chiark.greenend.org.uk/~sgtatham/newton/
 - http://www.hiddendimension.com/FractalMath/Convergent_Fractals_Main.html
 
+- https://en.wikibooks.org/wiki/Fractals/Iterations_in_the_complex_plane/demm
+
 ## other tools:
 - http://usefuljs.net/fractals/index.html
 

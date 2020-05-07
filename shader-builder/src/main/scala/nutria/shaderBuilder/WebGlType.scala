@@ -18,6 +18,7 @@ object WebGlType {
 
   def reference[T <: WebGlType: TypeProps](name: String): Ref[T] = TypeProps[T].construct(name)
 
+  // todo: remove unused parts
   trait TypeProps[T <: WebGlType] {
     val zero: WebGlExpression[T]
     val webGlType: String
@@ -48,6 +49,13 @@ object WebGlType {
     override val webGlType: String                         = "vec2"
 
     override def construct(name: String): RefVec2 = RefVec2(name)
+  }
+
+  implicit object TypePropsVec3 extends TypeProps[WebGlTypeVec3.type] {
+    override val zero: WebGlExpression[WebGlTypeVec3.type] = Vec3(FloatLiteral(0), FloatLiteral(0), FloatLiteral(0))
+    override val webGlType: String                         = "vec3"
+
+    override def construct(name: String): RefVec3 = RefVec3(name)
   }
 
   implicit object TypePropsVec4 extends TypeProps[WebGlTypeVec4.type] {

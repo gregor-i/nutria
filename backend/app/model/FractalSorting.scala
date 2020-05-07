@@ -1,6 +1,6 @@
 package model
 
-import nutria.core.{FractalEntityWithId, FractalProgram, UpVote, Vote}
+import nutria.core.{FractalEntityWithId, FreestyleProgram, UpVote, Vote}
 
 object FractalSorting {
   // source:  https://www.evanmiller.org/how-not-to-sort-by-average-rating.html
@@ -31,5 +31,5 @@ object FractalSorting {
   }
 
   val orderingByProgram: Ordering[FractalEntityWithId] =
-    FractalProgram.ordering.on(_.entity.program)
+    FreestyleProgram.ordering.on(_.entity.program)
 }

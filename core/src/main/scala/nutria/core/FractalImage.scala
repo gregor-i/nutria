@@ -6,7 +6,7 @@ import io.circe.Codec
 
 @monocle.macros.Lenses()
 case class FractalImage(
-    program: FractalProgram,
+    program: FreestyleProgram,
     view: Viewport = Viewport.defaultViewport,
     antiAliase: Int Refined Positive = refineUnsafe(1)
 )
@@ -21,7 +21,7 @@ object FractalImage extends CirceCodec {
   def firstImage(fractalEntity: FractalEntity): FractalImage =
     FractalImage(fractalEntity.program, fractalEntity.views.value.head, fractalEntity.antiAliase)
 
-  implicit val ordering: Ordering[FractalImage] = FractalProgram.ordering.on(_.program)
+  implicit val ordering: Ordering[FractalImage] = FreestyleProgram.ordering.on(_.program)
 
   implicit val codec: Codec[FractalImage] = semiauto.deriveConfiguredCodec
 }

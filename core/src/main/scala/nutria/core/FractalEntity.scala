@@ -10,7 +10,7 @@ import nutria.core.viewport.ViewportList
 @monocle.macros.Lenses()
 case class FractalEntity(
     title: String = "",
-    program: FractalProgram,
+    program: FreestyleProgram,
     views: ViewportList = ViewportList.refineUnsafe(List(Viewport.aroundZero)),
     description: String = "",
     reference: List[String] = List.empty,

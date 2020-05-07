@@ -7,7 +7,7 @@ import scala.scalajs.js.annotation.JSImport
 @js.native
 @JSImport("jimp", JSImport.Namespace)
 object Jimp extends js.Object {
-  def read(read: js.Object, callback: js.Function2[js.Object, JimpImage, Unit]): Promise[Unit] = js.native
+  def read(read: js.Object): Promise[JimpImage] = js.native
 }
 
 @js.native

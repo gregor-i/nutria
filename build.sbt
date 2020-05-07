@@ -8,8 +8,14 @@ scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation", "-Ymacro-annotati
 scalafmtOnCompile in ThisBuild := true
 
 // projects
+lazy val macros = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("macros"))
+  .settings(libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value)
+
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
+  .dependsOn(macros)
   .in(file("core"))
   .settings(mathParser, scalaTestAndScalaCheck, circe, monocle, refinedTypes)
 

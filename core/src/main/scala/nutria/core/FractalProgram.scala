@@ -2,7 +2,7 @@ package nutria.core
 
 import eu.timepit.refined.api.Refined
 import eu.timepit.refined.numeric.{NonNaN, Positive}
-import io.circe.Codec
+import io.circe.{Codec, Decoder, JsonObject}
 import mathParser.algebra.SpireNode
 import monocle.Prism
 import monocle.macros.GenPrism
@@ -91,35 +91,16 @@ object NewtonIteration {
   )
 }
 
-@monocle.macros.Lenses()
-case class FreestyleProgram(code: String, parameters: Seq[Parameter] = Seq.empty) extends FractalProgram
-
-object FreestyleProgram {
-  val default = FreestyleProgram("color = vec4(abs(z.x), abs(z.y), length(z), 1.0);")
-
-  val allVaribalesRegex = "\\$\\{([\\w\\d^\\}]+)\\}".r
-
-  def variables(code: String): Seq[String] =
-    allVaribalesRegex
-      .findAllMatchIn(code)
-      .map(_.group(1))
-      .distinct
-      .toSeq
-      .sorted
-}
-
+@deprecated("go freestyle!")
 object FractalProgram extends CirceCodec {
   val newtonIteration: Prism[FractalProgram, NewtonIteration] =
     GenPrism[FractalProgram, NewtonIteration]
   val divergingSeries: Prism[FractalProgram, DivergingSeries] =
     GenPrism[FractalProgram, DivergingSeries]
-  val freestyleProgram: Prism[FractalProgram, FreestyleProgram] =
-    GenPrism[FractalProgram, FreestyleProgram]
 
   implicit val ordering: Ordering[FractalProgram] = Ordering.by[FractalProgram, (Int, String)] {
-    case f: DivergingSeries  => (1, f.iteration.string)
-    case f: NewtonIteration  => (2, f.function.string)
-    case f: FreestyleProgram => (3, f.code)
+    case f: DivergingSeries => (1, f.iteration.string)
+    case f: NewtonIteration => (2, f.function.string)
   }
 
   implicit val codec: Codec[FractalProgram] = semiauto.deriveConfiguredCodec

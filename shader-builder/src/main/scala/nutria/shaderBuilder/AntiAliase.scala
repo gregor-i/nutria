@@ -3,51 +3,37 @@ package nutria.shaderBuilder
 import nutria.core.AntiAliase
 
 object AntiAliase {
-  def apply[T <: WebGlType: WebGlType.TypeProps](
-      block: (RefVec2, Ref[T]) => String,
-      aaFactor: AntiAliase
-  ): Ref[T] => String =
+  def apply(aaFactor: AntiAliase): RefVec4 => String =
     if (aaFactor.value > 1)
-      antiAliase(block, aaFactor)
+      antiAliase(aaFactor)
     else
-      noAntiAliase(block)
+      noAntiAliase
 
-  private def noAntiAliase[T <: WebGlType: WebGlType.TypeProps](
-      block: (RefVec2, Ref[T]) => String
-  )(outputVar: Ref[T]) =
-    s"""{
-       |  vec2 pos = gl_FragCoord.xy / u_resolution;
-       |  vec2 p = u_view_O + pos.x * u_view_A + pos.y * u_view_B;
-       |  ${block(RefVec2("p"), outputVar)}
-       |}
+  private def noAntiAliase(outputVar: RefVec4) =
+    s"""
+       |vec2 pos = gl_FragCoord.xy / u_resolution;
+       |vec2 p = u_view_O + pos.x * u_view_A + pos.y * u_view_B;
+       |${outputVar.name} = main_template(p);
      """.stripMargin
 
-  private def antiAliase[T <: WebGlType: WebGlType.TypeProps](
-      block: (RefVec2, Ref[T]) => String,
-      aaFactor: AntiAliase
-  )(outputVarname: Ref[T]) = {
-    val local = WebGlType.reference[T]("frag_out")
-    val acc   = WebGlType.reference[T]("acc")
-    s"""{
-       |  vec2 aa_factor = 1.0 / (float(${aaFactor.value}) * u_resolution);
-       |  float aa_offset = float(${(1 - aaFactor.value) / 2.0});
-       |  vec2 pos = gl_FragCoord.xy / u_resolution;
+  private def antiAliase(aaFactor: AntiAliase)(outputVarname: RefVec4) = {
+    s"""
+       |const int aa = ${aaFactor.value};
+       |vec2 aa_factor = 1.0 / (float(aa) * u_resolution);
+       |vec2 aa_offset = vec2((1.0 - float(aa)) / 2.0) * aa_factor;
+       |vec2 pos = gl_FragCoord.xy / u_resolution;
        |
-       |  ${WebGlType.declare(acc, WebGlType.zero[T])};
-       |  for(int aa_x = 0; aa_x < ${aaFactor.value}; aa_x ++){
-       |    for(int aa_y = 0; aa_y < ${aaFactor.value}; aa_y ++){
-       |      vec2 aa_pos = pos + vec2(float(aa_x) + aa_offset, float(aa_y) + aa_offset) * aa_factor;
-       |      vec2 p = u_view_O + aa_pos.x * u_view_A + aa_pos.y * u_view_B;
+       |vec4 acc = vec4(0.0);
+       |for(int aa_x = 0; aa_x < aa; aa_x ++){
+       |  for(int aa_y = 0; aa_y < aa; aa_y ++){
+       |    vec2 aa_pos = pos + vec2(float(aa_x), float(aa_y)) * aa_factor + aa_offset;
+       |    vec2 p = u_view_O + aa_pos.x * u_view_A + aa_pos.y * u_view_B;
        |
-       |      ${WebGlType.declare(local, WebGlType.zero[T])}
-       |      ${block(RefVec2("p"), local)}
-       |
-       |      acc += ${local.name};
-       |    }
+       |    acc += main_template(p);
        |  }
-       |
-       |  ${outputVarname.name} = acc / float(${aaFactor.value * aaFactor.value});
        |}
+       |
+       |${outputVarname.name} = acc / (float(aa) * float(aa));
      """.stripMargin
   }
 
