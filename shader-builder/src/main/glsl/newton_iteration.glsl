@@ -21,7 +21,7 @@ if(length(fz) < threshold){
     fract = float(l) + 1.0 - log(threshold / length(fz)) / log( length(fz_last) / length(fz));
   }
 
-  float H = atan(z.x - center_x, z.y - center_y) / (2.0 * pi);
+  float H = atan(z.x - center_x, z.y - center_y) / (2.0 * PI);
   float V = exp(-fract / brightness_factor);
   float S = length(z);
 
