@@ -5,8 +5,32 @@ $body-overflow-y: unset
 $navbar-box-shadow-size: 0 2px 3px
 $navbar-box-shadow-color: rgba(10,10,10,.1)
 
-@import "../../../../node_modules/bulma/bulma.sass"
+// modal
+$modal-background-background-color: rgba(10,10,10,.50)
+
+@import "../../../../node_modules/bulma/sass/utilities/_all"
+@import "../../../../node_modules/bulma/sass/base/_all"
+@import "../../../../node_modules/bulma/sass/elements/_all"
+@import "../../../../node_modules/bulma/sass/form/_all"
+@import "../../../../node_modules/bulma/sass/components/card"
+@import "../../../../node_modules/bulma/sass/components/modal"
+@import "../../../../node_modules/bulma/sass/components/navbar"
+@import "../../../../node_modules/bulma/sass/components/message"
+@import "../../../../node_modules/bulma/sass/layout/section"
+@import "../../../../node_modules/bulma/sass/layout/footer"
 
 .button.is-rounded
   padding-left: 1em
   padding-right: 1em
+
+.container
+  min-height: 80vh
+
+nav.navbar
+  border-bottom: 1px solid $primary
+  background: $grey-lightest
+
+footer.footer
+  margin-top: 4rem
+  border-top: 1px solid $primary
+  background: $grey-lightest

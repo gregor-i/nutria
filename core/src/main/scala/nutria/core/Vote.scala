@@ -1,7 +1,6 @@
 package nutria.core
 
 import io.circe.Codec
-import io.circe.generic.JsonCodec
 
 case class Vote(forFractal: String, byUser: String, verdict: Verdict)
 
@@ -11,11 +10,11 @@ sealed trait Verdict
 case object DownVote extends Verdict
 case object UpVote   extends Verdict
 
-object Verdict extends CirceCodex {
+object Verdict extends CirceCodec {
   implicit val codec: Codec[Verdict] = semiauto.deriveConfiguredCodec
 }
 
-object VoteStatistic extends CirceCodex {
+object VoteStatistic extends CirceCodec {
   implicit val codec: Codec[VoteStatistic] = semiauto.deriveConfiguredCodec
 
   val empty: VoteStatistic = VoteStatistic(0, 0, None)

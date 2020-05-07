@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg"
-     width="400"
-     height="225">
-    <rect width="100%" height="100%" fill="#fff"/>
-    <path fill="none" d="M122-4.5h156v156H122v-156z"/>
-    <path fill="gray"
-          d="M193.5 93h13v13h-13zm0-52h13v39h-13zm6.43-32.5c-35.88 0-64.93 29.12-64.93 65s29.05 65 64.94 65c35.94 0 65.06-29.12 65.06-65s-29.12-65-65.06-65zm.07 117c-28.73 0-52-23.27-52-52s23.27-52 52-52 52 23.27 52 52-23.27 52-52 52z"/>
-    <text fill="gray" textLength="88" transform="matrix(3.25 0 0 3.25 57 203.5)">Rendering ...</text>
-</svg>

@@ -27,7 +27,6 @@ object Main {
     "/img/icon.png",
     "/favicon.ico",
     "/js/nutria.js"
-//    "/js/sw.js"
   )
 
   val apiCacheName = "nutria-api"

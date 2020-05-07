@@ -1,19 +1,20 @@
 package nutria.frontend
 
-import snabbdom._
-import SnabbdomFacade.Eventlistener
-import Snabbdom.event
-import eu.timepit.refined.collection.NonEmpty
-import nutria.core.viewport.Viewport
+import nutria.core.viewport.{Dimensions, Viewport, ViewportList}
 import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage, Verdict}
-import eu.timepit.refined.refineV
+import nutria.frontend.pages.common.FractalTile
+import nutria.frontend.pages._
 import nutria.frontend.service.NutriaService
 import nutria.frontend.toasts.Toasts
+import nutria.frontend.util.Untyped
 import org.scalajs.dom
+import org.scalajs.dom.html.Anchor
+import snabbdom.Snabbdom.event
+import snabbdom.SnabbdomFacade.Eventlistener
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.{Failure, Success, Try}
+import scala.util.{Failure, Success}
 
 object Actions {
   private def asyncUpdate(fut: Future[NutriaState])(implicit update: NutriaState => Unit): Unit =
@@ -31,14 +32,15 @@ object Actions {
     }
 
   def exploreFractal(
-      fractal: FractalEntityWithId
+      fractal: FractalEntityWithId,
+      image: FractalImage
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       update(
         ExplorerState(
           user = state.user,
           remoteFractal = Some(fractal),
-          fractalImage = FractalImage.firstImage(fractal.entity)
+          fractalImage = image
         )
       )
     }
@@ -75,7 +77,7 @@ object Actions {
           for {
             remoteFractal <- NutriaService.loadFractal(fractalId)
             views   = (remoteFractal.entity.views.value :+ viewport).distinct
-            updated = remoteFractal.entity.copy(views = refineV[NonEmpty](views).toOption.get)
+            updated = remoteFractal.entity.copy(views = ViewportList.refineUnsafe(views))
             _ <- NutriaService.updateFractal(remoteFractal.copy(entity = updated))
             _ = Toasts.successToast("Snapshot saved")
           } yield state
@@ -93,9 +95,9 @@ object Actions {
           for {
             remoteFractal <- NutriaService.loadFractal(fractalId)
             updated = remoteFractal.entity.copy(
-              views = refineV[NonEmpty](
-                remoteFractal.entity.views.value :+ viewport
-              ).toOption.get
+              views = ViewportList.refineUnsafe(
+                (remoteFractal.entity.views.value :+ viewport).distinct
+              )
             )
             forkedFractal <- NutriaService.save(updated)
             _ = Toasts.successToast("Fractal saved")
@@ -163,13 +165,15 @@ object Actions {
       val lensViewports = DetailsState.fractalToEdit.composeLens(FractalEntityWithId.viewports)
       val views         = lensViewports.get(state).value
       val newViewports  = views.filter(_ == viewport) ++ views.filter(_ != viewport)
-      refineV[NonEmpty](newViewports) match {
+      ViewportList(newViewports) match {
         case Right(newViews) =>
           Toasts.successToast(
             "Snapshot moved at the first position. This Snapshot will be used in the galleries."
           )
           update(lensViewports.set(newViews)(state))
-        case Left(_) => ???
+        case Left(_) =>
+          // this should never happen
+          Toasts.dangerToast("The last snapshot can't be moved.")
       }
     }
 
@@ -180,7 +184,7 @@ object Actions {
       val lensViewports = DetailsState.fractalToEdit.composeLens(FractalEntityWithId.viewports)
       val views         = lensViewports.get(state).value
       val newViewports  = views.filter(_ != viewport)
-      refineV[NonEmpty](newViewports) match {
+      ViewportList(newViewports) match {
         case Right(newViews) =>
           Toasts.successToast("Snapshot deleted.")
           update(lensViewports.set(newViews)(state))
@@ -240,7 +244,10 @@ object Actions {
       }
     }
 
-  def vote(fractalId: String, verdict: Verdict)(implicit state: GalleryState, update: NutriaState => Unit): Eventlistener =
+  def vote(
+      fractalId: String,
+      verdict: Verdict
+  )(implicit state: GalleryState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -263,4 +270,43 @@ object Actions {
         }
       }
     }
+
+  def openSaveToDiskModal(implicit state: ExplorerState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      update {
+        state.copy(
+          saveModal = Some(
+            SaveFractalDialog(
+              dimensions = Dimensions.fullHD,
+              antiAliase = state.fractalImage.antiAliase
+            )
+          )
+        )
+      }
+    }
+
+  def closeSaveToDiskModal(implicit state: ExplorerState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      update {
+        state.copy(saveModal = None)
+      }
+    }
+
+  def saveToDisk(
+      fractalImage: FractalImage,
+      dimensions: Dimensions
+  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      val dataUrl = FractalTile.dataUrl(fractalImage, dimensions)
+
+      val link = dom.document.createElement("a").asInstanceOf[Anchor]
+      Untyped(link).download = "fractal-image.png"
+      link.href = dataUrl
+      dom.document.body.appendChild(link)
+      link.click()
+      dom.document.body.removeChild(link)
+    }
+
+  def gotoFAQ()(implicit state: NutriaState): FAQState =
+    FAQState(state.user)
 }

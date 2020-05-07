@@ -21,6 +21,8 @@ node_modules/
 .idea
 *.iml
 
-service/public/js/*.js
-service/public/css/*.css
-service/public/fonts/
+backend/public/js/*.js
+backend/public/css/*.css
+backend/public/fonts/
+
+temp/

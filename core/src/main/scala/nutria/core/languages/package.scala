@@ -18,8 +18,8 @@ package object languages {
   implicit val xAndLambda: CLang[XAndLambda] = constructLang("x" -> X, "lambda" -> Lambda)
 
   implicit val zAndZDerAndLambda: CLang[ZAndZDerAndLambda] = constructLang(
-    "z"      -> Z,
-    "lambda" -> Lambda,
-    "z'"     -> ZDer
+    "z"         -> Z,
+    "z_derived" -> ZDer,
+    "lambda"    -> Lambda
   )
 }

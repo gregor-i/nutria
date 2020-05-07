@@ -2,104 +2,32 @@ package nutria.frontend
 
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
-import nutria.core.FractalImage
-import nutria.frontend.service.{NutriaAdminService, NutriaService}
+import nutria.frontend.pages.ErrorState
 import org.scalajs.dom
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.Try
+import scala.util.chaining._
 
 object Router {
-  def stateFromUrl(location: dom.Location): NutriaState = {
-    val queryParams = location.search
-      .dropWhile(_ == '?')
-      .split('&')
-      .collect {
-        case s"${key}=${value}" => key -> value
-      }
-      .toMap
+  type Path           = String
+  type QueryParameter = Map[String, String]
+  type Location       = (Path, QueryParameter)
 
-    location.pathname match {
-      case "/" =>
-        LoadingState(
-          Links.greetingState()
-        )
+  def stateFromUrl(location: dom.Location): NutriaState =
+    stateFromUrl((location.pathname, queryParamsFromUrl(location.search)): Location)
 
-      case "/gallery" =>
-        LoadingState(
-          Links.galleryState()
-        )
+  private val stateFromUrlPF: Location => Option[NutriaState] =
+    Pages.all
+      .map(_.stateFromUrl)
+      .reduce(_ orElse _)
+      .lift
+  def stateFromUrl(location: Location): NutriaState =
+    stateFromUrlPF(location).getOrElse(ErrorState("Unkown url"))
 
-      case s"/user/profile" =>
-        LoadingState(
-          NutriaService.whoAmI().map {
-            case Some(user) => ProfileState(about = user)
-            case None       => ErrorState("You are not logged in")
-          }
-        )
+  def stateToUrl[State <: NutriaState](state: State): Option[Location] =
+    Pages.selectPage(state).stateToUrl(state)
 
-      case s"/user/${userId}/gallery" =>
-        LoadingState(
-          Links.userGalleryState(userId)
-        )
-
-      case s"/fractals/${fractalsId}/details" =>
-        LoadingState(
-          Links.detailsState(fractalsId)
-        )
-
-      case s"/fractals/${fractalId}/explorer" =>
-        LoadingState(
-          for {
-            user          <- NutriaService.whoAmI()
-            remoteFractal <- NutriaService.loadFractal(fractalId)
-          } yield {
-            val fractalFromUrl =
-              queryParams.get("state").flatMap(queryDecoded[FractalImage])
-
-            fractalFromUrl match {
-              case Some(image) =>
-                ExplorerState(
-                  user,
-                  remoteFractal = Some(remoteFractal),
-                  fractalImage = image
-                )
-              case None => ErrorState("Query Parameter is invalid")
-            }
-          }
-        )
-
-      case "/explorer" =>
-        LoadingState(
-          NutriaService
-            .whoAmI()
-            .map { user =>
-              val fractalFromUrl =
-                queryParams.get("state").flatMap(queryDecoded[FractalImage])
-
-              fractalFromUrl match {
-                case Some(fractal) => ExplorerState(user, None, fractal)
-                case None          => ErrorState("Query Parameter is invalid")
-              }
-            }
-        )
-
-      case "/faq" =>
-        LoadingState(
-          Links.faqState()
-        )
-
-      case "/admin" =>
-        LoadingState(
-          NutriaAdminService.load()
-        )
-
-      case _ =>
-        ErrorState("Unkown url")
-    }
-  }
-
-  def searchToUrl(search: Map[String, String]): String = {
+  def queryParamsToUrl(search: QueryParameter): String = {
     val stringSearch = search
       .map {
         case (key, value) => s"$key=$value"
@@ -111,34 +39,18 @@ object Router {
       "?" + stringSearch
   }
 
-  def stateToUrl(state: NutriaState): Option[(String, Map[String, String])] = state match {
-    case _: GalleryState =>
-      Some(("/gallery", Map.empty))
-    case state: UserGalleryState =>
-      Some((s"/user/${state.aboutUser}/gallery", Map.empty))
-    case details: DetailsState =>
-      Some((s"/fractals/${details.remoteFractal.id}/details", Map.empty))
-    case exState: ExplorerState =>
-      exState.remoteFractal match {
-        case Some(remoteFractal) =>
-          Some(
-            (s"/fractals/${remoteFractal.id}/explorer", Map("state" -> queryEncoded(exState.fractalImage)))
-          )
-        case None => Some((s"/explorer", Map("state" -> queryEncoded(exState.fractalImage))))
+  def queryParamsFromUrl(search: String): QueryParameter =
+    search
+      .dropWhile(_ == '?')
+      .split('&')
+      .collect {
+        case s"${key}=${value}" => key -> value
       }
-    case _: ProfileState => Some("/user/profile" -> Map.empty)
-    case _: GreetingState =>
-      Some(("/", Map.empty))
-    case _: FAQState   => Some("/faq"   -> Map.empty)
-    case _: AdminState => Some("/admin" -> Map.empty)
-    case _: ErrorState =>
-      None
-    case _: LoadingState =>
-      None
-  }
+      .toMap
 
   def queryEncoded[T: Encoder](t: T): String =
-    dom.window.btoa(t.asJson.noSpaces)
+    t.asJson.noSpaces
+      .pipe(dom.window.btoa)
 
   def queryDecoded[T: Decoder](string: String): Option[T] =
     (for {

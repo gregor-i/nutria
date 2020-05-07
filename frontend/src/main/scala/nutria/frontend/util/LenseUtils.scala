@@ -1,16 +1,15 @@
 package nutria.frontend.util
 
-import monocle.{Lens, Setter}
+import monocle.{Lens, Optional, PPrism}
 
-object LenseUtils {
-  //  def primsWithDefault[A, B](p: Prism[B, A], default: A): Lens[B, A] =
-  //    Lens[B, A](p.getOption(_).getOrElse(default))(a => s => p.set(a)(s))
+trait LenseUtils {
+  def unsafe[A, T](prism: PPrism[T, T, A, A]): Lens[T, A] =
+    Lens[T, A](get = prism.getOption(_).get)(set = prism.set)
 
-  def lookedUp[A, S](value: A, setter: Setter[S, A]): Lens[S, A] =
-    Lens[S, A](_ => value)(setter.set)
-
-  def withDefault[A, S](p: Lens[S, Option[A]], default: A): Lens[S, A] =
-    Lens[S, A](p.get(_).getOrElse(default))(a => p.set(Some(a)))
+  def unsafeOptional[A, T](optional: Optional[A, T]): Lens[A, T] =
+    Lens[A, T](get = optional.getOption(_).get)(set = optional.set)
 
   def seqAt[A](i: Int): Lens[Seq[A], A] = Lens[Seq[A], A](_.apply(i))(a => seq => seq.updated(i, a))
 }
+
+object LenseUtils extends LenseUtils

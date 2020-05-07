@@ -4,12 +4,52 @@
     </h1>
 </div>
 
-<div class="section content">
+<div class="section content" id="zooming">
     <h2>After zooming, the image becomes pixelated. Why is that?</h2>
     <p>
       Nutria uses WebGL Fragment Shader to create the fractal images.
       WebGL 1.0 only supports <a href="https://en.wikipedia.org/wiki/Single-precision_floating-point_format">single precision floating point numbers</a>.
       There are no more numbers between 2 pixels, so the pixel have the same position and caculate the same pixel color.
+    </p>
+</div>
+
+<div class="section content" id="language">
+    <h2>What functions are allowed to describe formulas?</h2>
+    <p>
+        Complex numbers can be constructed with use of real numbers and <code>i</code> (the imaginary unit).
+        For Example: <code>12.1 + 5*i</code> and <code>3.41 * i + 2</code>
+    </p>
+    <p>
+        Nutria supports these complex number operations:
+        <ul>
+            <li>
+                Addition: <code>a + b</code>
+            </li>
+            <li>
+                Subtraction: <code>a - b</code>
+            </li>
+            <li>
+                Multiplication: <code>a * b</code>
+            </li>
+            <li>
+                Division: <code>a / b</code>
+            </li>
+            <li>
+                Power: <code>a ^ b</code>
+            </li>
+            <li>
+                Exp and Log: <code>exp(x)</code> and <code>log(x)</code>
+            </li>
+            <li>
+                Sin, Cos, Tan: <code>sin(x)</code>, <code>cos(x)</code> and <code>tan(x)</code>
+            </li>
+            <li>
+                And their inverses: <code>asin(x)</code>, <code>acos(x)</code> and <code>atan(x)</code>
+            </li>
+            <li>
+                And their hyperbolics: <code>sinh(x)</code>, <code>cosh(x)</code> and <code>tanh(x)</code>
+            </li>
+        </ul>
     </p>
 </div>
 

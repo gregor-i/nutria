@@ -25,7 +25,7 @@ object Main {
     )
   }
 
-  private def installServiceWorker() =
+  private def installServiceWorker(): Unit =
     (for {
       navigator <- Future {
         dom.window.navigator

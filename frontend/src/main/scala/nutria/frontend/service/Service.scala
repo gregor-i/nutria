@@ -5,6 +5,7 @@ import io.circe.{Decoder, Encoder, parser}
 import org.scalajs.dom.experimental.{Fetch, HttpMethod, RequestInit, Response}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.scalajs.js.Dynamic
 
 trait Service {
   implicit val ex: ExecutionContext = ExecutionContext.global
@@ -12,16 +13,16 @@ trait Service {
   def get(url: String): Future[Response] = Fetch.fetch(url).toFuture
 
   def post(url: String): Future[Response] =
-    Fetch.fetch(url, RequestInit(method = HttpMethod.POST)).toFuture
+    Fetch.fetch(url, Dynamic.literal(method = "POST").asInstanceOf[RequestInit]).toFuture
 
   def delete(url: String): Future[Response] =
-    Fetch.fetch(url, RequestInit(method = HttpMethod.DELETE)).toFuture
+    Fetch.fetch(url, Dynamic.literal(method = "DELETE").asInstanceOf[RequestInit]).toFuture
 
   def post[A: Encoder](url: String, body: A): Future[Response] =
-    Fetch.fetch(url, RequestInit(method = HttpMethod.POST, body = body.asJson.noSpaces)).toFuture
+    Fetch.fetch(url, Dynamic.literal(method = "POST", body = body.asJson.noSpaces).asInstanceOf[RequestInit]).toFuture
 
   def put[A: Encoder](url: String, body: A): Future[Response] =
-    Fetch.fetch(url, RequestInit(method = HttpMethod.PUT, body = body.asJson.noSpaces)).toFuture
+    Fetch.fetch(url, Dynamic.literal(method = "PUT", body = body.asJson.noSpaces).asInstanceOf[RequestInit]).toFuture
 
   def check(excepted: Int)(req: Response): Future[Response] =
     if (req.status == excepted)
