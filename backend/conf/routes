@@ -24,6 +24,7 @@ GET           /api/admin                                        controller.Admin
 POST          /api/admin/truncate-fractals                      controller.AdminController.truncateFractals()
 POST          /api/admin/clean-fractals                         controller.AdminController.cleanFractals()
 POST          /api/admin/insert-system-fractals                 controller.AdminController.insertSystemFractals()
+POST          /api/admin/migrate-all-fractals                   controller.AdminController.migrateAllFractals()
 POST          /api/admin/delete-fractal/:id                     controller.AdminController.deleteFractal(id : String)
 POST          /api/admin/delete-user/:id                        controller.AdminController.deleteUser(id : String)
 

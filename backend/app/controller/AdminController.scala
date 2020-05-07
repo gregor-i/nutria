@@ -81,4 +81,16 @@ class AdminController @Inject() (
       Ok
     }
   }
+
+  def migrateAllFractals = Action { req =>
+    authenticator.adminUser(req) { _ =>
+      fractalRepo
+        .list()
+        .foreach {
+          case FractalRow(id, owner, _, Some(fractal)) => fractalRepo.save(id, owner, fractal)
+          case _                                       => ()
+        }
+      Ok
+    }
+  }
 }

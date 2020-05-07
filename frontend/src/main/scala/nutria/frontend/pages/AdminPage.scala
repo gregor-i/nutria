@@ -114,6 +114,7 @@ object AdminPage extends Page[AdminState] {
           .child(Button("Insert system Fractals", action(NutriaAdminService.insertSystemFractals())))
           .child(Button("clean Fractals", action(NutriaAdminService.cleanFractals())))
           .child(Button("delete all Fractals", action(NutriaAdminService.truncateFractals())))
+          .child(Button("migrate all Fractals", action(NutriaAdminService.migrateAllFractals())))
       )
 
   private def action(
