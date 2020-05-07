@@ -29,22 +29,6 @@ object Main {
     "/js/nutria.js"
   )
 
-  val apiCacheName = "nutria-api"
-  def apiCache(): Future[js.Array[RequestInfo]] =
-    for {
-      me             <- nutria.frontend.service.NutriaService.whoAmI()
-      publicFractals <- nutria.frontend.service.NutriaService.loadPublicFractals()
-      personalFractals <- me match {
-        case Some(user) => nutria.frontend.service.NutriaService.loadUserFractals(user.id)
-        case None       => Future.successful(Seq.empty)
-      }
-    } yield {
-      val fractalDetailsRequests = (publicFractals.map(_.id) ++ personalFractals.map(_.id)).distinct
-        .map[RequestInfo](id => s"/api/fractals/${id}")
-      val staticRequests = Seq[RequestInfo]("/api/fractals", "/api/fractals/random", "/api/votes")
-      (fractalDetailsRequests ++ staticRequests).toJSArray
-    }
-
   def main(args: Array[String]): Unit = {
     self.addEventListener(
       "install",
@@ -52,8 +36,6 @@ object Main {
         event.waitUntil(
           (for {
             _          <- populateCache(staticCacheName, staticFiles)
-            apiRequest <- apiCache()
-            _          <- populateCache(apiCacheName, apiRequest)
           } yield ()).toJSPromise
         )
     )
@@ -68,8 +50,7 @@ object Main {
     self.addEventListener(
       "fetch",
       (event: FetchEvent) => {
-        val response = fromCache(staticCacheName, event.request)
-          .recoverWith(_ => fromCache(apiCacheName, event.request))
+        fromCache(staticCacheName, event.request)
           .recoverWith(_ => fetch(event.request).toFuture)
           .toJSPromise
           .tap(event.respondWith(_))
