@@ -88,7 +88,7 @@ private object ImgStrategy extends Strategy {
       .key(fractalImage.hashCode)
       .attr("width", dimensions.width.toString)
       .attr("height", dimensions.height.toString)
-      .attr("src", "/img/rendering.svg")
+      .attr("src", "/assets/rendering.svg")
       .hook("insert", Snabbdom.hook { node =>
         val img = node.elm.get.asInstanceOf[Image]
         interval

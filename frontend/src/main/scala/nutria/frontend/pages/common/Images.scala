@@ -3,12 +3,10 @@ package nutria.frontend.pages.common
 import snabbdom.Node
 
 object Images {
-  val icon = "/img/icon.png"
+  val icon = "/assets/icon.png"
 
-  val exampleDivergingSeries = "/img/example_DivergingSeries.png"
-  val exampleNewtonIteration = "/img/example_NewtonIteration.png"
+  val exampleDivergingSeries = "/assets/example_DivergingSeries.png"
+  val exampleNewtonIteration = "/assets/example_NewtonIteration.png"
 
-  def apply(src: String): Node =
-    Node("img")
-      .attr("src", src)
+  def apply(src: String): Node = Node("img").attr("src", src)
 }

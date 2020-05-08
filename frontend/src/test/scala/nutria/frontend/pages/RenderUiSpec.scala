@@ -50,5 +50,5 @@ class RenderUiSpec extends AnyFunSuite {
   private def withFixture(html: String): String =
     StaticContent("frontend/src/test/html/fixture.html")
       .replaceAllLiterally("$content", html)
-      .replaceAllLiterally("src=\"/img", "src=\"img")
+      .replaceAllLiterally("src=\"/assets", "src=\"assets")
 }

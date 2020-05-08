@@ -29,14 +29,8 @@ POST          /api/admin/delete-fractal/:id                     controller.Admin
 POST          /api/admin/delete-user/:id                        controller.AdminController.deleteUser(id : String)
 
 # Assets
-GET           /favicon.ico                                      controller.UiController.asset(path = "icon.png", folder = "/public/img")
-GET           /manifest.json                                    controller.UiController.asset(path = "manifest.json", folder = "/public")
+GET           /assets/*path                                     controller.UiController.asset(path: String, folder = "/public/assets")
 GET           /js/sw.js                                         controller.UiController.serviceWorker(path = "sw.js", folder = "/public/js")
-GET           /img/*path                                        controller.UiController.asset(path: String, folder = "/public/img")
-GET           /js/*path                                         controller.UiController.asset(path: String, folder = "/public/js")
-GET           /css/*path                                        controller.UiController.asset(path: String, folder = "/public/css")
-GET           /fonts/*path                                      controller.UiController.asset(path: String, folder = "/public/fonts")
-
 
 # Frontend
 GET           /                                                 controller.UiController.frontend(path = "")

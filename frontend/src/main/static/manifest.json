@@ -3,7 +3,7 @@
   "name": "Nutria - Explorer",
   "icons": [
     {
-      "src": "/img/icon.png",
+      "src": "/assets/icon.png",
       "type": "image/png",
       "sizes": "256x256"
     }

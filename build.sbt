@@ -81,7 +81,7 @@ val `static-renderer` = project
 val integration = taskKey[Unit]("build the frontend and copy the results into backend")
 integration in frontend := {
   val buildFrontend = (frontend / Compile / fastOptJS).value.data
-  val exitCode = s"./node_modules/.bin/browserify ${buildFrontend.toString} -o backend/public/js/nutria.js".!
+  val exitCode = s"./node_modules/.bin/browserify ${buildFrontend.toString} -o backend/public/assets/nutria.js".!
   require(exitCode == 0)
 }
 

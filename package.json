@@ -1,18 +1,21 @@
 {
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.13.0",
     "browserify": "^16",
     "bulma": "^0.8.2",
     "clean-css-cli": "^4",
-    "font-awesome": "^4",
+    "npm-run-all": "^4.1.5",
     "sass": "^1",
     "snabbdom": "^0.7"
   },
   "scripts": {
-    "build": "npm run make-dirs && npm run cp && npm run build-css",
-    "make-dirs": "mkdir -p backend/public/css && mkdir -p backend/public/js",
-    "build-css": "sass frontend/src/main/css/nutria.sass backend/public/css/nutria.css --no-source-map  --style compressed",
-    "cp": "npm run cp-fas",
-    "cp-fas": "cp node_modules/font-awesome/css/font-awesome.min.css backend/public/css/font-awesome.css && cp -r node_modules/font-awesome/fonts backend/public"
+    "build": "npm run make-dirs && run-p build-*",
+    "make-dirs": "mkdir -p backend/public/assets && mkdir -p backend/public/html",
+    "build-css": "sass frontend/src/main/css/nutria.sass backend/public/assets/nutria.css --no-source-map --style compressed",
+    "build-fas": "cp -r node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid* backend/public/assets/.",
+    "build-html": "cp frontend/src/main/html/nutria.html backend/public/html/nutria.html",
+    "build-img": "cp frontend/src/main/img/* backend/public/assets/.",
+    "build-static": "cp frontend/src/main/static/* backend/public/assets/."
   },
   "devDependencies": {
     "gl": "^4.5.0",
