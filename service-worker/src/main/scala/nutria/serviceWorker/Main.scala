@@ -15,29 +15,30 @@ import scala.util.chaining._
 object Main {
   val staticCacheName = "nutria-static"
   val staticFiles = js.Array[RequestInfo](
-    "/css/font-awesome.css",
-    "/css/nutria.css",
-    "/fonts/fontawesome-webfont.woff?v=4.7.0",
-    "/fonts/fontawesome-webfont.svg?v=4.7.0",
-    "/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0",
-    "/fonts/fontawesome-webfont.woff2?v=4.7.0",
-    "/fonts/FontAwesome.otf?v=4.7.0",
-    "/fonts/fontawesome-webfont.ttf?v=4.7.0",
-    "/img/rendering.svg",
-    "/img/icon.png",
-    "/favicon.ico",
-    "/js/nutria.js"
+    "/assets/example_DivergingSeries.png",
+    "/assets/example_NewtonIteration.png",
+    "/assets/fa-solid-900.eot",
+    "/assets/fa-solid-900.svg",
+    "/assets/fa-solid-900.ttf",
+    "/assets/fa-solid-900.woff",
+    "/assets/fa-solid-900.woff2",
+    "/assets/freestyle.svg",
+    "/assets/icon.png",
+    "/assets/manifest.json",
+    "/assets/nutria.css",
+    "/assets/nutria.js",
+    "/assets/rendering.svg",
+    "/assets/sw.js",
+    "/assets/transparent.svg"
   )
 
   def main(args: Array[String]): Unit = {
     self.addEventListener(
       "install",
       (event: ExtendableEvent) =>
-        event.waitUntil(
-          (for {
-            _          <- populateCache(staticCacheName, staticFiles)
-          } yield ()).toJSPromise
-        )
+          populateCache(staticCacheName, staticFiles)
+            .toJSPromise
+            .tap(event.waitUntil(_))
     )
 
     self.addEventListener(

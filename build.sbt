@@ -48,6 +48,15 @@ val frontend = project
     libraryDependencies += "io.circe" %%% "not-java-time" % "0.2.0"
   )
 
+val `service-worker` = project
+  .in(file("service-worker"))
+  .enablePlugins(ScalaJSPlugin)
+  .settings(scalacOptions += "-P:scalajs:sjsDefinedByDefault")
+  .settings(scalaJSUseMainModuleInitializer := true)
+  .settings(skip in packageJSDependencies := true)
+  .settings(emitSourceMaps := false)
+  .settings(libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0")
+
 lazy val backend = project
   .in(file("backend"))
   .dependsOn(core.jvm)
@@ -85,8 +94,15 @@ integration in frontend := {
   require(exitCode == 0)
 }
 
+integration in `service-worker` := {
+  val buildSw = (`service-worker` / Compile / fastOptJS).value.data
+  val exitCode = s"cp ${buildSw.toString} backend/public/assets/sw.js".!
+  require(exitCode == 0)
+}
+
 compile in Compile := {
   (frontend / integration).value
+  (`service-worker` / integration).value
   (compile in Compile).value
 }
 

@@ -32,7 +32,7 @@ object Main {
           .pipe(toServiceWorkerNavigator)
           .serviceWorker
       }
-      registration <- navigator.register("/js/sw.js", Dynamic.literal(scope = "/")).toFuture
+      registration <- navigator.register("/assets/sw.js", Dynamic.literal(scope = "/")).toFuture
       _            <- registration.update.toFuture
     } yield ()).onComplete {
       case Success(_) =>
