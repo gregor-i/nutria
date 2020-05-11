@@ -62,13 +62,53 @@ object Examples {
       )
     )
 
-  // todo: include old freestyles
+  val sierpinskiTriangle =
+    FreestyleProgram(
+      code = StaticContent("shader-builder/src/main/glsl/sierpinsky_triangle.glsl"),
+      parameters = Vector(
+        IntParameter(name = "iterations", value = 25),
+        FloatParameter(name = "size", value = 1.0.toFloat),
+        RGBParameter(name = "color_outside", value = RGB.white),
+        RGBParameter(name = "color_inside", value = RGB.black)
+      )
+    )
+
+  val lyapunovFractal =
+    FreestyleProgram(
+      code = StaticContent("shader-builder/src/main/glsl/lyapunov_fractal.glsl"),
+      parameters = Vector(
+        IntParameter(name = "iterations", value = 120),
+        IntParameter(name = "steps_X", value = 6),
+        IntParameter(name = "steps_Y", value = 6)
+      )
+    )
+
+  val kochSnowflake = FreestyleProgram(
+    code = StaticContent("shader-builder/src/main/glsl/koch_snowflake.glsl"),
+    parameters = Vector(
+      IntParameter(name = "iterations", value = 26),
+      RGBAParameter(name = "color_inside", value = RGB.black.withAlpha()),
+      RGBAParameter(name = "color_outside", value = RGB.white.withAlpha())
+    )
+  )
+
+  val novaFractal = FreestyleProgram(
+    code = StaticContent("shader-builder/src/main/glsl/nova_fractal.glsl"),
+    parameters = Vector(
+      IntParameter(name = "max_iterations", value = 200),
+      NewtonFunctionParameter(name = "iteration", value = StringFunction.unsafe("x*x*x - 1"), includeDerivative = true)
+    )
+  )
 
   val allNamed: Seq[(String, FreestyleProgram, Viewport)] = Seq(
     ("timeEscape", timeEscape, Viewport.mandelbrot),
     ("normalMap", normalMap, Viewport.mandelbrot),
     ("outerDistance", outerDistance, Viewport.mandelbrot),
-    ("newtonIteration", newtonIteration, Viewport.aroundZero)
+    ("newtonIteration", newtonIteration, Viewport.aroundZero),
+    ("sierpinskiTriangle", sierpinskiTriangle, Viewport.aroundZero),
+    ("lyapunovFractal", lyapunovFractal, Viewport.aroundZero),
+    ("kochSnowflake", kochSnowflake, Viewport.aroundZero),
+    ("novaFractal", novaFractal, Viewport.aroundZero)
   )
 
   val all: Seq[FreestyleProgram] = allNamed.map(_._2)
