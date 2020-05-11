@@ -2,13 +2,12 @@ package repo
 
 import java.util.UUID
 
-import nutria.core.FractalEntity
+import nutria.core.{Examples, FractalEntity}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-
-import nutria.SystemFractals.systemFractals
+import nutria.core.viewport.{Viewport, ViewportList}
 
 class FractalRepoSpec extends AnyFunSuite with Matchers with GuiceOneAppPerSuite with BeforeAndAfterEach {
   def repo = app.injector.instanceOf[FractalRepo]
@@ -21,8 +20,19 @@ class FractalRepoSpec extends AnyFunSuite with Matchers with GuiceOneAppPerSuite
       maybeFractal = Some(fractal)
     )
 
-  val f1 = row(systemFractals(0))
-  val f2 = row(systemFractals(1))
+  val f1 = row(
+    FractalEntity(
+      program = Examples.timeEscape,
+      views = ViewportList.refineUnsafe(List(Viewport.mandelbrot))
+    )
+  )
+
+  val f2 = row(
+    FractalEntity(
+      program = Examples.newtonIteration,
+      views = ViewportList.refineUnsafe(List(Viewport.aroundZero))
+    )
+  )
 
   override def beforeEach = {
     repo.list().foreach(row => repo.delete(row.id))

@@ -1,12 +1,9 @@
 package controller
 
-import java.util.UUID
-
 import io.circe.syntax._
 import io.circe.JsonObject
 import javax.inject.Inject
 import model.FractalSorting
-import nutria.SystemFractals
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
 import repo.{FractalRepo, FractalRow, UserRepo}
@@ -63,21 +60,6 @@ class AdminController @Inject() (
   def truncateFractals = Action { req =>
     authenticator.adminUser(req) { _ =>
       fractalRepo.list().map(_.id).foreach(fractalRepo.delete)
-      Ok
-    }
-  }
-
-  def insertSystemFractals = Action { req =>
-    authenticator.adminUser(req) { admin =>
-      SystemFractals.systemFractals
-        .foreach(
-          entity =>
-            fractalRepo.save(
-              id = UUID.randomUUID().toString,
-              owner = admin.id,
-              fractal = entity
-            )
-        )
       Ok
     }
   }

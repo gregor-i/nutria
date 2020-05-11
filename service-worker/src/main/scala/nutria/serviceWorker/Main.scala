@@ -36,9 +36,8 @@ object Main {
     self.addEventListener(
       "install",
       (event: ExtendableEvent) =>
-          populateCache(staticCacheName, staticFiles)
-            .toJSPromise
-            .tap(event.waitUntil(_))
+        populateCache(staticCacheName, staticFiles).toJSPromise
+          .tap(event.waitUntil(_))
     )
 
     self.addEventListener(

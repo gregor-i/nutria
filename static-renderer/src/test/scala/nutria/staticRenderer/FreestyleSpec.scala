@@ -1,23 +1,14 @@
 package nutria.staticRenderer
 
-import nutria.SystemFractals
-import nutria.core.languages.{StringFunction, XAndLambda, ZAndLambda}
-import nutria.core.viewport.{Dimensions, Viewport}
 import nutria.core._
-import org.scalatest.funsuite.{AnyFunSuite, AsyncFunSuite}
+import nutria.core.languages.{StringFunction, XAndLambda}
+import nutria.core.viewport.{Dimensions, Viewport}
 
 class FreestyleSpec extends RenderingSuite {
 
-  private def isSystemFractal(program: FreestyleProgram) = {
-    assert(
-      SystemFractals.systemFractals.exists(_.program == program),
-      "fractal was not included in systemfractals. Maybe you want to update them?\nJson:\n" + FreestyleProgram.encode(program).noSpaces
-    )
-  }
-
   test("Sierpinski Triangle") {
     val program = FreestyleProgram(
-      parameters = Seq(
+      parameters = Vector(
         IntParameter(name = "iterations", value = 25),
         FloatParameter(name = "size", value = 1.0.toFloat),
         RGBParameter(name = "color_outside", value = RGB.white),
@@ -66,8 +57,6 @@ class FreestyleSpec extends RenderingSuite {
         |""".stripMargin
     )
 
-    isSystemFractal(program)
-
     Renderer
       .renderToFile(
         FractalImage(program, view = Viewport.aroundZero),
@@ -80,7 +69,7 @@ class FreestyleSpec extends RenderingSuite {
   test("Lyapunov Fractal") {
 
     val program = FreestyleProgram(
-      parameters = Seq(
+      parameters = Vector(
         IntParameter(name = "iterations", value = 120),
         IntParameter(name = "steps_X", value = 6),
         IntParameter(name = "steps_Y", value = 6)
@@ -111,8 +100,6 @@ class FreestyleSpec extends RenderingSuite {
          |""".stripMargin
     )
 
-    isSystemFractal(program)
-
     Renderer
       .renderToFile(
         FractalImage(program, view = Viewport.aroundZero),
@@ -125,7 +112,7 @@ class FreestyleSpec extends RenderingSuite {
   test("Koch Snowflake") {
 
     val program = FreestyleProgram(
-      parameters = Seq(
+      parameters = Vector(
         IntParameter(name = "iterations", value = 26),
         RGBAParameter(name = "color_inside", value = RGB.black.withAlpha()),
         RGBAParameter(name = "color_outside", value = RGB.white.withAlpha())
@@ -151,8 +138,6 @@ class FreestyleSpec extends RenderingSuite {
                |""".stripMargin
     )
 
-    isSystemFractal(program)
-
     Renderer
       .renderToFile(
         FractalImage(program, view = Viewport.aroundZero),
@@ -165,7 +150,7 @@ class FreestyleSpec extends RenderingSuite {
   test("Nova Fractal") {
 
     val program = FreestyleProgram(
-      parameters = Seq(
+      parameters = Vector(
         IntParameter(name = "max_iterations", value = 200),
         NewtonFunctionParameter(name = "iteration", value = StringFunction.unsafe[XAndLambda]("x*x*x - 1"), includeDerivative = true)
       ),
@@ -184,8 +169,6 @@ class FreestyleSpec extends RenderingSuite {
                |
                |""".stripMargin
     )
-
-    isSystemFractal(program)
 
     Renderer
       .renderToFile(

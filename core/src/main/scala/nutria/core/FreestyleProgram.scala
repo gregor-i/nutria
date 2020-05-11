@@ -1,7 +1,6 @@
 package nutria.core
 
-import io.circe.Decoder.Result
-import io.circe.{Decoder, DecodingFailure, HCursor}
+import io.circe.Decoder
 
 @monocle.macros.Lenses()
 case class FreestyleProgram(code: String, parameters: Vector[Parameter] = Vector.empty)
@@ -13,9 +12,10 @@ object FreestyleProgram extends CirceCodec {
 
   // todo: after migration, only use default.
   private val autoDecode     = semiauto.deriveConfiguredDecoder[FreestyleProgram]
+  private val oldDecode      = autoDecode.at("FreestyleProgram")
   private val decodeOnlyCode = Decoder.decodeString.at("code").at("FreestyleProgram").map(FreestyleProgram(_, Vector.empty))
   implicit val decode = autoDecode
-    .or(FractalProgram.codec.map(ToFreestyle.apply))
+    .or(oldDecode)
     .or(decodeOnlyCode)
 //    .or(Decoder.decodeJson.emap[FreestyleProgram] { json =>
 //      println(s"could not parse, ${json}")

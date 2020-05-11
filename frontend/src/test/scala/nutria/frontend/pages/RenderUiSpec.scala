@@ -15,7 +15,7 @@ class RenderUiSpec extends AnyFunSuite {
   Polyfil.init()
 
   for {
-    (name, state) <- Data.states
+    (name, state) <- TestData.states
   } stateRenderingTest(s"Renders $name")(
     state = state,
     fileName = s"./temp/${this.getClass.getSimpleName}/${name}.html"

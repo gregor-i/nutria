@@ -32,11 +32,6 @@ object NutriaAdminService extends Service with CirceCodec {
       .flatMap(check(200))
       .map(_ => ())
 
-  def insertSystemFractals(): Future[Unit] =
-    post("/api/admin/insert-system-fractals")
-      .flatMap(check(200))
-      .map(_ => ())
-
   def migrateAllFractals(): Future[Unit] =
     post(url = "/api/admin/migrate-all-fractals")
       .flatMap(check(200))

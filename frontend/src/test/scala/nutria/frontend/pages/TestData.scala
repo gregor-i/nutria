@@ -1,13 +1,12 @@
 package nutria.frontend.pages
 
-import nutria.core.{DivergingSeries, FractalEntity, FractalEntityWithId, FractalImage, NewtonIteration, ToFreestyle}
+import nutria.core.{Examples, FractalEntity, FractalEntityWithId, FractalImage}
 import nutria.frontend.NutriaState
 
 import scala.concurrent.Future
-import scala.util.chaining._
 
-object Data {
-  private val fractalImage = FractalImage(program = DivergingSeries.default.pipe(ToFreestyle.apply))
+object TestData {
+  private val fractalImage = FractalImage(program = Examples.timeEscape)
   private val fractalEntity = FractalEntityWithId(
     id = "id",
     owner = "owner",

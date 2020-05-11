@@ -1,7 +1,7 @@
 package nutria.staticRenderer
 
 import nutria.core.viewport.{Dimensions, Viewport}
-import nutria.core.{DivergingSeries, FractalImage, NewtonIteration, OuterDistance, RGB, ToFreestyle, refineUnsafe}
+import nutria.core.{Examples, FractalImage, refineUnsafe}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -21,15 +21,15 @@ object RenderAssets {
     s"backend/public/img/$src"
 
   private def favicon(): Future[Unit] = {
-    val program = DivergingSeries.default
-      .copy(
-        coloring = OuterDistance(
-          colorFar = RGB.black.withAlpha(0.0),
-          colorNear = RGB.black.withAlpha(),
-          colorInside = RGB.black.withAlpha()
-        )
-      )
-      .pipe(ToFreestyle.apply)
+    val program = Examples.outerDistance
+    // todo: fix me
+    //      .copy(
+//        coloring = OuterDistance(
+//          colorFar = RGB.black.withAlpha(0.0),
+//          colorNear = RGB.black.withAlpha(),
+//          colorInside = RGB.black.withAlpha()
+//        )
+//      )
 
     val view = Viewport.mandelbrot
       .pipe { view =>
@@ -50,7 +50,7 @@ object RenderAssets {
 
   private def example_DivergingSeries(): Future[Unit] = Renderer.renderToFile(
     fractalImage = FractalImage(
-      program = DivergingSeries.default.pipe(ToFreestyle.apply),
+      program = Examples.timeEscape,
       view = Viewport.mandelbrot,
       antiAliase = refineUnsafe(4)
     ),
@@ -61,7 +61,7 @@ object RenderAssets {
   private def example_NewtonIteration(): Future[Unit] =
     Renderer.renderToFile(
       fractalImage = FractalImage(
-        program = NewtonIteration.default.pipe(ToFreestyle.apply),
+        program = Examples.newtonIteration,
         view = Viewport.aroundZero,
         antiAliase = refineUnsafe(4)
       ),

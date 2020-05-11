@@ -16,7 +16,7 @@ object FreestyleProgramTemplate extends Template[FreestyleProgram] {
       case fp: FunctionParameter if fp.includeDerivative =>
         Seq(
           function(fp.name, fp.value.node),
-          function(fp.name + "_derived", DivergingSeries.deriveIteration(DivergingSeries.default.copy(iteration = fp.value)))
+          function(fp.name + "_derived", DivergingSeries.deriveIteration(fp.value))
         ).mkString("\n")
       case fp: FunctionParameter => function(fp.name, fp.value.node)
 
