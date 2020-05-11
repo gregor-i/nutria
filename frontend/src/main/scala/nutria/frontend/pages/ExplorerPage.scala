@@ -2,6 +2,7 @@ package nutria.frontend.pages
 
 import monocle.Lens
 import monocle.macros.Lenses
+import nutria.api.User
 import nutria.core._
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._

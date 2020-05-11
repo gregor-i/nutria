@@ -2,12 +2,11 @@ package repo
 
 import java.util.UUID
 
-import nutria.core.{Examples, FractalEntity}
+import nutria.core.{Examples, FractalEntity, Viewport, ViewportList}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import nutria.core.viewport.{Viewport, ViewportList}
 
 class FractalRepoSpec extends AnyFunSuite with Matchers with GuiceOneAppPerSuite with BeforeAndAfterEach {
   def repo = app.injector.instanceOf[FractalRepo]

@@ -2,6 +2,7 @@ package nutria.core
 
 import io.circe.Codec
 import monocle.macros.GenPrism
+import nutria.CirceCodec
 import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda}
 
 sealed trait Parameter {
@@ -25,6 +26,12 @@ object Parameter extends CirceCodec {
   val FunctionParameter        = GenPrism[Parameter, FunctionParameter]
   val InitialFunctionParameter = GenPrism[Parameter, InitialFunctionParameter]
   val NewtonFunctionParameter  = GenPrism[Parameter, NewtonFunctionParameter]
+
+  def setParameter(list: Vector[Parameter], newParameter: Parameter): Vector[Parameter] =
+    list.indexWhere(_.name == newParameter.name) match {
+      case -1    => list.appended(newParameter)
+      case index => list.updated(index, newParameter)
+    }
 
   implicit val codec: Codec[Parameter] = semiauto.deriveConfiguredCodec
 }

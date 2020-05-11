@@ -1,5 +1,6 @@
 package nutria.core.viewport
 
+import nutria.core.{Point, Viewport}
 import org.scalacheck.Gen.choose
 
 object ViewportChooser {

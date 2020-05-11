@@ -1,7 +1,6 @@
 package nutria.staticRenderer
 
-import nutria.core.viewport.Dimensions
-import nutria.core.{Examples, FractalImage}
+import nutria.core.{Dimensions, Examples, FractalImage}
 
 class ExampleFractalSpec extends RenderingSuite {
   for {

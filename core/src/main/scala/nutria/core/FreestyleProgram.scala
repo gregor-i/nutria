@@ -1,7 +1,12 @@
 package nutria.core
 
+import nutria.CirceCodec
+
 @monocle.macros.Lenses()
-case class FreestyleProgram(code: String, parameters: Vector[Parameter] = Vector.empty)
+case class FreestyleProgram(code: String, parameters: Vector[Parameter] = Vector.empty) {
+  def setParameter(newParameter: Parameter): FreestyleProgram =
+    copy(parameters = Parameter.setParameter(parameters, newParameter))
+}
 
 object FreestyleProgram extends CirceCodec {
   implicit val codec = semiauto.deriveConfiguredCodec[FreestyleProgram]

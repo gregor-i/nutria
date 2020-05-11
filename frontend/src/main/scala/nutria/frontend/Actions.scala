@@ -1,7 +1,7 @@
 package nutria.frontend
 
-import nutria.core.viewport.{Dimensions, Viewport, ViewportList}
-import nutria.core.{FractalEntity, FractalEntityWithId, FractalImage, Verdict}
+import nutria.api.Verdict
+import nutria.core.{Dimensions, FractalEntity, FractalEntityWithId, FractalImage, Viewport, ViewportList}
 import nutria.frontend.pages.common.FractalTile
 import nutria.frontend.pages._
 import nutria.frontend.service.NutriaService

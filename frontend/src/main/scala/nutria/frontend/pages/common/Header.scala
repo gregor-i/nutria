@@ -1,6 +1,6 @@
 package nutria.frontend.pages.common
 
-import nutria.core.User
+import nutria.api.User
 import nutria.frontend._
 import nutria.frontend.pages.{FAQState, ProfileState}
 import snabbdom.{Node, Snabbdom}

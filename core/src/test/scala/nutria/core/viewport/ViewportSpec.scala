@@ -1,5 +1,6 @@
 package nutria.core.viewport
 
+import nutria.core.Viewport
 import org.scalacheck.Gen.choose
 import org.scalacheck.Prop.{forAll, _}
 import org.scalatest.Assertion

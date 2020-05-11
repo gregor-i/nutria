@@ -1,13 +1,6 @@
-package nutria.core.viewport
-
-import nutria.core.Point
+package nutria.core
 
 object Point {
-  private def longToDouble(l: Long): Double = java.lang.Double.longBitsToDouble(l)
-
-  def createWithLongs(x: Long, y: Long): Point =
-    (longToDouble(x), longToDouble(y))
-
   def apply(x: Double, y: Double): Point = (x, y)
 
   implicit class PointOps(val self: Point) extends AnyVal {

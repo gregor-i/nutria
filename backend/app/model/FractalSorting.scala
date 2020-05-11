@@ -1,6 +1,7 @@
 package model
 
-import nutria.core.{FractalEntityWithId, FreestyleProgram, UpVote, Vote}
+import nutria.api.{UpVote, Vote}
+import nutria.core.{FractalEntityWithId, FreestyleProgram}
 
 object FractalSorting {
   // source:  https://www.evanmiller.org/how-not-to-sort-by-average-rating.html

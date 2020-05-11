@@ -1,4 +1,4 @@
-package nutria.core
+package nutria
 
 import eu.timepit.refined.api.{RefType, Validate}
 import io.circe.generic.extras.Configuration

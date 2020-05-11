@@ -1,7 +1,6 @@
 package nutria.staticRenderer
 
-import nutria.core.viewport.{Dimensions, Viewport}
-import nutria.core.{Examples, FractalImage, refineUnsafe}
+import nutria.core._
 
 class RendererSpec extends RenderingSuite {
   renderingTest("renders high resolution Mandelbrot images")(

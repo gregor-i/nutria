@@ -3,7 +3,7 @@ package module.auth
 import java.util.UUID
 
 import javax.inject.{Inject, Singleton}
-import nutria.core.User
+import nutria.api.User
 import play.api.mvc.InjectedController
 import repo.UserRepo
 

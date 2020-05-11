@@ -1,7 +1,6 @@
 package nutria.staticRenderer
 
-import nutria.core.FractalImage
-import nutria.core.viewport.Dimensions
+import nutria.core.{Dimensions, FractalImage}
 import org.scalatest.funsuite.{AnyFunSuite, AsyncFunSuite}
 
 trait RenderingSuite extends AsyncFunSuite {

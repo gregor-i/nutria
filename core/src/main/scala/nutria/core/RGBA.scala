@@ -1,6 +1,7 @@
 package nutria.core
 
 import io.circe.{Codec, Decoder, Encoder}
+import nutria.CirceCodec
 
 object RGBA extends CirceCodec {
   def interpolate(la: RGBA, lb: RGBA, p: Double): RGBA = {

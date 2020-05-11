@@ -1,5 +1,6 @@
 package nutria.core
 
+import nutria.core
 import nutria.core.languages.StringFunction
 import nutria.macros.StaticContent
 
@@ -100,7 +101,7 @@ object Examples {
     )
   )
 
-  val allNamed: Seq[(String, FreestyleProgram, Viewport)] = Seq(
+  val allNamed: Seq[(String, FreestyleProgram, core.Viewport)] = Seq(
     ("timeEscape", timeEscape, Viewport.mandelbrot),
     ("normalMap", normalMap, Viewport.mandelbrot),
     ("outerDistance", outerDistance, Viewport.mandelbrot),

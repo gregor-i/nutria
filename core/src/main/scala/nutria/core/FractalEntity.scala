@@ -5,7 +5,7 @@ import eu.timepit.refined.numeric.{NonNegative, Positive}
 import io.circe.syntax._
 import io.circe.{Codec, Decoder, Encoder}
 import monocle.Lens
-import nutria.core.viewport.ViewportList
+import nutria.CirceCodec
 
 @monocle.macros.Lenses()
 case class FractalEntity(
@@ -30,7 +30,7 @@ case class FractalEntity(
 
 object FractalEntity extends CirceCodec {
   // do not remove, intellij lies ...
-  import viewport.ViewportList.viewportListValidate
+  import ViewportList.viewportListValidate
 
   import Ordering.Double.TotalOrdering
   implicit val ordering: Ordering[FractalEntity] = Ordering.by { entity =>

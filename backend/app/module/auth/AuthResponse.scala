@@ -1,7 +1,7 @@
 package module.auth
 
 import io.circe.Codec
-import nutria.core.CirceCodec
+import nutria.CirceCodec
 
 case class AuthResponse(access_token: String, expires_in: Int, token_type: String)
 

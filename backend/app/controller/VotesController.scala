@@ -1,9 +1,9 @@
 package controller
 
 import javax.inject.{Inject, Singleton}
-import nutria.core.{DownVote, UpVote, Verdict, Vote, VoteStatistic}
 import play.api.mvc.InjectedController
 import io.circe.syntax._
+import nutria.api.{DownVote, UpVote, Verdict, Vote, VoteStatistic}
 import play.api.libs.circe.Circe
 import repo.VotesRepository
 

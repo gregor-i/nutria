@@ -5,8 +5,7 @@ import java.util.UUID
 import io.circe.syntax._
 import javax.inject.Inject
 import model.FractalSorting
-import nutria.core._
-import nutria.core.viewport.Viewport
+import nutria.core.{Viewport, _}
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
 import repo.{FractalRepo, FractalRow, VotesRepository}

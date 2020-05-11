@@ -1,7 +1,6 @@
 package nutria.staticRenderer
 
-import nutria.core.FractalImage
-import nutria.core.viewport.Dimensions
+import nutria.core.{Dimensions, FractalImage}
 import nutria.shaderBuilder.FractalRenderer
 import org.scalajs.dom.raw.WebGLRenderingContext
 

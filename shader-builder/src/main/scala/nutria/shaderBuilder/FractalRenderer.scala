@@ -1,7 +1,6 @@
 package nutria.shaderBuilder
 
-import nutria.core.viewport.Viewport
-import nutria.core.{AntiAliase, FractalImage, FreestyleProgram}
+import nutria.core.{AntiAliase, FractalImage, FreestyleProgram, Viewport}
 import nutria.macros.StaticContent
 import nutria.shaderBuilder.templates.FreestyleProgramTemplate
 import org.scalajs.dom

@@ -1,4 +1,4 @@
-package nutria.core.viewport
+package nutria.core
 
 import monocle.macros.Lenses
 

@@ -1,6 +1,6 @@
 package nutria.frontend.pages.explorer
 
-import nutria.core.viewport.Point._
+import nutria.core.Point._
 import nutria.core.{Point, Viewport}
 
 object Transform {

@@ -1,7 +1,7 @@
 package nutria.frontend.service
 
 import io.circe.Decoder
-import nutria.core.CirceCodec
+import nutria.CirceCodec
 import nutria.frontend.NutriaState
 import nutria.frontend.pages.{AdminState, ErrorState}
 

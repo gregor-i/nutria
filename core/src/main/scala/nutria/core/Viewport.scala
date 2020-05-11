@@ -1,8 +1,8 @@
-package nutria.core.viewport
+package nutria.core
 
 import io.circe.{Codec, Decoder, Encoder}
-import nutria.core.viewport.Point.PointOps
-import nutria.core.{CirceCodec, Point}
+import nutria.CirceCodec
+import nutria.core.Point.PointOps
 
 object Viewport extends CirceCodec {
   val mandelbrot: Viewport = Viewport(Point(-2.5, -1), Point(3.5, 0), Point(0, 2))
@@ -25,7 +25,6 @@ object Viewport extends CirceCodec {
 }
 
 case class Viewport(origin: Point, A: Point, B: Point) {
-
   import Viewport._
 
   def translate(t: Point): Viewport = Viewport(origin + t, A, B)

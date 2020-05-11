@@ -5,7 +5,7 @@ import java.util.UUID
 import anorm.{RowParser, SqlParser, _}
 import javax.inject.{Inject, Singleton}
 import module.auth.GoogleUserInfo
-import nutria.core.User
+import nutria.api.User
 import play.api.db.Database
 
 @Singleton()

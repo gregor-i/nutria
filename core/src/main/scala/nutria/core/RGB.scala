@@ -1,6 +1,7 @@
 package nutria.core
 
 import io.circe.{Codec, Decoder, Encoder}
+import nutria.CirceCodec
 
 import scala.util.Try
 

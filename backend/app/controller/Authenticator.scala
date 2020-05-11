@@ -1,7 +1,7 @@
 package controller
 
 import javax.inject.Inject
-import nutria.core.User
+import nutria.api.User
 import play.api.Configuration
 import play.api.mvc.{Request, Result, Results}
 import repo.UserRepo

@@ -2,7 +2,7 @@ package nutria.core.languages
 
 import io.circe.{Decoder, Encoder}
 import mathParser.implicits._
-import nutria.core.CirceCodec
+import nutria.CirceCodec
 
 class StringFunction[V] private (val string: String, val node: CNode[V]) {
   override def equals(other: Any): Boolean =

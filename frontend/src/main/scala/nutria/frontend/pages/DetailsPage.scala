@@ -3,6 +3,7 @@ package nutria.frontend.pages
 import monocle.{Iso, Lens}
 import monocle.function.{At, Index}
 import monocle.macros.Lenses
+import nutria.api.User
 import nutria.core._
 import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda}
 import nutria.frontend.Router.{Path, QueryParameter}

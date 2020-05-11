@@ -2,7 +2,7 @@ package repo
 
 import java.util.UUID
 
-import nutria.core.{DownVote, UpVote, Vote}
+import nutria.api.{DownVote, UpVote, Vote}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers

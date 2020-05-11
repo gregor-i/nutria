@@ -1,7 +1,6 @@
 package nutria.staticRenderer
 
-import nutria.core.viewport.{Dimensions, Viewport}
-import nutria.core.{Examples, FractalImage, refineUnsafe}
+import nutria.core._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -22,14 +21,9 @@ object RenderAssets {
 
   private def favicon(): Future[Unit] = {
     val program = Examples.outerDistance
-    // todo: fix me
-    //      .copy(
-//        coloring = OuterDistance(
-//          colorFar = RGB.black.withAlpha(0.0),
-//          colorNear = RGB.black.withAlpha(),
-//          colorInside = RGB.black.withAlpha()
-//        )
-//      )
+      .setParameter(RGBAParameter("colorFar", RGB.black.withAlpha(0.0)))
+      .setParameter(RGBAParameter("colorNear", RGB.black.withAlpha()))
+      .setParameter(RGBAParameter("colorInside", RGB.black.withAlpha()))
 
     val view = Viewport.mandelbrot
       .pipe { view =>
