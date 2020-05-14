@@ -1,6 +1,6 @@
 package nutria.frontend.pages
 
-import nutria.api.User
+import nutria.api.{User, WithId}
 import nutria.core.{Dimensions, _}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common.{FractalTile, _}

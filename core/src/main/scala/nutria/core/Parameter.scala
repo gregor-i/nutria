@@ -7,7 +7,6 @@ import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda}
 
 sealed trait Parameter {
   def name: String
-  def value: Any
 }
 
 case class IntParameter(name: String, value: Int)                                                                         extends Parameter
@@ -26,6 +25,10 @@ object Parameter extends CirceCodec {
   val FunctionParameter        = GenPrism[Parameter, FunctionParameter]
   val InitialFunctionParameter = GenPrism[Parameter, InitialFunctionParameter]
   val NewtonFunctionParameter  = GenPrism[Parameter, NewtonFunctionParameter]
+
+  def setParameters(parameters: Vector[Parameter], newParameters: Vector[Parameter]): Vector[Parameter] = {
+    (parameters ++ newParameters).reverse.distinctBy(_.name).reverse
+  }
 
   def setParameter(list: Vector[Parameter], newParameter: Parameter): Vector[Parameter] =
     list.indexWhere(_.name == newParameter.name) match {

@@ -1,10 +1,8 @@
-package nutria.core
-
-import io.circe.{Codec, Decoder, Encoder}
-import monocle.Lens
-import nutria.CirceCodec
+package nutria.api
 
 import io.circe.syntax._
+import io.circe.{Codec, Decoder, Encoder}
+import nutria.CirceCodec
 
 @monocle.macros.Lenses()
 case class WithId[A](id: String, owner: String, entity: A)

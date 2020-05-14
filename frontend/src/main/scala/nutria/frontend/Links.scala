@@ -1,7 +1,7 @@
 package nutria.frontend
 
-import nutria.api.User
-import nutria.core.{FractalEntity, FractalImage, WithId}
+import nutria.api.{User, WithId}
+import nutria.core.{FractalEntity, FractalImage}
 import nutria.frontend.pages._
 import nutria.frontend.service.NutriaService
 

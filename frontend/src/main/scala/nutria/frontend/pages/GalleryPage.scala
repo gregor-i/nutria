@@ -1,6 +1,6 @@
 package nutria.frontend.pages
 
-import nutria.api.{DownVote, UpVote, User, VoteStatistic}
+import nutria.api.{DownVote, UpVote, User, VoteStatistic, WithId}
 import nutria.core.{Dimensions, _}
 import nutria.frontend.pages.common.{FractalTile, _}
 import nutria.frontend._

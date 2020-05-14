@@ -11,7 +11,7 @@ case class FractalEntity(
     description: String = "",
     reference: List[String] = List.empty,
     published: Boolean = false,
-    program: FreestyleProgram,
+    program: FractalTemplate,
     views: ViewportList = ViewportList.refineUnsafe(List(Viewport.aroundZero)),
     antiAliase: Int Refined Positive = refineUnsafe(1),
     upvotes: Int Refined NonNegative = refineUnsafe(0),

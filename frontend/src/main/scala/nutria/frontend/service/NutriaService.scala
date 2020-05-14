@@ -1,6 +1,6 @@
 package nutria.frontend.service
 
-import nutria.api.{User, Verdict, VoteStatistic}
+import nutria.api.{User, Verdict, VoteStatistic, WithId}
 import nutria.core._
 
 import scala.concurrent.Future

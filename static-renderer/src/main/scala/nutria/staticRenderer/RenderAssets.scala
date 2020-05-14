@@ -21,9 +21,15 @@ object RenderAssets {
 
   private def favicon(): Future[Unit] = {
     val program = Examples.outerDistance
-      .setParameter(RGBAParameter("colorFar", RGB.black.withAlpha(0.0)))
-      .setParameter(RGBAParameter("colorNear", RGB.black.withAlpha()))
-      .setParameter(RGBAParameter("colorInside", RGB.black.withAlpha()))
+      .pipe(
+        FractalTemplate.applyParameters(_)(
+          Vector(
+            RGBAParameter("colorFar", RGB.black.withAlpha(0.0)),
+            RGBAParameter("colorNear", RGB.black.withAlpha()),
+            RGBAParameter("colorInside", RGB.black.withAlpha())
+          )
+        )
+      )
 
     val view = Viewport.mandelbrot
       .pipe { view =>
@@ -34,8 +40,8 @@ object RenderAssets {
       .pipe(_.zoom((0.65, 0.35), 0.60))
 
     val image = FractalImage(
-      program = program,
-      view = view,
+      template = program,
+      viewport = view,
       antiAliase = refineUnsafe(4)
     )
 
@@ -44,8 +50,8 @@ object RenderAssets {
 
   private def example_DivergingSeries(): Future[Unit] = Renderer.renderToFile(
     fractalImage = FractalImage(
-      program = Examples.timeEscape,
-      view = Viewport.mandelbrot,
+      template = Examples.timeEscape,
+      viewport = Viewport.mandelbrot,
       antiAliase = refineUnsafe(4)
     ),
     dimensions = Dimensions.thumbnail,
@@ -55,8 +61,8 @@ object RenderAssets {
   private def example_NewtonIteration(): Future[Unit] =
     Renderer.renderToFile(
       fractalImage = FractalImage(
-        program = Examples.newtonIteration,
-        view = Viewport.aroundZero,
+        template = Examples.newtonIteration,
+        viewport = Viewport.aroundZero,
         antiAliase = refineUnsafe(4)
       ),
       dimensions = Dimensions.thumbnail,

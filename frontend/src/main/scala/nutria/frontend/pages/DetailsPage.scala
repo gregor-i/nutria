@@ -3,7 +3,7 @@ package nutria.frontend.pages
 import monocle.{Iso, Lens}
 import monocle.function.{At, Index}
 import monocle.macros.Lenses
-import nutria.api.User
+import nutria.api.{User, WithId}
 import nutria.core._
 import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda}
 import nutria.frontend.Router.{Path, QueryParameter}
@@ -30,7 +30,7 @@ object DetailsState extends LenseUtils {
   val fractalToEdit_entity_program = fractalToEdit_entity.composeLens(FractalEntity.program)
   val fractalToEdit_entity_program_parameter =
     fractalToEdit_entity_program
-      .composeLens(FreestyleProgram.parameters)
+      .composeLens(FractalTemplate.parameters)
 }
 
 object DetailsPage extends Page[DetailsState] {
@@ -123,7 +123,7 @@ object DetailsPage extends Page[DetailsState] {
   def template()(implicit state: State, update: NutriaState => Unit) = {
     val toEditProgram = DetailsState.fractalToEdit_entity_program
 
-    Form.mulitlineStringInput("template", toEditProgram composeLens FreestyleProgram.code)
+    Form.mulitlineStringInput("template", toEditProgram composeLens FractalTemplate.code)
   }
 
   def parameters(lens: Lens[State, Vector[Parameter]])(implicit state: State, update: NutriaState => Unit) = {

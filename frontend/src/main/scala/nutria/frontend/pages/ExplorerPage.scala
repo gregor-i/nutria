@@ -2,7 +2,7 @@ package nutria.frontend.pages
 
 import monocle.Lens
 import monocle.macros.Lenses
-import nutria.api.User
+import nutria.api.{User, WithId}
 import nutria.core._
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
@@ -32,7 +32,7 @@ case class SaveFractalDialog(
 )
 
 object ExplorerState {
-  val viewport: Lens[ExplorerState, Viewport] = ExplorerState.fractalImage.composeLens(FractalImage.view)
+  val viewport: Lens[ExplorerState, Viewport] = ExplorerState.fractalImage.composeLens(FractalImage.viewport)
 }
 
 object ExplorerPage extends Page[ExplorerState] {
@@ -116,11 +116,11 @@ object ExplorerPage extends Page[ExplorerState] {
 
   def buttonAddViewport(fractalId: String)(implicit state: ExplorerState, update: NutriaState => Unit) =
     Button
-      .icon(Icons.snapshot, Actions.addViewport(fractalId, state.fractalImage.view))
+      .icon(Icons.snapshot, Actions.addViewport(fractalId, state.fractalImage.viewport))
       .classes("is-primary", "is-rounded")
 
   def buttonForkAndAddViewport(fractalId: String)(implicit state: ExplorerState, update: NutriaState => Unit) =
-    Button("Fork and Save this image", Icons.copy, Actions.forkAndAddViewport(fractalId, state.fractalImage.view))
+    Button("Fork and Save this image", Icons.copy, Actions.forkAndAddViewport(fractalId, state.fractalImage.viewport))
       .classes("is-primary")
 
   def renderCanvas(implicit state: ExplorerState, update: NutriaState => Unit): Node =

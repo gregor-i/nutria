@@ -4,7 +4,8 @@ import anorm.{RowParser, SqlParser, _}
 import io.circe.parser._
 import io.circe.syntax._
 import javax.inject.{Inject, Singleton}
-import nutria.core.{FractalEntity, WithId}
+import nutria.api.WithId
+import nutria.core.FractalEntity
 import play.api.db.Database
 
 case class FractalRow(

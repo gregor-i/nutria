@@ -51,8 +51,8 @@ private object OffscrencanvasStrategy extends Strategy {
               offscreenCanvas.width = dimensions.width
               offscreenCanvas.height = dimensions.height
               val webGlProgram = FractalRenderer
-                .constructProgram(webglCtx, fractalImage.program, fractalImage.antiAliase)
-              FractalRenderer.render(webglCtx, fractalImage.view, webGlProgram)
+                .constructProgram(webglCtx, fractalImage.template, fractalImage.antiAliase)
+              FractalRenderer.render(webglCtx, fractalImage.viewport, webGlProgram)
               canvas
                 .getContext("bitmaprenderer")
                 .transferFromImageBitmap(offscreenCanvas.transferToImageBitmap())
@@ -99,8 +99,8 @@ private object ImgStrategy extends Strategy {
     canvas.width = dimensions.width
     canvas.height = dimensions.height
     val webGlProgram = FractalRenderer
-      .constructProgram(webglCtx, fractalImage.program, fractalImage.antiAliase)
-    FractalRenderer.render(webglCtx, fractalImage.view, webGlProgram)
+      .constructProgram(webglCtx, fractalImage.template, fractalImage.antiAliase)
+    FractalRenderer.render(webglCtx, fractalImage.viewport, webGlProgram)
     canvas.toDataURL("image/png")
   }
 }

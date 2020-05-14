@@ -1,7 +1,7 @@
 package nutria.frontend.pages
 
-import nutria.api.User
-import nutria.core.{FractalEntity, WithId}
+import nutria.api.{User, WithId}
+import nutria.core.FractalEntity
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common.{Body, Button, Header, Icons}
 import nutria.frontend.service.NutriaAdminService

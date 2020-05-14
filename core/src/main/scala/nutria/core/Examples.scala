@@ -5,7 +5,7 @@ import nutria.core.languages.StringFunction
 import nutria.macros.StaticContent
 
 object Examples {
-  val timeEscape = FreestyleProgram(
+  val timeEscape = FractalTemplate(
     code = StaticContent("shader-builder/src/main/glsl/time_escape.glsl"),
     parameters = Vector(
       IntParameter("max_iterations", 200),
@@ -17,7 +17,7 @@ object Examples {
     )
   )
 
-  val gaussianInteger = FreestyleProgram(
+  val gaussianInteger = FractalTemplate(
     code = StaticContent("shader-builder/src/main/glsl/gaussian_integer.glsl"),
     parameters = Vector(
       IntParameter("max_iterations", 200),
@@ -30,7 +30,7 @@ object Examples {
   )
 
   val normalMap =
-    FreestyleProgram(
+    FractalTemplate(
       code = StaticContent("shader-builder/src/main/glsl/normal_map.glsl"),
       parameters = Vector(
         IntParameter("max_iterations", 200),
@@ -46,7 +46,7 @@ object Examples {
     )
 
   val outerDistance =
-    FreestyleProgram(
+    FractalTemplate(
       code = StaticContent("shader-builder/src/main/glsl/outer_distance.glsl"),
       parameters = Vector(
         IntParameter("max_iterations", 200),
@@ -61,7 +61,7 @@ object Examples {
     )
 
   val newtonIteration =
-    FreestyleProgram(
+    FractalTemplate(
       code = StaticContent("shader-builder/src/main/glsl/newton_iteration.glsl"),
       parameters = Vector(
         FloatParameter("threshold", 1e-4f),
@@ -76,7 +76,7 @@ object Examples {
     )
 
   val sierpinskiTriangle =
-    FreestyleProgram(
+    FractalTemplate(
       code = StaticContent("shader-builder/src/main/glsl/sierpinsky_triangle.glsl"),
       parameters = Vector(
         IntParameter(name = "iterations", value = 25),
@@ -87,7 +87,7 @@ object Examples {
     )
 
   val lyapunovFractal =
-    FreestyleProgram(
+    FractalTemplate(
       code = StaticContent("shader-builder/src/main/glsl/lyapunov_fractal.glsl"),
       parameters = Vector(
         IntParameter(name = "iterations", value = 120),
@@ -96,7 +96,7 @@ object Examples {
       )
     )
 
-  val kochSnowflake = FreestyleProgram(
+  val kochSnowflake = FractalTemplate(
     code = StaticContent("shader-builder/src/main/glsl/koch_snowflake.glsl"),
     parameters = Vector(
       IntParameter(name = "iterations", value = 26),
@@ -105,7 +105,7 @@ object Examples {
     )
   )
 
-  val novaFractal = FreestyleProgram(
+  val novaFractal = FractalTemplate(
     code = StaticContent("shader-builder/src/main/glsl/nova_fractal.glsl"),
     parameters = Vector(
       IntParameter(name = "max_iterations", value = 200),
@@ -113,7 +113,7 @@ object Examples {
     )
   )
 
-  val allNamed: Seq[(String, FreestyleProgram, core.Viewport)] = Seq(
+  val allNamed: Seq[(String, FractalTemplate, core.Viewport)] = Seq(
     ("timeEscape", timeEscape, Viewport.mandelbrot),
     ("gaussianInteger", gaussianInteger, Viewport.mandelbrot),
     ("normalMap", normalMap, Viewport.mandelbrot),
@@ -125,5 +125,5 @@ object Examples {
     ("novaFractal", novaFractal, Viewport.aroundZero)
   )
 
-  val all: Seq[FreestyleProgram] = allNamed.map(_._2)
+  val all: Seq[FractalTemplate] = allNamed.map(_._2)
 }

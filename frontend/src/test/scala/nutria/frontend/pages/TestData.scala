@@ -1,17 +1,18 @@
 package nutria.frontend.pages
 
-import nutria.core.{Examples, FractalEntity, WithId, FractalImage}
+import nutria.api.WithId
+import nutria.core.{Examples, FractalEntity, FractalImage, Viewport}
 import nutria.frontend.NutriaState
 
 import scala.concurrent.Future
 
 object TestData {
-  private val fractalImage = FractalImage(program = Examples.timeEscape)
+  private val fractalImage = FractalImage(template = Examples.timeEscape, viewport = Viewport.mandelbrot)
   private val fractalEntity = WithId(
     id = "id",
     owner = "owner",
     entity = FractalEntity(
-      program = fractalImage.program
+      program = fractalImage.template
     )
   )
   private val publicFractals = Vector.fill(10)(fractalEntity)

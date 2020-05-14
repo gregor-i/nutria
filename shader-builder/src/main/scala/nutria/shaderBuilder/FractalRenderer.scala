@@ -1,6 +1,6 @@
 package nutria.shaderBuilder
 
-import nutria.core.{AntiAliase, FractalImage, FreestyleProgram, Viewport}
+import nutria.core.{AntiAliase, FractalImage, FractalTemplate, Viewport}
 import nutria.macros.StaticContent
 import nutria.shaderBuilder.templates.FreestyleProgramTemplate
 import org.scalajs.dom
@@ -16,8 +16,8 @@ import scala.util.{Failure, Try}
 object FractalRenderer {
 
   def render(canvas: Canvas, entity: FractalImage, resize: Boolean): Boolean = {
-    val viewport = entity.view
-    val program  = entity.program
+    val viewport = entity.viewport
+    val program  = entity.template
     val ctx = canvas
       .getContext("webgl", Dynamic.literal(preserveDrawingBuffer = true))
       .asInstanceOf[WebGLRenderingContext]
@@ -53,7 +53,7 @@ object FractalRenderer {
   @throws[Exception]
   def constructProgram(
       gl: WebGLRenderingContext,
-      fractralProgram: FreestyleProgram,
+      fractralProgram: FractalTemplate,
       antiAliase: AntiAliase
   ): WebGLProgram = {
     val vertexShader = gl.createShader(VERTEX_SHADER)
@@ -127,7 +127,7 @@ object FractalRenderer {
     gl.drawArrays(TRIANGLES, 0, 6)
   }
 
-  def fragmentShaderSource(state: FreestyleProgram, antiAliase: AntiAliase): String = {
+  def fragmentShaderSource(state: FractalTemplate, antiAliase: AntiAliase): String = {
     s"""precision highp float;
        |
        |uniform vec2 u_resolution;

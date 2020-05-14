@@ -6,8 +6,8 @@ import mathParser.implicits._
 import mathParser.Syntax._
 import nutria.core.languages.{Lambda, StringFunction, X, Z}
 
-object FreestyleProgramTemplate extends Template[FreestyleProgram] {
-  override def definitions(v: FreestyleProgram): Seq[String] =
+object FreestyleProgramTemplate extends Template[FractalTemplate] {
+  override def definitions(v: FractalTemplate): Seq[String] =
     v.parameters.map {
       case IntParameter(name, value)   => constant[WebGlTypeInt.type](name, IntLiteral(value))
       case FloatParameter(name, value) => constant[WebGlTypeFloat.type](name, FloatLiteral(value))
@@ -30,5 +30,5 @@ object FreestyleProgramTemplate extends Template[FreestyleProgram] {
         function(name, value.node) + "\n" + function(name + "_derived", value.node.derive(X))
     }
 
-  override def main(v: FreestyleProgram): String = v.code
+  override def main(v: FractalTemplate): String = v.code
 }

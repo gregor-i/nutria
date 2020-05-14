@@ -89,7 +89,7 @@ object ExplorerEvents {
               event.preventDefault()
               val (canvas, boundingBox) = context(event)
               val to                    = toPoint(event, boundingBox)
-              val newView               = calcNewView(boundingBox, Seq(from -> to), state.fractalImage.view)
+              val newView               = calcNewView(boundingBox, Seq(from -> to), state.fractalImage.viewport)
               resetTransformCss(canvas)
               update(ExplorerState.viewport.set(newView)(state))
             case None => ()
@@ -176,11 +176,11 @@ object ExplorerEvents {
         val newView = calcNewView(
           boundingBox = event.currentTarget.asInstanceOf[Element].getBoundingClientRect(),
           moves = moves.values.map(_.toMove).toSeq,
-          view = state.fractalImage.view
+          view = state.fractalImage.viewport
         )
 
         resetTransformCss(canvas)
-        update(state.copy(fractalImage = state.fractalImage.copy(view = newView)))
+        update(state.copy(fractalImage = state.fractalImage.copy(viewport = newView)))
       }
     }
 
