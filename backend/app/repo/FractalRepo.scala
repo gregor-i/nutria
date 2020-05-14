@@ -4,9 +4,8 @@ import anorm.{RowParser, SqlParser, _}
 import io.circe.parser._
 import io.circe.syntax._
 import javax.inject.{Inject, Singleton}
-import nutria.core.FractalEntity
+import nutria.core.{FractalEntity, WithId}
 import play.api.db.Database
-import nutria.core.FractalEntityWithId
 
 case class FractalRow(
     id: String,
@@ -24,9 +23,9 @@ class FractalRepo @Inject() (db: Database) {
     maybeFractal <- SqlParser.str("fractal").map(data => decode[FractalEntity](data).toOption)
   } yield FractalRow(id, owner, published, maybeFractal.map(_.copy(published = published)))
 
-  val fractalRowToFractalEntity: PartialFunction[FractalRow, FractalEntityWithId] = {
+  val fractalRowToFractalEntity: PartialFunction[FractalRow, WithId[FractalEntity]] = {
     case FractalRow(id, owner, published, Some(entity)) =>
-      FractalEntityWithId(id, owner, entity.copy(published = published))
+      WithId(id, owner, entity.copy(published = published))
   }
 
   def list(): List[FractalRow] =

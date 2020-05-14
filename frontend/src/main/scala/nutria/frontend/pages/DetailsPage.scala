@@ -17,8 +17,8 @@ import scala.util.chaining._
 @Lenses
 case class DetailsState(
     user: Option[User],
-    remoteFractal: FractalEntityWithId,
-    fractalToEdit: FractalEntityWithId,
+    remoteFractal: WithId[FractalEntity],
+    fractalToEdit: WithId[FractalEntity],
     navbarExpanded: Boolean = false
 ) extends NutriaState {
   def dirty: Boolean                                            = remoteFractal != fractalToEdit
@@ -26,7 +26,7 @@ case class DetailsState(
 }
 
 object DetailsState extends LenseUtils {
-  val fractalToEdit_entity         = fractalToEdit.composeLens(FractalEntityWithId.entity)
+  val fractalToEdit_entity         = fractalToEdit.composeLens(WithId.entity)
   val fractalToEdit_entity_program = fractalToEdit_entity.composeLens(FractalEntity.program)
   val fractalToEdit_entity_program_parameter =
     fractalToEdit_entity_program

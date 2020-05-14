@@ -100,7 +100,7 @@ class FractalController @Inject() (fractalRepo: FractalRepo, votesRepo: VotesRep
         owner = user.id,
         fractal = request.body
       )
-      FractalEntityWithId(id, user.id, request.body).asJson
+      WithId(id, user.id, request.body).asJson
         .pipe(Created(_))
     }
   }

@@ -12,7 +12,7 @@ import scala.util.chaining._
 case class UserGalleryState(
     user: Option[User],
     aboutUser: String,
-    userFractals: Vector[FractalEntityWithId],
+    userFractals: Vector[WithId[FractalEntity]],
     navbarExpanded: Boolean = false
 ) extends NutriaState {
   override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
@@ -55,7 +55,7 @@ object UserGalleryPage extends Page[UserGalleryState] {
       .child(Footer())
 
   def renderFractalTile(
-      fractal: FractalEntityWithId
+      fractal: WithId[FractalEntity]
   )(implicit state: UserGalleryState, update: NutriaState => Unit): Node =
     Node("article.fractal-tile.is-relative")
       .child(

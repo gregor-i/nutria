@@ -17,7 +17,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 @Lenses
 case class ExplorerState(
     user: Option[User],
-    remoteFractal: Option[FractalEntityWithId],
+    remoteFractal: Option[WithId[FractalEntity]],
     fractalImage: FractalImage,
     saveModal: Option[SaveFractalDialog] = None,
     navbarExpanded: Boolean = false
@@ -109,7 +109,7 @@ object ExplorerPage extends Page[ExplorerState] {
         Button.icon(Icons.download, Actions.openSaveToDiskModal)
       )
 
-  def buttonBackToDetails(fractal: FractalEntityWithId)(implicit state: ExplorerState, update: NutriaState => Unit) =
+  def buttonBackToDetails(fractal: WithId[FractalEntity])(implicit state: ExplorerState, update: NutriaState => Unit) =
     Link(Links.detailsState(fractal, state.user))
       .classes("button", "is-rounded")
       .child(Icons.icon(Icons.edit))

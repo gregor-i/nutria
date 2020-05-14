@@ -1,7 +1,7 @@
 package model
 
 import nutria.api.{UpVote, Vote}
-import nutria.core.{FractalEntityWithId, FreestyleProgram}
+import nutria.core.{FractalEntity, FreestyleProgram, WithId}
 
 object FractalSorting {
   // source:  https://www.evanmiller.org/how-not-to-sort-by-average-rating.html
@@ -17,7 +17,7 @@ object FractalSorting {
 
   private val defaultScore: Double = score(0, 0)
 
-  def ordering(votes: Seq[Vote]): Ordering[FractalEntityWithId] = {
+  def ordering(votes: Seq[Vote]): Ordering[WithId[FractalEntity]] = {
     val acceptanceMap = votes
       .groupBy(_.forFractal)
       .view
@@ -26,11 +26,11 @@ object FractalSorting {
       }
 
     val acceptanceOrdering = Ordering.Double.TotalOrdering.reverse
-      .on[FractalEntityWithId](fractal => acceptanceMap.getOrElse(fractal.id, defaultScore))
+      .on[WithId[FractalEntity]](fractal => acceptanceMap.getOrElse(fractal.id, defaultScore))
 
     acceptanceOrdering.orElse(orderingByProgram)
   }
 
-  val orderingByProgram: Ordering[FractalEntityWithId] =
+  val orderingByProgram: Ordering[WithId[FractalEntity]] =
     FreestyleProgram.ordering.on(_.entity.program)
 }

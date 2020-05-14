@@ -1,7 +1,7 @@
 package nutria.frontend
 
 import nutria.api.Verdict
-import nutria.core.{Dimensions, FractalEntity, FractalEntityWithId, FractalImage, Viewport, ViewportList}
+import nutria.core.{Dimensions, FractalEntity, WithId, FractalImage, Viewport, ViewportList}
 import nutria.frontend.pages.common.FractalTile
 import nutria.frontend.pages._
 import nutria.frontend.service.NutriaService
@@ -32,7 +32,7 @@ object Actions {
     }
 
   def exploreFractal(
-      fractal: FractalEntityWithId,
+      fractal: WithId[FractalEntity],
       image: FractalImage
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
@@ -59,7 +59,7 @@ object Actions {
     }
 
   def editFractal(
-      fractal: FractalEntityWithId
+      fractal: WithId[FractalEntity]
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       update(
@@ -111,7 +111,7 @@ object Actions {
     }
 
   def togglePublished(
-      fractal: FractalEntityWithId
+      fractal: WithId[FractalEntity]
   )(implicit state: UserGalleryState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
@@ -119,7 +119,7 @@ object Actions {
           val published = fractal.entity.published
           for {
             _ <- NutriaService.updateFractal(
-              FractalEntityWithId.entity
+              WithId.entity
                 .composeLens(FractalEntity.published)
                 .set(!published)
                 .apply(fractal)
@@ -162,7 +162,7 @@ object Actions {
       viewport: Viewport
   )(implicit state: DetailsState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
-      val lensViewports = DetailsState.fractalToEdit.composeLens(FractalEntityWithId.viewports)
+      val lensViewports = DetailsState.fractalToEdit.composeLens(WithId.entity).composeLens(FractalEntity.views)
       val views         = lensViewports.get(state).value
       val newViewports  = views.filter(_ == viewport) ++ views.filter(_ != viewport)
       ViewportList(newViewports) match {
@@ -181,7 +181,7 @@ object Actions {
       viewport: Viewport
   )(implicit state: DetailsState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
-      val lensViewports = DetailsState.fractalToEdit.composeLens(FractalEntityWithId.viewports)
+      val lensViewports = DetailsState.fractalToEdit.composeLens(WithId.entity).composeLens(FractalEntity.views)
       val views         = lensViewports.get(state).value
       val newViewports  = views.filter(_ != viewport)
       ViewportList(newViewports) match {
@@ -194,7 +194,7 @@ object Actions {
     }
 
   def updateFractal(
-      fractalWithId: FractalEntityWithId
+      fractalWithId: WithId[FractalEntity]
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
