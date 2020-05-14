@@ -17,6 +17,18 @@ object Examples {
     )
   )
 
+  val gaussianInteger = FreestyleProgram(
+    code = StaticContent("shader-builder/src/main/glsl/gaussian_integer.glsl"),
+    parameters = Vector(
+      IntParameter("max_iterations", 200),
+      FloatParameter("escape_radius", 100.0f),
+      RGBAParameter("color_near_gaussian", RGB.white.withAlpha()),
+      RGBAParameter("color_far_gaussian", RGB.black.withAlpha()),
+      InitialFunctionParameter("initial", StringFunction.unsafe("lambda")),
+      FunctionParameter("iteration", StringFunction.unsafe("z*z+lambda"))
+    )
+  )
+
   val normalMap =
     FreestyleProgram(
       code = StaticContent("shader-builder/src/main/glsl/normal_map.glsl"),
@@ -103,6 +115,7 @@ object Examples {
 
   val allNamed: Seq[(String, FreestyleProgram, core.Viewport)] = Seq(
     ("timeEscape", timeEscape, Viewport.mandelbrot),
+    ("gaussianInteger", gaussianInteger, Viewport.mandelbrot),
     ("normalMap", normalMap, Viewport.mandelbrot),
     ("outerDistance", outerDistance, Viewport.mandelbrot),
     ("newtonIteration", newtonIteration, Viewport.aroundZero),
