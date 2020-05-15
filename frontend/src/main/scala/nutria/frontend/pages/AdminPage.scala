@@ -21,9 +21,13 @@ case class AdminState(
   override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
 }
 
+object AdminState {
+  def initial = LoadingState(NutriaAdminService.load())
+}
+
 object AdminPage extends Page[AdminState] {
   override def stateFromUrl: PartialFunction[(Path, QueryParameter), NutriaState] = {
-    case ("/admin", _) => LoadingState(NutriaAdminService.load())
+    case ("/admin", _) => AdminState.initial
   }
 
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =

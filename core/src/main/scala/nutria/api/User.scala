@@ -4,7 +4,7 @@ import io.circe.Codec
 import nutria.CirceCodec
 import nutria.core.FractalEntity
 
-case class User(id: String, name: String, email: String, googleUserId: Option[String])
+case class User(id: String, name: String, email: String, googleUserId: Option[String], admin: Boolean = false)
 
 object User extends CirceCodec {
   def isOwner(user: Option[User], fractal: WithId[FractalEntity]): Boolean =

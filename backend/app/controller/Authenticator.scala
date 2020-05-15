@@ -34,7 +34,8 @@ class Authenticator @Inject() (conf: Configuration, userRepo: UserRepo) extends 
     for {
       userId <- req.session.get("user-id")
       user   <- userRepo.get(userId)
-    } yield user
+      isAdmin = user.email == adminEmail
+    } yield user.copy(admin = isAdmin)
 
   def getUser(req: Request[_]): Option[User] = userFromSessionAndDb(req)
 }
