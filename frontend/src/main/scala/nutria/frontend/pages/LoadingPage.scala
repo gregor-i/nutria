@@ -4,7 +4,6 @@ import nutria.frontend.pages.common.{Body, Header}
 import nutria.frontend.{NoRouting, NoUser, NutriaState, Page}
 import snabbdom._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 

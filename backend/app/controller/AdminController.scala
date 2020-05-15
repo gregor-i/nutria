@@ -1,9 +1,12 @@
 package controller
 
+import java.util.UUID
+
 import io.circe.syntax._
 import io.circe.JsonObject
 import javax.inject.Inject
 import model.FractalSorting
+import nutria.core.{Examples, FractalEntity, ViewportList}
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
 import repo.{FractalRepo, FractalRow, UserRepo}
@@ -64,13 +67,20 @@ class AdminController @Inject() (
     }
   }
 
-  def migrateAllFractals = Action { req =>
-    authenticator.adminUser(req) { _ =>
-      fractalRepo
-        .list()
+  def insertExamples = Action { req =>
+    authenticator.adminUser(req) { admin =>
+      Examples.allNamed
         .foreach {
-          case FractalRow(id, owner, _, Some(fractal)) => fractalRepo.save(id, owner, fractal)
-          case _                                       => ()
+          case (name, template, viewport) =>
+            fractalRepo.save(
+              id = UUID.randomUUID().toString,
+              owner = admin.id,
+              fractal = FractalEntity(
+                program = template,
+                views = ViewportList.apply(viewport),
+                title = name
+              )
+            )
         }
       Ok
     }

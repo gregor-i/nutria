@@ -1,13 +1,12 @@
 package nutria.frontend.pages.common
 
-import nutria.frontend.{NutriaState, Router}
+import nutria.frontend.{ExecutionContext, NutriaState, Router}
 import snabbdom.{Node, Snabbdom}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.chaining._
 
-object Link {
+object Link extends ExecutionContext {
   def apply(newState: NutriaState)(implicit update: NutriaState => Unit): Node =
     Node("a")
       .pipe(

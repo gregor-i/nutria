@@ -9,6 +9,7 @@ case class Distinct()
 
 object ViewportList {
 
+  def apply(single: core.Viewport): ViewportList                     = nutria.core.refineUnsafe(List(single))
   def apply(list: List[core.Viewport]): Either[String, ViewportList] = nutria.core.refine(list)
 
   def refineUnsafe(list: List[core.Viewport]): ViewportList = nutria.core.refineUnsafe(list)

@@ -7,8 +7,6 @@ import nutria.frontend.pages.common._
 import nutria.frontend.service.NutriaService
 import snabbdom.Node
 
-import scala.concurrent.ExecutionContext.Implicits.global
-
 case class ProfileState(
     about: User,
     navbarExpanded: Boolean = false

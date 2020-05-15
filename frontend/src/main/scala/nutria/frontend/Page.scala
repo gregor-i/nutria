@@ -5,7 +5,7 @@ import snabbdom.Node
 
 import scala.reflect.ClassTag
 
-abstract class Page[S <: NutriaState: ClassTag] {
+abstract class Page[S <: NutriaState: ClassTag] extends ExecutionContext {
   type State  = S
   type Update = NutriaState => Unit
 

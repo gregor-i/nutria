@@ -8,5 +8,7 @@ object Images {
   val exampleDivergingSeries = "/assets/example_DivergingSeries.png"
   val exampleNewtonIteration = "/assets/example_NewtonIteration.png"
 
+  val compileError = "/assets/compile_error.svg"
+
   def apply(src: String): Node = Node("img").attr("src", src)
 }

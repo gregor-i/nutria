@@ -12,8 +12,6 @@ import nutria.frontend.service.NutriaService
 import nutria.frontend.util.LenseUtils
 import snabbdom.Node
 
-import scala.concurrent.ExecutionContext.Implicits.global
-
 @Lenses
 case class ExplorerState(
     user: Option[User],

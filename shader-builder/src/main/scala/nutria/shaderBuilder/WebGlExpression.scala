@@ -12,7 +12,7 @@ case class IntLiteral(value: Int) extends WebGlExpression[WebGlTypeInt.type] {
 }
 
 case class FloatLiteral(value: Float) extends WebGlExpression[WebGlTypeFloat.type] {
-  override def toCode: String = s"float($value)"
+  override def toCode: String = if (value == value.toInt.toFloat) s"${value.toInt}.0" else value.toString
 }
 
 object FloatLiteral {
@@ -61,37 +61,4 @@ object Vec4 {
       FloatLiteral((rgba.B / 255d).toFloat),
       FloatLiteral(rgba.A.toFloat)
     )
-}
-
-case class ComplexBinaryExp(
-    op: SpireBinaryOperator,
-    left: WebGlExpression[WebGlTypeVec2.type],
-    right: WebGlExpression[WebGlTypeVec2.type]
-) extends WebGlExpression[WebGlTypeVec2.type] {
-  import mathParser.algebra._
-  override def toCode: String = op match {
-    case Plus    => left.toCode + "+" + right.toCode
-    case Minus   => left.toCode + "-" + right.toCode
-    case Times   => s"complex_product(${left.toCode}, ${right.toCode})"
-    case Divided => s"complex_divide(${left.toCode}, ${right.toCode})"
-    case Power   => s"complex_power(${left.toCode}, ${right.toCode})"
-  }
-}
-
-case class ComplexUnitaryExp(op: SpireUnitaryOperator, child: WebGlExpression[WebGlTypeVec2.type]) extends WebGlExpression[WebGlTypeVec2.type] {
-  import mathParser.algebra._
-  override def toCode: String = op match {
-    case Neg  => s"-(${child.toCode})"
-    case Sin  => s"complex_sin(${child.toCode})"
-    case Cos  => s"complex_cos(${child.toCode})"
-    case Tan  => s"complex_tan(${child.toCode})"
-    case Asin => s"complex_asin(${child.toCode})"
-    case Acos => s"complex_acos(${child.toCode})"
-    case Atan => s"complex_atan(${child.toCode})"
-    case Sinh => s"complex_sinh(${child.toCode})"
-    case Cosh => s"complex_cosh(${child.toCode})"
-    case Tanh => s"complex_tanh(${child.toCode})"
-    case Exp  => s"complex_exp(${child.toCode})"
-    case Log  => s"complex_log(${child.toCode})"
-  }
 }

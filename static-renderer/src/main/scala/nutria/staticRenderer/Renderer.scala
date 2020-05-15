@@ -29,7 +29,7 @@ object Renderer {
   def renderToBuffer(fractalImage: FractalImage, dimensions: Dimensions): Uint8Array = {
     val context = gl(dimensions.width, dimensions.height, Dynamic.literal())
 
-    val glProgram = FractalRenderer.constructProgram(context, fractalImage.template, fractalImage.antiAliase)
+    val glProgram = FractalRenderer.compileProgram(context, fractalImage.template, fractalImage.antiAliase)
     FractalRenderer.render(context, fractalImage.viewport, glProgram)
 
     val buffer = new Uint8Array(dimensions.width * dimensions.height * 4)

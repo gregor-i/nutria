@@ -10,6 +10,7 @@ import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common.{Form, _}
 import nutria.frontend.util.LenseUtils
+import nutria.shaderBuilder.FragmentShaderSource
 import snabbdom.Node
 
 import scala.util.chaining._
@@ -96,7 +97,7 @@ object DetailsPage extends Page[DetailsState] {
         Node("section.section").children(
           Node("h4.title.is-4").text("Constructed Fragment Shader:"),
           Node("pre").text(
-            nutria.shaderBuilder.FractalRenderer.fragmentShaderSource(state.fractalToEdit.entity.program, state.fractalToEdit.entity.antiAliase)
+            FragmentShaderSource(state.fractalToEdit.entity.program, state.fractalToEdit.entity.antiAliase)
           )
         )
       )

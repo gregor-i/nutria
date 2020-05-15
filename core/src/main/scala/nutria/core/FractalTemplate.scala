@@ -6,6 +6,8 @@ import nutria.CirceCodec
 case class FractalTemplate(code: String, parameters: Vector[Parameter])
 
 object FractalTemplate extends CirceCodec {
+  val empty = FractalTemplate("", Vector.empty)
+
   implicit val codec = semiauto.deriveConfiguredCodec[FractalTemplate]
 
   implicit val ordering: Ordering[FractalTemplate] = Ordering.by[FractalTemplate, String](_.code)

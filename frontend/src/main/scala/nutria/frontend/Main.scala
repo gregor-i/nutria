@@ -3,11 +3,10 @@ package nutria.frontend
 import org.scalajs.dom
 
 import scala.scalajs.js
-import org.scalajs.dom.experimental.serviceworkers.toServiceWorkerNavigator
+import org.scalajs.dom.experimental.serviceworkers.{ServiceWorkerContainer, ServiceWorkerNavigator}
 
-import scala.scalajs.js.Dynamic
-import scala.util.{Failure, Success}
-import scala.util.chaining._
+import scala.scalajs.js.{Dynamic, UndefOr, |}
+import scala.util.{Failure, Success, Try}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -27,10 +26,12 @@ object Main {
 
   private def installServiceWorker(): Unit =
     (for {
-      navigator <- Future {
+      navigator <- Future.fromTry {
         dom.window.navigator
-          .pipe(toServiceWorkerNavigator)
+          .asInstanceOf[Dynamic]
           .serviceWorker
+          .asInstanceOf[UndefOr[ServiceWorkerNavigator]]
+          .fold[Try[ServiceWorkerContainer]](Failure(new Exception))(sw => Success(sw.serviceWorker))
       }
       registration <- navigator.register("/assets/sw.js", Dynamic.literal(scope = "/")).toFuture
       _            <- registration.update.toFuture

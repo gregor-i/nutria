@@ -2,13 +2,13 @@ package nutria.frontend.service
 
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, parser}
+import nutria.frontend.ExecutionContext
 import org.scalajs.dom.experimental.{Fetch, HttpMethod, RequestInit, Response}
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 import scala.scalajs.js.Dynamic
 
-trait Service {
-  implicit val ex: ExecutionContext = ExecutionContext.global
+trait Service extends ExecutionContext {
 
   def get(url: String): Future[Response] = Fetch.fetch(url).toFuture
 

@@ -2,7 +2,7 @@ package nutria.frontend.pages.common
 
 import nutria.api.User
 import nutria.frontend._
-import nutria.frontend.pages.{FAQState, ProfileState}
+import nutria.frontend.pages.{FAQState, ProfileState, TemplateEditorState}
 import snabbdom.{Node, Snabbdom}
 
 object Header {
@@ -26,6 +26,11 @@ object Header {
                   .async("/gallery", Links.galleryState())
                   .classes("navbar-item")
                   .text("Public Gallery")
+              )
+              .child(
+                Link(TemplateEditorState.initial)
+                  .classes("navbar-item")
+                  .text("Template Editor")
               )
               .child(
                 Link(FAQState(state.user))

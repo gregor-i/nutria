@@ -14,8 +14,6 @@
 //import nutria.macros.StaticContent
 //import snabbdom.Node
 //
-//import scala.concurrent.ExecutionContext.Implicits.global
-//
 //@Lenses
 //case class CreateNewFractalState(
 //    user: Option[User],
