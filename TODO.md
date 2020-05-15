@@ -27,6 +27,7 @@
         - details:
            - become template editor
            - add, delete, reorder parameter
-           - highlight compile errors
         - explorer:
            - modal or something to tweek parameter
+ - service worker:
+    - Cache prevents updates   
