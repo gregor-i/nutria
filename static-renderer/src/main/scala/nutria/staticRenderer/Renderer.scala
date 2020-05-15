@@ -29,11 +29,15 @@ object Renderer {
   def renderToBuffer(fractalImage: FractalImage, dimensions: Dimensions): Uint8Array = {
     val context = gl(dimensions.width, dimensions.height, Dynamic.literal())
 
-    val glProgram = FractalRenderer.compileProgram(context, fractalImage.template, fractalImage.antiAliase)
-    FractalRenderer.render(context, fractalImage.viewport, glProgram)
+    FractalRenderer.compileProgram(context, fractalImage.template, fractalImage.antiAliase) match {
+      case Right(program) =>
+        FractalRenderer.render(context, fractalImage.viewport, program)
 
-    val buffer = new Uint8Array(dimensions.width * dimensions.height * 4)
-    context.readPixels(0, 0, dimensions.width, dimensions.height, WebGLRenderingContext.RGBA, WebGLRenderingContext.UNSIGNED_BYTE, buffer)
-    buffer
+        val buffer = new Uint8Array(dimensions.width * dimensions.height * 4)
+        context.readPixels(0, 0, dimensions.width, dimensions.height, WebGLRenderingContext.RGBA, WebGLRenderingContext.UNSIGNED_BYTE, buffer)
+        buffer
+      case Left(compileException) =>
+        throw compileException
+    }
   }
 }

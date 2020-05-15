@@ -9,7 +9,11 @@ import nutria.shaderBuilder.WebGlType.TypeProps
 
 object FragmentShaderSource {
   def apply(state: FractalTemplate, antiAliase: AntiAliase): String = {
-    s"""${definitions(state)}
+    s"""
+       |#line 1
+       |${definitions(state)}
+       |
+       |#line 1
        |${FragmentShaderSource.main(state)}
        |
        |void main() {

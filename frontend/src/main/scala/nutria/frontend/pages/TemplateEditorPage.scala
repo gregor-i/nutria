@@ -14,9 +14,10 @@ import nutria.frontend.util.LenseUtils
 import nutria.shaderBuilder.{CompileException, FractalRenderer, FragmentShaderSource}
 import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
-import org.scalajs.dom.raw.{HTMLInputElement, WebGLRenderingContext}
+import org.scalajs.dom.raw.{HTMLInputElement, HTMLTextAreaElement, WebGLRenderingContext}
 import snabbdom.{Node, Snabbdom}
 
+import scala.scalajs.js
 import scala.util.{Failure, Success, Try}
 import scala.util.chaining._
 
@@ -131,31 +132,42 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
 //      )
 
   def template(lens: Lens[State, FractalTemplate])(implicit state: State, update: NutriaState => Unit) = {
-    val callback = Snabbdom.event { event =>
-      val value = event.target.asInstanceOf[HTMLInputElement].value
-      update(lens.composeLens(FractalTemplate.code).set(value)(state))
-    }
+    val response = (FractalRenderer.compileProgram(webglCtx, state.template, nutria.core.refineUnsafe(1)) match {
+      case Left(CompileException(context, _, shader)) =>
+        Node("pre.is-paddingless.message.is-danger")
+          .child(Node("div.message-body").text(context.getShaderInfoLog(shader).filter(_.toInt != 0)))
+      case Right(_) =>
+        Node("pre.is-paddingless.message.is-success")
+          .child(Node("div.message-body").text("Compiled successfully"))
+    })
+
+    val codeEditor =
+      Node("div.code-editor-container")
+        .child(
+          Node("pre.code-editor-line-numbers").text {
+            (1 to (state.template.code.count(_ == '\n') + 1))
+              .map(number => s"${number}:")
+              .mkString("\n")
+          }
+        )
+        .child(
+          Node("textarea.code-editor.is-family-code")
+            .event(
+              "input",
+              Snabbdom.event { event =>
+                event.target
+                  .asInstanceOf[HTMLTextAreaElement]
+                  .value
+                  .pipe(lens.composeLens(FractalTemplate.code).set(_)(state))
+                  .tap(update)
+              }
+            )
+            .text(state.template.code)
+        )
 
     Seq(
-      Node("textArea.textarea.is-family-monospace")
-        .style("min-height", "400px")
-        .event("input", callback)
-        .text(state.template.code),
-      Node("pre").text {
-        val offset = FragmentShaderSource.definitions(state.template).count(_ == '\n') + 1
-        FragmentShaderSource
-          .main(state.template)
-          .linesIterator
-          .zipWithIndex
-          .map { case (line, number) => s"${number + offset + 1}: $line" }
-          .mkString("\n")
-      },
-      Node("pre").text {
-        FractalRenderer.compileProgram(webglCtx, state.template, nutria.core.refineUnsafe(1)) match {
-          case Left(CompileException(context, _, shader)) => context.getShaderInfoLog(shader)
-          case Right(_)                                   => "Compiled successfully"
-        }
-      }
+      codeEditor,
+      response
     )
   }
 
