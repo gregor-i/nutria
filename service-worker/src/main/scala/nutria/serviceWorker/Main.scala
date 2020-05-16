@@ -23,14 +23,13 @@ object Main {
     "/assets/fa-solid-900.ttf",
     "/assets/fa-solid-900.woff",
     "/assets/fa-solid-900.woff2",
-    "/assets/freestyle.svg",
+    "/assets/compile_error.svg",
+    "/assets/rendering.svg",
+    "/assets/transparent.svg",
     "/assets/icon.png",
     "/assets/manifest.json",
     "/assets/nutria.css",
-    "/assets/nutria.js",
-    "/assets/rendering.svg",
-    "/assets/sw.js",
-    "/assets/transparent.svg"
+    "/assets/nutria.js"
   )
 
   def main(args: Array[String]): Unit = {
