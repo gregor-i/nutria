@@ -38,7 +38,7 @@ object Main {
       "install",
       (event: ExtendableEvent) =>
         populateCache(staticCacheName, staticFiles)
-          .map(_ => dom.console.debug(s"service-worker-build-time: ${buildinfo.BuildInfo.buildTime}"))
+          .map(_ => Dynamic.global.console.debug(s"service-worker-build-time: ${buildinfo.BuildInfo.buildTime}"))
           .toJSPromise
           .tap(event.waitUntil(_))
     )
