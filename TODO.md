@@ -29,5 +29,3 @@
            - add, delete, reorder parameter
         - explorer:
            - modal or something to tweek parameter
- - service worker:
-    - Cache prevents updates   

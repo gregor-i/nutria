@@ -56,6 +56,8 @@ val `service-worker` = project
   .settings(skip in packageJSDependencies := true)
   .settings(emitSourceMaps := false)
   .settings(libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0")
+  .enablePlugins(BuildInfoPlugin)
+  .settings(buildInfoKeys := Seq(BuildInfoKey.action("buildTime") { System.currentTimeMillis }))
 
 lazy val backend = project
   .in(file("backend"))

@@ -1,5 +1,6 @@
 package nutria.serviceWorker
 
+import org.scalajs.dom
 import org.scalajs.dom.experimental.Fetch._
 import org.scalajs.dom.experimental._
 import org.scalajs.dom.experimental.serviceworkers.ServiceWorkerGlobalScope.self
@@ -36,7 +37,9 @@ object Main {
     self.addEventListener(
       "install",
       (event: ExtendableEvent) =>
-        populateCache(staticCacheName, staticFiles).toJSPromise
+        populateCache(staticCacheName, staticFiles)
+          .map(_ => dom.console.debug(s"service-worker-build-time: ${buildinfo.BuildInfo.buildTime}"))
+          .toJSPromise
           .tap(event.waitUntil(_))
     )
 
