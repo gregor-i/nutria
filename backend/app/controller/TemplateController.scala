@@ -29,9 +29,9 @@ class TemplateController @Inject() (templateRepo: TemplateRepository, authentica
     }
   }
 
-  def postTemplate() = Action(circe.tolerantJson[FractalTemplateEntity]){ req =>
-    authenticator.withUser(req){ user =>
-    val id = UUID.randomUUID().toString
+  def postTemplate() = Action(circe.tolerantJson[FractalTemplateEntity]) { req =>
+    authenticator.withUser(req) { user =>
+      val id = UUID.randomUUID().toString
       templateRepo.save(
         id = id,
         owner = user.id,

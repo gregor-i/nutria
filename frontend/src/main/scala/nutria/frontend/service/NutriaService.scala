@@ -1,6 +1,6 @@
 package nutria.frontend.service
 
-import nutria.api.{User, Verdict, VoteStatistic, WithId}
+import nutria.api.{FractalTemplateEntity, FractalTemplateEntityWithId, User, Verdict, VoteStatistic, WithId}
 import nutria.core._
 
 import scala.concurrent.Future
@@ -11,10 +11,20 @@ object NutriaService extends Service {
       .flatMap(check(200))
       .flatMap(parse[Option[User]])
 
-  def loadTemplate(templateId: String): Future[WithId[FractalTemplate]] =
+  def loadAllTemplates(): Future[Seq[FractalTemplateEntityWithId]] =
+    get(url = s"/api/templates")
+      .flatMap(check(200))
+      .flatMap(parse[Seq[FractalTemplateEntityWithId]])
+
+  def loadTemplate(templateId: String): Future[FractalTemplateEntityWithId] =
     get(url = s"/api/templates/${templateId}")
       .flatMap(check(200))
-      .flatMap(parse[WithId[FractalTemplate]])
+      .flatMap(parse[FractalTemplateEntityWithId])
+
+  def saveTemplate(template: FractalTemplateEntity): Future[FractalTemplateEntityWithId] =
+    post(url = s"/api/templates", body = template)
+      .flatMap(check(201))
+      .flatMap(parse[FractalTemplateEntityWithId])
 
   def loadFractal(fractalId: String): Future[WithId[FractalEntity]] =
     get(url = s"/api/fractals/${fractalId}")

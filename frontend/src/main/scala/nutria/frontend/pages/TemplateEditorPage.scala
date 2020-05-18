@@ -3,7 +3,7 @@ package nutria.frontend.pages
 import monocle.{Iso, Lens}
 import monocle.function.{At, Index}
 import monocle.macros.Lenses
-import nutria.api.{User, WithId}
+import nutria.api.{Entity, FractalTemplateEntityWithId, User, WithId}
 import nutria.core._
 import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda}
 import nutria.frontend.Router.{Path, QueryParameter}
@@ -24,13 +24,13 @@ import scala.util.chaining._
 @Lenses
 case class TemplateEditorState(
     user: Option[User],
-    remoteTemplate: Option[WithId[FractalTemplate]],
+    remoteTemplate: Option[FractalTemplateEntityWithId],
     template: FractalTemplate,
     viewport: Viewport = Viewport.mandelbrot, // todo: remove
     compileErrors: String = "",
     navbarExpanded: Boolean = false
 ) extends NutriaState {
-  def dirty: Boolean                                   = remoteTemplate.fold(FractalTemplate.empty)(_.entity) != template
+  def dirty: Boolean                                   = remoteTemplate.fold(FractalTemplate.empty)(_.entity.value) != template
   def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
 }
 
@@ -60,7 +60,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
         } yield TemplateEditorState(
           user = user,
           remoteTemplate = Some(remoteTemplate),
-          template = queryParams.get("state").flatMap(Router.queryDecoded[FractalTemplate]).getOrElse(remoteTemplate.entity)
+          template = queryParams.get("state").flatMap(Router.queryDecoded[FractalTemplate]).getOrElse(remoteTemplate.entity.value)
         )
       )
 
@@ -120,16 +120,16 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
           preview()
         )
       )
-//      .child(
-//        Node("section.section").children(
-//          Node("h4.title.is-4").text("Constructed Fragment Shader:"),
-//          source()
-//        )
-//      )
-//      .child(
-//        Node("section.section")
-//          .child(actions())
-//      )
+      //      .child(
+      //        Node("section.section").children(
+      //          Node("h4.title.is-4").text("Constructed Fragment Shader:"),
+      //          source()
+      //        )
+      //      )
+      .child(
+        Node("section.section")
+          .child(actions())
+      )
 
   def template(lens: Lens[State, FractalTemplate])(implicit state: State, update: NutriaState => Unit) = {
     val response = (FractalRenderer.compileProgram(webglCtx, state.template, nutria.core.refineUnsafe(1)) match {
@@ -268,31 +268,27 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
         .mkString("\n")
     )
 
-//  private def actions()(implicit state: State, update: NutriaState => Unit): Node = {
-//    val buttons: Seq[Node] = state.user match {
-//      case Some(user) if user.id == state.remoteFractal.owner =>
-//        Seq(buttonDelete, buttonSaveAsOld)
-//
-//      case _ =>
-//        Seq(buttonFork)
-//    }
-//
-//    Node("div.field.is-grouped.is-grouped-right")
-//      .child(buttons.map(button => Node("p.control").child(button)))
-//  }
-//
-//  private def buttonSaveAsOld(implicit state: State, update: NutriaState => Unit) =
-//    Button(
-//      "Save Changes",
-//      Icons.save,
-//      Actions.updateFractal(state.fractalToEdit)
-//    ).classes("is-primary")
-//
-//  private def buttonDelete(implicit state: State, update: NutriaState => Unit) =
-//    Button("Delete", Icons.delete, Actions.deleteFractal(state.fractalToEdit.id))
-//      .classes("is-danger", "is-light")
-//
-//  private def buttonFork(implicit state: State, update: NutriaState => Unit) =
-//    Button("Copy this Fractal", Icons.copy, Actions.saveAsNewFractal(state.fractalToEdit.entity))
-//      .classes("is-primary")
+  private def actions()(implicit state: State, update: NutriaState => Unit): Node = {
+    val buttons: Seq[Node] = state.user match {
+      case Some(user) =>
+        Seq(buttonSave)
+      case None =>
+        Seq.empty
+    }
+
+    Node("div.field.is-grouped.is-grouped-right")
+      .child(buttons.map(button => Node("p.control").child(button)))
+  }
+
+  private def buttonSave(implicit state: State, update: NutriaState => Unit) =
+    Button(
+      "Save Changes as new Template",
+      Icons.save,
+      Actions.saveTemplate(
+        Entity(
+          title = "todo",
+          value = state.template
+        )
+      )
+    ).classes("is-primary")
 }
