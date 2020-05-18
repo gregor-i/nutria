@@ -57,7 +57,10 @@ val `service-worker` = project
   .settings(emitSourceMaps := false)
   .settings(libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0")
   .enablePlugins(BuildInfoPlugin)
-  .settings(buildInfoKeys := Seq(BuildInfoKey.action("buildTime") { System.currentTimeMillis }))
+  .settings(buildInfoKeys := Seq(
+    BuildInfoKey.action("buildTime") { System.currentTimeMillis },
+    BuildInfoKey.action("assetFiles") { "ls backend/public/assets".!! },
+  ))
 
 lazy val backend = project
   .in(file("backend"))

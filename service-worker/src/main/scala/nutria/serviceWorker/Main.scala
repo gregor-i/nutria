@@ -1,6 +1,5 @@
 package nutria.serviceWorker
 
-import org.scalajs.dom
 import org.scalajs.dom.experimental.Fetch._
 import org.scalajs.dom.experimental._
 import org.scalajs.dom.experimental.serviceworkers.ServiceWorkerGlobalScope.self
@@ -14,45 +13,33 @@ import scala.scalajs.js.JSConverters._
 import scala.util.chaining._
 
 object Main {
-  val staticCacheName = "nutria-static"
-  val staticFiles = js.Array[RequestInfo](
-    "/assets/example_DivergingSeries.png",
-    "/assets/example_NewtonIteration.png",
-    "/assets/fa-solid-900.eot",
-    "/assets/fa-solid-900.svg",
-    "/assets/fa-solid-900.ttf",
-    "/assets/fa-solid-900.woff",
-    "/assets/fa-solid-900.woff2",
-    "/assets/compile_error.svg",
-    "/assets/rendering.svg",
-    "/assets/transparent.svg",
-    "/assets/icon.png",
-    "/assets/manifest.json",
-    "/assets/nutria.css",
-    "/assets/nutria.js"
-  )
+  val assetCacheName = "nutria-assets"
+
+  val assets =
+    buildinfo.BuildInfo.assetFiles
+      .split("\n")
+      .map[RequestInfo](fileName => "/assets/" + fileName)
+      .toJSArray
+
+  val startUrl: RequestInfo = "/"
 
   def main(args: Array[String]): Unit = {
     self.addEventListener(
       "install",
       (event: ExtendableEvent) =>
-        populateCache(staticCacheName, staticFiles)
+        populateCache(assetCacheName, assets)
+          .flatMap(_ => populateCache(assetCacheName, js.Array(startUrl)))
           .map(_ => Dynamic.global.console.debug(s"service-worker-build-time: ${buildinfo.BuildInfo.buildTime}"))
           .toJSPromise
           .tap(event.waitUntil(_))
     )
 
-    self.addEventListener(
-      "activate",
-      (event: ExtendableEvent) =>
-        //invalidateCache()
-        self.clients.claim()
-    )
+    self.addEventListener("activate", (_: ExtendableEvent) => self.clients.claim())
 
     self.addEventListener(
       "fetch",
       (event: FetchEvent) => {
-        fromCache(staticCacheName, event.request)
+        fromCache(assetCacheName, event.request)
           .recoverWith(_ => fetch(event.request).toFuture)
           .toJSPromise
           .tap(event.respondWith(_))
@@ -66,7 +53,7 @@ object Main {
       _     <- cache.addAll(files).toFuture
     } yield ()
 
-  def fromCache(cacheName: String, request: Request): Future[Response] =
+  def fromCache(cacheName: String, request: RequestInfo): Future[Response] =
     for {
       cache         <- self.caches.open(cacheName).toFuture
       maybeResponse <- cache.`match`(request).toFuture
