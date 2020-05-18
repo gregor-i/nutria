@@ -5,6 +5,8 @@ import eu.timepit.refined.numeric.{NonNegative, Positive}
 import io.circe.Codec
 import nutria.CirceCodec
 
+// todo: extract Entity
+
 @monocle.macros.Lenses()
 case class FractalEntity(
     title: String = "",

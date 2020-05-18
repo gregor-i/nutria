@@ -8,9 +8,6 @@ import nutria.CirceCodec
 case class WithId[A](id: String, owner: String, entity: A)
 
 object WithId extends CirceCodec {
-//  val viewports: Lens[WithId[FractalEntity], ViewportList] =
-//    WithId[FractalEntity].entity.composeLens(FractalEntity.views)
-
   implicit def codec[A: Decoder: Encoder]: Codec[WithId[A]] = Codec.from(
     decodeA = Decoder[WithId[A]] { json =>
       for {
