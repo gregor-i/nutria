@@ -9,10 +9,10 @@ import play.api.db.Database
 
 abstract class EntityRepo[E <: Entity[_]: Decoder: Encoder](tableName: String, rowEntity: String, db: Database) {
   private val rowParser: RowParser[WithId[Option[E]]] = for {
-    id           <- SqlParser.str("id")
-    owner        <- SqlParser.str("owner")
-    maybeFractal <- SqlParser.str(rowEntity).map(data => decode[E](data).toOption)
-  } yield WithId[Option[E]](id, owner, maybeFractal)
+    id     <- SqlParser.str("id")
+    owner  <- SqlParser.str("owner")
+    maybeE <- SqlParser.str(rowEntity).map(data => decode[E](data).toOption)
+  } yield WithId[Option[E]](id, owner, maybeE)
 
   val rowToEntity: PartialFunction[WithId[Option[E]], WithId[E]] = {
     case WithId(id, owner, Some(entity)) => WithId(id, owner, entity)
