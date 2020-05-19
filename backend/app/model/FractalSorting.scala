@@ -1,7 +1,7 @@
 package model
 
-import nutria.api.{UpVote, Vote, WithId}
-import nutria.core.{FractalEntity, FractalTemplate}
+import nutria.api.{FractalEntity, UpVote, Vote, WithId}
+import nutria.core.FractalTemplate
 
 object FractalSorting {
   // source:  https://www.evanmiller.org/how-not-to-sort-by-average-rating.html
@@ -32,5 +32,5 @@ object FractalSorting {
   }
 
   val orderingByProgram: Ordering[WithId[FractalEntity]] =
-    FractalTemplate.ordering.on(_.entity.program)
+    FractalTemplate.ordering.on(_.entity.value.program)
 }

@@ -5,14 +5,8 @@ import eu.timepit.refined.numeric.{NonNegative, Positive}
 import io.circe.Codec
 import nutria.CirceCodec
 
-// todo: extract Entity
-
 @monocle.macros.Lenses()
-case class FractalEntity(
-    title: String = "",
-    description: String = "",
-    reference: List[String] = List.empty,
-    published: Boolean = false,
+case class Fractal(
     program: FractalTemplate,
     views: ViewportList = ViewportList.refineUnsafe(List(Viewport.aroundZero)),
     antiAliase: Int Refined Positive = refineUnsafe(1),
@@ -20,9 +14,9 @@ case class FractalEntity(
     downvotes: Int Refined NonNegative = refineUnsafe(0)
 )
 
-object FractalEntity extends CirceCodec {
+object Fractal extends CirceCodec {
   // do not remove, intellij lies ...
   import ViewportList.viewportListValidate
 
-  implicit val codec: Codec[FractalEntity] = semiauto.deriveConfiguredCodec
+  implicit val codec: Codec[Fractal] = semiauto.deriveConfiguredCodec
 }

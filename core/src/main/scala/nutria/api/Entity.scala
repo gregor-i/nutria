@@ -4,6 +4,7 @@ import io.circe.{Codec, Decoder, Encoder}
 import nutria.CirceCodec
 import io.circe.syntax._
 
+@monocle.macros.Lenses()
 case class Entity[A](
     title: String = "",
     description: String = "",

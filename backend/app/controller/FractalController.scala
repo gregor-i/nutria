@@ -5,7 +5,7 @@ import java.util.UUID
 import io.circe.syntax._
 import javax.inject.Inject
 import model.FractalSorting
-import nutria.api.WithId
+import nutria.api.{FractalEntity, WithId}
 import nutria.core.{Viewport, _}
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
@@ -59,7 +59,7 @@ class FractalController @Inject() (fractalRepo: FractalRepo, votesRepo: VotesRep
         FractalImage(template = Examples.newtonIteration, viewport = Viewport.aroundZero)
       Ok(defaultImage.asJson)
     } else {
-      val images      = FractalImage.allImages(entities.map(_.entity))
+      val images      = FractalImage.allImages(entities.map(_.entity.value))
       val randomImage = images(random.nextInt(images.length))
       Ok(randomImage.asJson)
     }

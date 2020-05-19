@@ -2,7 +2,6 @@ package nutria.api
 
 import io.circe.Codec
 import nutria.CirceCodec
-import nutria.core.FractalEntity
 
 case class User(id: String, name: String, email: String, googleUserId: Option[String], admin: Boolean = false)
 

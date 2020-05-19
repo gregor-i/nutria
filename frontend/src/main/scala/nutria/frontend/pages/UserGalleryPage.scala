@@ -1,6 +1,6 @@
 package nutria.frontend.pages
 
-import nutria.api.{User, WithId}
+import nutria.api.{FractalEntity, User, WithId}
 import nutria.core.{Dimensions, _}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common.{FractalTile, _}
@@ -61,7 +61,7 @@ object UserGalleryPage extends Page[UserGalleryState] {
       .child(
         Link(Links.detailsState(fractal, state.user))
           .child(
-            FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnail)
+            FractalTile(FractalImage.firstImage(fractal.entity.value), Dimensions.thumbnail)
               .event("click", Actions.editFractal(fractal))
           )
       )

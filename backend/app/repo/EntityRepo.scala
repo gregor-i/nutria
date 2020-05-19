@@ -4,11 +4,10 @@ import anorm.{RowParser, SqlParser, _}
 import io.circe.{Decoder, Encoder}
 import io.circe.parser._
 import io.circe.syntax._
-import nutria.api.{FractalTemplateEntity, WithId}
-import nutria.core.FractalEntity
+import nutria.api.{Entity, WithId}
 import play.api.db.Database
 
-abstract class EntityRepo[E: Decoder: Encoder: Publishable](tableName: String, rowEntity: String, db: Database) {
+abstract class EntityRepo[E <: Entity[_]: Decoder: Encoder](tableName: String, rowEntity: String, db: Database) {
   private val rowParser: RowParser[WithId[Option[E]]] = for {
     id           <- SqlParser.str("id")
     owner        <- SqlParser.str("owner")
@@ -57,10 +56,10 @@ abstract class EntityRepo[E: Decoder: Encoder: Publishable](tableName: String, r
     db.withConnection { implicit con =>
       val data = entity.asJson.noSpaces
       SQL"""INSERT INTO #${tableName} (id, owner, published, #${rowEntity})
-            VALUES (${id}, ${owner}, ${Publishable.published(entity)}, $data)
+            VALUES (${id}, ${owner}, ${entity.published}, $data)
             ON CONFLICT (id) DO UPDATE
             SET #${rowEntity} = $data,
-                published = ${Publishable.published(entity)}
+                published = ${entity.published}
         """.executeUpdate()
     }
 
@@ -70,18 +69,4 @@ abstract class EntityRepo[E: Decoder: Encoder: Publishable](tableName: String, r
             WHERE id = $id"""
         .executeUpdate()
     }
-}
-
-trait Publishable[E] {
-  def published(e: E): Boolean
-}
-
-object Publishable {
-  def published[E](e: E)(implicit ev: Publishable[E]): Boolean = ev.published(e)
-
-  implicit val templateIsPublishable: Publishable[FractalTemplateEntity] =
-    _.published
-
-  implicit val fractalIsPublishable: Publishable[FractalEntity] =
-    _.published
 }

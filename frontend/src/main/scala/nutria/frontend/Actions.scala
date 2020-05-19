@@ -1,7 +1,7 @@
 package nutria.frontend
 
-import nutria.api.{FractalTemplateEntity, Verdict, WithId}
-import nutria.core.{Dimensions, FractalEntity, FractalImage, Viewport, ViewportList}
+import nutria.api.{Entity, FractalEntity, FractalTemplateEntity, Verdict, WithId}
+import nutria.core.{Dimensions, Fractal, FractalImage, Viewport, ViewportList}
 import nutria.frontend.pages.common.FractalTile
 import nutria.frontend.pages._
 import nutria.frontend.service.NutriaService
@@ -76,9 +76,15 @@ object Actions {
         asyncUpdate {
           for {
             remoteFractal <- NutriaService.loadFractal(fractalId)
-            views   = (remoteFractal.entity.views.value :+ viewport).distinct
-            updated = remoteFractal.entity.copy(views = ViewportList.refineUnsafe(views))
-            _ <- NutriaService.updateFractal(remoteFractal.copy(entity = updated))
+            updated = WithId
+              .entity[FractalEntity]
+              .composeLens(Entity.value)
+              .composeLens(Fractal.views)
+              .modify { views =>
+                val newViews = (views.value :+ viewport).distinct
+                ViewportList.refineUnsafe(newViews)
+              }(remoteFractal)
+            _ <- NutriaService.updateFractal(updated)
             _ = Toasts.successToast("Snapshot saved")
           } yield state
         }
@@ -94,17 +100,21 @@ object Actions {
         asyncUpdate {
           for {
             remoteFractal <- NutriaService.loadFractal(fractalId)
-            updated = remoteFractal.entity.copy(
-              views = ViewportList.refineUnsafe(
-                (remoteFractal.entity.views.value :+ viewport).distinct
-              )
-            )
-            forkedFractal <- NutriaService.save(updated)
+            updated = WithId
+              .entity[FractalEntity]
+              .composeLens(Entity.value)
+              .composeLens(Fractal.views)
+              .modify { views =>
+                ViewportList.refineUnsafe(
+                  (views.value :+ viewport).distinct
+                )
+              }(remoteFractal)
+            forkedFractal <- NutriaService.save(updated.entity)
             _ = Toasts.successToast("Fractal saved")
           } yield ExplorerState(
             state.user,
             remoteFractal = Some(forkedFractal),
-            fractalImage = FractalImage(remoteFractal.entity.program, viewport, remoteFractal.entity.antiAliase)
+            fractalImage = FractalImage(remoteFractal.entity.value.program, viewport, remoteFractal.entity.value.antiAliase)
           )
         }
       }
@@ -119,8 +129,9 @@ object Actions {
           val published = fractal.entity.published
           for {
             _ <- NutriaService.updateFractal(
-              WithId.entity
-                .composeLens(FractalEntity.published)
+              WithId
+                .entity[FractalEntity]
+                .composeLens(Entity.published)
                 .set(!published)
                 .apply(fractal)
             )
@@ -162,7 +173,7 @@ object Actions {
       viewport: Viewport
   )(implicit state: DetailsState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
-      val lensViewports = DetailsState.fractalToEdit.composeLens(WithId.entity).composeLens(FractalEntity.views)
+      val lensViewports = DetailsState.fractalToEdit.composeLens(WithId.entity).composeLens(Entity.value).composeLens(Fractal.views)
       val views         = lensViewports.get(state).value
       val newViewports  = views.filter(_ == viewport) ++ views.filter(_ != viewport)
       ViewportList(newViewports) match {
@@ -181,7 +192,7 @@ object Actions {
       viewport: Viewport
   )(implicit state: DetailsState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
-      val lensViewports = DetailsState.fractalToEdit.composeLens(WithId.entity).composeLens(FractalEntity.views)
+      val lensViewports = DetailsState.fractalToEdit.composeLens(WithId.entity).composeLens(Entity.value).composeLens(Fractal.views)
       val views         = lensViewports.get(state).value
       val newViewports  = views.filter(_ != viewport)
       ViewportList(newViewports) match {

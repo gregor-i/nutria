@@ -6,8 +6,8 @@ import io.circe.JsonObject
 import io.circe.syntax._
 import javax.inject.Inject
 import model.FractalSorting
-import nutria.api.WithId
-import nutria.core.{Examples, FractalEntity, ViewportList}
+import nutria.api.{Entity, WithId}
+import nutria.core.{Examples, Fractal, ViewportList}
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
 import repo.{FractalRepo, UserRepo}
@@ -76,10 +76,12 @@ class AdminController @Inject() (
             fractalRepo.save(
               id = UUID.randomUUID().toString,
               owner = admin.id,
-              entity = FractalEntity(
-                program = template,
-                views = ViewportList.apply(viewport),
-                title = name
+              entity = Entity(
+                title = name,
+                value = Fractal(
+                  program = template,
+                  views = ViewportList.apply(viewport)
+                )
               )
             )
         }

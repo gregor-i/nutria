@@ -1,6 +1,6 @@
 package nutria.frontend.pages
 
-import nutria.api.{DownVote, UpVote, User, VoteStatistic, WithId}
+import nutria.api.{DownVote, FractalEntity, UpVote, User, VoteStatistic, WithId}
 import nutria.core.{Dimensions, _}
 import nutria.frontend.pages.common.{FractalTile, _}
 import nutria.frontend._
@@ -62,7 +62,7 @@ object GalleryPage extends Page[GalleryState] {
       .child(
         Link(Links.explorerState(fractal, state.user))
           .child(
-            FractalTile(FractalImage.firstImage(fractal.entity), Dimensions.thumbnail)
+            FractalTile(FractalImage.firstImage(fractal.entity.value), Dimensions.thumbnail)
           )
       )
       .child(

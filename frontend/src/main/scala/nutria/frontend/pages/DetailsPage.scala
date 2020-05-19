@@ -3,7 +3,7 @@ package nutria.frontend.pages
 import monocle.{Iso, Lens}
 import monocle.function.{At, Index}
 import monocle.macros.Lenses
-import nutria.api.{User, WithId}
+import nutria.api.{Entity, FractalEntity, User, WithId}
 import nutria.core._
 import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda}
 import nutria.frontend.Router.{Path, QueryParameter}
@@ -28,7 +28,7 @@ case class DetailsState(
 
 object DetailsState extends LenseUtils {
   val fractalToEdit_entity         = fractalToEdit.composeLens(WithId.entity)
-  val fractalToEdit_entity_program = fractalToEdit_entity.composeLens(FractalEntity.program)
+  val fractalToEdit_entity_program = fractalToEdit_entity.composeLens(Entity.value).composeLens(Fractal.program)
   val fractalToEdit_entity_program_parameter =
     fractalToEdit_entity_program
       .composeLens(FractalTemplate.parameters)
@@ -97,7 +97,7 @@ object DetailsPage extends Page[DetailsState] {
         Node("section.section").children(
           Node("h4.title.is-4").text("Constructed Fragment Shader:"),
           Node("pre").text(
-            FragmentShaderSource(state.fractalToEdit.entity.program, state.fractalToEdit.entity.antiAliase)
+            FragmentShaderSource(state.fractalToEdit.entity.value.program, state.fractalToEdit.entity.value.antiAliase)
           )
         )
       )
@@ -109,12 +109,12 @@ object DetailsPage extends Page[DetailsState] {
   def general()(implicit state: State, update: NutriaState => Unit) = {
     val startLens = DetailsState.fractalToEdit_entity
     Seq(
-      Form.stringInput("Title", startLens composeLens FractalEntity.title),
-      Form.stringInput("Description", startLens composeLens FractalEntity.description),
+      Form.stringInput("Title", startLens composeLens Entity.title),
+      Form.stringInput("Description", startLens composeLens Entity.description),
       Form.readonlyStringInput("Published", state.fractalToEdit.entity.published.toString),
       Form.stringInput(
         "References",
-        startLens composeLens FractalEntity.reference composeIso Iso[List[String], String](
+        startLens composeLens Entity.reference composeIso Iso[List[String], String](
           _.mkString(" ")
         )(_.split("\\s").filter(_.nonEmpty).toList)
       )
@@ -128,7 +128,7 @@ object DetailsPage extends Page[DetailsState] {
   }
 
   def parameters(lens: Lens[State, Vector[Parameter]])(implicit state: State, update: NutriaState => Unit) = {
-    state.fractalToEdit.entity.program.parameters.zipWithIndex
+    state.fractalToEdit.entity.value.program.parameters.zipWithIndex
       .map {
         case (p: IntParameter, index) =>
           Form.intInput(
@@ -197,7 +197,7 @@ object DetailsPage extends Page[DetailsState] {
   }
 
   def snapshots()(implicit state: State, update: NutriaState => Unit) = {
-    val fractal = state.fractalToEdit.entity
+    val fractal = state.fractalToEdit.entity.value
 
     val tiles = fractal.views.value.map { viewport =>
       val img = FractalImage(fractal.program, viewport, fractal.antiAliase)

@@ -1,7 +1,6 @@
 package nutria.frontend.pages
 
-import nutria.api.{User, WithId}
-import nutria.core.FractalEntity
+import nutria.api.{FractalEntity, User, WithId}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common.{Body, Button, Header, Icons}
 import nutria.frontend.service.NutriaAdminService
@@ -101,7 +100,7 @@ object AdminPage extends Page[AdminState] {
                   .child(Node("td").text(fractal.entity.published.toString))
                   .child(Node("td").text(fractal.entity.title))
                   .child(Node("td").text(fractal.entity.description))
-                  .child(Node("td").text(fractal.entity.program.getClass.getSimpleName))
+                  .child(Node("td").text(fractal.entity.value.program.getClass.getSimpleName))
                   .child(
                     Node("td").child(
                       Button

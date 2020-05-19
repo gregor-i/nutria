@@ -12,13 +12,13 @@ case class FractalImage(
 )
 
 object FractalImage extends CirceCodec {
-  def allImages(fractalEntities: Seq[FractalEntity]): Seq[FractalImage] =
+  def allImages(fractalEntities: Seq[Fractal]): Seq[FractalImage] =
     for {
       entity <- fractalEntities
       view   <- entity.views.value
     } yield FractalImage(entity.program, view, entity.antiAliase)
 
-  def firstImage(fractalEntity: FractalEntity): FractalImage =
+  def firstImage(fractalEntity: Fractal): FractalImage =
     FractalImage(fractalEntity.program, fractalEntity.views.value.head, fractalEntity.antiAliase)
 
   implicit val codec: Codec[FractalImage] = semiauto.deriveConfiguredCodec

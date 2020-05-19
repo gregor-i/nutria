@@ -1,7 +1,7 @@
 package nutria.frontend.pages
 
-import nutria.api.WithId
-import nutria.core.{Examples, FractalEntity, FractalImage, Viewport}
+import nutria.api.{Entity, WithId}
+import nutria.core.{Examples, Fractal, FractalImage, Viewport}
 import nutria.frontend.NutriaState
 
 import scala.concurrent.Future
@@ -11,8 +11,10 @@ object TestData {
   private val fractalEntity = WithId(
     id = "id",
     owner = "owner",
-    entity = FractalEntity(
-      program = fractalImage.template
+    entity = Entity(
+      value = Fractal(
+        program = fractalImage.template
+      )
     )
   )
   private val publicFractals = Vector.fill(10)(fractalEntity)

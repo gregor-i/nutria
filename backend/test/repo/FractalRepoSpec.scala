@@ -2,8 +2,8 @@ package repo
 
 import java.util.UUID
 
-import nutria.api.WithId
-import nutria.core.{Examples, FractalEntity, Viewport, ViewportList}
+import nutria.api.{Entity, FractalEntity, WithId}
+import nutria.core.{Examples, Fractal, Viewport, ViewportList}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
@@ -12,22 +12,22 @@ import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 class FractalRepoSpec extends AnyFunSuite with Matchers with GuiceOneAppPerSuite with BeforeAndAfterEach {
   def repo = app.injector.instanceOf[FractalRepo]
 
-  def row(fractal: FractalEntity) =
+  def row(fractal: Fractal) =
     WithId(
       id = UUID.randomUUID().toString,
       owner = UUID.randomUUID().toString,
-      entity = Some(fractal)
+      entity = Some(Entity(value = fractal))
     )
 
   val f1 = row(
-    FractalEntity(
+    Fractal(
       program = Examples.timeEscape,
       views = ViewportList.refineUnsafe(List(Viewport.mandelbrot))
     )
   )
 
   val f2 = row(
-    FractalEntity(
+    Fractal(
       program = Examples.newtonIteration,
       views = ViewportList.refineUnsafe(List(Viewport.aroundZero))
     )

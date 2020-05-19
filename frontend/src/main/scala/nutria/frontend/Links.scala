@@ -1,7 +1,7 @@
 package nutria.frontend
 
-import nutria.api.{User, WithId}
-import nutria.core.{FractalEntity, FractalImage}
+import nutria.api.{FractalEntity, User, WithId}
+import nutria.core.FractalImage
 import nutria.frontend.pages._
 import nutria.frontend.service.NutriaService
 
@@ -41,7 +41,7 @@ object Links {
     ExplorerState(
       user = user,
       remoteFractal = Some(fractal),
-      fractalImage = FractalImage.firstImage(fractal.entity)
+      fractalImage = FractalImage.firstImage(fractal.entity.value)
     )
 
   def detailsState(fractal: WithId[FractalEntity], user: Option[User]): DetailsState =
