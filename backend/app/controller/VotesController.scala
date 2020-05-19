@@ -5,12 +5,12 @@ import play.api.mvc.InjectedController
 import io.circe.syntax._
 import nutria.api.{DownVote, UpVote, Verdict, Vote, VoteStatistic}
 import play.api.libs.circe.Circe
-import repo.VotesRepository
+import repo.VotesRepo
 
 import scala.util.chaining._
 
 @Singleton()
-class VotesController @Inject() (votesRepo: VotesRepository, authenticator: Authenticator) extends InjectedController with Circe {
+class VotesController @Inject() (votesRepo: VotesRepo, authenticator: Authenticator) extends InjectedController with Circe {
   def getAll() = Action { req =>
     val maybeUser = authenticator.getUser(req)
     votesRepo

@@ -9,19 +9,19 @@ import nutria.api.WithId
 import nutria.core.{Viewport, _}
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
-import repo.{FractalRepo, FractalRow, VotesRepository}
+import repo.{FractalRepo, VotesRepo}
 
 import scala.util.Random
 import scala.util.chaining._
 
-class FractalController @Inject() (fractalRepo: FractalRepo, votesRepo: VotesRepository, authenticator: Authenticator)
+class FractalController @Inject() (fractalRepo: FractalRepo, votesRepo: VotesRepo, authenticator: Authenticator)
     extends InjectedController
     with Circe {
 
   def listPublicFractals() = Action {
     fractalRepo
       .listPublic()
-      .collect(fractalRepo.fractalRowToFractalEntity)
+      .collect(fractalRepo.rowToEntity)
       .sorted(FractalSorting.ordering(votesRepo.getAll()))
       .asJson
       .pipe(Ok(_))
@@ -31,7 +31,7 @@ class FractalController @Inject() (fractalRepo: FractalRepo, votesRepo: VotesRep
     authenticator.byUserId(req)(userId) {
       fractalRepo
         .listByUser(userId)
-        .collect(fractalRepo.fractalRowToFractalEntity)
+        .collect(fractalRepo.rowToEntity)
         .sorted(FractalSorting.orderingByProgram)
         .asJson
         .pipe(Ok(_))
@@ -41,7 +41,7 @@ class FractalController @Inject() (fractalRepo: FractalRepo, votesRepo: VotesRep
   def getFractal(id: String) = Action {
     (for {
       fractalRow <- fractalRepo.get(id)
-      fractalEntity = fractalRepo.fractalRowToFractalEntity.lift.apply(fractalRow)
+      fractalEntity = fractalRepo.rowToEntity.lift.apply(fractalRow)
     } yield fractalEntity) match {
       case Some(fractal) => Ok(fractal.asJson)
       case _             => NotFound
@@ -53,7 +53,7 @@ class FractalController @Inject() (fractalRepo: FractalRepo, votesRepo: VotesRep
     val random = new Random(seed = seed)
     val entities = fractalRepo
       .listPublic()
-      .collect(fractalRepo.fractalRowToFractalEntity)
+      .collect(fractalRepo.rowToEntity)
     if (entities.isEmpty) {
       val defaultImage =
         FractalImage(template = Examples.newtonIteration, viewport = Viewport.aroundZero)
@@ -74,7 +74,7 @@ class FractalController @Inject() (fractalRepo: FractalRepo, votesRepo: VotesRep
             fractalRepo.save(
               id = fractalId,
               owner = savedFractal.owner,
-              fractal = req.body
+              entity = req.body
             )
             Accepted
           }
@@ -99,7 +99,7 @@ class FractalController @Inject() (fractalRepo: FractalRepo, votesRepo: VotesRep
       fractalRepo.save(
         id = id,
         owner = user.id,
-        fractal = request.body
+        entity = request.body
       )
       WithId(id, user.id, request.body).asJson
         .pipe(Created(_))

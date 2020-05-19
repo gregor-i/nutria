@@ -5,7 +5,7 @@ import javax.inject.Inject
 import nutria.api.{DownVote, UpVote, Verdict, Vote}
 import play.api.db.Database
 
-class VotesRepository @Inject() (db: Database) {
+class VotesRepo @Inject() (db: Database) {
   private val rowParser: RowParser[Vote] = for {
     forFractal <- SqlParser.str("for_fractal")
     byUser     <- SqlParser.str("by_user")

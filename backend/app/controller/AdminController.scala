@@ -2,14 +2,15 @@ package controller
 
 import java.util.UUID
 
-import io.circe.syntax._
 import io.circe.JsonObject
+import io.circe.syntax._
 import javax.inject.Inject
 import model.FractalSorting
+import nutria.api.WithId
 import nutria.core.{Examples, FractalEntity, ViewportList}
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
-import repo.{FractalRepo, FractalRow, UserRepo}
+import repo.{FractalRepo, UserRepo}
 
 class AdminController @Inject() (
     fractalRepo: FractalRepo,
@@ -26,7 +27,7 @@ class AdminController @Inject() (
           "users" -> userRepo.list().asJson,
           "fractals" -> fractalRepo
             .list()
-            .collect(fractalRepo.fractalRowToFractalEntity)
+            .collect(fractalRepo.rowToEntity)
             .sorted(FractalSorting.orderingByProgram)
             .asJson
         ).asJson
@@ -53,7 +54,7 @@ class AdminController @Inject() (
       fractalRepo
         .list()
         .collect {
-          case FractalRow(id, _, _, None) => id
+          case WithId(id, _, None) => id
         }
         .foreach(fractalRepo.delete)
       Ok
@@ -75,7 +76,7 @@ class AdminController @Inject() (
             fractalRepo.save(
               id = UUID.randomUUID().toString,
               owner = admin.id,
-              fractal = FractalEntity(
+              entity = FractalEntity(
                 program = template,
                 views = ViewportList.apply(viewport),
                 title = name

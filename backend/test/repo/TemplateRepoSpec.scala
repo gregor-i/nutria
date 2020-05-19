@@ -2,7 +2,7 @@ package repo
 
 import java.util.UUID
 
-import nutria.api.{Entity, FractalTemplateEntity}
+import nutria.api.{Entity, FractalTemplateEntity, WithId}
 import nutria.core.{Examples, Viewport, ViewportList}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
@@ -10,14 +10,13 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
 class TemplateRepoSpec extends AnyFunSuite with Matchers with GuiceOneAppPerSuite with BeforeAndAfterEach {
-  def repo = app.injector.instanceOf[TemplateRepository]
+  def repo = app.injector.instanceOf[TemplateRepo]
 
   def row(template: FractalTemplateEntity) =
-    TemplateRow(
+    WithId(
       id = UUID.randomUUID().toString,
       owner = UUID.randomUUID().toString,
-      published = template.published,
-      maybeTemplate = Some(template)
+      entity = Some(template)
     )
 
   val testData = Examples.allNamed
@@ -36,21 +35,21 @@ class TemplateRepoSpec extends AnyFunSuite with Matchers with GuiceOneAppPerSuit
   }
 
   test("save & get") {
-    repo.save(f1.id, f1.owner, f1.maybeTemplate.get)
-    repo.save(f2.id, f2.owner, f2.maybeTemplate.get)
+    repo.save(f1.id, f1.owner, f1.entity.get)
+    repo.save(f2.id, f2.owner, f2.entity.get)
     assert(repo.get(f1.id) === Some(f1))
     assert(repo.get(f2.id) === Some(f2))
   }
 
   test("list") {
-    repo.save(f1.id, f1.owner, f1.maybeTemplate.get)
-    repo.save(f2.id, f2.owner, f2.maybeTemplate.get)
+    repo.save(f1.id, f1.owner, f1.entity.get)
+    repo.save(f2.id, f2.owner, f2.entity.get)
     repo.list() shouldBe List(f1, f2)
   }
 
   test("delete") {
-    repo.save(f1.id, f1.owner, f1.maybeTemplate.get)
-    repo.save(f2.id, f2.owner, f2.maybeTemplate.get)
+    repo.save(f1.id, f1.owner, f1.entity.get)
+    repo.save(f2.id, f2.owner, f2.entity.get)
     repo.delete(f1.id)
     repo.get(f1.id) shouldBe None
     repo.list() shouldBe List(f2)

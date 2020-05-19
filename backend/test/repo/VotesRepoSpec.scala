@@ -9,7 +9,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
 class VotesRepoSpec extends AnyFunSuite with Matchers with GuiceOneAppPerSuite with BeforeAndAfterEach {
-  def repo = app.injector.instanceOf[VotesRepository]
+  def repo = app.injector.instanceOf[VotesRepo]
 
   override def beforeEach = {
     repo.getAll().foreach(row => repo.delete(row.forFractal, row.byUser))
