@@ -92,23 +92,54 @@ val `static-renderer` = project
 
 // tasks
 
-val integration = taskKey[Unit]("build the frontend and copy the results into backend")
-integration in frontend := {
+compile in frontend := {
+  val ret = (frontend / Compile / compile).value
   val buildFrontend = (frontend / Compile / fastOptJS).value.data
-  val exitCode = s"./node_modules/.bin/browserify ${buildFrontend.toString} -o backend/public/assets/nutria.js".!
-  require(exitCode == 0)
+  val outputFile = (backend / Assets / WebKeys.public).value / "assets"/ "nutria.js"
+  streams.value.log.info("integrating frontend (fastOptJS)")
+  val npmLog = Seq("./node_modules/.bin/browserify", buildFrontend.toString,  "-o",  outputFile.toString).!!
+  streams.value.log.info(npmLog)
+  ret
 }
 
-integration in `service-worker` := {
+stage in frontend := {
+  val buildFrontend = (frontend / Compile / fullOptJS).value.data
+  val outputFile = (backend / Assets / WebKeys.public).value / "assets"/ "nutria.js"
+  streams.value.log.info("integrating frontend (fullOptJS)")
+  val npmLog = Seq("./node_modules/.bin/browserify", buildFrontend.toString,  "-o",  outputFile.toString).!!
+  streams.value.log.info(npmLog)
+  outputFile
+}
+
+compile in `service-worker` := {
+  val ret = (`service-worker` / Compile / compile).value
   val buildSw = (`service-worker` / Compile / fastOptJS).value.data
-  val exitCode = s"cp ${buildSw.toString} backend/public/assets/sw.js".!
-  require(exitCode == 0)
+  val outputFile = (backend / Assets / WebKeys.public).value / "assets"/ "sw.js"
+  streams.value.log.info("integrating service-worker (fastOptJS)")
+  val buildLog = Seq("cp",  buildSw.toString,  outputFile.toString).!!
+  streams.value.log.info(buildLog)
+  ret
+}
+
+stage in `service-worker` := {
+  val buildSw = (`service-worker` / Compile / fullOptJS).value.data
+  val outputFile = (backend / Assets / WebKeys.public).value / "assets"/ "sw.js"
+  streams.value.log.info("integrating service-worker (fullOptJS)")
+  val buildLog = Seq("cp",  buildSw.toString,  outputFile.toString).!!
+  streams.value.log.info(buildLog)
+  outputFile
 }
 
 compile in Compile := {
-  (frontend / integration).value
-  (`service-worker` / integration).value
-  (compile in Compile).value
+  (compile in frontend).value
+  (compile in `service-worker`).value
+  (backend / Compile / compile).value
+}
+
+stage in Compile := {
+  (stage in frontend ).value
+  (stage in `service-worker` ).value
+  (stage in backend).value
 }
 
 // libraries
