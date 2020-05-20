@@ -3,12 +3,12 @@ import scala.sys.process._
 
 // global settings
 version in ThisBuild := "0.0.1"
-scalaVersion in ThisBuild := "2.13.1"
+scalaVersion in ThisBuild := "2.13.2"
 scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation", "-Ymacro-annotations")
 scalafmtOnCompile in ThisBuild := true
 resolvers in ThisBuild += Resolver.bintrayRepo("gregor-i", "maven")
 
-libraryDependencies in ThisBuild += "org.scalatest" %%% "scalatest" % "3.1.1" % Test
+libraryDependencies in ThisBuild += "org.scalatest" %%% "scalatest" % "3.1.2" % Test
 testOptions in ThisBuild += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
 
 // projects
@@ -36,7 +36,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       "com.github.julien-truffaut" %%% "monocle-unsafe" % "2.0.4",
       "com.github.julien-truffaut" %%% "monocle-refined" % "2.0.4"
     ),
-    libraryDependencies += "eu.timepit" %%% "refined" % "0.9.13"
+    libraryDependencies += "eu.timepit" %%% "refined" % "0.9.14"
   )
 
 lazy val `shader-builder` = project
@@ -86,11 +86,11 @@ lazy val backend = project
     libraryDependencies += guice,
     libraryDependencies += jdbc,
     libraryDependencies += evolutions,
-    libraryDependencies += "io.lemonlabs"   %% "scala-uri"  % "2.2.0",
+    libraryDependencies += "io.lemonlabs"   %% "scala-uri"  % "2.2.2",
     libraryDependencies += "com.dripower"   %% "play-circe" % "2812.0",
-    libraryDependencies += "org.postgresql" % "postgresql"  % "42.2.11",
+    libraryDependencies += "org.postgresql" % "postgresql"  % "42.2.12",
     libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.5",
-    libraryDependencies += "org.scalatestplus.play"  %% "scalatestplus-play" % "5.0.0" % Test,
+    libraryDependencies += "org.scalatestplus.play"  %% "scalatestplus-play" % "5.1.0" % Test,
   )
   .enablePlugins(EmbeddedPostgresPlugin)
   .settings(javaOptions += s"-DDATABASE_URL=${postgresConnectionString.value}")
