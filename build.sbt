@@ -107,7 +107,7 @@ val `static-renderer` = project
 compile in frontend := {
   val ret = (frontend / Compile / compile).value
   val buildFrontend = (frontend / Compile / fastOptJS).value.data
-  val outputFile = (backend / Assets / WebKeys.public).value / "assets"/ "nutria.js"
+  val outputFile = (backend / baseDirectory).value / "public" / "assets"/ "nutria.js"
   streams.value.log.info("integrating frontend (fastOptJS)")
   val npmLog = Seq("./node_modules/.bin/browserify", buildFrontend.toString,  "-o",  outputFile.toString).!!
   streams.value.log.info(npmLog)
@@ -116,7 +116,7 @@ compile in frontend := {
 
 stage in frontend := {
   val buildFrontend = (frontend / Compile / fullOptJS).value.data
-  val outputFile = (backend / Assets / WebKeys.public).value / "assets"/ "nutria.js"
+  val outputFile = (backend / baseDirectory).value / "public" / "assets"/ "nutria.js"
   streams.value.log.info("integrating frontend (fullOptJS)")
   val npmLog = Seq("./node_modules/.bin/browserify", buildFrontend.toString,  "-o",  outputFile.toString).!!
   streams.value.log.info(npmLog)
@@ -126,7 +126,7 @@ stage in frontend := {
 compile in `service-worker` := {
   val ret = (`service-worker` / Compile / compile).value
   val buildSw = (`service-worker` / Compile / fastOptJS).value.data
-  val outputFile = (backend / Assets / WebKeys.public).value / "assets"/ "sw.js"
+  val outputFile = (backend / baseDirectory).value / "public" / "assets"/ "sw.js"
   streams.value.log.info("integrating service-worker (fastOptJS)")
   val buildLog = Seq("cp",  buildSw.toString,  outputFile.toString).!!
   streams.value.log.info(buildLog)
@@ -135,7 +135,7 @@ compile in `service-worker` := {
 
 stage in `service-worker` := {
   val buildSw = (`service-worker` / Compile / fullOptJS).value.data
-  val outputFile = (backend / Assets / WebKeys.public).value / "assets"/ "sw.js"
+  val outputFile = (backend / baseDirectory).value / "public" / "assets"/ "sw.js"
   streams.value.log.info("integrating service-worker (fullOptJS)")
   val buildLog = Seq("cp",  buildSw.toString,  outputFile.toString).!!
   streams.value.log.info(buildLog)
