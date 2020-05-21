@@ -12,6 +12,8 @@ libraryDependencies in ThisBuild += "org.scalatest" %%% "scalatest" % "3.1.2" % 
 testOptions in ThisBuild += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
 
 // projects
+lazy val nutria = project.in(file("."))
+
 lazy val macros = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("macros"))
@@ -142,14 +144,14 @@ stage in `service-worker` := {
   outputFile
 }
 
-compile in Compile := {
-  (compile in frontend).value
-  (compile in `service-worker`).value
-  (backend / Compile / compile).value
-}
+compile in nutria := Def.sequential(
+  (compile in frontend),
+  (compile in `service-worker`),
+  (compile in backend)
+).value
 
-stage in Compile := {
-  (stage in frontend ).value
-  (stage in `service-worker` ).value
-  (stage in backend).value
-}
+stage in nutria := Def.sequential(
+  (stage in frontend),
+  (stage in `service-worker`),
+  (stage in backend)
+).value
