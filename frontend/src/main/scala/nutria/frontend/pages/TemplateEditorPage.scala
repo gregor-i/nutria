@@ -201,11 +201,12 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
         selectType,
         Form.stringInput("name", lensToParameter.composeLens(Parameter.name)),
         ParameterForm(lensToParameter),
-        Form.inputStyle(
-          "generated code:",
-          Node("pre")
+        Label(
+          label = "generated code:",
+          node = Node("pre")
             .text(FragmentShaderSource.parameter(lensToParameter.get(state)))
-            .style("whiteSpace", "break-spaces")
+            .style("whiteSpace", "break-spaces"),
+          actions = Seq.empty
         ),
         ButtonList(
           Button("Cancel", Icons.cancel, SnabbdomUtil.update(lensToMaybeParameter.set(None))),

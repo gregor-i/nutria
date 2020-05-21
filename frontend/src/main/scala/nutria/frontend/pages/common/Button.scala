@@ -14,8 +14,9 @@ object Button {
       .event("click", onclick)
       .text(text)
 
-  def icon(icon: String, onclick: SnabbdomFacade.Eventlistener): Node =
-    Node("button.button.is-rounded")
+  def icon(icon: String, onclick: SnabbdomFacade.Eventlistener, round: Boolean = true): Node =
+    Node("button.button")
+      .`class`("is-rounded", round)
       .event("click", onclick)
       .child(Icons.icon(icon))
 

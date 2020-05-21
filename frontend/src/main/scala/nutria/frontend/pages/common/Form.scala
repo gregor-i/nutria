@@ -7,6 +7,7 @@ import monocle.Lens
 import nutria.core.languages.StringFunction
 import nutria.core.{RGB, RGBA}
 import org.scalajs.dom.raw.{HTMLInputElement, HTMLSelectElement}
+import snabbdom.SnabbdomFacade.Eventlistener
 import snabbdom.{Node, Snabbdom}
 import spire.math.Complex
 
@@ -14,30 +15,15 @@ import scala.util.Try
 
 object Form {
 
-  def inputStyle(label: String, inputs: Node*) =
-    Node("div.field.is-horizontal")
-      .child(
-        Node("div.field-label.is-normal")
-          .style("flexGrow", "2")
-          .child(Node("label.label").text(label))
-      )
-      .child(
-        Node("div.field-body").child(
-          inputs.map(
-            input =>
-              Node("div.field")
-                .child(Node("p.control").child(input))
-          )
-        )
-      )
-
   def stringFunctionInput[S, V](
       label: String,
-      lens: Lens[S, StringFunction[V]]
+      lens: Lens[S, StringFunction[V]],
+      actions: Seq[Node] = Seq.empty
   )(implicit state: S, update: S => Unit, lang: SpireLanguage[Complex[Double], V]) =
-    inputStyle(
-      label,
-      Node("input.input")
+    Label(
+      label = label,
+      actions = actions,
+      node = Node("input.input")
         .attr("type", "text")
         .attr("value", lens.get(state).string)
         .event(
@@ -57,11 +43,13 @@ object Form {
 
   def stringInput[S](
       label: String,
-      lens: Lens[S, String]
+      lens: Lens[S, String],
+      actions: Seq[Node] = Seq.empty
   )(implicit state: S, update: S => Unit): Node =
-    inputStyle(
-      label,
-      Node("input.input")
+    Label(
+      label = label,
+      actions = actions,
+      node = Node("input.input")
         .attr("type", "text")
         .attr("value", lens.get(state))
         .event("change", Snabbdom.event { event =>
@@ -72,11 +60,13 @@ object Form {
 
   def readonlyStringInput(
       label: String,
-      value: String
+      value: String,
+      actions: Seq[Node] = Seq.empty
   ): Node =
-    inputStyle(
-      label,
-      Node("input.input")
+    Label(
+      label = label,
+      actions = actions,
+      node = Node("input.input")
         .attr("type", "text")
         .attr("disabled", "disabled")
         .attr("value", value)
@@ -84,11 +74,13 @@ object Form {
 
   def mulitlineStringInput[S](
       label: String,
-      lens: Lens[S, String]
+      lens: Lens[S, String],
+      actions: Seq[Node] = Seq.empty
   )(implicit state: S, update: S => Unit) =
-    inputStyle(
-      label,
-      Node("textArea.textarea")
+    Label(
+      label = label,
+      actions = actions,
+      node = Node("textArea.textarea")
         .style("min-height", "400px")
         .event("change", Snabbdom.event { event =>
           val value = event.target.asInstanceOf[HTMLInputElement].value
@@ -97,13 +89,15 @@ object Form {
         .text(lens.get(state))
     )
 
-  def intInput[S, T, V](
+  def refinedIntInput[S, T, V](
       label: String,
-      lens: Lens[S, Refined[Int, V]]
+      lens: Lens[S, Refined[Int, V]],
+      actions: Seq[Node] = Seq.empty
   )(implicit state: S, update: S => Unit, validate: Validate[Int, V]): Node = {
-    inputStyle(
-      label,
-      Node("input.input")
+    Label(
+      label = label,
+      actions = actions,
+      node = Node("input.input")
         .attr("type", "number")
         .attr("value", lens.get(state).value.toString)
         .event(
@@ -125,11 +119,13 @@ object Form {
 
   def intInput[S, T](
       label: String,
-      lens: Lens[S, Int]
+      lens: Lens[S, Int],
+      actions: Seq[Node] = Seq.empty
   )(implicit state: S, update: S => Unit): Node = {
-    inputStyle(
-      label,
-      Node("input.input")
+    Label(
+      label = label,
+      actions = actions,
+      node = Node("input.input")
         .attr("type", "number")
         .attr("value", lens.get(state).toString)
         .event(
@@ -142,38 +138,42 @@ object Form {
     )
   }
 
-  def doubleInput[S, V](
-      label: String,
-      lens: Lens[S, Double Refined V]
-  )(implicit state: S, update: S => Unit, validate: Validate[Double, V]) =
-    inputStyle(
-      label,
-      Node("input.input")
-        .attr("type", "number")
-        .attr("value", lens.get(state).toString)
-        .event(
-          "change",
-          Snabbdom.event { event =>
-            val element = event.target.asInstanceOf[HTMLInputElement]
-            Try(element.value.toDouble).toEither
-              .flatMap(refineV[V](_)(validate)) match {
-              case Right(v) =>
-                element.classList.remove("is-danger")
-                update(lens.set(v)(state))
-              case Left(error) =>
-                element.classList.add("is-danger")
-            }
-          }
-        )
-    )
+//  def doubleInput[S, V](
+//      label: String,
+//      actions: Seq[Node] = Seq.empty,
+//      lens: Lens[S, Double Refined V]
+//  )(implicit state: S, update: S => Unit, validate: Validate[Double, V]) =
+//    Label(
+//      label = label,
+//      actions = actions,
+//      node = Node("input.input")
+//        .attr("type", "number")
+//        .attr("value", lens.get(state).toString)
+//        .event(
+//          "change",
+//          Snabbdom.event { event =>
+//            val element = event.target.asInstanceOf[HTMLInputElement]
+//            Try(element.value.toDouble).toEither
+//              .flatMap(refineV[V](_)(validate)) match {
+//              case Right(v) =>
+//                element.classList.remove("is-danger")
+//                update(lens.set(v)(state))
+//              case Left(error) =>
+//                element.classList.add("is-danger")
+//            }
+//          }
+//        )
+//    )
 
   def doubleInput[S](
       label: String,
-      lens: Lens[S, Double]
+      lens: Lens[S, Double],
+      actions: Seq[Node] = Seq.empty
   )(implicit state: S, update: S => Unit) =
-    inputStyle(
-      label,
-      Node("input.input")
+    Label(
+      label = label,
+      actions = actions,
+      node = Node("input.input")
         .attr("type", "number")
         .attr("value", lens.get(state).toString)
         .event(
@@ -191,10 +191,11 @@ object Form {
         )
     )
 
-  def colorInput[S](label: String, lens: Lens[S, RGBA])(implicit state: S, update: S => Unit) =
-    inputStyle(
-      label,
-      Node("input.input")
+  def colorInput[S](label: String, lens: Lens[S, RGBA], actions: Seq[Node] = Seq.empty)(implicit state: S, update: S => Unit) =
+    Label(
+      label = label,
+      actions = actions,
+      node = Node("input.input")
         .attr("type", "color")
         .attr("value", RGB.toRGBString(lens.get(state).withoutAlpha))
         .event(
@@ -212,44 +213,24 @@ object Form {
         )
     )
 
-  def tupleDoubleInput[S](
-      label: String,
-      lens: Lens[S, (Double, Double)]
-  )(implicit state: S, update: S => Unit) =
-    inputStyle(
-      label,
-      Node("input.input")
-        .attr("type", "number")
-        .attr("value", lens.get(state)._1.toString)
-        .event("change", Snabbdom.event { event =>
-          val value = event.target.asInstanceOf[HTMLInputElement].value.toDouble
-          update(lens.modify(t => (value, t._2))(state))
-        }),
-      Node("input.input")
-        .attr("type", "number")
-        .attr("value", lens.get(state)._2.toString)
-        .event("change", Snabbdom.event { event =>
-          val value = event.target.asInstanceOf[HTMLInputElement].value.toDouble
-          update(lens.modify(t => (t._1, value))(state))
-        })
-    )
-
-  def booleanInput[S](label: String, lens: Lens[S, Boolean])(implicit state: S, update: S => Unit) =
+  def booleanInput[S](label: String, lens: Lens[S, Boolean], actions: Seq[Node] = Seq.empty)(implicit state: S, update: S => Unit) =
     selectInput(
       label = label,
+      actions = actions,
       options = Seq("true" -> true, "false" -> false),
       lens = lens,
       eqFunction = (a: Boolean, b: Boolean) => a == b
     )
 
-  def selectInput[S, A](label: String, options: Seq[(String, A)], lens: Lens[S, A], eqFunction: (A, A) => Boolean)(
+  def selectInput[S, A](label: String, options: Seq[(String, A)], lens: Lens[S, A], eqFunction: (A, A) => Boolean, actions: Seq[Node] = Seq.empty)(
       implicit state: S,
       update: S => Unit
   ) = {
     val currentValue = lens.get(state)
-    inputStyle(
-      label,
-      Node("div.select.is-fullwidth")
+    Label(
+      label = label,
+      actions = actions,
+      node = Node("div.select.is-fullwidth")
         .child(
           Node("select")
             .event(

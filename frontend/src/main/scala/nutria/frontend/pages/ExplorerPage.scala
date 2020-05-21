@@ -152,7 +152,7 @@ object ExplorerPage extends Page[ExplorerState] {
               lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.height
             )
           )
-          .child(Form.intInput("anti alias", lensParams composeLens SaveFractalDialog.antiAliase)),
+          .child(Form.refinedIntInput("anti alias", lensParams composeLens SaveFractalDialog.antiAliase)),
         ButtonList(Button("Download", Icons.download, downloadAction).classes("is-primary"))
       )
     }
