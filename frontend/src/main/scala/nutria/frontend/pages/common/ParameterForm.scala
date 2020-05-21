@@ -24,52 +24,33 @@ object ParameterForm {
           .pipe(ParameterForm.apply(_, Seq(deleteButton)))
       }
 
-  def apply[S](lens: Lens[S, Parameter], actions: Seq[Node] = Seq.empty)(implicit state: S, update: S => Unit): Node =
+  def apply[S](lens: Lens[S, Parameter], actions: Seq[Node] = Seq.empty)(implicit state: S, update: S => Unit): Node = {
     lens.get(state) match {
-      case p: IntParameter   => intParameter(p.name, lens.composePrism(Parameter.prismIntParameter).pipe(LenseUtils.unsafeOptional), actions)
-      case p: FloatParameter => floatParameter(p.name, lens.composePrism(Parameter.prismFloatParameter).pipe(LenseUtils.unsafeOptional), actions)
-      case p: RGBAParameter  => rgbaParameter(p.name, lens.composePrism(Parameter.prismRGBAParameter).pipe(LenseUtils.unsafeOptional), actions)
+      case p: IntParameter =>
+        val valueLens = lens.composePrism(Parameter.prismIntParameter).composeLens(IntParameter.value).pipe(LenseUtils.unsafeOptional)
+        Form.forLens(p.name, valueLens, actions)
+
+      case p: FloatParameter =>
+        val valueLens = lens.composePrism(Parameter.prismFloatParameter).composeLens(FloatParameter.value).pipe(LenseUtils.unsafeOptional)
+        Form.forLens(p.name, valueLens, actions)
+
+      case p: RGBAParameter =>
+        val valueLens = lens.composePrism(Parameter.prismRGBAParameter).composeLens(RGBAParameter.value).pipe(LenseUtils.unsafeOptional)
+        Form.forLens(p.name, valueLens, actions)
+
       case p: FunctionParameter =>
-        functionParameter(p.name, lens.composePrism(Parameter.prismFunctionParameter).pipe(LenseUtils.unsafeOptional), actions)
+        val valueLens = lens.composePrism(Parameter.prismFunctionParameter).composeLens(FunctionParameter.value).pipe(LenseUtils.unsafeOptional)
+        Form.forLens(p.name, valueLens, actions)
+
       case p: InitialFunctionParameter =>
-        initialFunctionParameter(p.name, lens.composePrism(Parameter.prismInitialFunctionParameter).pipe(LenseUtils.unsafeOptional), actions)
+        val valueLens =
+          lens.composePrism(Parameter.prismInitialFunctionParameter).composeLens(InitialFunctionParameter.value).pipe(LenseUtils.unsafeOptional)
+        Form.forLens(p.name, valueLens, actions)
+
       case p: NewtonFunctionParameter =>
-        newtonFunctionParameter(p.name, lens.composePrism(Parameter.prismNewtonFunctionParameter).pipe(LenseUtils.unsafeOptional), actions)
+        val valueLens =
+          lens.composePrism(Parameter.prismNewtonFunctionParameter).composeLens(NewtonFunctionParameter.value).pipe(LenseUtils.unsafeOptional)
+        Form.forLens(p.name, valueLens, actions)
     }
-
-  def intParameter[S](name: String, lens: Lens[S, IntParameter], actions: Seq[Node])(
-      implicit state: S,
-      update: S => Unit
-  ): Node =
-    Form.intInput(name, lens.composeLens(IntParameter.value), actions)
-
-  def floatParameter[S](name: String, lens: Lens[S, FloatParameter], actions: Seq[Node])(
-      implicit state: S,
-      update: S => Unit
-  ): Node =
-    Form.doubleInput(name, lens.composeLens(FloatParameter.value), actions)
-
-  def rgbaParameter[S](name: String, lens: Lens[S, RGBAParameter], actions: Seq[Node])(
-      implicit state: S,
-      update: S => Unit
-  ): Node =
-    Form.colorInput(name, lens.composeLens(RGBAParameter.value), actions)
-
-  def functionParameter[S](name: String, lens: Lens[S, FunctionParameter], actions: Seq[Node])(
-      implicit state: S,
-      update: S => Unit
-  ): Node =
-    Form.stringFunctionInput(name, lens.composeLens(FunctionParameter.value), actions)
-
-  def initialFunctionParameter[S](name: String, lens: Lens[S, InitialFunctionParameter], actions: Seq[Node])(
-      implicit state: S,
-      update: S => Unit
-  ): Node =
-    Form.stringFunctionInput(name, lens = lens.composeLens(InitialFunctionParameter.value), actions)
-
-  def newtonFunctionParameter[S](name: String, lens: Lens[S, NewtonFunctionParameter], actions: Seq[Node])(
-      implicit state: S,
-      update: S => Unit
-  ): Node =
-    Form.stringFunctionInput(name, lens = lens.composeLens(NewtonFunctionParameter.value), actions)
+  }
 }

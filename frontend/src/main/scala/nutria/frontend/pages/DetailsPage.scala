@@ -107,10 +107,10 @@ object DetailsPage extends Page[DetailsState] {
   def general()(implicit state: State, update: NutriaState => Unit) = {
     val startLens = DetailsState.fractalToEdit_entity
     Seq(
-      Form.stringInput("Title", startLens composeLens Entity.title),
-      Form.stringInput("Description", startLens composeLens Entity.description),
+      Form.forLens("Title", startLens composeLens Entity.title),
+      Form.forLens("Description", startLens composeLens Entity.description),
       Form.readonlyStringInput("Published", state.fractalToEdit.entity.published.toString),
-      Form.stringInput(
+      Form.forLens(
         "References",
         startLens composeLens Entity.reference composeIso Iso[List[String], String](
           _.mkString(" ")

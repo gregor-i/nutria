@@ -141,18 +141,18 @@ object ExplorerPage extends Page[ExplorerState] {
           .style("marginBottom", "1.5rem")
           .child(Node("h1.title").text("Render high resolution Image"))
           .child(
-            Form.intInput(
+            Form.forLens(
               "width",
               lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.width
             )
           )
           .child(
-            Form.intInput(
+            Form.forLens(
               "height",
               lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.height
             )
           )
-          .child(Form.refinedIntInput("anti alias", lensParams composeLens SaveFractalDialog.antiAliase)),
+          .child(Form.forLens("anti alias", lensParams composeLens SaveFractalDialog.antiAliase)),
         ButtonList(Button("Download", Icons.download, downloadAction).classes("is-primary"))
       )
     }
