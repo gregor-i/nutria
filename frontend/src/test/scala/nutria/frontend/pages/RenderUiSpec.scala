@@ -28,14 +28,12 @@ class RenderUiSpec extends AnyFunSuite {
         .toVNode
         .pipe(SnabbdomToHtml.apply)
         .pipe(withFixture)
-        .pipe(HtmlFormatter.render)
+        //        .pipe(HtmlFormatter.render)
         .pipe(write(fileName, _))
         .tap(_.onComplete {
           case Success(_)  => ()
           case Failure(ex) => println(ex)
         })
-//        .pipe(_.isReadyWithin(Span(2, Seconds)))
-//        .tap(assert(_))
     }
 
   private def write(fileName: String, content: String): Future[Unit] = {
@@ -49,6 +47,6 @@ class RenderUiSpec extends AnyFunSuite {
 
   private def withFixture(html: String): String =
     StaticContent("frontend/src/test/html/fixture.html")
-      .replaceAllLiterally("$content", html)
-      .replaceAllLiterally("src=\"/assets", "src=\"assets")
+      .replace("$content", html)
+      .replace("src=\"/assets", "src=\"assets")
 }

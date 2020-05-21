@@ -8,9 +8,6 @@ scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation", "-Ymacro-annotati
 scalafmtOnCompile in ThisBuild := true
 resolvers in ThisBuild += Resolver.bintrayRepo("gregor-i", "maven")
 
-libraryDependencies in ThisBuild += "org.scalatest" %%% "scalatest" % "3.1.2" % Test
-testOptions in ThisBuild += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
-
 // projects
 lazy val nutria = project.in(file("."))
 
@@ -38,7 +35,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       "com.github.julien-truffaut" %%% "monocle-unsafe" % "2.0.4",
       "com.github.julien-truffaut" %%% "monocle-refined" % "2.0.4"
     ),
-    libraryDependencies += "eu.timepit" %%% "refined" % "0.9.14"
+    libraryDependencies += "eu.timepit" %%% "refined" % "0.9.14",
+    scalatest
   )
 
 lazy val `shader-builder` = project
@@ -55,6 +53,7 @@ val frontend = project
   .dependsOn(`shader-builder`)
   .enablePlugins(ScalaJSPlugin)
   .settings(
+    scalacOptions += "-P:scalajs:sjsDefinedByDefault",
     scalaJSUseMainModuleInitializer := true,
     emitSourceMaps := false,
     scalaJSModuleKind := ModuleKind.CommonJSModule
@@ -63,6 +62,7 @@ val frontend = project
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0",
     libraryDependencies += "com.github.gregor-i" %%% "scalajs-snabbdom" % "1.0",
     libraryDependencies += "io.circe" %%% "not-java-time" % "0.2.0",
+    scalatest
   )
 
 val `service-worker` = project
@@ -102,7 +102,11 @@ val `static-renderer` = project
   .dependsOn(`shader-builder`)
   .enablePlugins(ScalaJSPlugin)
   .dependsOn(core.js, frontend)
-  .settings(scalaJSUseMainModuleInitializer := true)
+  .settings(
+    scalaJSUseMainModuleInitializer := true,
+    scalaJSModuleKind := ModuleKind.CommonJSModule
+  )
+  .settings(scalatest)
 
 // tasks
 
@@ -156,3 +160,9 @@ stage in nutria := Def.sequential(
   (stage in `service-worker`),
   (stage in backend)
 ).value
+
+def scalatest =
+  Seq(
+    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.2" % Test,
+    testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
+  )

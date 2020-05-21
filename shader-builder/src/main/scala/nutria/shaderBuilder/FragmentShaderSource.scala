@@ -2,7 +2,7 @@ package nutria.shaderBuilder
 
 import mathParser.Syntax._
 import mathParser.implicits._
-import nutria.core.languages.{CLang, CNode, Lambda, X}
+import nutria.core.languages.{CLang, CNode, Lambda, Z}
 import nutria.core.{DivergingSeries, _}
 import nutria.macros.StaticContent
 import nutria.shaderBuilder.WebGlType.TypeProps
@@ -32,7 +32,6 @@ object FragmentShaderSource {
   def parameter: Parameter => String = {
     case IntParameter(name, value)   => constant[WebGlTypeInt.type](name, IntLiteral(value))
     case FloatParameter(name, value) => constant[WebGlTypeFloat.type](name, FloatLiteral(value))
-    case RGBParameter(name, value)   => constant[WebGlTypeVec3.type](name, Vec3.fromRGB(value))
     case RGBAParameter(name, value)  => constant[WebGlTypeVec4.type](name, Vec4.fromRGBA(value))
     case fp: FunctionParameter if fp.includeDerivative =>
       Seq(
@@ -48,7 +47,7 @@ object FragmentShaderSource {
         function(name, value.node)
 
     case NewtonFunctionParameter(name, value, true) =>
-      function(name, value.node) + "\n" + function(name + "_derived", value.node.derive(X))
+      function(name, value.node) + "\n" + function(name + "_derived", value.node.derive(Z))
   }
 
   def definitions(template: FractalTemplate): String =

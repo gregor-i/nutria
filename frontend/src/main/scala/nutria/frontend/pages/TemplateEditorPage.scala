@@ -1,11 +1,11 @@
 package nutria.frontend.pages
 
-import monocle.{Iso, Lens}
+import monocle.{Iso, Lens, Optional}
 import monocle.function.{At, Index}
 import monocle.macros.Lenses
 import nutria.api.{Entity, FractalTemplateEntityWithId, User, WithId}
 import nutria.core._
-import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda}
+import nutria.core.languages.{Lambda, StringFunction, ZAndLambda}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common.{Form, _}
@@ -27,7 +27,7 @@ case class TemplateEditorState(
     remoteTemplate: Option[FractalTemplateEntityWithId],
     template: FractalTemplate,
     viewport: Viewport = Viewport.mandelbrot, // todo: remove
-    compileErrors: String = "",
+    newParameter: Option[Parameter] = None,
     navbarExpanded: Boolean = false
 ) extends NutriaState {
   def dirty: Boolean                                   = remoteTemplate.fold(FractalTemplate.empty)(_.entity.value) != template
@@ -48,8 +48,6 @@ object TemplateEditorState extends LenseUtils {
 }
 
 object TemplateEditorPage extends Page[TemplateEditorState] {
-  private lazy val canvas: Canvas = dom.document.createElement("canvas").asInstanceOf[Canvas]
-  private lazy val webglCtx       = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
 
   override def stateFromUrl: PartialFunction[(Path, QueryParameter), NutriaState] = {
     case (s"/templates/${templateId}/editor", queryParams) =>
@@ -132,15 +130,6 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       )
 
   def template(lens: Lens[State, FractalTemplate])(implicit state: State, update: NutriaState => Unit) = {
-    val response = (FractalRenderer.compileProgram(webglCtx, state.template, nutria.core.refineUnsafe(1)) match {
-      case Left(CompileException(context, _, shader)) =>
-        Node("pre.is-paddingless.message.is-danger")
-          .child(Node("div.message-body").text(context.getShaderInfoLog(shader).filter(_.toInt != 0)))
-      case Right(_) =>
-        Node("pre.is-paddingless.message.is-success")
-          .child(Node("div.message-body").text("Compiled successfully"))
-    })
-
     val codeEditor =
       Node("div.code-editor-container")
         .child(
@@ -167,87 +156,98 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
 
     Seq(
       codeEditor,
-      response
+      CompileStatus(state.template)
     )
   }
 
-  def parameters(lens: Lens[State, Vector[Parameter]])(implicit state: State, update: NutriaState => Unit) = {
-    val inputs = lens
-      .get(state)
-      .zipWithIndex
-      .map {
-        case (p: IntParameter, index) =>
-          Form.intInput(
-            p.name,
-            lens
-              .composeOptional(Index.index(index))
-              .composePrism(Parameter.IntParameter)
-              .composeLens(Lens[IntParameter, Int](_.value)(value => _.copy(value = value)))
-              .pipe(LenseUtils.unsafeOptional)
-          )
-        case (p: FloatParameter, index) =>
-          Form.doubleInput(
-            p.name,
-            lens
-              .composeOptional(Index.index(index))
-              .composePrism(Parameter.FloatParameter)
-              .composeLens(Lens[FloatParameter, Double](_.value.toDouble)(value => _.copy(value = value.toFloat)))
-              .pipe(LenseUtils.unsafeOptional)
-          )
-        case (p: RGBParameter, index) =>
-          Form.colorInput(
-            p.name,
-            lens
-              .composeOptional(Index.index(index))
-              .composePrism(Parameter.RGBParameter)
-              .composeLens(Lens[RGBParameter, RGBA](_.value.withAlpha())(value => _.copy(value = value.withoutAlpha)))
-              .pipe(LenseUtils.unsafeOptional)
-          )
-        case (p: RGBAParameter, index) =>
-          Form.colorInput(
-            p.name,
-            lens
-              .composeOptional(Index.index(index))
-              .composePrism(Parameter.RGBAParameter)
-              .composeLens(Lens[RGBAParameter, RGBA](_.value)(value => _.copy(value = value)))
-              .pipe(LenseUtils.unsafeOptional)
-          )
-        case (p: FunctionParameter, index) =>
-          Form.stringFunctionInput(
-            p.name,
-            lens
-              .composeOptional(Index.index(index))
-              .composePrism(Parameter.FunctionParameter)
-              .composeLens(Lens[FunctionParameter, StringFunction[ZAndLambda]](_.value)(value => _.copy(value = value)))
-              .pipe(LenseUtils.unsafeOptional)
-          )
-        case (p: InitialFunctionParameter, index) =>
-          Form.stringFunctionInput(
-            p.name,
-            lens
-              .composeOptional(Index.index(index))
-              .composePrism(Parameter.InitialFunctionParameter)
-              .composeLens(Lens[InitialFunctionParameter, StringFunction[Lambda.type]](_.value)(value => _.copy(value = value)))
-              .pipe(LenseUtils.unsafeOptional)
-          )
-        case (p: NewtonFunctionParameter, index) =>
-          Form.stringFunctionInput(
-            p.name,
-            lens
-              .composeOptional(Index.index(index))
-              .composePrism(Parameter.NewtonFunctionParameter)
-              .composeLens(Lens[NewtonFunctionParameter, StringFunction[XAndLambda]](_.value)(value => _.copy(value = value)))
-              .pipe(LenseUtils.unsafeOptional)
-          )
-      }
+  def parameters(lens: Lens[State, Vector[Parameter]])(implicit state: State, update: NutriaState => Unit): Seq[Node] = {
+    val createNewParameter = Node("section")
+      .child(Node("h5.title.is-5").text("Add Parameter"))
+      .child(
+        Form.selectInput[TemplateEditorState, Option[Parameter]](
+          label = "parameter type",
+          options = Seq(
+            "Type"    -> None,
+            "Integer" -> Some(IntParameter("parameter_name", 0)),
+            "Float"   -> Some(FloatParameter("parameter_name", 0.0)),
+            "Color"   -> Some(RGBAParameter("parameter_name", RGB.white.withAlpha())),
+            "Function1 f: (lambda) => C" -> Some(
+              InitialFunctionParameter("function_name", StringFunction.unsafe("lambda"))
+            ),
+            "Function1 f: (lambda) => C, with derivative: (lambda) => C" -> Some(
+              InitialFunctionParameter("function_name", StringFunction.unsafe("lambda"), includeDerivative = true)
+            ),
+            "Function2 f: (z, lambda) => C" -> Some(FunctionParameter("function_name", StringFunction.unsafe("z + lambda"))),
+            "Function2 f: (z, lambda) => C, with derivative: (z, lambda) => C" -> Some(
+              NewtonFunctionParameter("function_name", StringFunction.unsafe("z + lambda"), includeDerivative = true)
+            ),
+            "Function2 f: (z, lambda) => C, with derivative: (z, z', lambda) => C" -> Some(
+              FunctionParameter("function_name", StringFunction.unsafe("z + lambda"), includeDerivative = true)
+            )
+          ),
+          lens = TemplateEditorState.newParameter,
+          eqFunction = (left, right) => {
+            (left, right) match {
+              case (None, None)                                                           => true
+              case (Some(l: InitialFunctionParameter), Some(r: InitialFunctionParameter)) => r.includeDerivative == l.includeDerivative
+              case (Some(l: NewtonFunctionParameter), Some(r: NewtonFunctionParameter))   => r.includeDerivative == l.includeDerivative
+              case (Some(l: FunctionParameter), Some(r: FunctionParameter))               => r.includeDerivative == l.includeDerivative
+              case (Some(l), Some(r))                                                     => l.getClass == r.getClass
+              case _                                                                      => false
+            }
+          }
+        )
+      )
+      .childOptional(
+        state.newParameter.map(
+          _ =>
+            Form.stringInput(
+              "parameter name",
+              TemplateEditorState.newParameter
+                .composePrism(monocle.std.all.some[Parameter])
+                .composeLens(Parameter.name)
+                .pipe(LenseUtils.unsafeOptional)
+            )
+        )
+      )
+      .childOptional(
+        state.newParameter.map(
+          _ =>
+            ParameterForm.apply {
+              TemplateEditorState.newParameter
+                .composePrism(monocle.std.all.some[Parameter])
+                .pipe(LenseUtils.unsafeOptional)
+            }
+        )
+      )
+      .childOptional(
+        state.newParameter.map(p => Node("pre").text(FragmentShaderSource.parameter(p)))
+      )
+      .childOptional(
+        state.newParameter.map(
+          p =>
+            Button
+              .list()
+              .classes("is-right")
+              .child(
+                Button(
+                  "Add Parameter",
+                  Icons.plus,
+                  Snabbdom.event(
+                    _ =>
+                      update(
+                        state.copy(
+                          newParameter = None,
+                          template = state.template.copy(parameters = state.template.parameters :+ p)
+                        )
+                      )
+                  )
+                ).classes("is-primary", "is-outline")
+              )
+        )
+      )
 
-    val previews = lens
-      .get(state)
-      .map { parameter =>
-        Node("pre").text(FragmentShaderSource.parameter(parameter))
-      }
-
-    inputs.zip(previews).flatMap(t => Seq(t._1, t._2))
+    ParameterForm.list(lens) ++ Seq(createNewParameter)
   }
 
   def preview()(implicit state: State, update: NutriaState => Unit) = {

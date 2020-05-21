@@ -26,7 +26,7 @@ object StringFunction extends CirceCodec {
   implicit def encoder[V]: Encoder[StringFunction[V]] = Encoder[String].contramap(_.string)
   implicit def decoder[V](implicit lang: CLang[V]): Decoder[StringFunction[V]] =
     Decoder[String].flatMap { string =>
-      apply[V](string) match {
+      apply[V](string).orElse(apply[V](string.replace("x", "z"))) match {
         case Some(stringFunction) => Decoder.const(stringFunction)
         case None                 => Decoder.failedWithMessage(s"function '$string' could not be parsed")
       }

@@ -1,30 +1,47 @@
 package nutria.core
 
 import io.circe.Codec
-import monocle.macros.GenPrism
+import monocle.Lens
+import monocle.macros.{GenLens, GenPrism, Lenses}
 import nutria.CirceCodec
-import nutria.core.languages.{Lambda, StringFunction, XAndLambda, ZAndLambda}
+import nutria.core.languages.{Lambda, StringFunction, ZAndLambda}
 
 sealed trait Parameter {
   def name: String
 }
 
-case class IntParameter(name: String, value: Int)                                                                         extends Parameter
-case class FloatParameter(name: String, value: Float)                                                                     extends Parameter
-case class RGBParameter(name: String, value: RGB)                                                                         extends Parameter
-case class RGBAParameter(name: String, value: RGBA)                                                                       extends Parameter
-case class FunctionParameter(name: String, value: StringFunction[ZAndLambda], includeDerivative: Boolean = false)         extends Parameter
+@Lenses
+case class IntParameter(name: String, value: Int) extends Parameter
+@Lenses
+case class FloatParameter(name: String, value: Double) extends Parameter
+@Lenses
+case class RGBAParameter(name: String, value: RGBA) extends Parameter
+@Lenses
+case class FunctionParameter(name: String, value: StringFunction[ZAndLambda], includeDerivative: Boolean = false) extends Parameter
+@Lenses
 case class InitialFunctionParameter(name: String, value: StringFunction[Lambda.type], includeDerivative: Boolean = false) extends Parameter
-case class NewtonFunctionParameter(name: String, value: StringFunction[XAndLambda], includeDerivative: Boolean = false)   extends Parameter
+@Lenses
+case class NewtonFunctionParameter(name: String, value: StringFunction[ZAndLambda], includeDerivative: Boolean = false) extends Parameter
 
 object Parameter extends CirceCodec {
-  val IntParameter             = GenPrism[Parameter, IntParameter]
-  val FloatParameter           = GenPrism[Parameter, FloatParameter]
-  val RGBParameter             = GenPrism[Parameter, RGBParameter]
-  val RGBAParameter            = GenPrism[Parameter, RGBAParameter]
-  val FunctionParameter        = GenPrism[Parameter, FunctionParameter]
-  val InitialFunctionParameter = GenPrism[Parameter, InitialFunctionParameter]
-  val NewtonFunctionParameter  = GenPrism[Parameter, NewtonFunctionParameter]
+
+  val name = Lens[Parameter, String](get = _.name) { newName =>
+    {
+      case p: IntParameter             => IntParameter.name.set(newName)(p)
+      case p: FloatParameter           => FloatParameter.name.set(newName)(p)
+      case p: RGBAParameter            => RGBAParameter.name.set(newName)(p)
+      case p: FunctionParameter        => FunctionParameter.name.set(newName)(p)
+      case p: InitialFunctionParameter => InitialFunctionParameter.name.set(newName)(p)
+      case p: NewtonFunctionParameter  => NewtonFunctionParameter.name.set(newName)(p)
+    }
+  }
+
+  val prismIntParameter             = GenPrism[Parameter, IntParameter]
+  val prismFloatParameter           = GenPrism[Parameter, FloatParameter]
+  val prismRGBAParameter            = GenPrism[Parameter, RGBAParameter]
+  val prismFunctionParameter        = GenPrism[Parameter, FunctionParameter]
+  val prismInitialFunctionParameter = GenPrism[Parameter, InitialFunctionParameter]
+  val prismNewtonFunctionParameter  = GenPrism[Parameter, NewtonFunctionParameter]
 
   def setParameters(parameters: Vector[Parameter], newParameters: Vector[Parameter]): Vector[Parameter] = {
     (parameters ++ newParameters).reverse.distinctBy(_.name).reverse
