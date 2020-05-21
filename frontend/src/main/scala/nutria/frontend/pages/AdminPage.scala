@@ -2,7 +2,7 @@ package nutria.frontend.pages
 
 import nutria.api.{FractalEntity, User, WithId}
 import nutria.frontend.Router.{Path, QueryParameter}
-import nutria.frontend.pages.common.{Body, Button, Header, Icons}
+import nutria.frontend.pages.common.{Body, Button, ButtonList, Header, Icons}
 import nutria.frontend.service.NutriaAdminService
 import nutria.frontend.service.NutriaAdminService.ex
 import nutria.frontend.{NutriaState, Page}
@@ -114,11 +114,11 @@ object AdminPage extends Page[AdminState] {
   private def actionBar()(implicit update: NutriaState => Unit): Node =
     Node("section.section")
       .child(
-        Button
-          .list()
-          .child(Button("clean Fractals", action(NutriaAdminService.cleanFractals())))
-          .child(Button("delete all Fractals", action(NutriaAdminService.truncateFractals())))
-          .child(Button("insert examples", action(NutriaAdminService.insertExamples())))
+        ButtonList(
+          Button("clean Fractals", action(NutriaAdminService.cleanFractals())),
+          Button("delete all Fractals", action(NutriaAdminService.truncateFractals())),
+          Button("insert examples", action(NutriaAdminService.insertExamples()))
+        )
       )
 
   private def action(

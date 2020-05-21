@@ -136,39 +136,24 @@ object ExplorerPage extends Page[ExplorerState] {
       val lensParams     = ExplorerState.saveModal.composeLens(LenseUtils.unsafe(monocle.std.all.some[SaveFractalDialog]))
       val downloadAction = Actions.saveToDisk(state.fractalImage.copy(antiAliase = params.antiAliase), params.dimensions)
 
-      Node("div.modal.is-active")
-        .children(
-          Node("div.modal-background").event("click", Actions.closeSaveToDiskModal),
-          Node("div.modal-content")
-            .child(
-              Node("div.box")
-                .child(
-                  Node("div")
-                    .style("marginBottom", "1.5rem")
-                    .child(Node("h1.title").text("Render high resolution Image"))
-                    .child(
-                      Form.intInput(
-                        "width",
-                        lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.width
-                      )
-                    )
-                    .child(
-                      Form.intInput(
-                        "height",
-                        lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.height
-                      )
-                    )
-                    .child(Form.intInput("anti alias", lensParams composeLens SaveFractalDialog.antiAliase))
-                )
-                .children(
-                  Button
-                    .list()
-                    .child(
-                      Button("Download", Icons.download, downloadAction)
-                        .classes("is-primary")
-                    )
-                )
+      Modal(closeAction = Actions.closeSaveToDiskModal)(
+        Node("div")
+          .style("marginBottom", "1.5rem")
+          .child(Node("h1.title").text("Render high resolution Image"))
+          .child(
+            Form.intInput(
+              "width",
+              lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.width
             )
-        )
+          )
+          .child(
+            Form.intInput(
+              "height",
+              lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.height
+            )
+          )
+          .child(Form.intInput("anti alias", lensParams composeLens SaveFractalDialog.antiAliase)),
+        ButtonList(Button("Download", Icons.download, downloadAction).classes("is-primary"))
+      )
     }
 }

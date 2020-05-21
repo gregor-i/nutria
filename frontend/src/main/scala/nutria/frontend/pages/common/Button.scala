@@ -19,6 +19,4 @@ object Button {
       .event("click", onclick)
       .child(Icons.icon(icon))
 
-  def list(): Node =
-    Node("div.buttons.is-right")
 }

@@ -10,7 +10,7 @@ import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common.{Form, _}
 import nutria.frontend.service.NutriaService
-import nutria.frontend.util.LenseUtils
+import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
 import nutria.shaderBuilder.{CompileException, FractalRenderer, FragmentShaderSource}
 import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
@@ -109,7 +109,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       .child(
         Node("section.section").children(
           Node("h4.title.is-4").text("Parameters:"),
-          parameters(TemplateEditorState.parameters)
+          parameters()
         )
       )
       .child(
@@ -128,6 +128,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
         Node("section.section")
           .child(actions())
       )
+      .child(parameterModal(TemplateEditorState.newParameter, TemplateEditorState.parameters))
 
   def template(lens: Lens[State, FractalTemplate])(implicit state: State, update: NutriaState => Unit) = {
     val codeEditor =
@@ -160,93 +161,75 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     )
   }
 
-  def parameters(lens: Lens[State, Vector[Parameter]])(implicit state: State, update: NutriaState => Unit): Seq[Node] = {
-    val createNewParameter = Node("section")
-      .child(Node("h5.title.is-5").text("Add Parameter"))
-      .child(
-        Form.selectInput[TemplateEditorState, Option[Parameter]](
-          label = "parameter type",
-          options = Seq(
-            "Type"    -> None,
-            "Integer" -> Some(IntParameter("parameter_name", 0)),
-            "Float"   -> Some(FloatParameter("parameter_name", 0.0)),
-            "Color"   -> Some(RGBAParameter("parameter_name", RGB.white.withAlpha())),
-            "Function1 f: (lambda) => C" -> Some(
-              InitialFunctionParameter("function_name", StringFunction.unsafe("lambda"))
-            ),
-            "Function1 f: (lambda) => C, with derivative: (lambda) => C" -> Some(
-              InitialFunctionParameter("function_name", StringFunction.unsafe("lambda"), includeDerivative = true)
-            ),
-            "Function2 f: (z, lambda) => C" -> Some(FunctionParameter("function_name", StringFunction.unsafe("z + lambda"))),
-            "Function2 f: (z, lambda) => C, with derivative: (z, lambda) => C" -> Some(
-              NewtonFunctionParameter("function_name", StringFunction.unsafe("z + lambda"), includeDerivative = true)
-            ),
-            "Function2 f: (z, lambda) => C, with derivative: (z, z', lambda) => C" -> Some(
-              FunctionParameter("function_name", StringFunction.unsafe("z + lambda"), includeDerivative = true)
-            )
-          ),
-          lens = TemplateEditorState.newParameter,
-          eqFunction = (left, right) => {
-            (left, right) match {
-              case (None, None)                                                           => true
-              case (Some(l: InitialFunctionParameter), Some(r: InitialFunctionParameter)) => r.includeDerivative == l.includeDerivative
-              case (Some(l: NewtonFunctionParameter), Some(r: NewtonFunctionParameter))   => r.includeDerivative == l.includeDerivative
-              case (Some(l: FunctionParameter), Some(r: FunctionParameter))               => r.includeDerivative == l.includeDerivative
-              case (Some(l), Some(r))                                                     => l.getClass == r.getClass
-              case _                                                                      => false
-            }
+  def parameterModal(
+      lensToMaybeParameter: Lens[State, Option[Parameter]],
+      lensToOtherParameters: Lens[State, Vector[Parameter]]
+  )(implicit state: State, update: NutriaState => Unit): Option[Node] =
+    lensToMaybeParameter.get(state).map { parameter =>
+      val lensToParameter = lensToMaybeParameter.composePrism(monocle.std.option.some).pipe(LenseUtils.unsafeOptional)
+      val overwrite       = lensToOtherParameters.get(state).exists(_.name == parameter.name)
+
+      val selectType = Form.selectInput[State, Parameter](
+        label = "parameter type",
+        options = Seq(
+          "Integer" -> IntParameter("parameter_name", 0),
+          "Float"   -> FloatParameter("parameter_name", 0.0),
+          "Color"   -> RGBAParameter("parameter_name", RGB.white.withAlpha()),
+          "Function1 f: (lambda) => C" ->
+            InitialFunctionParameter("function_name", StringFunction.unsafe("lambda")),
+          "Function1 f: (lambda) => C, with derivative: (lambda) => C" ->
+            InitialFunctionParameter("function_name", StringFunction.unsafe("lambda"), includeDerivative = true),
+          "Function2 f: (z, lambda) => C" -> FunctionParameter("function_name", StringFunction.unsafe("z + lambda")),
+          "Function2 f: (z, lambda) => C, with derivative: (z, lambda) => C" ->
+            NewtonFunctionParameter("function_name", StringFunction.unsafe("z + lambda"), includeDerivative = true),
+          "Function2 f: (z, lambda) => C, with derivative: (z, z', lambda) => C" ->
+            FunctionParameter("function_name", StringFunction.unsafe("z + lambda"), includeDerivative = true)
+        ),
+        lens = lensToParameter,
+        eqFunction = (left, right) => {
+          (left, right) match {
+            case (l: InitialFunctionParameter, r: InitialFunctionParameter) => r.includeDerivative == l.includeDerivative
+            case (l: NewtonFunctionParameter, r: NewtonFunctionParameter)   => r.includeDerivative == l.includeDerivative
+            case (l: FunctionParameter, r: FunctionParameter)               => r.includeDerivative == l.includeDerivative
+            case (l, r)                                                     => l.getClass == r.getClass
           }
-        )
-      )
-      .childOptional(
-        state.newParameter.map(
-          _ =>
-            Form.stringInput(
-              "parameter name",
-              TemplateEditorState.newParameter
-                .composePrism(monocle.std.all.some[Parameter])
-                .composeLens(Parameter.name)
-                .pipe(LenseUtils.unsafeOptional)
-            )
-        )
-      )
-      .childOptional(
-        state.newParameter.map(
-          _ =>
-            ParameterForm.apply {
-              TemplateEditorState.newParameter
-                .composePrism(monocle.std.all.some[Parameter])
-                .pipe(LenseUtils.unsafeOptional)
-            }
-        )
-      )
-      .childOptional(
-        state.newParameter.map(p => Node("pre").text(FragmentShaderSource.parameter(p)))
-      )
-      .childOptional(
-        state.newParameter.map(
-          p =>
-            Button
-              .list()
-              .child(
-                Button(
-                  "Add Parameter",
-                  Icons.plus,
-                  Snabbdom.event(
-                    _ =>
-                      update(
-                        state.copy(
-                          newParameter = None,
-                          template = state.template.copy(parameters = state.template.parameters :+ p)
-                        )
-                      )
-                  )
-                ).classes("is-primary", "is-outline")
-              )
-        )
+        }
       )
 
-    ParameterForm.list(lens) ++ Seq(createNewParameter)
+      Modal(closeAction = SnabbdomUtil.update(lensToMaybeParameter.set(None)))(
+        Node("h5.title.is-5").text("Add Parameter"),
+        selectType,
+        Form.stringInput("name", lensToParameter.composeLens(Parameter.name)),
+        ParameterForm(lensToParameter),
+        Form.inputStyle(
+          "generated code:",
+          Node("pre")
+            .text(FragmentShaderSource.parameter(lensToParameter.get(state)))
+            .style("whiteSpace", "break-spaces")
+        ),
+        ButtonList(
+          Button("Cancel", Icons.cancel, SnabbdomUtil.update(lensToMaybeParameter.set(None))),
+          Button(
+            if (overwrite) "Overwrite" else "Add",
+            Icons.plus,
+            SnabbdomUtil.update(
+              lensToOtherParameters
+                .modify(list => Parameter.setParameter(list, parameter))
+                .andThen(lensToMaybeParameter.set(None))
+            )
+          ).classes("is-primary")
+        )
+      )
+    }
+
+  def parameters()(implicit state: State, update: NutriaState => Unit): Seq[Node] = {
+    val lens = TemplateEditorState.parameters
+    val openModalButton =
+      ButtonList(
+        Button("Add new Parameter", Icons.plus, SnabbdomUtil.update(TemplateEditorState.newParameter.set(Some(IntParameter("parameter_name", 0)))))
+      )
+
+    ParameterForm.list(lens) ++ Seq(openModalButton)
   }
 
   def preview()(implicit state: State, update: NutriaState => Unit) = {
