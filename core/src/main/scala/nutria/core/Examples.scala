@@ -14,7 +14,8 @@ object Examples {
       RGBAParameter("color_outside", RGB.black.withAlpha()),
       InitialFunctionParameter("initial", StringFunction.unsafe("0")),
       FunctionParameter("iteration", StringFunction.unsafe("z*z+lambda"))
-    )
+    ),
+    exampleViewport = Viewport.mandelbrot
   )
 
   val gaussianInteger = FractalTemplate(
@@ -26,7 +27,8 @@ object Examples {
       RGBAParameter("color_far_gaussian", RGB.black.withAlpha()),
       InitialFunctionParameter("initial", StringFunction.unsafe("lambda")),
       FunctionParameter("iteration", StringFunction.unsafe("z*z+lambda"))
-    )
+    ),
+    exampleViewport = Viewport.mandelbrot
   )
 
   val normalMap =
@@ -42,7 +44,8 @@ object Examples {
         FloatParameter("h2", 2.0),
         InitialFunctionParameter("initial", StringFunction.unsafe("0"), includeDerivative = true),
         FunctionParameter("iteration", StringFunction.unsafe("z*z+lambda"), includeDerivative = true)
-      )
+      ),
+      exampleViewport = Viewport.mandelbrot
     )
 
   val outerDistance =
@@ -57,7 +60,8 @@ object Examples {
         RGBAParameter("color_near", RGB.black.withAlpha()),
         InitialFunctionParameter("initial", StringFunction.unsafe("0"), includeDerivative = true),
         FunctionParameter("iteration", StringFunction.unsafe("z*z+lambda"), includeDerivative = true)
-      )
+      ),
+      exampleViewport = Viewport.mandelbrot
     )
 
   val newtonIteration =
@@ -72,7 +76,8 @@ object Examples {
         IntParameter("max_iterations", 200),
         InitialFunctionParameter("initial", StringFunction.unsafe("lambda")),
         NewtonFunctionParameter("f", StringFunction.unsafe("z*z*z + 1"), includeDerivative = true)
-      )
+      ),
+      exampleViewport = Viewport.aroundZero
     )
 
   val sierpinskiTriangle =
@@ -83,7 +88,8 @@ object Examples {
         FloatParameter(name = "size", value = 1.0),
         RGBAParameter(name = "color_outside", value = RGB.white.withAlpha()),
         RGBAParameter(name = "color_inside", value = RGB.black.withAlpha())
-      )
+      ),
+      exampleViewport = Viewport.aroundZero
     )
 
   val lyapunovFractal =
@@ -93,7 +99,8 @@ object Examples {
         IntParameter(name = "iterations", value = 120),
         IntParameter(name = "steps_X", value = 6),
         IntParameter(name = "steps_Y", value = 6)
-      )
+      ),
+      exampleViewport = Viewport.aroundZero
     )
 
   val kochSnowflake = FractalTemplate(
@@ -102,7 +109,8 @@ object Examples {
       IntParameter(name = "iterations", value = 26),
       RGBAParameter(name = "color_inside", value = RGB.black.withAlpha()),
       RGBAParameter(name = "color_outside", value = RGB.white.withAlpha())
-    )
+    ),
+    exampleViewport = Viewport.aroundZero
   )
 
   val novaFractal = FractalTemplate(
@@ -110,19 +118,20 @@ object Examples {
     parameters = Vector(
       IntParameter(name = "max_iterations", value = 200),
       NewtonFunctionParameter(name = "iteration", value = StringFunction.unsafe("z*z*z - 1"), includeDerivative = true)
-    )
+    ),
+    exampleViewport = Viewport.aroundZero
   )
 
-  val allNamed: Seq[(String, FractalTemplate, core.Viewport)] = Seq(
-    ("timeEscape", timeEscape, Viewport.mandelbrot),
-    ("gaussianInteger", gaussianInteger, Viewport.mandelbrot),
-    ("normalMap", normalMap, Viewport.mandelbrot),
-    ("outerDistance", outerDistance, Viewport.mandelbrot),
-    ("newtonIteration", newtonIteration, Viewport.aroundZero),
-    ("sierpinskiTriangle", sierpinskiTriangle, Viewport.aroundZero),
-    ("lyapunovFractal", lyapunovFractal, Viewport.aroundZero),
-    ("kochSnowflake", kochSnowflake, Viewport.aroundZero),
-    ("novaFractal", novaFractal, Viewport.aroundZero)
+  val allNamed: Seq[(String, FractalTemplate)] = Seq(
+    ("timeEscape", timeEscape),
+    ("gaussianInteger", gaussianInteger),
+    ("normalMap", normalMap),
+    ("outerDistance", outerDistance),
+    ("newtonIteration", newtonIteration),
+    ("sierpinskiTriangle", sierpinskiTriangle),
+    ("lyapunovFractal", lyapunovFractal),
+    ("kochSnowflake", kochSnowflake),
+    ("novaFractal", novaFractal)
   )
 
   val all: Seq[FractalTemplate] = allNamed.map(_._2)

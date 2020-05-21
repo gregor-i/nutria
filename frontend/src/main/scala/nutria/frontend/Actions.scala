@@ -1,6 +1,6 @@
 package nutria.frontend
 
-import nutria.api.{Entity, FractalEntity, FractalTemplateEntity, Verdict, WithId}
+import nutria.api.{Entity, FractalEntity, FractalTemplateEntity, FractalTemplateEntityWithId, Verdict, WithId}
 import nutria.core.{Dimensions, Fractal, FractalImage, Viewport, ViewportList}
 import nutria.frontend.pages.common.FractalTile
 import nutria.frontend.pages._
@@ -248,6 +248,20 @@ object Actions {
             savedTemplate <- NutriaService.saveTemplate(templateEntity)
             _ = Toasts.successToast("Template saved.")
           } yield state.copy(remoteTemplate = Some(savedTemplate))
+        }
+      }
+    }
+
+  def updateTemplate(
+      template: FractalTemplateEntityWithId
+  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      onlyLoggedIn {
+        asyncUpdate {
+          for {
+            _ <- NutriaService.updateTemplate(template)
+            _ = Toasts.successToast("Template updated.")
+          } yield TemplateEditorState.byTemplate(template)
         }
       }
     }

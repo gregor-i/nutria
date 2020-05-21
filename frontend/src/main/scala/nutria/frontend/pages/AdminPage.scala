@@ -1,6 +1,6 @@
 package nutria.frontend.pages
 
-import nutria.api.{FractalEntity, User, WithId}
+import nutria.api.{FractalEntity, FractalTemplateEntityWithId, User, WithId}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common.{Body, Button, ButtonList, Header, Icons}
 import nutria.frontend.service.NutriaAdminService
@@ -14,6 +14,7 @@ case class AdminState(
     admin: User,
     users: Vector[User],
     fractals: Vector[WithId[FractalEntity]],
+    templates: Vector[FractalTemplateEntityWithId],
     navbarExpanded: Boolean = false
 ) extends NutriaState {
   def user: Some[User]                                          = Some(admin)
@@ -40,6 +41,7 @@ object AdminPage extends Page[AdminState] {
           .child(Node("section.section").child(Node("h1.title.is-1").text("Admin:")))
           .child(usersTable(state.users))
           .child(fractalsTable(state.fractals))
+          .child(templatesTable(state.templates))
           .child(actionBar())
       )
 
@@ -88,7 +90,6 @@ object AdminPage extends Page[AdminState] {
               .child(Node("th").text("Published"))
               .child(Node("th").text("Title"))
               .child(Node("th").text("Description"))
-              .child(Node("th").text("Typ"))
               .child(Node("th"))
           )
           .child(
@@ -100,13 +101,42 @@ object AdminPage extends Page[AdminState] {
                   .child(Node("td").text(fractal.entity.published.toString))
                   .child(Node("td").text(fractal.entity.title))
                   .child(Node("td").text(fractal.entity.description))
-                  .child(Node("td").text(fractal.entity.value.program.getClass.getSimpleName))
                   .child(
                     Node("td").child(
                       Button
                         .icon(Icons.delete, action(NutriaAdminService.deleteFractal(fractal.id)))
                     )
                   )
+            )
+          )
+      )
+
+  private def templatesTable(
+      templates: Seq[FractalTemplateEntityWithId]
+  )(implicit update: NutriaState => Unit): Node =
+    Node("section.section")
+      .child(Node("h4.title.is-4").text(s"Templates: ${templates.length}"))
+      .child(
+        Node("table.table.is-fullwidth")
+          .child(
+            Node("tr")
+              .child(Node("th").text("Id"))
+              .child(Node("th").text("Owner"))
+              .child(Node("th").text("Published"))
+              .child(Node("th").text("Title"))
+              .child(Node("th").text("Description"))
+              .child(Node("th"))
+          )
+          .child(
+            templates.map(
+              template =>
+                Node("tr")
+                  .child(Node("td").text(template.id))
+                  .child(Node("td").text(template.owner))
+                  .child(Node("td").text(template.entity.published.toString))
+                  .child(Node("td").text(template.entity.title))
+                  .child(Node("td").text(template.entity.description))
+                  .child(Node("td"))
             )
           )
       )

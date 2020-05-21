@@ -10,6 +10,7 @@ DELETE        /api/fractals/:fractalId                          controller.Fract
 GET           /api/templates                                    controller.TemplateController.listTemplates()
 POST          /api/templates                                    controller.TemplateController.postTemplate()
 GET           /api/templates/:templateId                        controller.TemplateController.getTemplate(templateId: String)
+PUT           /api/templates/:templateId                        controller.TemplateController.updateTemplate(templateId: String)
 
 GET           /api/votes                                        controller.VotesController.getAll()
 PUT           /api/votes/:fractalId                             controller.VotesController.vote(fractalId: String)

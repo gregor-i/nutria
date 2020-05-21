@@ -10,10 +10,11 @@ import nutria.api.{Entity, WithId}
 import nutria.core.{Examples, Fractal, ViewportList}
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
-import repo.{FractalRepo, UserRepo}
+import repo.{FractalRepo, TemplateRepo, UserRepo}
 
 class AdminController @Inject() (
     fractalRepo: FractalRepo,
+    templateRepo: TemplateRepo,
     userRepo: UserRepo,
     authenticator: Authenticator
 ) extends InjectedController
@@ -23,8 +24,9 @@ class AdminController @Inject() (
     authenticator.adminUser(req) { admin =>
       Ok(
         JsonObject(
-          "admin" -> admin.asJson,
-          "users" -> userRepo.list().asJson,
+          "admin"     -> admin.asJson,
+          "users"     -> userRepo.list().asJson,
+          "templates" -> templateRepo.list().collect(templateRepo.rowToEntity).asJson,
           "fractals" -> fractalRepo
             .list()
             .collect(fractalRepo.rowToEntity)
@@ -72,16 +74,13 @@ class AdminController @Inject() (
     authenticator.adminUser(req) { admin =>
       Examples.allNamed
         .foreach {
-          case (name, template, viewport) =>
-            fractalRepo.save(
+          case (name, template) =>
+            templateRepo.save(
               id = UUID.randomUUID().toString,
               owner = admin.id,
               entity = Entity(
                 title = name,
-                value = Fractal(
-                  program = template,
-                  views = ViewportList.apply(viewport)
-                )
+                value = template
               )
             )
         }

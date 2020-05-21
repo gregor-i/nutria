@@ -21,7 +21,7 @@ class TemplateRepoSpec extends AnyFunSuite with Matchers with GuiceOneAppPerSuit
 
   val testData = Examples.allNamed
     .map {
-      case (name, template, _) =>
+      case (name, template) =>
         Entity(title = name, value = template)
     }
     .map(row)

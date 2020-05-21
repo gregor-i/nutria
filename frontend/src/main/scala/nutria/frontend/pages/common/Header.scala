@@ -2,7 +2,7 @@ package nutria.frontend.pages.common
 
 import nutria.api.User
 import nutria.frontend._
-import nutria.frontend.pages.{AdminState, FAQState, ProfileState, TemplateEditorState}
+import nutria.frontend.pages.{AdminState, FAQState, ProfileState, TemplateEditorState, TemplateGalleryState}
 import snabbdom.{Node, Snabbdom}
 
 object Header {
@@ -32,6 +32,14 @@ object Header {
                   Link(TemplateEditorState.initial)
                     .classes("navbar-item")
                     .text("Template Editor")
+                ).filter(_ => state.user.exists(_.admin))
+              )
+              .childOptional(
+                Some(
+                  Link
+                    .async("/templates", TemplateGalleryState.load())
+                    .classes("navbar-item")
+                    .text("Template List")
                 ).filter(_ => state.user.exists(_.admin))
               )
               .childOptional(

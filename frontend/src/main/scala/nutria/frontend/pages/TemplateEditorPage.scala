@@ -26,7 +26,6 @@ case class TemplateEditorState(
     user: Option[User],
     remoteTemplate: Option[FractalTemplateEntityWithId],
     template: FractalTemplate,
-    viewport: Viewport = Viewport.mandelbrot, // todo: remove
     newParameter: Option[Parameter] = None,
     navbarExpanded: Boolean = false
 ) extends NutriaState {
@@ -42,9 +41,11 @@ object TemplateEditorState extends LenseUtils {
     TemplateEditorState(
       user = nutriaState.user,
       remoteTemplate = None,
-      template = Examples.timeEscape,
-      viewport = Viewport.mandelbrot
+      template = Examples.timeEscape
     )
+
+  def byTemplate(template: FractalTemplateEntityWithId)(implicit nutriaState: NutriaState): TemplateEditorState =
+    TemplateEditorState(user = nutriaState.user, remoteTemplate = Some(template), template = template.entity.value)
 }
 
 object TemplateEditorPage extends Page[TemplateEditorState] {
@@ -235,9 +236,9 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
 
   def preview()(implicit state: State, update: NutriaState => Unit) = {
     val tile =
-      Node("article.fractal-tile.is-relative")
+      Node("article.fractal-tile")
         .child(
-          FractalTile(FractalImage(state.template, state.viewport, nutria.core.refineUnsafe(1)), Dimensions.thumbnail)
+          FractalTile(FractalImage(state.template, state.template.exampleViewport, nutria.core.refineUnsafe(1)), Dimensions.thumbnail)
         )
 
     Node("div.fractal-tile-list")
@@ -252,20 +253,21 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     )
 
   private def actions()(implicit state: State, update: NutriaState => Unit): Node = {
-    val buttons: Seq[Node] = state.user match {
-      case Some(user) =>
+    val buttons: Seq[Node] = (state.user, state.remoteTemplate) match {
+      case (Some(user), Some(remote)) if user.id == remote.owner =>
+        Seq(buttonSave, buttonUpdate)
+      case (Some(_), _) =>
         Seq(buttonSave)
-      case None =>
+      case (None, _) =>
         Seq.empty
     }
 
-    Node("div.field.is-grouped.is-grouped-right")
-      .child(buttons.map(button => Node("p.control").child(button)))
+    ButtonList(buttons: _*)
   }
 
   private def buttonSave(implicit state: State, update: NutriaState => Unit) =
     Button(
-      "Save Changes as new Template",
+      "Save as new Template",
       Icons.save,
       Actions.saveTemplate(
         Entity(
@@ -274,4 +276,18 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
         )
       )
     ).classes("is-primary")
+      .boolAttr("disabled", !state.dirty)
+
+  private def buttonUpdate(implicit state: State, update: NutriaState => Unit) =
+    Button(
+      "Update existing Template",
+      Icons.save,
+      Actions.saveTemplate(
+        Entity(
+          title = "todo",
+          value = state.template
+        )
+      )
+    ).classes("is-primary")
+      .boolAttr("disabled", !state.dirty)
 }

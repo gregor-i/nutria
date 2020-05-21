@@ -26,6 +26,11 @@ object NutriaService extends Service {
       .flatMap(check(201))
       .flatMap(parse[FractalTemplateEntityWithId])
 
+  def updateTemplate(template: FractalTemplateEntityWithId): Future[Unit] =
+    put(url = s"/api/templates/${template.id}", body = template.entity)
+      .flatMap(check(202))
+      .map(_ => ())
+
   def loadFractal(fractalId: String): Future[WithId[FractalEntity]] =
     get(url = s"/api/fractals/${fractalId}")
       .flatMap(check(200))

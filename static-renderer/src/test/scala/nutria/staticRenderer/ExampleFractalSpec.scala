@@ -4,10 +4,10 @@ import nutria.core.{Dimensions, Examples, FractalImage}
 
 class ExampleFractalSpec extends RenderingSuite {
   for {
-    (name, program, viewport) <- Examples.allNamed
+    (name, template) <- Examples.allNamed
   } {
     renderingTest(s"renders example: $name")(
-      fractal = FractalImage(program, viewport),
+      fractal = FractalImage(template, template.exampleViewport),
       dimensions = Dimensions.fullHD,
       fileName = s"${baseFolder}/${name}.png"
     )

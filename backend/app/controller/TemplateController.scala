@@ -42,4 +42,20 @@ class TemplateController @Inject() (templateRepo: TemplateRepo, authenticator: A
     }
   }
 
+  def updateTemplate(templateId: String) =
+    Action(circe.tolerantJson[FractalTemplateEntity]) { req =>
+      templateRepo.get(templateId) match {
+        case None => NotFound
+        case Some(savedTemplate) =>
+          authenticator.byUserId(req)(savedTemplate.owner) {
+            templateRepo.save(
+              id = templateId,
+              owner = savedTemplate.owner,
+              entity = req.body
+            )
+            Accepted
+          }
+      }
+    }
+
 }
