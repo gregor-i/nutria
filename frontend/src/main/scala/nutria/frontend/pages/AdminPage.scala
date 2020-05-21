@@ -114,7 +114,8 @@ object AdminPage extends Page[AdminState] {
   private def actionBar()(implicit update: NutriaState => Unit): Node =
     Node("section.section")
       .child(
-        Node("div.buttons.is-right")
+        Button
+          .list()
           .child(Button("clean Fractals", action(NutriaAdminService.cleanFractals())))
           .child(Button("delete all Fractals", action(NutriaAdminService.truncateFractals())))
           .child(Button("insert examples", action(NutriaAdminService.insertExamples())))

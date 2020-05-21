@@ -3,7 +3,7 @@ package nutria.frontend.pages
 import nutria.core.FractalImage
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
-import nutria.frontend.pages.common.{Body, CanvasHooks, Icons, Link}
+import nutria.frontend.pages.common.{Body, Button, CanvasHooks, Icons, Link, Modal}
 import nutria.macros.StaticContent
 import snabbdom.Node
 
@@ -25,33 +25,27 @@ object GreetingPage extends Page[GreetingState] {
       .child(content)
 
   private def content(implicit state: GreetingState, update: NutriaState => Unit) = {
-    Node("div.modal.is-active")
-      .children(
-        Node("div.modal-background")
-          .event("click", Actions.exploreFractal(state.randomFractal)),
-        Node("div.modal-content")
+    Modal(
+      closeAction = Actions.exploreFractal(state.randomFractal),
+      content = Seq(
+        Node("div.content").prop("innerHTML", StaticContent("frontend/src/main/html/greeting.html")),
+        Button
+          .list()
           .child(
-            Node("div.box")
-              .children(
-                Node("div.content").prop("innerHTML", StaticContent("frontend/src/main/html/greeting.html")),
-                Node("div.buttons")
-                  .child(
-                    Link(Actions.gotoFAQ())
-                      .classes("button", "is-link", "is-outlined")
-                      .child(Icons.icon(Icons.info))
-                      .child(Node("span").text("more information"))
-                  )
-                  .child(
-                    Link
-                      .async("/gallery", Links.galleryState())
-                      .classes("button", "is-primary")
-                      .child(Icons.icon(Icons.gallery))
-                      .child(Node("span").text("Start exploring!"))
-                  )
-                  .classes("is-right")
-              )
+            Link(Actions.gotoFAQ())
+              .classes("button", "is-link", "is-outlined")
+              .child(Icons.icon(Icons.info))
+              .child(Node("span").text("more information"))
+          )
+          .child(
+            Link
+              .async("/gallery", Links.galleryState())
+              .classes("button", "is-primary")
+              .child(Icons.icon(Icons.gallery))
+              .child(Node("span").text("Start exploring!"))
           )
       )
+    )
   }
 
   private def renderCanvas(implicit state: GreetingState, update: ExplorerState => Unit): Node =

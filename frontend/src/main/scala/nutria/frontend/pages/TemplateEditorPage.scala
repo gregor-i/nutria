@@ -228,7 +228,6 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
           p =>
             Button
               .list()
-              .classes("is-right")
               .child(
                 Button(
                   "Add Parameter",
