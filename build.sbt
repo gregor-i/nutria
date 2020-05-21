@@ -144,10 +144,11 @@ stage in `service-worker` := {
   outputFile
 }
 
-compile in nutria := Def.sequential(
-  (compile in frontend),
-  (compile in `service-worker`),
-  (compile in backend)
+compile in Compile in nutria := Def.sequential(
+  (compile in Compile in frontend),
+  (compile in Compile in `service-worker`),
+  (compile in Compile in `static-renderer`),
+  (compile in Compile in backend)
 ).value
 
 stage in nutria := Def.sequential(
