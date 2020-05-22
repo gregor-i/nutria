@@ -3,7 +3,7 @@ package nutria.core
 import nutria.CirceCodec
 
 @monocle.macros.Lenses()
-case class FractalTemplate(code: String, parameters: Vector[Parameter], exampleViewport: Viewport)
+case class FractalTemplate(code: String, parameters: Vector[Parameter], exampleViewport: Viewport = Viewport.mandelbrot)
 
 object FractalTemplate extends CirceCodec {
   val empty = FractalTemplate("", Vector.empty, Viewport.aroundZero)
