@@ -1,6 +1,7 @@
 package nutria.frontend.pages
 
-import nutria.api.{FractalEntity, FractalTemplateEntityWithId, User, WithId}
+import nutria.api.{Entity, FractalEntity, FractalTemplateEntityWithId, User, WithId}
+import nutria.core.{Fractal, FractalTemplate}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common.{Body, Button, ButtonList, Header, Icons}
 import nutria.frontend.service.NutriaAdminService
@@ -13,8 +14,8 @@ import scala.concurrent.Future
 case class AdminState(
     admin: User,
     users: Vector[User],
-    fractals: Vector[WithId[FractalEntity]],
-    templates: Vector[FractalTemplateEntityWithId],
+    fractals: Vector[WithId[Option[Entity[Fractal]]]],
+    templates: Vector[WithId[Option[Entity[FractalTemplate]]]],
     navbarExpanded: Boolean = false
 ) extends NutriaState {
   def user: Some[User]                                          = Some(admin)
@@ -77,7 +78,7 @@ object AdminPage extends Page[AdminState] {
       )
 
   private def fractalsTable(
-      fractals: Seq[WithId[FractalEntity]]
+      fractals: Seq[WithId[Option[Entity[Fractal]]]]
   )(implicit update: NutriaState => Unit): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text(s"Fractals: ${fractals.length}"))
@@ -98,9 +99,9 @@ object AdminPage extends Page[AdminState] {
                 Node("tr")
                   .child(Node("td").text(fractal.id))
                   .child(Node("td").text(fractal.owner))
-                  .child(Node("td").text(fractal.entity.published.toString))
-                  .child(Node("td").text(fractal.entity.title))
-                  .child(Node("td").text(fractal.entity.description))
+                  .child(Node("td").text(fractal.entity.fold("invalid")(_.published.toString)))
+                  .child(Node("td").text(fractal.entity.fold("invalid")(_.title)))
+                  .child(Node("td").text(fractal.entity.fold("invalid")(_.description)))
                   .child(
                     Node("td").child(
                       Button
@@ -112,7 +113,7 @@ object AdminPage extends Page[AdminState] {
       )
 
   private def templatesTable(
-      templates: Seq[FractalTemplateEntityWithId]
+      templates: Seq[WithId[Option[Entity[FractalTemplate]]]]
   )(implicit update: NutriaState => Unit): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text(s"Templates: ${templates.length}"))
@@ -133,9 +134,9 @@ object AdminPage extends Page[AdminState] {
                 Node("tr")
                   .child(Node("td").text(template.id))
                   .child(Node("td").text(template.owner))
-                  .child(Node("td").text(template.entity.published.toString))
-                  .child(Node("td").text(template.entity.title))
-                  .child(Node("td").text(template.entity.description))
+                  .child(Node("td").text(template.entity.fold("invalid")(_.published.toString)))
+                  .child(Node("td").text(template.entity.fold("invalid")(_.title)))
+                  .child(Node("td").text(template.entity.fold("invalid")(_.description)))
                   .child(Node("td"))
             )
           )

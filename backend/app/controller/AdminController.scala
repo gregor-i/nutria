@@ -26,12 +26,8 @@ class AdminController @Inject() (
         JsonObject(
           "admin"     -> admin.asJson,
           "users"     -> userRepo.list().asJson,
-          "templates" -> templateRepo.list().collect(templateRepo.rowToEntity).asJson,
-          "fractals" -> fractalRepo
-            .list()
-            .collect(fractalRepo.rowToEntity)
-            .sorted(FractalSorting.orderingByProgram)
-            .asJson
+          "templates" -> templateRepo.list().asJson,
+          "fractals"  -> fractalRepo.list().asJson
         ).asJson
       )
     }
