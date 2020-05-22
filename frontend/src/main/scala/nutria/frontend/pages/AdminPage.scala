@@ -148,7 +148,8 @@ object AdminPage extends Page[AdminState] {
         ButtonList(
           Button("clean Fractals", action(NutriaAdminService.cleanFractals())),
           Button("delete all Fractals", action(NutriaAdminService.truncateFractals())),
-          Button("insert examples", action(NutriaAdminService.insertExamples()))
+          Button("insert examples", action(NutriaAdminService.insertExamples())),
+          Button("migrate Fractals", action(NutriaAdminService.migrateFractals()))
         )
       )
 
