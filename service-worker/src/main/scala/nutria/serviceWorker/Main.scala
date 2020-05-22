@@ -27,10 +27,12 @@ object Main {
     self.addEventListener(
       "install",
       (event: ExtendableEvent) =>
-        populateCache(assetCacheName, assets)
-          .flatMap(_ => populateCache(assetCacheName, js.Array(startUrl)))
-          .map(_ => Dynamic.global.console.debug(s"service-worker-build-time: ${buildinfo.BuildInfo.buildTime}"))
-          .toJSPromise
+        (for {
+          _ <- invalidateCache(assetCacheName)
+          _ <- populateCache(assetCacheName, assets)
+          _ <- populateCache(assetCacheName, js.Array(startUrl))
+          _ = Dynamic.global.console.debug(s"service-worker-build-time: ${buildinfo.BuildInfo.buildTime}")
+        } yield ()).toJSPromise
           .tap(event.waitUntil(_))
     )
 
