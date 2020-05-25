@@ -229,6 +229,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     val openModalButton =
       ButtonList(
         Button("Add new Parameter", Icons.plus, SnabbdomUtil.update(TemplateEditorState.newParameter.set(Some(IntParameter("parameter_name", 0)))))
+          .classes("is-marginless")
       )
 
     ParameterForm.list(lens) ++ Seq(openModalButton)
