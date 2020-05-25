@@ -227,6 +227,47 @@ object Actions {
       }
     }
 
+  def deleteTemplate(templateId: String)(implicit state: TemplateGalleryState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      onlyLoggedIn {
+        asyncUpdate {
+          for {
+            _         <- NutriaService.deleteTemplate(templateId)
+            templates <- NutriaService.loadUserTemplates(state.user.get.id)
+          } yield state.copy(templates = templates)
+        }
+      }
+    }
+
+  def togglePublished(
+      template: FractalTemplateEntityWithId
+  )(implicit state: TemplateGalleryState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      onlyLoggedIn {
+        asyncUpdate {
+          val published = template.entity.published
+          for {
+            _ <- NutriaService.updateTemplate(
+              WithId
+                .entity[FractalTemplateEntity]
+                .composeLens(Entity.published)
+                .set(!published)
+                .apply(template)
+            )
+            templates <- NutriaService.loadUserTemplates(state.user.get.id)
+            _ = if (published)
+              Toasts.warningToast(
+                "Template unpublished. The template will no longer be listed in the public gallery."
+              )
+            else
+              Toasts.successToast(
+                "Template unpublished. The template will be listed in the public gallery."
+              )
+          } yield state.copy(templates = templates)
+        }
+      }
+    }
+
   def deleteUser(
       userId: String
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =

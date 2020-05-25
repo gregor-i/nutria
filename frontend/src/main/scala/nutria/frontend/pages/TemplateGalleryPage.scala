@@ -4,9 +4,9 @@ import nutria.api.{FractalEntity, FractalTemplateEntityWithId, User, WithId}
 import nutria.core.FractalTemplate
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.AdminPage.action
-import nutria.frontend.pages.common.{Body, Button, Footer, Header, Icons, Link}
+import nutria.frontend.pages.common.{Body, Button, ButtonList, Footer, Header, Icons, Link}
 import nutria.frontend.service.{NutriaAdminService, NutriaService}
-import nutria.frontend.{ExecutionContext, NutriaState, Page}
+import nutria.frontend.{Actions, ExecutionContext, NutriaState, Page}
 import snabbdom.{Node, Snabbdom}
 
 import scala.concurrent.Future
@@ -23,7 +23,7 @@ object TemplateGalleryState extends ExecutionContext {
   def load(): Future[TemplateGalleryState] =
     for {
       user      <- NutriaService.whoAmI()
-      templates <- NutriaService.loadAllTemplates()
+      templates <- NutriaService.loadUserTemplates(user.get.id)
     } yield TemplateGalleryState(templates = templates, user = user)
 }
 
@@ -61,9 +61,7 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
         Node("table.table.is-fullwidth")
           .child(
             Node("tr")
-              .child(Node("th").text("Id"))
               .child(Node("th").text("Title"))
-              .child(Node("th").text("Description"))
               .child(Node("th").text("Published"))
               .child(Node("th"))
           )
@@ -71,16 +69,17 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
             templates.map(
               template =>
                 Node("tr")
-                  .child(Node("td").text(template.id))
                   .child(Node("td").text(template.entity.title))
-                  .child(Node("td").text(template.entity.description))
                   .child(Node("td").text(template.entity.published.toString))
                   .child(
                     Node("td").child(
-                      Link(TemplateEditorState.byTemplate(template))
-                        .classes("button")
-                        .child(Icons.icon(Icons.edit))
-                        .child(Node("span").text("Edit"))
+                      ButtonList(
+                        Link(TemplateEditorState.byTemplate(template))
+                          .classes("button", "is-rounded")
+                          .child(Icons.icon(Icons.edit)),
+                        Button.icon(if (template.entity.published) Icons.unpublish else Icons.publish, Actions.togglePublished(template)),
+                        Button.icon(Icons.delete, Actions.deleteTemplate(template.id))
+                      )
                     )
                   )
             )

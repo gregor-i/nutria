@@ -22,4 +22,6 @@ object FractalImage extends CirceCodec {
     FractalImage(fractalEntity.program, fractalEntity.views.value.head, fractalEntity.antiAliase)
 
   implicit val codec: Codec[FractalImage] = semiauto.deriveConfiguredCodec
+
+  implicit val ordering: Ordering[FractalImage] = Ordering.by(_.template)
 }

@@ -33,4 +33,6 @@ object Entity extends CirceCodec {
         .mapObject(_.add("published", row.published.asJson))
     }
   )
+
+  implicit def ordering[A: Ordering]: Ordering[Entity[A]] = Ordering.by(_.value)
 }
