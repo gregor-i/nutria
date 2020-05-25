@@ -4,10 +4,10 @@ import nutria.api.{FractalEntity, FractalTemplateEntityWithId, User, WithId}
 import nutria.core.FractalTemplate
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.AdminPage.action
-import nutria.frontend.pages.common.{Body, Button, Icons, Link}
+import nutria.frontend.pages.common.{Body, Button, Footer, Header, Icons, Link}
 import nutria.frontend.service.{NutriaAdminService, NutriaService}
 import nutria.frontend.{ExecutionContext, NutriaState, Page}
-import snabbdom.Node
+import snabbdom.{Node, Snabbdom}
 
 import scala.concurrent.Future
 
@@ -37,9 +37,15 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
 
   override def render(implicit state: State, update: NutriaState => Unit): Node =
     Body()
-      .child(common.Header())
+      .child(Header())
+      .child(
+        Header
+          .fab(Node("button"))
+          .child(Icons.icon(Icons.plus))
+          .event("click", Snabbdom.event(_ => update(TemplateEditorState.initial)))
+      )
       .child(body)
-      .child(common.Footer())
+      .child(Footer())
 
   def body()(implicit state: State, update: NutriaState => Unit): Node =
     Node("div.container")
