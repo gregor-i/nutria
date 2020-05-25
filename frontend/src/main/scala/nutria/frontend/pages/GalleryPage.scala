@@ -6,6 +6,8 @@ import nutria.frontend._
 import nutria.frontend.pages.common.{FractalTile, _}
 import snabbdom._
 
+import scala.util.chaining._
+
 case class GalleryState(
     user: Option[User],
     publicFractals: Vector[WithId[FractalImageEntity]],
@@ -30,11 +32,12 @@ object GalleryPage extends Page[GalleryState] {
   def render(implicit state: GalleryState, update: NutriaState => Unit) =
     Body()
       .child(Header())
-      //      .child(
-      //        Link(CreateNewFractalState(user = state.user))
-      //          .pipe(Header.fab)
-      //          .child(Icons.icon(Icons.plus))
-      //      )
+      .child(
+        Link
+          .async("/new-fractal", CreateNewFractalState.load())
+          .pipe(Header.fab)
+          .child(Icons.icon(Icons.plus))
+      )
       .child(
         Node("div.container")
           .child(

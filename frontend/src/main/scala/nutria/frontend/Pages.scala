@@ -16,7 +16,7 @@ object Pages {
     ProfilePage,
     TemplateEditorPage,
     TemplateGalleryPage,
-//    CreateNewFractalPage,
+    CreateNewFractalPage,
     AdminPage
   )
 

@@ -12,6 +12,9 @@ case class FractalImage(
 )
 
 object FractalImage extends CirceCodec {
+  def fromTemplate(template: FractalTemplate): FractalImage =
+    FractalImage(template = template, viewport = template.exampleViewport)
+
   implicit val codec: Codec[FractalImage] = semiauto.deriveConfiguredCodec
 
   implicit val ordering: Ordering[FractalImage] = Ordering.by(_.template)

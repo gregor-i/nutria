@@ -13,7 +13,7 @@ object NutriaService extends Service {
       .flatMap(parse[Option[User]])
 
   // templates
-  def loadAllTemplates(): Future[Seq[FractalTemplateEntityWithId]] =
+  def loadPublicTemplates(): Future[Seq[FractalTemplateEntityWithId]] =
     get(url = s"/api/templates")
       .flatMap(check(200))
       .flatMap(parse[Seq[FractalTemplateEntityWithId]])

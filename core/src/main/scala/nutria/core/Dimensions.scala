@@ -9,6 +9,7 @@ case class Dimensions(width: Int, height: Int) {
 
 object Dimensions {
   val thumbnail = Dimensions(400, 225)
+  val preview   = thumbnail.scale(1.5)
   val favicon   = Dimensions(256, 256)
   val fullHD    = Dimensions(1920, 1080)
 }
