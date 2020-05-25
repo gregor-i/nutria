@@ -27,29 +27,6 @@ object Header {
                   .classes("navbar-item")
                   .text("Public Gallery")
               )
-              .childOptional(
-                Some(
-                  Link(TemplateEditorState.initial)
-                    .classes("navbar-item")
-                    .text("Template Editor")
-                ).filter(_ => state.user.exists(_.admin))
-              )
-              .childOptional(
-                Some(
-                  Link
-                    .async("/templates", TemplateGalleryState.load())
-                    .classes("navbar-item")
-                    .text("Template List")
-                ).filter(_ => state.user.exists(_.admin))
-              )
-              .childOptional(
-                Some(
-                  Link
-                    .async("/admin", AdminState.initial.loading)
-                    .classes("navbar-item")
-                    .text("Admin")
-                ).filter(_ => state.user.exists(_.admin))
-              )
               .child(
                 Link(FAQState(state.user))
                   .classes("navbar-item")
@@ -66,11 +43,28 @@ object Header {
               )
               .childOptional(
                 state.user.map(
+                  _ =>
+                    Link
+                      .async("/templates", TemplateGalleryState.load())
+                      .classes("navbar-item")
+                      .text("My Templates")
+                )
+              )
+              .childOptional(
+                state.user.map(
                   user =>
                     Link(ProfileState(user))
                       .classes("navbar-item")
                       .text("My Profile")
                 )
+              )
+              .childOptional(
+                Some(
+                  Link
+                    .async("/admin", AdminState.initial.loading)
+                    .classes("navbar-item")
+                    .text("Admin")
+                ).filter(_ => state.user.exists(_.admin))
               )
           )
           .child(
