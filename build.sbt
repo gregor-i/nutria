@@ -161,6 +161,14 @@ stage in nutria := Def.sequential(
   (stage in backend)
 ).value
 
+test in nutria := Def.sequential(
+  test in Test in core.jvm,
+  test in Test in core.js,
+  test in Test in frontend,
+  test in Test in backend,
+  test in Test in `static-renderer`
+).value
+
 def scalatest =
   Seq(
     libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.2" % Test,
