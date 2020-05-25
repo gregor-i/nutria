@@ -5,6 +5,7 @@ import eu.timepit.refined.numeric.{NonNegative, Positive}
 import io.circe.Codec
 import nutria.CirceCodec
 
+@deprecated
 @monocle.macros.Lenses()
 case class Fractal(
     program: FractalTemplate,

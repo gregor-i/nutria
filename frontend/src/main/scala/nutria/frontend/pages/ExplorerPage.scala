@@ -2,7 +2,7 @@ package nutria.frontend.pages
 
 import monocle.Lens
 import monocle.macros.Lenses
-import nutria.api.{FractalEntity, User, WithId}
+import nutria.api.{FractalEntity, FractalImageEntity, FractalImageEntityWithId, User, WithId}
 import nutria.core._
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
@@ -15,7 +15,7 @@ import snabbdom.Node
 @Lenses
 case class ExplorerState(
     user: Option[User],
-    remoteFractal: Option[WithId[FractalEntity]],
+    remoteFractal: Option[FractalImageEntityWithId],
     fractalImage: FractalImage,
     saveModal: Option[SaveFractalDialog] = None,
     navbarExpanded: Boolean = false
@@ -107,7 +107,7 @@ object ExplorerPage extends Page[ExplorerState] {
         Button.icon(Icons.download, Actions.openSaveToDiskModal)
       )
 
-  def buttonBackToDetails(fractal: WithId[FractalEntity])(implicit state: ExplorerState, update: NutriaState => Unit) =
+  def buttonBackToDetails(fractal: WithId[FractalImageEntity])(implicit state: ExplorerState, update: NutriaState => Unit) =
     Link(Links.detailsState(fractal, state.user))
       .classes("button", "is-rounded")
       .child(Icons.icon(Icons.edit))

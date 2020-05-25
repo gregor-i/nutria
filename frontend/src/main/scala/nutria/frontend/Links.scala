@@ -1,6 +1,6 @@
 package nutria.frontend
 
-import nutria.api.{FractalEntity, User, WithId}
+import nutria.api.{FractalEntity, FractalImageEntity, User, WithId}
 import nutria.core.FractalImage
 import nutria.frontend.pages._
 import nutria.frontend.service.NutriaService
@@ -37,14 +37,14 @@ object Links {
       fractalToEdit = fractal
     )
 
-  def explorerState(fractal: WithId[FractalEntity], user: Option[User]): ExplorerState =
+  def explorerState(fractal: WithId[FractalImageEntity], user: Option[User]): ExplorerState =
     ExplorerState(
       user = user,
       remoteFractal = Some(fractal),
-      fractalImage = FractalImage.firstImage(fractal.entity.value)
+      fractalImage = fractal.entity.value
     )
 
-  def detailsState(fractal: WithId[FractalEntity], user: Option[User]): DetailsState =
+  def detailsState(fractal: WithId[FractalImageEntity], user: Option[User]): DetailsState =
     DetailsState(user = user, remoteFractal = fractal, fractalToEdit = fractal)
 
   def faqState(): Future[FAQState] =

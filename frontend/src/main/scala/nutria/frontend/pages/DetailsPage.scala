@@ -2,7 +2,7 @@ package nutria.frontend.pages
 
 import monocle.{Iso, Lens}
 import monocle.macros.Lenses
-import nutria.api.{Entity, FractalEntity, User, WithId}
+import nutria.api.{Entity, FractalEntity, FractalImageEntity, User, WithId}
 import nutria.core._
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
@@ -16,8 +16,8 @@ import scala.util.chaining._
 @Lenses
 case class DetailsState(
     user: Option[User],
-    remoteFractal: WithId[FractalEntity],
-    fractalToEdit: WithId[FractalEntity],
+    remoteFractal: WithId[FractalImageEntity],
+    fractalToEdit: WithId[FractalImageEntity],
     navbarExpanded: Boolean = false
 ) extends NutriaState {
   def dirty: Boolean                                            = remoteFractal != fractalToEdit
@@ -26,7 +26,7 @@ case class DetailsState(
 
 object DetailsState extends LenseUtils {
   val fractalToEdit_entity         = fractalToEdit.composeLens(WithId.entity)
-  val fractalToEdit_entity_program = fractalToEdit_entity.composeLens(Entity.value).composeLens(Fractal.program)
+  val fractalToEdit_entity_program = fractalToEdit_entity.composeLens(Entity.value).composeLens(FractalImage.template)
   val fractalToEdit_entity_program_parameter =
     fractalToEdit_entity_program
       .composeLens(FractalTemplate.parameters)
@@ -95,7 +95,7 @@ object DetailsPage extends Page[DetailsState] {
         Node("section.section").children(
           Node("h4.title.is-4").text("Constructed Fragment Shader:"),
           Node("pre").text(
-            FragmentShaderSource(state.fractalToEdit.entity.value.program, state.fractalToEdit.entity.value.antiAliase)
+            FragmentShaderSource(state.fractalToEdit.entity.value.template, state.fractalToEdit.entity.value.antiAliase)
           )
         )
       )
@@ -132,32 +132,16 @@ object DetailsPage extends Page[DetailsState] {
   def snapshots()(implicit state: State, update: NutriaState => Unit) = {
     val fractal = state.fractalToEdit.entity.value
 
-    val tiles = fractal.views.value.map { viewport =>
-      val img = FractalImage(fractal.program, viewport, fractal.antiAliase)
+    val img = fractal
 
+    val tile =
       Node("article.fractal-tile.is-relative")
         .child(
           FractalTile(img, Dimensions.thumbnail)
             .event("click", Actions.exploreFractal(state.fractalToEdit, img))
         )
-        .child(
-          Node("div.buttons.overlay-bottom-right.padding")
-            .child(
-              Button
-                .icon(Icons.up, Actions.moveViewportUp(viewport))
-                .classes("is-outlined")
-            )
-            .child(
-              Button
-                .icon(Icons.delete, Actions.deleteViewport(viewport))
-                .classes("is-outlined")
-            )
-        )
-    }
 
-    Node("div.fractal-tile-list")
-      .child(tiles)
-      .child(GalleryPage.dummyTiles)
+    Node("div.fractal-tile-list").child(tile)
   }
 
   private def actions()(implicit state: State, update: NutriaState => Unit): Node = {

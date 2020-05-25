@@ -1,7 +1,7 @@
 package nutria.frontend.pages
 
 import nutria.api.{Entity, FractalEntity, FractalTemplateEntityWithId, User, WithId}
-import nutria.core.{Fractal, FractalTemplate}
+import nutria.core.{Fractal, FractalImage, FractalTemplate}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common.{Body, Button, ButtonList, Header, Icons}
 import nutria.frontend.service.NutriaAdminService
@@ -14,7 +14,7 @@ import scala.concurrent.Future
 case class AdminState(
     admin: User,
     users: Vector[User],
-    fractals: Vector[WithId[Option[Entity[Fractal]]]],
+    fractals: Vector[WithId[Option[Entity[FractalImage]]]],
     templates: Vector[WithId[Option[Entity[FractalTemplate]]]],
     navbarExpanded: Boolean = false
 ) extends NutriaState {
@@ -78,7 +78,7 @@ object AdminPage extends Page[AdminState] {
       )
 
   private def fractalsTable(
-      fractals: Seq[WithId[Option[Entity[Fractal]]]]
+      fractals: Seq[WithId[Option[Entity[FractalImage]]]]
   )(implicit update: NutriaState => Unit): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text(s"Fractals: ${fractals.length}"))

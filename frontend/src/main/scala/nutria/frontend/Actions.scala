@@ -1,6 +1,6 @@
 package nutria.frontend
 
-import nutria.api.{Entity, FractalEntity, FractalTemplateEntity, FractalTemplateEntityWithId, Verdict, WithId}
+import nutria.api.{Entity, FractalEntity, FractalImageEntity, FractalTemplateEntity, FractalTemplateEntityWithId, Verdict, WithId}
 import nutria.core.{Dimensions, Fractal, FractalImage, Viewport, ViewportList}
 import nutria.frontend.pages.common.FractalTile
 import nutria.frontend.pages._
@@ -32,7 +32,7 @@ object Actions {
     }
 
   def exploreFractal(
-      fractal: WithId[FractalEntity],
+      fractal: WithId[FractalImageEntity],
       image: FractalImage
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
@@ -59,7 +59,7 @@ object Actions {
     }
 
   def editFractal(
-      fractal: WithId[FractalEntity]
+      fractal: WithId[FractalImageEntity]
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       update(
@@ -70,27 +70,27 @@ object Actions {
   def addViewport(
       fractalId: String,
       viewport: Viewport
-  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+  )(implicit state: ExplorerState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
           for {
             remoteFractal <- NutriaService.loadFractal(fractalId)
-            updated = WithId
-              .entity[FractalEntity]
-              .composeLens(Entity.value)
-              .composeLens(Fractal.views)
-              .modify { views =>
-                val newViews = (views.value :+ viewport).distinct
-                ViewportList.refineUnsafe(newViews)
-              }(remoteFractal)
-            _ <- NutriaService.updateFractal(updated)
+            newFractal = Entity.value
+              .composeLens(FractalImage.viewport)
+              .set(viewport)(remoteFractal.entity)
+            savedFractal <- NutriaService.save(newFractal)
             _ = Toasts.successToast("Snapshot saved")
-          } yield state
+          } yield ExplorerState(
+            user = state.user,
+            remoteFractal = Some(savedFractal),
+            fractalImage = savedFractal.entity.value
+          )
         }
       }
     }
 
+  // todo: rename
   def forkAndAddViewport(
       fractalId: String,
       viewport: Viewport
@@ -101,27 +101,23 @@ object Actions {
           for {
             remoteFractal <- NutriaService.loadFractal(fractalId)
             updated = WithId
-              .entity[FractalEntity]
+              .entity[FractalImageEntity]
               .composeLens(Entity.value)
-              .composeLens(Fractal.views)
-              .modify { views =>
-                ViewportList.refineUnsafe(
-                  (views.value :+ viewport).distinct
-                )
-              }(remoteFractal)
+              .composeLens(FractalImage.viewport)
+              .set(viewport)(remoteFractal)
             forkedFractal <- NutriaService.save(updated.entity)
             _ = Toasts.successToast("Fractal saved")
           } yield ExplorerState(
             state.user,
             remoteFractal = Some(forkedFractal),
-            fractalImage = FractalImage(remoteFractal.entity.value.program, viewport, remoteFractal.entity.value.antiAliase)
+            fractalImage = forkedFractal.entity.value
           )
         }
       }
     }
 
   def togglePublished(
-      fractal: WithId[FractalEntity]
+      fractal: WithId[FractalImageEntity]
   )(implicit state: UserGalleryState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
@@ -130,7 +126,7 @@ object Actions {
           for {
             _ <- NutriaService.updateFractal(
               WithId
-                .entity[FractalEntity]
+                .entity[FractalImageEntity]
                 .composeLens(Entity.published)
                 .set(!published)
                 .apply(fractal)
@@ -169,43 +165,8 @@ object Actions {
       }
     }
 
-  def moveViewportUp(
-      viewport: Viewport
-  )(implicit state: DetailsState, update: NutriaState => Unit): Eventlistener =
-    event { _ =>
-      val lensViewports = DetailsState.fractalToEdit.composeLens(WithId.entity).composeLens(Entity.value).composeLens(Fractal.views)
-      val views         = lensViewports.get(state).value
-      val newViewports  = views.filter(_ == viewport) ++ views.filter(_ != viewport)
-      ViewportList(newViewports) match {
-        case Right(newViews) =>
-          Toasts.successToast(
-            "Snapshot moved at the first position. This Snapshot will be used in the galleries."
-          )
-          update(lensViewports.set(newViews)(state))
-        case Left(_) =>
-          // this should never happen
-          Toasts.dangerToast("The last snapshot can't be moved.")
-      }
-    }
-
-  def deleteViewport(
-      viewport: Viewport
-  )(implicit state: DetailsState, update: NutriaState => Unit): Eventlistener =
-    event { _ =>
-      val lensViewports = DetailsState.fractalToEdit.composeLens(WithId.entity).composeLens(Entity.value).composeLens(Fractal.views)
-      val views         = lensViewports.get(state).value
-      val newViewports  = views.filter(_ != viewport)
-      ViewportList(newViewports) match {
-        case Right(newViews) =>
-          Toasts.successToast("Snapshot deleted.")
-          update(lensViewports.set(newViews)(state))
-        case Left(_) =>
-          Toasts.dangerToast("The last snapshot can't be deleted.")
-      }
-    }
-
   def updateFractal(
-      fractalWithId: WithId[FractalEntity]
+      fractalWithId: WithId[FractalImageEntity]
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
@@ -223,7 +184,7 @@ object Actions {
     }
 
   def saveAsNewFractal(
-      fractalEntity: FractalEntity
+      fractalEntity: FractalImageEntity
   )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {

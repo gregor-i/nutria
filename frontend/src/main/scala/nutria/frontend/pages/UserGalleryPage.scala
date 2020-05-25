@@ -1,6 +1,6 @@
 package nutria.frontend.pages
 
-import nutria.api.{FractalEntity, User, WithId}
+import nutria.api.{FractalEntity, FractalImageEntity, User, WithId}
 import nutria.core.{Dimensions, _}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common.{FractalTile, _}
@@ -12,7 +12,7 @@ import scala.util.chaining._
 case class UserGalleryState(
     user: Option[User],
     aboutUser: String,
-    userFractals: Vector[WithId[FractalEntity]],
+    userFractals: Vector[WithId[FractalImageEntity]],
     navbarExpanded: Boolean = false
 ) extends NutriaState {
   override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
@@ -55,13 +55,13 @@ object UserGalleryPage extends Page[UserGalleryState] {
       .child(Footer())
 
   def renderFractalTile(
-      fractal: WithId[FractalEntity]
+      fractal: WithId[FractalImageEntity]
   )(implicit state: UserGalleryState, update: NutriaState => Unit): Node =
     Node("article.fractal-tile.is-relative")
       .child(
         Link(Links.detailsState(fractal, state.user))
           .child(
-            FractalTile(FractalImage.firstImage(fractal.entity.value), Dimensions.thumbnail)
+            FractalTile(fractal.entity.value, Dimensions.thumbnail)
               .event("click", Actions.editFractal(fractal))
           )
       )
