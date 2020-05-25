@@ -2,7 +2,7 @@ package nutria.frontend.pages
 
 import monocle.Lens
 import monocle.macros.Lenses
-import nutria.api.{FractalEntity, FractalImageEntity, FractalImageEntityWithId, User, WithId}
+import nutria.api.{FractalImageEntity, FractalImageEntityWithId, User, WithId}
 import nutria.core._
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._

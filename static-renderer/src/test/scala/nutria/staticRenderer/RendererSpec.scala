@@ -10,7 +10,7 @@ class RendererSpec extends RenderingSuite {
   )
 
   renderingTest("renders a Mandelbrot with high anti aliase")(
-    fractal = FractalImage(Examples.timeEscape, Viewport.mandelbrot, antiAliase = refineUnsafe(10)),
+    fractal = FractalImage(Examples.timeEscape, Viewport.mandelbrot, antiAliase = 10),
     dimensions = Dimensions.fullHD,
     fileName = s"${baseFolder}/Mandelbrot-high-anti-aliase.png"
   )

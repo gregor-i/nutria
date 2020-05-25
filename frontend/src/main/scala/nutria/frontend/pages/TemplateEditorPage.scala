@@ -239,7 +239,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     val tile =
       Node("article.fractal-tile")
         .child(
-          FractalTile(FractalImage(state.template, state.template.exampleViewport, nutria.core.refineUnsafe(1)), Dimensions.thumbnail)
+          FractalTile(FractalImage(state.template, state.template.exampleViewport), Dimensions.thumbnail)
         )
 
     Node("div.fractal-tile-list")
@@ -248,7 +248,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
 
   def source()(implicit state: State) =
     Node("pre").text(
-      FragmentShaderSource(state.template, nutria.core.refineUnsafe(1)).linesIterator.zipWithIndex
+      FragmentShaderSource(state.template, 1).linesIterator.zipWithIndex
         .map { case (line, number) => s"${number + 1}: $line" }
         .mkString("\n")
     )

@@ -3,7 +3,7 @@ package repo
 import java.util.UUID
 
 import nutria.api.{Entity, FractalTemplateEntity, WithId}
-import nutria.core.{Examples, Viewport, ViewportList}
+import nutria.core.Examples
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers

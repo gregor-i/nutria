@@ -1,7 +1,7 @@
 package repo
 
 import javax.inject.{Inject, Singleton}
-import nutria.api.{FractalEntity, FractalImageEntity}
+import nutria.api.FractalImageEntity
 import play.api.db.Database
 
 @Singleton()

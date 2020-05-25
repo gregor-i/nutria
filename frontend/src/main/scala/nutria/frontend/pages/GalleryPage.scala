@@ -1,12 +1,10 @@
 package nutria.frontend.pages
 
-import nutria.api.{DownVote, FractalEntity, FractalImageEntity, UpVote, User, VoteStatistic, WithId}
-import nutria.core.{Dimensions, _}
-import nutria.frontend.pages.common.{FractalTile, _}
+import nutria.api.{FractalImageEntity, User, VoteStatistic, WithId}
+import nutria.core.Dimensions
 import nutria.frontend._
+import nutria.frontend.pages.common.{FractalTile, _}
 import snabbdom._
-
-import scala.util.chaining._
 
 case class GalleryState(
     user: Option[User],

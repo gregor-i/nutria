@@ -26,8 +26,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       "io.circe" %%% "circe-core" % "0.13.0",
       "io.circe" %%% "circe-generic" % "0.13.0",
       "io.circe" %%% "circe-generic-extras" % "0.13.0",
-      "io.circe" %%% "circe-parser" % "0.13.0",
-      "io.circe" %%% "circe-refined" % "0.13.0"
+      "io.circe" %%% "circe-parser" % "0.13.0"
     ),
     libraryDependencies ++= Seq(
       "com.github.julien-truffaut" %%% "monocle-core" % "2.0.4",
@@ -35,7 +34,6 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       "com.github.julien-truffaut" %%% "monocle-unsafe" % "2.0.4",
       "com.github.julien-truffaut" %%% "monocle-refined" % "2.0.4"
     ),
-    libraryDependencies += "eu.timepit" %%% "refined" % "0.9.14",
     scalatest
   )
 

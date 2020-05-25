@@ -7,20 +7,11 @@ import nutria.{CirceCodec, core}
 case class FractalImage(
     template: FractalTemplate,
     viewport: core.Viewport,
-    antiAliase: AntiAliase = refineUnsafe(1),
+    antiAliase: AntiAliase = 1,
     parameters: Vector[Parameter] = Vector.empty
 )
 
 object FractalImage extends CirceCodec {
-  def allImages(fractalEntities: Seq[Fractal]): Seq[FractalImage] =
-    for {
-      entity <- fractalEntities
-      view   <- entity.views.value
-    } yield FractalImage(entity.program, view, entity.antiAliase)
-
-  def firstImage(fractalEntity: Fractal): FractalImage =
-    FractalImage(fractalEntity.program, fractalEntity.views.value.head, fractalEntity.antiAliase)
-
   implicit val codec: Codec[FractalImage] = semiauto.deriveConfiguredCodec
 
   implicit val ordering: Ordering[FractalImage] = Ordering.by(_.template)

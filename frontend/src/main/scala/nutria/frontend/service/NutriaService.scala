@@ -1,6 +1,6 @@
 package nutria.frontend.service
 
-import nutria.api.{FractalEntity, FractalImageEntity, FractalTemplateEntity, FractalTemplateEntityWithId, User, Verdict, VoteStatistic, WithId}
+import nutria.api._
 import nutria.core._
 
 import scala.concurrent.Future

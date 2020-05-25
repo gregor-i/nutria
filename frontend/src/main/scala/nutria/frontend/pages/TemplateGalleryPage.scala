@@ -1,11 +1,9 @@
 package nutria.frontend.pages
 
-import nutria.api.{FractalEntity, FractalTemplateEntityWithId, User, WithId}
-import nutria.core.FractalTemplate
+import nutria.api.{FractalTemplateEntityWithId, User}
 import nutria.frontend.Router.{Path, QueryParameter}
-import nutria.frontend.pages.AdminPage.action
-import nutria.frontend.pages.common.{Body, Button, ButtonList, Footer, Header, Icons, Link}
-import nutria.frontend.service.{NutriaAdminService, NutriaService}
+import nutria.frontend.pages.common._
+import nutria.frontend.service.NutriaService
 import nutria.frontend.{Actions, ExecutionContext, NutriaState, Page}
 import snabbdom.{Node, Snabbdom}
 

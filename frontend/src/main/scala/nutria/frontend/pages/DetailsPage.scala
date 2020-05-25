@@ -1,14 +1,13 @@
 package nutria.frontend.pages
 
-import monocle.{Iso, Lens}
+import monocle.Lens
 import monocle.macros.Lenses
-import nutria.api.{Entity, FractalEntity, FractalImageEntity, User, WithId}
+import nutria.api.{Entity, FractalImageEntity, User, WithId}
 import nutria.core._
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
-import nutria.frontend.pages.common.{Form, _}
+import nutria.frontend.pages.common._
 import nutria.frontend.util.LenseUtils
-import nutria.shaderBuilder.FragmentShaderSource
 import snabbdom.Node
 
 import scala.util.chaining._

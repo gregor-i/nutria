@@ -1,8 +1,5 @@
 package model
 
-import nutria.api.{FractalEntity, FractalImageEntity, UpVote, Vote, WithId}
-import nutria.core.FractalTemplate
-
 object FractalSorting {
   // source:  https://www.evanmiller.org/how-not-to-sort-by-average-rating.html
   private[model] def score(_pos: Int, _n: Int): Double = {
@@ -31,6 +28,6 @@ object FractalSorting {
 //    acceptanceOrdering.orElse(orderingByProgram)
 //  }
 
-  val orderingByProgram: Ordering[WithId[FractalImageEntity]] =
-    FractalTemplate.ordering.on(_.entity.value.template)
+//  val orderingByProgram: Ordering[WithId[FractalImageEntity]] =
+//    FractalTemplate.ordering.on(_.entity.value.template)
 }

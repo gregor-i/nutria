@@ -1,13 +1,11 @@
 package nutria.frontend.pages
 
-import nutria.api.{FractalEntity, FractalImageEntity, User, WithId}
-import nutria.core.{Dimensions, _}
+import nutria.api.{FractalImageEntity, User, WithId}
+import nutria.core.Dimensions
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common.{FractalTile, _}
 import nutria.frontend.{Actions, Links, NutriaState, Page}
 import snabbdom.Node
-
-import scala.util.chaining._
 
 case class UserGalleryState(
     user: Option[User],

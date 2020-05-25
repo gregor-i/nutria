@@ -23,7 +23,7 @@ object CompileStatus {
         elem.innerHTML = s"<div class='message-body'>Compiled successfully</div>"
     }
 
-  def apply(template: FractalTemplate, aa: AntiAliase = nutria.core.refineUnsafe(1)): Node = {
+  def apply(template: FractalTemplate, aa: AntiAliase = 1): Node = {
     Node("pre.is-paddingless.message")
       .prop("innerHTML", s"<div class='message-body'>Compiling ...</div>")
       .hook(

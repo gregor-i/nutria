@@ -4,7 +4,7 @@ import nutria.core.AntiAliase
 
 object AntiAliase {
   def apply(aaFactor: AntiAliase): RefVec4 => String =
-    if (aaFactor.value > 1)
+    if (aaFactor > 1)
       antiAliase(aaFactor)
     else
       noAntiAliase
@@ -18,7 +18,7 @@ object AntiAliase {
 
   private def antiAliase(aaFactor: AntiAliase)(outputVarname: RefVec4) = {
     s"""
-       |const int aa = ${aaFactor.value};
+       |const int aa = ${aaFactor};
        |vec2 aa_factor = 1.0 / (float(aa) * u_resolution);
        |vec2 aa_offset = vec2((1.0 - float(aa)) / 2.0) * aa_factor;
        |vec2 pos = gl_FragCoord.xy / u_resolution;

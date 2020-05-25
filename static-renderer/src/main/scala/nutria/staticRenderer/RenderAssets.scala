@@ -42,7 +42,7 @@ object RenderAssets {
     val image = FractalImage(
       template = program,
       viewport = view,
-      antiAliase = refineUnsafe(4)
+      antiAliase = 4
     )
 
     Renderer.renderToFile(image, Dimensions.favicon, imgFolder("icon.png"))
@@ -52,7 +52,7 @@ object RenderAssets {
     fractalImage = FractalImage(
       template = Examples.timeEscape,
       viewport = Viewport.mandelbrot,
-      antiAliase = refineUnsafe(4)
+      antiAliase = 4
     ),
     dimensions = Dimensions.thumbnail,
     fileName = imgFolder("example_DivergingSeries.png")
@@ -63,7 +63,7 @@ object RenderAssets {
       fractalImage = FractalImage(
         template = Examples.newtonIteration,
         viewport = Viewport.aroundZero,
-        antiAliase = refineUnsafe(4)
+        antiAliase = 4
       ),
       dimensions = Dimensions.thumbnail,
       fileName = imgFolder("example_NewtonIteration.png")
