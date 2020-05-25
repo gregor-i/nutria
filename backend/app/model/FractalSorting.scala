@@ -1,6 +1,6 @@
 package model
 
-import nutria.api.{FractalEntity, UpVote, Vote, WithId}
+import nutria.api.{FractalEntity, FractalImageEntity, UpVote, Vote, WithId}
 import nutria.core.FractalTemplate
 
 object FractalSorting {
@@ -17,20 +17,20 @@ object FractalSorting {
 
   private val defaultScore: Double = score(0, 0)
 
-  def ordering(votes: Seq[Vote]): Ordering[WithId[FractalEntity]] = {
-    val acceptanceMap = votes
-      .groupBy(_.forFractal)
-      .view
-      .mapValues { votes =>
-        score(votes.count(_.verdict == UpVote), votes.length)
-      }
+//  def ordering(votes: Seq[Vote]): Ordering[WithId[FractalEntity]] = {
+//    val acceptanceMap = votes
+//      .groupBy(_.forFractal)
+//      .view
+//      .mapValues { votes =>
+//        score(votes.count(_.verdict == UpVote), votes.length)
+//      }
+//
+//    val acceptanceOrdering = Ordering.Double.TotalOrdering.reverse
+//      .on[WithId[FractalEntity]](fractal => acceptanceMap.getOrElse(fractal.id, defaultScore))
+//
+//    acceptanceOrdering.orElse(orderingByProgram)
+//  }
 
-    val acceptanceOrdering = Ordering.Double.TotalOrdering.reverse
-      .on[WithId[FractalEntity]](fractal => acceptanceMap.getOrElse(fractal.id, defaultScore))
-
-    acceptanceOrdering.orElse(orderingByProgram)
-  }
-
-  val orderingByProgram: Ordering[WithId[FractalEntity]] =
-    FractalTemplate.ordering.on(_.entity.value.program)
+  val orderingByProgram: Ordering[WithId[FractalImageEntity]] =
+    FractalTemplate.ordering.on(_.entity.value.template)
 }

@@ -26,18 +26,18 @@ object GreetingPage extends Page[GreetingState] {
 
   private def content(implicit state: GreetingState, update: NutriaState => Unit) = {
     Modal(closeAction = Actions.exploreFractal(state.randomFractal))(
-        Node("div.content").prop("innerHTML", StaticContent("frontend/src/main/html/greeting.html")),
-        ButtonList(
-          Link(Actions.gotoFAQ())
-            .classes("button", "is-link", "is-outlined")
-            .child(Icons.icon(Icons.info))
-            .child(Node("span").text("more information")),
-          Link
-            .async("/gallery", Links.galleryState())
-            .classes("button", "is-primary")
-            .child(Icons.icon(Icons.gallery))
-            .child(Node("span").text("Start exploring!"))
-        )
+      Node("div.content").prop("innerHTML", StaticContent("frontend/src/main/html/greeting.html")),
+      ButtonList(
+        Link(Actions.gotoFAQ())
+          .classes("button", "is-link", "is-outlined")
+          .child(Icons.icon(Icons.info))
+          .child(Node("span").text("more information")),
+        Link
+          .async("/gallery", Links.galleryState())
+          .classes("button", "is-primary")
+          .child(Icons.icon(Icons.gallery))
+          .child(Node("span").text("Start exploring!"))
+      )
     )
   }
 

@@ -7,14 +7,17 @@ import io.circe.syntax._
 import javax.inject.Inject
 import model.FractalSorting
 import nutria.api.{Entity, WithId}
-import nutria.core.{Examples, Fractal, ViewportList}
+import nutria.core.{Examples, Fractal, FractalImage, ViewportList}
 import play.api.libs.circe.Circe
 import play.api.mvc.InjectedController
-import repo.{FractalRepo, TemplateRepo, UserRepo}
+import repo.{FractalRepo, ImageRepo, TemplateRepo, UserRepo}
+
+import scala.util.chaining._
 
 class AdminController @Inject() (
     fractalRepo: FractalRepo,
     templateRepo: TemplateRepo,
+    imageRepo: ImageRepo,
     userRepo: UserRepo,
     authenticator: Authenticator
 ) extends InjectedController
@@ -27,7 +30,7 @@ class AdminController @Inject() (
           "admin"     -> admin.asJson,
           "users"     -> userRepo.list().asJson,
           "templates" -> templateRepo.list().asJson,
-          "fractals"  -> fractalRepo.list().asJson
+          "fractals"  -> imageRepo.list().asJson
         ).asJson
       )
     }
@@ -92,5 +95,44 @@ class AdminController @Inject() (
         .foreach(fractalRepo.save)
       Ok
     }
+  }
+
+  def toImages = Action {
+    val templates    = templateRepo.list()
+    val templatesMap = templates.groupBy(_.entity.get.value.code).mapValues(_.head)
+
+    val fractals = fractalRepo
+      .list()
+      .groupBy(_.entity.get.value.program.code)
+      .map {
+        case (code, values) =>
+          (code, templatesMap.get(code), values)
+      }
+      .toSeq
+
+    fractalRepo
+      .list()
+      .foreach { withId =>
+        val entity = withId.entity.get
+        val value  = entity.value
+        val images = FractalImage.allImages(Seq(value))
+
+        images.foreach { image =>
+          imageRepo.save(
+            id = UUID.randomUUID().toString,
+            owner = withId.owner,
+            entity = Entity(
+              title = entity.title,
+              description = entity.description,
+              published = entity.published,
+              value = image
+            )
+          )
+        }
+
+        fractalRepo.delete(withId.id)
+      }
+
+    Ok
   }
 }
