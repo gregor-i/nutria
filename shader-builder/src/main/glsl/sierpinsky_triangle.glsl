@@ -11,7 +11,7 @@ vec3 bary = vec3(calc_tri_area(B, C, p), calc_tri_area(C, A, p), calc_tri_area(A
 
 if(bary.x > 0.0 || bary.y > 0.0 || bary.z > 0.0){
   // outside
-  return vec4(color_outside, 1.0);
+  return color_outside;
 }else{
   // inside
   for(int i = 0; i < iterations; i++){
@@ -30,10 +30,9 @@ if(bary.x > 0.0 || bary.y > 0.0 || bary.z > 0.0){
       B = 0.5 * (B + C);
     }else{
       // in the middle triangle
-      return vec4(mix(color_outside, color_inside, float(i)/float(iterations)), 1.0);
-      break;
+      return mix(color_outside, color_inside, float(i)/float(iterations));
     }
   area /= 4.0;
   }
-  return vec4(color_inside, 1.0);
+  return color_inside;
 }
