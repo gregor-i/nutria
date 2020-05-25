@@ -49,12 +49,19 @@ object DetailsPage extends Page[DetailsState] {
       .child(
         Header
           .fab(Node("button"))
-          .child(Icons.icon(Icons.save))
-          .pipe { node =>
-            if (state.dirty)
-              node.event("click", Actions.updateFractal(state.fractalToEdit))
-            else
-              node.attr("disabled", "disabled")
+          .pipe {
+            case node if state.dirty && User.isOwner(state.user, state.remoteFractal) =>
+              node
+                .child(Icons.icon(Icons.save))
+                .event("click", Actions.updateFractal(state.fractalToEdit))
+            case node if !User.isOwner(state.user, state.remoteFractal) =>
+              node
+                .child(Icons.icon(Icons.copy))
+                .event("click", Actions.saveAsNewFractal(state.fractalToEdit.entity))
+            case node if !state.dirty =>
+              node
+                .child(Icons.icon(Icons.save))
+                .attr("disabled", "disabled")
           }
       )
       .child(body(state, update))
