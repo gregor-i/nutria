@@ -232,7 +232,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
           .classes("is-marginless")
       )
 
-    ParameterForm.list(lens) ++ Seq(openModalButton)
+    ParameterForm.listWithDelete(lens) ++ Seq(openModalButton)
   }
 
   def preview()(implicit state: State, update: NutriaState => Unit) = {

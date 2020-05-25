@@ -10,7 +10,7 @@ import snabbdom.{Node, SnabbdomFacade}
 import scala.util.chaining._
 
 object ParameterForm {
-  def list[S](lens: Lens[S, Vector[Parameter]])(implicit state: S, update: S => Unit): Seq[Node] =
+  def listWithDelete[S](lens: Lens[S, Vector[Parameter]])(implicit state: S, update: S => Unit): Seq[Node] =
     lens
       .get(state)
       .indices
@@ -21,7 +21,18 @@ object ParameterForm {
         lens
           .composeOptional(Index.index(i))
           .pipe(LenseUtils.unsafeOptional)
-          .pipe(ParameterForm.apply(_, Seq(deleteButton)))
+          .pipe(apply(_, Seq(deleteButton)))
+      }
+
+  def list[S](lens: Lens[S, Vector[Parameter]])(implicit state: S, update: S => Unit): Seq[Node] =
+    lens
+      .get(state)
+      .indices
+      .map { i =>
+        lens
+          .composeOptional(Index.index(i))
+          .pipe(LenseUtils.unsafeOptional)
+          .pipe(apply(_))
       }
 
   def apply[S](lens: Lens[S, Parameter], actions: Seq[Node] = Seq.empty)(implicit state: S, update: S => Unit): Node = {

@@ -25,10 +25,10 @@ case class DetailsState(
 }
 
 object DetailsState extends LenseUtils {
-  val fractalToEdit_entity         = fractalToEdit.composeLens(WithId.entity)
-  val fractalToEdit_entity_program = fractalToEdit_entity.composeLens(Entity.value).composeLens(FractalImage.template)
-  val fractalToEdit_entity_program_parameter =
-    fractalToEdit_entity_program
+  val fractalToEdit_entity          = fractalToEdit.composeLens(WithId.entity)
+  val fractalToEdit_entity_template = fractalToEdit_entity.composeLens(Entity.value).composeLens(FractalImage.template)
+  val fractalToEdit_entity_template_parameter =
+    fractalToEdit_entity_template
       .composeLens(FractalTemplate.parameters)
 }
 
@@ -67,36 +67,17 @@ object DetailsPage extends Page[DetailsState] {
           .child(Node("h1.title.is-1").text(Option(state.remoteFractal.entity.title).filter(_.nonEmpty).getOrElse("<No Title given>")))
           .child(Node("h2.subtitle").text(state.remoteFractal.entity.description))
       )
-      .child(
-        Node("section.section").children(
-          Node("h4.title.is-4").text("Administration Attributes:"),
-          general()
-        )
-      )
-      .child(
-        Node("section.section").children(
-          Node("h4.title.is-4").text("Template:"),
-          template()
-        )
-      )
+      .child(EntityAttributes.section(DetailsState.fractalToEdit_entity))
       .child(
         Node("section.section").children(
           Node("h4.title.is-4").text("Parameters:"),
-          parameters(DetailsState.fractalToEdit_entity_program_parameter)
+          parameters(DetailsState.fractalToEdit_entity_template_parameter)
         )
       )
       .child(
         Node("section.section").children(
-          Node("h4.title.is-4").text("Saved Snapshots:"),
-          snapshots()
-        )
-      )
-      .child(
-        Node("section.section").children(
-          Node("h4.title.is-4").text("Constructed Fragment Shader:"),
-          Node("pre").text(
-            FragmentShaderSource(state.fractalToEdit.entity.value.template, state.fractalToEdit.entity.value.antiAliase)
-          )
+          Node("h4.title.is-4").text("Preview:"),
+          preview()
         )
       )
       .child(
@@ -104,71 +85,44 @@ object DetailsPage extends Page[DetailsState] {
           .child(actions())
       )
 
-  def general()(implicit state: State, update: NutriaState => Unit) = {
-    val startLens = DetailsState.fractalToEdit_entity
-    Seq(
-      Form.forLens("Title", startLens composeLens Entity.title),
-      Form.forLens("Description", startLens composeLens Entity.description),
-      Form.readonlyStringInput("Published", state.fractalToEdit.entity.published.toString),
-      Form.forLens(
-        "References",
-        startLens composeLens Entity.reference composeIso Iso[List[String], String](
-          _.mkString(" ")
-        )(_.split("\\s").filter(_.nonEmpty).toList)
-      )
-    )
-  }
-
-  def template()(implicit state: State, update: NutriaState => Unit) = {
-    val toEditProgram = DetailsState.fractalToEdit_entity_program
-
-    Form.mulitlineStringInput("template", toEditProgram composeLens FractalTemplate.code)
-  }
-
   def parameters(lens: Lens[State, Vector[Parameter]])(implicit state: State, update: NutriaState => Unit) = {
     ParameterForm.list(lens)
   }
 
-  def snapshots()(implicit state: State, update: NutriaState => Unit) = {
+  def preview()(implicit state: State, update: NutriaState => Unit) = {
     val fractal = state.fractalToEdit.entity.value
 
-    val img = fractal
-
-    val tile =
-      Node("article.fractal-tile.is-relative")
-        .child(
-          FractalTile(img, Dimensions.thumbnail)
-            .event("click", Actions.exploreFractal(state.fractalToEdit, img))
-        )
-
-    Node("div.fractal-tile-list").child(tile)
+    Node("div.fractal-tile-list")
+      .child(
+        Node("article.fractal-tile.is-relative")
+          .child(
+            FractalTile(fractal, Dimensions.thumbnail)
+              .event("click", Actions.exploreFractal(state.fractalToEdit, fractal))
+          )
+      )
   }
 
   private def actions()(implicit state: State, update: NutriaState => Unit): Node = {
     val buttons: Seq[Node] = state.user match {
       case Some(user) if user.id == state.remoteFractal.owner =>
-        Seq(buttonDelete, buttonSaveAsOld)
+        Seq(buttonDelete, buttonFork, buttonSaveAsOld)
 
       case _ =>
         Seq(buttonFork)
     }
 
-    Node("div.field.is-grouped.is-grouped-right")
-      .child(buttons.map(button => Node("p.control").child(button)))
+    ButtonList(buttons: _*)
   }
 
   private def buttonSaveAsOld(implicit state: State, update: NutriaState => Unit) =
-    Button(
-      "Save Changes",
-      Icons.save,
-      Actions.updateFractal(state.fractalToEdit)
-    ).classes("is-primary")
+    Button("Update", Icons.save, Actions.updateFractal(state.fractalToEdit))
+      .classes("is-primary")
 
   private def buttonDelete(implicit state: State, update: NutriaState => Unit) =
     Button("Delete", Icons.delete, Actions.deleteFractal(state.fractalToEdit.id))
       .classes("is-danger", "is-light")
 
   private def buttonFork(implicit state: State, update: NutriaState => Unit) =
-    Button("Copy this Fractal", Icons.copy, Actions.saveAsNewFractal(state.fractalToEdit.entity))
+    Button("Clone", Icons.copy, Actions.saveAsNewFractal(state.fractalToEdit.entity))
       .classes("is-primary")
 }
