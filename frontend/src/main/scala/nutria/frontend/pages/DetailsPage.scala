@@ -95,18 +95,15 @@ object DetailsPage extends Page[DetailsState] {
     ParameterForm.list(lens)
   }
 
-  def preview()(implicit state: State, update: NutriaState => Unit) = {
-    val fractal = state.fractalToEdit.entity.value
-
+  def preview()(implicit state: State, update: NutriaState => Unit) =
     Node("div.fractal-tile-list")
       .child(
-        Node("article.fractal-tile.is-relative")
-          .child(
-            FractalTile(fractal, Dimensions.thumbnail)
-              .event("click", Actions.exploreFractal(state.fractalToEdit, fractal))
-          )
+        InteractiveFractal
+          .forTemplate(DetailsState.fractalToEdit_entity_template)
+          .classes("fractal-tile")
+          .style("maxHeight", "100vh")
+          .style("minHeight", "50vh")
       )
-  }
 
   private def actions()(implicit state: State, update: NutriaState => Unit): Node = {
     val buttons: Seq[Node] = state.user match {

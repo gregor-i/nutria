@@ -119,12 +119,6 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
           preview()
         )
       )
-      //      .child(
-      //        Node("section.section").children(
-      //          Node("h4.title.is-4").text("Constructed Fragment Shader:"),
-      //          source()
-      //        )
-      //      )
       .child(
         Node("section.section")
           .child(actions())
@@ -235,16 +229,15 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     ParameterForm.listWithDelete(lens) ++ Seq(openModalButton)
   }
 
-  def preview()(implicit state: State, update: NutriaState => Unit) = {
-    val tile =
-      Node("article.fractal-tile")
-        .child(
-          FractalTile(FractalImage(state.template, state.template.exampleViewport), Dimensions.thumbnail)
-        )
-
+  def preview()(implicit state: State, update: NutriaState => Unit) =
     Node("div.fractal-tile-list")
-      .child(tile)
-  }
+      .child(
+        InteractiveFractal
+          .forTemplate(TemplateEditorState.template)
+          .classes("fractal-tile")
+          .style("maxHeight", "100vh")
+          .style("minHeight", "50vh")
+      )
 
   def source()(implicit state: State) =
     Node("pre").text(

@@ -115,12 +115,14 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
       .child(Node("h4.title.is-4").text("Step 2: Modify parameters"))
       .child(ParameterForm.list(templateLens.composeLens(FractalTemplate.parameters)))
       .child(
-        FractalTile(
-          image.value,
-          dimensions = Dimensions.preview
-        ).classes("fractal-tile")
-          .style("display", "block")
-          .style("margin", "8px auto")
+        Node("div.fractal-tile-list")
+          .child(
+            InteractiveFractal
+              .forTemplate(templateLens)
+              .classes("fractal-tile")
+              .style("maxHeight", "100vh")
+              .style("minHeight", "50vh")
+          )
       )
       .child(
         ButtonList(

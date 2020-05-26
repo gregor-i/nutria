@@ -84,7 +84,7 @@ object ExplorerPage extends Page[ExplorerState] {
   def render(implicit state: ExplorerState, update: NutriaState => Unit) =
     Body()
       .child(Header())
-      .child(renderCanvas)
+      .child(InteractiveFractal.forImage(ExplorerState.fractalImage))
       .child(renderActionBar())
       .childOptional(saveDialog())
 
@@ -120,16 +120,6 @@ object ExplorerPage extends Page[ExplorerState] {
   def buttonForkAndAddViewport(fractalId: String)(implicit state: ExplorerState, update: NutriaState => Unit) =
     Button("Fork and Save this image", Icons.copy, Actions.forkAndAddViewport(fractalId, state.fractalImage.viewport))
       .classes("is-primary")
-
-  def renderCanvas(implicit state: ExplorerState, update: NutriaState => Unit): Node =
-    Node("div.interaction-panel")
-      .events(ExplorerEvents.canvasMouseEvents)
-      .events(ExplorerEvents.canvasWheelEvent)
-      .events(ExplorerEvents.canvasTouchEvents)
-      .child(
-        Node("canvas")
-          .hooks(CanvasHooks(state.fractalImage, resize = true))
-      )
 
   def saveDialog()(implicit state: ExplorerState, update: NutriaState => Unit): Option[Node] =
     state.saveModal.map { params =>
