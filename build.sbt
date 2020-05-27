@@ -77,6 +77,16 @@ val `service-worker` = project
   ))
   .settings(libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0")
 
+val `web-worker` = project
+  .in(file("web-worker"))
+  .dependsOn(`shader-builder`)
+  .enablePlugins(ScalaJSPlugin)
+  .settings(
+    scalaJSUseMainModuleInitializer := true,
+    emitSourceMaps := false
+  )
+  .settings(libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0")
+
 lazy val backend = project
   .in(file("backend"))
   .dependsOn(core.jvm)
@@ -140,6 +150,25 @@ compile in `service-worker` := {
 stage in `service-worker` := {
   val buildSw = (`service-worker` / Compile / fullOptJS).value.data
   val outputFile = (backend / baseDirectory).value / "public" / "assets"/ "sw.js"
+  streams.value.log.info("integrating service-worker (fullOptJS)")
+  val buildLog = Seq("cp",  buildSw.toString,  outputFile.toString).!!
+  streams.value.log.info(buildLog)
+  outputFile
+}
+
+compile in `web-worker` := {
+  val ret = (`web-worker` / Compile / compile).value
+  val buildSw = (`web-worker` / Compile / fastOptJS).value.data
+  val outputFile = (backend / baseDirectory).value / "public" / "assets"/ "web-worker.js"
+  streams.value.log.info("integrating`web-worker`(fastOptJS)")
+  val buildLog = Seq("cp",  buildSw.toString,  outputFile.toString).!!
+  streams.value.log.info(buildLog)
+  ret
+}
+
+stage in `web-worker` := {
+  val buildSw = (`web-worker` / Compile / fullOptJS).value.data
+  val outputFile = (backend / baseDirectory).value / "public" / "assets"/ "web-worker.js"
   streams.value.log.info("integrating service-worker (fullOptJS)")
   val buildLog = Seq("cp",  buildSw.toString,  outputFile.toString).!!
   streams.value.log.info(buildLog)
