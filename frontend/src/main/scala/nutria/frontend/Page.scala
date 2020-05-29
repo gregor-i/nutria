@@ -1,5 +1,6 @@
 package nutria.frontend
 
+import nutria.api.User
 import nutria.frontend.Router.Location
 import snabbdom.Node
 
@@ -9,7 +10,7 @@ abstract class Page[S <: NutriaState: ClassTag] extends ExecutionContext {
   type State  = S
   type Update = NutriaState => Unit
 
-  def stateFromUrl: PartialFunction[Router.Location, NutriaState]
+  def stateFromUrl: PartialFunction[(Option[User], Router.Path, Router.QueryParameter), NutriaState]
 
   def stateToUrl(state: State): Option[Router.Location]
 
@@ -21,7 +22,7 @@ abstract class Page[S <: NutriaState: ClassTag] extends ExecutionContext {
 trait NoRouting[State <: NutriaState] {
   _: Page[State] =>
 
-  override def stateFromUrl: PartialFunction[Location, NutriaState] = PartialFunction.empty
+  override def stateFromUrl = PartialFunction.empty
 
   override def stateToUrl(state: State): Option[Location] = None
 }

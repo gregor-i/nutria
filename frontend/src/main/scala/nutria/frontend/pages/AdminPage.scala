@@ -26,8 +26,8 @@ object AdminState {
 }
 
 object AdminPage extends Page[AdminState] {
-  override def stateFromUrl: PartialFunction[(Path, QueryParameter), NutriaState] = {
-    case ("/admin", _) => AdminState.initial
+  override def stateFromUrl: PartialFunction[(Option[User], Path, QueryParameter), NutriaState] = {
+    case (Some(user), "/admin", _) if user.admin => AdminState.initial
   }
 
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =

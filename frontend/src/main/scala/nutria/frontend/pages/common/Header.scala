@@ -23,7 +23,7 @@ object Header {
             Node("div.navbar-start")
               .child(
                 Link
-                  .async("/gallery", Links.galleryState())
+                  .async("/gallery", Links.galleryState(state.user))
                   .classes("navbar-item")
                   .text("Public Gallery")
               )
@@ -36,7 +36,7 @@ object Header {
                 state.user.map(
                   user =>
                     Link
-                      .async(s"/user/${user.id}/gallery", Links.userGalleryState(user.id))
+                      .async(s"/user/${user.id}/gallery", Links.userGalleryState(Some(user), user.id))
                       .classes("navbar-item")
                       .text("My Gallery")
                 )
@@ -45,7 +45,7 @@ object Header {
                 state.user.map(
                   _ =>
                     Link
-                      .async("/templates", TemplateGalleryState.load())
+                      .async("/templates", TemplateGalleryState.load(state.user))
                       .classes("navbar-item")
                       .text("My Templates")
                 )

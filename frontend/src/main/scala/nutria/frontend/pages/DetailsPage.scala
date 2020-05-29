@@ -32,10 +32,10 @@ object DetailsState extends LenseUtils {
 }
 
 object DetailsPage extends Page[DetailsState] {
-  override def stateFromUrl: PartialFunction[(Path, QueryParameter), NutriaState] = {
-    case (s"/fractals/${fractalId}/details", _) =>
+  override def stateFromUrl = {
+    case (user, s"/fractals/${fractalId}/details", _) =>
       LoadingState(
-        Links.detailsState(fractalId)
+        Links.detailsState(user, fractalId)
       )
   }
 

@@ -50,11 +50,10 @@ object TemplateEditorState extends LenseUtils {
 
 object TemplateEditorPage extends Page[TemplateEditorState] {
 
-  override def stateFromUrl: PartialFunction[(Path, QueryParameter), NutriaState] = {
-    case (s"/templates/${templateId}/editor", queryParams) =>
+  override def stateFromUrl = {
+    case (user, s"/templates/${templateId}/editor", queryParams) =>
       LoadingState(
         for {
-          user           <- NutriaService.whoAmI()
           remoteTemplate <- NutriaService.loadTemplate(templateId)
         } yield TemplateEditorState(
           user = user,
@@ -63,18 +62,14 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
         )
       )
 
-    case (s"/templates/editor", queryParams) =>
+    case (user, s"/templates/editor", queryParams) =>
       val templateFromUrl =
         queryParams.get("state").flatMap(Router.queryDecoded[FractalTemplate]).getOrElse(FractalTemplate.empty)
 
-      LoadingState(
-        for {
-          user <- NutriaService.whoAmI()
-        } yield TemplateEditorState(
-          user = user,
-          remoteTemplate = None,
-          template = templateFromUrl
-        )
+      TemplateEditorState(
+        user = user,
+        remoteTemplate = None,
+        template = templateFromUrl
       )
   }
 

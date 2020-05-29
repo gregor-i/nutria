@@ -18,16 +18,15 @@ case class TemplateGalleryState(
 }
 
 object TemplateGalleryState extends ExecutionContext {
-  def load(): Future[TemplateGalleryState] =
+  def load(user: Option[User]): Future[TemplateGalleryState] =
     for {
-      user      <- NutriaService.whoAmI()
       templates <- NutriaService.loadUserTemplates(user.get.id)
     } yield TemplateGalleryState(templates = templates, user = user)
 }
 
 object TemplateGalleryPage extends Page[TemplateGalleryState] {
-  override def stateFromUrl: PartialFunction[(Path, QueryParameter), NutriaState] = {
-    case ("/templates", _) => LoadingState(TemplateGalleryState.load())
+  override def stateFromUrl = {
+    case (user, "/templates", _) => LoadingState(TemplateGalleryState.load(user))
   }
 
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =

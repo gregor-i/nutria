@@ -276,7 +276,7 @@ object Actions {
         asyncUpdate {
           for {
             _     <- NutriaService.deleteUser(userId)
-            state <- Links.greetingState()
+            state <- Links.greetingState(None)
             _ = Toasts.successToast("Good Bye")
           } yield state
         }

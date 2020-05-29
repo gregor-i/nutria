@@ -2,7 +2,9 @@ package nutria.frontend
 
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
+import nutria.api.User
 import nutria.frontend.pages.ErrorState
+import nutria.frontend.service.NutriaService
 import org.scalajs.dom
 
 import scala.util.Try
@@ -13,16 +15,16 @@ object Router {
   type QueryParameter = Map[String, String]
   type Location       = (Path, QueryParameter)
 
-  def stateFromUrl(location: dom.Location): NutriaState =
-    stateFromUrl((location.pathname, queryParamsFromUrl(location.search)): Location)
+  def stateFromUrl(location: dom.Location, user: Option[User]): NutriaState =
+    stateFromUrl((location.pathname, queryParamsFromUrl(location.search)): Location, user)
 
-  private val stateFromUrlPF: Location => Option[NutriaState] =
+  private val stateFromUrlPF: ((Option[User], Path, QueryParameter)) => Option[NutriaState] =
     Pages.all
       .map(_.stateFromUrl)
       .reduce(_ orElse _)
       .lift
-  def stateFromUrl(location: Location): NutriaState =
-    stateFromUrlPF(location).getOrElse(ErrorState("Unkown url"))
+  def stateFromUrl(location: Location, user: Option[User]): NutriaState =
+    stateFromUrlPF((user, location._1, location._2)).getOrElse(ErrorState("Unkown url"))
 
   def stateToUrl[State <: NutriaState](state: State): Option[Location] =
     Pages.selectPage(state).stateToUrl(state)

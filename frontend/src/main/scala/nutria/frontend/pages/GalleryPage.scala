@@ -19,10 +19,10 @@ case class GalleryState(
 
 object GalleryPage extends Page[GalleryState] {
 
-  override def stateFromUrl: PartialFunction[Router.Location, NutriaState] = {
-    case ("/gallery", _) =>
+  override def stateFromUrl = {
+    case (user, "/gallery", _) =>
       LoadingState(
-        Links.galleryState()
+        Links.galleryState(user)
       )
   }
 
@@ -34,7 +34,7 @@ object GalleryPage extends Page[GalleryState] {
       .child(Header())
       .child(
         Link
-          .async("/new-fractal", CreateNewFractalState.load())
+          .async("/new-fractal", CreateNewFractalState.load(state.user))
           .pipe(Header.fab)
           .child(Icons.icon(Icons.plus))
       )

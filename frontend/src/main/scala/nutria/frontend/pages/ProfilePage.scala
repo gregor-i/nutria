@@ -17,14 +17,9 @@ case class ProfileState(
 
 object ProfilePage extends Page[ProfileState] {
 
-  override def stateFromUrl: PartialFunction[(Path, QueryParameter), NutriaState] = {
-    case (s"/user/profile", _) =>
-      LoadingState(
-        NutriaService.whoAmI().map {
-          case Some(user) => ProfileState(about = user)
-          case None       => ErrorState("You are not logged in")
-        }
-      )
+  override def stateFromUrl = {
+    case (Some(user), s"/user/profile", _) =>
+      ProfileState(about = user)
   }
 
   override def stateToUrl(state: ProfilePage.State): Option[(Path, QueryParameter)] =

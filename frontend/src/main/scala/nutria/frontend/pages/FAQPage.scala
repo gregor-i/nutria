@@ -15,13 +15,9 @@ case class FAQState(
 }
 
 object FAQPage extends Page[FAQState] {
-  override def stateFromUrl: PartialFunction[(Path, QueryParameter), NutriaState] = {
-
-    case ("/faq", _) =>
-      LoadingState(
-        Links.faqState()
-      )
-
+  override def stateFromUrl = {
+    case (user, "/faq", _) =>
+      Links.faqState(user)
   }
 
   override def stateToUrl(state: FAQPage.State): Option[(Path, QueryParameter)] =

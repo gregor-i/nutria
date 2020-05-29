@@ -37,9 +37,8 @@ object CreateNewFractalState extends ExecutionContext {
     implicit val codec: Codec[Step] = semiauto.deriveConfiguredCodec
   }
 
-  def load(): Future[CreateNewFractalState] =
+  def load(user: Option[User]): Future[CreateNewFractalState] =
     for {
-      user            <- NutriaService.whoAmI()
       publicTemplates <- NutriaService.loadPublicTemplates()
       userTemplates <- user match {
         case Some(user) => NutriaService.loadUserTemplates(user.id)
@@ -53,14 +52,14 @@ object CreateNewFractalState extends ExecutionContext {
 }
 
 object CreateNewFractalPage extends Page[CreateNewFractalState] {
-  override def stateFromUrl: PartialFunction[Location, NutriaState] = {
-    case ("/new-fractal", queryParameter) =>
+  override def stateFromUrl = {
+    case (user, "/new-fractal", queryParameter) =>
       val stepFromUrl = queryParameter
         .get("step")
         .flatMap(Router.queryDecoded[CreateNewFractalState.Step])
 
       LoadingState {
-        CreateNewFractalState.load().map(state => stepFromUrl.fold(state)(step => state.copy(step = step)))
+        CreateNewFractalState.load(user).map(state => stepFromUrl.fold(state)(step => state.copy(step = step)))
       }
   }
 

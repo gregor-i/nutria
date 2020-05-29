@@ -1,16 +1,17 @@
 package nutria.frontend
 
+import nutria.frontend.service.NutriaService
 import org.scalajs.dom
 import org.scalajs.dom.Element
 import snabbdom.{Snabbdom, SnabbdomFacade, VNode}
 
 import scala.scalajs.js.|
 
-class NutriaApp(container: Element) {
+class NutriaApp(container: Element) extends ExecutionContext {
 
-  var node: Element | VNode = container
+  private var node: Element | VNode = container
 
-  val patch: SnabbdomFacade.PatchFunction = Snabbdom.init(
+  private val patch: SnabbdomFacade.PatchFunction = Snabbdom.init(
     classModule = true,
     attributesModule = true,
     styleModule = true,
@@ -18,7 +19,7 @@ class NutriaApp(container: Element) {
     propsModule = true
   )
 
-  def renderState(state: NutriaState): Unit = {
+  private def renderState(state: NutriaState): Unit = {
     Router.stateToUrl(state) match {
       case Some((currentPath, currentSearch)) =>
         val stringSearch = Router.queryParamsToUrl(currentSearch)
@@ -34,7 +35,12 @@ class NutriaApp(container: Element) {
     node = patch(node, Pages.ui(state, renderState).toVNode)
   }
 
-  dom.window.onpopstate = _ => renderState(Router.stateFromUrl(dom.window.location))
+  private def loadUserAndRenderFromLocation(): Unit =
+    for (user <- NutriaService.whoAmI()) yield {
+      renderState(Router.stateFromUrl(dom.window.location, user))
+    }
 
-  renderState(Router.stateFromUrl(dom.window.location))
+  dom.window.onpopstate = _ => loadUserAndRenderFromLocation()
+
+  loadUserAndRenderFromLocation()
 }

@@ -35,11 +35,10 @@ object ExplorerState {
 
 object ExplorerPage extends Page[ExplorerState] {
 
-  override def stateFromUrl: PartialFunction[(Path, QueryParameter), NutriaState] = {
-    case (s"/fractals/${fractalId}/explorer", queryParams) =>
+  override def stateFromUrl = {
+    case (user, s"/fractals/${fractalId}/explorer", queryParams) =>
       LoadingState(
         for {
-          user          <- NutriaService.whoAmI()
           remoteFractal <- NutriaService.loadFractal(fractalId)
         } yield {
           val fractalFromUrl =
@@ -56,21 +55,14 @@ object ExplorerPage extends Page[ExplorerState] {
           }
         }
       )
-    case ("/explorer", queryParams) =>
-      LoadingState(
-        NutriaService
-          .whoAmI()
-          .map { user =>
-            val fractalFromUrl =
-              queryParams.get("state").flatMap(Router.queryDecoded[FractalImage])
+    case (user, "/explorer", queryParams) =>
+      val fractalFromUrl =
+        queryParams.get("state").flatMap(Router.queryDecoded[FractalImage])
 
-            fractalFromUrl match {
-              case Some(fractal) => ExplorerState(user, None, fractal)
-              case None          => ErrorState("Query Parameter is invalid")
-            }
-          }
-      )
-
+      fractalFromUrl match {
+        case Some(fractal) => ExplorerState(user, None, fractal)
+        case None          => ErrorState("Query Parameter is invalid")
+      }
   }
 
   override def stateToUrl(state: ExplorerPage.State): Option[(Path, QueryParameter)] = {

@@ -12,8 +12,8 @@ case class GreetingState(randomFractal: FractalImage, navbarExpanded: Boolean = 
 }
 
 object GreetingPage extends Page[GreetingState] {
-  override def stateFromUrl: PartialFunction[(Path, QueryParameter), NutriaState] = {
-    case ("/", _) => LoadingState(Links.greetingState())
+  override def stateFromUrl = {
+    case (user, "/", _) => LoadingState(Links.greetingState(user))
   }
 
   override def stateToUrl(state: GreetingState): Option[(Path, QueryParameter)] =
@@ -33,7 +33,7 @@ object GreetingPage extends Page[GreetingState] {
           .child(Icons.icon(Icons.info))
           .child(Node("span").text("more information")),
         Link
-          .async("/gallery", Links.galleryState())
+          .async("/gallery", Links.galleryState(state.user))
           .classes("button", "is-primary")
           .child(Icons.icon(Icons.gallery))
           .child(Node("span").text("Start exploring!"))

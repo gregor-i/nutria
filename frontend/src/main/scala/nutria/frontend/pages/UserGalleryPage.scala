@@ -21,10 +21,10 @@ object UserGalleryPage extends Page[UserGalleryState] {
   override def stateToUrl(state: UserGalleryPage.State): Option[(Path, QueryParameter)] =
     Some(s"/user/${state.aboutUser}/gallery" -> Map.empty)
 
-  override def stateFromUrl: PartialFunction[(Path, QueryParameter), NutriaState] = {
-    case (s"/user/${userId}/gallery", _) =>
+  override def stateFromUrl = {
+    case (user, s"/user/${userId}/gallery", _) =>
       LoadingState(
-        Links.userGalleryState(userId)
+        Links.userGalleryState(user, userId)
       )
 
   }
