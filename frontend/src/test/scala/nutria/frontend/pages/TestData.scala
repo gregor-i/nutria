@@ -18,7 +18,7 @@ object TestData {
   private val publicFractals = Vector.fill(10)(fractalEntity)
 
   val states: Seq[(String, NutriaState)] = Seq(
-    "Loading"                      -> LoadingState(Future.failed(new Exception)),
+    "Loading"                      -> LoadingState(None, Future.failed(new Exception)),
     "Error"                        -> ErrorState("error message"),
     "FAQ"                          -> FAQState(user = None),
     "Greeting"                     -> GreetingState(randomFractal = fractalImage),

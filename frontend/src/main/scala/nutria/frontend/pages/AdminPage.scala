@@ -22,12 +22,12 @@ case class AdminState(
 }
 
 object AdminState {
-  def initial = LoadingState(NutriaAdminService.load())
+  def initial() = NutriaAdminService.load()
 }
 
 object AdminPage extends Page[AdminState] {
   override def stateFromUrl: PartialFunction[(Option[User], Path, QueryParameter), NutriaState] = {
-    case (Some(user), "/admin", _) if user.admin => AdminState.initial
+    case (Some(user), "/admin", _) if user.admin => AdminState.initial().loading(Some(user))
   }
 
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =

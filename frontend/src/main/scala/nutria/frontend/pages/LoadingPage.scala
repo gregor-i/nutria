@@ -1,17 +1,24 @@
 package nutria.frontend.pages
 
+import nutria.api.User
+import nutria.frontend.Router.Location
 import nutria.frontend.pages.common.{Body, Header}
-import nutria.frontend.{NoRouting, NoUser, NutriaState, Page}
+import nutria.frontend.service.NutriaService
+import nutria.frontend.{NutriaState, Page}
 import snabbdom._
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
-case class LoadingState(loading: Future[NutriaState], navbarExpanded: Boolean = false) extends NutriaState with NoUser {
+case class LoadingState(user: Option[User], loading: Future[NutriaState], navbarExpanded: Boolean = false) extends NutriaState {
   override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
 }
 
-object LoadingPage extends Page[LoadingState] with NoRouting[LoadingState] {
+object LoadingPage extends Page[LoadingState] {
+  def stateFromUrl = PartialFunction.empty
+
+  def stateToUrl(state: State): Option[Location] = None
+
   def render(implicit state: LoadingState, update: NutriaState => Unit) =
     Body()
       .child(Header())
@@ -34,7 +41,7 @@ object LoadingPage extends Page[LoadingState] with NoRouting[LoadingState] {
             case Success(newState) => update(newState)
             case Failure(exception) =>
               update(
-                ErrorState(s"unexpected problem while initializing app: ${exception.getMessage}")
+                ErrorState(state.user, s"unexpected problem while initializing app: ${exception.getMessage}")
               )
           }
         }

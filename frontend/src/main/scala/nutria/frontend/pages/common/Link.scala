@@ -1,5 +1,6 @@
 package nutria.frontend.pages.common
 
+import nutria.frontend.pages.LoadingState
 import nutria.frontend.{ExecutionContext, NutriaState, Router}
 import snabbdom.{Node, Snabbdom}
 
@@ -21,12 +22,12 @@ object Link extends ExecutionContext {
         update(newState)
       })
 
-  def async(href: String, state: => Future[NutriaState])(implicit update: NutriaState => Unit): Node = {
+  def async(href: String, loadingState: => Future[NutriaState])(implicit state: NutriaState, update: NutriaState => Unit): Node = {
     Node("a")
       .attr("href", href)
       .event("click", Snabbdom.event { e =>
         e.preventDefault()
-        state.foreach(update)
+        update(LoadingState(state.user, loadingState))
       })
   }
 }

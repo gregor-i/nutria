@@ -1,5 +1,6 @@
 package nutria.frontend.pages
 
+import nutria.api.User
 import nutria.core.FractalImage
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
@@ -7,13 +8,13 @@ import nutria.frontend.pages.common.{Body, Button, ButtonList, CanvasHooks, Icon
 import nutria.macros.StaticContent
 import snabbdom.Node
 
-case class GreetingState(randomFractal: FractalImage, navbarExpanded: Boolean = false) extends NutriaState with NoUser {
+case class GreetingState(user: Option[User], randomFractal: FractalImage, navbarExpanded: Boolean = false) extends NutriaState {
   override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
 }
 
 object GreetingPage extends Page[GreetingState] {
   override def stateFromUrl = {
-    case (user, "/", _) => LoadingState(Links.greetingState(user))
+    case (user, "/", _) => Links.greetingState(user).loading(user)
   }
 
   override def stateToUrl(state: GreetingState): Option[(Path, QueryParameter)] =

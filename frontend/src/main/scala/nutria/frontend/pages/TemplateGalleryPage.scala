@@ -26,7 +26,7 @@ object TemplateGalleryState extends ExecutionContext {
 
 object TemplateGalleryPage extends Page[TemplateGalleryState] {
   override def stateFromUrl = {
-    case (user, "/templates", _) => LoadingState(TemplateGalleryState.load(user))
+    case (user, "/templates", _) => TemplateGalleryState.load(user).loading(user)
   }
 
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =

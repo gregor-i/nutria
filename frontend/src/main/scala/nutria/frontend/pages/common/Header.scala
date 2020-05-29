@@ -61,7 +61,7 @@ object Header {
               .childOptional(
                 Some(
                   Link
-                    .async("/admin", AdminState.initial.loading)
+                    .async("/admin", AdminState.initial())
                     .classes("navbar-item")
                     .text("Admin")
                 ).filter(_ => state.user.exists(_.admin))

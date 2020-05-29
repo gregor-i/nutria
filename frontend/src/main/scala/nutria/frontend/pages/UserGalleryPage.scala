@@ -23,9 +23,7 @@ object UserGalleryPage extends Page[UserGalleryState] {
 
   override def stateFromUrl = {
     case (user, s"/user/${userId}/gallery", _) =>
-      LoadingState(
-        Links.userGalleryState(user, userId)
-      )
+      Links.userGalleryState(user, userId).loading(user)
 
   }
 

@@ -34,9 +34,7 @@ object DetailsState extends LenseUtils {
 object DetailsPage extends Page[DetailsState] {
   override def stateFromUrl = {
     case (user, s"/fractals/${fractalId}/details", _) =>
-      LoadingState(
-        Links.detailsState(user, fractalId)
-      )
+      Links.detailsState(user, fractalId).loading(user)
   }
 
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =

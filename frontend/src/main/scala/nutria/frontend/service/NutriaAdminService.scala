@@ -15,7 +15,7 @@ object NutriaAdminService extends Service with CirceCodec {
     get("/api/admin")
       .flatMap(check(200))
       .flatMap(parse[AdminState])
-      .recover { case error => ErrorState(error.getMessage) }
+      .recover { case error => ErrorState(None, error.getMessage) }
 
   def deleteUser(userId: String): Future[Unit] =
     post(s"/api/admin/delete-user/$userId")

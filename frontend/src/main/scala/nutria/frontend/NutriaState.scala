@@ -8,8 +8,3 @@ trait NutriaState {
   def navbarExpanded: Boolean
   def setNavbarExtended(boolean: Boolean): NutriaState
 }
-
-trait NoUser {
-  _: NutriaState =>
-  def user: None.type = None
-}

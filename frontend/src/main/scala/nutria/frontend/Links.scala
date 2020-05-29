@@ -22,7 +22,7 @@ object Links {
   def greetingState(user: Option[User]): Future[GreetingState] =
     for {
       randomFractal <- NutriaService.loadRandomFractal()
-    } yield GreetingState(randomFractal)
+    } yield GreetingState(user, randomFractal)
 
   def detailsState(user: Option[User], fractalId: String): Future[DetailsState] =
     for {

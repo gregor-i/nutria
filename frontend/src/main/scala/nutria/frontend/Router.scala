@@ -24,7 +24,7 @@ object Router {
       .reduce(_ orElse _)
       .lift
   def stateFromUrl(location: Location, user: Option[User]): NutriaState =
-    stateFromUrlPF((user, location._1, location._2)).getOrElse(ErrorState("Unkown url"))
+    stateFromUrlPF((user, location._1, location._2)).getOrElse(ErrorState(user, "Unkown url"))
 
   def stateToUrl[State <: NutriaState](state: State): Option[Location] =
     Pages.selectPage(state).stateToUrl(state)

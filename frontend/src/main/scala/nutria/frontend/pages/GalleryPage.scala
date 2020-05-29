@@ -21,9 +21,7 @@ object GalleryPage extends Page[GalleryState] {
 
   override def stateFromUrl = {
     case (user, "/gallery", _) =>
-      LoadingState(
-        Links.galleryState(user)
-      )
+      Links.galleryState(user).loading(user)
   }
 
   override def stateToUrl(state: GalleryPage.State): Option[Router.Location] =

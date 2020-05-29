@@ -52,15 +52,13 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
 
   override def stateFromUrl = {
     case (user, s"/templates/${templateId}/editor", queryParams) =>
-      LoadingState(
-        for {
-          remoteTemplate <- NutriaService.loadTemplate(templateId)
-        } yield TemplateEditorState(
-          user = user,
-          remoteTemplate = Some(remoteTemplate),
-          template = queryParams.get("state").flatMap(Router.queryDecoded[FractalTemplate]).getOrElse(remoteTemplate.entity.value)
-        )
-      )
+      (for {
+        remoteTemplate <- NutriaService.loadTemplate(templateId)
+      } yield TemplateEditorState(
+        user = user,
+        remoteTemplate = Some(remoteTemplate),
+        template = queryParams.get("state").flatMap(Router.queryDecoded[FractalTemplate]).getOrElse(remoteTemplate.entity.value)
+      )).loading(user)
 
     case (user, s"/templates/editor", queryParams) =>
       val templateFromUrl =

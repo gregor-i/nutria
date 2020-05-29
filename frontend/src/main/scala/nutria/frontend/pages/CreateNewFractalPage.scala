@@ -58,9 +58,10 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
         .get("step")
         .flatMap(Router.queryDecoded[CreateNewFractalState.Step])
 
-      LoadingState {
-        CreateNewFractalState.load(user).map(state => stepFromUrl.fold(state)(step => state.copy(step = step)))
-      }
+      CreateNewFractalState
+        .load(user)
+        .map(state => stepFromUrl.fold(state)(step => state.copy(step = step)))
+        .loading(user)
   }
 
   override def stateToUrl(state: CreateNewFractalState): Option[Location] =
