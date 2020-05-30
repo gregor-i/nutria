@@ -44,7 +44,7 @@ object CreateNewFractalState extends ExecutionContext {
         case Some(user) => NutriaService.loadUserTemplates(user.id)
         case None       => Future.successful(Vector.empty)
       }
-      allTemplates = (publicTemplates.toVector ++ userTemplates).map(_.entity)
+      allTemplates = (publicTemplates.toVector ++ userTemplates).distinctBy(_.id).map(_.entity)
     } yield CreateNewFractalState(user = user, templates = allTemplates)
 
   val formulaStep: Prism[Step, ParametersStep] =
