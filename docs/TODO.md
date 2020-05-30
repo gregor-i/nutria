@@ -1,31 +1,19 @@
 ## todo list:
  - documentation:
     - define a data protection policy
-    - more faq
+    - more faq / form to ask a question
     - explain actions, icons and parameters
  - explorer:
-    - render images in low res and then in higher res to make it more responsive
     - return to start position actions
- - gallery
-    - pagination
-    - web worker to render images
- - editor
-    - create a wizard for adding new fractals
-       - use (static) images for fractal types and colorings
- - continue with templates:
-    - core:
-        - define fractal template 
-           - code + parameters (with defaults) + example viewport
-        - redefine fractal image
-            - template (by id?), parameter overwrites, 
-            - viewport overwrite, anti aliase
-    - backend: 
-        - new entity: fractal template
-        - new entity: fractal image
-        - remove entity: fractal
-    - frontend:
-        - details:
-           - become template editor
-           - add, delete, reorder parameter
-        - explorer:
-           - modal or something to tweek parameter
+ - gallery:
+    - pagination / infinite scrolling
+ - details:
+   - make it a modal over explorer
+ - general:
+   - some failed futures are not handled
+   - links cost a lot of rendering time
+ - backend:
+   - add inserted  / last updated to WithId
+   - sort by last updated?
+ - editor:
+   - color gradient parameter
