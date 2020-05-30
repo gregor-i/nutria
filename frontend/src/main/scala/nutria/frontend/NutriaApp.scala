@@ -20,6 +20,8 @@ class NutriaApp(container: Element) extends ExecutionContext {
   )
 
   private def renderState(state: NutriaState): Unit = {
+    val t0 = System.currentTimeMillis()
+
     Router.stateToUrl(state) match {
       case Some((currentPath, currentSearch)) =>
         val stringSearch = Router.queryParamsToUrl(currentSearch)
@@ -32,7 +34,22 @@ class NutriaApp(container: Element) extends ExecutionContext {
       case None => ()
     }
 
-    node = patch(node, Pages.ui(state, renderState).toVNode)
+    val t1 = System.currentTimeMillis()
+
+    val ui = Pages.ui(state, renderState).toVNode
+
+    val t2 = System.currentTimeMillis()
+
+    node = patch(node, ui)
+
+    val t3 = System.currentTimeMillis()
+
+    dom.console.debug(s"""
+         |Metric for ${state.getClass.getSimpleName}
+         |saving state in history and location: ${t1 - t0}
+         |rendering: ${t2 - t1}
+         |patching: ${t3 - t2}
+         |""".stripMargin.trim)
   }
 
   private def loadUserAndRenderFromLocation(): Unit =
