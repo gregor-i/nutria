@@ -21,6 +21,7 @@ case class ExplorerState(
     navbarExpanded: Boolean = false
 ) extends NutriaState {
   override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
+  def dirty: Boolean                                            = remoteFractal.fold(true)(_.entity.value != fractalImage)
 }
 
 @Lenses
@@ -67,8 +68,9 @@ object ExplorerPage extends Page[ExplorerState] {
   override def stateToUrl(state: ExplorerPage.State): Option[(Path, QueryParameter)] = {
     val stateQueryParam = Map("state" -> Router.queryEncoded(state.fractalImage))
     state.remoteFractal match {
-      case Some(remoteFractal) => Some(s"/fractals/${remoteFractal.id}/explorer" -> stateQueryParam)
-      case None                => Some("/explorer"                               -> stateQueryParam)
+      case Some(remoteFractal) if state.dirty => Some(s"/fractals/${remoteFractal.id}/explorer" -> stateQueryParam)
+      case Some(remoteFractal)                => Some(s"/fractals/${remoteFractal.id}/explorer" -> Map.empty)
+      case None                               => Some("/explorer"                               -> stateQueryParam)
     }
   }
 

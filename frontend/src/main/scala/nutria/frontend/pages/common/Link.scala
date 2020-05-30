@@ -10,6 +10,7 @@ import scala.util.chaining._
 object Link extends ExecutionContext {
   def apply(newState: NutriaState)(implicit update: NutriaState => Unit): Node =
     Node("a")
+    // todo: creating this href cost a lot of performance
       .pipe(
         link =>
           Router.stateToUrl(newState) match {
