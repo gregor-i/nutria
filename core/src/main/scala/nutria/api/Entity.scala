@@ -11,7 +11,10 @@ case class Entity[A](
     reference: List[String] = List.empty,
     published: Boolean = false,
     value: A
-)
+) {
+  def map[B](f: A => B): Entity[B] =
+    copy(value = f(value))
+}
 
 object Entity extends CirceCodec {
   implicit def codec[A: Decoder: Encoder]: Codec[Entity[A]] = Codec.from(

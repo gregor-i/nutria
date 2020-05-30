@@ -82,7 +82,6 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
                   CreateNewFractalState.step
                     .composePrism(CreateNewFractalState.formulaStep)
                     .composeLens(ParametersStep.template)
-                    .composeLens(Entity.value[FractalTemplate])
                     .pipe(LenseUtils.unsafeOptional)
                 )
             }
@@ -107,18 +106,18 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
       )
 
   private def modifyParameters(
-      templateLens: Lens[State, FractalTemplate]
+      templateLens: Lens[State, FractalTemplateEntity]
   )(implicit state: State, update: NutriaState => Unit): Node = {
-    val image = templateLens.get(state).pipe(FractalImage.fromTemplate).pipe(image => Entity(value = image))
+    val image = templateLens.get(state).map(FractalImage.fromTemplate)
 
     Node("section.section")
       .child(Node("h4.title.is-4").text("Step 2: Modify parameters"))
-      .child(ParameterForm.list(templateLens.composeLens(FractalTemplate.parameters)))
+      .child(ParameterForm.list(templateLens.composeLens(Entity.value).composeLens(FractalTemplate.parameters)))
       .child(
         Node("div.fractal-tile-list")
           .child(
             InteractiveFractal
-              .forTemplate(templateLens)
+              .forTemplate(templateLens.composeLens(Entity.value))
               .classes("fractal-tile")
               .style("maxHeight", "100vh")
               .style("minHeight", "50vh")
