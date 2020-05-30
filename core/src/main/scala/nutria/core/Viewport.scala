@@ -20,6 +20,8 @@ object Viewport extends CirceCodec {
 
   val defaultMovementFactor: Double = 0.20
   val defaultZoomInFactor: Double   = 0.60
+
+  implicit val ordering: Ordering[Viewport] = Ordering.by(view => (view.A.abs, view.B.abs, view.origin.abs))
 }
 
 case class Viewport(origin: Point, A: Point, B: Point) {

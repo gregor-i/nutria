@@ -17,5 +17,5 @@ object FractalImage extends CirceCodec {
 
   implicit val codec: Codec[FractalImage] = semiauto.deriveConfiguredCodec
 
-  implicit val ordering: Ordering[FractalImage] = Ordering.by(_.template)
+  implicit val ordering: Ordering[FractalImage] = Ordering.by(image => (image.template, image.viewport))
 }
