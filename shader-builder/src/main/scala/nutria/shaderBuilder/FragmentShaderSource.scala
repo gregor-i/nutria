@@ -13,6 +13,9 @@ object FragmentShaderSource {
        |#line 1
        |${definitions(state)}
        |
+       |${colorGradient("cool_sky", Seq("#2980B9", "#6DD5FA", "#FFFFFF").map(RGB.parseRGBString(_).get.withAlpha()))}
+       |${colorGradient("black_and_white", Seq(RGB.white.withAlpha(), RGB.black.withAlpha()))}
+       |
        |#line 1
        |${FragmentShaderSource.main(state)}
        |
@@ -65,4 +68,26 @@ object FragmentShaderSource {
        |${v.code.linesIterator.map("  " + _).mkString("\n")}
        |  return vec4(0.0);
        |}""".stripMargin
+
+  def colorGradient(name: String, colors: Seq[RGBA]): String = {
+
+    val gradients =
+      for ((Seq(colorLow, colorHigh), index) <- colors.sliding(2).zipWithIndex)
+        yield s"if (i == ${index}) return mix(${Vec4.fromRGBA(colorLow).toCode}, ${Vec4.fromRGBA(colorHigh).toCode}, f);"
+
+    val upperBound = s"return ${Vec4.fromRGBA(colors.last).toCode};"
+
+    s"""
+      |vec4 ${name} (in float low, in float high, in float value) {
+      |  float tv = float(${colors.size - 1}) * (clamp(low, high, value) - low) / (high - low);
+      |  int i = int(tv);
+      |  float f = tv - floor(tv);
+      |
+      |  ${gradients.mkString("\n")}
+      |  ${upperBound}
+      |
+      |}
+      |""".stripMargin
+
+  }
 }
