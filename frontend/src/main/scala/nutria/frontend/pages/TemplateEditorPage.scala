@@ -3,7 +3,7 @@ package nutria.frontend.pages
 import monocle.{Iso, Lens, Optional}
 import monocle.function.{At, Index}
 import monocle.macros.Lenses
-import nutria.api.{Entity, FractalTemplateEntityWithId, User, WithId}
+import nutria.api.{Entity, FractalTemplateEntity, FractalTemplateEntityWithId, User, WithId}
 import nutria.core._
 import nutria.core.languages.{Lambda, StringFunction, ZAndLambda}
 import nutria.frontend.Router.{Path, QueryParameter}
@@ -25,15 +25,16 @@ import scala.util.chaining._
 case class TemplateEditorState(
     user: Option[User],
     remoteTemplate: Option[FractalTemplateEntityWithId],
-    template: FractalTemplate,
+    entity: FractalTemplateEntity,
     newParameter: Option[Parameter] = None,
     navbarExpanded: Boolean = false
 ) extends NutriaState {
-  def dirty: Boolean                                   = remoteTemplate.fold(FractalTemplate.empty)(_.entity.value) != template
+  def dirty: Boolean                                   = !remoteTemplate.forall(_.entity == entity)
   def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
 }
 
 object TemplateEditorState extends LenseUtils {
+  val template   = entity.composeLens(Entity.value)
   val code       = template.composeLens(FractalTemplate.code)
   val parameters = template.composeLens(FractalTemplate.parameters)
 
@@ -41,11 +42,11 @@ object TemplateEditorState extends LenseUtils {
     TemplateEditorState(
       user = nutriaState.user,
       remoteTemplate = None,
-      template = Examples.timeEscape
+      entity = Entity(value = Examples.timeEscape)
     )
 
   def byTemplate(template: FractalTemplateEntityWithId)(implicit nutriaState: NutriaState): TemplateEditorState =
-    TemplateEditorState(user = nutriaState.user, remoteTemplate = Some(template), template = template.entity.value)
+    TemplateEditorState(user = nutriaState.user, remoteTemplate = Some(template), entity = template.entity)
 }
 
 object TemplateEditorPage extends Page[TemplateEditorState] {
@@ -57,22 +58,22 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       } yield TemplateEditorState(
         user = user,
         remoteTemplate = Some(remoteTemplate),
-        template = queryParams.get("state").flatMap(Router.queryDecoded[FractalTemplate]).getOrElse(remoteTemplate.entity.value)
+        entity = queryParams.get("state").flatMap(Router.queryDecoded[FractalTemplateEntity]).getOrElse(remoteTemplate.entity)
       )).loading(user)
 
     case (user, s"/templates/editor", queryParams) =>
       val templateFromUrl =
-        queryParams.get("state").flatMap(Router.queryDecoded[FractalTemplate]).getOrElse(FractalTemplate.empty)
+        queryParams.get("state").flatMap(Router.queryDecoded[FractalTemplateEntity]).getOrElse(Entity(value = FractalTemplate.empty))
 
       TemplateEditorState(
         user = user,
         remoteTemplate = None,
-        template = templateFromUrl
+        entity = templateFromUrl
       )
   }
 
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] = {
-    val query: QueryParameter = if (state.dirty) Map("state" -> Router.queryEncoded(state.template)) else Map.empty
+    val query: QueryParameter = if (state.dirty) Map("state" -> Router.queryEncoded(state.entity)) else Map.empty
     state.remoteTemplate match {
       case Some(remoteTemplate) =>
         Some(s"/templates/${remoteTemplate.id}/editor" -> query)
@@ -94,6 +95,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
           .child(Node("h1.title.is-1").text("Fractal Template"))
 //          .child(Node("h2.subtitle").text("description")
       )
+      .child(EntityAttributes.section(TemplateEditorState.entity))
       .child(
         Node("section.section").children(
           Node("h4.title.is-4").text("Template:"),
@@ -123,7 +125,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       Node("div.code-editor-container")
         .child(
           Node("pre.code-editor-line-numbers").text {
-            (1 to (state.template.code.count(_ == '\n') + 1))
+            (1 to (state.entity.value.code.count(_ == '\n') + 1))
               .map(number => s"${number}:")
               .mkString("\n")
           }
@@ -140,12 +142,12 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
                   .tap(update)
               }
             )
-            .text(state.template.code)
+            .text(state.entity.value.code)
         )
 
     Seq(
       codeEditor,
-      CompileStatus(state.template)
+      CompileStatus(state.entity.value)
     )
   }
 
@@ -234,7 +236,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
 
   def source()(implicit state: State) =
     Node("pre").text(
-      FragmentShaderSource(state.template, 1).linesIterator.zipWithIndex
+      FragmentShaderSource(state.entity.value, 1).linesIterator.zipWithIndex
         .map { case (line, number) => s"${number + 1}: $line" }
         .mkString("\n")
     )
@@ -242,7 +244,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
   private def actions()(implicit state: State, update: NutriaState => Unit): Node = {
     val buttons: Seq[Node] = (state.user, state.remoteTemplate) match {
       case (Some(user), Some(remote)) if user.id == remote.owner =>
-        Seq(buttonSave, buttonUpdate)
+        Seq(buttonDelete, buttonSave, buttonUpdate)
       case (Some(_), _) =>
         Seq(buttonSave)
       case (None, _) =>
@@ -256,12 +258,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     Button(
       "Save as new Template",
       Icons.save,
-      Actions.saveTemplate(
-        Entity(
-          title = "todo",
-          value = state.template
-        )
-      )
+      Actions.saveTemplate(state.entity)
     ).classes("is-primary")
       .boolAttr("disabled", !state.dirty)
 
@@ -269,12 +266,14 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     Button(
       "Update existing Template",
       Icons.save,
-      Actions.saveTemplate(
-        Entity(
-          title = "todo",
-          value = state.template
-        )
-      )
+      Actions.updateTemplate(state.remoteTemplate.get.copy(entity = state.entity))
     ).classes("is-primary")
       .boolAttr("disabled", !state.dirty)
+
+  private def buttonDelete(implicit state: State, update: NutriaState => Unit) =
+    Button(
+      "Delete",
+      Icons.delete,
+      Actions.deleteTemplate(state.remoteTemplate.get.id)
+    ).classes("is-danger", "is-light")
 }

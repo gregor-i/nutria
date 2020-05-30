@@ -225,14 +225,14 @@ object Actions {
       }
     }
 
-  def deleteTemplate(templateId: String)(implicit state: TemplateGalleryState, update: NutriaState => Unit): Eventlistener =
+  def deleteTemplate(templateId: String)(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
           for {
             _         <- NutriaService.deleteTemplate(templateId)
             templates <- NutriaService.loadUserTemplates(state.user.get.id)
-          } yield state.copy(templates = templates)
+          } yield TemplateGalleryState(user = state.user, templates = templates)
         }
       }
     }
