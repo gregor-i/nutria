@@ -106,10 +106,10 @@ object DetailsPage extends Page[DetailsState] {
   private def actions()(implicit state: State, update: NutriaState => Unit): Node = {
     val buttons: Seq[Node] = state.user match {
       case Some(user) if user.id == state.remoteFractal.owner =>
-        Seq(buttonDelete, buttonFork, buttonUpdate)
+        Seq(buttonDelete, buttonFork, buttonUpdate, buttonExplore)
 
       case _ =>
-        Seq(buttonFork)
+        Seq(buttonFork, buttonExplore)
     }
 
     ButtonList(buttons: _*)
@@ -126,4 +126,10 @@ object DetailsPage extends Page[DetailsState] {
   private def buttonFork(implicit state: State, update: NutriaState => Unit) =
     Button("Clone", Icons.copy, Actions.saveAsNewFractal(state.fractalToEdit.entity))
       .classes("is-primary")
+
+  private def buttonExplore(implicit state: State, update: NutriaState => Unit) =
+    Link(ExplorerState(user = state.user, remoteFractal = Some(state.remoteFractal), fractalImage = state.fractalToEdit.entity.value))
+      .classes("button")
+      .child(Icons.icon(Icons.explore))
+      .child(Node("span").text("Explore"))
 }
