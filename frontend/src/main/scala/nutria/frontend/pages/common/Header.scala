@@ -81,17 +81,7 @@ object Header {
 
   def fab(node: Node): Node =
     node
-      .classes("button", "is-large", "is-primary", "is-rounded")
-      .styles(
-        Seq(
-          "position"   -> "absolute",
-          "top"        -> "28px",
-          "z-index"    -> "30",
-          "right"      -> "120px",
-          "margin"     -> "0",
-          "box-shadow" -> "0 2px 4px rgba(0,0,0,0.2)"
-        )
-      )
+      .classes("button", "is-large", "is-primary", "is-rounded", "is-fab")
 
   def loginHref(implicit nutriaState: NutriaState): String = {
     Router.stateToUrl(nutriaState) match {
