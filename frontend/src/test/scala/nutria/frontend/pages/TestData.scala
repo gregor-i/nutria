@@ -1,6 +1,6 @@
 package nutria.frontend.pages
 
-import nutria.api.{Entity, WithId}
+import nutria.api.{Entity, User, WithId}
 import nutria.core.{Examples, FractalImage, IntParameter, Viewport}
 import nutria.frontend.NutriaState
 
@@ -16,13 +16,17 @@ object TestData {
     )
   )
   private val publicFractals = Vector.fill(10)(fractalEntity)
+  private val owner          = Some(User("owner", "name", "email", None))
+  private val user           = Some(User("user", "name", "email", None))
 
   val states: Seq[(String, NutriaState)] = Seq(
     "Loading"                      -> LoadingState(None, Future.failed(new Exception)),
-    "Error"                        -> ErrorState("error message"),
+    "Error"                        -> ErrorState(user, "error message"),
     "FAQ"                          -> FAQState(user = None),
-    "Greeting"                     -> GreetingState(randomFractal = fractalImage),
-    "Explorer"                     -> ExplorerState(user = None, remoteFractal = None, fractalImage = fractalImage),
+    "Greeting"                     -> GreetingState(user, randomFractal = fractalImage),
+    "Explorer-owner"               -> ExplorerState(user = owner, remoteFractal = Some(fractalEntity), fractalImage = fractalImage),
+    "Explorer-no-user"             -> ExplorerState(user = None, remoteFractal = Some(fractalEntity), fractalImage = fractalImage),
+    "Explorer-user"                -> ExplorerState(user = user, remoteFractal = Some(fractalEntity), fractalImage = fractalImage),
     "Gallery"                      -> GalleryState(user = None, publicFractals = publicFractals, votes = Map.empty),
     "Details-Diverging"            -> DetailsState(user = None, remoteFractal = fractalEntity, fractalToEdit = fractalEntity),
     "Template-Editor"              -> TemplateEditorState.initial(FAQState(user = None)),

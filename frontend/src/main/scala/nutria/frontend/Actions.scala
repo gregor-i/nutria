@@ -100,12 +100,10 @@ object Actions {
         asyncUpdate {
           for {
             remoteFractal <- NutriaService.loadFractal(fractalId)
-            updated = WithId
-              .entity[FractalImageEntity]
-              .composeLens(Entity.value)
+            updated = Entity.value
               .composeLens(FractalImage.viewport)
-              .set(viewport)(remoteFractal)
-            forkedFractal <- NutriaService.save(updated.entity)
+              .set(viewport)(remoteFractal.entity)
+            forkedFractal <- NutriaService.save(updated)
             _ = Toasts.successToast("Fractal saved")
           } yield ExplorerState(
             state.user,

@@ -106,7 +106,7 @@ object DetailsPage extends Page[DetailsState] {
   private def actions()(implicit state: State, update: NutriaState => Unit): Node = {
     val buttons: Seq[Node] = state.user match {
       case Some(user) if user.id == state.remoteFractal.owner =>
-        Seq(buttonDelete, buttonFork, buttonSaveAsOld)
+        Seq(buttonDelete, buttonFork, buttonUpdate)
 
       case _ =>
         Seq(buttonFork)
@@ -115,7 +115,7 @@ object DetailsPage extends Page[DetailsState] {
     ButtonList(buttons: _*)
   }
 
-  private def buttonSaveAsOld(implicit state: State, update: NutriaState => Unit) =
+  private def buttonUpdate(implicit state: State, update: NutriaState => Unit) =
     Button("Update", Icons.save, Actions.updateFractal(state.fractalToEdit))
       .classes("is-primary")
 

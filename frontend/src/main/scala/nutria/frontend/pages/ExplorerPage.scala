@@ -2,7 +2,7 @@ package nutria.frontend.pages
 
 import monocle.Lens
 import monocle.macros.Lenses
-import nutria.api.{FractalImageEntity, FractalImageEntityWithId, User, WithId}
+import nutria.api.{Entity, FractalImageEntity, FractalImageEntityWithId, User, WithId}
 import nutria.core._
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
@@ -80,37 +80,27 @@ object ExplorerPage extends Page[ExplorerState] {
       .childOptional(saveDialog())
 
   def renderActionBar()(implicit state: ExplorerState, update: NutriaState => Unit): Node =
-    Node("div.buttons.overlay-bottom-right.padding")
-      .childOptional(
-        state.remoteFractal match {
-          case Some(fractal) if User.isOwner(state.user, fractal) => Some(buttonAddViewport(fractal.id))
-          case Some(fractal)                                      => Some(buttonForkAndAddViewport(fractal.id))
-          case None                                               => None
-        }
-      )
-      .childOptional(
-        state.remoteFractal match {
-          case Some(fractal) => Some(buttonBackToDetails(fractal))
-          case None          => None
-        }
-      )
+    ButtonList()
+      .classes("overlay-bottom-right", "padding")
       .child(
-        Button.icon(Icons.download, Actions.openSaveToDiskModal)
+        state.remoteFractal match {
+          case Some(remoteFractal) => Some(buttonGoToDetails(remoteFractal))
+          case None                => None
+        }
       )
+      .child(buttonSave(Entity(value = state.fractalImage)))
+      .child(Button.icon(Icons.download, Actions.openSaveToDiskModal))
 
-  def buttonBackToDetails(fractal: WithId[FractalImageEntity])(implicit state: ExplorerState, update: NutriaState => Unit) =
+  // todo: this ignores the current state of fractalImage ...
+  def buttonGoToDetails(fractal: WithId[FractalImageEntity])(implicit state: ExplorerState, update: NutriaState => Unit) =
     Link(Links.detailsState(fractal, state.user))
       .classes("button", "is-rounded")
       .child(Icons.icon(Icons.edit))
 
-  def buttonAddViewport(fractalId: String)(implicit state: ExplorerState, update: NutriaState => Unit) =
+  def buttonSave(fractalImage: FractalImageEntity)(implicit state: ExplorerState, update: NutriaState => Unit) =
     Button
-      .icon(Icons.snapshot, Actions.addViewport(fractalId, state.fractalImage.viewport))
+      .icon(Icons.snapshot, Actions.saveAsNewFractal(fractalImage))
       .classes("is-primary", "is-rounded")
-
-  def buttonForkAndAddViewport(fractalId: String)(implicit state: ExplorerState, update: NutriaState => Unit) =
-    Button("Fork and Save this image", Icons.copy, Actions.forkAndAddViewport(fractalId, state.fractalImage.viewport))
-      .classes("is-primary")
 
   def saveDialog()(implicit state: ExplorerState, update: NutriaState => Unit): Option[Node] =
     state.saveModal.map { params =>

@@ -6,7 +6,7 @@ import io.circe.syntax._
 
 @monocle.macros.Lenses()
 case class Entity[A](
-    title: String = "",
+    title: String = "<no title>",
     description: String = "",
     reference: List[String] = List.empty,
     published: Boolean = false,
