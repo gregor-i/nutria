@@ -59,7 +59,7 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
           .child(
             Node("tr")
               .child(Node("th").text("Title"))
-              .child(Node("th").text("Published"))
+              .child(Node("th").text("State"))
               .child(Node("th"))
           )
           .child(
@@ -67,7 +67,7 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
               template =>
                 Node("tr")
                   .child(Node("td").text(template.entity.title))
-                  .child(Node("td").text(template.entity.published.toString))
+                  .child(Node("td").text(if (template.entity.published) "published" else "private"))
                   .child(
                     Node("td").child(
                       ButtonList(
