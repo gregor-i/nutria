@@ -31,8 +31,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies ++= Seq(
       "com.github.julien-truffaut" %%% "monocle-core" % "2.0.4",
       "com.github.julien-truffaut" %%% "monocle-macro" % "2.0.4",
-      "com.github.julien-truffaut" %%% "monocle-unsafe" % "2.0.4",
-      "com.github.julien-truffaut" %%% "monocle-refined" % "2.0.4"
+      "com.github.julien-truffaut" %%% "monocle-unsafe" % "2.0.4"
     ),
     scalatest
   )

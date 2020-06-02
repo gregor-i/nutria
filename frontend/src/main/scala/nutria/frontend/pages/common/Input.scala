@@ -1,7 +1,5 @@
 package nutria.frontend.pages.common
 
-import eu.timepit.refined.api.{Refined, Validate}
-import eu.timepit.refined.refineV
 import monocle.Lens
 import nutria.core.{RGB, RGBA}
 import nutria.core.languages.{CLang, StringFunction}
@@ -58,27 +56,7 @@ object Input {
           }
         )
 
-  implicit def refinedIntInput[S, V](implicit state: S, update: S => Unit, validate: Validate[Int, V]): Input[S, Int Refined V] =
-    lens =>
-      Node("input.input")
-        .attr("type", "number")
-        .attr("value", lens.get(state).value.toString)
-        .event(
-          "change",
-          Snabbdom.event { event =>
-            val element = event.target.asInstanceOf[HTMLInputElement]
-            Try(element.value.toInt).toEither
-              .flatMap(refineV[V](_)(validate)) match {
-              case Right(v) =>
-                element.classList.remove("is-danger")
-                update(lens.set(v)(state))
-              case Left(error) =>
-                element.classList.add("is-danger")
-            }
-          }
-        )
-
-  implicit def refinedDoubleInput[S, V](implicit state: S, update: S => Unit, validate: Validate[Double, V]): Input[S, Double Refined V] =
+  implicit def doubleInput[S](implicit state: S, update: S => Unit): Input[S, Double] =
     lens =>
       Node("input.input")
         .attr("type", "number")
@@ -87,8 +65,7 @@ object Input {
           "change",
           Snabbdom.event { event =>
             val element = event.target.asInstanceOf[HTMLInputElement]
-            Try(element.value.toDouble).toEither
-              .flatMap(refineV[V](_)(validate)) match {
+            Try(element.value.toDouble).toEither match {
               case Right(v) =>
                 element.classList.remove("is-danger")
                 update(lens.set(v)(state))
