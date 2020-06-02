@@ -7,6 +7,7 @@ import org.scalajs.dom.raw.HTMLInputElement
 import snabbdom.{Node, Snabbdom}
 
 import scala.util.Try
+import scala.util.chaining._
 
 trait Input[S, V] {
   def node(lens: Lens[S, V]): Node
@@ -75,25 +76,6 @@ object Input {
           }
         )
 
-  implicit def doubleInput[S](implicit state: S, update: S => Unit): Input[S, Double] =
-    lens =>
-      Node("input.input")
-        .attr("type", "number")
-        .attr("value", lens.get(state).toString)
-        .event(
-          "change",
-          Snabbdom.event { event =>
-            val element = event.target.asInstanceOf[HTMLInputElement]
-            Try(element.value.toDouble).toEither match {
-              case Right(v) =>
-                element.classList.remove("is-danger")
-                update(lens.set(v)(state))
-              case Left(error) =>
-                element.classList.add("is-danger")
-            }
-          }
-        )
-
   implicit def colorInput[S](implicit state: S, update: S => Unit): Input[S, RGBA] =
     lens =>
       Node("input.input")
@@ -107,6 +89,29 @@ object Input {
               case Some(v) =>
                 element.classList.remove("is-danger")
                 update(lens.set(v)(state))
+              case None =>
+                element.classList.add("is-danger")
+            }
+          }
+        )
+
+  implicit def colorGradientInput[S](implicit state: S, update: S => Unit): Input[S, Seq[RGBA]] =
+    lens =>
+      Node("input.input")
+        .attr("type", "text")
+        .attr("value", lens.get(state).map(_.withoutAlpha).map(RGB.toRGBString).mkString(" "))
+        .event(
+          "change",
+          snabbdom.Snabbdom.event { event =>
+            val element = event.target.asInstanceOf[HTMLInputElement]
+            element.value
+              .split("\\s")
+              .map(RGB.parseRGBString)
+              .pipe(tries => Try(tries.map(_.get)))
+              .toOption match {
+              case Some(v) =>
+                element.classList.remove("is-danger")
+                update(lens.set(v.map(_.withAlpha()))(state))
               case None =>
                 element.classList.add("is-danger")
             }

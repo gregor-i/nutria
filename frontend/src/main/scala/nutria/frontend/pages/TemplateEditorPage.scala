@@ -162,9 +162,10 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       val selectType = Form.selectInput[State, Parameter](
         label = "parameter type",
         options = Seq(
-          "Integer" -> IntParameter("parameter_name", 0),
-          "Float"   -> FloatParameter("parameter_name", 0.0),
-          "Color"   -> RGBAParameter("parameter_name", RGB.white.withAlpha()),
+          "Integer"        -> IntParameter("parameter_name", 0),
+          "Float"          -> FloatParameter("parameter_name", 0.0),
+          "Color"          -> RGBAParameter("parameter_name", RGB.white.withAlpha()),
+          "Color Gradient" -> ColorGradientParameter("parameter_name", Seq(RGB.white.withAlpha(), RGB.black.withAlpha())),
           "Function1 f: (lambda) => C" ->
             InitialFunctionParameter("function_name", StringFunction.unsafe("lambda")),
           "Function1 f: (lambda) => C, with derivative: (lambda) => C" ->

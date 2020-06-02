@@ -13,9 +13,6 @@ object FragmentShaderSource {
        |#line 1
        |${definitions(state)}
        |
-       |${colorGradient("cool_sky", Seq("#2980B9", "#6DD5FA", "#FFFFFF").map(RGB.parseRGBString(_).get.withAlpha()))}
-       |${colorGradient("black_and_white", Seq(RGB.white.withAlpha(), RGB.black.withAlpha()))}
-       |
        |#line 1
        |${FragmentShaderSource.main(state)}
        |
@@ -33,9 +30,10 @@ object FragmentShaderSource {
   }
 
   def parameter: Parameter => String = {
-    case IntParameter(name, value)   => constant[WebGlTypeInt.type](name, IntLiteral(value))
-    case FloatParameter(name, value) => constant[WebGlTypeFloat.type](name, FloatLiteral(value))
-    case RGBAParameter(name, value)  => constant[WebGlTypeVec4.type](name, Vec4.fromRGBA(value))
+    case IntParameter(name, value)           => constant[WebGlTypeInt.type](name, IntLiteral(value))
+    case FloatParameter(name, value)         => constant[WebGlTypeFloat.type](name, FloatLiteral(value))
+    case RGBAParameter(name, value)          => constant[WebGlTypeVec4.type](name, Vec4.fromRGBA(value))
+    case ColorGradientParameter(name, value) => colorGradient(name, value)
     case fp: FunctionParameter if fp.includeDerivative =>
       Seq(
         function(fp.name, fp.value.node),
@@ -79,7 +77,7 @@ object FragmentShaderSource {
 
     s"""
       |vec4 ${name} (in float low, in float high, in float value) {
-      |  float tv = float(${colors.size - 1}) * (clamp(low, high, value) - low) / (high - low);
+      |  float tv = float(${colors.size - 1}) * (clamp(value, low, high) - low) / (high - low);
       |  int i = int(tv);
       |  float f = tv - floor(tv);
       |

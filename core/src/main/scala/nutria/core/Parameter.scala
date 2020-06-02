@@ -17,6 +17,8 @@ case class FloatParameter(name: String, value: Double) extends Parameter
 @Lenses
 case class RGBAParameter(name: String, value: RGBA) extends Parameter
 @Lenses
+case class ColorGradientParameter(name: String, value: Seq[RGBA]) extends Parameter
+@Lenses
 case class FunctionParameter(name: String, value: StringFunction[ZAndLambda], includeDerivative: Boolean = false) extends Parameter
 @Lenses
 case class InitialFunctionParameter(name: String, value: StringFunction[Lambda.type], includeDerivative: Boolean = false) extends Parameter
@@ -30,6 +32,7 @@ object Parameter extends CirceCodec {
       case p: IntParameter             => IntParameter.name.set(newName)(p)
       case p: FloatParameter           => FloatParameter.name.set(newName)(p)
       case p: RGBAParameter            => RGBAParameter.name.set(newName)(p)
+      case p: ColorGradientParameter   => ColorGradientParameter.name.set(newName)(p)
       case p: FunctionParameter        => FunctionParameter.name.set(newName)(p)
       case p: InitialFunctionParameter => InitialFunctionParameter.name.set(newName)(p)
       case p: NewtonFunctionParameter  => NewtonFunctionParameter.name.set(newName)(p)
@@ -39,6 +42,7 @@ object Parameter extends CirceCodec {
   val prismIntParameter             = GenPrism[Parameter, IntParameter]
   val prismFloatParameter           = GenPrism[Parameter, FloatParameter]
   val prismRGBAParameter            = GenPrism[Parameter, RGBAParameter]
+  val prismColorGradientParameter   = GenPrism[Parameter, ColorGradientParameter]
   val prismFunctionParameter        = GenPrism[Parameter, FunctionParameter]
   val prismInitialFunctionParameter = GenPrism[Parameter, InitialFunctionParameter]
   val prismNewtonFunctionParameter  = GenPrism[Parameter, NewtonFunctionParameter]

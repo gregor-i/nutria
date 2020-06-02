@@ -2,7 +2,16 @@ package nutria.frontend.pages.common
 
 import monocle.Lens
 import monocle.function.Index
-import nutria.core.{FloatParameter, FunctionParameter, InitialFunctionParameter, IntParameter, NewtonFunctionParameter, Parameter, RGBAParameter}
+import nutria.core.{
+  ColorGradientParameter,
+  FloatParameter,
+  FunctionParameter,
+  InitialFunctionParameter,
+  IntParameter,
+  NewtonFunctionParameter,
+  Parameter,
+  RGBAParameter
+}
 import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
 import snabbdom.SnabbdomFacade.Eventlistener
 import snabbdom.{Node, SnabbdomFacade}
@@ -47,6 +56,11 @@ object ParameterForm {
 
       case p: RGBAParameter =>
         val valueLens = lens.composePrism(Parameter.prismRGBAParameter).composeLens(RGBAParameter.value).pipe(LenseUtils.unsafeOptional)
+        Form.forLens(p.name, valueLens, actions)
+
+      case p: ColorGradientParameter =>
+        val valueLens =
+          lens.composePrism(Parameter.prismColorGradientParameter).composeLens(ColorGradientParameter.value).pipe(LenseUtils.unsafeOptional)
         Form.forLens(p.name, valueLens, actions)
 
       case p: FunctionParameter =>
