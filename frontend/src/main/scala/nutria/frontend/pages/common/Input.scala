@@ -96,10 +96,12 @@ object Input {
         )
 
   implicit def colorGradientInput[S](implicit state: S, update: S => Unit): Input[S, Seq[RGBA]] =
-    lens =>
-      Node("input.input")
+    lens => {
+      val value = lens.get(state)
+      Node("input.input.color-gradient-input")
         .attr("type", "text")
-        .attr("value", lens.get(state).map(_.withoutAlpha).map(RGB.toRGBString).mkString(" "))
+        .attr("value", value.map(_.withoutAlpha).map(RGB.toRGBString).mkString(" "))
+        .style("background-image", s"linear-gradient(to right, ${value.map(_.withoutAlpha).map(RGB.toRGBString).mkString(", ")})")
         .event(
           "change",
           snabbdom.Snabbdom.event { event =>
@@ -117,4 +119,5 @@ object Input {
             }
           }
         )
+    }
 }
