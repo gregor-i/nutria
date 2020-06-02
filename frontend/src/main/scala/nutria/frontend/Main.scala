@@ -16,7 +16,7 @@ object Main {
     dom.document.addEventListener[dom.Event](
       "DOMContentLoaded",
       (_: js.Any) => {
-        val container = dom.document.createElement("nutria-app")
+        val container = dom.document.getElementsByTagName("nutria-app").item(0)
         dom.document.body.appendChild(container)
         new nutria.frontend.NutriaApp(container)
       }
