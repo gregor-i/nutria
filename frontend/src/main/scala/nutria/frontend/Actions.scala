@@ -281,33 +281,6 @@ object Actions {
       }
     }
 
-  def vote(
-      fractalId: String,
-      verdict: Verdict
-  )(implicit state: GalleryState, update: NutriaState => Unit): Eventlistener =
-    event { _ =>
-      onlyLoggedIn {
-        asyncUpdate {
-          for {
-            _     <- NutriaService.vote(fractalId, verdict)
-            votes <- NutriaService.votes()
-          } yield state.copy(votes = votes)
-        }
-      }
-    }
-
-  def removeVote(fractalId: String)(implicit state: GalleryState, update: NutriaState => Unit): Eventlistener =
-    event { _ =>
-      onlyLoggedIn {
-        asyncUpdate {
-          for {
-            _     <- NutriaService.deleteVote(fractalId)
-            votes <- NutriaService.votes()
-          } yield state.copy(votes = votes)
-        }
-      }
-    }
-
   def openSaveToDiskModal(implicit state: ExplorerState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       update {

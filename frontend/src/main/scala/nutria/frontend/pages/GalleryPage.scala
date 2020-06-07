@@ -11,7 +11,6 @@ import scala.util.chaining._
 case class GalleryState(
     user: Option[User],
     publicFractals: Vector[WithId[FractalImageEntity]],
-    votes: Map[String, VoteStatistic],
     navbarExpanded: Boolean = false
 ) extends NutriaState {
   override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)

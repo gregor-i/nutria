@@ -11,8 +11,7 @@ object Links {
   def galleryState(user: Option[User]): Future[GalleryState] =
     for {
       publicFractals <- NutriaService.loadPublicFractals()
-      votes          <- NutriaService.votes()
-    } yield GalleryState(user = user, publicFractals = publicFractals, votes = votes)
+    } yield GalleryState(user = user, publicFractals = publicFractals)
 
   def userGalleryState(user: Option[User], userId: String): Future[UserGalleryState] =
     for {
