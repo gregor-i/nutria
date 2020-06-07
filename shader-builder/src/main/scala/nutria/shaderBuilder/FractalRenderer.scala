@@ -8,17 +8,15 @@ import org.scalajs.dom.raw.WebGLRenderingContext._
 import org.scalajs.dom.raw.{WebGLProgram, WebGLRenderingContext}
 import org.scalajs.dom.webgl.Shader
 
-import scala.scalajs.js
 import scala.scalajs.js.Dynamic
 import scala.scalajs.js.typedarray.Float32Array
 import scala.util.{Failure, Try}
 
 object FractalRenderer {
 
-  // todo: result is mostly ignored
-  def render(canvas: Canvas, entity: FractalImage): Boolean = {
-    val viewport = entity.viewport
-    val program  = entity.template.copy(parameters = entity.appliedParameters) // todo: this is hacky. makes the cache consider parameters
+  // todo: result is ignored
+  private var cache: (FractalImage, WebGLProgram) = null
+  def render(canvas: Canvas, image: FractalImage): Boolean = {
     val ctx = canvas
       .getContext("webgl", Dynamic.literal(preserveDrawingBuffer = true))
       .asInstanceOf[WebGLRenderingContext]
@@ -26,23 +24,20 @@ object FractalRenderer {
     canvas.width = (canvas.clientWidth * dom.window.devicePixelRatio).toInt
     canvas.height = (canvas.clientHeight * dom.window.devicePixelRatio).toInt
 
-    // todo: analyse performance gain from this cache
     Try {
-      (Untyped(canvas).program, Untyped(canvas).webGlProgram, Untyped(canvas).viewport) match {
-        case (cachedProgram, _, cachedViewport)
-            if cachedProgram == Untyped(program.asInstanceOf[js.Object])
-              && cachedViewport == Untyped(viewport.asInstanceOf[js.Object]) =>
-        case (cachedProgram, cachedWebGlProgram, _) if cachedProgram == Untyped(program.asInstanceOf[js.Object]) =>
-          render(ctx, viewport, cachedWebGlProgram.asInstanceOf[WebGLProgram])
-          Untyped(canvas).viewport = viewport.asInstanceOf[js.Object]
+      cache match {
+        case (cachedImage, _) if cachedImage == image =>
+          ()
+
+        case (cachedImage, cachedProgram) if cachedImage.copy(viewport = image.viewport) == image =>
+          cache = (image, cachedProgram)
+          render(ctx, image.viewport, cachedProgram)
 
         case _ =>
-          compileProgram(ctx, program.code, entity.appliedParameters, entity.antiAliase) match {
+          compileProgram(ctx, image.template.code, image.appliedParameters, image.antiAliase) match {
             case Right(webGlProgram) =>
-              render(ctx, viewport, webGlProgram)
-              Untyped(canvas).program = program.asInstanceOf[js.Object]
-              Untyped(canvas).webGlProgram = webGlProgram.asInstanceOf[js.Object]
-              Untyped(canvas).viewport = viewport.asInstanceOf[js.Object]
+              render(ctx, image.viewport, webGlProgram)
+              cache = (image, webGlProgram)
             case Left(error) =>
               throw error
           }
@@ -54,11 +49,11 @@ object FractalRenderer {
     }.isSuccess
   }
 
-  def render(image: FractalImage)(gl: WebGLRenderingContext): Either[CompileException, Unit] =
+  def render(image: FractalImage)(gl: WebGLRenderingContext): Either[CompileException, WebGLProgram] =
     for {
       program <- compileProgram(gl = gl, code = image.template.code, parameters = image.appliedParameters, antiAliase = image.antiAliase)
       _ = render(gl = gl, view = image.viewport, program = program)
-    } yield ()
+    } yield program
 
   def compileVertexShader(source: String)(gl: WebGLRenderingContext): Either[CompileException, Shader] =
     compileShader(source, VERTEX_SHADER)(gl)

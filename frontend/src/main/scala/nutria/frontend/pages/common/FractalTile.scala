@@ -41,8 +41,8 @@ private object ImgStrategy {
     canvas.width = dimensions.width
     canvas.height = dimensions.height
     FractalRenderer.render(fractalImage)(webglCtx) match {
-      case Right(()) => canvas.toDataURL("image/png")
-      case Left(_)   => Images.compileError
+      case Right(_) => canvas.toDataURL("image/png")
+      case Left(_)  => Images.compileError
     }
   }
 }
