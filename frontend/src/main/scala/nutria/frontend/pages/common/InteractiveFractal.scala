@@ -21,6 +21,6 @@ object InteractiveFractal {
       .events(ExplorerEvents.canvasTouchEvents(lensViewport))
       .child(
         Node("canvas")
-          .hooks(CanvasHooks(image, resize = true))
+          .hooks(CanvasHooks(image))
       )
 }

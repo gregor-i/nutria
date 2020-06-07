@@ -1,6 +1,6 @@
 package nutria.shaderBuilder
 
-import nutria.core.{AntiAliase, FractalImage, FractalTemplate, Viewport}
+import nutria.core.{AntiAliase, FractalImage, FractalTemplate, Parameter, Viewport}
 import nutria.macros.StaticContent
 import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
@@ -14,18 +14,19 @@ import scala.scalajs.js.typedarray.Float32Array
 import scala.util.{Failure, Try}
 
 object FractalRenderer {
-  def render(canvas: Canvas, entity: FractalImage, resize: Boolean): Boolean = {
+
+  // todo: result is mostly ignored
+  def render(canvas: Canvas, entity: FractalImage): Boolean = {
     val viewport = entity.viewport
-    val program  = entity.template
+    val program  = entity.template.copy(parameters = entity.appliedParameters) // todo: this is hacky. makes the cache consider parameters
     val ctx = canvas
       .getContext("webgl", Dynamic.literal(preserveDrawingBuffer = true))
       .asInstanceOf[WebGLRenderingContext]
 
-    if (resize) {
-      canvas.width = (canvas.clientWidth * dom.window.devicePixelRatio).toInt
-      canvas.height = (canvas.clientHeight * dom.window.devicePixelRatio).toInt
-    }
+    canvas.width = (canvas.clientWidth * dom.window.devicePixelRatio).toInt
+    canvas.height = (canvas.clientHeight * dom.window.devicePixelRatio).toInt
 
+    // todo: analyse performance gain from this cache
     Try {
       (Untyped(canvas).program, Untyped(canvas).webGlProgram, Untyped(canvas).viewport) match {
         case (cachedProgram, _, cachedViewport)
@@ -36,7 +37,7 @@ object FractalRenderer {
           Untyped(canvas).viewport = viewport.asInstanceOf[js.Object]
 
         case _ =>
-          compileProgram(ctx, program, entity.antiAliase) match {
+          compileProgram(ctx, program.code, entity.appliedParameters, entity.antiAliase) match {
             case Right(webGlProgram) =>
               render(ctx, viewport, webGlProgram)
               Untyped(canvas).program = program.asInstanceOf[js.Object]
@@ -52,6 +53,12 @@ object FractalRenderer {
         Failure(error)
     }.isSuccess
   }
+
+  def render(image: FractalImage)(gl: WebGLRenderingContext): Either[CompileException, Unit] =
+    for {
+      program <- compileProgram(gl = gl, code = image.template.code, parameters = image.appliedParameters, antiAliase = image.antiAliase)
+      _ = render(gl = gl, view = image.viewport, program = program)
+    } yield ()
 
   def compileVertexShader(source: String)(gl: WebGLRenderingContext): Either[CompileException, Shader] =
     compileShader(source, VERTEX_SHADER)(gl)
@@ -78,12 +85,13 @@ object FractalRenderer {
 
   def compileProgram(
       gl: WebGLRenderingContext,
-      fractralProgram: FractalTemplate,
+      code: String,
+      parameters: Vector[Parameter],
       antiAliase: AntiAliase
   ): Either[CompileException, WebGLProgram] =
     for {
       vertexShader   <- compileVertexShader(StaticContent("shader-builder/src/main/glsl/vertex_shader.glsl"))(gl)
-      fragmentShader <- compileFragmentShader(FragmentShaderSource(fractralProgram, antiAliase))(gl)
+      fragmentShader <- compileFragmentShader(FragmentShaderSource(code, parameters, antiAliase))(gl)
     } yield {
       val program = gl.createProgram()
       gl.attachShader(program, vertexShader)

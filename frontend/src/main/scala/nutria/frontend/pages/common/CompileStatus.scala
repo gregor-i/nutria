@@ -12,7 +12,7 @@ object CompileStatus {
   private lazy val webglCtx       = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
 
   private def hook(template: FractalTemplate, aa: AntiAliase)(elem: Element) =
-    FractalRenderer.compileProgram(webglCtx, template, aa) match {
+    FractalRenderer.compileProgram(webglCtx, template.code, template.parameters, aa) match {
       case Left(CompileException(context, _, shader)) =>
         elem.classList.remove("is-success")
         elem.classList.add("is-danger")

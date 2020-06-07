@@ -40,12 +40,9 @@ private object ImgStrategy {
   def dataUrl(fractalImage: FractalImage, dimensions: Dimensions): String = {
     canvas.width = dimensions.width
     canvas.height = dimensions.height
-    FractalRenderer
-      .compileProgram(webglCtx, fractalImage.template, fractalImage.antiAliase) match {
-      case Right(webGlProgram) =>
-        FractalRenderer.render(webglCtx, fractalImage.viewport, webGlProgram)
-        canvas.toDataURL("image/png")
-      case Left(_) => Images.compileError
+    FractalRenderer.render(fractalImage)(webglCtx) match {
+      case Right(()) => canvas.toDataURL("image/png")
+      case Left(_)   => Images.compileError
     }
   }
 }

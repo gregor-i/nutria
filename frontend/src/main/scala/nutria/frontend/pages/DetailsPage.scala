@@ -24,11 +24,8 @@ case class DetailsState(
 }
 
 object DetailsState extends LenseUtils {
-  val fractalToEdit_entity          = fractalToEdit.composeLens(WithId.entity)
-  val fractalToEdit_entity_template = fractalToEdit_entity.composeLens(Entity.value).composeLens(FractalImage.template)
-  val fractalToEdit_entity_template_parameter =
-    fractalToEdit_entity_template
-      .composeLens(FractalTemplate.parameters)
+  val fractalToEdit_entity       = fractalToEdit.composeLens(WithId.entity)
+  val fractalToEdit_entity_image = fractalToEdit_entity.composeLens(Entity.value)
 }
 
 object DetailsPage extends Page[DetailsState] {
@@ -75,7 +72,7 @@ object DetailsPage extends Page[DetailsState] {
       .child(
         Node("section.section").children(
           Node("h4.title.is-4").text("Parameters:"),
-          parameters(DetailsState.fractalToEdit_entity_template_parameter)
+          parameters(DetailsState.fractalToEdit_entity_image.composeLens(FractalImage.appliedParameters))
         )
       )
       .child(
@@ -97,7 +94,7 @@ object DetailsPage extends Page[DetailsState] {
     Node("div.fractal-tile-list")
       .child(
         InteractiveFractal
-          .forTemplate(DetailsState.fractalToEdit_entity_template)
+          .forImage(DetailsState.fractalToEdit_entity_image)
           .classes("fractal-tile")
           .style("maxHeight", "100vh")
           .style("minHeight", "50vh")

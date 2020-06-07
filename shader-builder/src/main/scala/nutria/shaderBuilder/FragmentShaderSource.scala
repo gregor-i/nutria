@@ -8,13 +8,22 @@ import nutria.macros.StaticContent
 import nutria.shaderBuilder.WebGlType.TypeProps
 
 object FragmentShaderSource {
-  def apply(state: FractalTemplate, antiAliase: AntiAliase): String = {
-    s"""
-       |#line 1
-       |${definitions(state)}
+  def apply(template: FractalTemplate, antiAliase: AntiAliase = 1): String =
+    apply(template.code, template.parameters, antiAliase)
+
+  def apply(code: String, parameters: Vector[Parameter], antiAliase: AntiAliase): String = {
+    s"""precision highp float;
+       |
+       |uniform vec2 u_resolution;
+       |uniform vec2 u_view_O, u_view_A, u_view_B;
+       |
+       |${StaticContent("shader-builder/src/main/glsl/global_definitions.glsl")}
        |
        |#line 1
-       |${FragmentShaderSource.main(state)}
+       |${definitions(parameters)}
+       |
+       |#line 1
+       |${FragmentShaderSource.main(code)}
        |
        |void main() {
        |${AntiAliase(antiAliase).apply(RefVec4("gl_FragColor"))}
@@ -51,19 +60,12 @@ object FragmentShaderSource {
       function(name, value.node) + "\n" + function(name + "_derived", value.node.derive(Z))
   }
 
-  def definitions(template: FractalTemplate): String =
-    s"""precision highp float;
-       |
-       |uniform vec2 u_resolution;
-       |uniform vec2 u_view_O, u_view_A, u_view_B;
-       |
-       |${StaticContent("shader-builder/src/main/glsl/global_definitions.glsl")}
-       |
-       |${template.parameters.map(parameter).mkString("\n")}""".stripMargin
+  def definitions(parameters: Vector[Parameter]): String =
+    parameters.map(parameter).mkString("\n")
 
-  def main(v: FractalTemplate): String =
+  def main(code: String): String =
     s"""vec4 main_template(const in vec2 p) {
-       |${v.code.linesIterator.map("  " + _).mkString("\n")}
+       |${code}
        |  return vec4(0.0);
        |}""".stripMargin
 
