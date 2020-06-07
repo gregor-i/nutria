@@ -39,6 +39,9 @@ object Links {
       fractalImage = fractal.entity
     )
 
+  def detailsState(fractal: WithId[FractalImageEntity], toEdit: FractalImageEntity, user: Option[User]): DetailsState =
+    DetailsState(user = user, remoteFractal = fractal, fractalToEdit = fractal.copy(entity = toEdit))
+
   def detailsState(fractal: WithId[FractalImageEntity], user: Option[User]): DetailsState =
     DetailsState(user = user, remoteFractal = fractal, fractalToEdit = fractal)
 

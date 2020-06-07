@@ -86,16 +86,18 @@ object ExplorerPage extends Page[ExplorerState] {
       .classes("overlay-bottom-right", "padding")
       .child(
         state.remoteFractal match {
-          case Some(remoteFractal) => Some(buttonGoToDetails(remoteFractal))
+          case Some(remoteFractal) => Some(buttonGoToDetails(remoteFractal, state.fractalImage))
           case None                => None
         }
       )
       .child(buttonSave(state.fractalImage))
       .child(Button.icon(Icons.download, Actions.openSaveToDiskModal))
 
-  // todo: this ignores the current state of fractalImage ...
-  def buttonGoToDetails(fractal: WithId[FractalImageEntity])(implicit state: ExplorerState, update: NutriaState => Unit) =
-    Link(Links.detailsState(fractal, state.user))
+  def buttonGoToDetails(
+      remoteFractal: WithId[FractalImageEntity],
+      currentFractal: FractalImageEntity
+  )(implicit state: ExplorerState, update: NutriaState => Unit) =
+    Link(Links.detailsState(remoteFractal, currentFractal, state.user))
       .classes("button", "is-rounded")
       .child(Icons.icon(Icons.edit))
 
