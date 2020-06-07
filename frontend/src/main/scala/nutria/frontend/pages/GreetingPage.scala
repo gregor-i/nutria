@@ -26,7 +26,7 @@ object GreetingPage extends Page[GreetingState] {
       .child(content)
 
   private def content(implicit state: GreetingState, update: NutriaState => Unit) = {
-    Modal(closeAction = Actions.exploreFractal(state.randomFractal))(
+    Modal(closeAction = Actions.exploreFractal())(
       Node("div.content").prop("innerHTML", StaticContent("frontend/src/main/html/greeting.html")),
       ButtonList(
         Link(Actions.gotoFAQ())

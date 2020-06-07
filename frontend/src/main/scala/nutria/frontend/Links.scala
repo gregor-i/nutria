@@ -36,7 +36,7 @@ object Links {
     ExplorerState(
       user = user,
       remoteFractal = Some(fractal),
-      fractalImage = fractal.entity.value
+      fractalImage = fractal.entity
     )
 
   def detailsState(fractal: WithId[FractalImageEntity], user: Option[User]): DetailsState =

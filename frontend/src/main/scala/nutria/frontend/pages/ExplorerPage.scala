@@ -16,12 +16,12 @@ import snabbdom.Node
 case class ExplorerState(
     user: Option[User],
     remoteFractal: Option[FractalImageEntityWithId],
-    fractalImage: FractalImage,
+    fractalImage: FractalImageEntity,
     saveModal: Option[SaveFractalDialog] = None,
     navbarExpanded: Boolean = false
 ) extends NutriaState {
   override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
-  def dirty: Boolean                                            = remoteFractal.fold(true)(_.entity.value != fractalImage)
+  def dirty: Boolean                                            = remoteFractal.fold(true)(_.entity != fractalImage)
 }
 
 @Lenses
@@ -31,7 +31,7 @@ case class SaveFractalDialog(
 )
 
 object ExplorerState {
-  val viewport: Lens[ExplorerState, Viewport] = ExplorerState.fractalImage.composeLens(FractalImage.viewport)
+  val viewport: Lens[ExplorerState, Viewport] = ExplorerState.fractalImage.composeLens(Entity.value).composeLens(FractalImage.viewport)
 }
 
 object ExplorerPage extends Page[ExplorerState] {
@@ -42,7 +42,7 @@ object ExplorerPage extends Page[ExplorerState] {
         remoteFractal <- NutriaService.loadFractal(fractalId)
       } yield {
         val fractalFromUrl =
-          queryParams.get("state").flatMap(Router.queryDecoded[FractalImage])
+          queryParams.get("state").flatMap(Router.queryDecoded[FractalImageEntity])
 
         fractalFromUrl match {
           case Some(image) =>
@@ -57,7 +57,7 @@ object ExplorerPage extends Page[ExplorerState] {
 
     case (user, "/explorer", queryParams) =>
       val fractalFromUrl =
-        queryParams.get("state").flatMap(Router.queryDecoded[FractalImage])
+        queryParams.get("state").flatMap(Router.queryDecoded[FractalImageEntity])
 
       fractalFromUrl match {
         case Some(fractal) => ExplorerState(user, None, fractal)
@@ -77,7 +77,7 @@ object ExplorerPage extends Page[ExplorerState] {
   def render(implicit state: ExplorerState, update: NutriaState => Unit) =
     Body()
       .child(Header())
-      .child(InteractiveFractal.forImage(ExplorerState.fractalImage))
+      .child(InteractiveFractal.forImage(ExplorerState.fractalImage.composeLens(Entity.value)))
       .child(renderActionBar())
       .childOptional(saveDialog())
 
@@ -90,7 +90,7 @@ object ExplorerPage extends Page[ExplorerState] {
           case None                => None
         }
       )
-      .child(buttonSave(Entity(value = state.fractalImage)))
+      .child(buttonSave(state.fractalImage))
       .child(Button.icon(Icons.download, Actions.openSaveToDiskModal))
 
   // todo: this ignores the current state of fractalImage ...
@@ -101,13 +101,13 @@ object ExplorerPage extends Page[ExplorerState] {
 
   def buttonSave(fractalImage: FractalImageEntity)(implicit state: ExplorerState, update: NutriaState => Unit) =
     Button
-      .icon(Icons.snapshot, Actions.saveAsNewFractal(fractalImage))
+      .icon(Icons.snapshot, Actions.saveSnapshot(fractalImage))
       .classes("is-primary", "is-rounded")
 
   def saveDialog()(implicit state: ExplorerState, update: NutriaState => Unit): Option[Node] =
     state.saveModal.map { params =>
       val lensParams     = ExplorerState.saveModal.composeLens(LenseUtils.unsafe(monocle.std.all.some[SaveFractalDialog]))
-      val downloadAction = Actions.saveToDisk(state.fractalImage.copy(antiAliase = params.antiAliase), params.dimensions)
+      val downloadAction = Actions.saveToDisk(state.fractalImage.value.copy(antiAliase = params.antiAliase), params.dimensions)
 
       Modal(closeAction = Actions.closeSaveToDiskModal)(
         Node("div")

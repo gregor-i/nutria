@@ -128,7 +128,7 @@ object DetailsPage extends Page[DetailsState] {
       .classes("is-primary")
 
   private def buttonExplore(implicit state: State, update: NutriaState => Unit) =
-    Link(ExplorerState(user = state.user, remoteFractal = Some(state.remoteFractal), fractalImage = state.fractalToEdit.entity.value))
+    Link(ExplorerState(user = state.user, remoteFractal = Some(state.remoteFractal), fractalImage = state.fractalToEdit.entity))
       .classes("button")
       .child(Icons.icon(Icons.explore))
       .child(Node("span").text("Explore"))

@@ -31,29 +31,13 @@ object Actions {
       case Some(_) => op
     }
 
-  def exploreFractal(
-      fractal: WithId[FractalImageEntity],
-      image: FractalImage
-  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
-    event { _ =>
-      update(
-        ExplorerState(
-          user = state.user,
-          remoteFractal = Some(fractal),
-          fractalImage = image
-        )
-      )
-    }
-
-  def exploreFractal(
-      fractal: FractalImage
-  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+  def exploreFractal()(implicit state: GreetingState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       update(
         ExplorerState(
           user = state.user,
           remoteFractal = None,
-          fractalImage = fractal
+          fractalImage = Entity(value = state.randomFractal)
         )
       )
     }
@@ -84,7 +68,7 @@ object Actions {
           } yield ExplorerState(
             user = state.user,
             remoteFractal = Some(savedFractal),
-            fractalImage = savedFractal.entity.value
+            fractalImage = savedFractal.entity
           )
         }
       }
@@ -108,7 +92,7 @@ object Actions {
           } yield ExplorerState(
             state.user,
             remoteFractal = Some(forkedFractal),
-            fractalImage = forkedFractal.entity.value
+            fractalImage = forkedFractal.entity
           )
         }
       }
@@ -195,6 +179,18 @@ object Actions {
             remoteFractal = fractalWithId,
             fractalToEdit = fractalWithId
           )
+        }
+      }
+    }
+
+  def saveSnapshot(fractalEntity: FractalImageEntity)(implicit state: ExplorerState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      onlyLoggedIn {
+        asyncUpdate {
+          for {
+            savedImage <- NutriaService.save(fractalEntity.copy(published = false))
+            _ = Toasts.successToast("Fractal saved.")
+          } yield state.copy(remoteFractal = Some(savedImage))
         }
       }
     }
@@ -288,7 +284,7 @@ object Actions {
           saveModal = Some(
             SaveFractalDialog(
               dimensions = Dimensions.fullHD,
-              antiAliase = state.fractalImage.antiAliase
+              antiAliase = state.fractalImage.value.antiAliase
             )
           )
         )
