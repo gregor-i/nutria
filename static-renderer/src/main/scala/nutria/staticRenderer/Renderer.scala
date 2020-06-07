@@ -30,7 +30,7 @@ object Renderer {
     val context = gl(dimensions.width, dimensions.height, Dynamic.literal())
 
     FractalRenderer.render(fractalImage)(context) match {
-      case Right(()) =>
+      case Right(_) =>
         val buffer = new Uint8Array(dimensions.width * dimensions.height * 4)
         context.readPixels(0, 0, dimensions.width, dimensions.height, WebGLRenderingContext.RGBA, WebGLRenderingContext.UNSIGNED_BYTE, buffer)
         buffer
