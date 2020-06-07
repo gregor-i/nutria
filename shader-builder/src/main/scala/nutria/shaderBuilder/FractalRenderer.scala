@@ -96,23 +96,21 @@ object FractalRenderer {
       program
     }
 
-  def render(gl: WebGLRenderingContext, view: Viewport, program: WebGLProgram): Unit = {
+  private def render(gl: WebGLRenderingContext, view: Viewport, program: WebGLProgram): Unit = {
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
 
     val buffer = gl.createBuffer()
     gl.bindBuffer(ARRAY_BUFFER, buffer)
     gl.bufferData(
       ARRAY_BUFFER,
-      new Float32Array(
-        scala.scalajs.js.typedarray.floatArray2Float32Array(
-          Array(
-            -1.0f, -1.0f, // left  down
-            1.0f, -1.0f,  // right down
-            -1.0f, 1.0f,  // left  up
-            -1.0f, 1.0f,  // left  up
-            1.0f, -1.0f,  // right down
-            1.0f, 1.0f    // right up
-          )
+      scala.scalajs.js.typedarray.floatArray2Float32Array(
+        Array(
+          -1.0f, -1.0f, // left  down
+          1.0f, -1.0f,  // right down
+          -1.0f, 1.0f,  // left  up
+          -1.0f, 1.0f,  // left  up
+          1.0f, -1.0f,  // right down
+          1.0f, 1.0f    // right up
         )
       ),
       STATIC_DRAW
