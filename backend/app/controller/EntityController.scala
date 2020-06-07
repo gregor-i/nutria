@@ -52,12 +52,14 @@ abstract class EntityController[E <: Entity[_]: Decoder: Encoder](entityRepo: En
         case None => NotFound
         case Some(saved) =>
           authenticator.byUserId(req)(saved.owner) {
-            entityRepo.save(
-              id = id,
-              owner = saved.owner,
-              entity = req.body
-            )
-            Accepted
+            entityRepo
+              .save(
+                id = id,
+                owner = saved.owner,
+                entity = req.body
+              )
+              .asJson
+              .pipe(Ok(_))
           }
       }
     }
@@ -75,13 +77,13 @@ abstract class EntityController[E <: Entity[_]: Decoder: Encoder](entityRepo: En
 
   def post() = Action(circe.tolerantJson[E]) { request =>
     authenticator.withUser(request) { user =>
-      val id = UUID.randomUUID().toString
-      entityRepo.save(
-        id = id,
-        owner = user.id,
-        entity = request.body
-      )
-      WithId(id, user.id, request.body).asJson
+      entityRepo
+        .save(
+          id = UUID.randomUUID().toString,
+          owner = user.id,
+          entity = request.body
+        )
+        .asJson
         .pipe(Created(_))
     }
   }

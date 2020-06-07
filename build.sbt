@@ -35,6 +35,9 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     ),
     scalatest
   )
+  .jsSettings(
+    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0"
+  )
 
 lazy val `shader-builder` = project
   .in(file("shader-builder"))
@@ -58,7 +61,6 @@ val frontend = project
   .settings(
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0",
     libraryDependencies += "com.github.gregor-i" %%% "scalajs-snabbdom" % "1.0",
-    libraryDependencies += "io.circe" %%% "not-java-time" % "0.2.0",
     scalatest
   )
 

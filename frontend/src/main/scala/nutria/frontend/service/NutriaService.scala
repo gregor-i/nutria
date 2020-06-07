@@ -33,10 +33,10 @@ object NutriaService extends Service {
       .flatMap(check(204))
       .map(_ => ())
 
-  def updateTemplate(template: FractalTemplateEntityWithId): Future[Unit] =
+  def updateTemplate(template: FractalTemplateEntityWithId): Future[FractalTemplateEntityWithId] =
     put(url = s"/api/templates/${template.id}", body = template.entity)
-      .flatMap(check(202))
-      .map(_ => ())
+      .flatMap(check(200))
+      .flatMap(parse[FractalTemplateEntityWithId])
 
   def loadUserTemplates(userId: String): Future[Vector[FractalTemplateEntityWithId]] =
     get(url = s"/api/users/${userId}/templates")
@@ -74,10 +74,10 @@ object NutriaService extends Service {
       .flatMap(check(204))
       .map(_ => ())
 
-  def updateFractal(fractalEntity: WithId[FractalImageEntity]): Future[Unit] =
+  def updateFractal(fractalEntity: WithId[FractalImageEntity]): Future[WithId[FractalImageEntity]] =
     put(s"/api/fractals/${fractalEntity.id}", fractalEntity.entity)
-      .flatMap(check(202))
-      .map(_ => ())
+      .flatMap(check(200))
+      .flatMap(parse[WithId[FractalImageEntity]])
 
   // user
   def deleteUser(userId: String): Future[Unit] =
