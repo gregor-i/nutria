@@ -10,18 +10,22 @@ import scala.util.chaining._
 object Link extends ExecutionContext {
   def apply(newState: NutriaState)(implicit update: NutriaState => Unit): Node =
     Node("a")
-    // todo: creating this href cost a lot of performance
-      .pipe(
-        link =>
-          Router.stateToUrl(newState) match {
-            case None                 => link
-            case Some((path, search)) => link.attr("href", path + Router.queryParamsToUrl(search))
-          }
-      )
+      .key(newState.hashCode())
       .event("click", Snabbdom.event { e =>
         e.preventDefault()
         update(newState)
       })
+      .hook(
+        "postpatch",
+        Snabbdom.hook { (_, vnode) =>
+          Future {
+            for {
+              (path, search) <- Router.stateToUrl(newState)
+              elem           <- vnode.elm.toOption
+            } yield elem.setAttribute("href", path + Router.queryParamsToUrl(search))
+          }
+        }
+      )
 
   def async(href: String, loadingState: => Future[NutriaState])(implicit state: NutriaState, update: NutriaState => Unit): Node = {
     Node("a")
