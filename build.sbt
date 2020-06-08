@@ -10,6 +10,7 @@ resolvers in ThisBuild += Resolver.bintrayRepo("gregor-i", "maven")
 
 // projects
 lazy val nutria = project.in(file("."))
+  .aggregate(macros.js, macros.jvm, core.js, core.jvm, `shader-builder`, frontend, `service-worker`, backend, `static-renderer`)
 
 lazy val macros = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
