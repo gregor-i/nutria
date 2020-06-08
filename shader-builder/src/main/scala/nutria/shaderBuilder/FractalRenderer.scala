@@ -1,6 +1,6 @@
 package nutria.shaderBuilder
 
-import nutria.core.{AntiAliase, FractalImage, FractalTemplate, Parameter, Viewport}
+import nutria.core.{AntiAliase, FractalImage, Parameter, Viewport}
 import nutria.macros.StaticContent
 import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
@@ -9,14 +9,12 @@ import org.scalajs.dom.raw.{WebGLProgram, WebGLRenderingContext}
 import org.scalajs.dom.webgl.Shader
 
 import scala.scalajs.js.Dynamic
-import scala.scalajs.js.typedarray.Float32Array
-import scala.util.{Failure, Try}
 
 object FractalRenderer {
 
   // todo: result is ignored
-  private var cache: (FractalImage, WebGLProgram) = null
-  def render(canvas: Canvas, image: FractalImage): Boolean = {
+  private var cache: (WebGLRenderingContext, FractalImage, WebGLProgram) = null
+  def render(canvas: Canvas, image: FractalImage): Either[CompileException, WebGLProgram] = {
     val ctx = canvas
       .getContext("webgl", Dynamic.literal(preserveDrawingBuffer = true))
       .asInstanceOf[WebGLRenderingContext]
@@ -24,29 +22,20 @@ object FractalRenderer {
     canvas.width = (canvas.clientWidth * dom.window.devicePixelRatio).toInt
     canvas.height = (canvas.clientHeight * dom.window.devicePixelRatio).toInt
 
-    Try {
-      cache match {
-        case (cachedImage, _) if cachedImage == image =>
-          ()
+    cache match {
+      case (`ctx`, cachedImage, cachedProgram) if cachedImage == image =>
+        Right(cachedProgram)
 
-        case (cachedImage, cachedProgram) if cachedImage.copy(viewport = image.viewport) == image =>
-          cache = (image, cachedProgram)
-          render(ctx, image.viewport, cachedProgram)
+      case (`ctx`, cachedImage, cachedProgram) if cachedImage.copy(viewport = image.viewport) == image =>
+        render(ctx, image.viewport, cachedProgram)
+        Right(cachedProgram)
 
-        case _ =>
-          compileProgram(ctx, image.template.code, image.appliedParameters, image.antiAliase) match {
-            case Right(webGlProgram) =>
-              render(ctx, image.viewport, webGlProgram)
-              cache = (image, webGlProgram)
-            case Left(error) =>
-              throw error
-          }
-      }
-    }.recover {
-      case error =>
-        dom.console.error(error.getMessage)
-        Failure(error)
-    }.isSuccess
+      case _ =>
+        render(image)(ctx).map { program =>
+          cache = (ctx, image, program)
+          program
+        }
+    }
   }
 
   def render(image: FractalImage)(gl: WebGLRenderingContext): Either[CompileException, WebGLProgram] =
