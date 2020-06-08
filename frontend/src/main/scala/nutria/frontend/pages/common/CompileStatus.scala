@@ -1,7 +1,7 @@
 package nutria.frontend.pages.common
 
 import nutria.core.{AntiAliase, FractalTemplate}
-import nutria.shaderBuilder.{CompileException, FractalRenderer}
+import nutria.shaderBuilder.{CompileShaderException, FractalRenderer}
 import org.scalajs.dom
 import org.scalajs.dom.html.{Canvas, Element}
 import org.scalajs.dom.raw.WebGLRenderingContext
@@ -12,8 +12,8 @@ object CompileStatus {
   private lazy val webglCtx       = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
 
   private def hook(template: FractalTemplate, aa: AntiAliase)(elem: Element) =
-    FractalRenderer.compileProgram(webglCtx, template.code, template.parameters, aa) match {
-      case Left(CompileException(context, _, shader)) =>
+    FractalRenderer.validateSource(template)(webglCtx) match {
+      case Left(CompileShaderException(context, _, shader)) =>
         elem.classList.remove("is-success")
         elem.classList.add("is-danger")
         elem.innerHTML = s"<div class='message-body'>${context.getShaderInfoLog(shader).filter(_.toInt != 0)}</div>"

@@ -11,7 +11,7 @@ import nutria.frontend._
 import nutria.frontend.pages.common.{Form, _}
 import nutria.frontend.service.NutriaService
 import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
-import nutria.shaderBuilder.{CompileException, FractalRenderer, FragmentShaderSource}
+import nutria.shaderBuilder.{CompileShaderException, FractalRenderer, FragmentShaderSource}
 import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
 import org.scalajs.dom.raw.{HTMLInputElement, HTMLTextAreaElement, WebGLRenderingContext}
