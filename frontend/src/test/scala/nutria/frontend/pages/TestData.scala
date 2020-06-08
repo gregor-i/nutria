@@ -1,5 +1,7 @@
 package nutria.frontend.pages
 
+import java.time.{ZoneOffset, ZonedDateTime}
+
 import nutria.api.{Entity, User, WithId}
 import nutria.core.{Examples, FractalImage, IntParameter, Viewport}
 import nutria.frontend.NutriaState
@@ -13,7 +15,9 @@ object TestData {
     owner = "owner",
     entity = Entity(
       value = fractalImage
-    )
+    ),
+    updatedAt = ZonedDateTime.now(ZoneOffset.UTC),
+    insertedAt = ZonedDateTime.now(ZoneOffset.UTC)
   )
   private val publicFractals = Vector.fill(10)(fractalEntity)
   private val owner          = Some(User("owner", "name", "email", None))
@@ -24,10 +28,10 @@ object TestData {
     "Error"                        -> ErrorState(user, "error message"),
     "FAQ"                          -> FAQState(user = None),
     "Greeting"                     -> GreetingState(user, randomFractal = fractalImage),
-    "Explorer-owner"               -> ExplorerState(user = owner, remoteFractal = Some(fractalEntity), fractalImage = fractalImage),
-    "Explorer-no-user"             -> ExplorerState(user = None, remoteFractal = Some(fractalEntity), fractalImage = fractalImage),
-    "Explorer-user"                -> ExplorerState(user = user, remoteFractal = Some(fractalEntity), fractalImage = fractalImage),
-    "Gallery"                      -> GalleryState(user = None, publicFractals = publicFractals, votes = Map.empty),
+    "Explorer-owner"               -> ExplorerState(user = owner, remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)),
+    "Explorer-no-user"             -> ExplorerState(user = None, remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)),
+    "Explorer-user"                -> ExplorerState(user = user, remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)),
+    "Gallery"                      -> GalleryState(user = None, publicFractals = publicFractals),
     "Details-Diverging"            -> DetailsState(user = None, remoteFractal = fractalEntity, fractalToEdit = fractalEntity),
     "Template-Editor"              -> TemplateEditorState.initial(FAQState(user = None)),
     "Template-Editor-newParameter" -> TemplateEditorState.initial(FAQState(user = None)).copy(newParameter = Some(IntParameter("name", 5)))

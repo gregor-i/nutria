@@ -46,6 +46,7 @@ lazy val `shader-builder` = project
   .enablePlugins(ScalaJSPlugin)
   .settings(
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0",
+    scalatest
   )
 
 val frontend = project
