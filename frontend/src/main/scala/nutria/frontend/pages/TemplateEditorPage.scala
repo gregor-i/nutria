@@ -29,7 +29,7 @@ case class TemplateEditorState(
     newParameter: Option[Parameter] = None,
     navbarExpanded: Boolean = false
 ) extends NutriaState {
-  def dirty: Boolean                                   = !remoteTemplate.forall(_.entity == entity)
+  def dirty: Boolean                                   = remoteTemplate.fold(true)(_.entity != entity)
   def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
 }
 
