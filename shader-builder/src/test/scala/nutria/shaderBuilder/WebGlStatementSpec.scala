@@ -1,7 +1,7 @@
 package nutria.shaderBuilder
 
 import mathParser.MathParser
-import mathParser.implicits._
+import mathParser.Implicits._
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 

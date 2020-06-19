@@ -1,6 +1,5 @@
 package nutria.shaderBuilder
 
-import mathParser.algebra.{SpireBinaryOperator, SpireUnitaryOperator}
 import nutria.core.{RGB, RGBA}
 
 sealed trait WebGlExpression[T <: WebGlType] {

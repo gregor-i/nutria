@@ -1,13 +1,10 @@
 package nutria.shaderBuilder
 
-import mathParser.{BinaryNode, ConstantNode, UnitaryNode, VariableNode}
-import mathParser.algebra.{Plus, SpireBinaryOperator, SpireNode, SpireUnitaryOperator}
-import nutria.core.languages.{CLang, CNode}
-import spire.math.Complex
-import mathParser.algebra._
+import mathParser.complex._
+import mathParser.{BinaryNode, ConstantNode, UnitaryNode}
 
 object Function {
-  def apply[V](name: String, node: CNode[V])(implicit lang: CLang[V]): String = {
+  def apply[V](name: String, node: ComplexNode[V])(implicit lang: ComplexLanguage[V]): String = {
     val statements = flattenIntoStatements(node, lang)
 
     s"""vec2 $name(${lang.variables.map(t => s"const in vec2 ${t._1}").mkString(", ")}) {
@@ -16,10 +13,10 @@ object Function {
        |""".stripMargin
   }
 
-  private def flattenIntoStatements[V](node: CNode[V], lang: CLang[V]): List[String] = {
+  private def flattenIntoStatements[V](node: ComplexNode[V], lang: ComplexLanguage[V]): List[String] = {
     var names = lang.variables
       .map(v => (lang.variable(v._2), v._1))
-      .toMap[SpireNode[Complex[Double], V], String]
+      .toMap[ComplexNode[V], String]
     var statements = List.empty[String]
 
     var nameCounter = 0
@@ -28,7 +25,7 @@ object Function {
       s"var_${nameCounter}"
     }
 
-    def loop(node: SpireNode[Complex[Double], V]): String =
+    def loop(node: ComplexNode[V]): String =
       node match {
         case c if names.contains(c) => names(c)
         case ConstantNode(Complex(real, imag)) =>
@@ -53,7 +50,7 @@ object Function {
   }
 
   private def binaryNodeToCode(
-      op: SpireBinaryOperator,
+      op: ComplexBinaryOperator,
       left: String,
       right: String
   ): String =
@@ -66,7 +63,7 @@ object Function {
     }
 
   private def unitaryNodeToCode(
-      op: SpireUnitaryOperator,
+      op: ComplexUnitaryOperator,
       child: String
   ): String =
     op match {

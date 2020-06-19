@@ -1,8 +1,9 @@
 package nutria.frontend.pages.common
 
+import mathParser.complex.ComplexLanguage
 import monocle.Lens
+import nutria.core.languages.StringFunction
 import nutria.core.{RGB, RGBA}
-import nutria.core.languages.{CLang, StringFunction}
 import org.scalajs.dom.raw.HTMLInputElement
 import snabbdom.{Node, Snabbdom}
 
@@ -25,7 +26,7 @@ object Input {
           update(lens.set(value)(state))
         })
 
-  implicit def stringFunctionInput[S, L](implicit state: S, update: S => Unit, lang: CLang[L]): Input[S, StringFunction[L]] =
+  implicit def stringFunctionInput[S, L](implicit state: S, update: S => Unit, lang: ComplexLanguage[L]): Input[S, StringFunction[L]] =
     lens =>
       Node("input.input")
         .attr("type", "text")

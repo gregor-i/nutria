@@ -1,8 +1,9 @@
 package nutria.shaderBuilder
 
 import mathParser.Syntax._
-import mathParser.implicits._
-import nutria.core.languages.{CLang, CNode, Lambda, Z}
+import mathParser.Implicits._
+import mathParser.complex.{ComplexLanguage, ComplexNode}
+import nutria.core.languages.{Lambda, Z}
 import nutria.core.{DivergingSeries, _}
 import nutria.macros.StaticContent
 import nutria.shaderBuilder.WebGlType.TypeProps
@@ -31,7 +32,7 @@ object FragmentShaderSource {
     """.stripMargin
   }
 
-  def function[V](name: String, node: CNode[V])(implicit lang: CLang[V]): String =
+  def function[V](name: String, node: ComplexNode[V])(implicit lang: ComplexLanguage[V]): String =
     nutria.shaderBuilder.Function(name, node)
 
   def constant[T <: WebGlType: TypeProps](name: String, expr: WebGlExpression[T]): String = {
