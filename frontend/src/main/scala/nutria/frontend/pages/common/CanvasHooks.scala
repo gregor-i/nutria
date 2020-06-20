@@ -9,12 +9,14 @@ object CanvasHooks {
   def apply(fractal: FractalImage): Seq[(String, SnabbdomFacade.Hook)] =
     Seq[(String, SnabbdomFacade.Hook)](
       "insert" -> Snabbdom.hook { node =>
-        val canvas = node.elm.get.asInstanceOf[Canvas]
-        FractalRenderer.render(canvas, fractal)
+        val canvas           = node.elm.get.asInstanceOf[Canvas]
+        val interactionPanel = canvas.parentElement
+        FractalRenderer.render(interactionPanel, canvas, fractal)
       },
       "postpatch" -> Snabbdom.hook { (_, newNode) =>
-        val canvas = newNode.elm.get.asInstanceOf[Canvas]
-        FractalRenderer.render(canvas, fractal)
+        val canvas           = newNode.elm.get.asInstanceOf[Canvas]
+        val interactionPanel = canvas.parentElement
+        FractalRenderer.render(interactionPanel, canvas, fractal)
       },
       "destroy" -> Snabbdom.hook { node =>
         val canvas = node.elm.get.asInstanceOf[Canvas]

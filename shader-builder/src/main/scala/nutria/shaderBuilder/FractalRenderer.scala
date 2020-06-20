@@ -4,6 +4,7 @@ import nutria.core.{AntiAliase, FractalImage, FractalTemplate, Parameter, Viewpo
 import nutria.macros.StaticContent
 import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
+import org.scalajs.dom.raw.HTMLElement
 import org.scalajs.dom.webgl.Shader
 import org.scalajs.dom.webgl.Program
 import org.scalajs.dom.webgl.RenderingContext
@@ -16,13 +17,13 @@ object FractalRenderer {
 
   // todo: result is ignored
   private var cache: (RenderingContext, FractalImage, Program) = null
-  def render(canvas: Canvas, image: FractalImage): Either[WebGlException, Program] = {
+  def render(interactionPanel: HTMLElement, canvas: Canvas, image: FractalImage): Either[WebGlException, Program] = {
     val ctx = canvas
       .getContext("webgl", Dynamic.literal(preserveDrawingBuffer = true))
       .asInstanceOf[RenderingContext]
 
-    canvas.width = (canvas.clientWidth * dom.window.devicePixelRatio).toInt
-    canvas.height = (canvas.clientHeight * dom.window.devicePixelRatio).toInt
+    canvas.width = (interactionPanel.clientWidth * dom.window.devicePixelRatio).toInt
+    canvas.height = (interactionPanel.clientHeight * dom.window.devicePixelRatio).toInt
 
     cache match {
       case (`ctx`, cachedImage, cachedProgram) if cachedImage == image =>

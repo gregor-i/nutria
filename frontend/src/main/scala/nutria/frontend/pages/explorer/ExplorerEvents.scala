@@ -47,7 +47,7 @@ object ExplorerEvents {
 
   def canvasWheelEvent[S](lens: Lens[S, Viewport])(implicit state: S, update: S => Unit): Seq[(String, SnabbdomFacade.Eventlistener)] = {
     val eventHandler =
-      Snabbdom.specificEvent { event: PointerEvent =>
+      Snabbdom.specificEvent { event: MouseEvent =>
         event.preventDefault()
         val (_, boundingBox) = context(event)
         val p                = toPoint(event, boundingBox)
@@ -68,54 +68,49 @@ object ExplorerEvents {
     var startPosition = Option.empty[Point]
 
     val pointerDown =
-      Snabbdom.specificEvent { event: PointerEvent =>
-        if (event.pointerType == "mouse") {
-          event.preventDefault()
-          val (_, boundingBox) = context(event)
-          startPosition = Some(toPoint(event, boundingBox))
-        }
+      Snabbdom.specificEvent { event: MouseEvent =>
+        println("start")
+        event.preventDefault()
+        val (_, boundingBox) = context(event)
+        startPosition = Some(toPoint(event, boundingBox))
       }
 
     def pointerEnd =
-      Snabbdom.specificEvent { event: PointerEvent =>
-        if (event.pointerType == "mouse") {
-          startPosition match {
-            case Some(from) =>
-              event.preventDefault()
-              val (canvas, boundingBox) = context(event)
-              val to                    = toPoint(event, boundingBox)
-              val newView               = calcNewView(boundingBox, Seq(from -> to), lens.get(state))
-              resetTransformCss(canvas)
-              update(lens.set(newView)(state))
-            case None => ()
-          }
+      Snabbdom.specificEvent { event: MouseEvent =>
+        startPosition match {
+          case Some(from) =>
+            event.preventDefault()
+            val (canvas, boundingBox) = context(event)
+            val to                    = toPoint(event, boundingBox)
+            val newView               = calcNewView(boundingBox, Seq(from -> to), lens.get(state))
+            resetTransformCss(canvas)
+            update(lens.set(newView)(state))
+          case None => ()
         }
       }
 
     def pointerMove =
-      Snabbdom.specificEvent { event: PointerEvent =>
-        if (event.pointerType == "mouse") {
-          startPosition match {
-            case Some(from) =>
-              event.preventDefault()
-              val (canvas, boundingBox) = context(event)
-              val to                    = toPoint(event, boundingBox)
-              transformCss(
-                element = canvas,
-                moves = Seq(from -> to)
-              )
-            case None => ()
-          }
+      Snabbdom.specificEvent { event: MouseEvent =>
+        startPosition match {
+          case Some(from) =>
+            event.preventDefault()
+            val (canvas, boundingBox) = context(event)
+            val to                    = toPoint(event, boundingBox)
+            transformCss(
+              element = canvas,
+              moves = Seq(from -> to)
+            )
+          case None => ()
         }
       }
 
     //    fixme: use mousedown instead?
     Seq(
-      "pointerdown"   -> pointerDown,
-      "pointermove"   -> pointerMove,
-      "pointerup"     -> pointerEnd,
-      "pointercancel" -> pointerEnd,
-      "pointerout"    -> pointerEnd
+      "mousedown"   -> pointerDown,
+      "mousemove"   -> pointerMove,
+      "mouseup"     -> pointerEnd,
+      "mousecancel" -> pointerEnd,
+      "mouseout"    -> pointerEnd
     )
   }
 
@@ -169,7 +164,7 @@ object ExplorerEvents {
 
       if (moves.values.forall(_.isInstanceOf[Ended])) {
         val newView = calcNewView(
-          boundingBox = event.currentTarget.asInstanceOf[Element].getBoundingClientRect(),
+          boundingBox = boundingBox,
           moves = moves.values.map(_.toMove).toSeq,
           view = lens.get(state)
         )
