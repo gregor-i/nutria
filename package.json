@@ -1,11 +1,11 @@
 {
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.13.0",
+    "@fortawesome/fontawesome-free": "^5.13.1",
     "browserify": "^16",
     "bulma": "^0.8.2",
     "clean-css-cli": "^4",
     "npm-run-all": "^4.1.5",
-    "sass": "^1.26.7",
+    "sass": "^1.26.8",
     "snabbdom": "^0.7"
   },
   "scripts": {
@@ -23,7 +23,7 @@
     "watch-static": "nodemon --exec npm run build-static --watch frontend/src/main/static -e '*'"
   },
   "devDependencies": {
-    "gl": "^4.5.0",
+    "gl": "^4.5.2",
     "html-formatter": "^0",
     "jimp": "^0.10.3",
     "nodemon": "^2.0.4",
