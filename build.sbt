@@ -32,9 +32,9 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       "io.circe" %%% "circe-parser"         % "0.13.0"
     ),
     libraryDependencies ++= Seq(
-      "com.github.julien-truffaut" %%% "monocle-core"   % "2.0.4",
-      "com.github.julien-truffaut" %%% "monocle-macro"  % "2.0.4",
-      "com.github.julien-truffaut" %%% "monocle-unsafe" % "2.0.4"
+      "com.github.julien-truffaut" %%% "monocle-core"   % "2.0.5",
+      "com.github.julien-truffaut" %%% "monocle-macro"  % "2.0.5",
+      "com.github.julien-truffaut" %%% "monocle-unsafe" % "2.0.5"
     ),
     scalatest
   )
@@ -90,7 +90,7 @@ lazy val backend = project
     libraryDependencies += evolutions,
     libraryDependencies += "io.lemonlabs"            %% "scala-uri"          % "2.2.2",
     libraryDependencies += "com.dripower"            %% "play-circe"         % "2812.0",
-    libraryDependencies += "org.postgresql"          % "postgresql"          % "42.2.13",
+    libraryDependencies += "org.postgresql"          % "postgresql"          % "42.2.14",
     libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.5",
     libraryDependencies += "org.scalatestplus.play"  %% "scalatestplus-play" % "5.1.0" % Test
   )
@@ -177,6 +177,6 @@ test in nutria := Def
 
 def scalatest =
   Seq(
-    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.2" % Test,
+    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.0" % Test,
     testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
   )

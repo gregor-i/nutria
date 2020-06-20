@@ -2,7 +2,7 @@ package facades
 
 import scala.scalajs.js
 import scala.scalajs.js.Promise
-import scala.scalajs.js.annotation.{JSImport, ScalaJSDefined}
+import scala.scalajs.js.annotation.JSImport
 
 @js.native
 @JSImport("fs", JSImport.Namespace)
