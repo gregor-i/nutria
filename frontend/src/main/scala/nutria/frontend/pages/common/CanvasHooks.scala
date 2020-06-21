@@ -1,22 +1,32 @@
 package nutria.frontend.pages.common
 
 import nutria.core.FractalImage
+import nutria.frontend.ExecutionContext
+import nutria.frontend.util.AsyncUtil
 import nutria.shaderBuilder.FractalRenderer
 import org.scalajs.dom.html.Canvas
 import snabbdom.{Snabbdom, SnabbdomFacade}
 
-object CanvasHooks {
+object CanvasHooks extends ExecutionContext {
   def apply(fractal: FractalImage): Seq[(String, SnabbdomFacade.Hook)] =
     Seq[(String, SnabbdomFacade.Hook)](
       "insert" -> Snabbdom.hook { node =>
         val canvas           = node.elm.get.asInstanceOf[Canvas]
         val interactionPanel = canvas.parentElement
-        FractalRenderer.render(interactionPanel, canvas, fractal)
+        AsyncUtil
+          .sleep(0)
+          .foreach { _ =>
+            FractalRenderer.render(interactionPanel, canvas, fractal)
+          }
       },
       "postpatch" -> Snabbdom.hook { (_, newNode) =>
         val canvas           = newNode.elm.get.asInstanceOf[Canvas]
         val interactionPanel = canvas.parentElement
-        FractalRenderer.render(interactionPanel, canvas, fractal)
+        AsyncUtil
+          .sleep(0)
+          .foreach { _ =>
+            FractalRenderer.render(interactionPanel, canvas, fractal)
+          }
       },
       "destroy" -> Snabbdom.hook { node =>
         val canvas = node.elm.get.asInstanceOf[Canvas]
