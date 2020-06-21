@@ -23,6 +23,8 @@ object Icons {
   val upvote    = "fa-thumbs-up"
   val downvote  = "fa-thumbs-down"
   val plus      = "fa-plus"
+  val next      = "fa-chevron-right"
+  val prev      = "fa-chevron-left"
 
   def icon(icon: String): Node =
     Node("span.icon")

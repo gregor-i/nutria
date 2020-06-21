@@ -1,5 +1,6 @@
 package nutria.frontend.pages
 
+import monocle.macros.Lenses
 import nutria.api.{FractalImageEntity, User, VoteStatistic, WithId}
 import nutria.core.Dimensions
 import nutria.frontend._
@@ -8,9 +9,11 @@ import snabbdom._
 
 import scala.util.chaining._
 
+@Lenses
 case class GalleryState(
     user: Option[User],
-    publicFractals: Vector[WithId[FractalImageEntity]],
+    publicFractals: Seq[WithId[FractalImageEntity]],
+    page: Int,
     navbarExpanded: Boolean = false
 ) extends NutriaState {
   override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
@@ -19,12 +22,13 @@ case class GalleryState(
 object GalleryPage extends Page[GalleryState] {
 
   override def stateFromUrl = {
-    case (user, "/gallery", _) =>
-      Links.galleryState(user).loading(user)
+    case (user, "/gallery", query) =>
+      val page = query.get("page").flatMap(_.toIntOption).getOrElse(1)
+      Links.galleryState(user, page).loading(user)
   }
 
   override def stateToUrl(state: GalleryPage.State): Option[Router.Location] =
-    Some("/gallery" -> Map.empty)
+    Some("/gallery" -> Map("page" -> state.page.toString))
 
   def render(implicit state: GalleryState, update: NutriaState => Unit) =
     Body()
@@ -43,9 +47,10 @@ object GalleryPage extends Page[GalleryState] {
           )
           .child(
             Node("div.fractal-tile-list")
-              .child(state.publicFractals.map(renderFractalTile(_)))
+              .child(Pagination.page(GalleryState.publicFractals, GalleryState.page).map(renderFractalTile(_)))
               .child(dummyTiles)
           )
+          .child(Pagination.links(GalleryState.publicFractals, GalleryState.page))
       )
       .child(Footer())
 

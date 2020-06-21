@@ -1,5 +1,6 @@
 package nutria.frontend.pages
 
+import monocle.macros.Lenses
 import nutria.api.{FractalImageEntity, User, WithId}
 import nutria.core.Dimensions
 import nutria.frontend.Router.{Path, QueryParameter}
@@ -9,10 +10,12 @@ import snabbdom.Node
 
 import scala.util.chaining._
 
+@Lenses
 case class UserGalleryState(
     user: Option[User],
     aboutUser: String,
-    userFractals: Vector[WithId[FractalImageEntity]],
+    userFractals: Seq[WithId[FractalImageEntity]],
+    page: Int,
     navbarExpanded: Boolean = false
 ) extends NutriaState {
   override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
@@ -21,11 +24,12 @@ case class UserGalleryState(
 object UserGalleryPage extends Page[UserGalleryState] {
 
   override def stateToUrl(state: UserGalleryPage.State): Option[(Path, QueryParameter)] =
-    Some(s"/user/${state.aboutUser}/gallery" -> Map.empty)
+    Some(s"/user/${state.aboutUser}/gallery" -> Map("page" -> state.page.toString))
 
   override def stateFromUrl = {
-    case (user, s"/user/${userId}/gallery", _) =>
-      Links.userGalleryState(user, userId).loading(user)
+    case (user, s"/user/${userId}/gallery", query) =>
+      val page = query.get("page").flatMap(_.toIntOption).getOrElse(1)
+      Links.userGalleryState(user, userId, page = page).loading(user)
 
   }
 
@@ -47,9 +51,14 @@ object UserGalleryPage extends Page[UserGalleryState] {
           )
           .child(
             Node("div.fractal-tile-list")
-              .child(state.userFractals.map(renderFractalTile))
+              .child(
+                Pagination
+                  .page(UserGalleryState.userFractals, UserGalleryState.page)
+                  .map(renderFractalTile)
+              )
               .child(dummyTiles)
           )
+          .child(Pagination.links(UserGalleryState.userFractals, UserGalleryState.page))
       )
       .child(Footer())
 
@@ -78,7 +87,7 @@ object UserGalleryPage extends Page[UserGalleryState] {
             Button
               .icon(
                 Icons.delete,
-                Actions.deleteFractal(fractal.id)
+                Actions.deleteFractalFromUserGallery(fractal.id)
               )
               .classes("is-outlined")
           )

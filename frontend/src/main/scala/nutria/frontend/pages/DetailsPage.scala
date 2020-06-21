@@ -117,7 +117,7 @@ object DetailsPage extends Page[DetailsState] {
       .classes("is-primary")
 
   private def buttonDelete(implicit state: State, update: NutriaState => Unit) =
-    Button("Delete", Icons.delete, Actions.deleteFractal(state.fractalToEdit.id))
+    Button("Delete", Icons.delete, Actions.deleteFractalFromDetails(state.fractalToEdit.id))
       .classes("is-danger", "is-light")
 
   private def buttonFork(implicit state: State, update: NutriaState => Unit) =

@@ -127,9 +127,9 @@ object Actions {
       }
     }
 
-  def deleteFractal(
+  def deleteFractalFromUserGallery(
       fractalId: String
-  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+  )(implicit state: UserGalleryState, update: NutriaState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -141,7 +141,29 @@ object Actions {
           } yield UserGalleryState(
             user = state.user,
             userFractals = reloaded,
-            aboutUser = remoteFractal.owner
+            aboutUser = remoteFractal.owner,
+            page = state.page
+          )
+        }
+      }
+    }
+
+  def deleteFractalFromDetails(
+      fractalId: String
+  )(implicit state: DetailsState, update: NutriaState => Unit): Eventlistener =
+    event { _ =>
+      onlyLoggedIn {
+        asyncUpdate {
+          for {
+            remoteFractal <- NutriaService.loadFractal(fractalId)
+            _             <- NutriaService.deleteFractal(fractalId)
+            _ = Toasts.warningToast("Fractal deleted.")
+            reloaded <- NutriaService.loadUserFractals(remoteFractal.owner)
+          } yield UserGalleryState(
+            user = state.user,
+            userFractals = reloaded,
+            aboutUser = remoteFractal.owner,
+            page = 1
           )
         }
       }

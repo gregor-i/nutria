@@ -8,15 +8,15 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object Links {
-  def galleryState(user: Option[User]): Future[GalleryState] =
+  def galleryState(user: Option[User], page: Int = 1): Future[GalleryState] =
     for {
       publicFractals <- NutriaService.loadPublicFractals()
-    } yield GalleryState(user = user, publicFractals = publicFractals)
+    } yield GalleryState(user = user, publicFractals = publicFractals, page = page)
 
-  def userGalleryState(user: Option[User], userId: String): Future[UserGalleryState] =
+  def userGalleryState(user: Option[User], userId: String, page: Int = 1): Future[UserGalleryState] =
     for {
       userFractals <- NutriaService.loadUserFractals(userId)
-    } yield UserGalleryState(user = user, aboutUser = userId, userFractals = userFractals)
+    } yield UserGalleryState(user = user, aboutUser = userId, userFractals = userFractals, page = page)
 
   def greetingState(user: Option[User]): Future[GreetingState] =
     for {
