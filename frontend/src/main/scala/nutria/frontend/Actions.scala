@@ -51,53 +51,6 @@ object Actions {
       )
     }
 
-  def addViewport(
-      fractalId: String,
-      viewport: Viewport
-  )(implicit state: ExplorerState, update: NutriaState => Unit): Eventlistener =
-    event { _ =>
-      onlyLoggedIn {
-        asyncUpdate {
-          for {
-            remoteFractal <- NutriaService.loadFractal(fractalId)
-            newFractal = Entity.value
-              .composeLens(FractalImage.viewport)
-              .set(viewport)(remoteFractal.entity)
-            savedFractal <- NutriaService.save(newFractal)
-            _ = Toasts.successToast("Snapshot saved")
-          } yield ExplorerState(
-            user = state.user,
-            remoteFractal = Some(savedFractal),
-            fractalImage = savedFractal.entity
-          )
-        }
-      }
-    }
-
-  // todo: rename
-  def forkAndAddViewport(
-      fractalId: String,
-      viewport: Viewport
-  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
-    event { _ =>
-      onlyLoggedIn {
-        asyncUpdate {
-          for {
-            remoteFractal <- NutriaService.loadFractal(fractalId)
-            updated = Entity.value
-              .composeLens(FractalImage.viewport)
-              .set(viewport)(remoteFractal.entity)
-            forkedFractal <- NutriaService.save(updated)
-            _ = Toasts.successToast("Fractal saved")
-          } yield ExplorerState(
-            state.user,
-            remoteFractal = Some(forkedFractal),
-            fractalImage = forkedFractal.entity
-          )
-        }
-      }
-    }
-
   def togglePublished(
       fractal: WithId[FractalImageEntity]
   )(implicit state: UserGalleryState, update: NutriaState => Unit): Eventlistener =

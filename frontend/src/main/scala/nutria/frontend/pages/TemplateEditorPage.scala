@@ -259,7 +259,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     Button(
       "Save as new Template",
       Icons.save,
-      Actions.saveTemplate(state.entity)
+      Actions.saveTemplate(state.entity.copy(published = false))
     ).classes("is-primary")
       .boolAttr("disabled", !state.dirty)
 

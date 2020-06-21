@@ -51,7 +51,7 @@ object DetailsPage extends Page[DetailsState] {
             case node if !User.isOwner(state.user, state.remoteFractal) =>
               node
                 .child(Icons.icon(Icons.copy))
-                .event("click", Actions.saveAsNewFractal(state.fractalToEdit.entity))
+                .event("click", Actions.saveAsNewFractal(state.fractalToEdit.entity.copy(published = false)))
             case node if !state.dirty =>
               node
                 .child(Icons.icon(Icons.save))
@@ -121,7 +121,7 @@ object DetailsPage extends Page[DetailsState] {
       .classes("is-danger", "is-light")
 
   private def buttonFork(implicit state: State, update: NutriaState => Unit) =
-    Button("Clone", Icons.copy, Actions.saveAsNewFractal(state.fractalToEdit.entity))
+    Button("Clone", Icons.copy, Actions.saveAsNewFractal(state.fractalToEdit.entity.copy(published = false)))
       .classes("is-primary")
 
   private def buttonExplore(implicit state: State, update: NutriaState => Unit) =
