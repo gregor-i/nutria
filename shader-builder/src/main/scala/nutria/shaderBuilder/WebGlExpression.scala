@@ -3,15 +3,18 @@ package nutria.shaderBuilder
 import nutria.core.{RGB, RGBA}
 
 sealed trait WebGlExpression[T <: WebGlType] {
+  val typeName: String
   def toCode: String
 }
 
 case class IntLiteral(value: Int) extends WebGlExpression[WebGlTypeInt.type] {
-  override def toCode: String = value.toString
+  override val typeName: String = "int"
+  override def toCode: String   = value.toString
 }
 
 case class FloatLiteral(value: Float) extends WebGlExpression[WebGlTypeFloat.type] {
-  override def toCode: String = if (value == value.toInt.toFloat) s"${value.toInt}.0" else value.toString
+  override val typeName: String = "float"
+  override def toCode: String   = if (value == value.toInt.toFloat) s"${value.toInt}.0" else value.toString
 }
 
 object FloatLiteral {
@@ -19,7 +22,8 @@ object FloatLiteral {
 }
 
 case class Vec2(a: WebGlExpression[WebGlTypeFloat.type], b: WebGlExpression[WebGlTypeFloat.type]) extends WebGlExpression[WebGlTypeVec2.type] {
-  override def toCode: String = s"vec2(${a.toCode}, ${b.toCode})"
+  override val typeName: String = "vec2"
+  override def toCode: String   = s"vec2(${a.toCode}, ${b.toCode})"
 }
 
 case class Vec3(
@@ -27,7 +31,8 @@ case class Vec3(
     b: WebGlExpression[WebGlTypeFloat.type],
     c: WebGlExpression[WebGlTypeFloat.type]
 ) extends WebGlExpression[WebGlTypeVec3.type] {
-  override def toCode: String = s"vec3(${a.toCode}, ${b.toCode}, ${c.toCode})"
+  override val typeName: String = "vec3"
+  override def toCode: String   = s"vec3(${a.toCode}, ${b.toCode}, ${c.toCode})"
 }
 
 case class Vec4(
@@ -36,11 +41,8 @@ case class Vec4(
     c: WebGlExpression[WebGlTypeFloat.type],
     d: WebGlExpression[WebGlTypeFloat.type]
 ) extends WebGlExpression[WebGlTypeVec4.type] {
-  override def toCode: String = s"vec4(${a.toCode}, ${b.toCode}, ${c.toCode}, ${d.toCode})"
-}
-
-case class RefExp[T <: WebGlType](ref: Ref[T]) extends WebGlExpression[T] {
-  override def toCode: String = ref.name
+  override val typeName: String = "vec4"
+  override def toCode: String   = s"vec4(${a.toCode}, ${b.toCode}, ${c.toCode}, ${d.toCode})"
 }
 
 object Vec3 {

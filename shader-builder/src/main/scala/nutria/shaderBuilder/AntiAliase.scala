@@ -3,20 +3,20 @@ package nutria.shaderBuilder
 import nutria.core.AntiAliase
 
 object AntiAliase {
-  def apply(aaFactor: AntiAliase): RefVec4 => String =
+  def apply(aaFactor: AntiAliase, outputVar: String): String =
     if (aaFactor > 1)
-      antiAliase(aaFactor)
+      antiAliase(aaFactor, outputVar)
     else
-      noAntiAliase
+      noAntiAliase(outputVar)
 
-  private def noAntiAliase(outputVar: RefVec4) =
+  private def noAntiAliase(outputVar: String) =
     s"""
        |vec2 pos = gl_FragCoord.xy / u_resolution;
        |vec2 p = u_view_O + pos.x * u_view_A + pos.y * u_view_B;
-       |${outputVar.name} = main_template(p);
+       |${outputVar} = main_template(p);
      """.stripMargin
 
-  private def antiAliase(aaFactor: AntiAliase)(outputVarname: RefVec4) = {
+  private def antiAliase(aaFactor: AntiAliase, outputVar: String) = {
     s"""
        |const int aa = ${aaFactor};
        |vec2 aa_factor = 1.0 / (float(aa) * u_resolution);
@@ -33,7 +33,7 @@ object AntiAliase {
        |  }
        |}
        |
-       |${outputVarname.name} = acc / (float(aa) * float(aa));
+       |${outputVar} = acc / (float(aa) * float(aa));
      """.stripMargin
   }
 

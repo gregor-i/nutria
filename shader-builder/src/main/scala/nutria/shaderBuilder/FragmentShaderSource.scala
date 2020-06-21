@@ -1,12 +1,11 @@
 package nutria.shaderBuilder
 
-import mathParser.Syntax._
 import mathParser.Implicits._
+import mathParser.Syntax._
 import mathParser.complex.{ComplexLanguage, ComplexNode}
 import nutria.core.languages.{Lambda, Z}
 import nutria.core.{DivergingSeries, _}
 import nutria.macros.StaticContent
-import nutria.shaderBuilder.WebGlType.TypeProps
 
 object FragmentShaderSource {
   def apply(template: FractalTemplate, antiAliase: AntiAliase = 1): String =
@@ -27,7 +26,7 @@ object FragmentShaderSource {
        |${FragmentShaderSource.main(code)}
        |
        |void main() {
-       |${AntiAliase(antiAliase).apply(RefVec4("gl_FragColor"))}
+       |${AntiAliase(antiAliase, "gl_FragColor")}
        |}
     """.stripMargin
   }
@@ -35,14 +34,14 @@ object FragmentShaderSource {
   def function[V](name: String, node: ComplexNode[V])(implicit lang: ComplexLanguage[V]): String =
     nutria.shaderBuilder.Function(name, node)
 
-  def constant[T <: WebGlType: TypeProps](name: String, expr: WebGlExpression[T]): String = {
-    s"const ${TypeProps[T].webGlType} ${name} = ${expr.toCode};"
+  def constant(name: String, expr: WebGlExpression[_]): String = {
+    s"const ${expr.typeName} ${name} = ${expr.toCode};"
   }
 
   def parameter: Parameter => String = {
-    case IntParameter(name, value)           => constant[WebGlTypeInt.type](name, IntLiteral(value))
-    case FloatParameter(name, value)         => constant[WebGlTypeFloat.type](name, FloatLiteral(value))
-    case RGBAParameter(name, value)          => constant[WebGlTypeVec4.type](name, Vec4.fromRGBA(value))
+    case IntParameter(name, value)           => constant(name, IntLiteral(value))
+    case FloatParameter(name, value)         => constant(name, FloatLiteral(value))
+    case RGBAParameter(name, value)          => constant(name, Vec4.fromRGBA(value))
     case ColorGradientParameter(name, value) => colorGradient(name, value)
     case fp: FunctionParameter if fp.includeDerivative =>
       Seq(
