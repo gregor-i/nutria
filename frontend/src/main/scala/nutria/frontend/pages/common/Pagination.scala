@@ -2,12 +2,12 @@ package nutria.frontend.pages.common
 
 import monocle.Lens
 import nutria.frontend.util.SnabbdomUtil
-import snabbdom.{Node, Snabbdom}
+import snabbdom.Node
+
 import scala.util.chaining._
 
 object Pagination {
-  // todo: make it 24 again
-  val itemsPerPage = 2
+  val itemsPerPage = 24
 
   def page[A, S](itemsLense: Lens[S, Seq[A]], pageLens: Lens[S, Int])(implicit state: S): Seq[A] = {
     val p = pageLens.get(state)
@@ -45,7 +45,7 @@ object Pagination {
         Node("ul.pagination-list")
           .child(Node("a.pagination-link").child(Icons.icon(Icons.prev)).boolAttr("disabled", !isValid(page - 1)).event("click", action(page - 1)))
           .pipe { node =>
-            if (!range.contains(2))
+            if (!range.contains(1) && !range.contains(2))
               node
                 .child(link(1))
                 .child(ellipsis)
@@ -54,7 +54,7 @@ object Pagination {
           }
           .child(range.map(link))
           .pipe { node =>
-            if (!range.contains(pages - 1))
+            if (!range.contains(pages - 1) && !range.contains(pages))
               node
                 .child(ellipsis)
                 .child(link(pages))
