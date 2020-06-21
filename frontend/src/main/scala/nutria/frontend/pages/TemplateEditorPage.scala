@@ -1,24 +1,19 @@
 package nutria.frontend.pages
 
-import monocle.{Iso, Lens, Optional}
-import monocle.function.{At, Index}
+import monocle.Lens
 import monocle.macros.Lenses
-import nutria.api.{Entity, FractalTemplateEntity, FractalTemplateEntityWithId, User, WithId}
+import nutria.api.{Entity, FractalTemplateEntity, FractalTemplateEntityWithId, User}
 import nutria.core._
-import nutria.core.languages.{Lambda, StringFunction, ZAndLambda}
+import nutria.core.languages.StringFunction
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common.{Form, _}
-import nutria.frontend.service.NutriaService
+import nutria.frontend.service.TemplateService
 import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
-import nutria.shaderBuilder.{CompileShaderException, FractalRenderer, FragmentShaderSource}
-import org.scalajs.dom
-import org.scalajs.dom.html.Canvas
-import org.scalajs.dom.raw.{HTMLInputElement, HTMLTextAreaElement, WebGLRenderingContext}
+import nutria.shaderBuilder.FragmentShaderSource
+import org.scalajs.dom.raw.HTMLTextAreaElement
 import snabbdom.{Node, Snabbdom}
 
-import scala.scalajs.js
-import scala.util.{Failure, Success, Try}
 import scala.util.chaining._
 
 @Lenses
@@ -54,7 +49,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
   override def stateFromUrl = {
     case (user, s"/templates/${templateId}/editor", queryParams) =>
       (for {
-        remoteTemplate <- NutriaService.loadTemplate(templateId)
+        remoteTemplate <- TemplateService.get(templateId)
       } yield TemplateEditorState(
         user = user,
         remoteTemplate = Some(remoteTemplate),

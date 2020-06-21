@@ -1,10 +1,10 @@
 package nutria.frontend
 
 import nutria.api._
-import nutria.core.{Dimensions, FractalImage, Viewport}
+import nutria.core.{Dimensions, FractalImage}
 import nutria.frontend.pages._
 import nutria.frontend.pages.common.FractalTile
-import nutria.frontend.service.NutriaService
+import nutria.frontend.service.{FractalService, TemplateService, UserService}
 import nutria.frontend.toasts.Toasts
 import nutria.frontend.util.Untyped
 import org.scalajs.dom
@@ -59,14 +59,14 @@ object Actions {
         asyncUpdate {
           val published = fractal.entity.published
           for {
-            _ <- NutriaService.updateFractal(
+            _ <- FractalService.put(
               WithId
                 .entity[FractalImageEntity]
                 .composeLens(Entity.published)
                 .set(!published)
                 .apply(fractal)
             )
-            reloaded <- NutriaService.loadUserFractals(state.aboutUser)
+            reloaded <- FractalService.loadUserFractals(state.aboutUser)
             _ = if (published)
               Toasts.warningToast(
                 "Fractal unpublished. The fractal will no longer be listed in the public gallery."
@@ -87,10 +87,10 @@ object Actions {
       onlyLoggedIn {
         asyncUpdate {
           for {
-            remoteFractal <- NutriaService.loadFractal(fractalId)
-            _             <- NutriaService.deleteFractal(fractalId)
+            remoteFractal <- FractalService.get(fractalId)
+            _             <- FractalService.delete(fractalId)
             _ = Toasts.warningToast("Fractal deleted.")
-            reloaded <- NutriaService.loadUserFractals(remoteFractal.owner)
+            reloaded <- FractalService.loadUserFractals(remoteFractal.owner)
           } yield UserGalleryState(
             user = state.user,
             userFractals = reloaded,
@@ -108,10 +108,10 @@ object Actions {
       onlyLoggedIn {
         asyncUpdate {
           for {
-            remoteFractal <- NutriaService.loadFractal(fractalId)
-            _             <- NutriaService.deleteFractal(fractalId)
+            remoteFractal <- FractalService.get(fractalId)
+            _             <- FractalService.delete(fractalId)
             _ = Toasts.warningToast("Fractal deleted.")
-            reloaded <- NutriaService.loadUserFractals(remoteFractal.owner)
+            reloaded <- FractalService.loadUserFractals(remoteFractal.owner)
           } yield UserGalleryState(
             user = state.user,
             userFractals = reloaded,
@@ -129,7 +129,7 @@ object Actions {
       onlyLoggedIn {
         asyncUpdate {
           for {
-            _ <- NutriaService.updateFractal(fractalWithId)
+            _ <- FractalService.put(fractalWithId)
             _ = Toasts.successToast("Fractal updated.")
           } yield DetailsState(
             user = state.user,
@@ -147,7 +147,7 @@ object Actions {
       onlyLoggedIn {
         asyncUpdate {
           for {
-            fractalWithId <- NutriaService.save(fractalEntity)
+            fractalWithId <- FractalService.post(fractalEntity)
             _ = Toasts.successToast("Fractal saved.")
           } yield DetailsState(
             user = state.user,
@@ -163,7 +163,7 @@ object Actions {
       onlyLoggedIn {
         asyncUpdate {
           for {
-            savedImage <- NutriaService.save(fractalEntity.copy(published = false))
+            savedImage <- FractalService.post(fractalEntity.copy(published = false))
             _ = Toasts.successToast("Fractal saved.")
           } yield state.copy(remoteFractal = Some(savedImage))
         }
@@ -175,7 +175,7 @@ object Actions {
       onlyLoggedIn {
         asyncUpdate {
           for {
-            savedTemplate <- NutriaService.saveTemplate(templateEntity)
+            savedTemplate <- TemplateService.post(templateEntity)
             _ = Toasts.successToast("Template saved.")
           } yield state.copy(remoteTemplate = Some(savedTemplate))
         }
@@ -189,7 +189,7 @@ object Actions {
       onlyLoggedIn {
         asyncUpdate {
           for {
-            _ <- NutriaService.updateTemplate(template)
+            _ <- TemplateService.put(template)
             _ = Toasts.successToast("Template updated.")
           } yield TemplateEditorState.byTemplate(template)
         }
@@ -201,8 +201,8 @@ object Actions {
       onlyLoggedIn {
         asyncUpdate {
           for {
-            _         <- NutriaService.deleteTemplate(templateId)
-            templates <- NutriaService.loadUserTemplates(state.user.get.id)
+            _         <- TemplateService.delete(templateId)
+            templates <- TemplateService.listUser(state.user.get.id)
           } yield TemplateGalleryState(user = state.user, templates = templates)
         }
       }
@@ -216,14 +216,14 @@ object Actions {
         asyncUpdate {
           val published = template.entity.published
           for {
-            _ <- NutriaService.updateTemplate(
+            _ <- TemplateService.put(
               WithId
                 .entity[FractalTemplateEntity]
                 .composeLens(Entity.published)
                 .set(!published)
                 .apply(template)
             )
-            templates <- NutriaService.loadUserTemplates(state.user.get.id)
+            templates <- TemplateService.listUser(state.user.get.id)
             _ = if (published)
               Toasts.warningToast(
                 "Template unpublished. The template will no longer be listed in the public gallery."
@@ -244,7 +244,7 @@ object Actions {
       onlyLoggedIn {
         asyncUpdate {
           for {
-            _     <- NutriaService.deleteUser(userId)
+            _     <- UserService.delete(userId)
             state <- Links.greetingState(None)
             _ = Toasts.successToast("Good Bye")
           } yield state

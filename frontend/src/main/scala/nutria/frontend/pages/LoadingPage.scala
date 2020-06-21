@@ -3,7 +3,6 @@ package nutria.frontend.pages
 import nutria.api.User
 import nutria.frontend.Router.Location
 import nutria.frontend.pages.common.{Body, Header}
-import nutria.frontend.service.NutriaService
 import nutria.frontend.{NutriaState, Page}
 import snabbdom._
 

@@ -7,11 +7,11 @@ import nutria.CirceCodec
 import nutria.api.{Entity, FractalImageEntity, FractalTemplateEntity, User}
 import nutria.core._
 import nutria.frontend.Router.Location
+import nutria.frontend._
 import nutria.frontend.pages.CreateNewFractalState.{ParametersStep, TemplateStep}
 import nutria.frontend.pages.common._
-import nutria.frontend.service.NutriaService
+import nutria.frontend.service.TemplateService
 import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
-import nutria.frontend._
 import snabbdom.Node
 
 import scala.concurrent.Future
@@ -39,9 +39,9 @@ object CreateNewFractalState extends ExecutionContext {
 
   def load(user: Option[User]): Future[CreateNewFractalState] =
     for {
-      publicTemplates <- NutriaService.loadPublicTemplates()
+      publicTemplates <- TemplateService.listPublic()
       userTemplates <- user match {
-        case Some(user) => NutriaService.loadUserTemplates(user.id)
+        case Some(user) => TemplateService.listUser(user.id)
         case None       => Future.successful(Vector.empty)
       }
       allTemplates = (publicTemplates.toVector ++ userTemplates).distinctBy(_.id).map(_.entity)

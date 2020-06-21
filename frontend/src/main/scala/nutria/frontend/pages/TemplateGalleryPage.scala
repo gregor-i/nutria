@@ -3,7 +3,7 @@ package nutria.frontend.pages
 import nutria.api.{FractalTemplateEntityWithId, User}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common._
-import nutria.frontend.service.NutriaService
+import nutria.frontend.service.TemplateService
 import nutria.frontend.{Actions, ExecutionContext, NutriaState, Page}
 import snabbdom.{Node, Snabbdom}
 
@@ -20,7 +20,7 @@ case class TemplateGalleryState(
 object TemplateGalleryState extends ExecutionContext {
   def load(user: Option[User]): Future[TemplateGalleryState] =
     for {
-      templates <- NutriaService.loadUserTemplates(user.get.id)
+      templates <- TemplateService.listUser(user.get.id)
     } yield TemplateGalleryState(templates = templates, user = user)
 }
 

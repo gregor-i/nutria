@@ -4,7 +4,6 @@ import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
 import nutria.api.User
 import nutria.frontend.pages.ErrorState
-import nutria.frontend.service.NutriaService
 import org.scalajs.dom
 
 import scala.util.Try

@@ -4,7 +4,6 @@ import nutria.api.User
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common._
-import nutria.frontend.service.NutriaService
 import snabbdom.Node
 
 case class ProfileState(

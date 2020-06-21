@@ -2,13 +2,12 @@ package nutria.frontend.pages
 
 import monocle.Lens
 import monocle.macros.Lenses
-import nutria.api.{Entity, FractalImageEntity, FractalImageEntityWithId, User, WithId}
+import nutria.api._
 import nutria.core._
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common._
-import nutria.frontend.pages.explorer.ExplorerEvents
-import nutria.frontend.service.NutriaService
+import nutria.frontend.service.FractalService
 import nutria.frontend.util.LenseUtils
 import snabbdom.Node
 
@@ -39,7 +38,7 @@ object ExplorerPage extends Page[ExplorerState] {
   override def stateFromUrl = {
     case (user, s"/fractals/${fractalId}/explorer", queryParams) =>
       (for {
-        remoteFractal <- NutriaService.loadFractal(fractalId)
+        remoteFractal <- FractalService.get(fractalId)
       } yield {
         val fractalFromUrl =
           queryParams.get("state").flatMap(Router.queryDecoded[FractalImageEntity])

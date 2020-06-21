@@ -1,6 +1,6 @@
 package nutria.frontend
 
-import nutria.frontend.service.NutriaService
+import nutria.frontend.service.UserService
 import org.scalajs.dom
 import org.scalajs.dom.Element
 import snabbdom.{Snabbdom, SnabbdomFacade, VNode}
@@ -53,7 +53,7 @@ class NutriaApp(container: Element) extends ExecutionContext {
   }
 
   private def loadUserAndRenderFromLocation(): Unit =
-    for (user <- NutriaService.whoAmI()) yield {
+    for (user <- UserService.whoAmI()) yield {
       renderState(Router.stateFromUrl(dom.window.location, user))
     }
 
