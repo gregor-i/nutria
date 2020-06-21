@@ -122,7 +122,7 @@ object ExplorerEvents {
 
     val touchStart = Snabbdom.specificEvent { event: TouchEvent =>
       event.preventDefault()
-      val (canvas, boundingBox) = context(event)
+      val (_, boundingBox) = context(event)
 
       val newTouches =
         toSeq(event.changedTouches)

@@ -11,7 +11,7 @@ object CompileStatus {
   private lazy val canvas: Canvas = dom.document.createElement("canvas").asInstanceOf[Canvas]
   private lazy val webglCtx       = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
 
-  private def hook(template: FractalTemplate, aa: AntiAliase)(elem: Element) =
+  private def hook(template: FractalTemplate)(elem: Element) =
     FractalRenderer.validateSource(template)(webglCtx) match {
       case Left(CompileShaderException(context, _, shader)) =>
         elem.classList.remove("is-success")
@@ -23,19 +23,19 @@ object CompileStatus {
         elem.innerHTML = s"<div class='message-body'>Compiled successfully</div>"
     }
 
-  def apply(template: FractalTemplate, aa: AntiAliase = 1): Node = {
+  def apply(template: FractalTemplate): Node = {
     Node("pre.is-paddingless.message")
       .prop("innerHTML", s"<div class='message-body'>Compiling ...</div>")
       .hook(
         "insert",
         Snabbdom.hook { node =>
-          hook(template, aa)(node.elm.get)
+          hook(template)(node.elm.get)
         }
       )
       .hook(
         "postpatch",
         Snabbdom.hook { (_, newNode) =>
-          hook(template, aa)(newNode.elm.get)
+          hook(template)(newNode.elm.get)
         }
       )
   }

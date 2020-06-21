@@ -71,7 +71,7 @@ object Input {
               case Right(v) =>
                 element.classList.remove("is-danger")
                 update(lens.set(v)(state))
-              case Left(error) =>
+              case Left(_) =>
                 element.classList.add("is-danger")
             }
           }

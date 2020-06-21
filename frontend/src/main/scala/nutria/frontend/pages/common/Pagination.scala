@@ -36,7 +36,7 @@ object Pagination {
             .event("click", action(p))
         )
 
-    val range = ((page - 2).max(1) to (page + 2).min(pages))
+    val range = (page - 2).max(1) to (page + 2).min(pages)
 
     Node("nav.pagination.is-centered")
       .attr("role", "navigation")

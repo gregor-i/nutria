@@ -235,13 +235,6 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
           .style("minHeight", "50vh")
       )
 
-  def source()(implicit state: State) =
-    Node("pre").text(
-      FragmentShaderSource(state.entity.value, 1).linesIterator.zipWithIndex
-        .map { case (line, number) => s"${number + 1}: $line" }
-        .mkString("\n")
-    )
-
   private def actions()(implicit state: State, update: NutriaState => Unit): Node = {
     val buttons: Seq[Node] = (state.user, state.remoteTemplate) match {
       case (Some(user), Some(remote)) if user.id == remote.owner =>

@@ -28,9 +28,6 @@ class GenerateHTMLSpec extends AnyFunSuite {
       })
   }
 
-  def stateRenderingTest(testName: String)(state: NutriaState, fileName: String): Unit =
-    test(testName) {}
-
   private def write(fileName: String, content: String): Future[Unit] = {
     for {
       _ <- Fs.promises
