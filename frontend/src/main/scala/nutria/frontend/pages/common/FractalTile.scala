@@ -1,6 +1,7 @@
 package nutria.frontend.pages.common
 
 import nutria.core.{Dimensions, FractalImage}
+import nutria.frontend.util.AsyncUtil
 import nutria.shaderBuilder.FractalRenderer
 import org.scalajs.dom
 import org.scalajs.dom.html.{Canvas, Image}
@@ -8,7 +9,6 @@ import org.scalajs.dom.raw.WebGLRenderingContext
 import snabbdom.{Node, Snabbdom}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 object FractalTile {
   def apply(fractalImage: FractalImage, dimensions: Dimensions): Node =
@@ -31,9 +31,11 @@ private object ImgStrategy {
       .hook(
         "insert",
         Snabbdom.hook { node =>
-          val img = node.elm.get.asInstanceOf[Image]
-          Future(dataUrl(fractalImage, dimensions))
-            .foreach(dataUrl => img.src = dataUrl)
+          AsyncUtil
+            .sleep(0)
+            .foreach { _ =>
+              node.elm.get.asInstanceOf[Image].src = dataUrl(fractalImage, dimensions)
+            }
         }
       )
 
