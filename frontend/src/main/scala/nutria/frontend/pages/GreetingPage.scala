@@ -43,5 +43,8 @@ object GreetingPage extends Page[GreetingState] {
   }
 
   private def renderCanvas(implicit state: GreetingState, update: ExplorerState => Unit): Node =
-    Node("canvas.background").hooks(CanvasHooks(state.randomFractal))
+    Node("div.background")
+      .child(
+        Node("canvas").hooks(CanvasHooks(state.randomFractal))
+      )
 }
