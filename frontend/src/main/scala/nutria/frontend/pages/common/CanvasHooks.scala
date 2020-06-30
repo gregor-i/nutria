@@ -17,6 +17,7 @@ object CanvasHooks extends ExecutionContext {
           .sleep(0)
           .foreach { _ =>
             FractalRenderer.render(interactionPanel, canvas, fractal)
+            canvas.style.transform = null
           }
       },
       "postpatch" -> Snabbdom.hook { (_, newNode) =>
@@ -26,6 +27,7 @@ object CanvasHooks extends ExecutionContext {
           .sleep(0)
           .foreach { _ =>
             FractalRenderer.render(interactionPanel, canvas, fractal)
+            canvas.style.transform = null
           }
       },
       "destroy" -> Snabbdom.hook { node =>

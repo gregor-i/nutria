@@ -2,7 +2,6 @@ package nutria.frontend.pages.explorer
 
 import monocle.Lens
 import nutria.core.{Point, Viewport}
-import nutria.frontend.pages.ExplorerState
 import org.scalajs.dom._
 import org.scalajs.dom.html.Canvas
 import snabbdom.{Snabbdom, SnabbdomFacade}
@@ -13,8 +12,10 @@ object ExplorerEvents {
   private def toSeq(touchList: TouchList): Seq[Touch] =
     Seq.tabulate(touchList.length)(touchList.apply)
 
-  private def resetTransformCss(element: Canvas) =
-    element.asInstanceOf[js.Dynamic].style.transform = ""
+  private def resetTransformCss(element: Canvas) = {
+    // The reset will be performed by the canvas hooks after rendering
+    // element.asInstanceOf[js.Dynamic].style.transform = ""
+  }
 
   private def transformCss(element: Canvas, moves: Seq[(Point, Point)]): Unit = {
     val (translate, scale, rotate) = Transform.transformations(moves)
