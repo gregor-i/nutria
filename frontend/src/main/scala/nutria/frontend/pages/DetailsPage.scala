@@ -87,7 +87,10 @@ object DetailsPage extends Page[DetailsState] {
       )
 
   def parameters(lens: Lens[State, Vector[Parameter]])(implicit state: State, update: NutriaState => Unit) = {
-    ParameterForm.list(lens)
+    ParameterForm.list(lens) :+ Form.forLens(
+      "Anti Aliase (multi sampling)",
+      DetailsState.fractalToEdit_entity_image.composeLens(FractalImage.antiAliase)
+    )
   }
 
   def preview()(implicit state: State, update: NutriaState => Unit) =

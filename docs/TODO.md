@@ -7,6 +7,5 @@
     - return to start position actions
  - details:
    - make it a modal over explorer
-   - anti aliase is missing
  - general:
    - some failed futures are not handled
