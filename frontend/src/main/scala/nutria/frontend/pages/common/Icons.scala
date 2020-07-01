@@ -25,6 +25,7 @@ object Icons {
   val plus      = "fa-plus"
   val next      = "fa-chevron-right"
   val prev      = "fa-chevron-left"
+  val undo      = "fa-undo"
 
   def icon(icon: String): Node =
     Node("span.icon")

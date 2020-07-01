@@ -3,8 +3,6 @@
     - define a data protection policy
     - more faq / form to ask a question
     - explain actions, icons and parameters
- - explorer:
-    - return to start position actions
  - details:
    - make it a modal over explorer
  - general:

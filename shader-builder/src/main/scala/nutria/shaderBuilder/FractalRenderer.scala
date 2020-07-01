@@ -31,6 +31,7 @@ object FractalRenderer {
 
       case (`ctx`, cachedImage, cachedProgram) if cachedImage.copy(viewport = image.viewport) == image =>
         draw(image.viewport, cachedProgram)(ctx)
+        cache = (ctx, image, cachedProgram)
         Right(cachedProgram)
 
       case _ =>

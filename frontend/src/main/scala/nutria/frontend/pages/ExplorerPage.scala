@@ -8,7 +8,7 @@ import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common._
 import nutria.frontend.service.FractalService
-import nutria.frontend.util.LenseUtils
+import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
 import snabbdom.Node
 
 @Lenses
@@ -41,17 +41,16 @@ object ExplorerPage extends Page[ExplorerState] {
         remoteFractal <- FractalService.get(fractalId)
       } yield {
         val fractalFromUrl =
-          queryParams.get("state").flatMap(Router.queryDecoded[FractalImageEntity])
+          queryParams
+            .get("state")
+            .flatMap(Router.queryDecoded[FractalImageEntity])
+            .getOrElse(remoteFractal.entity)
 
-        fractalFromUrl match {
-          case Some(image) =>
-            ExplorerState(
-              user,
-              remoteFractal = Some(remoteFractal),
-              fractalImage = image
-            )
-          case None => ErrorState(user, "Query Parameter is invalid")
-        }
+        ExplorerState(
+          user,
+          remoteFractal = Some(remoteFractal),
+          fractalImage = fractalFromUrl
+        )
       }).loading(user)
 
     case (user, "/explorer", queryParams) =>
@@ -83,14 +82,10 @@ object ExplorerPage extends Page[ExplorerState] {
   def renderActionBar()(implicit state: ExplorerState, update: NutriaState => Unit): Node =
     ButtonList()
       .classes("overlay-bottom-right", "padding")
-      .child(
-        state.remoteFractal match {
-          case Some(remoteFractal) => Some(buttonGoToDetails(remoteFractal, state.fractalImage))
-          case None                => None
-        }
-      )
       .child(buttonSave(state.fractalImage))
+      .childOptional(state.remoteFractal.map(remoteFractal => buttonGoToDetails(remoteFractal, state.fractalImage)))
       .child(Button.icon(Icons.download, Actions.openSaveToDiskModal))
+      .child(buttonResetViewport())
 
   def buttonGoToDetails(
       remoteFractal: WithId[FractalImageEntity],
@@ -99,6 +94,12 @@ object ExplorerPage extends Page[ExplorerState] {
     Link(Links.detailsState(remoteFractal, currentFractal, state.user))
       .classes("button", "is-rounded")
       .child(Icons.icon(Icons.edit))
+
+  def buttonResetViewport()(implicit state: State, update: NutriaState => Unit) =
+    state.remoteFractal match {
+      case Some(remoteFractal) => Button.icon(Icons.undo, SnabbdomUtil.update(ExplorerState.viewport.set(remoteFractal.entity.value.viewport)))
+      case None                => Button.icon(Icons.undo, SnabbdomUtil.noop).boolAttr("disabled", true)
+    }
 
   def buttonSave(fractalImage: FractalImageEntity)(implicit state: ExplorerState, update: NutriaState => Unit) =
     Button
