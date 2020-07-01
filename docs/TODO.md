@@ -5,15 +5,8 @@
     - explain actions, icons and parameters
  - explorer:
     - return to start position actions
- - gallery:
-    - pagination / infinite scrolling
  - details:
    - make it a modal over explorer
+   - anti aliase is missing
  - general:
    - some failed futures are not handled
-   - links cost a lot of rendering time
- - backend:
-   - add inserted  / last updated to WithId
-   - sort by last updated?
- - editor:
-   - color gradient parameter
