@@ -15,13 +15,13 @@ object EntityAttributes {
     Seq(
       Form.forLens("Title", lens composeLens Entity.title),
       Form.forLens("Description", lens composeLens Entity.description),
-      Form.readonlyStringInput("Published", lens.get(state).published.toString),
       Form.forLens(
         "References",
         lens composeLens Entity.reference composeIso Iso[List[String], String](
           _.mkString(" ")
         )(_.split("\\s").filter(_.nonEmpty).toList)
-      )
+      ),
+      Form.readonlyStringInput("Published", if (lens.get(state).published) "published" else "private")
     )
   }
 }
