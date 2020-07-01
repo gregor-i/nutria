@@ -8,9 +8,7 @@ import nutria.frontend.pages.common.{Body, Button, ButtonList, CanvasHooks, Icon
 import nutria.macros.StaticContent
 import snabbdom.Node
 
-case class GreetingState(user: Option[User], randomFractal: FractalImage, navbarExpanded: Boolean = false) extends NutriaState {
-  override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
-}
+case class GreetingState(user: Option[User], randomFractal: FractalImage) extends NutriaState
 
 object GreetingPage extends Page[GreetingState] {
   override def stateFromUrl = {

@@ -19,8 +19,7 @@ case class DetailsState(
     fractalToEdit: WithId[FractalImageEntity],
     navbarExpanded: Boolean = false
 ) extends NutriaState {
-  def dirty: Boolean                                            = remoteFractal != fractalToEdit
-  override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
+  def dirty: Boolean = remoteFractal != fractalToEdit
 }
 
 object DetailsState extends LenseUtils {
@@ -39,7 +38,7 @@ object DetailsPage extends Page[DetailsState] {
 
   def render(implicit state: State, update: NutriaState => Unit) =
     Body()
-      .child(common.Header())
+      .child(common.Header(DetailsState.navbarExpanded))
       .child(
         Header
           .fab(Node("button"))

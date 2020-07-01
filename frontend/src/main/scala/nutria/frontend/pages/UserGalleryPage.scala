@@ -17,9 +17,7 @@ case class UserGalleryState(
     userFractals: Seq[WithId[FractalImageEntity]],
     page: Int,
     navbarExpanded: Boolean = false
-) extends NutriaState {
-  override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
-}
+) extends NutriaState
 
 object UserGalleryPage extends Page[UserGalleryState] {
 
@@ -35,7 +33,7 @@ object UserGalleryPage extends Page[UserGalleryState] {
 
   def render(implicit state: UserGalleryState, update: NutriaState => Unit) =
     Body()
-      .child(Header())
+      .child(Header(UserGalleryState.navbarExpanded))
       .child(
         Link
           .async("/new-fractal", CreateNewFractalState.load(state.user))

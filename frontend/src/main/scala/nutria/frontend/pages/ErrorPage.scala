@@ -1,14 +1,14 @@
 package nutria.frontend.pages
 
+import monocle.macros.Lenses
 import nutria.api.User
 import nutria.frontend.Router.Location
 import nutria.frontend._
 import nutria.frontend.pages.common.{Body, Header}
 import snabbdom._
 
-case class ErrorState(user: Option[User], message: String, navbarExpanded: Boolean = false) extends NutriaState {
-  override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
-}
+@Lenses
+case class ErrorState(user: Option[User], message: String, navbarExpanded: Boolean = false) extends NutriaState
 
 object ErrorPage extends Page[ErrorState] {
   def stateFromUrl = PartialFunction.empty
@@ -17,7 +17,7 @@ object ErrorPage extends Page[ErrorState] {
 
   def render(implicit state: ErrorState, update: NutriaState => Unit): Node =
     Body()
-      .child(Header())
+      .child(Header(ErrorState.navbarExpanded))
       .child(
         Node("div.section")
           .child(

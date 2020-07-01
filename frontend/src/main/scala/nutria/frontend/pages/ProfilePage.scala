@@ -1,17 +1,18 @@
 package nutria.frontend.pages
 
+import monocle.macros.Lenses
 import nutria.api.User
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common._
 import snabbdom.Node
 
+@Lenses
 case class ProfileState(
     about: User,
     navbarExpanded: Boolean = false
 ) extends NutriaState {
-  def user: Some[User]                                          = Some(about)
-  override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
+  def user: Some[User] = Some(about)
 }
 
 object ProfilePage extends Page[ProfileState] {
@@ -26,7 +27,7 @@ object ProfilePage extends Page[ProfileState] {
 
   def render(implicit state: ProfileState, update: NutriaState => Unit): Node =
     Body()
-      .child(Header())
+      .child(Header(ProfileState.navbarExpanded))
       .child(content())
       .child(Footer())
 

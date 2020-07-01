@@ -23,9 +23,7 @@ case class CreateNewFractalState(
     templates: Vector[FractalTemplateEntity],
     step: CreateNewFractalState.Step = CreateNewFractalState.TemplateStep,
     navbarExpanded: Boolean = false
-) extends NutriaState {
-  override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
-}
+) extends NutriaState
 
 object CreateNewFractalState extends ExecutionContext {
   sealed trait Step
@@ -69,7 +67,7 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
 
   override def render(implicit state: CreateNewFractalState, update: NutriaState => Unit): Node =
     Body()
-      .child(Header())
+      .child(Header(CreateNewFractalState.navbarExpanded))
       .child(
         Node("div.container")
           .child(Node("section.section").child(Node("h1.title.is-1").text("Create new Fractal")))

@@ -1,5 +1,6 @@
 package nutria.frontend.pages
 
+import monocle.macros.Lenses
 import nutria.api.{Entity, User, WithId}
 import nutria.core.{FractalImage, FractalTemplate}
 import nutria.frontend.Router.{Path, QueryParameter}
@@ -10,6 +11,7 @@ import snabbdom.{Node, Snabbdom, SnabbdomFacade}
 
 import scala.concurrent.Future
 
+@Lenses
 case class AdminState(
     admin: User,
     users: Vector[User],
@@ -17,8 +19,7 @@ case class AdminState(
     templates: Vector[WithId[Option[Entity[FractalTemplate]]]],
     navbarExpanded: Boolean = false
 ) extends NutriaState {
-  def user: Some[User]                                          = Some(admin)
-  override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
+  def user: Some[User] = Some(admin)
 }
 
 object AdminState {
@@ -35,7 +36,7 @@ object AdminPage extends Page[AdminState] {
 
   def render(implicit state: State, update: NutriaState => Unit): Node =
     Body()
-      .child(Header())
+      .child(Header(AdminState.navbarExpanded))
       .child(
         Node("div.container")
           .child(Node("section.section").child(Node("h1.title.is-1").text("Admin:")))

@@ -1,5 +1,6 @@
 package nutria.frontend.pages
 
+import monocle.macros.Lenses
 import nutria.api.User
 import nutria.frontend.Router.Location
 import nutria.frontend.pages.common.{Body, Header}
@@ -9,9 +10,8 @@ import snabbdom._
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
-case class LoadingState(user: Option[User], loading: Future[NutriaState], navbarExpanded: Boolean = false) extends NutriaState {
-  override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
-}
+@Lenses
+case class LoadingState(user: Option[User], loading: Future[NutriaState], navbarExpanded: Boolean = false) extends NutriaState
 
 object LoadingPage extends Page[LoadingState] {
   def stateFromUrl = PartialFunction.empty
@@ -20,7 +20,7 @@ object LoadingPage extends Page[LoadingState] {
 
   def render(implicit state: LoadingState, update: NutriaState => Unit) =
     Body()
-      .child(Header())
+      .child(Header(LoadingState.navbarExpanded))
       .child(
         Node("i.fa.fa-spinner.fa-pulse.has-text-primary")
           .styles(

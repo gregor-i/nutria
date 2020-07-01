@@ -24,8 +24,7 @@ case class TemplateEditorState(
     newParameter: Option[Parameter] = None,
     navbarExpanded: Boolean = false
 ) extends NutriaState {
-  def dirty: Boolean                                   = remoteTemplate.fold(true)(_.entity != entity)
-  def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
+  def dirty: Boolean = remoteTemplate.fold(true)(_.entity != entity)
 }
 
 object TemplateEditorState extends LenseUtils {
@@ -79,7 +78,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
 
   def render(implicit state: State, update: NutriaState => Unit) =
     Body()
-      .child(common.Header())
+      .child(common.Header(TemplateEditorState.navbarExpanded))
       .child(body(state, update))
       .child(common.Footer())
 

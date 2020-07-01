@@ -1,24 +1,26 @@
 package nutria.frontend.pages.common
 
+import monocle.Lens
 import nutria.api.User
 import nutria.frontend._
 import nutria.frontend.pages.{AdminState, FAQState, ProfileState, TemplateEditorState, TemplateGalleryState}
+import nutria.frontend.util.SnabbdomUtil
 import snabbdom.{Node, Snabbdom}
 
 object Header {
 
-  def apply()(implicit state: NutriaState, update: NutriaState => Unit): Node = {
+  def apply[S <: NutriaState](lens: Lens[S, Boolean])(implicit state: S, update: NutriaState => Unit): Node = {
     Node("nav.navbar")
       .attr("role", "navigation")
       .attr("aria-label", "main navigation")
       .child(
         Node("div.navbar-brand")
           .child(brand)
-          .child(burgerMenu)
+          .child(burgerMenu(lens))
       )
       .child(
         Node("div.navbar-menu")
-          .`class`("is-active", state.navbarExpanded)
+          .`class`("is-active", lens.get(state))
           .child(
             Node("div.navbar-start")
               .child(
@@ -109,13 +111,10 @@ object Header {
           .text("Nutria")
       )
 
-  private def burgerMenu(implicit state: NutriaState, update: NutriaState => Unit) =
+  private def burgerMenu[S <: NutriaState](lens: Lens[S, Boolean])(implicit state: S, update: NutriaState => Unit) =
     Node("a.navbar-burger.burger")
-      .event(
-        "click",
-        Snabbdom.event(_ => update(state.setNavbarExtended(!state.navbarExpanded)))
-      )
-      .`class`("is-active", state.navbarExpanded)
+      .event("click", SnabbdomUtil.update(lens.modify(!_)))
+      .`class`("is-active", lens.get(state))
       .attr("aria-label", "menu")
       .attr("aria-expanded", "false")
       .child(Node("span").attr("aria-hidden", "true"))

@@ -1,5 +1,6 @@
 package nutria.frontend.pages
 
+import monocle.macros.Lenses
 import nutria.api.{FractalTemplateEntityWithId, User}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common._
@@ -9,13 +10,12 @@ import snabbdom.{Node, Snabbdom}
 
 import scala.concurrent.Future
 
+@Lenses
 case class TemplateGalleryState(
     templates: Seq[FractalTemplateEntityWithId],
     user: Option[User],
     navbarExpanded: Boolean = false
-) extends NutriaState {
-  def setNavbarExtended(boolean: Boolean) = copy(navbarExpanded = boolean)
-}
+) extends NutriaState
 
 object TemplateGalleryState extends ExecutionContext {
   def load(user: Option[User]): Future[TemplateGalleryState] =
@@ -34,7 +34,7 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
 
   override def render(implicit state: State, update: NutriaState => Unit): Node =
     Body()
-      .child(Header())
+      .child(Header(TemplateGalleryState.navbarExpanded))
       .child(
         Header
           .fab(Node("button"))

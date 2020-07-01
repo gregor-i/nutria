@@ -19,8 +19,7 @@ case class ExplorerState(
     saveModal: Option[SaveFractalDialog] = None,
     navbarExpanded: Boolean = false
 ) extends NutriaState {
-  override def setNavbarExtended(boolean: Boolean): NutriaState = copy(navbarExpanded = boolean)
-  def dirty: Boolean                                            = remoteFractal.fold(true)(_.entity != fractalImage)
+  def dirty: Boolean = remoteFractal.fold(true)(_.entity != fractalImage)
 }
 
 @Lenses
@@ -74,7 +73,7 @@ object ExplorerPage extends Page[ExplorerState] {
 
   def render(implicit state: ExplorerState, update: NutriaState => Unit) =
     Body()
-      .child(Header())
+      .child(Header(ExplorerState.navbarExpanded))
       .child(InteractiveFractal.forImage(ExplorerState.fractalImage.composeLens(Entity.value)))
       .child(renderActionBar())
       .childOptional(saveDialog())
