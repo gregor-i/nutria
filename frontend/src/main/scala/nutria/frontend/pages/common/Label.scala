@@ -1,6 +1,6 @@
 package nutria.frontend.pages.common
 
-import snabbdom.{Node, Snabbdom, SnabbdomFacade}
+import snabbdom.Node
 
 object Label {
   def apply(label: String, description: String = "", actions: Seq[Node], node: Node): Node =

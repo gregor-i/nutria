@@ -186,7 +186,6 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
         selectType,
         Form.forLens("name", lens = lensToParameter.composeLens(Parameter.name)),
         Form.forLens("description", lens = lensToParameter.composeLens(Parameter.description)),
-        ParameterForm(lensToParameter),
         Label(
           label = "generated code:",
           node = Node("pre")
