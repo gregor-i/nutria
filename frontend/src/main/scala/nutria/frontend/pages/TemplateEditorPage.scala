@@ -156,19 +156,19 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       val selectType = Form.selectInput[State, Parameter](
         label = "parameter type",
         options = Seq(
-          "Integer"        -> IntParameter("parameter_name", 0),
-          "Float"          -> FloatParameter("parameter_name", 0.0),
-          "Color"          -> RGBAParameter("parameter_name", RGB.white.withAlpha()),
-          "Color Gradient" -> ColorGradientParameter("parameter_name", Seq(RGB.white.withAlpha(), RGB.black.withAlpha())),
+          "Integer"        -> IntParameter("parameter_name", value = 0),
+          "Float"          -> FloatParameter("parameter_name", value = 0.0),
+          "Color"          -> RGBAParameter("parameter_name", value = RGB.white.withAlpha()),
+          "Color Gradient" -> ColorGradientParameter("parameter_name", value = Seq(RGB.white.withAlpha(), RGB.black.withAlpha())),
           "Function1 f: (lambda) => C" ->
-            InitialFunctionParameter("function_name", StringFunction.unsafe("lambda")),
+            InitialFunctionParameter("function_name", value = StringFunction.unsafe("lambda")),
           "Function1 f: (lambda) => C, with derivative: (lambda) => C" ->
-            InitialFunctionParameter("function_name", StringFunction.unsafe("lambda"), includeDerivative = true),
-          "Function2 f: (z, lambda) => C" -> FunctionParameter("function_name", StringFunction.unsafe("z + lambda")),
+            InitialFunctionParameter("function_name", value = StringFunction.unsafe("lambda"), includeDerivative = true),
+          "Function2 f: (z, lambda) => C" -> FunctionParameter("function_name", value = StringFunction.unsafe("z + lambda")),
           "Function2 f: (z, lambda) => C, with derivative: (z, lambda) => C" ->
-            NewtonFunctionParameter("function_name", StringFunction.unsafe("z + lambda"), includeDerivative = true),
+            NewtonFunctionParameter("function_name", value = StringFunction.unsafe("z + lambda"), includeDerivative = true),
           "Function2 f: (z, lambda) => C, with derivative: (z, z', lambda) => C" ->
-            FunctionParameter("function_name", StringFunction.unsafe("z + lambda"), includeDerivative = true)
+            FunctionParameter("function_name", value = StringFunction.unsafe("z + lambda"), includeDerivative = true)
         ),
         lens = lensToParameter,
         eqFunction = (left, right) => {
@@ -184,7 +184,8 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       Modal(closeAction = SnabbdomUtil.update(lensToMaybeParameter.set(None)))(
         Node("h5.title.is-5").text("Add Parameter"),
         selectType,
-        Form.forLens("name", lensToParameter.composeLens(Parameter.name)),
+        Form.forLens("name", lens = lensToParameter.composeLens(Parameter.name)),
+        Form.forLens("description", lens = lensToParameter.composeLens(Parameter.description)),
         ParameterForm(lensToParameter),
         Label(
           label = "generated code:",
@@ -212,8 +213,11 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     val lens = TemplateEditorState.parameters
     val openModalButton =
       ButtonList(
-        Button("Add new Parameter", Icons.plus, SnabbdomUtil.update(TemplateEditorState.newParameter.set(Some(IntParameter("parameter_name", 0)))))
-          .classes("is-marginless")
+        Button(
+          "Add new Parameter",
+          Icons.plus,
+          SnabbdomUtil.update(TemplateEditorState.newParameter.set(Some(IntParameter("parameter_name", value = 0))))
+        ).classes("is-marginless")
       )
 
     ParameterForm.listWithDelete(lens) ++ Seq(openModalButton)

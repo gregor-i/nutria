@@ -117,16 +117,16 @@ object ExplorerPage extends Page[ExplorerState] {
           .child(
             Form.forLens(
               "width",
-              lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.width
+              lens = lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.width
             )
           )
           .child(
             Form.forLens(
               "height",
-              lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.height
+              lens = lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.height
             )
           )
-          .child(Form.forLens("anti alias", lensParams composeLens SaveFractalDialog.antiAliase)),
+          .child(Form.forLens("anti alias", lens = lensParams composeLens SaveFractalDialog.antiAliase)),
         ButtonList(Button("Download", Icons.download, downloadAction).classes("is-primary"))
       )
     }

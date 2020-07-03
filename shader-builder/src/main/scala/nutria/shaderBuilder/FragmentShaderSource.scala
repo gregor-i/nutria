@@ -39,10 +39,10 @@ object FragmentShaderSource {
   }
 
   def parameter: Parameter => String = {
-    case IntParameter(name, value)           => constant(name, IntLiteral(value))
-    case FloatParameter(name, value)         => constant(name, FloatLiteral(value))
-    case RGBAParameter(name, value)          => constant(name, Vec4.fromRGBA(value))
-    case ColorGradientParameter(name, value) => colorGradient(name, value)
+    case IntParameter(name, _, value)           => constant(name, IntLiteral(value))
+    case FloatParameter(name, _, value)         => constant(name, FloatLiteral(value))
+    case RGBAParameter(name, _, value)          => constant(name, Vec4.fromRGBA(value))
+    case ColorGradientParameter(name, _, value) => colorGradient(name, value)
     case fp: FunctionParameter if fp.includeDerivative =>
       Seq(
         function(fp.name, fp.value.node),
@@ -50,13 +50,13 @@ object FragmentShaderSource {
       ).mkString("\n")
     case fp: FunctionParameter => function(fp.name, fp.value.node)
 
-    case InitialFunctionParameter(name, value, includeDerivative) =>
+    case InitialFunctionParameter(name, _, value, includeDerivative) =>
       if (includeDerivative)
         function(name, value.node) + "\n" + function(name + "_derived", value.node.derive(Lambda))
       else
         function(name, value.node)
 
-    case NewtonFunctionParameter(name, value, true) =>
+    case NewtonFunctionParameter(name, _, value, true) =>
       function(name, value.node) + "\n" + function(name + "_derived", value.node.derive(Z))
   }
 

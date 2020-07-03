@@ -6,9 +6,15 @@ import snabbdom.{Node, Snabbdom}
 
 object Form {
 
-  def forLens[S, V](label: String, lens: Lens[S, V], actions: Seq[Node] = Seq.empty)(implicit input: Input[S, V], update: S => Unit, state: S): Node =
+  // todo: remove detault
+  def forLens[S, V](label: String, description: String = "", lens: Lens[S, V], actions: Seq[Node] = Seq.empty)(
+      implicit input: Input[S, V],
+      update: S => Unit,
+      state: S
+  ): Node =
     Label(
       label = label,
+      description = description,
       actions = actions,
       node = input.node(lens)
     )

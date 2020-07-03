@@ -13,11 +13,11 @@ object EntityAttributes {
 
   def form[S, E](lens: Lens[S, Entity[E]])(implicit state: S, update: S => Unit): Seq[Node] = {
     Seq(
-      Form.forLens("Title", lens composeLens Entity.title),
-      Form.forLens("Description", lens composeLens Entity.description),
+      Form.forLens("Title", lens = lens composeLens Entity.title),
+      Form.forLens("Description", lens = lens composeLens Entity.description),
       Form.forLens(
         "References",
-        lens composeLens Entity.reference composeIso Iso[List[String], String](
+        lens = lens composeLens Entity.reference composeIso Iso[List[String], String](
           _.mkString(" ")
         )(_.split("\\s").filter(_.nonEmpty).toList)
       ),

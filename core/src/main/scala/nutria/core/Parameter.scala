@@ -8,22 +8,26 @@ import nutria.core.languages.{Lambda, StringFunction, ZAndLambda}
 
 sealed trait Parameter {
   def name: String
+  def description: String
 }
 
 @Lenses
-case class IntParameter(name: String, value: Int) extends Parameter
+case class IntParameter(name: String, description: String = "", value: Int) extends Parameter
 @Lenses
-case class FloatParameter(name: String, value: Double) extends Parameter
+case class FloatParameter(name: String, description: String = "", value: Double) extends Parameter
 @Lenses
-case class RGBAParameter(name: String, value: RGBA) extends Parameter
+case class RGBAParameter(name: String, description: String = "", value: RGBA) extends Parameter
 @Lenses
-case class ColorGradientParameter(name: String, value: Seq[RGBA]) extends Parameter
+case class ColorGradientParameter(name: String, description: String = "", value: Seq[RGBA]) extends Parameter
 @Lenses
-case class FunctionParameter(name: String, value: StringFunction[ZAndLambda], includeDerivative: Boolean = false) extends Parameter
+case class FunctionParameter(name: String, description: String = "", value: StringFunction[ZAndLambda], includeDerivative: Boolean = false)
+    extends Parameter
 @Lenses
-case class InitialFunctionParameter(name: String, value: StringFunction[Lambda.type], includeDerivative: Boolean = false) extends Parameter
+case class InitialFunctionParameter(name: String, description: String = "", value: StringFunction[Lambda.type], includeDerivative: Boolean = false)
+    extends Parameter
 @Lenses
-case class NewtonFunctionParameter(name: String, value: StringFunction[ZAndLambda], includeDerivative: Boolean = false) extends Parameter
+case class NewtonFunctionParameter(name: String, description: String = "", value: StringFunction[ZAndLambda], includeDerivative: Boolean = false)
+    extends Parameter
 
 object Parameter extends CirceCodec {
 
@@ -36,6 +40,18 @@ object Parameter extends CirceCodec {
       case p: FunctionParameter        => FunctionParameter.name.set(newName)(p)
       case p: InitialFunctionParameter => InitialFunctionParameter.name.set(newName)(p)
       case p: NewtonFunctionParameter  => NewtonFunctionParameter.name.set(newName)(p)
+    }
+  }
+
+  val description = Lens[Parameter, String](get = _.description) { newDescription =>
+    {
+      case p: IntParameter             => IntParameter.description.set(newDescription)(p)
+      case p: FloatParameter           => FloatParameter.description.set(newDescription)(p)
+      case p: RGBAParameter            => RGBAParameter.description.set(newDescription)(p)
+      case p: ColorGradientParameter   => ColorGradientParameter.description.set(newDescription)(p)
+      case p: FunctionParameter        => FunctionParameter.description.set(newDescription)(p)
+      case p: InitialFunctionParameter => InitialFunctionParameter.description.set(newDescription)(p)
+      case p: NewtonFunctionParameter  => NewtonFunctionParameter.description.set(newDescription)(p)
     }
   }
 
