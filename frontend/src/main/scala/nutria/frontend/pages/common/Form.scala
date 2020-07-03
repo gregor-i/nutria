@@ -1,13 +1,14 @@
 package nutria.frontend.pages.common
 
 import monocle.Lens
+import nutria.frontend.util.SnabbdomUtil
 import org.scalajs.dom.raw.{HTMLInputElement, HTMLSelectElement}
 import snabbdom.{Node, Snabbdom}
 
 object Form {
 
-  // todo: remove detault
-  def forLens[S, V](label: String, description: String = "", lens: Lens[S, V], actions: Seq[Node] = Seq.empty)(
+  // todo: remove default description
+  def forLens[S, V](label: String, description: String = "", lens: Lens[S, V], actions: Seq[(String, S => S)] = Seq.empty)(
       implicit input: Input[S, V],
       update: S => Unit,
       state: S
@@ -15,9 +16,12 @@ object Form {
     Label(
       label = label,
       description = description,
-      actions = actions,
+      actions = actions.map(actionButton(_)),
       node = input.node(lens)
     )
+
+  private def actionButton[S, V](tupled: (String, S => S))(implicit state: S, update: S => Unit): Node =
+    Button.icon(tupled._1, SnabbdomUtil.update[S](tupled._2), round = false)
 
   def readonlyStringInput(
       label: String,

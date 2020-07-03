@@ -99,7 +99,8 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       .child(
         Node("section.section").children(
           Node("h4.title.is-4").text("Parameters:"),
-          parameters()
+          parameters(),
+          openModalButton()
         )
       )
       .child(
@@ -209,18 +210,26 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     }
 
   def parameters()(implicit state: State, update: NutriaState => Unit): Seq[Node] = {
-    val lens = TemplateEditorState.parameters
-    val openModalButton =
-      ButtonList(
-        Button(
-          "Add new Parameter",
-          Icons.plus,
-          SnabbdomUtil.update(TemplateEditorState.newParameter.set(Some(IntParameter("parameter_name", value = 0))))
-        ).classes("is-marginless")
+    val actions: Parameter => Seq[(String, State => State)] = parameter =>
+      Seq(
+        Icons.edit   -> TemplateEditorState.newParameter.set(Some(parameter)),
+        Icons.delete -> TemplateEditorState.parameters.modify(_.filter(_ != parameter))
       )
 
-    ParameterForm.listWithDelete(lens) ++ Seq(openModalButton)
+    ParameterForm.listWithActions(
+      TemplateEditorState.parameters,
+      actions
+    )
   }
+
+  def openModalButton()(implicit state: State, update: State => Unit) =
+    ButtonList(
+      Button(
+        "Add new Parameter",
+        Icons.plus,
+        SnabbdomUtil.update(TemplateEditorState.newParameter.set(Some(IntParameter("parameter_name", value = 0))))
+      ).classes("is-marginless")
+    )
 
   def preview()(implicit state: State, update: NutriaState => Unit) =
     Node("div.fractal-tile-list")

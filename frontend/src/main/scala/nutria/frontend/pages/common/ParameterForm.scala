@@ -19,18 +19,25 @@ import snabbdom.{Node, SnabbdomFacade}
 import scala.util.chaining._
 
 object ParameterForm {
-  def listWithDelete[S](lens: Lens[S, Vector[Parameter]])(implicit state: S, update: S => Unit): Seq[Node] =
+  def listWithActions[S](
+      lens: Lens[S, Vector[Parameter]],
+      actions: Parameter => Seq[(String, S => S)]
+  )(implicit state: S, update: S => Unit): Seq[Node] =
     lens
       .get(state)
-      .indices
-      .map { i =>
-        val deleteAction = SnabbdomUtil.update(lens.modify(_.zipWithIndex.filter(_._2 != i).map(_._1)))
-        val deleteButton = Button.icon(Icons.delete, deleteAction, round = false)
-
+      .map { parameter =>
         lens
-          .composeOptional(Index.index(i))
-          .pipe(LenseUtils.unsafeOptional)
-          .pipe(apply(_, Seq(deleteButton)))
+          .composeLens(
+            Lens[Vector[Parameter], Parameter](get = _ => parameter)(
+              set = newParameter =>
+                oldParameters =>
+                  oldParameters.map {
+                    case `parameter`    => newParameter
+                    case otherParameter => otherParameter
+                  }
+            )
+          )
+          .pipe(apply(_, actions(parameter)))
       }
 
   def list[S](lens: Lens[S, Vector[Parameter]])(implicit state: S, update: S => Unit): Seq[Node] =
@@ -44,7 +51,7 @@ object ParameterForm {
           .pipe(apply(_))
       }
 
-  def apply[S](lens: Lens[S, Parameter], actions: Seq[Node] = Seq.empty)(implicit state: S, update: S => Unit): Node = {
+  def apply[S](lens: Lens[S, Parameter], actions: Seq[(String, S => S)] = Seq.empty)(implicit state: S, update: S => Unit): Node = {
     lens.get(state) match {
       case p: IntParameter =>
         val valueLens = lens.composePrism(Parameter.prismIntParameter).composeLens(IntParameter.value).pipe(LenseUtils.unsafeOptional)
