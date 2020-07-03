@@ -24,9 +24,9 @@ object RenderAssets {
       .pipe(
         FractalTemplate.applyParameters(_)(
           Vector(
-            RGBAParameter("colorFar", RGB.black.withAlpha(0.0)),
-            RGBAParameter("colorNear", RGB.black.withAlpha()),
-            RGBAParameter("colorInside", RGB.black.withAlpha())
+            RGBAParameter("colorFar", value = RGB.black.withAlpha(0.0)),
+            RGBAParameter("colorNear", value = RGB.black.withAlpha()),
+            RGBAParameter("colorInside", value = RGB.black.withAlpha())
           )
         )
       )

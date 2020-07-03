@@ -24,16 +24,18 @@ object TestData {
   private val user           = Some(User("user", "name", "email", None))
 
   val states: Seq[(String, NutriaState)] = Seq(
-    "Loading"                      -> LoadingState(None, Future.failed(new Exception)),
-    "Error"                        -> ErrorState(user, "error message"),
-    "FAQ"                          -> FAQState(user = None),
-    "Greeting"                     -> GreetingState(user, randomFractal = fractalImage),
-    "Explorer-owner"               -> ExplorerState(user = owner, remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)),
-    "Explorer-no-user"             -> ExplorerState(user = None, remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)),
-    "Explorer-user"                -> ExplorerState(user = user, remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)),
-    "Gallery"                      -> GalleryState(user = None, publicFractals = publicFractals),
-    "Details-Diverging"            -> DetailsState(user = None, remoteFractal = fractalEntity, fractalToEdit = fractalEntity),
-    "Template-Editor"              -> TemplateEditorState.initial(FAQState(user = None)),
-    "Template-Editor-newParameter" -> TemplateEditorState.initial(FAQState(user = None)).copy(newParameter = Some(IntParameter("name", 5)))
+    "Loading"           -> LoadingState(None, Future.failed(new Exception)),
+    "Error"             -> ErrorState(user, "error message"),
+    "FAQ"               -> FAQState(user = None),
+    "Greeting"          -> GreetingState(user, randomFractal = fractalImage),
+    "Explorer-owner"    -> ExplorerState(user = owner, remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)),
+    "Explorer-no-user"  -> ExplorerState(user = None, remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)),
+    "Explorer-user"     -> ExplorerState(user = user, remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)),
+    "Gallery"           -> GalleryState(user = None, publicFractals = publicFractals, page = 1),
+    "Details-Diverging" -> DetailsState(user = None, remoteFractal = fractalEntity, fractalToEdit = fractalEntity),
+    "Template-Editor"   -> TemplateEditorState.initial(FAQState(user = None)),
+    "Template-Editor-newParameter" -> TemplateEditorState
+      .initial(FAQState(user = None))
+      .copy(newParameter = Some(IntParameter("name", description = "description", value = 5)))
   )
 }
