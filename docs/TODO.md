@@ -7,7 +7,3 @@
    - make it a modal over explorer
  - general:
    - some failed futures are not handled
- - template editor:
-   - edit parameter button
-   - add description to parameter
-   - move up / down for parameter

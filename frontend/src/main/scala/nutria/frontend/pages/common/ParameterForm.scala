@@ -19,36 +19,17 @@ import snabbdom.{Node, SnabbdomFacade}
 import scala.util.chaining._
 
 object ParameterForm {
-  def listWithActions[S](
+  def list[S](
       lens: Lens[S, Vector[Parameter]],
-      actions: Parameter => Seq[(String, S => S)]
+      actions: Parameter => Seq[(String, S => S)] = (_: Parameter) => Seq.empty
   )(implicit state: S, update: S => Unit): Seq[Node] =
     lens
       .get(state)
+      .sorted
       .map { parameter =>
         lens
-          .composeLens(
-            Lens[Vector[Parameter], Parameter](get = _ => parameter)(
-              set = newParameter =>
-                oldParameters =>
-                  oldParameters.map {
-                    case `parameter`    => newParameter
-                    case otherParameter => otherParameter
-                  }
-            )
-          )
+          .composeLens(LenseUtils.seqWhere(parameter))
           .pipe(apply(_, actions(parameter)))
-      }
-
-  def list[S](lens: Lens[S, Vector[Parameter]])(implicit state: S, update: S => Unit): Seq[Node] =
-    lens
-      .get(state)
-      .indices
-      .map { i =>
-        lens
-          .composeOptional(Index.index(i))
-          .pipe(LenseUtils.unsafeOptional)
-          .pipe(apply(_))
       }
 
   def apply[S](lens: Lens[S, Parameter], actions: Seq[(String, S => S)] = Seq.empty)(implicit state: S, update: S => Unit): Node = {

@@ -216,7 +216,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
         Icons.delete -> TemplateEditorState.parameters.modify(_.filter(_ != parameter))
       )
 
-    ParameterForm.listWithActions(
+    ParameterForm.list(
       TemplateEditorState.parameters,
       actions
     )

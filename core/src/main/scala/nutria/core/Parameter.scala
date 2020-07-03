@@ -74,4 +74,14 @@ object Parameter extends CirceCodec {
     }
 
   implicit val codec: Codec[Parameter] = semiauto.deriveConfiguredCodec
+
+  implicit val ordering: Ordering[Parameter] = Ordering.by {
+    case p: IntParameter             => (1, p.name)
+    case p: FloatParameter           => (2, p.name)
+    case p: RGBAParameter            => (3, p.name)
+    case p: ColorGradientParameter   => (4, p.name)
+    case p: FunctionParameter        => (5, p.name)
+    case p: InitialFunctionParameter => (6, p.name)
+    case p: NewtonFunctionParameter  => (7, p.name)
+  }
 }
