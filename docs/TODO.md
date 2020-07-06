@@ -7,3 +7,5 @@
    - make it a modal over explorer
  - general:
    - some failed futures are not handled
+ - explorer:
+   - limit maximal zoom in / zoom out
