@@ -57,8 +57,8 @@ object ExplorerEvents {
         update(
           lens.modify {
             _.cover(boundingBox.width, boundingBox.height)
-              .zoomSteps(p, steps / 50)
-              .rotate(p, event.asInstanceOf[WheelEvent].deltaX / 200)
+              .zoomSteps(p, steps / 50.0)
+              .rotate(p, event.asInstanceOf[WheelEvent].deltaX / 200.0)
           }(state)
         )
       }
@@ -70,7 +70,6 @@ object ExplorerEvents {
 
     val pointerDown =
       Snabbdom.specificEvent { event: MouseEvent =>
-        println("start")
         event.preventDefault()
         val (_, boundingBox) = context(event)
         startPosition = Some(toPoint(event, boundingBox))

@@ -20,6 +20,8 @@ object Viewport extends CirceCodec {
 
   val defaultMovementFactor: Double = 0.20
   val defaultZoomInFactor: Double   = 0.60
+  val minLength: Double             = 1e-5
+  val maxLength: Double             = 1e3
 
   implicit val ordering: Ordering[Viewport] = Ordering.by(view => (view.A.abs, view.B.abs, view.origin.abs))
 }
@@ -37,12 +39,20 @@ case class Viewport(origin: Point, A: Point, B: Point) {
   def focus(xRatio: Double, yRatio: Double): Viewport =
     translate(A * (xRatio - 0.5) + (B * (yRatio - 0.5)))
 
-  def zoom(z: Point, zoomFactor: Double): Viewport =
+  def zoom(z: Point, zoomFactorInput: Double): Viewport = {
+    val zoomFactor = if (A.abs * zoomFactorInput < minLength || B.abs * zoomFactorInput < minLength) {
+      Math.max(A.abs / minLength, B.abs / minLength)
+    } else if (A.abs * zoomFactorInput > maxLength || B.abs * zoomFactorInput > maxLength) {
+      Math.min(A.abs / maxLength, B.abs / maxLength)
+    } else {
+      zoomFactorInput
+    }
     Viewport(
       origin = origin + (A * z.x + B * z.y) * (1 - zoomFactor),
       A = A * zoomFactor,
       B = B * zoomFactor
     )
+  }
 
   def zoomOut(z: (Double, Double) = (0.5, 0.5), zoomFactor: Double = defaultZoomInFactor): Viewport =
     zoom(z, 1 / zoomFactor)
