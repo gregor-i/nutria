@@ -7,5 +7,3 @@
    - make it a modal over explorer
  - general:
    - some failed futures are not handled
- - template editor:
-   - debounce input events

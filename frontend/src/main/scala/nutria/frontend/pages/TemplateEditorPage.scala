@@ -7,13 +7,16 @@ import nutria.core._
 import nutria.core.languages.StringFunction
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
+import nutria.frontend.facades.Debounce
 import nutria.frontend.pages.common.{Form, _}
 import nutria.frontend.service.TemplateService
 import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
 import nutria.shaderBuilder.FragmentShaderSource
+import org.scalajs.dom
 import org.scalajs.dom.raw.HTMLTextAreaElement
 import snabbdom.{Node, Snabbdom}
 
+import scala.scalajs.js
 import scala.util.chaining._
 
 @Lenses
@@ -129,13 +132,16 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
           Node("textarea.code-editor.is-family-code")
             .event(
               "input",
-              Snabbdom.event { event =>
-                event.target
-                  .asInstanceOf[HTMLTextAreaElement]
-                  .value
-                  .pipe(lens.composeLens(FractalTemplate.code).set(_)(state))
-                  .tap(update)
-              }
+              Debounce(
+                Snabbdom.event { event =>
+                  event.target
+                    .asInstanceOf[HTMLTextAreaElement]
+                    .value
+                    .pipe(lens.composeLens(FractalTemplate.code).set(_)(state))
+                    .tap(update)
+                },
+                250
+              )
             )
             .text(state.entity.value.code)
         )
