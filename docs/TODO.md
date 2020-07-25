@@ -1,9 +1,12 @@
 ## todo list:
  - documentation:
-    - define a data protection policy
-    - more faq / form to ask a question
+    - more faq
+    - form to ask a question
     - explain actions, icons and parameters
+    - use an "Purpose first Design Patterns" for introduction
+    - define a data protection policy
  - details:
    - make it a modal over explorer
  - general:
    - some failed futures are not handled
+   - GL lose context is not handled in explorer / interactive panel.

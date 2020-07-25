@@ -287,7 +287,4 @@ object Actions {
       link.click()
       dom.document.body.removeChild(link)
     }
-
-  def gotoFAQ()(implicit state: NutriaState): FAQState =
-    FAQState(state.user)
 }

@@ -12,7 +12,7 @@ object Pages {
     UserGalleryPage,
     LoadingPage,
     GreetingPage,
-    FAQPage,
+    DocumentationPage,
     ProfilePage,
     TemplateEditorPage,
     TemplateGalleryPage,

@@ -27,7 +27,7 @@ object GreetingPage extends Page[GreetingState] {
     Modal(closeAction = Actions.exploreFractal())(
       Node("div.content").prop("innerHTML", StaticContent("frontend/src/main/html/greeting.html")),
       ButtonList(
-        Link(Actions.gotoFAQ())
+        Link(DocumentationState.introduction)
           .classes("button", "is-link", "is-outlined")
           .child(Icons.icon(Icons.info))
           .child(Node("span").text("more information")),

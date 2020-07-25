@@ -23,19 +23,22 @@ object TestData {
   private val owner          = Some(User("owner", "name", "email", None))
   private val user           = Some(User("user", "name", "email", None))
 
+  val dummyState = GreetingState(user, randomFractal = fractalImage)
+
   val states: Seq[(String, NutriaState)] = Seq(
     "Loading"           -> LoadingState(None, Future.failed(new Exception)),
     "Error"             -> ErrorState(user, "error message"),
-    "FAQ"               -> FAQState(user = None),
+    "FAQ"               -> DocumentationState.faq(dummyState),
+    "Introduction"      -> DocumentationState.introduction(dummyState),
     "Greeting"          -> GreetingState(user, randomFractal = fractalImage),
     "Explorer-owner"    -> ExplorerState(user = owner, remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)),
     "Explorer-no-user"  -> ExplorerState(user = None, remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)),
     "Explorer-user"     -> ExplorerState(user = user, remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)),
     "Gallery"           -> GalleryState(user = None, publicFractals = publicFractals, page = 1),
     "Details-Diverging" -> DetailsState(user = None, remoteFractal = fractalEntity, fractalToEdit = fractalEntity),
-    "Template-Editor"   -> TemplateEditorState.initial(FAQState(user = None)),
+    "Template-Editor"   -> TemplateEditorState.initial(dummyState),
     "Template-Editor-newParameter" -> TemplateEditorState
-      .initial(FAQState(user = None))
+      .initial(dummyState)
       .copy(newParameter = Some(IntParameter("name", description = "description", value = 5)))
   )
 }

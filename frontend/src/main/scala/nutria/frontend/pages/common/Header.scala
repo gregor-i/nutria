@@ -3,9 +3,9 @@ package nutria.frontend.pages.common
 import monocle.Lens
 import nutria.api.User
 import nutria.frontend._
-import nutria.frontend.pages.{AdminState, FAQState, ProfileState, TemplateEditorState, TemplateGalleryState}
+import nutria.frontend.pages.{AdminState, DocumentationState, ProfileState, TemplateGalleryState}
 import nutria.frontend.util.SnabbdomUtil
-import snabbdom.{Node, Snabbdom}
+import snabbdom.Node
 
 object Header {
 
@@ -30,7 +30,12 @@ object Header {
                   .text("Public Gallery")
               )
               .child(
-                Link(FAQState(state.user))
+                Link(DocumentationState.introduction)
+                  .classes("navbar-item")
+                  .text("Introduction")
+              )
+              .child(
+                Link(DocumentationState.faq)
                   .classes("navbar-item")
                   .text("FAQ")
               )
