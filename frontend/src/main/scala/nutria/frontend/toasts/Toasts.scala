@@ -1,9 +1,21 @@
 package nutria.frontend.toasts
 
+import nutria.frontend.ExecutionContext
 import org.scalajs.dom
 import snabbdom.{Node, Snabbdom, SnabbdomFacade, VNode}
 
-object Toasts {
+import scala.concurrent.Future
+import scala.util.Try
+
+private sealed trait ToastState {
+  def id: Int
+}
+private case class FireAndForgetToast(text: String, toastType: ToastType, id: Int) extends ToastState
+private case class FutureToast[A](progressText: String, progress: Future[A], onComplete: Try[A] => (ToastType, String), id: Int) extends ToastState {
+  type State = A
+}
+
+object Toasts extends ExecutionContext {
   private var counter: Int             = 0
   private var toasts: List[ToastState] = List.empty
 
@@ -11,18 +23,44 @@ object Toasts {
 
   private def render(): Unit = {
     val ui = Node("toast-bar")
-      .child(toasts.map { toast =>
-        Node("div.notification")
-          .key(toast.id)
-          .classes(toast.`class`)
-          .child(Node("button.delete").event("click", Snabbdom.event(_ => removeToast(toast.id))))
-          .text(toast.text)
-          .style("transition", "0.5s")
-          .hook("insert", Snabbdom.hook { vnode =>
-            dom.window.setTimeout(() => vnode.elm.get.style.opacity = "0", 2000)
-            dom.window.setTimeout(() => removeToast(toast.id), 2500)
-            ()
-          })
+      .child(toasts.map {
+        case toast: FireAndForgetToast =>
+          notification(toast.toastType, toast.text)
+            .key(toast.id)
+            .child(Node("button.delete").event("click", Snabbdom.event(_ => removeToast(toast.id))))
+            .style("transition", "0.5s")
+            .hook("insert", Snabbdom.hook { vnode =>
+              dom.window.setTimeout(() => vnode.elm.get.style.opacity = "0", 2000)
+              dom.window.setTimeout(() => removeToast(toast.id), 2500)
+              ()
+            })
+
+        case toast: FutureToast[_] =>
+          toast.progress.value match {
+            case Some(value) =>
+              val (toastType, text) = toast.asInstanceOf[FutureToast[toast.State]].onComplete(value.asInstanceOf[Try[toast.State]])
+
+              notification(toastType, text)
+                .key(toast.id)
+                .child(Node("button.delete").event("click", Snabbdom.event(_ => removeToast(toast.id))))
+                .style("transition", "0.5s")
+                .hook(
+                  "postpatch",
+                  Snabbdom.hook { vnode =>
+                    dom.window.setTimeout(() => vnode.elm.get.style.opacity = "0", 2000)
+                    dom.window.setTimeout(() => removeToast(toast.id), 2500)
+                    ()
+                  }
+                )
+
+            case None =>
+              notification(Info, toast.progressText)
+                .key(toast.id)
+                .hook("insert", Snabbdom.hook { _ =>
+                  toast.progress.onComplete(_ => render())
+                  ()
+                })
+          }
       })
       .toVNode
 
@@ -36,13 +74,40 @@ object Toasts {
     }
   }
 
-  def successToast(text: String): Unit = addToast(text, "is-success")
-  def dangerToast(text: String): Unit  = addToast(text, "is-danger")
-  def warningToast(text: String): Unit = addToast(text, "is-warning")
+  def notification(toastType: ToastType, text: String): Node =
+    Node("div.notification")
+      .classes(toastType.`class`)
+      .child(
+        Node("div.media")
+          .child(
+            Node("figure.media-left")
+              .child(
+                Node("span.icon")
+                  .child(
+                    Node("i.fas.fa-lg").classes(toastType.iconClasses: _*)
+                  )
+              )
+          )
+          .child(
+            Node("div.media-content").text(text)
+          )
+      )
 
-  private def addToast(text: String, `class`: String): Unit = {
+  def successToast(text: String): Unit = addToast(text, Success)
+  def dangerToast(text: String): Unit  = addToast(text, Danger)
+  def warningToast(text: String): Unit = addToast(text, Warning)
+
+  def addToast(text: String, toastType: ToastType): Int = {
     val id    = { counter += 1; counter }
-    val toast = ToastState(text, `class`, id)
+    val toast = FireAndForgetToast(text, toastType, id)
+    toasts = toast :: toasts
+    render()
+    id
+  }
+
+  def futureToast[A](progressText: String, progress: Future[A], onComplete: Try[A] => (ToastType, String)): Unit = {
+    val id    = { counter += 1; counter }
+    val toast = FutureToast(progressText, progress, onComplete, id)
     toasts = toast :: toasts
     render()
   }
@@ -59,5 +124,3 @@ object Toasts {
   )
 
 }
-
-private case class ToastState(text: String, `class`: String, id: Int)

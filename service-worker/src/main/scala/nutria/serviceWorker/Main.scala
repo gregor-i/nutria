@@ -13,7 +13,7 @@ import scala.scalajs.js.JSConverters._
 import scala.util.chaining._
 
 object Main {
-  val assetCacheName = "nutria-assets"
+  val assetCacheName = "assets"
 
   val assets =
     buildinfo.BuildInfo.assetFiles

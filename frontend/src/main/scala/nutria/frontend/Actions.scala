@@ -5,7 +5,7 @@ import nutria.core.{Dimensions, FractalImage}
 import nutria.frontend.pages._
 import nutria.frontend.pages.common.FractalTile
 import nutria.frontend.service.{FractalService, TemplateService, UserService}
-import nutria.frontend.toasts.Toasts
+import nutria.frontend.toasts.{ToastType, Toasts}
 import nutria.frontend.util.Untyped
 import org.scalajs.dom
 import org.scalajs.dom.html.Anchor
@@ -14,15 +14,15 @@ import snabbdom.SnabbdomFacade.Eventlistener
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import scala.util.{Failure, Success}
+import scala.util.chaining.scalaUtilChainingOps
+import scala.util.{Failure, Success, Try}
+import nutria.frontend.toasts.Syntax._
 
 object Actions {
   private def asyncUpdate(fut: Future[NutriaState])(implicit update: NutriaState => Unit): Unit =
     fut.onComplete {
-      case Success(value) => update(value)
-      case Failure(exception) =>
-        dom.console.error(s"Unexpected Failure. See: ${exception}")
-        Toasts.dangerToast("The last action was not successful. Please retry the action or reload the page.")
+      case Success(value)     => update(value)
+      case Failure(exception) => dom.console.error(s"Unexpected Failure. See: ${exception}")
     }
 
   private def onlyLoggedIn[A](op: => A)(implicit state: NutriaState) =
@@ -58,24 +58,23 @@ object Actions {
       onlyLoggedIn {
         asyncUpdate {
           val published = fractal.entity.published
-          for {
-            _ <- FractalService.put(
-              WithId
-                .entity[FractalImageEntity]
-                .composeLens(Entity.published)
-                .set(!published)
-                .apply(fractal)
-            )
+          (for {
+            _ <- FractalService
+              .put(
+                WithId
+                  .entity[FractalImageEntity]
+                  .composeLens(Entity.published)
+                  .set(!published)
+                  .apply(fractal)
+              )
             reloaded <- FractalService.loadUserFractals(state.aboutUser)
-            _ = if (published)
-              Toasts.warningToast(
-                "Fractal unpublished. The fractal will no longer be listed in the public gallery."
-              )
-            else
-              Toasts.successToast(
-                "Fractal unpublished. The fractal will be listed in the public gallery."
-              )
-          } yield state.copy(userFractals = reloaded)
+          } yield state.copy(userFractals = reloaded))
+            .pipe { fut =>
+              if (published)
+                fut.withWarningToast("Unpublishing Fractal", "Fractal unpublished. The fractal will no longer be listed in the public gallery.")
+              else
+                fut.withSuccessToast("Publishing Fractal", "Fractal published. The fractal will be listed in the public gallery.")
+            }
         }
       }
     }
@@ -86,17 +85,18 @@ object Actions {
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
-          for {
-            remoteFractal <- FractalService.get(fractalId)
-            _             <- FractalService.delete(fractalId)
-            _ = Toasts.warningToast("Fractal deleted.")
-            reloaded <- FractalService.loadUserFractals(remoteFractal.owner)
-          } yield UserGalleryState(
-            user = state.user,
-            userFractals = reloaded,
-            aboutUser = remoteFractal.owner,
-            page = state.page
-          )
+          withWarningToast("Deleting Fractal", "Fractal deleted") {
+            for {
+              remoteFractal <- FractalService.get(fractalId)
+              _             <- FractalService.delete(fractalId)
+              reloaded      <- FractalService.loadUserFractals(remoteFractal.owner)
+            } yield UserGalleryState(
+              user = state.user,
+              userFractals = reloaded,
+              aboutUser = remoteFractal.owner,
+              page = state.page
+            )
+          }
         }
       }
     }
@@ -107,17 +107,18 @@ object Actions {
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
-          for {
-            remoteFractal <- FractalService.get(fractalId)
-            _             <- FractalService.delete(fractalId)
-            _ = Toasts.warningToast("Fractal deleted.")
-            reloaded <- FractalService.loadUserFractals(remoteFractal.owner)
-          } yield UserGalleryState(
-            user = state.user,
-            userFractals = reloaded,
-            aboutUser = remoteFractal.owner,
-            page = 1
-          )
+          withWarningToast("Deleting Fractal", "Fractal deleted") {
+            for {
+              remoteFractal <- FractalService.get(fractalId)
+              _             <- FractalService.delete(fractalId)
+              reloaded      <- FractalService.loadUserFractals(remoteFractal.owner)
+            } yield UserGalleryState(
+              user = state.user,
+              userFractals = reloaded,
+              aboutUser = remoteFractal.owner,
+              page = 1
+            )
+          }
         }
       }
     }
@@ -128,14 +129,15 @@ object Actions {
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
-          for {
-            _ <- FractalService.put(fractalWithId)
-            _ = Toasts.successToast("Fractal updated.")
-          } yield DetailsState(
-            user = state.user,
-            remoteFractal = fractalWithId,
-            fractalToEdit = fractalWithId
-          )
+          withSuccessToast("Updating Fractal", "Fractal updated") {
+            for {
+              _ <- FractalService.put(fractalWithId)
+            } yield DetailsState(
+              user = state.user,
+              remoteFractal = fractalWithId,
+              fractalToEdit = fractalWithId
+            )
+          }
         }
       }
     }
@@ -146,14 +148,15 @@ object Actions {
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
-          for {
-            fractalWithId <- FractalService.post(fractalEntity)
-            _ = Toasts.successToast("Fractal saved.")
-          } yield DetailsState(
-            user = state.user,
-            remoteFractal = fractalWithId,
-            fractalToEdit = fractalWithId
-          )
+          withSuccessToast("Saving Fractal", "Fractal saved") {
+            for {
+              fractalWithId <- FractalService.post(fractalEntity.copy(published = false))
+            } yield DetailsState(
+              user = state.user,
+              remoteFractal = fractalWithId,
+              fractalToEdit = fractalWithId
+            )
+          }
         }
       }
     }
@@ -162,10 +165,11 @@ object Actions {
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
-          for {
-            savedImage <- FractalService.post(fractalEntity.copy(published = false))
-            _ = Toasts.successToast("Fractal saved.")
-          } yield state.copy(remoteFractal = Some(savedImage))
+          withSuccessToast("Saving Fractal", "Fractal saved") {
+            for {
+              savedImage <- FractalService.post(fractalEntity.copy(published = false))
+            } yield state.copy(remoteFractal = Some(savedImage))
+          }
         }
       }
     }
@@ -174,10 +178,11 @@ object Actions {
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
-          for {
-            savedTemplate <- TemplateService.post(templateEntity)
-            _ = Toasts.successToast("Template saved.")
-          } yield state.copy(remoteTemplate = Some(savedTemplate))
+          withSuccessToast("Saving Template", "Template saved") {
+            for {
+              savedTemplate <- TemplateService.post(templateEntity)
+            } yield state.copy(remoteTemplate = Some(savedTemplate))
+          }
         }
       }
     }
@@ -188,10 +193,11 @@ object Actions {
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
-          for {
-            _ <- TemplateService.put(template)
-            _ = Toasts.successToast("Template updated.")
-          } yield TemplateEditorState.byTemplate(template)
+          withSuccessToast("Updating Template", "Template updated") {
+            for {
+              _ <- TemplateService.put(template)
+            } yield TemplateEditorState.byTemplate(template)
+          }
         }
       }
     }
@@ -200,10 +206,12 @@ object Actions {
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
-          for {
-            _         <- TemplateService.delete(templateId)
-            templates <- TemplateService.listUser(state.user.get.id)
-          } yield TemplateGalleryState(user = state.user, templates = templates)
+          withWarningToast("Deleting Template", "Template deleted") {
+            for {
+              _         <- TemplateService.delete(templateId)
+              templates <- TemplateService.listUser(state.user.get.id)
+            } yield TemplateGalleryState(user = state.user, templates = templates)
+          }
         }
       }
     }
@@ -215,24 +223,23 @@ object Actions {
       onlyLoggedIn {
         asyncUpdate {
           val published = template.entity.published
-          for {
-            _ <- TemplateService.put(
-              WithId
-                .entity[FractalTemplateEntity]
-                .composeLens(Entity.published)
-                .set(!published)
-                .apply(template)
-            )
+          (for {
+            _ <- TemplateService
+              .put(
+                WithId
+                  .entity[FractalTemplateEntity]
+                  .composeLens(Entity.published)
+                  .set(!published)
+                  .apply(template)
+              )
             templates <- TemplateService.listUser(state.user.get.id)
-            _ = if (published)
-              Toasts.warningToast(
-                "Template unpublished. The template will no longer be listed in the public gallery."
-              )
-            else
-              Toasts.successToast(
-                "Template unpublished. The template will be listed in the public gallery."
-              )
-          } yield state.copy(templates = templates)
+          } yield state.copy(templates = templates))
+            .pipe { fut =>
+              if (published)
+                fut.withWarningToast("Unpublishing Template", "Template unpublished. The template will no longer be listed in the public gallery.")
+              else
+                fut.withSuccessToast("Publishing Template", "Template published. The template will be listed in the public gallery.")
+            }
         }
       }
     }
@@ -243,11 +250,12 @@ object Actions {
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
-          for {
-            _     <- UserService.delete(userId)
-            state <- Links.greetingState(None)
-            _ = Toasts.successToast("Good Bye")
-          } yield state
+          withSuccessToast("Deleting account", "Good Bye!") {
+            for {
+              _     <- UserService.delete(userId)
+              state <- Links.greetingState(None)
+            } yield state
+          }
         }
       }
     }
