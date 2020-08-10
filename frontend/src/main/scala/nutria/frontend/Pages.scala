@@ -17,6 +17,7 @@ object Pages {
     TemplateEditorPage,
     TemplateGalleryPage,
     CreateNewFractalPage,
+    NewtonFractalDesignePage,
     AdminPage
   )
 

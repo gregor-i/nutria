@@ -24,7 +24,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .dependsOn(macros)
   .in(file("core"))
   .settings(
-    libraryDependencies += "com.github.gregor-i" %%% "math-parser" % "1.6",
+    libraryDependencies += "com.github.gregor-i" %%% "math-parser" % "1.6.1",
     libraryDependencies ++= Seq(
       "io.circe" %%% "circe-core"           % "0.13.0",
       "io.circe" %%% "circe-generic"        % "0.13.0",

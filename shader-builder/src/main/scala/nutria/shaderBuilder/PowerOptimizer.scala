@@ -4,7 +4,7 @@ import mathParser.complex.ComplexLanguage.syntax.EnrichNode
 import mathParser.complex._
 import mathParser.{BinaryNode, ConstantNode, Optimizer}
 
-object PowerOptimizer {
+private[shaderBuilder] object PowerOptimizer {
   def optimizer[V]: Optimizer[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] =
     new Optimizer[ComplexUnitaryOperator, ComplexBinaryOperator, Complex, V] {
 

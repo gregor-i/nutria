@@ -31,8 +31,10 @@ object FragmentShaderSource {
     """.stripMargin
   }
 
-  def function[V](name: String, node: ComplexNode[V])(implicit lang: ComplexLanguage[V]): String =
-    nutria.shaderBuilder.Function(name, node)
+  def function[V](name: String, node: ComplexNode[V])(implicit lang: ComplexLanguage[V]): String = {
+    val optimized = PowerOptimizer.optimizer.optimize(node)
+    nutria.shaderBuilder.Function(name, optimized)
+  }
 
   def constant(name: String, expr: WebGlExpression[_]): String = {
     s"const ${expr.typeName} ${name} = ${expr.toCode};"

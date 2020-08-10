@@ -7,6 +7,8 @@
     - define a data protection policy
  - details:
    - make it a modal over explorer
+ - explorer:
+   - requestFullscreen button
  - general:
    - some failed futures are not handled
    - GL lose context is not handled in explorer / interactive panel.
