@@ -1,33 +1,49 @@
 package nutria.frontend.pages.common
 
 import nutria.core.{Dimensions, FractalImage}
+import nutria.frontend.util.Untyped
 import nutria.shaderBuilder.FractalRenderer
 import org.scalajs.dom
+import org.scalajs.dom.experimental.Fullscreen.toFullscreenDocument
 import org.scalajs.dom.html.Canvas
 import org.scalajs.dom.raw.WebGLRenderingContext
+import org.w3c.dom.html.HTMLElement
 import snabbdom.{Node, Snabbdom, SnabbdomFacade}
 
 import scala.scalajs.js
+import scala.scalajs.js.UndefOr
 import scala.util.Random
 
 object AnimatedFractalTile {
-  def apply(fractalImageOverTime: LazyList[FractalImage], dimensions: Dimensions): Node =
+  def apply(fractalImageOverTime: LazyList[FractalImage]): Node =
     Node("canvas")
       .key(Random.nextInt())
-      .attr("width", dimensions.width.toString)
-      .attr("height", dimensions.height.toString)
       .style("backgroundImage", Images.rendering)
+      .event(
+        "dblclick",
+        Snabbdom.event { event =>
+          val target = Untyped(event.target)
+          if (dom.document.fullscreenElement != null) {
+            dom.document.exitFullscreen()
+          } else {
+            target.requestFullscreen()
+          }
+        }
+      )
       .hooks(hooks(fractalImageOverTime))
 
   private def hooks(fractalImageOverTime: LazyList[FractalImage]): Seq[(String, SnabbdomFacade.Hook)] = {
     var animationHandle: Int = 0
     Seq(
       "insert" -> Snabbdom.hook { vnode =>
-        val elem   = vnode.elm.get.asInstanceOf[Canvas]
-        val ctx    = elem.getContext("webgl").asInstanceOf[WebGLRenderingContext]
+        val canvas = vnode.elm.get.asInstanceOf[Canvas]
+        val ctx    = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
         var frames = fractalImageOverTime
 
         def callback: js.Function1[Double, Unit] = _ => {
+          canvas.width = canvas.clientWidth
+          canvas.height = canvas.clientHeight
+
           val fractalImage = frames.head
           frames = frames.drop(1)
           FractalRenderer.render(fractalImage)(ctx)

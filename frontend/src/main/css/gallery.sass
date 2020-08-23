@@ -1,11 +1,11 @@
 .fractal-tile-list
-  display : flex
-  flex-wrap : wrap
+  display: flex
+  flex-wrap: wrap
 
   & > .fractal-tile,
   & > .dummy-tile
     flex-basis: 400px
-    flex-grow : 1
+    flex-grow: 1
     margin-left: 8px
     margin-right: 8px
 
@@ -19,14 +19,15 @@
 
   & > .dummy-tile
     height: 0px
-    border : 0px
+    border: 0px
 
   & > .dummy-tile img,
   & > .dummy-tile canvas,
   & > .fractal-tile img,
   & > .fractal-tile canvas
-    width : 100%
-    display : block
+    width: 100%
+    height: 100%
+    display: block
     background: url('/assets/rendering.svg')
     background-size: contain
 

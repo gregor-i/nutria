@@ -50,24 +50,18 @@ object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
     Node("div.fractal-tile-list")
       .child {
         Node("div.fractal-tile")
-          .style("maxHeight", "100vh")
-          .style("minHeight", "50vh")
-          .child {
-            AnimatedFractalTile(
-              fractalImageOverTime(state),
-              Dimensions.preview.scale(3)
-            )
-          }
+          .style("height", Dimensions.preview.height + "px")
+          .style("width", Dimensions.preview.width + "px")
+          .child(AnimatedFractalTile(fractalImageOverTime(state)))
       }
 
-  private def fractalImageOverTime(state: State): LazyList[FractalImage] = {
+  private def fractalImageOverTime(state: State): LazyList[FractalImage] =
     NewtonFractalDesigner
       .animation(
         constant = state.constant,
         roots = Seq.tabulate(state.numberOfRoots)(i => Complex(Math.sin(i) * 0.5, Math.cos(i) * 0.5)),
         seed = state.seed
       )
-  }
 
   private def inputs()(implicit state: State, update: NutriaState => Unit) =
     Node("div.section")
