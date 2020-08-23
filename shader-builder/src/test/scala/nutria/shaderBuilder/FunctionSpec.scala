@@ -5,7 +5,7 @@ import mathParser.Implicits._
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
 
-class WebGlStatementSpec extends AnyFunSuite with Matchers {
+class FunctionSpec extends AnyFunSuite with Matchers {
   object X
 
   val lang = MathParser.complexLanguage.withVariables(List("x" -> X))

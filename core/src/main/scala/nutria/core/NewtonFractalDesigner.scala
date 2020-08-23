@@ -36,7 +36,7 @@ object NewtonFractalDesigner {
       .flatMap(apply(constant, _))
   }
 
-  def streamPath(seed: Int, start: Complex): LazyList[Complex] = {
+  private def streamPath(seed: Int, start: Complex): LazyList[Complex] = {
     val alpha  = 0.01
     val beta   = 0.01
     val gamma  = 0.99
