@@ -1,6 +1,5 @@
 package nutria.core
 
-import nutria.core
 import nutria.core.languages.StringFunction
 import nutria.macros.StaticContent
 

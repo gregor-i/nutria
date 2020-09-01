@@ -191,8 +191,8 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       Modal(closeAction = SnabbdomUtil.update(lensToMaybeParameter.set(None)))(
         Node("h5.title.is-5").text("Add Parameter"),
         selectType,
-        Form.forLens("name", lens = lensToParameter.composeLens(Parameter.name)),
-        Form.forLens("description", lens = lensToParameter.composeLens(Parameter.description)),
+        Form.forLens("name", description = "", lens = lensToParameter.composeLens(Parameter.name)),
+        Form.forLens("description", description = "", lens = lensToParameter.composeLens(Parameter.description)),
         Label(
           label = "generated code:",
           node = Node("pre")

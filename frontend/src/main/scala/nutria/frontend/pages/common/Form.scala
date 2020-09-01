@@ -7,8 +7,7 @@ import snabbdom.{Node, Snabbdom}
 
 object Form {
 
-  // todo: remove default description
-  def forLens[S, V](label: String, description: String = "", lens: Lens[S, V], actions: Seq[(String, S => S)] = Seq.empty)(
+  def forLens[S, V](label: String, description: String, lens: Lens[S, V], actions: Seq[(String, S => S)] = Seq.empty)(
       implicit input: Input[S, V],
       update: S => Unit,
       state: S

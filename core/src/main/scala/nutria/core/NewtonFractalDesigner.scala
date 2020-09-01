@@ -13,7 +13,7 @@ object NewtonFractalDesigner {
     val polynom =
       roots
         .pipe(coefficients)
-        .pipe(integrate(_, constant))
+        //        .pipe(integrate(_, constant))
         .pipe(stringify)
 
     StringFunction[ZAndLambda](polynom).map { stringFunction =>
@@ -24,11 +24,11 @@ object NewtonFractalDesigner {
     }
   }
 
-  def animation(constant: Complex, roots: Seq[Complex], seed: Int): LazyList[FractalImage] = {
+  def animation(constant: Complex, roots: Seq[Complex], seed: Int, alpha: Double, beta: Double, gamma: Double): LazyList[FractalImage] = {
     val random = new Random(seed)
 
     val streams = roots.map { root =>
-      streamPath(random.nextInt(), root)
+      streamPath(random.nextInt(), alpha, beta, gamma, root)
     }
 
     LazyList
@@ -36,14 +36,12 @@ object NewtonFractalDesigner {
       .flatMap(apply(constant, _))
   }
 
-  private def streamPath(seed: Int, start: Complex): LazyList[Complex] = {
-    val alpha  = 0.01
-    val beta   = 0.01
-    val gamma  = 0.99
+  private def streamPath(seed: Int, alpha: Double, beta: Double, gamma: Double, start: Complex): LazyList[Complex] = {
+    println(seed)
     val random = new Random(seed)
     var d      = random.nextDouble() * 2.0 * Math.PI
     LazyList.iterate(start) { c =>
-      d += Math.random() * alpha
+      d += random.nextGaussian() * alpha
       (c + (Complex(Math.sin(d), Math.cos(d)) * beta)) * gamma
     }
   }

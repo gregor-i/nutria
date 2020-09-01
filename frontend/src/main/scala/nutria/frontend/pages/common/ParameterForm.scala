@@ -1,20 +1,9 @@
 package nutria.frontend.pages.common
 
 import monocle.Lens
-import monocle.function.Index
-import nutria.core.{
-  ColorGradientParameter,
-  FloatParameter,
-  FunctionParameter,
-  InitialFunctionParameter,
-  IntParameter,
-  NewtonFunctionParameter,
-  Parameter,
-  RGBAParameter
-}
-import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
-import snabbdom.SnabbdomFacade.Eventlistener
-import snabbdom.{Node, SnabbdomFacade}
+import nutria.core._
+import nutria.frontend.util.LenseUtils
+import snabbdom.Node
 
 import scala.util.chaining._
 
