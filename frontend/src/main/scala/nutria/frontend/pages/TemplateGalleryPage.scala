@@ -41,7 +41,7 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
           .child(Icons.icon(Icons.plus))
           .event("click", Snabbdom.event(_ => update(TemplateEditorState.initial)))
       )
-      .child(body)
+      .child(body())
       .child(Footer())
 
   def body()(implicit state: State, update: NutriaState => Unit): Node =

@@ -114,7 +114,7 @@ object Input {
               .toOption match {
               case Some(v) =>
                 element.classList.remove("is-danger")
-                update(lens.set(v.map(_.withAlpha()))(state))
+                update(lens.set(v.toSeq.map(_.withAlpha()))(state))
               case None =>
                 element.classList.add("is-danger")
             }

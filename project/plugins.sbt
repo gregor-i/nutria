@@ -8,7 +8,7 @@ resolvers += Resolver.bintrayRepo("gregor-i", "maven")
 addSbtPlugin("com.github.gregor-i" % "sbt-embedded-postgres" % "2.0.0-RC1")
 
 // js
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.1.0")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.2.0")
 
 // service worker
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.9.0")

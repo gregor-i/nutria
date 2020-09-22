@@ -65,8 +65,8 @@ object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
     Node("div.fractal-tile-list")
       .child {
         Node("div.fractal-tile")
-          .style("height", Dimensions.preview.height + "px")
-          .style("width", Dimensions.preview.width + "px")
+          .style("height", Dimensions.preview.height.toString + "px")
+          .style("width", Dimensions.preview.width.toString + "px")
           .child(AnimatedFractalTile(fractalImageOverTime(state)))
       }
 

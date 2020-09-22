@@ -7,11 +7,8 @@ object Point {
     @inline final def x: Double = self._1
     @inline final def y: Double = self._2
 
-    @inline final def +(px: Double, py: Double): Point = (x + px, y + py)
-    @inline final def -(px: Double, py: Double): Point = (x - px, y - py)
-
-    @inline final def +(t: Point): Point = this + (t.x, t.y)
-    @inline final def -(t: Point): Point = this - (t.x, t.y)
+    @inline final def +(t: Point): Point = (x + t.x, y + t.y)
+    @inline final def -(t: Point): Point = (x - t.x, y - t.y)
 
     @inline final def *(f: Double): Point = (x * f, y * f)
     @inline final def *(p: Point): Double = x * p.x + y * p.y

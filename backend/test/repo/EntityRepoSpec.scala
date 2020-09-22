@@ -3,8 +3,7 @@ package repo
 import java.time.ZonedDateTime
 import java.util.UUID
 
-import nutria.api.{Entity, FractalTemplateEntity, WithId}
-import nutria.core.Examples
+import nutria.api.{Entity, WithId}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
@@ -31,7 +30,7 @@ abstract class EntityRepoSpec[E <: Entity[_]](repoGetter: Application => EntityR
   val f1 = row(e1)
   val f2 = row(e2)
 
-  override def beforeEach = {
+  override def beforeEach(): Unit = {
     repo.list().foreach(row => repo.delete(row.id))
   }
 

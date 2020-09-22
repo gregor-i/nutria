@@ -4,7 +4,7 @@ import scala.sys.process._
 
 // global settings
 version in ThisBuild := "0.0.1"
-scalaVersion in ThisBuild := "2.13.2"
+scalaVersion in ThisBuild := "2.13.3"
 scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation", "-Ymacro-annotations")
 scalafmtOnCompile in ThisBuild := true
 resolvers in ThisBuild += Resolver.bintrayRepo("gregor-i", "maven")
@@ -32,9 +32,9 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       "io.circe" %%% "circe-parser"         % "0.13.0"
     ),
     libraryDependencies ++= Seq(
-      "com.github.julien-truffaut" %%% "monocle-core"   % "2.0.5",
-      "com.github.julien-truffaut" %%% "monocle-macro"  % "2.0.5",
-      "com.github.julien-truffaut" %%% "monocle-unsafe" % "2.0.5"
+      "com.github.julien-truffaut" %%% "monocle-core"   % "2.1.0",
+      "com.github.julien-truffaut" %%% "monocle-macro"  % "2.1.0",
+      "com.github.julien-truffaut" %%% "monocle-unsafe" % "2.1.0"
     ),
     scalatest
   )
@@ -47,7 +47,7 @@ lazy val `shader-builder` = project
   .dependsOn(core.js)
   .enablePlugins(ScalaJSPlugin)
   .settings(
-    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0",
+    scalaJsDom,
     scalatest
   )
 
@@ -61,8 +61,8 @@ val frontend = project
     scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) }
   )
   .settings(
-    libraryDependencies += "org.scala-js"        %%% "scalajs-dom"      % "1.0.0",
     libraryDependencies += "com.github.gregor-i" %%% "scalajs-snabbdom" % "1.0.1",
+    scalaJsDom,
     scalatest
   )
 
@@ -77,7 +77,7 @@ val `service-worker` = project
       BuildInfoKey.action("assetFiles") { "ls backend/public/assets".!! }
     )
   )
-  .settings(libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0")
+  .settings(scalaJsDom)
 
 lazy val backend = project
   .in(file("backend"))
@@ -88,10 +88,10 @@ lazy val backend = project
     libraryDependencies += guice,
     libraryDependencies += jdbc,
     libraryDependencies += evolutions,
-    libraryDependencies += "io.lemonlabs"            %% "scala-uri"          % "2.2.2",
+    libraryDependencies += "io.lemonlabs"            %% "scala-uri"          % "2.3.1",
     libraryDependencies += "com.dripower"            %% "play-circe"         % "2812.0",
-    libraryDependencies += "org.postgresql"          % "postgresql"          % "42.2.14",
-    libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.5",
+    libraryDependencies += "org.postgresql"          % "postgresql"          % "42.2.16",
+    libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.7",
     libraryDependencies += "org.scalatestplus.play"  %% "scalatestplus-play" % "5.1.0" % Test
   )
   .enablePlugins(EmbeddedPostgresPlugin)
@@ -177,6 +177,9 @@ test in nutria := Def
 
 def scalatest =
   Seq(
-    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.0" % Test,
+    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.2" % Test,
     testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
   )
+
+def scalaJsDom =
+  libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.1.0"
