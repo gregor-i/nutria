@@ -1,17 +1,18 @@
-package nutria.frontend.pages.common
+package nutria.frontend.pages
+package common
 
 import monocle.{Iso, Lens}
 import nutria.api.Entity
-import nutria.frontend.{GlobalState, PageState}
+import nutria.frontend.util.Updatable
 import snabbdom.Node
 
 object EntityAttributes {
-  def section[S, E](lens: Lens[S, Entity[E]])(implicit globalState: GlobalState, state: S, update: S => Unit): Node =
+  def section[S, E](lens: Lens[S, Entity[E]])(implicit updatable: Updatable[S, S]): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text("Administration Attributes:"))
       .child(form(lens))
 
-  def form[S, E](lens: Lens[S, Entity[E]])(implicit globalState: GlobalState, state: S, update: S => Unit): Seq[Node] = {
+  def form[S, E](lens: Lens[S, Entity[E]])(implicit updatable: Updatable[S, S]): Seq[Node] = {
     Seq(
       Form.forLens("Title", description = "give this fractal a short name", lens = lens composeLens Entity.title),
       Form.forLens("Description", description = "give this fractal a short description", lens = lens composeLens Entity.description),
@@ -22,7 +23,7 @@ object EntityAttributes {
           _.mkString(" ")
         )(_.split("\\s").filter(_.nonEmpty).toList)
       ),
-      Form.readonlyStringInput("Published", if (lens.get(state).published) "published" else "private")
+      Form.readonlyStringInput("Published", if (lens.get(updatable.state).published) "published" else "private")
     )
   }
 }

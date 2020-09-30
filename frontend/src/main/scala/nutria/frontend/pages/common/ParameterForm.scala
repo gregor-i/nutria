@@ -3,7 +3,7 @@ package nutria.frontend.pages.common
 import monocle.Lens
 import nutria.core._
 import nutria.frontend.GlobalState
-import nutria.frontend.util.LenseUtils
+import nutria.frontend.util.{LenseUtils, Updatable}
 import snabbdom.Node
 
 import scala.util.chaining._
@@ -12,9 +12,9 @@ object ParameterForm {
   def list[S](
       lens: Lens[S, Vector[Parameter]],
       actions: Parameter => Seq[(String, S => S)] = (_: Parameter) => Seq.empty
-  )(implicit globalState: GlobalState, state: S, update: S => Unit): Seq[Node] =
+  )(implicit updatable: Updatable[S, S]): Seq[Node] =
     lens
-      .get(state)
+      .get(updatable.state)
       .sorted
       .map { parameter =>
         lens
@@ -25,8 +25,8 @@ object ParameterForm {
   def apply[S](
       lens: Lens[S, Parameter],
       actions: Seq[(String, S => S)] = Seq.empty
-  )(implicit globalState: GlobalState, state: S, update: S => Unit): Node = {
-    lens.get(state) match {
+  )(implicit updatable: Updatable[S, S]): Node = {
+    lens.get(updatable.state) match {
       case p: IntParameter =>
         val valueLens = lens.composePrism(Parameter.prismIntParameter).composeLens(IntParameter.value).pipe(LenseUtils.unsafeOptional)
         Form.forLens(p.name, p.description, valueLens, actions)

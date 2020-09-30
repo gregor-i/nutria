@@ -15,8 +15,8 @@ case class DocumentationState(
 ) extends PageState
 
 object DocumentationState {
-  def faq(implicit nutriaState: PageState)          = DocumentationState(subpage = FAQ)
-  def introduction(implicit nutriaState: PageState) = DocumentationState(subpage = Introduction)
+  val faq          = DocumentationState(subpage = FAQ)
+  val introduction = DocumentationState(subpage = Introduction)
 }
 
 sealed trait Subpage

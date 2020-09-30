@@ -2,7 +2,7 @@ package nutria.frontend.pages.common
 
 import monocle.Lens
 import nutria.frontend.GlobalState
-import nutria.frontend.util.SnabbdomUtil
+import nutria.frontend.util.{SnabbdomUtil, Updatable}
 import snabbdom.Node
 
 import scala.util.chaining._
@@ -10,19 +10,19 @@ import scala.util.chaining._
 object Pagination {
   val itemsPerPage = 24
 
-  def page[A, S](itemsLense: Lens[S, Seq[A]], pageLens: Lens[S, Int])(implicit state: S): Seq[A] = {
-    val p = pageLens.get(state)
-    itemsLense
-      .get(state)
+  def page[A, S](itemsLens: Lens[S, Seq[A]], pageLens: Lens[S, Int])(implicit updatable: Updatable[S, _]): Seq[A] = {
+    val p = pageLens.get(updatable.state)
+    itemsLens
+      .get(updatable.state)
       .slice((p - 1) * itemsPerPage, p * itemsPerPage)
   }
 
-  def links[A, S](itemsLense: Lens[S, Seq[A]], pageLens: Lens[S, Int])(implicit globalState: GlobalState, state: S, update: S => Unit): Node = {
-    val page  = pageLens.get(state)
-    val pages = (itemsLense.get(state).size - 1) / itemsPerPage + 1
+  def links[A, S](itemsLens: Lens[S, Seq[A]], pageLens: Lens[S, Int])(implicit updatable: Updatable[S, S]): Node = {
+    val page  = pageLens.get(updatable.state)
+    val pages = (itemsLens.get(updatable.state).size - 1) / itemsPerPage + 1
 
     def action(p: Int) =
-      SnabbdomUtil.update(pageLens.set(p))
+      SnabbdomUtil.updateT(pageLens.set(p))
 
     def isValid(p: Int) =
       p >= 1 && p <= pages

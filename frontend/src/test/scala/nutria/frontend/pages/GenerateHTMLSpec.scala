@@ -1,7 +1,7 @@
 package nutria.frontend.pages
 
 import facades.{Fs, HtmlFormatter, SnabbdomToHtml}
-import nutria.frontend.{PageState, Pages}
+import nutria.frontend.{GlobalState, PageState, Pages}
 import nutria.macros.StaticContent
 import org.scalatest.funsuite.AnyFunSuite
 
@@ -16,7 +16,7 @@ class GenerateHTMLSpec extends AnyFunSuite {
 
   test("generate the static html file") {
     LoadingState(loading = Future.never)
-      .pipe(Pages.ui(_, _ => ()))
+      .pipe(Pages.ui(GlobalState.initial, _, _ => ()))
       .toVNode
       .pipe(SnabbdomToHtml.apply)
       .pipe(withFixture)

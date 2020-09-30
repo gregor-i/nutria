@@ -24,7 +24,7 @@ class RenderUiSpec extends AnyFunSuite {
   def stateRenderingTest(testName: String)(state: PageState, fileName: String): Unit =
     test(testName) {
       state
-        .pipe(Pages.ui(_, _ => ()))
+        .pipe(Pages.ui(GlobalState.initial, _, _ => ()))
         .toVNode
         .pipe(SnabbdomToHtml.apply)
         .pipe(withFixture)

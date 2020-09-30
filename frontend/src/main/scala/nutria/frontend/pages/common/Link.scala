@@ -1,6 +1,7 @@
 package nutria.frontend.pages.common
 
 import nutria.frontend.pages.LoadingState
+import nutria.frontend.util.Updatable
 import nutria.frontend.{ExecutionContext, GlobalState, PageState, Router}
 import snabbdom.{Node, Snabbdom}
 
@@ -8,12 +9,12 @@ import scala.concurrent.Future
 import scala.util.chaining._
 
 object Link extends ExecutionContext {
-  def apply(newState: PageState)(implicit update: PageState => Unit): Node =
+  def apply(newState: PageState)(implicit updatable: Updatable[_, PageState]): Node =
     Node("a")
       .key(newState.hashCode())
       .event("click", Snabbdom.event { e =>
         e.preventDefault()
-        update(newState)
+        updatable.update(newState)
       })
       .hook(
         "postpatch",
@@ -30,12 +31,24 @@ object Link extends ExecutionContext {
   def async(
       href: String,
       loadingState: => Future[PageState]
-  )(implicit globalState: GlobalState, state: PageState, update: PageState => Unit): Node = {
+  )(implicit state: PageState, update: PageState => Unit): Node = {
     Node("a")
       .attr("href", href)
       .event("click", Snabbdom.event { e =>
         e.preventDefault()
         update(LoadingState(loadingState))
+      })
+  }
+
+  def asyncT(
+      href: String,
+      loadingState: => Future[PageState]
+  )(implicit updatable: Updatable[_, PageState]): Node = {
+    Node("a")
+      .attr("href", href)
+      .event("click", Snabbdom.event { e =>
+        e.preventDefault()
+        updatable.update(LoadingState(loadingState))
       })
   }
 }

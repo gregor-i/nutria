@@ -1,15 +1,16 @@
-package nutria.frontend.pages.common
+package nutria.frontend.pages
+package common
 
 import monocle.Lens
 import nutria.api.User
 import nutria.frontend._
 import nutria.frontend.pages.{AdminState, DocumentationState, ProfileState, TemplateGalleryState}
-import nutria.frontend.util.SnabbdomUtil
+import nutria.frontend.util.{SnabbdomUtil, Updatable}
 import snabbdom.Node
 
 object Header {
 
-  def apply[S <: PageState](lens: Lens[S, Boolean])(implicit globalState: GlobalState, state: S, update: PageState => Unit): Node = {
+  def apply[S <: PageState](lens: Lens[S, Boolean])(implicit globalState: GlobalState, updatable: Updatable[S, PageState]): Node = {
     Node("nav.navbar")
       .attr("role", "navigation")
       .attr("aria-label", "main navigation")
@@ -20,12 +21,12 @@ object Header {
       )
       .child(
         Node("div.navbar-menu")
-          .`class`("is-active", lens.get(state))
+          .`class`("is-active", lens.get(updatable.state))
           .child(
             Node("div.navbar-start")
               .child(
                 Link
-                  .async("/gallery", Links.galleryState())
+                  .asyncT("/gallery", Links.galleryState())
                   .classes("navbar-item")
                   .text("Public Gallery")
               )
@@ -43,7 +44,7 @@ object Header {
                 globalState.user.map(
                   user =>
                     Link
-                      .async(s"/user/${user.id}/gallery", Links.userGalleryState(user.id))
+                      .asyncT(s"/user/${user.id}/gallery", Links.userGalleryState(user.id))
                       .classes("navbar-item")
                       .text("My Gallery")
                 )
@@ -52,7 +53,7 @@ object Header {
                 globalState.user.map(
                   _ =>
                     Link
-                      .async("/templates", TemplateGalleryState.load(globalState))
+                      .asyncT("/templates", TemplateGalleryState.load(globalState))
                       .classes("navbar-item")
                       .text("My Templates")
                 )
@@ -68,7 +69,7 @@ object Header {
               .childOptional(
                 Some(
                   Link
-                    .async("/admin", AdminState.initial())
+                    .asyncT("/admin", AdminState.initial())
                     .classes("navbar-item")
                     .text("Admin")
                 ).filter(_ => globalState.user.exists(_.admin))
@@ -90,12 +91,11 @@ object Header {
     node
       .classes("button", "is-large", "is-primary", "is-rounded", "is-fab")
 
-  def loginHref(implicit nutriaState: PageState): String = {
+  def loginHref(nutriaState: PageState): String =
     Router.stateToUrl(nutriaState) match {
       case None                 => "/auth/google"
       case Some((base, search)) => s"/auth/google?return-to=${base + Router.queryParamsToUrl(search)}"
     }
-  }
 
   val logoutHref: String = "/auth/logout"
 
@@ -116,21 +116,21 @@ object Header {
           .text("Nutria")
       )
 
-  private def burgerMenu[S <: PageState](lens: Lens[S, Boolean])(implicit globalState: GlobalState, state: S, update: PageState => Unit) =
+  private def burgerMenu[S <: PageState](lens: Lens[S, Boolean])(implicit updatable: Updatable[S, PageState]) =
     Node("a.navbar-burger.burger")
-      .event("click", SnabbdomUtil.update(lens.modify(!_)))
-      .`class`("is-active", lens.get(state))
+      .event("click", SnabbdomUtil.updateT(lens.modify(!_)))
+      .`class`("is-active", lens.get(updatable.state))
       .attr("aria-label", "menu")
       .attr("aria-expanded", "false")
       .child(Node("span").attr("aria-hidden", "true"))
       .child(Node("span").attr("aria-hidden", "true"))
       .child(Node("span").attr("aria-hidden", "true"))
 
-  private def loginItem(implicit nutriaState: PageState) =
+  private def loginItem(implicit updatable: Updatable[PageState, _]) =
     Node("div.navbar-item")
       .child(
         Node("a.button.is-rounded")
-          .attr("href", loginHref)
+          .attr("href", loginHref(updatable.state))
           .child(Icons.icon(Icons.login))
           .child(Node("span").text("Log in"))
       )

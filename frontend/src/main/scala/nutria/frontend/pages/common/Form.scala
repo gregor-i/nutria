@@ -1,8 +1,7 @@
 package nutria.frontend.pages.common
 
 import monocle.Lens
-import nutria.frontend.GlobalState
-import nutria.frontend.util.SnabbdomUtil
+import nutria.frontend.util.{SnabbdomUtil, Updatable}
 import org.scalajs.dom.raw.{HTMLInputElement, HTMLSelectElement}
 import snabbdom.{Node, Snabbdom}
 
@@ -10,9 +9,7 @@ object Form {
 
   def forLens[S, V](label: String, description: String, lens: Lens[S, V], actions: Seq[(String, S => S)] = Seq.empty)(
       implicit input: Input[S, V],
-      globalState: GlobalState,
-      update: S => Unit,
-      state: S
+      updatable: Updatable[S, S]
   ): Node =
     Label(
       label = label,
@@ -21,8 +18,8 @@ object Form {
       node = input.node(lens)
     )
 
-  private def actionButton[S, V](tupled: (String, S => S))(implicit globalState: GlobalState, state: S, update: S => Unit): Node =
-    Button.icon(tupled._1, SnabbdomUtil.update[S](tupled._2), round = false)
+  private def actionButton[S, V](tupled: (String, S => S))(implicit updatable: Updatable[S, S]): Node =
+    Button.icon(tupled._1, SnabbdomUtil.updateT[S](tupled._2), round = false)
 
   def readonlyStringInput(
       label: String,
@@ -42,7 +39,7 @@ object Form {
       label: String,
       lens: Lens[S, String],
       actions: Seq[Node] = Seq.empty
-  )(implicit globalState: GlobalState, state: S, update: S => Unit) =
+  )(implicit updatable: Updatable[S, S]) =
     Label(
       label = label,
       actions = actions,
@@ -50,16 +47,16 @@ object Form {
         .style("min-height", "400px")
         .event("change", Snabbdom.event { event =>
           val value = event.target.asInstanceOf[HTMLInputElement].value
-          update(lens.set(value)(state))
+          updatable.update(lens.set(value)(updatable.state))
         })
-        .text(lens.get(state))
+        .text(lens.get(updatable.state))
     )
 
   def booleanInput[S](
       label: String,
       lens: Lens[S, Boolean],
       actions: Seq[Node] = Seq.empty
-  )(implicit globalState: GlobalState, state: S, update: S => Unit) =
+  )(implicit updatable: Updatable[S, S]) =
     selectInput(
       label = label,
       actions = actions,
@@ -69,10 +66,9 @@ object Form {
     )
 
   def selectInput[S, A](label: String, options: Seq[(String, A)], lens: Lens[S, A], eqFunction: (A, A) => Boolean, actions: Seq[Node] = Seq.empty)(
-      implicit state: S,
-      update: S => Unit
+      implicit updatable: Updatable[S, S]
   ) = {
-    val currentValue = lens.get(state)
+    val currentValue = lens.get(updatable.state)
     Label(
       label = label,
       actions = actions,
@@ -86,8 +82,8 @@ object Form {
                 options
                   .find(_._1 == selected)
                   .map(_._2)
-                  .map(lens.set(_)(state))
-                  .foreach(update)
+                  .map(lens.set(_)(updatable.state))
+                  .foreach(updatable.update)
               }
             )
             .child(
