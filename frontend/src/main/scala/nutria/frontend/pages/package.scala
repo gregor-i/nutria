@@ -10,5 +10,5 @@ package object pages {
   }
 
   implicit def updatablePageState[S <: PageState](implicit pageState: S, update: PageState => Unit): Updatable[S, PageState] =
-    Updatable.polymorphic(pageState, update)
+    Updatable[S, PageState](pageState, update)
 }

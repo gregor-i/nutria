@@ -1,7 +1,6 @@
 package nutria.frontend.pages.common
 
 import mathParser.complex.ComplexLanguage
-import monocle.Lens
 import nutria.core.languages.StringFunction
 import nutria.core.{RGB, RGBA}
 import nutria.frontend.util.Updatable
@@ -11,30 +10,28 @@ import snabbdom.{Node, Snabbdom}
 import scala.util.Try
 import scala.util.chaining._
 
-trait Input[S, V] {
-  def node(lens: Lens[S, V]): Node
+trait Input[S] {
+  def node(updatable: Updatable[S, S]): Node
 }
 
 object Input {
-
-  implicit def stringInput[S](implicit updatable: Updatable[S, S]): Input[S, String] =
-    lens =>
+  implicit val stringInput: Input[String] =
+    updatable =>
       Node("input.input")
         .attr("type", "text")
-        .attr("value", lens.get(updatable.state))
+        .attr("value", updatable.state)
         .event("change", Snabbdom.event { event =>
           val value = event.target.asInstanceOf[HTMLInputElement].value
-          updatable.update(lens.set(value)(updatable.state))
+          updatable.update(value)
         })
 
-  implicit def stringFunctionInput[S, L](
-      implicit updatable: Updatable[S, S],
-      lang: ComplexLanguage[L]
-  ): Input[S, StringFunction[L]] =
-    lens =>
+  implicit def stringFunctionInput[L](
+      implicit lang: ComplexLanguage[L]
+  ): Input[StringFunction[L]] =
+    updatable =>
       Node("input.input")
         .attr("type", "text")
-        .attr("value", lens.get(updatable.state).string)
+        .attr("value", updatable.state.string)
         .event(
           "change",
           snabbdom.Snabbdom.event { event =>
@@ -42,31 +39,31 @@ object Input {
             StringFunction(element.value) match {
               case Some(v) =>
                 element.classList.remove("is-danger")
-                updatable.update(lens.set(v)(updatable.state))
+                updatable.update(v)
               case None =>
                 element.classList.add("is-danger")
             }
           }
         )
 
-  implicit def intInput[S](implicit updatable: Updatable[S, S]): Input[S, Int] =
-    lens =>
+  implicit val intInput: Input[Int] =
+    updatable =>
       Node("input.input")
         .attr("type", "number")
-        .attr("value", lens.get(updatable.state).toString)
+        .attr("value", updatable.state.toString)
         .event(
           "change",
           Snabbdom.event { event =>
             val element = event.target.asInstanceOf[HTMLInputElement]
-            updatable.update(lens.set(element.value.toInt)(updatable.state))
+            updatable.update(element.value.toInt)
           }
         )
 
-  implicit def doubleInput[S](implicit updatable: Updatable[S, S]): Input[S, Double] =
-    lens =>
+  implicit val doubleInput: Input[Double] =
+    updatable =>
       Node("input.input")
         .attr("type", "number")
-        .attr("value", lens.get(updatable.state).toString)
+        .attr("value", updatable.state.toString)
         .event(
           "change",
           Snabbdom.event { event =>
@@ -74,18 +71,18 @@ object Input {
             Try(element.value.toDouble).toEither match {
               case Right(v) =>
                 element.classList.remove("is-danger")
-                updatable.update(lens.set(v)(updatable.state))
+                updatable.update(v)
               case Left(_) =>
                 element.classList.add("is-danger")
             }
           }
         )
 
-  implicit def colorInput[S](implicit updatable: Updatable[S, S]): Input[S, RGBA] =
-    lens =>
+  implicit val colorInput: Input[RGBA] =
+    updatable =>
       Node("input.input")
         .attr("type", "color")
-        .attr("value", RGB.toRGBString(lens.get(updatable.state).withoutAlpha))
+        .attr("value", RGB.toRGBString(updatable.state.withoutAlpha))
         .event(
           "change",
           Snabbdom.event { event =>
@@ -93,16 +90,16 @@ object Input {
             RGB.parseRGBString(element.value).map(_.withAlpha()).toOption match {
               case Some(v) =>
                 element.classList.remove("is-danger")
-                updatable.update(lens.set(v)(updatable.state))
+                updatable.update(v)
               case None =>
                 element.classList.add("is-danger")
             }
           }
         )
 
-  implicit def colorGradientInput[S](implicit updatable: Updatable[S, S]): Input[S, Seq[RGBA]] =
-    lens => {
-      val value = lens.get(updatable.state)
+  implicit val colorGradientInput: Input[Seq[RGBA]] =
+    updatable => {
+      val value = updatable.state
       Node("input.input.color-gradient-input")
         .attr("type", "text")
         .attr("value", value.map(_.withoutAlpha).map(RGB.toRGBString).mkString(" "))
@@ -118,7 +115,7 @@ object Input {
               .toOption match {
               case Some(v) =>
                 element.classList.remove("is-danger")
-                updatable.update(lens.set(v.toSeq.map(_.withAlpha()))(updatable.state))
+                updatable.update(v.toSeq.map(_.withAlpha()))
               case None =>
                 element.classList.add("is-danger")
             }

@@ -2,6 +2,7 @@ package nutria.frontend.pages
 
 import facades.{Fs, HtmlFormatter, SnabbdomToHtml}
 import nutria.frontend._
+import nutria.frontend.util.Updatable
 import nutria.macros.StaticContent
 import org.scalatest.funsuite.AnyFunSuite
 
@@ -15,16 +16,17 @@ class RenderUiSpec extends AnyFunSuite {
   Polyfil.init()
 
   for {
-    (name, state) <- TestData.states
+    (name, pageState, globalState) <- TestData.states
   } stateRenderingTest(s"Renders $name")(
-    state = state,
+    state = pageState,
+    globalState = globalState,
     fileName = s"./temp/${this.getClass.getSimpleName}/${name}.html"
   )
 
-  def stateRenderingTest(testName: String)(state: PageState, fileName: String): Unit =
+  def stateRenderingTest(testName: String)(state: PageState, globalState: GlobalState, fileName: String): Unit =
     test(testName) {
       state
-        .pipe(Pages.ui(GlobalState.initial, _, _ => ()))
+        .pipe(state => Pages.ui(globalState, Updatable(state, _ => ())))
         .toVNode
         .pipe(SnabbdomToHtml.apply)
         .pipe(withFixture)

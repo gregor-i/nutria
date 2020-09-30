@@ -34,7 +34,7 @@ object TemplateEditorState extends LenseUtils {
   val code       = template.composeLens(FractalTemplate.code)
   val parameters = template.composeLens(FractalTemplate.parameters)
 
-  def initial(implicit nutriaState: PageState): TemplateEditorState =
+  val initial: TemplateEditorState =
     TemplateEditorState(
       remoteTemplate = None,
       entity = Entity(value = Examples.timeEscape)

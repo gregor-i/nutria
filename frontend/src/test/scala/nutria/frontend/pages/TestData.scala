@@ -4,7 +4,7 @@ import java.time.{ZoneOffset, ZonedDateTime}
 
 import nutria.api.{Entity, User, WithId}
 import nutria.core.{Examples, FractalImage, IntParameter, Viewport}
-import nutria.frontend.PageState
+import nutria.frontend.{GlobalState, PageState}
 
 import scala.concurrent.Future
 
@@ -20,25 +20,27 @@ object TestData {
     insertedAt = ZonedDateTime.now(ZoneOffset.UTC)
   )
   private val publicFractals = Vector.fill(10)(fractalEntity)
-  private val owner          = Some(User("owner", "name", "email", None))
-  private val user           = Some(User("user", "name", "email", None))
+  private val owner          = GlobalState(Some(User("owner", "name", "email", None)))
+  private val user           = GlobalState(Some(User("user", "name", "email", None)))
+  private val noUser         = GlobalState(None)
 
-  val dummyState = GreetingState(user, randomFractal = fractalImage)
-
-  val states: Seq[(String, PageState)] = Seq(
-    "Loading"           -> LoadingState(None, Future.failed(new Exception)),
-    "Error"             -> ErrorState(user, "error message"),
-    "FAQ"               -> DocumentationState.faq(dummyState),
-    "Introduction"      -> DocumentationState.introduction(dummyState),
-    "Greeting"          -> GreetingState(user, randomFractal = fractalImage),
-    "Explorer-owner"    -> ExplorerState(user = owner, remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)),
-    "Explorer-no-user"  -> ExplorerState(user = None, remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)),
-    "Explorer-user"     -> ExplorerState(user = user, remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)),
-    "Gallery"           -> GalleryState(user = None, publicFractals = publicFractals, page = 1),
-    "Details-Diverging" -> DetailsState(user = None, remoteFractal = fractalEntity, fractalToEdit = fractalEntity),
-    "Template-Editor"   -> TemplateEditorState.initial(dummyState),
-    "Template-Editor-newParameter" -> TemplateEditorState
-      .initial(dummyState)
-      .copy(newParameter = Some(IntParameter("name", description = "description", value = 5)))
+  val states: Seq[(String, PageState, GlobalState)] = Seq(
+    ("Loading", LoadingState(Future.failed(new Exception)), noUser),
+    ("Error", ErrorState("error message"), noUser),
+    ("FAQ", DocumentationState.faq, user),
+    ("Introduction", DocumentationState.introduction, user),
+    ("Greeting", GreetingState(randomFractal = fractalImage), user),
+    ("Explorer-owner", ExplorerState(remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)), owner),
+    ("Explorer-no-user", ExplorerState(remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)), noUser),
+    ("Explorer-user", ExplorerState(remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)), user),
+    ("Gallery", GalleryState(publicFractals = publicFractals, page = 1), noUser),
+    ("Details-Diverging", DetailsState(remoteFractal = fractalEntity, fractalToEdit = fractalEntity), noUser),
+    ("Template-Editor", TemplateEditorState.initial, user),
+    (
+      "Template-Editor-newParameter",
+      TemplateEditorState.initial
+        .copy(newParameter = Some(IntParameter("name", description = "description", value = 5))),
+      user
+    )
   )
 }

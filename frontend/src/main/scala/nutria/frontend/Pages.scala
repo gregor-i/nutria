@@ -1,6 +1,7 @@
 package nutria.frontend
 
 import nutria.frontend.pages._
+import nutria.frontend.util.Updatable
 import snabbdom.Node
 
 object Pages {
@@ -27,6 +28,6 @@ object Pages {
       .map(_.asInstanceOf[Page[State]])
       .getOrElse(throw new Exception(s"No Page defined for '${nutriaState.getClass.getSimpleName}'"))
 
-  def ui(globalState: GlobalState, pageState: PageState, update: PageState => Unit): Node =
-    selectPage(pageState).render(globalState, pageState, update)
+  def ui(globalState: GlobalState, updatable: Updatable[PageState, PageState]): Node =
+    selectPage(updatable.state).render(globalState, updatable.state, updatable.update)
 }

@@ -8,14 +8,14 @@ import snabbdom.{Node, Snabbdom}
 object Form {
 
   def forLens[S, V](label: String, description: String, lens: Lens[S, V], actions: Seq[(String, S => S)] = Seq.empty)(
-      implicit input: Input[S, V],
+      implicit input: Input[V],
       updatable: Updatable[S, S]
   ): Node =
     Label(
       label = label,
       description = description,
       actions = actions.map(actionButton(_)),
-      node = input.node(lens)
+      node = input.node(Updatable.composeLens(updatable, lens))
     )
 
   private def actionButton[S, V](tupled: (String, S => S))(implicit updatable: Updatable[S, S]): Node =
