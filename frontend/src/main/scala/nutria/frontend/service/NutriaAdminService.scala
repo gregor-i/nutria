@@ -2,7 +2,7 @@ package nutria.frontend.service
 
 import io.circe.Decoder
 import nutria.CirceCodec
-import nutria.frontend.NutriaState
+import nutria.frontend.PageState
 import nutria.frontend.pages.{AdminState, ErrorState}
 
 import scala.concurrent.Future
@@ -11,11 +11,11 @@ object NutriaAdminService extends Service with CirceCodec {
   private implicit val stateDecoder: Decoder[AdminState] =
     semiauto.deriveConfiguredDecoder[AdminState]
 
-  def load(): Future[NutriaState] =
+  def load(): Future[PageState] =
     get("/api/admin")
       .flatMap(check(200))
       .flatMap(parse[AdminState])
-      .recover { case error => ErrorState(None, error.getMessage) }
+      .recover { case error => ErrorState(error.getMessage) }
 
   def deleteUser(userId: String): Future[Unit] =
     post(s"/api/admin/delete-user/$userId")

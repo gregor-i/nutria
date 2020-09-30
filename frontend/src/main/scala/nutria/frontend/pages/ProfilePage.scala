@@ -11,27 +11,25 @@ import snabbdom.Node
 case class ProfileState(
     about: User,
     navbarExpanded: Boolean = false
-) extends NutriaState {
-  def user: Some[User] = Some(about)
-}
+) extends PageState
 
 object ProfilePage extends Page[ProfileState] {
 
   override def stateFromUrl = {
-    case (Some(user), s"/user/profile", _) =>
-      ProfileState(about = user)
+    case (globalState, s"/user/profile", _) if globalState.user.isDefined =>
+      ProfileState(about = globalState.user.get)
   }
 
   override def stateToUrl(state: ProfilePage.State): Option[(Path, QueryParameter)] =
     Some(s"/user/profile" -> Map.empty)
 
-  def render(implicit state: ProfileState, update: NutriaState => Unit): Node =
+  def render(implicit globalState: GlobalState, state: ProfileState, update: PageState => Unit): Node =
     Body()
       .child(Header(ProfileState.navbarExpanded))
       .child(content())
       .child(Footer())
 
-  def content()(implicit state: ProfileState, update: NutriaState => Unit) =
+  def content()(implicit globalState: GlobalState, state: ProfileState, update: PageState => Unit) =
     Node("div.container")
       .child(
         Node("section.section")

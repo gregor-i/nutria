@@ -14,18 +14,18 @@ object Router {
   type QueryParameter = Map[String, String]
   type Location       = (Path, QueryParameter)
 
-  def stateFromUrl(location: dom.Location, user: Option[User]): NutriaState =
-    stateFromUrl((location.pathname, queryParamsFromUrl(location.search)): Location, user)
+  def stateFromUrl(location: dom.Location, globalState: GlobalState): PageState =
+    stateFromUrl((location.pathname, queryParamsFromUrl(location.search)): Location, globalState)
 
-  private val stateFromUrlPF: ((Option[User], Path, QueryParameter)) => Option[NutriaState] =
+  private val stateFromUrlPF: ((GlobalState, Path, QueryParameter)) => Option[PageState] =
     Pages.all
       .map(_.stateFromUrl)
       .reduce(_ orElse _)
       .lift
-  def stateFromUrl(location: Location, user: Option[User]): NutriaState =
-    stateFromUrlPF((user, location._1, location._2)).getOrElse(ErrorState(user, "Unkown url"))
+  def stateFromUrl(location: Location, globalState: GlobalState): PageState =
+    stateFromUrlPF((globalState, location._1, location._2)).getOrElse(ErrorState("Unkown url"))
 
-  def stateToUrl[State <: NutriaState](state: State): Option[Location] =
+  def stateToUrl[State <: PageState](state: State): Option[Location] =
     Pages.selectPage(state).stateToUrl(state)
 
   def queryParamsToUrl(search: QueryParameter): String = {

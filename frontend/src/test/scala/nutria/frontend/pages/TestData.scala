@@ -4,7 +4,7 @@ import java.time.{ZoneOffset, ZonedDateTime}
 
 import nutria.api.{Entity, User, WithId}
 import nutria.core.{Examples, FractalImage, IntParameter, Viewport}
-import nutria.frontend.NutriaState
+import nutria.frontend.PageState
 
 import scala.concurrent.Future
 
@@ -25,7 +25,7 @@ object TestData {
 
   val dummyState = GreetingState(user, randomFractal = fractalImage)
 
-  val states: Seq[(String, NutriaState)] = Seq(
+  val states: Seq[(String, PageState)] = Seq(
     "Loading"           -> LoadingState(None, Future.failed(new Exception)),
     "Error"             -> ErrorState(user, "error message"),
     "FAQ"               -> DocumentationState.faq(dummyState),

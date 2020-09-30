@@ -1,24 +1,25 @@
-package nutria.frontend.pages
+package nutria.frontend
+package pages
 
 import monocle.macros.Lenses
 import nutria.api.User
 import nutria.frontend.Router.Location
 import nutria.frontend.pages.common.{Body, Header}
-import nutria.frontend.{NutriaState, Page}
+import nutria.frontend.{PageState, Page}
 import snabbdom._
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 @Lenses
-case class LoadingState(user: Option[User], loading: Future[NutriaState], navbarExpanded: Boolean = false) extends NutriaState
+case class LoadingState(loading: Future[PageState], navbarExpanded: Boolean = false) extends PageState
 
 object LoadingPage extends Page[LoadingState] {
   def stateFromUrl = PartialFunction.empty
 
   def stateToUrl(state: State): Option[Location] = None
 
-  def render(implicit state: LoadingState, update: NutriaState => Unit) =
+  def render(implicit globalState: GlobalState, state: LoadingState, update: PageState => Unit) =
     Body()
       .child(Header(LoadingState.navbarExpanded))
       .child(
@@ -40,7 +41,7 @@ object LoadingPage extends Page[LoadingState] {
             case Success(newState) => update(newState)
             case Failure(exception) =>
               update(
-                ErrorState(state.user, s"unexpected problem while initializing app: ${exception.getMessage}")
+                ErrorState(s"unexpected problem while initializing app: ${exception.getMessage}")
               )
           }
         }

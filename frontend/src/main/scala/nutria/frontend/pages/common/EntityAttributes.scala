@@ -2,16 +2,16 @@ package nutria.frontend.pages.common
 
 import monocle.{Iso, Lens}
 import nutria.api.Entity
-import nutria.frontend.NutriaState
+import nutria.frontend.{GlobalState, PageState}
 import snabbdom.Node
 
 object EntityAttributes {
-  def section[S, E](lens: Lens[S, Entity[E]])(implicit state: S, update: S => Unit): Node =
+  def section[S, E](lens: Lens[S, Entity[E]])(implicit globalState: GlobalState, state: S, update: S => Unit): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text("Administration Attributes:"))
       .child(form(lens))
 
-  def form[S, E](lens: Lens[S, Entity[E]])(implicit state: S, update: S => Unit): Seq[Node] = {
+  def form[S, E](lens: Lens[S, Entity[E]])(implicit globalState: GlobalState, state: S, update: S => Unit): Seq[Node] = {
     Seq(
       Form.forLens("Title", description = "give this fractal a short name", lens = lens composeLens Entity.title),
       Form.forLens("Description", description = "give this fractal a short description", lens = lens composeLens Entity.description),

@@ -1,6 +1,7 @@
 package nutria.frontend.pages.common
 
 import monocle.Lens
+import nutria.frontend.GlobalState
 import nutria.frontend.util.SnabbdomUtil
 import snabbdom.Node
 
@@ -16,7 +17,7 @@ object Pagination {
       .slice((p - 1) * itemsPerPage, p * itemsPerPage)
   }
 
-  def links[A, S](itemsLense: Lens[S, Seq[A]], pageLens: Lens[S, Int])(implicit state: S, update: S => Unit): Node = {
+  def links[A, S](itemsLense: Lens[S, Seq[A]], pageLens: Lens[S, Int])(implicit globalState: GlobalState, state: S, update: S => Unit): Node = {
     val page  = pageLens.get(state)
     val pages = (itemsLense.get(state).size - 1) / itemsPerPage + 1
 

@@ -13,12 +13,11 @@ import snabbdom.Node
 
 @Lenses
 case class ExplorerState(
-    user: Option[User],
     remoteFractal: Option[FractalImageEntityWithId],
     fractalImage: FractalImageEntity,
     saveModal: Option[SaveFractalDialog] = None,
     navbarExpanded: Boolean = false
-) extends NutriaState {
+) extends PageState {
   def dirty: Boolean = remoteFractal.fold(true)(_.entity != fractalImage)
 }
 
@@ -46,19 +45,18 @@ object ExplorerPage extends Page[ExplorerState] {
             .getOrElse(remoteFractal.entity)
 
         ExplorerState(
-          user,
           remoteFractal = Some(remoteFractal),
           fractalImage = fractalFromUrl
         )
-      }).loading(user)
+      }).loading()
 
     case (user, "/explorer", queryParams) =>
       val fractalFromUrl =
         queryParams.get("state").flatMap(Router.queryDecoded[FractalImageEntity])
 
       fractalFromUrl match {
-        case Some(fractal) => ExplorerState(user, None, fractal)
-        case None          => ErrorState(user, "Query Parameter is invalid")
+        case Some(fractal) => ExplorerState(None, fractal)
+        case None          => ErrorState("Query Parameter is invalid")
       }
   }
 
@@ -71,14 +69,14 @@ object ExplorerPage extends Page[ExplorerState] {
     }
   }
 
-  def render(implicit state: ExplorerState, update: NutriaState => Unit) =
+  def render(implicit globalState: GlobalState, state: ExplorerState, update: PageState => Unit) =
     Body()
       .child(Header(ExplorerState.navbarExpanded))
       .child(InteractiveFractal.forImage(ExplorerState.fractalImage.composeLens(Entity.value)))
       .child(renderActionBar())
       .childOptional(saveDialog())
 
-  def renderActionBar()(implicit state: ExplorerState, update: NutriaState => Unit): Node =
+  def renderActionBar()(implicit globalState: GlobalState, state: ExplorerState, update: PageState => Unit): Node =
     ButtonList()
       .classes("overlay-bottom-right", "padding")
       .child(buttonSave(state.fractalImage))
@@ -89,23 +87,23 @@ object ExplorerPage extends Page[ExplorerState] {
   def buttonGoToDetails(
       remoteFractal: WithId[FractalImageEntity],
       currentFractal: FractalImageEntity
-  )(implicit state: ExplorerState, update: NutriaState => Unit) =
-    Link(Links.detailsState(remoteFractal, currentFractal, state.user))
+  )(implicit globalState: GlobalState, state: ExplorerState, update: PageState => Unit) =
+    Link(Links.detailsState(remoteFractal, currentFractal))
       .classes("button", "is-rounded")
       .child(Icons.icon(Icons.edit))
 
-  def buttonResetViewport()(implicit state: State, update: NutriaState => Unit) =
+  def buttonResetViewport()(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     state.remoteFractal match {
       case Some(remoteFractal) => Button.icon(Icons.undo, SnabbdomUtil.update(ExplorerState.viewport.set(remoteFractal.entity.value.viewport)))
       case None                => Button.icon(Icons.undo, SnabbdomUtil.noop).boolAttr("disabled", true)
     }
 
-  def buttonSave(fractalImage: FractalImageEntity)(implicit state: ExplorerState, update: NutriaState => Unit) =
+  def buttonSave(fractalImage: FractalImageEntity)(implicit globalState: GlobalState, state: ExplorerState, update: PageState => Unit) =
     Button
       .icon(Icons.snapshot, Actions.saveSnapshot(fractalImage))
       .classes("is-primary", "is-rounded")
 
-  def saveDialog()(implicit state: ExplorerState, update: NutriaState => Unit): Option[Node] =
+  def saveDialog()(implicit globalState: GlobalState, state: ExplorerState, update: PageState => Unit): Option[Node] =
     state.saveModal.map { params =>
       val lensParams     = ExplorerState.saveModal.composeLens(LenseUtils.unsafe(monocle.std.all.some[SaveFractalDialog]))
       val downloadAction = Actions.saveToDisk(state.fractalImage.value.copy(antiAliase = params.antiAliase), params.dimensions)

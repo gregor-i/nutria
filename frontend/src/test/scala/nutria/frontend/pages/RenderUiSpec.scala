@@ -21,7 +21,7 @@ class RenderUiSpec extends AnyFunSuite {
     fileName = s"./temp/${this.getClass.getSimpleName}/${name}.html"
   )
 
-  def stateRenderingTest(testName: String)(state: NutriaState, fileName: String): Unit =
+  def stateRenderingTest(testName: String)(state: PageState, fileName: String): Unit =
     test(testName) {
       state
         .pipe(Pages.ui(_, _ => ()))

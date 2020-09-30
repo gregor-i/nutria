@@ -1,4 +1,5 @@
-package nutria.frontend.pages
+package nutria.frontend
+package pages
 
 import mathParser.complex.Complex
 import monocle.Lens
@@ -7,12 +8,11 @@ import nutria.api.User
 import nutria.core._
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common.{AnimatedFractalTile, Body, Form, Header}
-import nutria.frontend.{NutriaState, Page}
+import nutria.frontend.{PageState, Page}
 import snabbdom.Node
 
 @Lenses
 case class NewtonFractalDesignerState(
-    user: Option[User],
     constant: Complex = Complex(1, 0),
     viewport: Viewport = Viewport.aroundZero.cover(Dimensions.preview.width, Dimensions.preview.height),
     numberOfRoots: Int = 3,
@@ -21,7 +21,7 @@ case class NewtonFractalDesignerState(
     beta: Double,
     gamma: Double,
     navbarExpanded: Boolean = false
-) extends NutriaState
+) extends PageState
 
 object NewtonFractalDesignerState {
   def real: Lens[Complex, Double] = GenLens[Complex](_.real)
@@ -29,10 +29,9 @@ object NewtonFractalDesignerState {
 }
 
 object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
-  override def stateFromUrl: PartialFunction[(Option[User], Path, QueryParameter), NutriaState] = {
-    case (user, "/newton-fractal-designer", params) =>
+  override def stateFromUrl: PartialFunction[(GlobalState, Path, QueryParameter), PageState] = {
+    case (_, "/newton-fractal-designer", params) =>
       NewtonFractalDesignerState(
-        user = user,
         alpha = params.get("alpha").flatMap(_.toDoubleOption).getOrElse(0.05),
         beta = params.get("beta").flatMap(_.toDoubleOption).getOrElse(0.01),
         gamma = params.get("gamma").flatMap(_.toDoubleOption).getOrElse(0.995),
@@ -52,7 +51,7 @@ object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
       )
     )
 
-  override def render(implicit state: State, update: NutriaState => Unit): Node =
+  override def render(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node =
     Body()
       .child(Header(NewtonFractalDesignerState.navbarExpanded))
       .child(
@@ -61,7 +60,7 @@ object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
           .child(inputs())
       )
 
-  private def fractalTile()(implicit state: State, update: NutriaState => Unit) =
+  private def fractalTile()(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Node("div.fractal-tile-list")
       .child {
         Node("div.fractal-tile")
@@ -81,7 +80,7 @@ object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
         gamma = state.gamma
       )
 
-  private def inputs()(implicit state: State, update: NutriaState => Unit) =
+  private def inputs()(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Node("div.section")
       .child(
         Form.forLens(

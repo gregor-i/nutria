@@ -11,29 +11,28 @@ import scala.util.chaining._
 
 @Lenses
 case class GalleryState(
-    user: Option[User],
     publicFractals: Seq[WithId[FractalImageEntity]],
     page: Int,
     navbarExpanded: Boolean = false
-) extends NutriaState
+) extends PageState
 
 object GalleryPage extends Page[GalleryState] {
 
   override def stateFromUrl = {
     case (user, "/gallery", query) =>
       val page = query.get("page").flatMap(_.toIntOption).getOrElse(1)
-      Links.galleryState(user, page).loading(user)
+      Links.galleryState(page).loading()
   }
 
   override def stateToUrl(state: GalleryPage.State): Option[Router.Location] =
     Some("/gallery" -> Map("page" -> state.page.toString))
 
-  def render(implicit state: GalleryState, update: NutriaState => Unit) =
+  def render(implicit globalState: GlobalState, state: GalleryState, update: PageState => Unit) =
     Body()
       .child(Header(GalleryState.navbarExpanded))
       .child(
         Link
-          .async("/new-fractal", CreateNewFractalState.load(state.user))
+          .async("/new-fractal", CreateNewFractalState.load(globalState))
           .pipe(Header.fab)
           .child(Icons.icon(Icons.plus))
       )
@@ -54,10 +53,10 @@ object GalleryPage extends Page[GalleryState] {
 
   def renderFractalTile(
       fractal: WithId[FractalImageEntity]
-  )(implicit state: GalleryState, update: NutriaState => Unit): Node =
+  )(implicit globalState: GlobalState, state: GalleryState, update: PageState => Unit): Node =
     Node("article.fractal-tile.is-relative")
       .child(
-        Link(Links.explorerState(fractal, state.user))
+        Link(Links.explorerState(fractal))
           .child(
             FractalTile(fractal.entity.value, Dimensions.thumbnail)
           )
@@ -65,12 +64,12 @@ object GalleryPage extends Page[GalleryState] {
       .child(
         Node("div.buttons.overlay-bottom-right.padding")
           .child(
-            Link(Links.explorerState(fractal, state.user))
+            Link(Links.explorerState(fractal))
               .classes("button", "is-outlined", "is-rounded")
               .child(Icons.icon(Icons.explore))
           )
           .child(
-            Link(Links.detailsState(fractal, state.user))
+            Link(Links.detailsState(fractal))
               .classes("button", "is-outlined", "is-rounded")
               .child(Icons.icon(Icons.edit))
           )

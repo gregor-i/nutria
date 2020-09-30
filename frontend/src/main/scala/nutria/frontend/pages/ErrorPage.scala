@@ -8,14 +8,18 @@ import nutria.frontend.pages.common.{Body, Header}
 import snabbdom._
 
 @Lenses
-case class ErrorState(user: Option[User], message: String, navbarExpanded: Boolean = false) extends NutriaState
+case class ErrorState(message: String, navbarExpanded: Boolean = false) extends PageState
+
+object ErrorState {
+  val unauthorized = ErrorState("You are not logged in")
+}
 
 object ErrorPage extends Page[ErrorState] {
   def stateFromUrl = PartialFunction.empty
 
   def stateToUrl(state: State): Option[Location] = None
 
-  def render(implicit state: ErrorState, update: NutriaState => Unit): Node =
+  def render(implicit globalState: GlobalState, state: ErrorState, update: PageState => Unit): Node =
     Body()
       .child(Header(ErrorState.navbarExpanded))
       .child(

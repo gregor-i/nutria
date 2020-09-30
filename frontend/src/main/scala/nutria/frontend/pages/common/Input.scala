@@ -4,6 +4,7 @@ import mathParser.complex.ComplexLanguage
 import monocle.Lens
 import nutria.core.languages.StringFunction
 import nutria.core.{RGB, RGBA}
+import nutria.frontend.GlobalState
 import org.scalajs.dom.raw.HTMLInputElement
 import snabbdom.{Node, Snabbdom}
 
@@ -16,7 +17,7 @@ trait Input[S, V] {
 
 object Input {
 
-  implicit def stringInput[S](implicit state: S, update: S => Unit): Input[S, String] =
+  implicit def stringInput[S](implicit globalState: GlobalState, state: S, update: S => Unit): Input[S, String] =
     lens =>
       Node("input.input")
         .attr("type", "text")
@@ -26,7 +27,12 @@ object Input {
           update(lens.set(value)(state))
         })
 
-  implicit def stringFunctionInput[S, L](implicit state: S, update: S => Unit, lang: ComplexLanguage[L]): Input[S, StringFunction[L]] =
+  implicit def stringFunctionInput[S, L](
+      implicit globalState: GlobalState,
+      state: S,
+      update: S => Unit,
+      lang: ComplexLanguage[L]
+  ): Input[S, StringFunction[L]] =
     lens =>
       Node("input.input")
         .attr("type", "text")
@@ -45,7 +51,7 @@ object Input {
           }
         )
 
-  implicit def intInput[S](implicit state: S, update: S => Unit): Input[S, Int] =
+  implicit def intInput[S](implicit globalState: GlobalState, state: S, update: S => Unit): Input[S, Int] =
     lens =>
       Node("input.input")
         .attr("type", "number")
@@ -58,7 +64,7 @@ object Input {
           }
         )
 
-  implicit def doubleInput[S](implicit state: S, update: S => Unit): Input[S, Double] =
+  implicit def doubleInput[S](implicit globalState: GlobalState, state: S, update: S => Unit): Input[S, Double] =
     lens =>
       Node("input.input")
         .attr("type", "number")
@@ -77,7 +83,7 @@ object Input {
           }
         )
 
-  implicit def colorInput[S](implicit state: S, update: S => Unit): Input[S, RGBA] =
+  implicit def colorInput[S](implicit globalState: GlobalState, state: S, update: S => Unit): Input[S, RGBA] =
     lens =>
       Node("input.input")
         .attr("type", "color")
@@ -96,7 +102,7 @@ object Input {
           }
         )
 
-  implicit def colorGradientInput[S](implicit state: S, update: S => Unit): Input[S, Seq[RGBA]] =
+  implicit def colorGradientInput[S](implicit globalState: GlobalState, state: S, update: S => Unit): Input[S, Seq[RGBA]] =
     lens => {
       val value = lens.get(state)
       Node("input.input.color-gradient-input")

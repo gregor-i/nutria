@@ -1,6 +1,7 @@
 package nutria.frontend.pages.common
 
 import monocle.Lens
+import nutria.frontend.GlobalState
 import nutria.frontend.util.SnabbdomUtil
 import org.scalajs.dom.raw.{HTMLInputElement, HTMLSelectElement}
 import snabbdom.{Node, Snabbdom}
@@ -9,6 +10,7 @@ object Form {
 
   def forLens[S, V](label: String, description: String, lens: Lens[S, V], actions: Seq[(String, S => S)] = Seq.empty)(
       implicit input: Input[S, V],
+      globalState: GlobalState,
       update: S => Unit,
       state: S
   ): Node =
@@ -19,7 +21,7 @@ object Form {
       node = input.node(lens)
     )
 
-  private def actionButton[S, V](tupled: (String, S => S))(implicit state: S, update: S => Unit): Node =
+  private def actionButton[S, V](tupled: (String, S => S))(implicit globalState: GlobalState, state: S, update: S => Unit): Node =
     Button.icon(tupled._1, SnabbdomUtil.update[S](tupled._2), round = false)
 
   def readonlyStringInput(
@@ -40,7 +42,7 @@ object Form {
       label: String,
       lens: Lens[S, String],
       actions: Seq[Node] = Seq.empty
-  )(implicit state: S, update: S => Unit) =
+  )(implicit globalState: GlobalState, state: S, update: S => Unit) =
     Label(
       label = label,
       actions = actions,
@@ -53,7 +55,11 @@ object Form {
         .text(lens.get(state))
     )
 
-  def booleanInput[S](label: String, lens: Lens[S, Boolean], actions: Seq[Node] = Seq.empty)(implicit state: S, update: S => Unit) =
+  def booleanInput[S](
+      label: String,
+      lens: Lens[S, Boolean],
+      actions: Seq[Node] = Seq.empty
+  )(implicit globalState: GlobalState, state: S, update: S => Unit) =
     selectInput(
       label = label,
       actions = actions,

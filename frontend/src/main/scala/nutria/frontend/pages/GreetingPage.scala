@@ -8,22 +8,22 @@ import nutria.frontend.pages.common.{Body, Button, ButtonList, CanvasHooks, Icon
 import nutria.macros.StaticContent
 import snabbdom.Node
 
-case class GreetingState(user: Option[User], randomFractal: FractalImage) extends NutriaState
+case class GreetingState(randomFractal: FractalImage) extends PageState
 
 object GreetingPage extends Page[GreetingState] {
   override def stateFromUrl = {
-    case (user, "/", _) => Links.greetingState(user).loading(user)
+    case (user, "/", _) => Links.greetingState().loading()
   }
 
   override def stateToUrl(state: GreetingState): Option[(Path, QueryParameter)] =
     Some("/" -> Map.empty)
 
-  def render(implicit state: GreetingState, update: NutriaState => Unit) =
+  def render(implicit globalState: GlobalState, state: GreetingState, update: PageState => Unit) =
     Body()
       .child(renderCanvas)
       .child(content)
 
-  private def content(implicit state: GreetingState, update: NutriaState => Unit) = {
+  private def content(implicit globalState: GlobalState, state: GreetingState, update: PageState => Unit) = {
     Modal(closeAction = Actions.exploreFractal())(
       Node("div.content").prop("innerHTML", StaticContent("frontend/src/main/html/greeting.html")),
       ButtonList(
@@ -32,7 +32,7 @@ object GreetingPage extends Page[GreetingState] {
           .child(Icons.icon(Icons.info))
           .child(Node("span").text("more information")),
         Link
-          .async("/gallery", Links.galleryState(state.user))
+          .async("/gallery", Links.galleryState())
           .classes("button", "is-primary")
           .child(Icons.icon(Icons.gallery))
           .child(Node("span").text("Start exploring!"))
@@ -40,7 +40,7 @@ object GreetingPage extends Page[GreetingState] {
     )
   }
 
-  private def renderCanvas(implicit state: GreetingState, update: ExplorerState => Unit): Node =
+  private def renderCanvas(implicit globalState: GlobalState, state: GreetingState, update: ExplorerState => Unit): Node =
     Node("div.background")
       .child(
         Node("canvas").hooks(CanvasHooks(state.randomFractal))

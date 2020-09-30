@@ -2,6 +2,7 @@ package nutria.frontend.pages.common
 
 import monocle.Lens
 import nutria.core._
+import nutria.frontend.GlobalState
 import nutria.frontend.util.LenseUtils
 import snabbdom.Node
 
@@ -11,7 +12,7 @@ object ParameterForm {
   def list[S](
       lens: Lens[S, Vector[Parameter]],
       actions: Parameter => Seq[(String, S => S)] = (_: Parameter) => Seq.empty
-  )(implicit state: S, update: S => Unit): Seq[Node] =
+  )(implicit globalState: GlobalState, state: S, update: S => Unit): Seq[Node] =
     lens
       .get(state)
       .sorted
@@ -21,7 +22,10 @@ object ParameterForm {
           .pipe(apply(_, actions(parameter)))
       }
 
-  def apply[S](lens: Lens[S, Parameter], actions: Seq[(String, S => S)] = Seq.empty)(implicit state: S, update: S => Unit): Node = {
+  def apply[S](
+      lens: Lens[S, Parameter],
+      actions: Seq[(String, S => S)] = Seq.empty
+  )(implicit globalState: GlobalState, state: S, update: S => Unit): Node = {
     lens.get(state) match {
       case p: IntParameter =>
         val valueLens = lens.composePrism(Parameter.prismIntParameter).composeLens(IntParameter.value).pipe(LenseUtils.unsafeOptional)

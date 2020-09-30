@@ -6,35 +6,32 @@ import nutria.core.{FractalImage, FractalTemplate}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common._
 import nutria.frontend.service.NutriaAdminService
-import nutria.frontend.{NutriaState, Page}
+import nutria.frontend.{GlobalState, Page, PageState}
 import snabbdom.{Node, Snabbdom, SnabbdomFacade}
 
 import scala.concurrent.Future
 
 @Lenses
 case class AdminState(
-    admin: User,
     users: Vector[User],
     fractals: Vector[WithId[Option[Entity[FractalImage]]]],
     templates: Vector[WithId[Option[Entity[FractalTemplate]]]],
     navbarExpanded: Boolean = false
-) extends NutriaState {
-  def user: Some[User] = Some(admin)
-}
+) extends PageState
 
 object AdminState {
   def initial() = NutriaAdminService.load()
 }
 
 object AdminPage extends Page[AdminState] {
-  override def stateFromUrl: PartialFunction[(Option[User], Path, QueryParameter), NutriaState] = {
-    case (Some(user), "/admin", _) if user.admin => AdminState.initial().loading(Some(user))
+  override def stateFromUrl: PartialFunction[(GlobalState, Path, QueryParameter), PageState] = {
+    case (globalState, "/admin", _) if globalState.user.exists(_.admin) => AdminState.initial().loading()
   }
 
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =
     Some("/admin" -> Map.empty)
 
-  def render(implicit state: State, update: NutriaState => Unit): Node =
+  def render(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node =
     Body()
       .child(Header(AdminState.navbarExpanded))
       .child(
@@ -46,7 +43,7 @@ object AdminPage extends Page[AdminState] {
           .child(actionBar())
       )
 
-  private def usersTable(users: Seq[User])(implicit update: NutriaState => Unit): Node =
+  private def usersTable(users: Seq[User])(implicit update: PageState => Unit): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text(s"Users: ${users.length}"))
       .child(
@@ -79,7 +76,7 @@ object AdminPage extends Page[AdminState] {
 
   private def fractalsTable(
       fractals: Seq[WithId[Option[Entity[FractalImage]]]]
-  )(implicit update: NutriaState => Unit): Node =
+  )(implicit update: PageState => Unit): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text(s"Fractals: ${fractals.length}"))
       .child(
@@ -114,7 +111,7 @@ object AdminPage extends Page[AdminState] {
 
   private def templatesTable(
       templates: Seq[WithId[Option[Entity[FractalTemplate]]]]
-  )(implicit update: NutriaState => Unit): Node =
+  )(implicit update: PageState => Unit): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text(s"Templates: ${templates.length}"))
       .child(
@@ -142,7 +139,7 @@ object AdminPage extends Page[AdminState] {
           )
       )
 
-  private def actionBar()(implicit update: NutriaState => Unit): Node =
+  private def actionBar()(implicit update: PageState => Unit): Node =
     Node("section.section")
       .child(
         ButtonList(
@@ -155,6 +152,6 @@ object AdminPage extends Page[AdminState] {
 
   private def action(
       action: => Future[Unit]
-  )(implicit update: NutriaState => Unit): SnabbdomFacade.Eventlistener =
+  )(implicit update: PageState => Unit): SnabbdomFacade.Eventlistener =
     Snabbdom.event { _ -> action.flatMap(_ => NutriaAdminService.load()).foreach(update) }
 }

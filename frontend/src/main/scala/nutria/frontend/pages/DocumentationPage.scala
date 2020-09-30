@@ -10,14 +10,13 @@ import snabbdom.Node
 
 @Lenses
 case class DocumentationState(
-    user: Option[User],
     subpage: Subpage,
     navbarExpanded: Boolean = false
-) extends NutriaState
+) extends PageState
 
 object DocumentationState {
-  def faq(implicit nutriaState: NutriaState)          = DocumentationState(user = nutriaState.user, subpage = FAQ)
-  def introduction(implicit nutriaState: NutriaState) = DocumentationState(user = nutriaState.user, subpage = Introduction)
+  def faq(implicit nutriaState: PageState)          = DocumentationState(subpage = FAQ)
+  def introduction(implicit nutriaState: PageState) = DocumentationState(subpage = Introduction)
 }
 
 sealed trait Subpage
@@ -28,9 +27,9 @@ object DocumentationPage extends Page[DocumentationState] {
 
   override def stateFromUrl = {
     case (user, "/documentation/faq", _) =>
-      DocumentationState(user = user, subpage = FAQ)
+      DocumentationState(subpage = FAQ)
     case (user, "/documentation/introduction", _) =>
-      DocumentationState(user = user, subpage = Introduction)
+      DocumentationState(subpage = Introduction)
   }
 
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =
@@ -41,13 +40,13 @@ object DocumentationPage extends Page[DocumentationState] {
         Some("/documentation/introduction" -> Map.empty)
     }
 
-  def render(implicit state: State, update: NutriaState => Unit) =
+  def render(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Body()
       .child(Header(DocumentationState.navbarExpanded))
       .child(content(state.subpage))
       .child(Footer())
 
-  private def content(subpage: Subpage)(implicit state: DocumentationState, update: NutriaState => Unit) =
+  private def content(subpage: Subpage)(implicit globalState: GlobalState, state: DocumentationState, update: PageState => Unit) =
     subpage match {
       case FAQ =>
         Node("div.container")

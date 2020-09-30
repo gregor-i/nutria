@@ -9,7 +9,7 @@ import snabbdom.Node
 
 object Header {
 
-  def apply[S <: NutriaState](lens: Lens[S, Boolean])(implicit state: S, update: NutriaState => Unit): Node = {
+  def apply[S <: PageState](lens: Lens[S, Boolean])(implicit globalState: GlobalState, state: S, update: PageState => Unit): Node = {
     Node("nav.navbar")
       .attr("role", "navigation")
       .attr("aria-label", "main navigation")
@@ -25,7 +25,7 @@ object Header {
             Node("div.navbar-start")
               .child(
                 Link
-                  .async("/gallery", Links.galleryState(state.user))
+                  .async("/gallery", Links.galleryState())
                   .classes("navbar-item")
                   .text("Public Gallery")
               )
@@ -40,25 +40,25 @@ object Header {
                   .text("FAQ")
               )
               .childOptional(
-                state.user.map(
+                globalState.user.map(
                   user =>
                     Link
-                      .async(s"/user/${user.id}/gallery", Links.userGalleryState(Some(user), user.id))
+                      .async(s"/user/${user.id}/gallery", Links.userGalleryState(user.id))
                       .classes("navbar-item")
                       .text("My Gallery")
                 )
               )
               .childOptional(
-                state.user.map(
+                globalState.user.map(
                   _ =>
                     Link
-                      .async("/templates", TemplateGalleryState.load(state.user))
+                      .async("/templates", TemplateGalleryState.load(globalState))
                       .classes("navbar-item")
                       .text("My Templates")
                 )
               )
               .childOptional(
-                state.user.map(
+                globalState.user.map(
                   user =>
                     Link(ProfileState(user))
                       .classes("navbar-item")
@@ -71,13 +71,13 @@ object Header {
                     .async("/admin", AdminState.initial())
                     .classes("navbar-item")
                     .text("Admin")
-                ).filter(_ => state.user.exists(_.admin))
+                ).filter(_ => globalState.user.exists(_.admin))
               )
           )
           .child(
             Node("div.navbar-end")
               .child(
-                state.user match {
+                globalState.user match {
                   case Some(user) => logoutItem(user)
                   case None       => loginItem
                 }
@@ -90,7 +90,7 @@ object Header {
     node
       .classes("button", "is-large", "is-primary", "is-rounded", "is-fab")
 
-  def loginHref(implicit nutriaState: NutriaState): String = {
+  def loginHref(implicit nutriaState: PageState): String = {
     Router.stateToUrl(nutriaState) match {
       case None                 => "/auth/google"
       case Some((base, search)) => s"/auth/google?return-to=${base + Router.queryParamsToUrl(search)}"
@@ -116,7 +116,7 @@ object Header {
           .text("Nutria")
       )
 
-  private def burgerMenu[S <: NutriaState](lens: Lens[S, Boolean])(implicit state: S, update: NutriaState => Unit) =
+  private def burgerMenu[S <: PageState](lens: Lens[S, Boolean])(implicit globalState: GlobalState, state: S, update: PageState => Unit) =
     Node("a.navbar-burger.burger")
       .event("click", SnabbdomUtil.update(lens.modify(!_)))
       .`class`("is-active", lens.get(state))
@@ -126,7 +126,7 @@ object Header {
       .child(Node("span").attr("aria-hidden", "true"))
       .child(Node("span").attr("aria-hidden", "true"))
 
-  private def loginItem(implicit nutriaState: NutriaState) =
+  private def loginItem(implicit nutriaState: PageState) =
     Node("div.navbar-item")
       .child(
         Node("a.button.is-rounded")

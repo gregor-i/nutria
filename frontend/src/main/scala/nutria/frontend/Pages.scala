@@ -4,7 +4,7 @@ import nutria.frontend.pages._
 import snabbdom.Node
 
 object Pages {
-  val all: Seq[Page[_ <: NutriaState]] = Seq(
+  val all: Seq[Page[_ <: PageState]] = Seq(
     ErrorPage,
     DetailsPage,
     ExplorerPage,
@@ -21,12 +21,12 @@ object Pages {
     AdminPage
   )
 
-  def selectPage[State <: NutriaState](nutriaState: State): Page[State] =
+  def selectPage[State <: PageState](nutriaState: State): Page[State] =
     all
       .find(_.acceptState(nutriaState))
       .map(_.asInstanceOf[Page[State]])
       .getOrElse(throw new Exception(s"No Page defined for '${nutriaState.getClass.getSimpleName}'"))
 
-  def ui(nutriaState: NutriaState, update: NutriaState => Unit): Node =
-    selectPage(nutriaState).render(nutriaState, update)
+  def ui(globalState: GlobalState, pageState: PageState, update: PageState => Unit): Node =
+    selectPage(pageState).render(globalState, pageState, update)
 }

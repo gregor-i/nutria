@@ -19,11 +19,10 @@ import scala.util.chaining._
 
 @Lenses
 case class CreateNewFractalState(
-    user: Option[User],
     templates: Vector[FractalTemplateEntity],
     step: CreateNewFractalState.Step = CreateNewFractalState.TemplateStep,
     navbarExpanded: Boolean = false
-) extends NutriaState
+) extends PageState
 
 object CreateNewFractalState extends ExecutionContext {
   sealed trait Step
@@ -35,15 +34,15 @@ object CreateNewFractalState extends ExecutionContext {
     implicit val codec: Codec[Step] = semiauto.deriveConfiguredCodec
   }
 
-  def load(user: Option[User]): Future[CreateNewFractalState] =
+  def load(globalState: GlobalState): Future[CreateNewFractalState] =
     for {
       publicTemplates <- TemplateService.listPublic()
-      userTemplates <- user match {
+      userTemplates <- globalState.user match {
         case Some(user) => TemplateService.listUser(user.id)
         case None       => Future.successful(Vector.empty)
       }
       allTemplates = (publicTemplates.toVector ++ userTemplates).distinctBy(_.id).map(_.entity)
-    } yield CreateNewFractalState(user = user, templates = allTemplates)
+    } yield CreateNewFractalState(templates = allTemplates)
 
   val formulaStep: Prism[Step, ParametersStep] =
     GenPrism[Step, ParametersStep]
@@ -51,21 +50,21 @@ object CreateNewFractalState extends ExecutionContext {
 
 object CreateNewFractalPage extends Page[CreateNewFractalState] {
   override def stateFromUrl = {
-    case (user, "/new-fractal", queryParameter) =>
+    case (globalState, "/new-fractal", queryParameter) =>
       val stepFromUrl = queryParameter
         .get("step")
         .flatMap(Router.queryDecoded[CreateNewFractalState.Step])
 
       CreateNewFractalState
-        .load(user)
+        .load(globalState)
         .map(state => stepFromUrl.fold(state)(step => state.copy(step = step)))
-        .loading(user)
+        .loading()
   }
 
   override def stateToUrl(state: CreateNewFractalState): Option[Location] =
     Some(("/new-fractal", Map("step" -> Router.queryEncoded(state.step))))
 
-  override def render(implicit state: CreateNewFractalState, update: NutriaState => Unit): Node =
+  override def render(implicit globalState: GlobalState, state: CreateNewFractalState, update: PageState => Unit): Node =
     Body()
       .child(Header(CreateNewFractalState.navbarExpanded))
       .child(
@@ -87,7 +86,7 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
       )
       .child(Footer())
 
-  private def selectTemplate()(implicit state: CreateNewFractalState, update: NutriaState => Unit): Node =
+  private def selectTemplate()(implicit globalState: GlobalState, state: CreateNewFractalState, update: PageState => Unit): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text("Step 1: Select the fractal template"))
       .child(
@@ -105,7 +104,7 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
 
   private def modifyParameters(
       templateLens: Lens[State, FractalTemplateEntity]
-  )(implicit state: State, update: NutriaState => Unit): Node = {
+  )(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node = {
     val image = templateLens.get(state).map(FractalImage.fromTemplate)
 
     Node("section.section")
@@ -129,10 +128,10 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
       )
   }
 
-  private def backButton()(implicit state: State, update: NutriaState => Unit): Node =
+  private def backButton()(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node =
     Button("Choose a different Template", Icons.cancel, SnabbdomUtil.update[State](_.copy(step = TemplateStep)))
 
-  private def finishButton(fractal: FractalImageEntity)(implicit state: State, update: NutriaState => Unit): Node =
+  private def finishButton(fractal: FractalImageEntity)(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node =
     Button("Save Fractal", Icons.save, Actions.saveAsNewFractal(fractal))
       .classes("is-primary")
 }

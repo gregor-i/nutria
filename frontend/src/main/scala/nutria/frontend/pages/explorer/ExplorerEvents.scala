@@ -2,6 +2,7 @@ package nutria.frontend.pages.explorer
 
 import monocle.Lens
 import nutria.core.{Point, Viewport}
+import nutria.frontend.GlobalState
 import org.scalajs.dom._
 import org.scalajs.dom.html.Canvas
 import snabbdom.{Snabbdom, SnabbdomFacade}
@@ -46,7 +47,9 @@ object ExplorerEvents {
   private def calcNewView(boundingBox: ClientRect, moves: Seq[(Point, Point)], view: Viewport) =
     Transform.applyToViewport(moves, view.cover(boundingBox.width, boundingBox.height))
 
-  def canvasWheelEvent[S](lens: Lens[S, Viewport])(implicit state: S, update: S => Unit): Seq[(String, SnabbdomFacade.Eventlistener)] = {
+  def canvasWheelEvent[S](
+      lens: Lens[S, Viewport]
+  )(implicit globalState: GlobalState, state: S, update: S => Unit): Seq[(String, SnabbdomFacade.Eventlistener)] = {
     val eventHandler =
       Snabbdom.specificEvent { event: MouseEvent =>
         event.preventDefault()
@@ -65,7 +68,9 @@ object ExplorerEvents {
     Seq("wheel" -> eventHandler)
   }
 
-  def canvasMouseEvents[S](lens: Lens[S, Viewport])(implicit state: S, update: S => Unit): Seq[(String, SnabbdomFacade.Eventlistener)] = {
+  def canvasMouseEvents[S](
+      lens: Lens[S, Viewport]
+  )(implicit globalState: GlobalState, state: S, update: S => Unit): Seq[(String, SnabbdomFacade.Eventlistener)] = {
     var startPosition = Option.empty[Point]
 
     val pointerDown =

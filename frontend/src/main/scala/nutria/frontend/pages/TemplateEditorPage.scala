@@ -21,12 +21,11 @@ import scala.util.chaining._
 
 @Lenses
 case class TemplateEditorState(
-    user: Option[User],
     remoteTemplate: Option[FractalTemplateEntityWithId],
     entity: FractalTemplateEntity,
     newParameter: Option[Parameter] = None,
     navbarExpanded: Boolean = false
-) extends NutriaState {
+) extends PageState {
   def dirty: Boolean = remoteTemplate.fold(true)(_.entity != entity)
 }
 
@@ -35,15 +34,14 @@ object TemplateEditorState extends LenseUtils {
   val code       = template.composeLens(FractalTemplate.code)
   val parameters = template.composeLens(FractalTemplate.parameters)
 
-  def initial(implicit nutriaState: NutriaState): TemplateEditorState =
+  def initial(implicit nutriaState: PageState): TemplateEditorState =
     TemplateEditorState(
-      user = nutriaState.user,
       remoteTemplate = None,
       entity = Entity(value = Examples.timeEscape)
     )
 
-  def byTemplate(template: FractalTemplateEntityWithId)(implicit nutriaState: NutriaState): TemplateEditorState =
-    TemplateEditorState(user = nutriaState.user, remoteTemplate = Some(template), entity = template.entity)
+  def byTemplate(template: FractalTemplateEntityWithId)(implicit nutriaState: PageState): TemplateEditorState =
+    TemplateEditorState(remoteTemplate = Some(template), entity = template.entity)
 }
 
 object TemplateEditorPage extends Page[TemplateEditorState] {
@@ -53,17 +51,15 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       (for {
         remoteTemplate <- TemplateService.get(templateId)
       } yield TemplateEditorState(
-        user = user,
         remoteTemplate = Some(remoteTemplate),
         entity = queryParams.get("state").flatMap(Router.queryDecoded[FractalTemplateEntity]).getOrElse(remoteTemplate.entity)
-      )).loading(user)
+      )).loading()
 
     case (user, s"/templates/editor", queryParams) =>
       val templateFromUrl =
         queryParams.get("state").flatMap(Router.queryDecoded[FractalTemplateEntity]).getOrElse(Entity(value = FractalTemplate.empty))
 
       TemplateEditorState(
-        user = user,
         remoteTemplate = None,
         entity = templateFromUrl
       )
@@ -79,13 +75,13 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     }
   }
 
-  def render(implicit state: State, update: NutriaState => Unit) =
+  def render(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Body()
       .child(common.Header(TemplateEditorState.navbarExpanded))
-      .child(body(state, update))
+      .child(body)
       .child(common.Footer())
 
-  def body(implicit state: State, update: NutriaState => Unit) =
+  def body(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Node("div.container")
       .child(
         Node("section.section")
@@ -118,7 +114,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       )
       .child(parameterModal(TemplateEditorState.newParameter, TemplateEditorState.parameters))
 
-  def template(lens: Lens[State, FractalTemplate])(implicit state: State, update: NutriaState => Unit) = {
+  def template(lens: Lens[State, FractalTemplate])(implicit globalState: GlobalState, state: State, update: PageState => Unit) = {
     val codeEditor =
       Node("div.code-editor-container")
         .child(
@@ -155,7 +151,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
   def parameterModal(
       lensToMaybeParameter: Lens[State, Option[Parameter]],
       lensToOtherParameters: Lens[State, Vector[Parameter]]
-  )(implicit state: State, update: NutriaState => Unit): Option[Node] =
+  )(implicit globalState: GlobalState, state: State, update: PageState => Unit): Option[Node] =
     lensToMaybeParameter.get(state).map { parameter =>
       val lensToParameter = lensToMaybeParameter.composePrism(monocle.std.option.some).pipe(LenseUtils.unsafeOptional)
       val overwrite       = lensToOtherParameters.get(state).exists(_.name == parameter.name)
@@ -215,7 +211,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       )
     }
 
-  def parameters()(implicit state: State, update: NutriaState => Unit): Seq[Node] = {
+  def parameters()(implicit globalState: GlobalState, state: State, update: PageState => Unit): Seq[Node] = {
     val actions: Parameter => Seq[(String, State => State)] = parameter =>
       Seq(
         Icons.edit   -> TemplateEditorState.newParameter.set(Some(parameter)),
@@ -228,7 +224,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     )
   }
 
-  def openModalButton()(implicit state: State, update: State => Unit) =
+  def openModalButton()(implicit globalState: GlobalState, state: State, update: State => Unit) =
     ButtonList(
       Button(
         "Add new Parameter",
@@ -237,7 +233,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       ).classes("is-marginless")
     )
 
-  def preview()(implicit state: State, update: NutriaState => Unit) =
+  def preview()(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Node("div.fractal-tile-list")
       .child(
         InteractiveFractal
@@ -247,8 +243,8 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
           .style("minHeight", "50vh")
       )
 
-  private def actions()(implicit state: State, update: NutriaState => Unit): Node = {
-    val buttons: Seq[Node] = (state.user, state.remoteTemplate) match {
+  private def actions()(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node = {
+    val buttons: Seq[Node] = (globalState.user, state.remoteTemplate) match {
       case (Some(user), Some(remote)) if user.id == remote.owner =>
         Seq(buttonDelete, buttonSave, buttonUpdate)
       case (Some(_), _) =>
@@ -260,7 +256,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     ButtonList(buttons: _*)
   }
 
-  private def buttonSave(implicit state: State, update: NutriaState => Unit) =
+  private def buttonSave(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Button(
       "Save as new Template",
       Icons.save,
@@ -268,7 +264,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     ).classes("is-primary")
       .boolAttr("disabled", !state.dirty)
 
-  private def buttonUpdate(implicit state: State, update: NutriaState => Unit) =
+  private def buttonUpdate(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Button(
       "Update existing Template",
       Icons.save,
@@ -276,7 +272,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     ).classes("is-primary")
       .boolAttr("disabled", !state.dirty)
 
-  private def buttonDelete(implicit state: State, update: NutriaState => Unit) =
+  private def buttonDelete(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Button(
       "Delete",
       Icons.delete,

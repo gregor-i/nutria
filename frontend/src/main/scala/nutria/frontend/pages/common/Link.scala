@@ -1,14 +1,14 @@
 package nutria.frontend.pages.common
 
 import nutria.frontend.pages.LoadingState
-import nutria.frontend.{ExecutionContext, NutriaState, Router}
+import nutria.frontend.{ExecutionContext, GlobalState, PageState, Router}
 import snabbdom.{Node, Snabbdom}
 
 import scala.concurrent.Future
 import scala.util.chaining._
 
 object Link extends ExecutionContext {
-  def apply(newState: NutriaState)(implicit update: NutriaState => Unit): Node =
+  def apply(newState: PageState)(implicit update: PageState => Unit): Node =
     Node("a")
       .key(newState.hashCode())
       .event("click", Snabbdom.event { e =>
@@ -27,12 +27,15 @@ object Link extends ExecutionContext {
         }
       )
 
-  def async(href: String, loadingState: => Future[NutriaState])(implicit state: NutriaState, update: NutriaState => Unit): Node = {
+  def async(
+      href: String,
+      loadingState: => Future[PageState]
+  )(implicit globalState: GlobalState, state: PageState, update: PageState => Unit): Node = {
     Node("a")
       .attr("href", href)
       .event("click", Snabbdom.event { e =>
         e.preventDefault()
-        update(LoadingState(state.user, loadingState))
+        update(LoadingState(loadingState))
       })
   }
 }

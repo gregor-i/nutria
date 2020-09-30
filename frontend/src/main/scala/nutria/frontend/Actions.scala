@@ -19,23 +19,22 @@ import scala.util.{Failure, Success, Try}
 import nutria.frontend.toasts.Syntax._
 
 object Actions {
-  private def asyncUpdate(fut: Future[NutriaState])(implicit update: NutriaState => Unit): Unit =
+  private def asyncUpdate(fut: Future[PageState])(implicit update: PageState => Unit): Unit =
     fut.onComplete {
       case Success(value)     => update(value)
       case Failure(exception) => dom.console.error(s"Unexpected Failure. See: ${exception}")
     }
 
-  private def onlyLoggedIn[A](op: => A)(implicit state: NutriaState) =
-    state.user match {
+  private def onlyLoggedIn[A](op: => A)(implicit globalState: GlobalState) =
+    globalState.user match {
       case None    => Toasts.dangerToast("Log in first")
       case Some(_) => op
     }
 
-  def exploreFractal()(implicit state: GreetingState, update: NutriaState => Unit): Eventlistener =
+  def exploreFractal()(implicit globalState: GlobalState, state: GreetingState, update: PageState => Unit): Eventlistener =
     event { _ =>
       update(
         ExplorerState(
-          user = state.user,
           remoteFractal = None,
           fractalImage = Entity(value = state.randomFractal)
         )
@@ -44,16 +43,16 @@ object Actions {
 
   def editFractal(
       fractal: WithId[FractalImageEntity]
-  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+  )(implicit globalState: GlobalState, state: PageState, update: PageState => Unit): Eventlistener =
     event { _ =>
       update(
-        DetailsState(user = state.user, remoteFractal = fractal, fractalToEdit = fractal)
+        DetailsState(remoteFractal = fractal, fractalToEdit = fractal)
       )
     }
 
   def togglePublished(
       fractal: WithId[FractalImageEntity]
-  )(implicit state: UserGalleryState, update: NutriaState => Unit): Eventlistener =
+  )(implicit globalState: GlobalState, state: UserGalleryState, update: PageState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -81,7 +80,7 @@ object Actions {
 
   def deleteFractalFromUserGallery(
       fractalId: String
-  )(implicit state: UserGalleryState, update: NutriaState => Unit): Eventlistener =
+  )(implicit globalState: GlobalState, state: UserGalleryState, update: PageState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -91,7 +90,6 @@ object Actions {
               _             <- FractalService.delete(fractalId)
               reloaded      <- FractalService.loadUserFractals(remoteFractal.owner)
             } yield UserGalleryState(
-              user = state.user,
               userFractals = reloaded,
               aboutUser = remoteFractal.owner,
               page = state.page
@@ -103,7 +101,7 @@ object Actions {
 
   def deleteFractalFromDetails(
       fractalId: String
-  )(implicit state: DetailsState, update: NutriaState => Unit): Eventlistener =
+  )(implicit globalState: GlobalState, state: DetailsState, update: PageState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -113,7 +111,6 @@ object Actions {
               _             <- FractalService.delete(fractalId)
               reloaded      <- FractalService.loadUserFractals(remoteFractal.owner)
             } yield UserGalleryState(
-              user = state.user,
               userFractals = reloaded,
               aboutUser = remoteFractal.owner,
               page = 1
@@ -125,7 +122,7 @@ object Actions {
 
   def updateFractal(
       fractalWithId: WithId[FractalImageEntity]
-  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+  )(implicit globalState: GlobalState, state: PageState, update: PageState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -133,7 +130,6 @@ object Actions {
             for {
               _ <- FractalService.put(fractalWithId)
             } yield DetailsState(
-              user = state.user,
               remoteFractal = fractalWithId,
               fractalToEdit = fractalWithId
             )
@@ -144,7 +140,7 @@ object Actions {
 
   def saveAsNewFractal(
       fractalEntity: FractalImageEntity
-  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+  )(implicit globalState: GlobalState, state: PageState, update: PageState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -152,7 +148,6 @@ object Actions {
             for {
               fractalWithId <- FractalService.post(fractalEntity.copy(published = false))
             } yield DetailsState(
-              user = state.user,
               remoteFractal = fractalWithId,
               fractalToEdit = fractalWithId
             )
@@ -161,7 +156,9 @@ object Actions {
       }
     }
 
-  def saveSnapshot(fractalEntity: FractalImageEntity)(implicit state: ExplorerState, update: NutriaState => Unit): Eventlistener =
+  def saveSnapshot(
+      fractalEntity: FractalImageEntity
+  )(implicit globalState: GlobalState, state: ExplorerState, update: PageState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -174,7 +171,9 @@ object Actions {
       }
     }
 
-  def saveTemplate(templateEntity: FractalTemplateEntity)(implicit state: TemplateEditorState, update: NutriaState => Unit): Eventlistener =
+  def saveTemplate(
+      templateEntity: FractalTemplateEntity
+  )(implicit globalState: GlobalState, state: TemplateEditorState, update: PageState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -189,7 +188,7 @@ object Actions {
 
   def updateTemplate(
       template: FractalTemplateEntityWithId
-  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+  )(implicit globalState: GlobalState, state: PageState, update: PageState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -202,15 +201,15 @@ object Actions {
       }
     }
 
-  def deleteTemplate(templateId: String)(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+  def deleteTemplate(templateId: String)(implicit globalState: GlobalState, state: PageState, update: PageState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
           withWarningToast("Deleting Template", "Template deleted") {
             for {
               _         <- TemplateService.delete(templateId)
-              templates <- TemplateService.listUser(state.user.get.id)
-            } yield TemplateGalleryState(user = state.user, templates = templates)
+              templates <- TemplateService.listUser(globalState.user.get.id)
+            } yield TemplateGalleryState(templates = templates)
           }
         }
       }
@@ -218,7 +217,7 @@ object Actions {
 
   def togglePublished(
       template: FractalTemplateEntityWithId
-  )(implicit state: TemplateGalleryState, update: NutriaState => Unit): Eventlistener =
+  )(implicit globalState: GlobalState, state: TemplateGalleryState, update: PageState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -232,7 +231,7 @@ object Actions {
                   .set(!published)
                   .apply(template)
               )
-            templates <- TemplateService.listUser(state.user.get.id)
+            templates <- TemplateService.listUser(globalState.user.get.id)
           } yield state.copy(templates = templates))
             .pipe { fut =>
               if (published)
@@ -246,21 +245,21 @@ object Actions {
 
   def deleteUser(
       userId: String
-  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+  )(implicit globalState: GlobalState, state: PageState, update: PageState => Unit): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
           withSuccessToast("Deleting account", "Good Bye!") {
             for {
               _     <- UserService.delete(userId)
-              state <- Links.greetingState(None)
+              state <- Links.greetingState()
             } yield state
           }
         }
       }
     }
 
-  def openSaveToDiskModal(implicit state: ExplorerState, update: NutriaState => Unit): Eventlistener =
+  def openSaveToDiskModal(implicit globalState: GlobalState, state: ExplorerState, update: PageState => Unit): Eventlistener =
     event { _ =>
       update {
         state.copy(
@@ -274,7 +273,7 @@ object Actions {
       }
     }
 
-  def closeSaveToDiskModal(implicit state: ExplorerState, update: NutriaState => Unit): Eventlistener =
+  def closeSaveToDiskModal(implicit globalState: GlobalState, state: ExplorerState, update: PageState => Unit): Eventlistener =
     event { _ =>
       update {
         state.copy(saveModal = None)
@@ -284,7 +283,7 @@ object Actions {
   def saveToDisk(
       fractalImage: FractalImage,
       dimensions: Dimensions
-  )(implicit state: NutriaState, update: NutriaState => Unit): Eventlistener =
+  )(implicit globalState: GlobalState, state: PageState, update: PageState => Unit): Eventlistener =
     event { _ =>
       val dataUrl = FractalTile.dataUrl(fractalImage, dimensions)
 

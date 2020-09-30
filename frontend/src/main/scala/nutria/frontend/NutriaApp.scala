@@ -19,7 +19,7 @@ class NutriaApp(container: Element) extends ExecutionContext {
     propsModule = true
   )
 
-  private def renderState(state: NutriaState): Unit = {
+  private def renderState(globalState: GlobalState, state: PageState): Unit = {
     val t0 = System.currentTimeMillis()
 
     Router.stateToUrl(state) match {
@@ -36,7 +36,7 @@ class NutriaApp(container: Element) extends ExecutionContext {
 
     val t1 = System.currentTimeMillis()
 
-    val ui = Pages.ui(state, renderState).toVNode
+    val ui = Pages.ui(globalState, state, renderState(globalState, _)).toVNode
 
     val t2 = System.currentTimeMillis()
 
@@ -53,8 +53,11 @@ class NutriaApp(container: Element) extends ExecutionContext {
   }
 
   private def loadUserAndRenderFromLocation(): Unit =
-    for (user <- UserService.whoAmI()) yield {
-      renderState(Router.stateFromUrl(dom.window.location, user))
+    for {
+      user <- UserService.whoAmI()
+      globalState = GlobalState(user = user)
+    } yield {
+      renderState(globalState, Router.stateFromUrl(dom.window.location, globalState))
     }
 
   dom.window.onpopstate = _ => loadUserAndRenderFromLocation()

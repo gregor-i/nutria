@@ -8,40 +8,38 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 object Links {
-  def galleryState(user: Option[User], page: Int = 1): Future[GalleryState] =
+  def galleryState(page: Int = 1): Future[GalleryState] =
     for {
       publicFractals <- FractalService.listPublic()
-    } yield GalleryState(user = user, publicFractals = publicFractals, page = page)
+    } yield GalleryState(publicFractals = publicFractals, page = page)
 
-  def userGalleryState(user: Option[User], userId: String, page: Int = 1): Future[UserGalleryState] =
+  def userGalleryState(userId: String, page: Int = 1): Future[UserGalleryState] =
     for {
       userFractals <- FractalService.loadUserFractals(userId)
-    } yield UserGalleryState(user = user, aboutUser = userId, userFractals = userFractals, page = page)
+    } yield UserGalleryState(aboutUser = userId, userFractals = userFractals, page = page)
 
-  def greetingState(user: Option[User]): Future[GreetingState] =
+  def greetingState(): Future[GreetingState] =
     for {
       randomFractal <- FractalService.getRandom()
-    } yield GreetingState(user, randomFractal)
+    } yield GreetingState(randomFractal)
 
-  def detailsState(user: Option[User], fractalId: String): Future[DetailsState] =
+  def detailsState(fractalId: String): Future[DetailsState] =
     for {
       fractal <- FractalService.get(fractalId)
     } yield DetailsState(
-      user = user,
       remoteFractal = fractal,
       fractalToEdit = fractal
     )
 
-  def explorerState(fractal: WithId[FractalImageEntity], user: Option[User]): ExplorerState =
+  def explorerState(fractal: WithId[FractalImageEntity]): ExplorerState =
     ExplorerState(
-      user = user,
       remoteFractal = Some(fractal),
       fractalImage = fractal.entity
     )
 
-  def detailsState(fractal: WithId[FractalImageEntity], toEdit: FractalImageEntity, user: Option[User]): DetailsState =
-    DetailsState(user = user, remoteFractal = fractal, fractalToEdit = fractal.copy(entity = toEdit))
+  def detailsState(fractal: WithId[FractalImageEntity], toEdit: FractalImageEntity): DetailsState =
+    DetailsState(remoteFractal = fractal, fractalToEdit = fractal.copy(entity = toEdit))
 
-  def detailsState(fractal: WithId[FractalImageEntity], user: Option[User]): DetailsState =
-    DetailsState(user = user, remoteFractal = fractal, fractalToEdit = fractal)
+  def detailsState(fractal: WithId[FractalImageEntity]): DetailsState =
+    DetailsState(remoteFractal = fractal, fractalToEdit = fractal)
 }

@@ -1,11 +1,12 @@
-package nutria.frontend.pages
+package nutria.frontend
+package pages
 
 import monocle.macros.Lenses
 import nutria.api.{FractalTemplateEntityWithId, User}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common._
 import nutria.frontend.service.TemplateService
-import nutria.frontend.{Actions, ExecutionContext, NutriaState, Page}
+import nutria.frontend.{Actions, ExecutionContext, PageState, Page}
 import snabbdom.{Node, Snabbdom}
 
 import scala.concurrent.Future
@@ -13,26 +14,30 @@ import scala.concurrent.Future
 @Lenses
 case class TemplateGalleryState(
     templates: Seq[FractalTemplateEntityWithId],
-    user: Option[User],
     navbarExpanded: Boolean = false
-) extends NutriaState
+) extends PageState
 
 object TemplateGalleryState extends ExecutionContext {
-  def load(user: Option[User]): Future[TemplateGalleryState] =
-    for {
-      templates <- TemplateService.listUser(user.get.id)
-    } yield TemplateGalleryState(templates = templates, user = user)
+  def load(globalState: GlobalState): Future[PageState] =
+    globalState.user match {
+      case Some(user) =>
+        for {
+          templates <- TemplateService.listUser(user.id)
+        } yield TemplateGalleryState(templates = templates)
+      case None =>
+        Future.successful(ErrorState.unauthorized)
+    }
 }
 
 object TemplateGalleryPage extends Page[TemplateGalleryState] {
   override def stateFromUrl = {
-    case (user, "/templates", _) => TemplateGalleryState.load(user).loading(user)
+    case (globalState, "/templates", _) => TemplateGalleryState.load(globalState).loading()
   }
 
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =
     Some("/templates" -> Map.empty)
 
-  override def render(implicit state: State, update: NutriaState => Unit): Node =
+  override def render(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node =
     Body()
       .child(Header(TemplateGalleryState.navbarExpanded))
       .child(
@@ -44,7 +49,7 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
       .child(body())
       .child(Footer())
 
-  def body()(implicit state: State, update: NutriaState => Unit): Node =
+  def body()(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node =
     Node("div.container")
       .child(
         Node("section.section")
@@ -52,7 +57,7 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
       )
       .child(table(state.templates))
 
-  private def table(templates: Seq[FractalTemplateEntityWithId])(implicit state: State, update: NutriaState => Unit): Node =
+  private def table(templates: Seq[FractalTemplateEntityWithId])(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node =
     Node("section.section")
       .child(
         Node("table.table.is-fullwidth")

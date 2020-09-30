@@ -14,11 +14,10 @@ import scala.util.chaining._
 
 @Lenses
 case class DetailsState(
-    user: Option[User],
     remoteFractal: WithId[FractalImageEntity],
     fractalToEdit: WithId[FractalImageEntity],
     navbarExpanded: Boolean = false
-) extends NutriaState {
+) extends PageState {
   def dirty: Boolean = remoteFractal != fractalToEdit
 }
 
@@ -30,24 +29,24 @@ object DetailsState extends LenseUtils {
 object DetailsPage extends Page[DetailsState] {
   override def stateFromUrl = {
     case (user, s"/fractals/${fractalId}/details", _) =>
-      Links.detailsState(user, fractalId).loading(user)
+      Links.detailsState(fractalId).loading()
   }
 
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =
     Some(s"/fractals/${state.remoteFractal.id}/details" -> Map.empty)
 
-  def render(implicit state: State, update: NutriaState => Unit) =
+  def render(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Body()
       .child(common.Header(DetailsState.navbarExpanded))
       .child(
         Header
           .fab(Node("button"))
           .pipe {
-            case node if state.dirty && User.isOwner(state.user, state.remoteFractal) =>
+            case node if state.dirty && User.isOwner(globalState.user, state.remoteFractal) =>
               node
                 .child(Icons.icon(Icons.save))
                 .event("click", Actions.updateFractal(state.fractalToEdit))
-            case node if !User.isOwner(state.user, state.remoteFractal) =>
+            case node if !User.isOwner(globalState.user, state.remoteFractal) =>
               node
                 .child(Icons.icon(Icons.copy))
                 .event("click", Actions.saveAsNewFractal(state.fractalToEdit.entity.copy(published = false)))
@@ -57,10 +56,10 @@ object DetailsPage extends Page[DetailsState] {
                 .attr("disabled", "disabled")
           }
       )
-      .child(body(state, update))
+      .child(body)
       .child(common.Footer())
 
-  def body(implicit state: State, update: NutriaState => Unit) =
+  def body(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Node("div.container")
       .child(
         Node("section.section")
@@ -85,7 +84,7 @@ object DetailsPage extends Page[DetailsState] {
           .child(actions())
       )
 
-  def parameters(lens: Lens[State, Vector[Parameter]])(implicit state: State, update: NutriaState => Unit) = {
+  def parameters(lens: Lens[State, Vector[Parameter]])(implicit globalState: GlobalState, state: State, update: PageState => Unit) = {
     ParameterForm.list(lens) :+ Form.forLens(
       label = "Anti Aliase (multi sampling)",
       description = "Define the Anti Aliase factor. It should be something like 1, 2 ... 4",
@@ -93,7 +92,7 @@ object DetailsPage extends Page[DetailsState] {
     )
   }
 
-  def preview()(implicit state: State, update: NutriaState => Unit) =
+  def preview()(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Node("div.fractal-tile-list")
       .child(
         InteractiveFractal
@@ -103,8 +102,8 @@ object DetailsPage extends Page[DetailsState] {
           .style("minHeight", "50vh")
       )
 
-  private def actions()(implicit state: State, update: NutriaState => Unit): Node = {
-    val buttons: Seq[Node] = state.user match {
+  private def actions()(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node = {
+    val buttons: Seq[Node] = globalState.user match {
       case Some(user) if user.id == state.remoteFractal.owner =>
         Seq(buttonDelete, buttonFork, buttonUpdate, buttonExplore)
 
@@ -115,20 +114,20 @@ object DetailsPage extends Page[DetailsState] {
     ButtonList(buttons: _*)
   }
 
-  private def buttonUpdate(implicit state: State, update: NutriaState => Unit) =
+  private def buttonUpdate(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Button("Update", Icons.save, Actions.updateFractal(state.fractalToEdit))
       .classes("is-primary")
 
-  private def buttonDelete(implicit state: State, update: NutriaState => Unit) =
+  private def buttonDelete(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Button("Delete", Icons.delete, Actions.deleteFractalFromDetails(state.fractalToEdit.id))
       .classes("is-danger", "is-light")
 
-  private def buttonFork(implicit state: State, update: NutriaState => Unit) =
+  private def buttonFork(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Button("Clone", Icons.copy, Actions.saveAsNewFractal(state.fractalToEdit.entity.copy(published = false)))
       .classes("is-primary")
 
-  private def buttonExplore(implicit state: State, update: NutriaState => Unit) =
-    Link(ExplorerState(user = state.user, remoteFractal = Some(state.remoteFractal), fractalImage = state.fractalToEdit.entity))
+  private def buttonExplore(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
+    Link(ExplorerState(remoteFractal = Some(state.remoteFractal), fractalImage = state.fractalToEdit.entity))
       .classes("button")
       .child(Icons.icon(Icons.explore))
       .child(Node("span").text("Explore"))
