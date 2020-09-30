@@ -31,7 +31,7 @@ object UserGalleryPage extends Page[UserGalleryState] {
 
   }
 
-  def render(implicit globalState: GlobalState, state: UserGalleryState, update: PageState => Unit) =
+  override def render(implicit globalState: GlobalState, state: UserGalleryState, update: PageState => Unit) =
     Body()
       .child(Header(UserGalleryState.navbarExpanded))
       .child(

@@ -1,6 +1,6 @@
 package nutria.frontend
 
-import nutria.api.User
+import nutria.frontend.util.Updatable
 import snabbdom.Node
 
 import scala.reflect.ClassTag
@@ -13,7 +13,9 @@ abstract class Page[S <: PageState: ClassTag] extends ExecutionContext {
 
   def stateToUrl(state: State): Option[Router.Location]
 
-  def render(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node
+  def render(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node = ???
+
+  def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node = render(globalState, updatable.state, updatable.update)
 
   def acceptState(nutriaState: PageState): Boolean = implicitly[ClassTag[State]].runtimeClass == nutriaState.getClass
 }

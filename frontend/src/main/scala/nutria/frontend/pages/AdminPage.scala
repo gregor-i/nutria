@@ -6,6 +6,7 @@ import nutria.core.{FractalImage, FractalTemplate}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common._
 import nutria.frontend.service.NutriaAdminService
+import nutria.frontend.util.Updatable
 import nutria.frontend.{GlobalState, Page, PageState}
 import snabbdom.{Node, Snabbdom, SnabbdomFacade}
 
@@ -31,19 +32,19 @@ object AdminPage extends Page[AdminState] {
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =
     Some("/admin" -> Map.empty)
 
-  def render(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node =
-    Body()
+  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
+    Body()(updatable.state) // todo: continue with implicit magic
       .child(Header(AdminState.navbarExpanded))
       .child(
         Node("div.container")
           .child(Node("section.section").child(Node("h1.title.is-1").text("Admin:")))
-          .child(usersTable(state.users))
-          .child(fractalsTable(state.fractals))
-          .child(templatesTable(state.templates))
+          .child(usersTable(updatable.state.users))
+          .child(fractalsTable(updatable.state.fractals))
+          .child(templatesTable(updatable.state.templates))
           .child(actionBar())
       )
 
-  private def usersTable(users: Seq[User])(implicit update: PageState => Unit): Node =
+  private def usersTable(users: Seq[User])(implicit updatable: Updatable[State, PageState]): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text(s"Users: ${users.length}"))
       .child(
@@ -76,7 +77,7 @@ object AdminPage extends Page[AdminState] {
 
   private def fractalsTable(
       fractals: Seq[WithId[Option[Entity[FractalImage]]]]
-  )(implicit update: PageState => Unit): Node =
+  )(implicit updatable: Updatable[State, PageState]): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text(s"Fractals: ${fractals.length}"))
       .child(
@@ -111,7 +112,7 @@ object AdminPage extends Page[AdminState] {
 
   private def templatesTable(
       templates: Seq[WithId[Option[Entity[FractalTemplate]]]]
-  )(implicit update: PageState => Unit): Node =
+  )(implicit updatable: Updatable[State, PageState]): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text(s"Templates: ${templates.length}"))
       .child(
@@ -139,7 +140,7 @@ object AdminPage extends Page[AdminState] {
           )
       )
 
-  private def actionBar()(implicit update: PageState => Unit): Node =
+  private def actionBar()(implicit updatable: Updatable[State, PageState]): Node =
     Node("section.section")
       .child(
         ButtonList(
@@ -152,6 +153,6 @@ object AdminPage extends Page[AdminState] {
 
   private def action(
       action: => Future[Unit]
-  )(implicit update: PageState => Unit): SnabbdomFacade.Eventlistener =
-    Snabbdom.event { _ -> action.flatMap(_ => NutriaAdminService.load()).foreach(update) }
+  )(implicit updatable: Updatable[State, PageState]): SnabbdomFacade.Eventlistener =
+    Snabbdom.event { _ -> action.flatMap(_ => NutriaAdminService.load()).foreach(updatable.update) }
 }

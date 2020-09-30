@@ -40,7 +40,7 @@ object DocumentationPage extends Page[DocumentationState] {
         Some("/documentation/introduction" -> Map.empty)
     }
 
-  def render(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
+  override def render(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Body()
       .child(Header(DocumentationState.navbarExpanded))
       .child(content(state.subpage))

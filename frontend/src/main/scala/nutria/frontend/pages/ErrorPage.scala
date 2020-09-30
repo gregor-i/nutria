@@ -19,7 +19,7 @@ object ErrorPage extends Page[ErrorState] {
 
   def stateToUrl(state: State): Option[Location] = None
 
-  def render(implicit globalState: GlobalState, state: ErrorState, update: PageState => Unit): Node =
+  override def render(implicit globalState: GlobalState, state: ErrorState, update: PageState => Unit): Node =
     Body()
       .child(Header(ErrorState.navbarExpanded))
       .child(

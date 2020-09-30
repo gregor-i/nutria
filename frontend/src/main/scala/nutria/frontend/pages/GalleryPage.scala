@@ -27,7 +27,7 @@ object GalleryPage extends Page[GalleryState] {
   override def stateToUrl(state: GalleryPage.State): Option[Router.Location] =
     Some("/gallery" -> Map("page" -> state.page.toString))
 
-  def render(implicit globalState: GlobalState, state: GalleryState, update: PageState => Unit) =
+  override def render(implicit globalState: GlobalState, state: GalleryState, update: PageState => Unit) =
     Body()
       .child(Header(GalleryState.navbarExpanded))
       .child(

@@ -19,7 +19,7 @@ object LoadingPage extends Page[LoadingState] {
 
   def stateToUrl(state: State): Option[Location] = None
 
-  def render(implicit globalState: GlobalState, state: LoadingState, update: PageState => Unit) =
+  override def render(implicit globalState: GlobalState, state: LoadingState, update: PageState => Unit) =
     Body()
       .child(Header(LoadingState.navbarExpanded))
       .child(

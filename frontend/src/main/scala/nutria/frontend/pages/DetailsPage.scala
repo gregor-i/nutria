@@ -35,7 +35,7 @@ object DetailsPage extends Page[DetailsState] {
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =
     Some(s"/fractals/${state.remoteFractal.id}/details" -> Map.empty)
 
-  def render(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
+  override def render(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Body()
       .child(common.Header(DetailsState.navbarExpanded))
       .child(

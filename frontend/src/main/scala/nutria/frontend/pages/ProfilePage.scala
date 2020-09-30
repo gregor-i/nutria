@@ -23,7 +23,7 @@ object ProfilePage extends Page[ProfileState] {
   override def stateToUrl(state: ProfilePage.State): Option[(Path, QueryParameter)] =
     Some(s"/user/profile" -> Map.empty)
 
-  def render(implicit globalState: GlobalState, state: ProfileState, update: PageState => Unit): Node =
+  override def render(implicit globalState: GlobalState, state: ProfileState, update: PageState => Unit): Node =
     Body()
       .child(Header(ProfileState.navbarExpanded))
       .child(content())

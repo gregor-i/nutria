@@ -69,7 +69,7 @@ object ExplorerPage extends Page[ExplorerState] {
     }
   }
 
-  def render(implicit globalState: GlobalState, state: ExplorerState, update: PageState => Unit) =
+  override def render(implicit globalState: GlobalState, state: ExplorerState, update: PageState => Unit) =
     Body()
       .child(Header(ExplorerState.navbarExpanded))
       .child(InteractiveFractal.forImage(ExplorerState.fractalImage.composeLens(Entity.value)))

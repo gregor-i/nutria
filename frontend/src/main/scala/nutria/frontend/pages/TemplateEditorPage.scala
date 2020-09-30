@@ -75,7 +75,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     }
   }
 
-  def render(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
+  override def render(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
     Body()
       .child(common.Header(TemplateEditorState.navbarExpanded))
       .child(body)

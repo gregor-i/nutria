@@ -18,7 +18,7 @@ object GreetingPage extends Page[GreetingState] {
   override def stateToUrl(state: GreetingState): Option[(Path, QueryParameter)] =
     Some("/" -> Map.empty)
 
-  def render(implicit globalState: GlobalState, state: GreetingState, update: PageState => Unit) =
+  override def render(implicit globalState: GlobalState, state: GreetingState, update: PageState => Unit) =
     Body()
       .child(renderCanvas)
       .child(content)
