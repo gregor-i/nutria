@@ -5,7 +5,8 @@ import monocle.macros.Lenses
 import nutria.api.User
 import nutria.frontend.Router.Location
 import nutria.frontend.pages.common.{Body, Header}
-import nutria.frontend.{PageState, Page}
+import nutria.frontend.util.Updatable
+import nutria.frontend.{Page, PageState}
 import snabbdom._
 
 import scala.concurrent.Future
@@ -19,7 +20,7 @@ object LoadingPage extends Page[LoadingState] {
 
   def stateToUrl(state: State): Option[Location] = None
 
-  override def render(implicit globalState: GlobalState, state: LoadingState, update: PageState => Unit) =
+  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
     Body()
       .child(Header(LoadingState.navbarExpanded))
       .child(
@@ -38,9 +39,9 @@ object LoadingPage extends Page[LoadingState] {
         "insert",
         Snabbdom.hook { _ =>
           state.loading.onComplete {
-            case Success(newState) => update(newState)
+            case Success(newState) => updatable.update(newState)
             case Failure(exception) =>
-              update(
+              updatable.update(
                 ErrorState(s"unexpected problem while initializing app: ${exception.getMessage}")
               )
           }

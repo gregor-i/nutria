@@ -5,6 +5,7 @@ import nutria.core.FractalImage
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common.{Body, Button, ButtonList, CanvasHooks, Icons, Link, Modal}
+import nutria.frontend.util.Updatable
 import nutria.macros.StaticContent
 import snabbdom.Node
 
@@ -18,12 +19,12 @@ object GreetingPage extends Page[GreetingState] {
   override def stateToUrl(state: GreetingState): Option[(Path, QueryParameter)] =
     Some("/" -> Map.empty)
 
-  override def render(implicit globalState: GlobalState, state: GreetingState, update: PageState => Unit) =
+  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
     Body()
       .child(renderCanvas)
       .child(content)
 
-  private def content(implicit globalState: GlobalState, state: GreetingState, update: PageState => Unit) = {
+  private def content(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) = {
     Modal(closeAction = Actions.exploreFractal())(
       Node("div.content").prop("innerHTML", StaticContent("frontend/src/main/html/greeting.html")),
       ButtonList(
@@ -40,7 +41,7 @@ object GreetingPage extends Page[GreetingState] {
     )
   }
 
-  private def renderCanvas(implicit globalState: GlobalState, state: GreetingState, update: ExplorerState => Unit): Node =
+  private def renderCanvas(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
     Node("div.background")
       .child(
         Node("canvas").hooks(CanvasHooks(state.randomFractal))

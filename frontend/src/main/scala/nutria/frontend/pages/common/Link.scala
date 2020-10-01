@@ -31,18 +31,6 @@ object Link extends ExecutionContext {
   def async(
       href: String,
       loadingState: => Future[PageState]
-  )(implicit state: PageState, update: PageState => Unit): Node = {
-    Node("a")
-      .attr("href", href)
-      .event("click", Snabbdom.event { e =>
-        e.preventDefault()
-        update(LoadingState(loadingState))
-      })
-  }
-
-  def asyncT(
-      href: String,
-      loadingState: => Future[PageState]
   )(implicit updatable: Updatable[_, PageState]): Node = {
     Node("a")
       .attr("href", href)

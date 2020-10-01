@@ -11,7 +11,7 @@ import nutria.frontend._
 import nutria.frontend.pages.CreateNewFractalState.{ParametersStep, TemplateStep}
 import nutria.frontend.pages.common._
 import nutria.frontend.service.TemplateService
-import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
+import nutria.frontend.util.{LenseUtils, SnabbdomUtil, Updatable}
 import snabbdom.Node
 
 import scala.concurrent.Future
@@ -64,7 +64,7 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
   override def stateToUrl(state: CreateNewFractalState): Option[Location] =
     Some(("/new-fractal", Map("step" -> Router.queryEncoded(state.step))))
 
-  override def render(implicit globalState: GlobalState, state: CreateNewFractalState, update: PageState => Unit): Node =
+  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
     Body()
       .child(Header(CreateNewFractalState.navbarExpanded))
       .child(
@@ -86,7 +86,7 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
       )
       .child(Footer())
 
-  private def selectTemplate()(implicit globalState: GlobalState, state: CreateNewFractalState, update: PageState => Unit): Node =
+  private def selectTemplate()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text("Step 1: Select the fractal template"))
       .child(
@@ -104,7 +104,7 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
 
   private def modifyParameters(
       templateLens: Lens[State, FractalTemplateEntity]
-  )(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node = {
+  )(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node = {
     val image = templateLens.get(state).map(FractalImage.fromTemplate)
 
     Node("section.section")
@@ -128,10 +128,10 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
       )
   }
 
-  private def backButton()(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node =
-    Button("Choose a different Template", Icons.cancel, SnabbdomUtil.update[State](_.copy(step = TemplateStep)))
+  private def backButton()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
+    Button("Choose a different Template", Icons.cancel, SnabbdomUtil.updateT[State](_.copy(step = TemplateStep)))
 
-  private def finishButton(fractal: FractalImageEntity)(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node =
+  private def finishButton(fractal: FractalImageEntity)(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
     Button("Save Fractal", Icons.save, Actions.saveAsNewFractal(fractal))
       .classes("is-primary")
 }

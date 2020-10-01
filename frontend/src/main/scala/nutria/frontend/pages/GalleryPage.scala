@@ -5,6 +5,7 @@ import nutria.api.{FractalImageEntity, User, VoteStatistic, WithId}
 import nutria.core.Dimensions
 import nutria.frontend._
 import nutria.frontend.pages.common.{FractalTile, _}
+import nutria.frontend.util.Updatable
 import snabbdom._
 
 import scala.util.chaining._
@@ -27,7 +28,7 @@ object GalleryPage extends Page[GalleryState] {
   override def stateToUrl(state: GalleryPage.State): Option[Router.Location] =
     Some("/gallery" -> Map("page" -> state.page.toString))
 
-  override def render(implicit globalState: GlobalState, state: GalleryState, update: PageState => Unit) =
+  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
     Body()
       .child(Header(GalleryState.navbarExpanded))
       .child(
@@ -53,7 +54,7 @@ object GalleryPage extends Page[GalleryState] {
 
   def renderFractalTile(
       fractal: WithId[FractalImageEntity]
-  )(implicit globalState: GlobalState, state: GalleryState, update: PageState => Unit): Node =
+  )(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
     Node("article.fractal-tile.is-relative")
       .child(
         Link(Links.explorerState(fractal))

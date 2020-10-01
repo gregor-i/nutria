@@ -33,7 +33,7 @@ object AdminPage extends Page[AdminState] {
     Some("/admin" -> Map.empty)
 
   override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
-    Body()(updatable.state) // todo: continue with implicit magic
+    Body()
       .child(Header(AdminState.navbarExpanded))
       .child(
         Node("div.container")

@@ -5,6 +5,7 @@ import nutria.api.User
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common.{Body, Footer, Header}
+import nutria.frontend.util.Updatable
 import nutria.macros.StaticContent
 import snabbdom.Node
 
@@ -40,13 +41,13 @@ object DocumentationPage extends Page[DocumentationState] {
         Some("/documentation/introduction" -> Map.empty)
     }
 
-  override def render(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
+  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
     Body()
       .child(Header(DocumentationState.navbarExpanded))
       .child(content(state.subpage))
       .child(Footer())
 
-  private def content(subpage: Subpage)(implicit globalState: GlobalState, state: DocumentationState, update: PageState => Unit) =
+  private def content(subpage: Subpage)(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
     subpage match {
       case FAQ =>
         Node("div.container")

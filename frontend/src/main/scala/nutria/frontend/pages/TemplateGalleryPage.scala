@@ -6,7 +6,8 @@ import nutria.api.{FractalTemplateEntityWithId, User}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common._
 import nutria.frontend.service.TemplateService
-import nutria.frontend.{Actions, ExecutionContext, PageState, Page}
+import nutria.frontend.util.Updatable
+import nutria.frontend.{Actions, ExecutionContext, Page, PageState}
 import snabbdom.{Node, Snabbdom}
 
 import scala.concurrent.Future
@@ -37,19 +38,19 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =
     Some("/templates" -> Map.empty)
 
-  override def render(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node =
+  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
     Body()
       .child(Header(TemplateGalleryState.navbarExpanded))
       .child(
         Header
           .fab(Node("button"))
           .child(Icons.icon(Icons.plus))
-          .event("click", Snabbdom.event(_ => update(TemplateEditorState.initial)))
+          .event("click", Snabbdom.event(_ => updatable.update(TemplateEditorState.initial)))
       )
       .child(body())
       .child(Footer())
 
-  def body()(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node =
+  def body()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
     Node("div.container")
       .child(
         Node("section.section")
@@ -57,7 +58,7 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
       )
       .child(table(state.templates))
 
-  private def table(templates: Seq[FractalTemplateEntityWithId])(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node =
+  private def table(templates: Seq[FractalTemplateEntityWithId])(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
     Node("section.section")
       .child(
         Node("table.table.is-fullwidth")
@@ -79,7 +80,7 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
                         Link(TemplateEditorState.byTemplate(template))
                           .classes("button", "is-rounded")
                           .child(Icons.icon(Icons.edit)),
-                        Button.icon(if (template.entity.published) Icons.unpublish else Icons.publish, Actions.togglePublished(template)),
+                        Button.icon(if (template.entity.published) Icons.unpublish else Icons.publish, Actions.togglePublishedTemplate(template)),
                         Button.icon(Icons.delete, Actions.deleteTemplate(template.id))
                       )
                     )

@@ -6,7 +6,8 @@ import nutria.api.{FractalImageEntity, User, WithId}
 import nutria.core.Dimensions
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common.{FractalTile, _}
-import nutria.frontend.{Actions, Links, PageState, Page}
+import nutria.frontend.util.Updatable
+import nutria.frontend.{Actions, Links, Page, PageState}
 import snabbdom.Node
 
 import scala.util.chaining._
@@ -31,7 +32,7 @@ object UserGalleryPage extends Page[UserGalleryState] {
 
   }
 
-  override def render(implicit globalState: GlobalState, state: UserGalleryState, update: PageState => Unit) =
+  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
     Body()
       .child(Header(UserGalleryState.navbarExpanded))
       .child(
@@ -62,7 +63,7 @@ object UserGalleryPage extends Page[UserGalleryState] {
 
   def renderFractalTile(
       fractal: WithId[FractalImageEntity]
-  )(implicit globalState: GlobalState, state: UserGalleryState, update: PageState => Unit): Node =
+  )(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
     Node("article.fractal-tile.is-relative")
       .child(
         Link(Links.detailsState(fractal))
@@ -77,7 +78,7 @@ object UserGalleryPage extends Page[UserGalleryState] {
             Button
               .icon(
                 if (fractal.entity.published) Icons.unpublish else Icons.publish,
-                Actions.togglePublished(fractal)
+                Actions.togglePublishedImage(fractal)
               )
               .classes("is-outlined")
           )

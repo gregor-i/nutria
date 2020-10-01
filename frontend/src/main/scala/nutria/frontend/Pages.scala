@@ -29,5 +29,5 @@ object Pages {
       .getOrElse(throw new Exception(s"No Page defined for '${nutriaState.getClass.getSimpleName}'"))
 
   def ui(globalState: GlobalState, updatable: Updatable[PageState, PageState]): Node =
-    selectPage(updatable.state).render(globalState, updatable.state, updatable.update)
+    selectPage(updatable.state).render(globalState, updatable)
 }

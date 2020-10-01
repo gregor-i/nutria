@@ -5,6 +5,7 @@ import nutria.api.User
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common._
+import nutria.frontend.util.Updatable
 import snabbdom.Node
 
 @Lenses
@@ -23,13 +24,13 @@ object ProfilePage extends Page[ProfileState] {
   override def stateToUrl(state: ProfilePage.State): Option[(Path, QueryParameter)] =
     Some(s"/user/profile" -> Map.empty)
 
-  override def render(implicit globalState: GlobalState, state: ProfileState, update: PageState => Unit): Node =
+  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
     Body()
       .child(Header(ProfileState.navbarExpanded))
       .child(content())
       .child(Footer())
 
-  def content()(implicit globalState: GlobalState, state: ProfileState, update: PageState => Unit) =
+  def content()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
     Node("div.container")
       .child(
         Node("section.section")

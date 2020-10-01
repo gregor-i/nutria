@@ -3,6 +3,7 @@ package nutria.frontend.pages.explorer
 import monocle.Lens
 import nutria.core.{Point, Viewport}
 import nutria.frontend.GlobalState
+import nutria.frontend.util.Updatable
 import org.scalajs.dom._
 import org.scalajs.dom.html.Canvas
 import snabbdom.{Snabbdom, SnabbdomFacade}
@@ -49,7 +50,7 @@ object ExplorerEvents {
 
   def canvasWheelEvent[S](
       lens: Lens[S, Viewport]
-  )(implicit globalState: GlobalState, state: S, update: S => Unit): Seq[(String, SnabbdomFacade.Eventlistener)] = {
+  )(implicit globalState: GlobalState, updatable: Updatable[S, S]): Seq[(String, SnabbdomFacade.Eventlistener)] = {
     val eventHandler =
       Snabbdom.specificEvent { event: MouseEvent =>
         event.preventDefault()
@@ -57,12 +58,12 @@ object ExplorerEvents {
         val p                = toPoint(event, boundingBox)
         val steps            = -event.asInstanceOf[WheelEvent].deltaY
 
-        update(
+        updatable.update(
           lens.modify {
             _.cover(boundingBox.width, boundingBox.height)
               .zoomSteps(p, steps / 50.0)
               .rotate(p, event.asInstanceOf[WheelEvent].deltaX / 200.0)
-          }(state)
+          }(updatable.state)
         )
       }
     Seq("wheel" -> eventHandler)
@@ -70,7 +71,7 @@ object ExplorerEvents {
 
   def canvasMouseEvents[S](
       lens: Lens[S, Viewport]
-  )(implicit globalState: GlobalState, state: S, update: S => Unit): Seq[(String, SnabbdomFacade.Eventlistener)] = {
+  )(implicit globalState: GlobalState, updatable: Updatable[S, S]): Seq[(String, SnabbdomFacade.Eventlistener)] = {
     var startPosition = Option.empty[Point]
 
     val pointerDown =
@@ -87,9 +88,9 @@ object ExplorerEvents {
             event.preventDefault()
             val (canvas, boundingBox) = context(event)
             val to                    = toPoint(event, boundingBox)
-            val newView               = calcNewView(boundingBox, Seq(from -> to), lens.get(state))
+            val newView               = calcNewView(boundingBox, Seq(from -> to), lens.get(updatable.state))
             resetTransformCss(canvas)
-            update(lens.set(newView)(state))
+            updatable.update(lens.set(newView)(updatable.state))
           case None => ()
         }
       }
@@ -109,7 +110,6 @@ object ExplorerEvents {
         }
       }
 
-    //    fixme: use mousedown instead?
     Seq(
       "mousedown"   -> pointerDown,
       "mousemove"   -> pointerMove,
@@ -119,10 +119,7 @@ object ExplorerEvents {
     )
   }
 
-  def canvasTouchEvents[S](lens: Lens[S, Viewport])(
-      implicit state: S,
-      update: S => Unit
-  ): Seq[(String, SnabbdomFacade.Eventlistener)] = {
+  def canvasTouchEvents[S](lens: Lens[S, Viewport])(implicit updatable: Updatable[S, S]): Seq[(String, SnabbdomFacade.Eventlistener)] = {
     var moves = Map.empty[Double, TouchMove]
 
     val touchStart = Snabbdom.specificEvent { event: TouchEvent =>
@@ -171,11 +168,11 @@ object ExplorerEvents {
         val newView = calcNewView(
           boundingBox = boundingBox,
           moves = moves.values.map(_.toMove).toSeq,
-          view = lens.get(state)
+          view = lens.get(updatable.state)
         )
 
         resetTransformCss(canvas)
-        update(lens.set(newView)(state))
+        updatable.update(lens.set(newView)(updatable.state))
       }
     }
 

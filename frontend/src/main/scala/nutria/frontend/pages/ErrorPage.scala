@@ -1,10 +1,10 @@
 package nutria.frontend.pages
 
 import monocle.macros.Lenses
-import nutria.api.User
 import nutria.frontend.Router.Location
 import nutria.frontend._
 import nutria.frontend.pages.common.{Body, Header}
+import nutria.frontend.util.Updatable
 import snabbdom._
 
 @Lenses
@@ -19,7 +19,7 @@ object ErrorPage extends Page[ErrorState] {
 
   def stateToUrl(state: State): Option[Location] = None
 
-  override def render(implicit globalState: GlobalState, state: ErrorState, update: PageState => Unit): Node =
+  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
     Body()
       .child(Header(ErrorState.navbarExpanded))
       .child(

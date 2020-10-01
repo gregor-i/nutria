@@ -26,7 +26,7 @@ object Header {
             Node("div.navbar-start")
               .child(
                 Link
-                  .asyncT("/gallery", Links.galleryState())
+                  .async("/gallery", Links.galleryState())
                   .classes("navbar-item")
                   .text("Public Gallery")
               )
@@ -44,7 +44,7 @@ object Header {
                 globalState.user.map(
                   user =>
                     Link
-                      .asyncT(s"/user/${user.id}/gallery", Links.userGalleryState(user.id))
+                      .async(s"/user/${user.id}/gallery", Links.userGalleryState(user.id))
                       .classes("navbar-item")
                       .text("My Gallery")
                 )
@@ -53,7 +53,7 @@ object Header {
                 globalState.user.map(
                   _ =>
                     Link
-                      .asyncT("/templates", TemplateGalleryState.load(globalState))
+                      .async("/templates", TemplateGalleryState.load(globalState))
                       .classes("navbar-item")
                       .text("My Templates")
                 )
@@ -69,7 +69,7 @@ object Header {
               .childOptional(
                 Some(
                   Link
-                    .asyncT("/admin", AdminState.initial())
+                    .async("/admin", AdminState.initial())
                     .classes("navbar-item")
                     .text("Admin")
                 ).filter(_ => globalState.user.exists(_.admin))

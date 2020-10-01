@@ -8,7 +8,8 @@ import nutria.api.User
 import nutria.core._
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common.{AnimatedFractalTile, Body, Form, Header}
-import nutria.frontend.{PageState, Page}
+import nutria.frontend.util.Updatable
+import nutria.frontend.{Page, PageState}
 import snabbdom.Node
 
 @Lenses
@@ -51,7 +52,7 @@ object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
       )
     )
 
-  override def render(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node =
+  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
     Body()
       .child(Header(NewtonFractalDesignerState.navbarExpanded))
       .child(
@@ -60,7 +61,7 @@ object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
           .child(inputs())
       )
 
-  private def fractalTile()(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
+  private def fractalTile()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
     Node("div.fractal-tile-list")
       .child {
         Node("div.fractal-tile")
@@ -80,7 +81,7 @@ object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
         gamma = state.gamma
       )
 
-  private def inputs()(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
+  private def inputs()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
     Node("div.section")
       .child(
         Form.forLens(

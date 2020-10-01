@@ -13,9 +13,7 @@ abstract class Page[S <: PageState: ClassTag] extends ExecutionContext {
 
   def stateToUrl(state: State): Option[Router.Location]
 
-  def render(implicit globalState: GlobalState, state: State, update: PageState => Unit): Node = ???
-
-  def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node = render(globalState, updatable.state, updatable.update)
+  def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node
 
   def acceptState(nutriaState: PageState): Boolean = implicitly[ClassTag[State]].runtimeClass == nutriaState.getClass
 }

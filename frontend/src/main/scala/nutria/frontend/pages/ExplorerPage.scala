@@ -8,7 +8,7 @@ import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common._
 import nutria.frontend.service.FractalService
-import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
+import nutria.frontend.util.{LenseUtils, SnabbdomUtil, Updatable}
 import snabbdom.Node
 
 @Lenses
@@ -69,14 +69,14 @@ object ExplorerPage extends Page[ExplorerState] {
     }
   }
 
-  override def render(implicit globalState: GlobalState, state: ExplorerState, update: PageState => Unit) =
+  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
     Body()
       .child(Header(ExplorerState.navbarExpanded))
       .child(InteractiveFractal.forImage(ExplorerState.fractalImage.composeLens(Entity.value)))
       .child(renderActionBar())
       .childOptional(saveDialog())
 
-  def renderActionBar()(implicit globalState: GlobalState, state: ExplorerState, update: PageState => Unit): Node =
+  def renderActionBar()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
     ButtonList()
       .classes("overlay-bottom-right", "padding")
       .child(buttonSave(state.fractalImage))
@@ -87,23 +87,23 @@ object ExplorerPage extends Page[ExplorerState] {
   def buttonGoToDetails(
       remoteFractal: WithId[FractalImageEntity],
       currentFractal: FractalImageEntity
-  )(implicit globalState: GlobalState, state: ExplorerState, update: PageState => Unit) =
+  )(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
     Link(Links.detailsState(remoteFractal, currentFractal))
       .classes("button", "is-rounded")
       .child(Icons.icon(Icons.edit))
 
-  def buttonResetViewport()(implicit globalState: GlobalState, state: State, update: PageState => Unit) =
+  def buttonResetViewport()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
     state.remoteFractal match {
-      case Some(remoteFractal) => Button.icon(Icons.undo, SnabbdomUtil.update(ExplorerState.viewport.set(remoteFractal.entity.value.viewport)))
+      case Some(remoteFractal) => Button.icon(Icons.undo, SnabbdomUtil.updateT(ExplorerState.viewport.set(remoteFractal.entity.value.viewport)))
       case None                => Button.icon(Icons.undo, SnabbdomUtil.noop).boolAttr("disabled", true)
     }
 
-  def buttonSave(fractalImage: FractalImageEntity)(implicit globalState: GlobalState, state: ExplorerState, update: PageState => Unit) =
+  def buttonSave(fractalImage: FractalImageEntity)(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
     Button
       .icon(Icons.snapshot, Actions.saveSnapshot(fractalImage))
       .classes("is-primary", "is-rounded")
 
-  def saveDialog()(implicit globalState: GlobalState, state: ExplorerState, update: PageState => Unit): Option[Node] =
+  def saveDialog()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Option[Node] =
     state.saveModal.map { params =>
       val lensParams     = ExplorerState.saveModal.composeLens(LenseUtils.unsafe(monocle.std.all.some[SaveFractalDialog]))
       val downloadAction = Actions.saveToDisk(state.fractalImage.value.copy(antiAliase = params.antiAliase), params.dimensions)
