@@ -37,7 +37,6 @@ object NewtonFractalDesigner {
   }
 
   private def streamPath(seed: Int, alpha: Double, beta: Double, gamma: Double, start: Complex): LazyList[Complex] = {
-    println(seed)
     val random = new Random(seed)
     var d      = random.nextDouble() * 2.0 * Math.PI
     LazyList.iterate(start) { c =>

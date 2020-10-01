@@ -21,8 +21,6 @@ class UserController @Inject() (userRepo: UserRepo, authenticator: Authenticator
 
   def delete(userId: String) = Action { implicit req =>
     authenticator.byUserId(req)(userId) {
-      println(userRepo.get(userId))
-
       (userRepo.delete(userId) match {
         case 0 => NotFound
         case _ => NoContent

@@ -13,7 +13,6 @@ object RenderAssets {
       _ <- favicon()
       _ <- example_DivergingSeries()
       _ <- example_NewtonIteration()
-      _ = println("execution finished")
     } yield ()
 
   private def imgFolder(src: String): String =
