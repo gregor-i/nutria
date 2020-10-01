@@ -2,7 +2,6 @@ package nutria.frontend
 
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder}
-import nutria.api.User
 import nutria.frontend.pages.ErrorState
 import org.scalajs.dom
 

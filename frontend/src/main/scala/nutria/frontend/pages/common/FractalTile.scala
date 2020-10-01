@@ -4,9 +4,9 @@ import nutria.core.{Dimensions, FractalImage}
 import nutria.frontend.util.AsyncUtil
 import nutria.shaderBuilder.FractalRenderer
 import org.scalajs.dom
+import org.scalajs.dom.CanvasRenderingContext2D
 import org.scalajs.dom.html.{Canvas, Image}
 import org.scalajs.dom.raw.WebGLRenderingContext
-import org.scalajs.dom.{CanvasRenderingContext2D, Event}
 import snabbdom.{Node, Snabbdom}
 
 import scala.concurrent.ExecutionContext.Implicits.global

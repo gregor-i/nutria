@@ -1,17 +1,14 @@
 package nutria.frontend.pages.common
 
-import nutria.core.{Dimensions, FractalImage}
+import nutria.core.FractalImage
 import nutria.frontend.util.Untyped
 import nutria.shaderBuilder.FractalRenderer
 import org.scalajs.dom
-import org.scalajs.dom.experimental.Fullscreen.toFullscreenDocument
 import org.scalajs.dom.html.Canvas
 import org.scalajs.dom.raw.WebGLRenderingContext
-import org.w3c.dom.html.HTMLElement
 import snabbdom.{Node, Snabbdom, SnabbdomFacade}
 
 import scala.scalajs.js
-import scala.scalajs.js.UndefOr
 import scala.util.Random
 
 object AnimatedFractalTile {

@@ -1,7 +1,6 @@
 package nutria.frontend.pages.common
 
 import monocle.Lens
-import nutria.frontend.GlobalState
 import nutria.frontend.util.{SnabbdomUtil, Updatable}
 import snabbdom.Node
 

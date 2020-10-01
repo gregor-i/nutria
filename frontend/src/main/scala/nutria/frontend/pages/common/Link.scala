@@ -2,11 +2,10 @@ package nutria.frontend.pages.common
 
 import nutria.frontend.pages.LoadingState
 import nutria.frontend.util.Updatable
-import nutria.frontend.{ExecutionContext, GlobalState, PageState, Router}
+import nutria.frontend.{ExecutionContext, PageState, Router}
 import snabbdom.{Node, Snabbdom}
 
 import scala.concurrent.Future
-import scala.util.chaining._
 
 object Link extends ExecutionContext {
   def apply(newState: PageState)(implicit updatable: Updatable[_, PageState]): Node =

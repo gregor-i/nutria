@@ -4,7 +4,7 @@ import io.circe.Codec
 import monocle.macros.{GenPrism, Lenses}
 import monocle.{Lens, Prism}
 import nutria.CirceCodec
-import nutria.api.{Entity, FractalImageEntity, FractalTemplateEntity, User}
+import nutria.api.{Entity, FractalImageEntity, FractalTemplateEntity}
 import nutria.core._
 import nutria.frontend.Router.Location
 import nutria.frontend._

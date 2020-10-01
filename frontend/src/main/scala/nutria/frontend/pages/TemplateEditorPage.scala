@@ -2,7 +2,7 @@ package nutria.frontend.pages
 
 import monocle.Lens
 import monocle.macros.Lenses
-import nutria.api.{Entity, FractalTemplateEntity, FractalTemplateEntityWithId, User}
+import nutria.api.{Entity, FractalTemplateEntity, FractalTemplateEntityWithId}
 import nutria.core._
 import nutria.core.languages.StringFunction
 import nutria.frontend.Router.{Path, QueryParameter}
@@ -12,11 +12,9 @@ import nutria.frontend.pages.common.{Form, _}
 import nutria.frontend.service.TemplateService
 import nutria.frontend.util.{LenseUtils, SnabbdomUtil, Updatable}
 import nutria.shaderBuilder.FragmentShaderSource
-import org.scalajs.dom
 import org.scalajs.dom.raw.HTMLTextAreaElement
 import snabbdom.{Node, Snabbdom}
 
-import scala.scalajs.js
 import scala.util.chaining._
 
 @Lenses

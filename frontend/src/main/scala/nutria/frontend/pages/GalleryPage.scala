@@ -1,7 +1,7 @@
 package nutria.frontend.pages
 
 import monocle.macros.Lenses
-import nutria.api.{FractalImageEntity, User, VoteStatistic, WithId}
+import nutria.api.{FractalImageEntity, WithId}
 import nutria.core.Dimensions
 import nutria.frontend._
 import nutria.frontend.pages.common.{FractalTile, _}

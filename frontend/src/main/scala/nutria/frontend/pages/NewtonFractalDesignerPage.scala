@@ -4,12 +4,10 @@ package pages
 import mathParser.complex.Complex
 import monocle.Lens
 import monocle.macros.{GenLens, Lenses}
-import nutria.api.User
 import nutria.core._
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common.{AnimatedFractalTile, Body, Form, Header}
 import nutria.frontend.util.Updatable
-import nutria.frontend.{Page, PageState}
 import snabbdom.Node
 
 @Lenses

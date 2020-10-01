@@ -1,7 +1,6 @@
 package nutria.frontend.pages
 
 import monocle.macros.Lenses
-import nutria.api.User
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common.{Body, Footer, Header}

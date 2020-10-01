@@ -5,7 +5,8 @@ import nutria.core.{Dimensions, FractalImage}
 import nutria.frontend.pages._
 import nutria.frontend.pages.common.FractalTile
 import nutria.frontend.service.{FractalService, TemplateService, UserService}
-import nutria.frontend.toasts.{ToastType, Toasts}
+import nutria.frontend.toasts.Syntax._
+import nutria.frontend.toasts.Toasts
 import nutria.frontend.util.{Untyped, Updatable}
 import org.scalajs.dom
 import org.scalajs.dom.html.Anchor
@@ -15,8 +16,7 @@ import snabbdom.SnabbdomFacade.Eventlistener
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.chaining.scalaUtilChainingOps
-import scala.util.{Failure, Success, Try}
-import nutria.frontend.toasts.Syntax._
+import scala.util.{Failure, Success}
 
 object Actions {
   private def asyncUpdate(fut: Future[PageState])(implicit updatable: Updatable[_, PageState]): Unit =

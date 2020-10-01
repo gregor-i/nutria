@@ -2,10 +2,9 @@ package nutria.frontend.service
 
 import nutria.api.{FractalImageEntity, WithId}
 import nutria.core.FractalImage
+import nutria.frontend.service.Service._
 
 import scala.concurrent.Future
-
-import nutria.frontend.service.Service._
 
 object FractalService {
   def get(fractalId: String): Future[WithId[FractalImageEntity]] =

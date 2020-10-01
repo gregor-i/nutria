@@ -2,12 +2,11 @@ package nutria.frontend
 package pages
 
 import monocle.macros.Lenses
-import nutria.api.{FractalTemplateEntityWithId, User}
+import nutria.api.FractalTemplateEntityWithId
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common._
 import nutria.frontend.service.TemplateService
 import nutria.frontend.util.Updatable
-import nutria.frontend.{Actions, ExecutionContext, Page, PageState}
 import snabbdom.{Node, Snabbdom}
 
 import scala.concurrent.Future

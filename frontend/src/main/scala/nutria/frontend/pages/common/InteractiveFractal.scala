@@ -2,7 +2,6 @@ package nutria.frontend.pages.common
 
 import monocle.Lens
 import nutria.core.{FractalImage, FractalTemplate, Viewport}
-import nutria.frontend.GlobalState
 import nutria.frontend.pages.explorer.ExplorerEvents
 import nutria.frontend.util.Updatable
 import snabbdom.Node

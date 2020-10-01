@@ -22,11 +22,11 @@ object Pages {
     AdminPage
   )
 
-  def selectPage[State <: PageState](nutriaState: State): Page[State] =
+  def selectPage[State <: PageState](pageState: State): Page[State] =
     all
-      .find(_.acceptState(nutriaState))
+      .find(_.acceptState(pageState))
       .map(_.asInstanceOf[Page[State]])
-      .getOrElse(throw new Exception(s"No Page defined for '${nutriaState.getClass.getSimpleName}'"))
+      .getOrElse(throw new Exception(s"No Page defined for '${pageState.getClass.getSimpleName}'"))
 
   def ui(globalState: GlobalState, updatable: Updatable[PageState, PageState]): Node =
     selectPage(updatable.state).render(globalState, updatable)

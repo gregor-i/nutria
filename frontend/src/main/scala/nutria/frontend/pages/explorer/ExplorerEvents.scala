@@ -1,8 +1,6 @@
 package nutria.frontend.pages.explorer
 
-import monocle.Lens
 import nutria.core.{Point, Viewport}
-import nutria.frontend.GlobalState
 import nutria.frontend.util.Updatable
 import org.scalajs.dom._
 import org.scalajs.dom.html.Canvas

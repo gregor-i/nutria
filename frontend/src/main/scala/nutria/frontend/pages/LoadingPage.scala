@@ -2,11 +2,9 @@ package nutria.frontend
 package pages
 
 import monocle.macros.Lenses
-import nutria.api.User
 import nutria.frontend.Router.Location
 import nutria.frontend.pages.common.{Body, Header}
 import nutria.frontend.util.Updatable
-import nutria.frontend.{Page, PageState}
 import snabbdom._
 
 import scala.concurrent.Future

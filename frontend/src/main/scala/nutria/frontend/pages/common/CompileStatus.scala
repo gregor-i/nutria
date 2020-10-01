@@ -1,6 +1,6 @@
 package nutria.frontend.pages.common
 
-import nutria.core.{AntiAliase, FractalTemplate}
+import nutria.core.FractalTemplate
 import nutria.shaderBuilder.{CompileShaderException, FractalRenderer}
 import org.scalajs.dom
 import org.scalajs.dom.html.{Canvas, Element}
