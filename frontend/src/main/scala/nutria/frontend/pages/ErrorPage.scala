@@ -4,7 +4,6 @@ import monocle.macros.Lenses
 import nutria.frontend.Router.Location
 import nutria.frontend._
 import nutria.frontend.pages.common.{Body, Header}
-import nutria.frontend.util.Updatable
 import snabbdom._
 
 @Lenses

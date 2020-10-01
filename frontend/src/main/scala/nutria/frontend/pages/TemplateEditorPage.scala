@@ -10,7 +10,7 @@ import nutria.frontend._
 import nutria.frontend.facades.Debounce
 import nutria.frontend.pages.common.{Form, _}
 import nutria.frontend.service.TemplateService
-import nutria.frontend.util.{LenseUtils, SnabbdomUtil, Updatable}
+import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
 import nutria.shaderBuilder.FragmentShaderSource
 import org.scalajs.dom.raw.HTMLTextAreaElement
 import snabbdom.{Node, Snabbdom}

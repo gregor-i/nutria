@@ -2,13 +2,13 @@ package nutria.frontend.pages
 package common
 
 import nutria.api.User
-import nutria.frontend.Page.Global
+import nutria.frontend.Page.{Global, Local}
 import nutria.frontend._
-import nutria.frontend.util.{SnabbdomUtil, Updatable}
+import nutria.frontend.util.SnabbdomUtil
 import snabbdom.Node
 
 object Header {
-  def apply()(implicit global: Global, local: Updatable[PageState, PageState]): Node = {
+  def apply()(implicit global: Global, local: Local[PageState]): Node = {
     Node("nav.navbar")
       .attr("role", "navigation")
       .attr("aria-label", "main navigation")
@@ -114,21 +114,21 @@ object Header {
           .text("Nutria")
       )
 
-  private def burgerMenu()(implicit globalState: Global) =
+  private def burgerMenu()(implicit global: Global) =
     Node("a.navbar-burger.burger")
-      .event("click", SnabbdomUtil.modify[GlobalState](_.copy(navbarExpanded = !globalState.state.navbarExpanded)))
-      .`class`("is-active", globalState.state.navbarExpanded)
+      .event("click", SnabbdomUtil.modify[GlobalState](_.copy(navbarExpanded = !global.state.navbarExpanded)))
+      .`class`("is-active", global.state.navbarExpanded)
       .attr("aria-label", "menu")
       .attr("aria-expanded", "false")
       .child(Node("span").attr("aria-hidden", "true"))
       .child(Node("span").attr("aria-hidden", "true"))
       .child(Node("span").attr("aria-hidden", "true"))
 
-  private def loginItem(implicit updatable: Updatable[PageState, _]) =
+  private def loginItem(implicit local: Local[PageState]) =
     Node("div.navbar-item")
       .child(
         Node("a.button.is-rounded")
-          .attr("href", loginHref(updatable.state))
+          .attr("href", loginHref(local.state))
           .child(Icons.icon(Icons.login))
           .child(Node("span").text("Log in"))
       )

@@ -4,7 +4,6 @@ import nutria.core.FractalImage
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common._
-import nutria.frontend.util.Updatable
 import nutria.macros.StaticContent
 import snabbdom.Node
 

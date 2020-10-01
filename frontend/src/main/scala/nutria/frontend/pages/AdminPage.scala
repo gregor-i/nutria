@@ -6,7 +6,6 @@ import nutria.core.{FractalImage, FractalTemplate}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common._
 import nutria.frontend.service.NutriaAdminService
-import nutria.frontend.util.Updatable
 import nutria.frontend.{GlobalState, Page, PageState}
 import snabbdom.{Node, Snabbdom, SnabbdomFacade}
 

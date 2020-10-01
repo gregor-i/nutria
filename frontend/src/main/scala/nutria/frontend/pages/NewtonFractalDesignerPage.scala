@@ -7,7 +7,6 @@ import monocle.macros.{GenLens, Lenses}
 import nutria.core._
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common.{AnimatedFractalTile, Body, Form, Header}
-import nutria.frontend.util.Updatable
 import snabbdom.Node
 
 @Lenses

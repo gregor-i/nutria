@@ -7,7 +7,7 @@ import nutria.core._
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common._
-import nutria.frontend.util.{LenseUtils, Updatable}
+import nutria.frontend.util.LenseUtils
 import snabbdom.Node
 
 import scala.util.chaining._

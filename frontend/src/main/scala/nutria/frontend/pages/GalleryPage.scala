@@ -5,7 +5,6 @@ import nutria.api.{FractalImageEntity, WithId}
 import nutria.core.Dimensions
 import nutria.frontend._
 import nutria.frontend.pages.common.{FractalTile, _}
-import nutria.frontend.util.Updatable
 import snabbdom._
 
 import scala.util.chaining._

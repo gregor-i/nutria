@@ -8,7 +8,7 @@ import nutria.frontend.pages.common.FractalTile
 import nutria.frontend.service.{FractalService, TemplateService, UserService}
 import nutria.frontend.toasts.Syntax._
 import nutria.frontend.toasts.Toasts
-import nutria.frontend.util.{Untyped, Updatable}
+import nutria.frontend.util.Untyped
 import org.scalajs.dom
 import org.scalajs.dom.html.Anchor
 import snabbdom.Snabbdom.event

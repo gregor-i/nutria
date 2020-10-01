@@ -11,7 +11,7 @@ import nutria.frontend._
 import nutria.frontend.pages.CreateNewFractalState.{ParametersStep, TemplateStep}
 import nutria.frontend.pages.common._
 import nutria.frontend.service.TemplateService
-import nutria.frontend.util.{LenseUtils, SnabbdomUtil, Updatable}
+import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
 import snabbdom.Node
 
 import scala.concurrent.Future

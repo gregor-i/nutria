@@ -4,7 +4,6 @@ import monocle.macros.Lenses
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common.{Body, Footer, Header}
-import nutria.frontend.util.Updatable
 import nutria.macros.StaticContent
 import snabbdom.Node
 

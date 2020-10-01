@@ -6,7 +6,6 @@ import nutria.api.FractalTemplateEntityWithId
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common._
 import nutria.frontend.service.TemplateService
-import nutria.frontend.util.Updatable
 import snabbdom.{Node, Snabbdom}
 
 import scala.concurrent.Future

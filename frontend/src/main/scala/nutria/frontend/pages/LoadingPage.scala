@@ -4,7 +4,6 @@ package pages
 import monocle.macros.Lenses
 import nutria.frontend.Router.Location
 import nutria.frontend.pages.common.{Body, Header}
-import nutria.frontend.util.Updatable
 import snabbdom._
 
 import scala.concurrent.Future

@@ -8,7 +8,7 @@ import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common._
 import nutria.frontend.service.FractalService
-import nutria.frontend.util.{LenseUtils, SnabbdomUtil, Updatable}
+import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
 import snabbdom.Node
 
 @Lenses
