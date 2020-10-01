@@ -11,16 +11,16 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 @Lenses
-case class LoadingState(loading: Future[PageState], navbarExpanded: Boolean = false) extends PageState
+case class LoadingState(loading: Future[PageState]) extends PageState
 
 object LoadingPage extends Page[LoadingState] {
   def stateFromUrl = PartialFunction.empty
 
   def stateToUrl(state: State): Option[Location] = None
 
-  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
+  override def render(implicit global: Global, local: Local) =
     Body()
-      .child(Header(LoadingState.navbarExpanded))
+      .child(Header())
       .child(
         Node("i.fa.fa-spinner.fa-pulse.has-text-primary")
           .styles(
@@ -36,10 +36,10 @@ object LoadingPage extends Page[LoadingState] {
       .hook(
         "insert",
         Snabbdom.hook { _ =>
-          state.loading.onComplete {
-            case Success(newState) => updatable.update(newState)
+          local.state.loading.onComplete {
+            case Success(newState) => local.update(newState)
             case Failure(exception) =>
-              updatable.update(
+              local.update(
                 ErrorState(s"unexpected problem while initializing app: ${exception.getMessage}")
               )
           }

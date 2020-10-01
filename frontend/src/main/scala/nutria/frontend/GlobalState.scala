@@ -1,9 +1,11 @@
 package nutria.frontend
 
+import monocle.macros.Lenses
 import nutria.api.User
 
-case class GlobalState(user: Option[User])
+@Lenses
+case class GlobalState(user: Option[User], navbarExpanded: Boolean)
 
 object GlobalState {
-  val initial: GlobalState = GlobalState(None)
+  val initial: GlobalState = GlobalState(user = None, navbarExpanded = false)
 }

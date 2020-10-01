@@ -18,8 +18,7 @@ case class NewtonFractalDesignerState(
     seed: Int,
     alpha: Double,
     beta: Double,
-    gamma: Double,
-    navbarExpanded: Boolean = false
+    gamma: Double
 ) extends PageState
 
 object NewtonFractalDesignerState {
@@ -50,22 +49,22 @@ object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
       )
     )
 
-  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
+  override def render(implicit global: Global, local: Local): Node =
     Body()
-      .child(Header(NewtonFractalDesignerState.navbarExpanded))
+      .child(Header())
       .child(
         Node("div.container")
           .child(fractalTile())
           .child(inputs())
       )
 
-  private def fractalTile()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
+  private def fractalTile()(implicit local: Local) =
     Node("div.fractal-tile-list")
       .child {
         Node("div.fractal-tile")
           .style("height", Dimensions.preview.height.toString + "px")
           .style("width", Dimensions.preview.width.toString + "px")
-          .child(AnimatedFractalTile(fractalImageOverTime(state)))
+          .child(AnimatedFractalTile(fractalImageOverTime(local.state)))
       }
 
   private def fractalImageOverTime(state: State): LazyList[FractalImage] =
@@ -79,7 +78,7 @@ object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
         gamma = state.gamma
       )
 
-  private def inputs()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
+  private def inputs()(implicit local: Local) =
     Node("div.section")
       .child(
         Form.forLens(

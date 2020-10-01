@@ -28,6 +28,6 @@ object Pages {
       .map(_.asInstanceOf[Page[State]])
       .getOrElse(throw new Exception(s"No Page defined for '${pageState.getClass.getSimpleName}'"))
 
-  def ui(globalState: GlobalState, updatable: Updatable[PageState, PageState]): Node =
+  def ui(globalState: Updatable[GlobalState, GlobalState], updatable: Updatable[PageState, PageState]): Node =
     selectPage(updatable.state).render(globalState, updatable)
 }

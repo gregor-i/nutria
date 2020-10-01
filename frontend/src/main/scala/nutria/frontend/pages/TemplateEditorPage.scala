@@ -21,8 +21,7 @@ import scala.util.chaining._
 case class TemplateEditorState(
     remoteTemplate: Option[FractalTemplateEntityWithId],
     entity: FractalTemplateEntity,
-    newParameter: Option[Parameter] = None,
-    navbarExpanded: Boolean = false
+    newParameter: Option[Parameter] = None
 ) extends PageState {
   def dirty: Boolean = remoteTemplate.fold(true)(_.entity != entity)
 }
@@ -73,13 +72,13 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     }
   }
 
-  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
+  override def render(implicit global: Global, local: Local) =
     Body()
-      .child(common.Header(TemplateEditorState.navbarExpanded))
+      .child(common.Header())
       .child(body)
       .child(common.Footer())
 
-  def body(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
+  def body(implicit global: Global, local: Local) =
     Node("div.container")
       .child(
         Node("section.section")
@@ -112,12 +111,14 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       )
       .child(parameterModal(TemplateEditorState.newParameter, TemplateEditorState.parameters))
 
-  def template(lens: Lens[State, FractalTemplate])(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) = {
+  def template(
+      lens: Lens[State, FractalTemplate]
+  )(implicit global: Global, local: Local) = {
     val codeEditor =
       Node("div.code-editor-container")
         .child(
           Node("pre.code-editor-line-numbers").text {
-            (1 to (state.entity.value.code.count(_ == '\n') + 1))
+            (1 to (local.state.entity.value.code.count(_ == '\n') + 1))
               .map(number => s"${number}:")
               .mkString("\n")
           }
@@ -131,28 +132,28 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
                   event.target
                     .asInstanceOf[HTMLTextAreaElement]
                     .value
-                    .pipe(lens.composeLens(FractalTemplate.code).set(_)(state))
-                    .tap(updatable.update)
+                    .pipe(lens.composeLens(FractalTemplate.code).set(_)(local.state))
+                    .tap(local.update)
                 },
                 250
               )
             )
-            .text(state.entity.value.code)
+            .text(local.state.entity.value.code)
         )
 
     Seq(
       codeEditor,
-      CompileStatus(state.entity.value)
+      CompileStatus(local.state.entity.value)
     )
   }
 
   def parameterModal(
       lensToMaybeParameter: Lens[State, Option[Parameter]],
       lensToOtherParameters: Lens[State, Vector[Parameter]]
-  )(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Option[Node] =
-    lensToMaybeParameter.get(state).map { parameter =>
+  )(implicit global: Global, local: Local): Option[Node] =
+    lensToMaybeParameter.get(local.state).map { parameter =>
       val lensToParameter = lensToMaybeParameter.composePrism(monocle.std.option.some).pipe(LenseUtils.unsafeOptional)
-      val overwrite       = lensToOtherParameters.get(state).exists(_.name == parameter.name)
+      val overwrite       = lensToOtherParameters.get(local.state).exists(_.name == parameter.name)
 
       val selectType = Form.selectInput[State, Parameter](
         label = "parameter type",
@@ -182,7 +183,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
         }
       )
 
-      Modal(closeAction = SnabbdomUtil.updateT(lensToMaybeParameter.set(None)))(
+      Modal(closeAction = SnabbdomUtil.modify(lensToMaybeParameter.set(None)))(
         Node("h5.title.is-5").text("Add Parameter"),
         selectType,
         Form.forLens("name", description = "", lens = lensToParameter.composeLens(Parameter.name)),
@@ -190,16 +191,16 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
         Label(
           label = "generated code:",
           node = Node("pre")
-            .text(FragmentShaderSource.parameter(lensToParameter.get(state)))
+            .text(FragmentShaderSource.parameter(lensToParameter.get(local.state)))
             .style("whiteSpace", "break-spaces"),
           actions = Seq.empty
         ),
         ButtonList(
-          Button("Cancel", Icons.cancel, SnabbdomUtil.updateT(lensToMaybeParameter.set(None))),
+          Button("Cancel", Icons.cancel, SnabbdomUtil.modify(lensToMaybeParameter.set(None))),
           Button(
             if (overwrite) "Overwrite" else "Add",
             Icons.plus,
-            SnabbdomUtil.updateT(
+            SnabbdomUtil.modify(
               lensToOtherParameters
                 .modify(list => Parameter.setParameter(list, parameter))
                 .andThen(lensToMaybeParameter.set(None))
@@ -209,7 +210,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       )
     }
 
-  def parameters()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Seq[Node] = {
+  def parameters()(implicit global: Global, local: Local): Seq[Node] = {
     val actions: Parameter => Seq[(String, State => State)] = parameter =>
       Seq(
         Icons.edit   -> TemplateEditorState.newParameter.set(Some(parameter)),
@@ -222,16 +223,16 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     )
   }
 
-  def openModalButton()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
+  def openModalButton()(implicit global: Global, local: Local) =
     ButtonList(
       Button(
         "Add new Parameter",
         Icons.plus,
-        SnabbdomUtil.updateT(TemplateEditorState.newParameter.set(Some(IntParameter("parameter_name", value = 0))))
+        SnabbdomUtil.modify(TemplateEditorState.newParameter.set(Some(IntParameter("parameter_name", value = 0))))
       ).classes("is-marginless")
     )
 
-  def preview()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
+  def preview()(implicit global: Global, local: Local) =
     Node("div.fractal-tile-list")
       .child(
         InteractiveFractal
@@ -241,8 +242,8 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
           .style("minHeight", "50vh")
       )
 
-  private def actions()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node = {
-    val buttons: Seq[Node] = (globalState.user, state.remoteTemplate) match {
+  private def actions()(implicit global: Global, local: Local): Node = {
+    val buttons: Seq[Node] = (global.state.user, local.state.remoteTemplate) match {
       case (Some(user), Some(remote)) if user.id == remote.owner =>
         Seq(buttonDelete, buttonSave, buttonUpdate)
       case (Some(_), _) =>
@@ -254,26 +255,26 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     ButtonList(buttons: _*)
   }
 
-  private def buttonSave(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
+  private def buttonSave(implicit global: Global, local: Local) =
     Button(
       "Save as new Template",
       Icons.save,
-      Actions.saveTemplate(state.entity.copy(published = false))
+      Actions.saveTemplate(local.state.entity.copy(published = false))
     ).classes("is-primary")
-      .boolAttr("disabled", !state.dirty)
+      .boolAttr("disabled", !local.state.dirty)
 
-  private def buttonUpdate(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
+  private def buttonUpdate(implicit global: Global, local: Local) =
     Button(
       "Update existing Template",
       Icons.save,
-      Actions.updateTemplate(state.remoteTemplate.get.copy(entity = state.entity))
+      Actions.updateTemplate(local.state.remoteTemplate.get.copy(entity = local.state.entity))
     ).classes("is-primary")
-      .boolAttr("disabled", !state.dirty)
+      .boolAttr("disabled", !local.state.dirty)
 
-  private def buttonDelete(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
+  private def buttonDelete(implicit global: Global, local: Local) =
     Button(
       "Delete",
       Icons.delete,
-      Actions.deleteTemplate(state.remoteTemplate.get.id)
+      Actions.deleteTemplate(local.state.remoteTemplate.get.id)
     ).classes("is-danger", "is-light")
 }

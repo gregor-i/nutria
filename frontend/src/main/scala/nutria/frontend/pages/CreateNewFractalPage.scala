@@ -20,8 +20,7 @@ import scala.util.chaining._
 @Lenses
 case class CreateNewFractalState(
     templates: Vector[FractalTemplateEntity],
-    step: CreateNewFractalState.Step = CreateNewFractalState.TemplateStep,
-    navbarExpanded: Boolean = false
+    step: CreateNewFractalState.Step = CreateNewFractalState.TemplateStep
 ) extends PageState
 
 object CreateNewFractalState extends ExecutionContext {
@@ -64,14 +63,14 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
   override def stateToUrl(state: CreateNewFractalState): Option[Location] =
     Some(("/new-fractal", Map("step" -> Router.queryEncoded(state.step))))
 
-  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
+  override def render(implicit global: Global, local: Local): Node =
     Body()
-      .child(Header(CreateNewFractalState.navbarExpanded))
+      .child(Header())
       .child(
         Node("div.container")
           .child(Node("section.section").child(Node("h1.title.is-1").text("Create new Fractal")))
           .child {
-            state.step match {
+            local.state.step match {
               case TemplateStep =>
                 selectTemplate()
               case ParametersStep(_) =>
@@ -86,14 +85,14 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
       )
       .child(Footer())
 
-  private def selectTemplate()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
+  private def selectTemplate()(implicit local: Local): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text("Step 1: Select the fractal template"))
       .child(
         Node("div.fractal-tile-list")
           .child(
-            state.templates.map { template =>
-              Link(state.copy(step = ParametersStep(template)))
+            local.state.templates.map { template =>
+              Link(local.state.copy(step = ParametersStep(template)))
                 .classes("fractal-tile")
                 .attr("title", template.title)
                 .child(FractalTile(FractalImage.fromTemplate(template.value), Dimensions.thumbnail))
@@ -104,8 +103,8 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
 
   private def modifyParameters(
       templateLens: Lens[State, FractalTemplateEntity]
-  )(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node = {
-    val image = templateLens.get(state).map(FractalImage.fromTemplate)
+  )(implicit global: Global, local: Local): Node = {
+    val image = templateLens.get(local.state).map(FractalImage.fromTemplate)
 
     Node("section.section")
       .child(Node("h4.title.is-4").text("Step 2: Modify parameters"))
@@ -128,10 +127,12 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
       )
   }
 
-  private def backButton()(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
-    Button("Choose a different Template", Icons.cancel, SnabbdomUtil.updateT[State](_.copy(step = TemplateStep)))
+  private def backButton()(implicit local: Local): Node =
+    Button("Choose a different Template", Icons.cancel, SnabbdomUtil.modify[State](_.copy(step = TemplateStep)))
 
-  private def finishButton(fractal: FractalImageEntity)(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
+  private def finishButton(
+      fractal: FractalImageEntity
+  )(implicit global: Global, local: Local): Node =
     Button("Save Fractal", Icons.save, Actions.saveAsNewFractal(fractal))
       .classes("is-primary")
 }

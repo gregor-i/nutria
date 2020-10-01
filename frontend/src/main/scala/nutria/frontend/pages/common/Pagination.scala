@@ -21,7 +21,7 @@ object Pagination {
     val pages = (itemsLens.get(updatable.state).size - 1) / itemsPerPage + 1
 
     def action(p: Int) =
-      SnabbdomUtil.updateT(pageLens.set(p))
+      SnabbdomUtil.modify(pageLens.set(p))
 
     def isValid(p: Int) =
       p >= 1 && p <= pages

@@ -19,7 +19,7 @@ object Form {
     )
 
   private def actionButton[S, V](tupled: (String, S => S))(implicit updatable: Updatable[S, S]): Node =
-    Button.icon(tupled._1, SnabbdomUtil.updateT[S](tupled._2), round = false)
+    Button.icon(tupled._1, SnabbdomUtil.modify[S](tupled._2), round = false)
 
   def readonlyStringInput(
       label: String,

@@ -37,8 +37,9 @@ class NutriaApp(container: Element) extends ExecutionContext {
 
     val t1 = System.currentTimeMillis()
 
-    val stateUpdatable = Updatable[PageState, PageState](state, renderState(globalState, _))
-    val ui             = Pages.ui(globalState, stateUpdatable).toVNode
+    val stateUpdatable  = Updatable[PageState, PageState](state, renderState(globalState, _))
+    val globalUpdatable = Updatable[GlobalState, GlobalState](globalState, renderState(_, state))
+    val ui              = Pages.ui(globalUpdatable, stateUpdatable).toVNode
 
     val t2 = System.currentTimeMillis()
 
@@ -57,7 +58,7 @@ class NutriaApp(container: Element) extends ExecutionContext {
   private def loadUserAndRenderFromLocation(): Unit =
     for {
       user <- UserService.whoAmI()
-      globalState = GlobalState(user = user)
+      globalState = GlobalState(user = user, navbarExpanded = false)
     } yield {
       renderState(globalState, Router.stateFromUrl(dom.window.location, globalState))
     }

@@ -1,26 +1,25 @@
 package nutria.frontend.pages
 package common
 
-import monocle.Lens
 import nutria.api.User
+import nutria.frontend.Page.Global
 import nutria.frontend._
 import nutria.frontend.util.{SnabbdomUtil, Updatable}
 import snabbdom.Node
 
 object Header {
-
-  def apply[S <: PageState](lens: Lens[S, Boolean])(implicit globalState: GlobalState, updatable: Updatable[S, PageState]): Node = {
+  def apply()(implicit global: Global, local: Updatable[PageState, PageState]): Node = {
     Node("nav.navbar")
       .attr("role", "navigation")
       .attr("aria-label", "main navigation")
       .child(
         Node("div.navbar-brand")
           .child(brand)
-          .child(burgerMenu(lens))
+          .child(burgerMenu())
       )
       .child(
         Node("div.navbar-menu")
-          .`class`("is-active", lens.get(updatable.state))
+          .`class`("is-active", global.state.navbarExpanded)
           .child(
             Node("div.navbar-start")
               .child(
@@ -40,7 +39,7 @@ object Header {
                   .text("FAQ")
               )
               .childOptional(
-                globalState.user.map(
+                global.state.user.map(
                   user =>
                     Link
                       .async(s"/user/${user.id}/gallery", Links.userGalleryState(user.id))
@@ -49,16 +48,16 @@ object Header {
                 )
               )
               .childOptional(
-                globalState.user.map(
+                global.state.user.map(
                   _ =>
                     Link
-                      .async("/templates", TemplateGalleryState.load(globalState))
+                      .async("/templates", TemplateGalleryState.load(global.state))
                       .classes("navbar-item")
                       .text("My Templates")
                 )
               )
               .childOptional(
-                globalState.user.map(
+                global.state.user.map(
                   user =>
                     Link(ProfileState(user))
                       .classes("navbar-item")
@@ -71,13 +70,13 @@ object Header {
                     .async("/admin", AdminState.initial())
                     .classes("navbar-item")
                     .text("Admin")
-                ).filter(_ => globalState.user.exists(_.admin))
+                ).filter(_ => global.state.user.exists(_.admin))
               )
           )
           .child(
             Node("div.navbar-end")
               .child(
-                globalState.user match {
+                global.state.user match {
                   case Some(user) => logoutItem(user)
                   case None       => loginItem
                 }
@@ -115,10 +114,10 @@ object Header {
           .text("Nutria")
       )
 
-  private def burgerMenu[S <: PageState](lens: Lens[S, Boolean])(implicit updatable: Updatable[S, PageState]) =
+  private def burgerMenu()(implicit globalState: Global) =
     Node("a.navbar-burger.burger")
-      .event("click", SnabbdomUtil.updateT(lens.modify(!_)))
-      .`class`("is-active", lens.get(updatable.state))
+      .event("click", SnabbdomUtil.modify[GlobalState](_.copy(navbarExpanded = !globalState.state.navbarExpanded)))
+      .`class`("is-active", globalState.state.navbarExpanded)
       .attr("aria-label", "menu")
       .attr("aria-expanded", "false")
       .child(Node("span").attr("aria-hidden", "true"))

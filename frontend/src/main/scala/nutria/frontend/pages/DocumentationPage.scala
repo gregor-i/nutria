@@ -10,8 +10,7 @@ import snabbdom.Node
 
 @Lenses
 case class DocumentationState(
-    subpage: Subpage,
-    navbarExpanded: Boolean = false
+    subpage: Subpage
 ) extends PageState
 
 object DocumentationState {
@@ -40,13 +39,13 @@ object DocumentationPage extends Page[DocumentationState] {
         Some("/documentation/introduction" -> Map.empty)
     }
 
-  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
+  override def render(implicit global: Global, local: Local): Node =
     Body()
-      .child(Header(DocumentationState.navbarExpanded))
-      .child(content(state.subpage))
+      .child(Header())
+      .child(content(local.state.subpage))
       .child(Footer())
 
-  private def content(subpage: Subpage)(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
+  private def content(subpage: Subpage) =
     subpage match {
       case FAQ =>
         Node("div.container")

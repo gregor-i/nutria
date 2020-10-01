@@ -18,12 +18,12 @@ object GreetingPage extends Page[GreetingState] {
   override def stateToUrl(state: GreetingState): Option[(Path, QueryParameter)] =
     Some("/" -> Map.empty)
 
-  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
+  override def render(implicit global: Global, local: Local) =
     Body()
       .child(renderCanvas)
       .child(content)
 
-  private def content(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) = {
+  private def content(implicit global: Global, local: Local) = {
     Modal(closeAction = Actions.exploreFractal())(
       Node("div.content").prop("innerHTML", StaticContent("frontend/src/main/html/greeting.html")),
       ButtonList(
@@ -40,9 +40,9 @@ object GreetingPage extends Page[GreetingState] {
     )
   }
 
-  private def renderCanvas(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
+  private def renderCanvas(implicit global: Global, local: Local): Node =
     Node("div.background")
       .child(
-        Node("canvas").hooks(CanvasHooks(state.randomFractal))
+        Node("canvas").hooks(CanvasHooks(local.state.randomFractal))
       )
 }

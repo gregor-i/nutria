@@ -2,6 +2,7 @@ package nutria.frontend
 
 import nutria.api._
 import nutria.core.{Dimensions, FractalImage}
+import nutria.frontend.Page.{Global, Local}
 import nutria.frontend.pages._
 import nutria.frontend.pages.common.FractalTile
 import nutria.frontend.service.{FractalService, TemplateService, UserService}
@@ -13,46 +14,43 @@ import org.scalajs.dom.html.Anchor
 import snabbdom.Snabbdom.event
 import snabbdom.SnabbdomFacade.Eventlistener
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.chaining.scalaUtilChainingOps
 import scala.util.{Failure, Success}
 
-object Actions {
-  private def asyncUpdate(fut: Future[PageState])(implicit updatable: Updatable[_, PageState]): Unit =
+object Actions extends ExecutionContext {
+  private def asyncUpdate(fut: Future[PageState])(implicit local: Local[_]): Unit =
     fut.onComplete {
-      case Success(value)     => updatable.update(value)
+      case Success(value)     => local.update(value)
       case Failure(exception) => dom.console.error(s"Unexpected Failure. See: ${exception}")
     }
 
-  private def onlyLoggedIn[A](op: => A)(implicit globalState: GlobalState) =
-    globalState.user match {
+  private def onlyLoggedIn[A](op: => A)(implicit global: Global) =
+    global.state.user match {
       case None    => Toasts.dangerToast("Log in first")
       case Some(_) => op
     }
 
-  def exploreFractal()(implicit globalState: GlobalState, updatable: Updatable[GreetingState, PageState]): Eventlistener =
+  def exploreFractal()(implicit global: Global, local: Local[GreetingState]): Eventlistener =
     event { _ =>
-      updatable.update(
+      local.update(
         ExplorerState(
           remoteFractal = None,
-          fractalImage = Entity(value = state.randomFractal)
+          fractalImage = Entity(value = local.state.randomFractal)
         )
       )
     }
 
-  def editFractal(
-      fractal: WithId[FractalImageEntity]
-  )(implicit globalState: GlobalState, updatable: Updatable[PageState, PageState]): Eventlistener =
+  def editFractal(fractal: WithId[FractalImageEntity])(implicit global: Global, local: Local[PageState]): Eventlistener =
     event { _ =>
-      updatable.update(
+      local.update(
         DetailsState(remoteFractal = fractal, fractalToEdit = fractal)
       )
     }
 
   def togglePublishedImage(
       fractal: WithId[FractalImageEntity]
-  )(implicit globalState: GlobalState, updatable: Updatable[UserGalleryState, PageState]): Eventlistener =
+  )(implicit global: Global, local: Local[UserGalleryState]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -66,8 +64,8 @@ object Actions {
                   .set(!published)
                   .apply(fractal)
               )
-            reloaded <- FractalService.loadUserFractals(state.aboutUser)
-          } yield state.copy(userFractals = reloaded))
+            reloaded <- FractalService.loadUserFractals(local.state.aboutUser)
+          } yield local.state.copy(userFractals = reloaded))
             .pipe { fut =>
               if (published)
                 fut.withWarningToast("Unpublishing Fractal", "Fractal unpublished. The fractal will no longer be listed in the public gallery.")
@@ -80,7 +78,7 @@ object Actions {
 
   def deleteFractalFromUserGallery(
       fractalId: String
-  )(implicit globalState: GlobalState, updatable: Updatable[UserGalleryState, PageState]): Eventlistener =
+  )(implicit global: Global, local: Local[UserGalleryState]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -92,7 +90,7 @@ object Actions {
             } yield UserGalleryState(
               userFractals = reloaded,
               aboutUser = remoteFractal.owner,
-              page = state.page
+              page = local.state.page
             )
           }
         }
@@ -101,7 +99,7 @@ object Actions {
 
   def deleteFractalFromDetails(
       fractalId: String
-  )(implicit globalState: GlobalState, updatable: Updatable[DetailsState, PageState]): Eventlistener =
+  )(implicit global: Global, local: Local[DetailsState]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -122,7 +120,7 @@ object Actions {
 
   def updateFractal(
       fractalWithId: WithId[FractalImageEntity]
-  )(implicit globalState: GlobalState, updatable: Updatable[PageState, PageState]): Eventlistener =
+  )(implicit global: Global, local: Local[_]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -140,7 +138,7 @@ object Actions {
 
   def saveAsNewFractal(
       fractalEntity: FractalImageEntity
-  )(implicit globalState: GlobalState, updatable: Updatable[PageState, PageState]): Eventlistener =
+  )(implicit global: Global, local: Local[_]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -158,14 +156,14 @@ object Actions {
 
   def saveSnapshot(
       fractalEntity: FractalImageEntity
-  )(implicit globalState: GlobalState, updatable: Updatable[ExplorerState, PageState]): Eventlistener =
+  )(implicit global: Global, local: Local[ExplorerState]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
           withSuccessToast("Saving Fractal", "Fractal saved") {
             for {
               savedImage <- FractalService.post(fractalEntity.copy(published = false))
-            } yield state.copy(remoteFractal = Some(savedImage))
+            } yield local.state.copy(remoteFractal = Some(savedImage))
           }
         }
       }
@@ -173,14 +171,14 @@ object Actions {
 
   def saveTemplate(
       templateEntity: FractalTemplateEntity
-  )(implicit globalState: GlobalState, updatable: Updatable[TemplateEditorState, PageState]): Eventlistener =
+  )(implicit global: Global, local: Local[TemplateEditorState]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
           withSuccessToast("Saving Template", "Template saved") {
             for {
               savedTemplate <- TemplateService.post(templateEntity)
-            } yield state.copy(remoteTemplate = Some(savedTemplate))
+            } yield local.state.copy(remoteTemplate = Some(savedTemplate))
           }
         }
       }
@@ -188,7 +186,7 @@ object Actions {
 
   def updateTemplate(
       template: FractalTemplateEntityWithId
-  )(implicit globalState: GlobalState, updatable: Updatable[PageState, PageState]): Eventlistener =
+  )(implicit global: Global, local: Local[_]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -201,14 +199,16 @@ object Actions {
       }
     }
 
-  def deleteTemplate(templateId: String)(implicit globalState: GlobalState, updatable: Updatable[PageState, PageState]): Eventlistener =
+  def deleteTemplate(
+      templateId: String
+  )(implicit global: Global, local: Local[_]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
           withWarningToast("Deleting Template", "Template deleted") {
             for {
               _         <- TemplateService.delete(templateId)
-              templates <- TemplateService.listUser(globalState.user.get.id)
+              templates <- TemplateService.listUser(global.state.user.get.id)
             } yield TemplateGalleryState(templates = templates)
           }
         }
@@ -217,7 +217,7 @@ object Actions {
 
   def togglePublishedTemplate(
       template: FractalTemplateEntityWithId
-  )(implicit globalState: GlobalState, updatable: Updatable[TemplateGalleryState, PageState]): Eventlistener =
+  )(implicit global: Global, local: Local[TemplateGalleryState]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -231,8 +231,8 @@ object Actions {
                   .set(!published)
                   .apply(template)
               )
-            templates <- TemplateService.listUser(globalState.user.get.id)
-          } yield state.copy(templates = templates))
+            templates <- TemplateService.listUser(global.state.user.get.id)
+          } yield local.state.copy(templates = templates))
             .pipe { fut =>
               if (published)
                 fut.withWarningToast("Unpublishing Template", "Template unpublished. The template will no longer be listed in the public gallery.")
@@ -245,7 +245,7 @@ object Actions {
 
   def deleteUser(
       userId: String
-  )(implicit globalState: GlobalState, updatable: Updatable[PageState, PageState]): Eventlistener =
+  )(implicit global: Global, local: Local[_]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -259,31 +259,31 @@ object Actions {
       }
     }
 
-  def openSaveToDiskModal(implicit globalState: GlobalState, updatable: Updatable[ExplorerState, PageState]): Eventlistener =
+  def openSaveToDiskModal(implicit global: Global, local: Local[ExplorerState]): Eventlistener =
     event { _ =>
-      updatable.update {
-        state.copy(
+      local.update {
+        local.state.copy(
           saveModal = Some(
             SaveFractalDialog(
               dimensions = Dimensions.fullHD,
-              antiAliase = state.fractalImage.value.antiAliase
+              antiAliase = local.state.fractalImage.value.antiAliase
             )
           )
         )
       }
     }
 
-  def closeSaveToDiskModal(implicit globalState: GlobalState, updatable: Updatable[ExplorerState, PageState]): Eventlistener =
+  def closeSaveToDiskModal(implicit global: Global, local: Local[ExplorerState]): Eventlistener =
     event { _ =>
-      updatable.update {
-        state.copy(saveModal = None)
+      local.update {
+        local.state.copy(saveModal = None)
       }
     }
 
   def saveToDisk(
       fractalImage: FractalImage,
       dimensions: Dimensions
-  )(implicit globalState: GlobalState, updatable: Updatable[PageState, PageState]): Eventlistener =
+  )(implicit globalState: Global, local: Local[_]): Eventlistener =
     event { _ =>
       val dataUrl = FractalTile.dataUrl(fractalImage, dimensions)
 

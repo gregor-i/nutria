@@ -15,8 +15,7 @@ import scala.util.chaining._
 case class UserGalleryState(
     aboutUser: String,
     userFractals: Seq[WithId[FractalImageEntity]],
-    page: Int,
-    navbarExpanded: Boolean = false
+    page: Int
 ) extends PageState
 
 object UserGalleryPage extends Page[UserGalleryState] {
@@ -31,12 +30,12 @@ object UserGalleryPage extends Page[UserGalleryState] {
 
   }
 
-  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]) =
+  override def render(implicit global: Global, local: Local) =
     Body()
-      .child(Header(UserGalleryState.navbarExpanded))
+      .child(Header())
       .child(
         Link
-          .async("/new-fractal", CreateNewFractalState.load(globalState))
+          .async("/new-fractal", CreateNewFractalState.load(global.state))
           .pipe(Header.fab)
           .child(Icons.icon(Icons.plus))
       )
@@ -62,7 +61,7 @@ object UserGalleryPage extends Page[UserGalleryState] {
 
   def renderFractalTile(
       fractal: WithId[FractalImageEntity]
-  )(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
+  )(implicit global: Global, local: Local): Node =
     Node("article.fractal-tile.is-relative")
       .child(
         Link(Links.detailsState(fractal))

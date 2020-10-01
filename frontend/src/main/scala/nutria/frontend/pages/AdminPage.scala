@@ -16,8 +16,7 @@ import scala.concurrent.Future
 case class AdminState(
     users: Vector[User],
     fractals: Vector[WithId[Option[Entity[FractalImage]]]],
-    templates: Vector[WithId[Option[Entity[FractalTemplate]]]],
-    navbarExpanded: Boolean = false
+    templates: Vector[WithId[Option[Entity[FractalTemplate]]]]
 ) extends PageState
 
 object AdminState {
@@ -32,19 +31,19 @@ object AdminPage extends Page[AdminState] {
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =
     Some("/admin" -> Map.empty)
 
-  override def render(implicit globalState: GlobalState, updatable: Updatable[State, PageState]): Node =
+  override def render(implicit global: Global, local: Local): Node =
     Body()
-      .child(Header(AdminState.navbarExpanded))
+      .child(Header())
       .child(
         Node("div.container")
           .child(Node("section.section").child(Node("h1.title.is-1").text("Admin:")))
-          .child(usersTable(updatable.state.users))
-          .child(fractalsTable(updatable.state.fractals))
-          .child(templatesTable(updatable.state.templates))
+          .child(usersTable(local.state.users))
+          .child(fractalsTable(local.state.fractals))
+          .child(templatesTable(local.state.templates))
           .child(actionBar())
       )
 
-  private def usersTable(users: Seq[User])(implicit updatable: Updatable[State, PageState]): Node =
+  private def usersTable(users: Seq[User])(implicit local: Local): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text(s"Users: ${users.length}"))
       .child(
@@ -77,7 +76,7 @@ object AdminPage extends Page[AdminState] {
 
   private def fractalsTable(
       fractals: Seq[WithId[Option[Entity[FractalImage]]]]
-  )(implicit updatable: Updatable[State, PageState]): Node =
+  )(implicit local: Local): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text(s"Fractals: ${fractals.length}"))
       .child(
@@ -112,7 +111,7 @@ object AdminPage extends Page[AdminState] {
 
   private def templatesTable(
       templates: Seq[WithId[Option[Entity[FractalTemplate]]]]
-  )(implicit updatable: Updatable[State, PageState]): Node =
+  )(implicit local: Local): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text(s"Templates: ${templates.length}"))
       .child(
@@ -140,7 +139,7 @@ object AdminPage extends Page[AdminState] {
           )
       )
 
-  private def actionBar()(implicit updatable: Updatable[State, PageState]): Node =
+  private def actionBar()(implicit local: Local): Node =
     Node("section.section")
       .child(
         ButtonList(
@@ -153,6 +152,6 @@ object AdminPage extends Page[AdminState] {
 
   private def action(
       action: => Future[Unit]
-  )(implicit updatable: Updatable[State, PageState]): SnabbdomFacade.Eventlistener =
-    Snabbdom.event { _ -> action.flatMap(_ => NutriaAdminService.load()).foreach(updatable.update) }
+  )(implicit local: Local): SnabbdomFacade.Eventlistener =
+    Snabbdom.event { _ -> action.flatMap(_ => NutriaAdminService.load()).foreach(local.update) }
 }
