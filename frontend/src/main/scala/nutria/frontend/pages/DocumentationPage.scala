@@ -38,10 +38,10 @@ object DocumentationPage extends Page[DocumentationState] {
         Some("/documentation/introduction" -> Map.empty)
     }
 
-  override def render(implicit global: Global, local: Local): Node =
+  def render(implicit context: Context): Node =
     Body()
       .child(Header())
-      .child(content(local.state.subpage))
+      .child(content(context.local.subpage))
       .child(Footer())
 
   private def content(subpage: Subpage) =

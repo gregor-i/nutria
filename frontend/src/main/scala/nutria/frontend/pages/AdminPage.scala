@@ -1,7 +1,7 @@
 package nutria.frontend.pages
 
 import monocle.macros.Lenses
-import nutria.api.{Entity, User, WithId}
+import nutria.api._
 import nutria.core.{FractalImage, FractalTemplate}
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common._
@@ -30,19 +30,19 @@ object AdminPage extends Page[AdminState] {
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =
     Some("/admin" -> Map.empty)
 
-  override def render(implicit global: Global, local: Local): Node =
+  override def render(implicit context: Context): Node =
     Body()
       .child(Header())
       .child(
         Node("div.container")
           .child(Node("section.section").child(Node("h1.title.is-1").text("Admin:")))
-          .child(usersTable(local.state.users))
-          .child(fractalsTable(local.state.fractals))
-          .child(templatesTable(local.state.templates))
+          .child(usersTable(context.local.users))
+          .child(fractalsTable(context.local.fractals))
+          .child(templatesTable(context.local.templates))
           .child(actionBar())
       )
 
-  private def usersTable(users: Seq[User])(implicit local: Local): Node =
+  private def usersTable(users: Seq[User])(implicit context: Context): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text(s"Users: ${users.length}"))
       .child(
@@ -73,9 +73,7 @@ object AdminPage extends Page[AdminState] {
           )
       )
 
-  private def fractalsTable(
-      fractals: Seq[WithId[Option[Entity[FractalImage]]]]
-  )(implicit local: Local): Node =
+  private def fractalsTable(fractals: Seq[WithId[Option[FractalImageEntity]]])(implicit context: Context): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text(s"Fractals: ${fractals.length}"))
       .child(
@@ -109,8 +107,8 @@ object AdminPage extends Page[AdminState] {
       )
 
   private def templatesTable(
-      templates: Seq[WithId[Option[Entity[FractalTemplate]]]]
-  )(implicit local: Local): Node =
+      templates: Seq[WithId[Option[FractalTemplateEntity]]]
+  )(implicit context: Context): Node =
     Node("section.section")
       .child(Node("h4.title.is-4").text(s"Templates: ${templates.length}"))
       .child(
@@ -138,7 +136,7 @@ object AdminPage extends Page[AdminState] {
           )
       )
 
-  private def actionBar()(implicit local: Local): Node =
+  private def actionBar()(implicit context: Context): Node =
     Node("section.section")
       .child(
         ButtonList(
@@ -151,6 +149,6 @@ object AdminPage extends Page[AdminState] {
 
   private def action(
       action: => Future[Unit]
-  )(implicit local: Local): SnabbdomFacade.Eventlistener =
-    Snabbdom.event { _ -> action.flatMap(_ => NutriaAdminService.load()).foreach(local.update) }
+  )(implicit context: Context): SnabbdomFacade.Eventlistener =
+    Snabbdom.event { _ -> action.flatMap(_ => NutriaAdminService.load()).foreach(context.update) }
 }

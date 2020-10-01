@@ -17,7 +17,7 @@ object LoadingPage extends Page[LoadingState] {
 
   def stateToUrl(state: State): Option[Location] = None
 
-  override def render(implicit global: Global, local: Local) =
+  def render(implicit context: Context) =
     Body()
       .child(Header())
       .child(
@@ -32,13 +32,13 @@ object LoadingPage extends Page[LoadingState] {
             )
           )
       )
-      .key(local.state.process.hashCode())
+      .key(context.local.process.hashCode())
       .hook(
         "insert",
         Snabbdom.hook { _ =>
-          local.state.process.onComplete {
-            case Success(newState) => local.update(newState)
-            case Failure(error)    => local.update(ErrorState.asyncLoadError(error))
+          context.local.process.onComplete {
+            case Success(newState) => context.update(newState)
+            case Failure(error)    => context.update(ErrorState.asyncLoadError(error))
           }
         }
       )

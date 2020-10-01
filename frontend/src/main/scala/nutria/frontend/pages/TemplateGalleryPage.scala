@@ -35,29 +35,29 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =
     Some("/templates" -> Map.empty)
 
-  override def render(implicit global: Global, local: Local): Node =
+  def render(implicit context: Context): Node =
     Body()
       .child(Header())
       .child(
         Header
           .fab(Node("button"))
           .child(Icons.icon(Icons.plus))
-          .event("click", Snabbdom.event(_ => local.update(TemplateEditorState.initial)))
+          .event("click", Snabbdom.event(_ => context.update(TemplateEditorState.initial)))
       )
       .child(body())
       .child(Footer())
 
-  def body()(implicit global: Global, local: Local): Node =
+  def body()(implicit context: Context): Node =
     Node("div.container")
       .child(
         Node("section.section")
           .child(Node("h1.title.is-1").text("Template Gallery:"))
       )
-      .child(table(local.state.templates))
+      .child(table(context.local.templates))
 
   private def table(
       templates: Seq[FractalTemplateEntityWithId]
-  )(implicit global: Global, local: Local): Node =
+  )(implicit context: Context): Node =
     Node("section.section")
       .child(
         Node("table.table.is-fullwidth")

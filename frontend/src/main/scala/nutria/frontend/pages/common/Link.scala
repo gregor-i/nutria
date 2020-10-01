@@ -1,19 +1,18 @@
 package nutria.frontend.pages.common
 
-import nutria.frontend.Page.Local
 import nutria.frontend.pages.LoadingState
-import nutria.frontend.{ExecutionContext, PageState, Router}
+import nutria.frontend.{Context, ExecutionContext, PageState, Router}
 import snabbdom.{Node, Snabbdom}
 
 import scala.concurrent.Future
 
 object Link extends ExecutionContext {
-  def apply(newState: PageState)(implicit local: Local[_]): Node =
+  def apply(newState: PageState)(implicit context: Context[_]): Node =
     Node("a")
       .key(newState.hashCode())
       .event("click", Snabbdom.event { e =>
         e.preventDefault()
-        local.update(newState)
+        context.update(newState)
       })
       .hook(
         "postpatch",
@@ -30,12 +29,12 @@ object Link extends ExecutionContext {
   def async(
       href: String,
       loadingState: => Future[PageState]
-  )(implicit local: Local[_]): Node = {
+  )(implicit context: Context[_]): Node = {
     Node("a")
       .attr("href", href)
       .event("click", Snabbdom.event { e =>
         e.preventDefault()
-        local.update(LoadingState(loadingState))
+        context.update(LoadingState(loadingState))
       })
   }
 }

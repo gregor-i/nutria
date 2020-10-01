@@ -59,7 +59,7 @@ object ExplorerPage extends Page[ExplorerState] {
       }
   }
 
-  override def stateToUrl(state: ExplorerPage.State): Option[(Path, QueryParameter)] = {
+  override def stateToUrl(state: State): Option[(Path, QueryParameter)] = {
     val stateQueryParam = Map("state" -> Router.queryEncoded(state.fractalImage))
     state.remoteFractal match {
       case Some(remoteFractal) if state.dirty => Some(s"/fractals/${remoteFractal.id}/explorer" -> stateQueryParam)
@@ -68,46 +68,46 @@ object ExplorerPage extends Page[ExplorerState] {
     }
   }
 
-  override def render(implicit global: Global, local: Local) =
+  def render(implicit context: Context) =
     Body()
       .child(Header())
       .child(InteractiveFractal.forImage(ExplorerState.fractalImage.composeLens(Entity.value)))
       .child(renderActionBar())
       .childOptional(saveDialog())
 
-  def renderActionBar()(implicit global: Global, local: Local): Node =
+  def renderActionBar()(implicit context: Context): Node =
     ButtonList()
       .classes("overlay-bottom-right", "padding")
-      .child(buttonSave(local.state.fractalImage))
-      .childOptional(local.state.remoteFractal.map(remoteFractal => buttonGoToDetails(remoteFractal, local.state.fractalImage)))
+      .child(buttonSave(context.local.fractalImage))
+      .childOptional(context.local.remoteFractal.map(remoteFractal => buttonGoToDetails(remoteFractal, context.local.fractalImage)))
       .child(Button.icon(Icons.download, Actions.openSaveToDiskModal))
       .child(buttonResetViewport())
 
   def buttonGoToDetails(
       remoteFractal: WithId[FractalImageEntity],
       currentFractal: FractalImageEntity
-  )(implicit global: Global, local: Local) =
+  )(implicit context: Context) =
     Link(Links.detailsState(remoteFractal, currentFractal))
       .classes("button", "is-rounded")
       .child(Icons.icon(Icons.edit))
 
-  def buttonResetViewport()(implicit global: Global, local: Local) =
-    local.state.remoteFractal match {
+  def buttonResetViewport()(implicit context: Context) =
+    context.local.remoteFractal match {
       case Some(remoteFractal) => Button.icon(Icons.undo, SnabbdomUtil.modify(ExplorerState.viewport.set(remoteFractal.entity.value.viewport)))
       case None                => Button.icon(Icons.undo, SnabbdomUtil.noop).boolAttr("disabled", true)
     }
 
   def buttonSave(
       fractalImage: FractalImageEntity
-  )(implicit global: Global, local: Local) =
+  )(implicit context: Context) =
     Button
       .icon(Icons.snapshot, Actions.saveSnapshot(fractalImage))
       .classes("is-primary", "is-rounded")
 
-  def saveDialog()(implicit global: Global, local: Local): Option[Node] =
-    local.state.saveModal.map { params =>
+  def saveDialog()(implicit context: Context): Option[Node] =
+    context.local.saveModal.map { params =>
       val lensParams     = ExplorerState.saveModal.composeLens(LenseUtils.unsafe(monocle.std.all.some[SaveFractalDialog]))
-      val downloadAction = Actions.saveToDisk(local.state.fractalImage.value.copy(antiAliase = params.antiAliase), params.dimensions)
+      val downloadAction = Actions.saveToDisk(context.local.fractalImage.value.copy(antiAliase = params.antiAliase), params.dimensions)
 
       Modal(closeAction = Actions.closeSaveToDiskModal)(
         Node("div")

@@ -2,13 +2,12 @@ package nutria.frontend.pages
 package common
 
 import nutria.api.User
-import nutria.frontend.Page.{Global, Local}
 import nutria.frontend._
 import nutria.frontend.util.SnabbdomUtil
 import snabbdom.Node
 
 object Header {
-  def apply()(implicit global: Global, local: Local[PageState]): Node = {
+  def apply()(implicit context: Context[PageState]): Node = {
     Node("nav.navbar")
       .attr("role", "navigation")
       .attr("aria-label", "main navigation")
@@ -19,7 +18,7 @@ object Header {
       )
       .child(
         Node("div.navbar-menu")
-          .`class`("is-active", global.state.navbarExpanded)
+          .`class`("is-active", context.global.navbarExpanded)
           .child(
             Node("div.navbar-start")
               .child(
@@ -39,7 +38,7 @@ object Header {
                   .text("FAQ")
               )
               .childOptional(
-                global.state.user.map(
+                context.global.user.map(
                   user =>
                     Link
                       .async(s"/user/${user.id}/gallery", Links.userGalleryState(user.id))
@@ -48,16 +47,16 @@ object Header {
                 )
               )
               .childOptional(
-                global.state.user.map(
+                context.global.user.map(
                   _ =>
                     Link
-                      .async("/templates", TemplateGalleryState.load(global.state))
+                      .async("/templates", TemplateGalleryState.load(context.global))
                       .classes("navbar-item")
                       .text("My Templates")
                 )
               )
               .childOptional(
-                global.state.user.map(
+                context.global.user.map(
                   user =>
                     Link(ProfileState(user))
                       .classes("navbar-item")
@@ -70,13 +69,13 @@ object Header {
                     .async("/admin", AdminState.initial())
                     .classes("navbar-item")
                     .text("Admin")
-                ).filter(_ => global.state.user.exists(_.admin))
+                ).filter(_ => context.global.user.exists(_.admin))
               )
           )
           .child(
             Node("div.navbar-end")
               .child(
-                global.state.user match {
+                context.global.user match {
                   case Some(user) => logoutItem(user)
                   case None       => loginItem
                 }
@@ -114,21 +113,21 @@ object Header {
           .text("Nutria")
       )
 
-  private def burgerMenu()(implicit global: Global) =
+  private def burgerMenu()(implicit context: Context[_]) =
     Node("a.navbar-burger.burger")
-      .event("click", SnabbdomUtil.modify[GlobalState](_.copy(navbarExpanded = !global.state.navbarExpanded)))
-      .`class`("is-active", global.state.navbarExpanded)
+      .event("click", SnabbdomUtil.modifyGlobal(GlobalState.navbarExpanded.modify(!_)))
+      .`class`("is-active", context.global.navbarExpanded)
       .attr("aria-label", "menu")
       .attr("aria-expanded", "false")
       .child(Node("span").attr("aria-hidden", "true"))
       .child(Node("span").attr("aria-hidden", "true"))
       .child(Node("span").attr("aria-hidden", "true"))
 
-  private def loginItem(implicit local: Local[PageState]) =
+  private def loginItem(implicit context: Context[PageState]) =
     Node("div.navbar-item")
       .child(
         Node("a.button.is-rounded")
-          .attr("href", loginHref(local.state))
+          .attr("href", loginHref(context.local))
           .child(Icons.icon(Icons.login))
           .child(Node("span").text("Log in"))
       )

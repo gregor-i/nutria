@@ -1,7 +1,6 @@
 package nutria.frontend
 
 import nutria.frontend.service.UserService
-import nutria.frontend.util.Updatable
 import org.scalajs.dom
 import org.scalajs.dom.Element
 import snabbdom.{Snabbdom, SnabbdomFacade, VNode}
@@ -37,9 +36,8 @@ class NutriaApp(container: Element) extends ExecutionContext {
 
     val t1 = System.currentTimeMillis()
 
-    val stateUpdatable  = Updatable[PageState, PageState](state, renderState(globalState, _))
-    val globalUpdatable = Updatable[GlobalState, GlobalState](globalState, renderState(_, state))
-    val ui              = Pages.ui(globalUpdatable, stateUpdatable).toVNode
+    val context = Context(state, globalState, renderState)
+    val ui      = Pages.ui(context).toVNode
 
     val t2 = System.currentTimeMillis()
 

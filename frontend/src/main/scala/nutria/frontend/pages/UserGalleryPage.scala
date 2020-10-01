@@ -29,12 +29,12 @@ object UserGalleryPage extends Page[UserGalleryState] {
 
   }
 
-  override def render(implicit global: Global, local: Local) =
+  def render(implicit context: Context) =
     Body()
       .child(Header())
       .child(
         Link
-          .async("/new-fractal", CreateNewFractalState.load(global.state))
+          .async("/new-fractal", CreateNewFractalState.load(context.global))
           .pipe(Header.fab)
           .child(Icons.icon(Icons.plus))
       )
@@ -60,7 +60,7 @@ object UserGalleryPage extends Page[UserGalleryState] {
 
   def renderFractalTile(
       fractal: WithId[FractalImageEntity]
-  )(implicit global: Global, local: Local): Node =
+  )(implicit context: Context): Node =
     Node("article.fractal-tile.is-relative")
       .child(
         Link(Links.detailsState(fractal))

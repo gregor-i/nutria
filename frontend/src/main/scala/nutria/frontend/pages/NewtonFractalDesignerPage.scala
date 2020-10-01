@@ -48,7 +48,7 @@ object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
       )
     )
 
-  override def render(implicit global: Global, local: Local): Node =
+  def render(implicit context: Context): Node =
     Body()
       .child(Header())
       .child(
@@ -57,13 +57,13 @@ object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
           .child(inputs())
       )
 
-  private def fractalTile()(implicit local: Local) =
+  private def fractalTile()(implicit context: Context) =
     Node("div.fractal-tile-list")
       .child {
         Node("div.fractal-tile")
           .style("height", Dimensions.preview.height.toString + "px")
           .style("width", Dimensions.preview.width.toString + "px")
-          .child(AnimatedFractalTile(fractalImageOverTime(local.state)))
+          .child(AnimatedFractalTile(fractalImageOverTime(context.local)))
       }
 
   private def fractalImageOverTime(state: State): LazyList[FractalImage] =
@@ -77,7 +77,7 @@ object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
         gamma = state.gamma
       )
 
-  private def inputs()(implicit local: Local) =
+  private def inputs()(implicit context: Context) =
     Node("div.section")
       .child(
         Form.forLens(

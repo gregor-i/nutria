@@ -11,6 +11,8 @@ object Links {
   def galleryState(page: Int = 1): Future[GalleryState] =
     for {
       publicFractals <- FractalService.listPublic()
+      _ = println("fractals loaded")
+      _ = println(GalleryState(publicFractals = publicFractals, page = page))
     } yield GalleryState(publicFractals = publicFractals, page = page)
 
   def userGalleryState(userId: String, page: Int = 1): Future[UserGalleryState] =

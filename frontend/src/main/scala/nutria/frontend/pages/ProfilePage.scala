@@ -22,26 +22,26 @@ object ProfilePage extends Page[ProfileState] {
   override def stateToUrl(state: ProfilePage.State): Option[(Path, QueryParameter)] =
     Some(s"/user/profile" -> Map.empty)
 
-  override def render(implicit global: Global, local: Local): Node =
+  def render(implicit context: Context): Node =
     Body()
       .child(Header())
       .child(content())
       .child(Footer())
 
-  def content()(implicit global: Global, local: Local) =
+  def content()(implicit context: Context) =
     Node("div.container")
       .child(
         Node("section.section")
           .child(Node("h1.title.is-1").text("User Profile"))
-          .child(Node("h2.subtitle").text("ID: " + local.state.about.id))
+          .child(Node("h2.subtitle").text("ID: " + context.local.about.id))
       )
       .child(
         Node("section.section").children(
           Node("h4.title.is-4").text("Saved information from Google:"),
           Form
-            .readonlyStringInput("Google User Id", local.state.about.googleUserId.getOrElse("<None>")),
-          Form.readonlyStringInput("Name", local.state.about.name),
-          Form.readonlyStringInput("Email", local.state.about.email)
+            .readonlyStringInput("Google User Id", context.local.about.googleUserId.getOrElse("<None>")),
+          Form.readonlyStringInput("Name", context.local.about.name),
+          Form.readonlyStringInput("Email", context.local.about.email)
         )
       )
       .child(
@@ -51,7 +51,7 @@ object ProfilePage extends Page[ProfileState] {
               .child(
                 Node("p.control")
                   .child(
-                    Button("Delete profile", Icons.delete, Actions.deleteUser(local.state.about.id))
+                    Button("Delete profile", Icons.delete, Actions.deleteUser(context.local.about.id))
                       .classes("is-danger")
                   )
               )
