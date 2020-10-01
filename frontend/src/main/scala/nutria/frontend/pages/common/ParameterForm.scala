@@ -2,7 +2,6 @@ package nutria.frontend.pages.common
 
 import monocle.Lens
 import nutria.core._
-import nutria.frontend.GlobalState
 import nutria.frontend.util.{LenseUtils, Updatable}
 import snabbdom.Node
 

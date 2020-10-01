@@ -10,17 +10,20 @@ import snabbdom.Node
 import scala.util.chaining._
 
 object InteractiveFractal {
-  def forImage[S](lens: Lens[S, FractalImage])(implicit globalState: GlobalState, updatable: Updatable[S, S]): Node =
-    apply(lens.composeLens(FractalImage.viewport), lens.get(updatable.state))
+  def forImage[S](lens: Lens[S, FractalImage])(implicit updatable: Updatable[S, S]): Node =
+    apply(image = lens.get(updatable.state), updatable = Updatable.composeLens(updatable, lens.composeLens(FractalImage.viewport)))
 
-  def forTemplate[S](lens: Lens[S, FractalTemplate])(implicit globalState: GlobalState, updatable: Updatable[S, S]): Node =
-    apply(lens.composeLens(FractalTemplate.exampleViewport), lens.get(updatable.state).pipe(FractalImage.fromTemplate))
+  def forTemplate[S](lens: Lens[S, FractalTemplate])(implicit updatable: Updatable[S, S]): Node =
+    apply(
+      image = lens.get(updatable.state).pipe(FractalImage.fromTemplate),
+      updatable = Updatable.composeLens(updatable, lens.composeLens(FractalTemplate.exampleViewport))
+    )
 
-  private def apply[S](lensViewport: Lens[S, Viewport], image: FractalImage)(implicit globalState: GlobalState, updatable: Updatable[S, S]): Node =
+  private def apply(image: FractalImage, updatable: Updatable[Viewport, Viewport]): Node =
     Node("div.interaction-panel")
-      .events(ExplorerEvents.canvasMouseEvents(lensViewport))
-      .events(ExplorerEvents.canvasWheelEvent(lensViewport))
-      .events(ExplorerEvents.canvasTouchEvents(lensViewport))
+      .events(ExplorerEvents.canvasMouseEvents(updatable))
+      .events(ExplorerEvents.canvasWheelEvent(updatable))
+      .events(ExplorerEvents.canvasTouchEvents(updatable))
       .child(
         Node("canvas")
           .hooks(CanvasHooks(image))

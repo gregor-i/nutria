@@ -4,7 +4,6 @@ package common
 import monocle.Lens
 import nutria.api.User
 import nutria.frontend._
-import nutria.frontend.pages.{AdminState, DocumentationState, ProfileState, TemplateGalleryState}
 import nutria.frontend.util.{SnabbdomUtil, Updatable}
 import snabbdom.Node
 

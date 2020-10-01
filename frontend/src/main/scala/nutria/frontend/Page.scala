@@ -6,8 +6,7 @@ import snabbdom.Node
 import scala.reflect.ClassTag
 
 abstract class Page[S <: PageState: ClassTag] extends ExecutionContext {
-  type State  = S
-  type Update = PageState => Unit
+  type State = S
 
   def stateFromUrl: PartialFunction[(GlobalState, Router.Path, Router.QueryParameter), PageState]
 
