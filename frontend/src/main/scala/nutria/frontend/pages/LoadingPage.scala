@@ -10,7 +10,7 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 @Lenses
-case class LoadingState(loading: Future[PageState]) extends PageState
+case class LoadingState(process: Future[PageState]) extends PageState
 
 object LoadingPage extends Page[LoadingState] {
   def stateFromUrl = PartialFunction.empty
@@ -32,15 +32,13 @@ object LoadingPage extends Page[LoadingState] {
             )
           )
       )
+      .key(local.state.process.hashCode())
       .hook(
         "insert",
         Snabbdom.hook { _ =>
-          local.state.loading.onComplete {
+          local.state.process.onComplete {
             case Success(newState) => local.update(newState)
-            case Failure(exception) =>
-              local.update(
-                ErrorState(s"unexpected problem while initializing app: ${exception.getMessage}")
-              )
+            case Failure(error)    => local.update(ErrorState.asyncLoadError(error))
           }
         }
       )

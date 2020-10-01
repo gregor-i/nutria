@@ -10,7 +10,8 @@ import snabbdom._
 case class ErrorState(message: String) extends PageState
 
 object ErrorState {
-  val unauthorized = ErrorState("You are not logged in")
+  val unauthorized                     = ErrorState("You are not logged in")
+  def asyncLoadError(error: Throwable) = ErrorState(s"unexpected problem while initializing app: ${error.getMessage}")
 }
 
 object ErrorPage extends Page[ErrorState] {

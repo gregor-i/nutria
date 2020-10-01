@@ -16,7 +16,7 @@ class GenerateHTMLSpec extends AnyFunSuite {
   Polyfil.init()
 
   test("generate the static html file") {
-    LoadingState(loading = Future.never)
+    LoadingState(process = Future.never)
       .pipe(state => Pages.ui(GlobalState.initial, Updatable(state, _ => ())))
       .toVNode
       .pipe(SnabbdomToHtml.apply)

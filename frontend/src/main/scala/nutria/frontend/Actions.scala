@@ -253,6 +253,7 @@ object Actions extends ExecutionContext {
             for {
               _     <- UserService.delete(userId)
               state <- Links.greetingState()
+              // todo: update global (user = None) and local
             } yield state
           }
         }
