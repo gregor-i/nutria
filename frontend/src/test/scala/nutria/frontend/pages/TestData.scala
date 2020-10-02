@@ -2,8 +2,9 @@ package nutria.frontend.pages
 
 import java.time.{ZoneOffset, ZonedDateTime}
 
+import mathParser.complex.Complex
 import nutria.api.{Entity, User, WithId}
-import nutria.core.{Examples, FractalImage, IntParameter, Viewport}
+import nutria.core.{ComplexParameter, Examples, FractalImage, IntParameter, Viewport}
 import nutria.frontend.{Context, GlobalState, PageState}
 
 import scala.concurrent.Future
@@ -37,9 +38,15 @@ object TestData {
     ("Details-Diverging", DetailsState(remoteFractal = fractalEntity, fractalToEdit = fractalEntity), noUser),
     ("Template-Editor", TemplateEditorState.initial, user),
     (
-      "Template-Editor-newParameter",
+      "Template-Editor-new-parameter-Int",
       TemplateEditorState.initial
         .copy(newParameter = Some(IntParameter("name", description = "description", value = 5))),
+      user
+    ),
+    (
+      "Template-Editor-new-parameter-Complex",
+      TemplateEditorState.initial
+        .copy(newParameter = Some(ComplexParameter("name", description = "description", value = Complex(5, 2)))),
       user
     )
   )

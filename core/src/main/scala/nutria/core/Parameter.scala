@@ -1,6 +1,7 @@
 package nutria.core
 
 import io.circe.Codec
+import mathParser.complex.Complex
 import monocle.Lens
 import monocle.macros.{GenLens, GenPrism, Lenses}
 import nutria.CirceCodec
@@ -15,6 +16,8 @@ sealed trait Parameter {
 case class IntParameter(name: String, description: String = "", value: Int) extends Parameter
 @Lenses
 case class FloatParameter(name: String, description: String = "", value: Double) extends Parameter
+@Lenses
+case class ComplexParameter(name: String, description: String = "", value: Complex) extends Parameter
 @Lenses
 case class RGBAParameter(name: String, description: String = "", value: RGBA) extends Parameter
 @Lenses
@@ -35,6 +38,7 @@ object Parameter extends CirceCodec {
     {
       case p: IntParameter             => IntParameter.name.set(newName)(p)
       case p: FloatParameter           => FloatParameter.name.set(newName)(p)
+      case p: ComplexParameter         => ComplexParameter.name.set(newName)(p)
       case p: RGBAParameter            => RGBAParameter.name.set(newName)(p)
       case p: ColorGradientParameter   => ColorGradientParameter.name.set(newName)(p)
       case p: FunctionParameter        => FunctionParameter.name.set(newName)(p)
@@ -47,6 +51,7 @@ object Parameter extends CirceCodec {
     {
       case p: IntParameter             => IntParameter.description.set(newDescription)(p)
       case p: FloatParameter           => FloatParameter.description.set(newDescription)(p)
+      case p: ComplexParameter         => ComplexParameter.description.set(newDescription)(p)
       case p: RGBAParameter            => RGBAParameter.description.set(newDescription)(p)
       case p: ColorGradientParameter   => ColorGradientParameter.description.set(newDescription)(p)
       case p: FunctionParameter        => FunctionParameter.description.set(newDescription)(p)
@@ -57,6 +62,7 @@ object Parameter extends CirceCodec {
 
   val prismIntParameter             = GenPrism[Parameter, IntParameter]
   val prismFloatParameter           = GenPrism[Parameter, FloatParameter]
+  val prismComplexParameter         = GenPrism[Parameter, ComplexParameter]
   val prismRGBAParameter            = GenPrism[Parameter, RGBAParameter]
   val prismColorGradientParameter   = GenPrism[Parameter, ColorGradientParameter]
   val prismFunctionParameter        = GenPrism[Parameter, FunctionParameter]
@@ -73,15 +79,17 @@ object Parameter extends CirceCodec {
       case index => list.updated(index, newParameter)
     }
 
-  implicit val codec: Codec[Parameter] = semiauto.deriveConfiguredCodec
+  implicit val complexCodec: Codec[Complex] = semiauto.deriveConfiguredCodec
+  implicit val codec: Codec[Parameter]      = semiauto.deriveConfiguredCodec
 
   implicit val ordering: Ordering[Parameter] = Ordering.by {
     case p: IntParameter             => (1, p.name)
     case p: FloatParameter           => (2, p.name)
-    case p: RGBAParameter            => (3, p.name)
-    case p: ColorGradientParameter   => (4, p.name)
-    case p: FunctionParameter        => (5, p.name)
-    case p: InitialFunctionParameter => (6, p.name)
-    case p: NewtonFunctionParameter  => (7, p.name)
+    case p: ComplexParameter         => (3, p.name)
+    case p: RGBAParameter            => (4, p.name)
+    case p: ColorGradientParameter   => (5, p.name)
+    case p: FunctionParameter        => (6, p.name)
+    case p: InitialFunctionParameter => (7, p.name)
+    case p: NewtonFunctionParameter  => (8, p.name)
   }
 }

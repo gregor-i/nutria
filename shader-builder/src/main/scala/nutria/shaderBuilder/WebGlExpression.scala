@@ -21,9 +21,17 @@ object FloatLiteral {
   def apply(d: Double): FloatLiteral = FloatLiteral(d.toFloat)
 }
 
+// todo: replace WebGlExpression[WebGlTypeFloat.type] with Float
 case class Vec2(a: WebGlExpression[WebGlTypeFloat.type], b: WebGlExpression[WebGlTypeFloat.type]) extends WebGlExpression[WebGlTypeVec2.type] {
   override val typeName: String = "vec2"
   override def toCode: String   = s"vec2(${a.toCode}, ${b.toCode})"
+}
+
+object Vec2 {
+  def apply(a: Double, b: Double): Vec2 = Vec2(
+    FloatLiteral(a.toFloat),
+    FloatLiteral(b.toFloat)
+  )
 }
 
 case class Vec3(

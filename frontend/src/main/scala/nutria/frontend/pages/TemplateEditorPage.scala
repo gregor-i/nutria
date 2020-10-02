@@ -1,5 +1,6 @@
 package nutria.frontend.pages
 
+import mathParser.complex.Complex
 import monocle.Lens
 import monocle.macros.Lenses
 import nutria.api.{Entity, FractalTemplateEntity, FractalTemplateEntityWithId}
@@ -160,6 +161,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
         options = Seq(
           "Integer"        -> IntParameter("parameter_name", value = 0),
           "Float"          -> FloatParameter("parameter_name", value = 0.0),
+          "Complex"        -> ComplexParameter("parameter_name", value = Complex(0.0, 0.0)),
           "Color"          -> RGBAParameter("parameter_name", value = RGB.white.withAlpha()),
           "Color Gradient" -> ColorGradientParameter("parameter_name", value = Seq(RGB.white.withAlpha(), RGB.black.withAlpha())),
           "Function1 f: (lambda) => C" ->

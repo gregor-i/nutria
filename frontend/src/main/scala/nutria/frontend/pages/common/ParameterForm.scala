@@ -34,6 +34,10 @@ object ParameterForm {
         val valueLens = lens.composePrism(Parameter.prismFloatParameter).composeLens(FloatParameter.value).pipe(LenseUtils.unsafeOptional)
         Form.forLens(p.name, p.description, valueLens, actions)
 
+      case p: ComplexParameter =>
+        val valueLens = lens.composePrism(Parameter.prismComplexParameter).composeLens(ComplexParameter.value).pipe(LenseUtils.unsafeOptional)
+        Form.forLens(p.name, p.description, valueLens, actions)
+
       case p: RGBAParameter =>
         val valueLens = lens.composePrism(Parameter.prismRGBAParameter).composeLens(RGBAParameter.value).pipe(LenseUtils.unsafeOptional)
         Form.forLens(p.name, p.description, valueLens, actions)

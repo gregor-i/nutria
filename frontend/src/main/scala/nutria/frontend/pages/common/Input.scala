@@ -1,9 +1,9 @@
 package nutria.frontend.pages.common
 
-import mathParser.complex.ComplexLanguage
+import mathParser.complex.{Complex, ComplexLanguage}
 import nutria.core.languages.StringFunction
 import nutria.core.{RGB, RGBA}
-import nutria.frontend.util.Updatable
+import nutria.frontend.util.{ComplexLenses, Updatable}
 import org.scalajs.dom.raw.HTMLInputElement
 import snabbdom.{Node, Snabbdom}
 
@@ -76,6 +76,20 @@ object Input {
                 element.classList.add("is-danger")
             }
           }
+        )
+
+  implicit val complexInput: Input[Complex] =
+    updatable =>
+      Node("div.field-body")
+        .child(
+          doubleInput
+            .node(Updatable.composeLens(updatable, ComplexLenses.real))
+            .classes("field")
+        )
+        .child(
+          doubleInput
+            .node(Updatable.composeLens(updatable, ComplexLenses.imag))
+            .classes("field")
         )
 
   implicit val colorInput: Input[RGBA] =
