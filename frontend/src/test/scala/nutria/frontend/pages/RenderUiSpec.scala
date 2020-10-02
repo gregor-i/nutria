@@ -1,50 +1,36 @@
 package nutria.frontend.pages
 
-import facades.{Fs, HtmlFormatter, SnabbdomToHtml}
+import facades.{Fs, SnabbdomToHtml}
 import nutria.frontend._
-import nutria.frontend.util.Updatable
 import nutria.macros.StaticContent
 import org.scalatest.funsuite.AnyFunSuite
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 import scala.scalajs.js
-import scala.util.{Failure, Success}
 import scala.util.chaining._
 
 class RenderUiSpec extends AnyFunSuite {
   Polyfil.init()
 
   for {
-    (name, pageState, globalState) <- TestData.states
+    (name, local, global) <- TestData.states
   } stateRenderingTest(s"Renders $name")(
-    state = pageState,
-    globalState = globalState,
+    context = NoOpContext(local = local, global = global),
     fileName = s"./temp/${this.getClass.getSimpleName}/${name}.html"
   )
 
-  def stateRenderingTest(testName: String)(state: PageState, globalState: GlobalState, fileName: String): Unit =
+  def stateRenderingTest(testName: String)(context: Context[_ <: PageState], fileName: String) =
     test(testName) {
-      state
-        .pipe(state => Pages.ui(globalState, Updatable(state, _ => ())))
+      Pages
+        .ui(context)
         .toVNode
         .pipe(SnabbdomToHtml.apply)
         .pipe(withFixture)
-        //        .pipe(HtmlFormatter.render)
         .pipe(write(fileName, _))
-        .tap(_.onComplete {
-          case Success(_)  => ()
-          case Failure(ex) => println(ex)
-        })
     }
 
-  private def write(fileName: String, content: String): Future[Unit] = {
-    for {
-      _ <- Fs.promises
-        .mkdir(fileName.reverse.dropWhile(_ != '/').reverse, js.Dynamic.literal(recursive = true))
-        .toFuture
-      _ <- Fs.promises.writeFile(fileName, content).toFuture
-    } yield ()
+  private def write(fileName: String, content: String): Unit = {
+    Fs.mkdirSync(fileName.reverse.dropWhile(_ != '/').reverse, js.Dynamic.literal(recursive = true))
+    Fs.writeFileSync(fileName, content)
   }
 
   private def withFixture(html: String): String =

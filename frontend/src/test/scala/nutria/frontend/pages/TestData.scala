@@ -4,7 +4,7 @@ import java.time.{ZoneOffset, ZonedDateTime}
 
 import nutria.api.{Entity, User, WithId}
 import nutria.core.{Examples, FractalImage, IntParameter, Viewport}
-import nutria.frontend.{GlobalState, PageState}
+import nutria.frontend.{Context, GlobalState, PageState}
 
 import scala.concurrent.Future
 

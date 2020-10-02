@@ -5,10 +5,10 @@ import nutria.api.User
 import nutria.frontend.util.Updatable
 
 @Lenses
-case class GlobalState(user: Option[User], navbarExpanded: Boolean)
+case class GlobalState(user: Option[User], navbarExpanded: Boolean = false)
 
 object GlobalState {
-  val initial: GlobalState = GlobalState(user = None, navbarExpanded = false)
+  val initial: GlobalState = GlobalState(user = None)
 }
 
 trait PageState

@@ -1,41 +1,30 @@
 package nutria.frontend.pages
 
 import facades.{Fs, HtmlFormatter, SnabbdomToHtml}
-import nutria.frontend.util.Updatable
-import nutria.frontend.{GlobalState, PageState, Pages}
+import nutria.frontend.{GlobalState, Pages}
 import nutria.macros.StaticContent
 import org.scalatest.funsuite.AnyFunSuite
 
 import scala.concurrent.Future
 import scala.scalajs.js
-import scala.util.{Failure, Success}
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.chaining._
 
 class GenerateHTMLSpec extends AnyFunSuite {
   Polyfil.init()
 
   test("generate the static html file") {
-    LoadingState(process = Future.never)
-      .pipe(state => Pages.ui(GlobalState.initial, Updatable(state, _ => ())))
+    Pages
+      .ui(NoOpContext(local = LoadingState(process = Future.never), global = GlobalState.initial))
       .toVNode
       .pipe(SnabbdomToHtml.apply)
       .pipe(withFixture)
       .pipe(HtmlFormatter.render)
       .pipe(write("frontend/src/main/html/nutria.html", _))
-      .tap(_.onComplete {
-        case Success(_)  => ()
-        case Failure(ex) => println(ex)
-      })
   }
 
-  private def write(fileName: String, content: String): Future[Unit] = {
-    for {
-      _ <- Fs.promises
-        .mkdir(fileName.reverse.dropWhile(_ != '/').reverse, js.Dynamic.literal(recursive = true))
-        .toFuture
-      _ <- Fs.promises.writeFile(fileName, content).toFuture
-    } yield ()
+  private def write(fileName: String, content: String): Unit = {
+    Fs.mkdirSync(fileName.reverse.dropWhile(_ != '/').reverse, js.Dynamic.literal(recursive = true))
+    Fs.writeFileSync(fileName, content)
   }
 
   private def withFixture(html: String): String =

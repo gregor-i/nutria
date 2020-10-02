@@ -7,10 +7,6 @@ import scala.scalajs.js.annotation.JSImport
 @js.native
 @JSImport("fs", JSImport.Namespace)
 object Fs extends js.Object {
-  def promises: FsPromises = js.native
-}
-
-trait FsPromises extends js.Object {
-  def writeFile(fileName: String, contenet: String): Promise[_]
-  def mkdir(folderName: String, opts: js.Object): Promise[_]
+  def writeFileSync(fileName: String, content: String): Unit = js.native
+  def mkdirSync(folderName: String, opts: js.Object): Unit   = js.native
 }
