@@ -35,6 +35,6 @@ object Context {
       def global: GlobalState                 = globalState
       def update(newState: GlobalState): Unit = renderState(newState, pageState)
 
-      def update(newGlobalState: GlobalState, newPageState: PageState): Unit = renderState(globalState, newPageState)
+      def update(newGlobalState: GlobalState, newPageState: PageState): Unit = renderState(newGlobalState, newPageState)
     }
 }
