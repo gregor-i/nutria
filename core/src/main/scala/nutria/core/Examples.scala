@@ -121,6 +121,15 @@ object Examples {
     exampleViewport = Viewport.aroundZero
   )
 
+  val colorfulFractalNoise = FractalTemplate(
+    code = StaticContent("shader-builder/src/main/glsl/colorful_fractal_noise.glsl"),
+    parameters = Vector(
+      IntParameter(name = "octaves", value = 8),
+      FloatParameter(name = "time", value = 0)
+    ),
+    exampleViewport = Viewport.aroundZero.zoomOut(zoomFactor = 0.3)
+  )
+
   val allNamed: Seq[(String, FractalTemplate)] = Seq(
     ("timeEscape", timeEscape),
     ("gaussianInteger", gaussianInteger),
@@ -130,7 +139,8 @@ object Examples {
     ("sierpinskiTriangle", sierpinskiTriangle),
     ("lyapunovFractal", lyapunovFractal),
     ("kochSnowflake", kochSnowflake),
-    ("novaFractal", novaFractal)
+    ("novaFractal", novaFractal),
+    ("colorfulFractalNoise", colorfulFractalNoise)
   )
 
   val all: Seq[FractalTemplate] = allNamed.map(_._2)

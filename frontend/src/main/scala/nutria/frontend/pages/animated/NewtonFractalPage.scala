@@ -1,5 +1,6 @@
 package nutria.frontend
 package pages
+package animated
 
 import mathParser.complex.Complex
 import monocle.Lens
@@ -10,7 +11,7 @@ import nutria.frontend.pages.common.{AnimatedFractalTile, Body, Form, Header}
 import snabbdom.Node
 
 @Lenses
-case class NewtonFractalDesignerState(
+case class NewtonFractalState(
     constant: Complex = Complex(1, 0),
     viewport: Viewport = Viewport.aroundZero.cover(Dimensions.preview.width, Dimensions.preview.height),
     numberOfRoots: Int = 3,
@@ -20,15 +21,15 @@ case class NewtonFractalDesignerState(
     gamma: Double
 ) extends PageState
 
-object NewtonFractalDesignerState {
+object NewtonFractalState {
   def real: Lens[Complex, Double] = GenLens[Complex](_.real)
   def imag: Lens[Complex, Double] = GenLens[Complex](_.imag)
 }
 
-object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
+object NewtonFractalPage extends Page[NewtonFractalState] {
   override def stateFromUrl: PartialFunction[(GlobalState, Path, QueryParameter), PageState] = {
-    case (_, "/newton-fractal-designer", params) =>
-      NewtonFractalDesignerState(
+    case (_, "/animated/newton-fractal", params) =>
+      NewtonFractalState(
         alpha = params.get("alpha").flatMap(_.toDoubleOption).getOrElse(0.05),
         beta = params.get("beta").flatMap(_.toDoubleOption).getOrElse(0.01),
         gamma = params.get("gamma").flatMap(_.toDoubleOption).getOrElse(0.995),
@@ -39,7 +40,7 @@ object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
 
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =
     Some(
-      "/newton-fractal-designer" -> Map(
+      "/animated/newton-fractal" -> Map(
         "alpha"         -> state.alpha.toString,
         "beta"          -> state.beta.toString,
         "gamma"         -> state.gamma.toString,
@@ -83,36 +84,36 @@ object NewtonFractalDesignePage extends Page[NewtonFractalDesignerState] {
         Form.forLens(
           "constant real",
           description = "real part of the integration constant",
-          lens = NewtonFractalDesignerState.constant.composeLens(NewtonFractalDesignerState.real)
+          lens = NewtonFractalState.constant.composeLens(NewtonFractalState.real)
         )
       )
       .child(
         Form.forLens(
           "constant imag",
           description = "imaginary part of the integration constant",
-          lens = NewtonFractalDesignerState.constant.composeLens(NewtonFractalDesignerState.imag)
+          lens = NewtonFractalState.constant.composeLens(NewtonFractalState.imag)
         )
       )
-      .child(Form.forLens("number of roots", description = "how many roots should be generated", lens = NewtonFractalDesignerState.numberOfRoots))
+      .child(Form.forLens("number of roots", description = "how many roots should be generated", lens = NewtonFractalState.numberOfRoots))
       .child(
         Form.forLens(
           "alpha",
           description = "parameter for random walk: how fast does the root change direction",
-          lens = NewtonFractalDesignerState.alpha
+          lens = NewtonFractalState.alpha
         )
       )
       .child(
-        Form.forLens("beta", description = "parameter for random walk: how fast does the root move foreward", lens = NewtonFractalDesignerState.beta)
+        Form.forLens("beta", description = "parameter for random walk: how fast does the root move foreward", lens = NewtonFractalState.beta)
       )
       .child(
         Form.forLens(
           "gamma",
           description = "parameter for random walk: how much are the roots bound to origin",
-          lens = NewtonFractalDesignerState.gamma
+          lens = NewtonFractalState.gamma
         )
       )
       .child(
         Form
-          .forLens("seed", description = "seed for the random number generation, needed for moving the roots", lens = NewtonFractalDesignerState.seed)
+          .forLens("seed", description = "seed for the random number generation, needed for moving the roots", lens = NewtonFractalState.seed)
       )
 }

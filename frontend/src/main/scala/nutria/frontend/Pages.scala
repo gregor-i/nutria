@@ -17,7 +17,8 @@ object Pages {
     TemplateEditorPage,
     TemplateGalleryPage,
     CreateNewFractalPage,
-    NewtonFractalDesignePage,
+    animated.NewtonFractalPage,
+    animated.ColorfulFractalNoisePage,
     AdminPage
   )
 
