@@ -23,7 +23,7 @@ object FragmentShaderSource {
        |${definitions(parameters)}
        |
        |#line 1
-       |${FragmentShaderSource.main(code)}
+       |${code}
        |
        |void main() {
        |${AntiAliase(antiAliase, "gl_FragColor")}
@@ -65,12 +65,6 @@ object FragmentShaderSource {
 
   def definitions(parameters: Vector[Parameter]): String =
     parameters.map(parameter).mkString("\n")
-
-  def main(code: String): String =
-    s"""vec4 main_template(const in vec2 p) {
-       |${code}
-       |  return vec4(0.0);
-       |}""".stripMargin
 
   def colorGradient(name: String, colors: Seq[RGBA]): String = {
 

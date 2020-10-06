@@ -13,7 +13,7 @@ object AntiAliase {
     s"""
        |vec2 pos = gl_FragCoord.xy / u_resolution;
        |vec2 p = u_view_O + pos.x * u_view_A + pos.y * u_view_B;
-       |${outputVar} = main_template(p);
+       |${outputVar} = pixel(p);
      """.stripMargin
 
   private def antiAliase(aaFactor: AntiAliase, outputVar: String) = {
@@ -29,7 +29,7 @@ object AntiAliase {
        |    vec2 aa_pos = pos + vec2(float(aa_x), float(aa_y)) * aa_factor + aa_offset;
        |    vec2 p = u_view_O + aa_pos.x * u_view_A + aa_pos.y * u_view_B;
        |
-       |    acc += main_template(p);
+       |    acc += pixel(p);
        |  }
        |}
        |
