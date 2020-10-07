@@ -1,41 +1,42 @@
 package nutria.staticRenderer
 
-import nutria.core.{Dimensions, FractalImage}
-import nutria.shaderBuilder.FractalRenderer
-import org.scalajs.dom.raw.WebGLRenderingContext
+import java.io.{File, FileWriter}
 
-import scala.concurrent.{ExecutionContext, Future}
-import scala.scalajs.js.Dynamic
-import scala.scalajs.js.typedarray.Uint8Array
+import nutria.core.{Dimensions, FractalImage}
+import nutria.shaderBuilder.FragmentShaderSource
+
+import scala.sys.process._
+import scala.util.{Failure, Success, Try, Using}
 
 object Renderer {
-  def renderToFile(fractalImage: FractalImage, dimensions: Dimensions, fileName: String)(implicit ex: ExecutionContext): Future[Unit] = {
-    val buffer = renderToBuffer(fractalImage, dimensions)
-    saveToFile(buffer, fileName, dimensions)
-  }
+  def renderToFile(fractalImage: FractalImage, dimensions: Dimensions, fileName: String): Try[Unit] = {
+    val fragFile = File.createTempFile("nutria", ".frag")
 
-  def saveToFile(buffer: Uint8Array, fileName: String, dimensions: Dimensions)(implicit ex: ExecutionContext): Future[Unit] =
-    Jimp
-      .read(
-        Dynamic.literal(
-          width = dimensions.width,
-          height = dimensions.height,
-          data = buffer
-        )
-      )
-      .toFuture
-      .map(_.write(fileName))
-
-  def renderToBuffer(fractalImage: FractalImage, dimensions: Dimensions): Uint8Array = {
-    val context = gl(dimensions.width, dimensions.height, Dynamic.literal())
-
-    FractalRenderer.render(fractalImage)(context) match {
-      case Right(_) =>
-        val buffer = new Uint8Array(dimensions.width * dimensions.height * 4)
-        context.readPixels(0, 0, dimensions.width, dimensions.height, WebGLRenderingContext.RGBA, WebGLRenderingContext.UNSIGNED_BYTE, buffer)
-        buffer
-      case Left(compileException) =>
-        throw compileException
+    Using(new FileWriter(fragFile)) { fw =>
+      fw.append(FragmentShaderSource.forImage(fractalImage))
+      fw.close()
     }
+
+    new File(fileName).getParentFile.mkdirs()
+
+    val responseCode = s"""
+       glslViewer ${fragFile.getAbsolutePath}
+        -e u_view_O,${fractalImage.viewport.origin._1},${fractalImage.viewport.origin._2}
+        -e u_view_A,${fractalImage.viewport.A._1},${fractalImage.viewport.A._2}
+        -e u_view_B,${fractalImage.viewport.B._1},${fractalImage.viewport.B._2}
+        -E screenshot,${fileName}
+        -w ${dimensions.width}
+        -h ${dimensions.height}
+        --headless
+        """
+      .filter(_ != '\n')
+      .!
+
+    fragFile.delete()
+
+    if (responseCode == 0)
+      Success(())
+    else
+      Failure(new Exception(s"response code not 0, but ${responseCode}"))
   }
 }

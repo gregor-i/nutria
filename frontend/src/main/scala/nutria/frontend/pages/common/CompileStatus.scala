@@ -1,7 +1,7 @@
 package nutria.frontend.pages.common
 
 import nutria.core.FractalTemplate
-import nutria.shaderBuilder.{CompileShaderException, FractalRenderer}
+import nutria.frontend.{CompileShaderException, FractalRenderer}
 import org.scalajs.dom
 import org.scalajs.dom.html.{Canvas, Element}
 import org.scalajs.dom.raw.WebGLRenderingContext

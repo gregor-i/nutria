@@ -1,4 +1,4 @@
-package nutria.shaderBuilder
+package nutria.frontend
 
 import org.scalajs.dom.raw.{WebGLProgram, WebGLRenderingContext, WebGLShader}
 

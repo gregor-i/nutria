@@ -8,8 +8,11 @@ import nutria.core.{DivergingSeries, _}
 import nutria.macros.StaticContent
 
 object FragmentShaderSource {
-  def apply(template: FractalTemplate, antiAliase: AntiAliase = 1): String =
+  def forTemplate(template: FractalTemplate, antiAliase: AntiAliase = 1): String =
     apply(template.code, template.parameters, antiAliase)
+
+  def forImage(image: FractalImage, antiAliase: AntiAliase = 1): String =
+    apply(image.template.code, image.appliedParameters, antiAliase)
 
   def apply(code: String, parameters: Vector[Parameter], antiAliase: AntiAliase): String = {
     s"""precision highp float;

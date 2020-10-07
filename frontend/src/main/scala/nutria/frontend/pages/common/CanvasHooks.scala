@@ -1,9 +1,8 @@
 package nutria.frontend.pages.common
 
 import nutria.core.FractalImage
-import nutria.frontend.ExecutionContext
+import nutria.frontend.{ExecutionContext, FractalRenderer}
 import nutria.frontend.util.AsyncUtil
-import nutria.shaderBuilder.FractalRenderer
 import org.scalajs.dom.html.Canvas
 import snabbdom.{Snabbdom, SnabbdomFacade}
 

@@ -1,16 +1,14 @@
-package nutria.shaderBuilder
+package nutria.frontend
 
-import nutria.core.{AntiAliase, FractalImage, FractalTemplate, Parameter, Viewport}
+import nutria.core.{FractalImage, FractalTemplate, Viewport}
 import nutria.macros.StaticContent
+import nutria.shaderBuilder._
 import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
 import org.scalajs.dom.raw.HTMLElement
-import org.scalajs.dom.webgl.Shader
-import org.scalajs.dom.webgl.Program
-import org.scalajs.dom.webgl.RenderingContext
 import org.scalajs.dom.raw.WebGLRenderingContext._
+import org.scalajs.dom.webgl.{Program, RenderingContext, Shader}
 
-import scala.scalajs.js
 import scala.scalajs.js.Dynamic
 
 object FractalRenderer {
@@ -43,12 +41,12 @@ object FractalRenderer {
   }
 
   def validateSource(fractalTemplate: FractalTemplate)(gl: RenderingContext): Either[CompileShaderException, Shader] =
-    compileFragmentShader(FragmentShaderSource(fractalTemplate.code, fractalTemplate.parameters, 1))(gl)
+    compileFragmentShader(FragmentShaderSource.forTemplate(fractalTemplate, 1))(gl)
 
   def render(image: FractalImage)(gl: RenderingContext): Either[WebGlException, Program] =
     for {
       vertexShader   <- compileVertexShader(StaticContent("shader-builder/src/main/glsl/vertex_shader.glsl"))(gl)
-      fragmentShader <- compileFragmentShader(FragmentShaderSource(image.template.code, image.appliedParameters, image.antiAliase))(gl)
+      fragmentShader <- compileFragmentShader(FragmentShaderSource.forImage(image, image.antiAliase))(gl)
       program        <- linkProgram(vertexShader, fragmentShader)(gl)
       _              <- draw(image.viewport, program)(gl)
     } yield program

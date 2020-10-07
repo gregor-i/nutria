@@ -12,7 +12,18 @@ resolvers in ThisBuild += Resolver.bintrayRepo("gregor-i", "maven")
 // projects
 lazy val nutria = project
   .in(file("."))
-  .aggregate(macros.js, macros.jvm, core.js, core.jvm, `shader-builder`, frontend, `service-worker`, backend, `static-renderer`)
+  .aggregate(
+    macros.js,
+    macros.jvm,
+    core.js,
+    core.jvm,
+    `shader-builder`.js,
+    `shader-builder`.jvm,
+    frontend,
+    `service-worker`,
+    backend,
+    `static-renderer`
+  )
 
 lazy val macros = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -42,19 +53,16 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0"
   )
 
-lazy val `shader-builder` = project
+lazy val `shader-builder` = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
   .in(file("shader-builder"))
-  .dependsOn(core.js)
-  .enablePlugins(ScalaJSPlugin)
-  .settings(
-    scalaJsDom,
-    scalatest
-  )
+  .dependsOn(core)
+  .settings(scalatest)
 
 val frontend = project
   .in(file("frontend"))
   .dependsOn(core.js)
-  .dependsOn(`shader-builder`)
+  .dependsOn(`shader-builder`.js)
   .enablePlugins(ScalaJSPlugin)
   .settings(
     scalaJSUseMainModuleInitializer := true,
@@ -99,13 +107,7 @@ lazy val backend = project
 
 val `static-renderer` = project
   .in(file("static-renderer"))
-  .dependsOn(`shader-builder`)
-  .enablePlugins(ScalaJSPlugin)
-  .dependsOn(core.js, frontend)
-  .settings(
-    scalaJSUseMainModuleInitializer := true,
-    scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) }
-  )
+  .dependsOn(`shader-builder`.jvm)
   .settings(scalatest)
 
 // tasks

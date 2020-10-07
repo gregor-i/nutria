@@ -2,8 +2,7 @@ package nutria.staticRenderer
 
 import nutria.core._
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.util.Try
 import scala.util.chaining._
 
 object RenderAssets {
@@ -18,7 +17,7 @@ object RenderAssets {
   private def imgFolder(src: String): String =
     s"backend/public/img/$src"
 
-  private def favicon(): Future[Unit] = {
+  private def favicon(): Try[Unit] = {
     val program = Examples.outerDistance
       .pipe(
         FractalTemplate.applyParameters(_)(
@@ -47,7 +46,7 @@ object RenderAssets {
     Renderer.renderToFile(image, Dimensions.favicon, imgFolder("icon.png"))
   }
 
-  private def example_DivergingSeries(): Future[Unit] = Renderer.renderToFile(
+  private def example_DivergingSeries(): Try[Unit] = Renderer.renderToFile(
     fractalImage = FractalImage(
       template = Examples.timeEscape,
       viewport = Viewport.mandelbrot,
@@ -57,7 +56,7 @@ object RenderAssets {
     fileName = imgFolder("example_DivergingSeries.png")
   )
 
-  private def example_NewtonIteration(): Future[Unit] =
+  private def example_NewtonIteration(): Try[Unit] =
     Renderer.renderToFile(
       fractalImage = FractalImage(
         template = Examples.newtonIteration,
