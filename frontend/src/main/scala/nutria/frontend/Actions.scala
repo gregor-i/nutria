@@ -46,13 +46,6 @@ object Actions extends ExecutionContext {
       )
     }
 
-  def editFractal(fractal: WithId[FractalImageEntity])(implicit context: Context[PageState]): Eventlistener =
-    event { _ =>
-      context.update(
-        Links.explorerStateWithModal(fractal)
-      )
-    }
-
   def togglePublishedImage(fractal: WithId[FractalImageEntity])(implicit context: Context[UserGalleryState]): Eventlistener =
     event { _ =>
       onlyLoggedIn {

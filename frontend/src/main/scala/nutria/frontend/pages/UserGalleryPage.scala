@@ -61,10 +61,7 @@ object UserGalleryPage extends Page[UserGalleryState] {
     Node("article.fractal-tile.is-relative")
       .child(
         Link(Links.explorerState(fractal))
-          .child(
-            FractalTile(fractal.entity.value, Dimensions.thumbnail)
-              .event("click", Actions.editFractal(fractal))
-          )
+          .child(FractalTile(fractal.entity.value, Dimensions.thumbnail))
       )
       .child(
         Node("div.buttons.overlay-bottom-right.padding")
