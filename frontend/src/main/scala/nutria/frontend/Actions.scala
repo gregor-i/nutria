@@ -36,16 +36,6 @@ object Actions extends ExecutionContext {
       case Some(_) => op
     }
 
-  def exploreFractal()(implicit context: Context[GreetingState]): Eventlistener =
-    event { _ =>
-      context.update(
-        ExplorerState(
-          remoteFractal = None,
-          fractalImage = Entity(value = context.local.randomFractal)
-        )
-      )
-    }
-
   def togglePublishedImage(fractal: WithId[FractalImageEntity])(implicit context: Context[UserGalleryState]): Eventlistener =
     event { _ =>
       onlyLoggedIn {

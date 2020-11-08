@@ -28,6 +28,11 @@ object Links {
       remoteFractal = Some(fractal),
       fractalImage = fractal.entity
     )
+  def explorerState(fractal: FractalImageEntity): ExplorerState =
+    ExplorerState(
+      remoteFractal = None,
+      fractalImage = fractal
+    )
 
   def explorerStateWithModal(fractal: WithId[FractalImageEntity]): ExplorerState =
     ExplorerState(remoteFractal = Some(fractal), fractalImage = fractal.entity, editModal = Some(()))

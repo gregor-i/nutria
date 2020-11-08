@@ -19,11 +19,11 @@ object FractalService {
       .flatMap(check(200))
       .flatMap(parse[Vector[WithId[FractalImageEntity]]])
 
-  def getRandom(): Future[FractalImage] =
+  def getRandom(): Future[FractalImageEntity] =
     Service
       .get(url = "/api/fractals/random")
       .flatMap(check(200))
-      .flatMap(parse[FractalImage])
+      .flatMap(parse[FractalImageEntity])
 
   def loadUserFractals(userId: String): Future[Vector[WithId[FractalImageEntity]]] =
     Service
