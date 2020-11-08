@@ -19,7 +19,7 @@ object Input {
     updatable =>
       Node("input.input")
         .attr("type", "text")
-        .attr("value", updatable.state)
+        .prop("value", updatable.state)
         .event("change", Snabbdom.event { event =>
           val value = event.target.asInstanceOf[HTMLInputElement].value
           updatable.update(value)
@@ -31,7 +31,7 @@ object Input {
     updatable =>
       Node("input.input")
         .attr("type", "text")
-        .attr("value", updatable.state.string)
+        .prop("value", updatable.state.string)
         .event(
           "change",
           snabbdom.Snabbdom.event { event =>
@@ -50,7 +50,7 @@ object Input {
     updatable =>
       Node("input.input")
         .attr("type", "number")
-        .attr("value", updatable.state.toString)
+        .prop("value", updatable.state.toString)
         .event(
           "change",
           Snabbdom.event { event =>
@@ -63,7 +63,7 @@ object Input {
     updatable =>
       Node("input.input")
         .attr("type", "number")
-        .attr("value", updatable.state.toString)
+        .prop("value", updatable.state.toString)
         .event(
           "change",
           Snabbdom.event { event =>
@@ -96,7 +96,7 @@ object Input {
     updatable =>
       Node("input.input")
         .attr("type", "color")
-        .attr("value", RGB.toRGBString(updatable.state.withoutAlpha))
+        .prop("value", RGB.toRGBString(updatable.state.withoutAlpha))
         .event(
           "change",
           Snabbdom.event { event =>
@@ -116,7 +116,7 @@ object Input {
       val value = updatable.state
       Node("input.input.color-gradient-input")
         .attr("type", "text")
-        .attr("value", value.map(_.withoutAlpha).map(RGB.toRGBString).mkString(" "))
+        .prop("value", value.map(_.withoutAlpha).map(RGB.toRGBString).mkString(" "))
         .style("background-image", s"linear-gradient(to right, ${value.map(_.withoutAlpha).map(RGB.toRGBString).mkString(", ")})")
         .event(
           "change",
