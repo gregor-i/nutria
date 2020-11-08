@@ -23,23 +23,12 @@ object Links {
       randomFractal <- FractalService.getRandom()
     } yield GreetingState(randomFractal)
 
-  def detailsState(fractalId: String): Future[DetailsState] =
-    for {
-      fractal <- FractalService.get(fractalId)
-    } yield DetailsState(
-      remoteFractal = fractal,
-      fractalToEdit = fractal
-    )
-
   def explorerState(fractal: WithId[FractalImageEntity]): ExplorerState =
     ExplorerState(
       remoteFractal = Some(fractal),
       fractalImage = fractal.entity
     )
 
-  def detailsState(fractal: WithId[FractalImageEntity], toEdit: FractalImageEntity): DetailsState =
-    DetailsState(remoteFractal = fractal, fractalToEdit = fractal.copy(entity = toEdit))
-
-  def detailsState(fractal: WithId[FractalImageEntity]): DetailsState =
-    DetailsState(remoteFractal = fractal, fractalToEdit = fractal)
+  def explorerStateWithModal(fractal: WithId[FractalImageEntity]): ExplorerState =
+    ExplorerState(remoteFractal = Some(fractal), fractalImage = fractal.entity, editModal = Some(()))
 }

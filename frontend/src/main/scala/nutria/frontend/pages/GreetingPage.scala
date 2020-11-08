@@ -1,11 +1,12 @@
 package nutria.frontend.pages
 
+import nutria.api.Entity
 import nutria.core.FractalImage
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common._
 import nutria.macros.StaticContent
-import snabbdom.Node
+import snabbdom.{Node, Snabbdom}
 
 case class GreetingState(randomFractal: FractalImage) extends PageState
 

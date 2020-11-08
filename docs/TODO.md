@@ -3,12 +3,11 @@
     - more faq
     - form to ask a question
     - explain actions, icons and parameters
-    - use an "Purpose first Design Patterns" for introduction
+    - use a "Purpose first Design Patterns" for introduction
     - define a data protection policy
- - details:
-   - make it a modal over explorer
  - explorer:
    - requestFullscreen button
  - general:
    - some failed futures are not handled
    - GL lose context is not handled in explorer / interactive panel.
+   - navigation from navbar should close the navbar

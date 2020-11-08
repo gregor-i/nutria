@@ -49,13 +49,11 @@ object Actions extends ExecutionContext {
   def editFractal(fractal: WithId[FractalImageEntity])(implicit context: Context[PageState]): Eventlistener =
     event { _ =>
       context.update(
-        DetailsState(remoteFractal = fractal, fractalToEdit = fractal)
+        Links.explorerStateWithModal(fractal)
       )
     }
 
-  def togglePublishedImage(
-      fractal: WithId[FractalImageEntity]
-  )(implicit context: Context[UserGalleryState]): Eventlistener =
+  def togglePublishedImage(fractal: WithId[FractalImageEntity])(implicit context: Context[UserGalleryState]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -81,9 +79,7 @@ object Actions extends ExecutionContext {
       }
     }
 
-  def deleteFractalFromUserGallery(
-      fractalId: String
-  )(implicit context: Context[UserGalleryState]): Eventlistener =
+  def deleteFractalFromUserGallery(fractalId: String)(implicit context: Context[UserGalleryState]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -102,66 +98,47 @@ object Actions extends ExecutionContext {
       }
     }
 
-  def deleteFractalFromDetails(
-      fractalId: String
-  )(implicit context: Context[DetailsState]): Eventlistener =
+  def deleteFractal(fractalId: String)(implicit context: Context[_]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
           withWarningToast("Deleting Fractal", "Fractal deleted") {
             for {
-              remoteFractal <- FractalService.get(fractalId)
-              _             <- FractalService.delete(fractalId)
-              reloaded      <- FractalService.loadUserFractals(remoteFractal.owner)
-            } yield UserGalleryState(
-              userFractals = reloaded,
-              aboutUser = remoteFractal.owner,
-              page = 1
-            )
+              _        <- FractalService.delete(fractalId)
+              newState <- Links.userGalleryState(userId = context.global.user.get.id)
+            } yield newState
           }
         }
       }
     }
 
-  def updateFractal(
-      fractalWithId: WithId[FractalImageEntity]
-  )(implicit context: Context[_]): Eventlistener =
+  def updateFractal(fractalWithId: WithId[FractalImageEntity])(implicit context: Context[_]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
           withSuccessToast("Updating Fractal", "Fractal updated") {
             for {
               _ <- FractalService.put(fractalWithId)
-            } yield DetailsState(
-              remoteFractal = fractalWithId,
-              fractalToEdit = fractalWithId
-            )
+            } yield Links.explorerStateWithModal(fractalWithId)
           }
         }
       }
     }
 
-  def saveAsNewFractal(
-      fractalEntity: FractalImageEntity
-  )(implicit context: Context[_]): Eventlistener =
+  def saveAsNewFractal(fractalEntity: FractalImageEntity)(implicit context: Context[_]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
           withSuccessToast("Saving Fractal", "Fractal saved") {
             for {
               fractalWithId <- FractalService.post(fractalEntity.copy(published = false))
-            } yield DetailsState(
-              remoteFractal = fractalWithId,
-              fractalToEdit = fractalWithId
-            )
+            } yield Links.explorerStateWithModal(fractalWithId)
           }
         }
       }
     }
 
-  def saveSnapshot(
-      fractalEntity: FractalImageEntity
-  )(implicit context: Context[ExplorerState]): Eventlistener =
+  def saveSnapshot(fractalEntity: FractalImageEntity)(implicit context: Context[ExplorerState]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -174,9 +151,7 @@ object Actions extends ExecutionContext {
       }
     }
 
-  def saveTemplate(
-      templateEntity: FractalTemplateEntity
-  )(implicit context: Context[TemplateEditorState]): Eventlistener =
+  def saveTemplate(templateEntity: FractalTemplateEntity)(implicit context: Context[TemplateEditorState]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -189,9 +164,7 @@ object Actions extends ExecutionContext {
       }
     }
 
-  def updateTemplate(
-      template: FractalTemplateEntityWithId
-  )(implicit context: Context[_]): Eventlistener =
+  def updateTemplate(template: FractalTemplateEntityWithId)(implicit context: Context[_]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -204,9 +177,7 @@ object Actions extends ExecutionContext {
       }
     }
 
-  def deleteTemplate(
-      templateId: String
-  )(implicit context: Context[_]): Eventlistener =
+  def deleteTemplate(templateId: String)(implicit context: Context[_]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -220,9 +191,7 @@ object Actions extends ExecutionContext {
       }
     }
 
-  def togglePublishedTemplate(
-      template: FractalTemplateEntityWithId
-  )(implicit context: Context[TemplateGalleryState]): Eventlistener =
+  def togglePublishedTemplate(template: FractalTemplateEntityWithId)(implicit context: Context[TemplateGalleryState]): Eventlistener =
     event { _ =>
       onlyLoggedIn {
         asyncUpdate {
@@ -262,35 +231,10 @@ object Actions extends ExecutionContext {
       }
     }
 
-  def openSaveToDiskModal(implicit context: Context[ExplorerState]): Eventlistener =
-    event { _ =>
-      context.update {
-        context.local.copy(
-          saveModal = Some(
-            SaveFractalDialog(
-              dimensions = Dimensions.fullHD,
-              antiAliase = context.local.fractalImage.value.antiAliase
-            )
-          )
-        )
-      }
-    }
-
-  def closeSaveToDiskModal(implicit context: Context[ExplorerState]): Eventlistener =
-    event { _ =>
-      context.update {
-        context.local.copy(saveModal = None)
-      }
-    }
-
-  def saveToDisk(
-      fractalImage: FractalImage,
-      dimensions: Dimensions
-  )(implicit context: Context[_]): Eventlistener =
+  def saveToDisk(fractalImage: FractalImage, dimensions: Dimensions)(implicit context: Context[_]): Eventlistener =
     event { _ =>
       val dataUrl = FractalTile.dataUrl(fractalImage, dimensions)
-
-      val link = dom.document.createElement("a").asInstanceOf[Anchor]
+      val link    = dom.document.createElement("a").asInstanceOf[Anchor]
       Untyped(link).download = "fractal-image.png"
       link.href = dataUrl
       dom.document.body.appendChild(link)

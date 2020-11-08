@@ -50,9 +50,7 @@ object GalleryPage extends Page[GalleryState] {
       )
       .child(Footer())
 
-  def renderFractalTile(
-      fractal: WithId[FractalImageEntity]
-  )(implicit context: Context): Node =
+  def renderFractalTile(fractal: WithId[FractalImageEntity])(implicit context: Context): Node =
     Node("article.fractal-tile.is-relative")
       .child(
         Link(Links.explorerState(fractal))
@@ -68,7 +66,7 @@ object GalleryPage extends Page[GalleryState] {
               .child(Icons.icon(Icons.explore))
           )
           .child(
-            Link(Links.detailsState(fractal))
+            Link(Links.explorerStateWithModal(fractal))
               .classes("button", "is-outlined", "is-rounded")
               .child(Icons.icon(Icons.edit))
           )

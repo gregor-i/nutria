@@ -14,7 +14,7 @@ import scala.util.chaining._
 case class UserGalleryState(
     aboutUser: String,
     userFractals: Seq[WithId[FractalImageEntity]],
-    page: Int
+    page: Int = 1
 ) extends PageState
 
 object UserGalleryPage extends Page[UserGalleryState] {
@@ -26,7 +26,6 @@ object UserGalleryPage extends Page[UserGalleryState] {
     case (user, s"/user/${userId}/gallery", query) =>
       val page = query.get("page").flatMap(_.toIntOption).getOrElse(1)
       Links.userGalleryState(userId, page = page).loading()
-
   }
 
   def render(implicit context: Context) =
@@ -58,12 +57,10 @@ object UserGalleryPage extends Page[UserGalleryState] {
       )
       .child(Footer())
 
-  def renderFractalTile(
-      fractal: WithId[FractalImageEntity]
-  )(implicit context: Context): Node =
+  def renderFractalTile(fractal: WithId[FractalImageEntity])(implicit context: Context): Node =
     Node("article.fractal-tile.is-relative")
       .child(
-        Link(Links.detailsState(fractal))
+        Link(Links.explorerState(fractal))
           .child(
             FractalTile(fractal.entity.value, Dimensions.thumbnail)
               .event("click", Actions.editFractal(fractal))
@@ -71,6 +68,16 @@ object UserGalleryPage extends Page[UserGalleryState] {
       )
       .child(
         Node("div.buttons.overlay-bottom-right.padding")
+          .child(
+            Link(Links.explorerState(fractal))
+              .classes("button", "is-outlined", "is-rounded")
+              .child(Icons.icon(Icons.explore))
+          )
+          .child(
+            Link(Links.explorerStateWithModal(fractal))
+              .classes("button", "is-outlined", "is-rounded")
+              .child(Icons.icon(Icons.edit))
+          )
           .child(
             Button
               .icon(
