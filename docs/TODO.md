@@ -10,4 +10,3 @@
  - general:
    - some failed futures are not handled
    - GL lose context is not handled in explorer / interactive panel.
-   - navigation from navbar should close the navbar

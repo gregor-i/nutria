@@ -12,7 +12,7 @@ object Link extends ExecutionContext {
       .key(newState.hashCode())
       .event("click", Snabbdom.event { e =>
         e.preventDefault()
-        context.update(newState)
+        context.update(context.global.copy(navbarExpanded = false), newState)
       })
       .hook(
         "postpatch",
@@ -34,7 +34,7 @@ object Link extends ExecutionContext {
       .attr("href", href)
       .event("click", Snabbdom.event { e =>
         e.preventDefault()
-        context.update(LoadingState(loadingState))
+        context.update(context.global.copy(navbarExpanded = false), LoadingState(loadingState))
       })
   }
 }
