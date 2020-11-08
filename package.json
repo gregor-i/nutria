@@ -28,6 +28,7 @@
     "snabbdom-to-html": "^5"
   },
   "engines": {
-    "node": ">= 12.16"
+    "node": "12.x",
+    "npm": "6.x"
   }
 }
