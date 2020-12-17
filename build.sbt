@@ -5,7 +5,7 @@ import scala.sys.process._
 
 // global settings
 version in ThisBuild := "0.0.1"
-scalaVersion in ThisBuild := "2.13.3"
+scalaVersion in ThisBuild := "2.13.4"
 scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation", "-Ymacro-annotations")
 scalafmtOnCompile in ThisBuild := true
 resolvers in ThisBuild += Resolver.bintrayRepo("gregor-i", "maven")
@@ -97,10 +97,10 @@ lazy val backend = project
     libraryDependencies += guice,
     libraryDependencies += jdbc,
     libraryDependencies += evolutions,
-    libraryDependencies += "io.lemonlabs"            %% "scala-uri"          % "2.3.1",
+    libraryDependencies += "io.lemonlabs"            %% "scala-uri"          % "3.0.0",
     libraryDependencies += "com.dripower"            %% "play-circe"         % "2812.0",
-    libraryDependencies += "org.postgresql"          % "postgresql"          % "42.2.16",
-    libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.7",
+    libraryDependencies += "org.postgresql"          % "postgresql"          % "42.2.18",
+    libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.8",
     libraryDependencies += "org.scalatestplus.play"  %% "scalatestplus-play" % "5.1.0" % Test
   )
   .enablePlugins(EmbeddedPostgresPlugin)
@@ -180,7 +180,7 @@ test in nutria := Def
 
 def scalatest =
   Seq(
-    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.2" % Test,
+    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.3" % Test,
     testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
   )
 
