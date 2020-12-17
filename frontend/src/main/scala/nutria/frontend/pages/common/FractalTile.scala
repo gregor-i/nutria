@@ -31,16 +31,13 @@ private object ImgStrategy {
       .attr("width", dimensions.width.toString)
       .attr("height", dimensions.height.toString)
       .attr("src", Images.rendering)
-      .hook(
-        "insert",
-        Snabbdom.hook { node =>
-          AsyncUtil
-            .sleep(0)
-            .foreach { _ =>
-              node.elm.get.asInstanceOf[Image].src = dataUrl(fractalImage, dimensions)
-            }
-        }
-      )
+      .hookInsert { node =>
+        AsyncUtil
+          .sleep(0)
+          .foreach { _ =>
+            node.elm.get.asInstanceOf[Image].src = dataUrl(fractalImage, dimensions)
+          }
+      }
 
   def dataUrl(fractalImage: FractalImage, dimensions: Dimensions): String = {
     canvas.width = dimensions.width
@@ -59,26 +56,23 @@ private object CanvasStrategy {
       .attr("width", dimensions.width.toString)
       .attr("height", dimensions.height.toString)
       .style("backgroundImage", Images.rendering)
-      .hook(
-        "insert",
-        Snabbdom.hook { node =>
-          AsyncUtil
-            .sleep(1)
-            .foreach { _ =>
-              val canvas = node.elm.get.asInstanceOf[Canvas]
-              withOffscreenCanvas(canvas.width, canvas.height) { (offScreenCanvas, gl) =>
-                FractalRenderer.render(fractalImage)(gl) match {
-                  case Right(_) =>
-                    val canvasContext = canvas.getContext("2d").asInstanceOf[CanvasRenderingContext2D]
-                    canvasContext.drawImage(offScreenCanvas, 0, 0)
-                    canvas.style.backgroundImage = null
-                  case Left(_) =>
-                    canvas.style.backgroundImage = Images.compileError
-                }
+      .hookInsert { node =>
+        AsyncUtil
+          .sleep(1)
+          .foreach { _ =>
+            val canvas = node.elm.get.asInstanceOf[Canvas]
+            withOffscreenCanvas(canvas.width, canvas.height) { (offScreenCanvas, gl) =>
+              FractalRenderer.render(fractalImage)(gl) match {
+                case Right(_) =>
+                  val canvasContext = canvas.getContext("2d").asInstanceOf[CanvasRenderingContext2D]
+                  canvasContext.drawImage(offScreenCanvas, 0, 0)
+                  canvas.style.backgroundImage = null
+                case Left(_) =>
+                  canvas.style.backgroundImage = Images.compileError
               }
             }
-        }
-      )
+          }
+      }
 
   def dataUrl(fractalImage: FractalImage, dimensions: Dimensions): String = {
     withOffscreenCanvas(dimensions.width, dimensions.height) { (offScreenCanvas, gl) =>

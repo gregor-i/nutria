@@ -6,7 +6,9 @@ import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common._
 import nutria.macros.StaticContent
-import snabbdom.{Node, Snabbdom}
+import snabbdom.{Event, Node, Snabbdom}
+
+import scala.util.chaining.scalaUtilChainingOps
 
 case class GreetingState(randomFractal: FractalImageEntity) extends PageState
 
@@ -24,7 +26,7 @@ object GreetingPage extends Page[GreetingState] {
       .child(content)
 
   private def content(implicit context: Context) = {
-    Modal(closeAction = Snabbdom.event(_ => context.update(Links.explorerState(fractal = context.local.randomFractal))))(
+    Modal(closeAction = _ => context.update(Links.explorerState(fractal = context.local.randomFractal)))(
       Node("div.content").prop("innerHTML", StaticContent("frontend/src/main/html/greeting.html")),
       ButtonList(
         Link(DocumentationState.introduction)
@@ -43,6 +45,6 @@ object GreetingPage extends Page[GreetingState] {
   private def renderCanvas(implicit context: Context): Node =
     Node("div.background")
       .child(
-        Node("canvas").hooks(CanvasHooks(context.local.randomFractal.value))
+        Node("canvas").pipe(CanvasHooks(context.local.randomFractal.value))
       )
 }

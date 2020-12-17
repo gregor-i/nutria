@@ -7,7 +7,7 @@ import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common._
 import nutria.frontend.service.NutriaAdminService
 import nutria.frontend.{GlobalState, Page, PageState}
-import snabbdom.{Node, Snabbdom, SnabbdomFacade}
+import snabbdom.{Event, Node}
 
 import scala.concurrent.Future
 
@@ -149,6 +149,6 @@ object AdminPage extends Page[AdminState] {
 
   private def action(
       action: => Future[Unit]
-  )(implicit context: Context): SnabbdomFacade.Eventlistener =
-    Snabbdom.event { _ -> action.flatMap(_ => NutriaAdminService.load()).foreach(context.update) }
+  )(implicit context: Context): Event => Unit =
+    (_: Event) -> action.flatMap(_ => NutriaAdminService.load()).foreach(context.update)
 }

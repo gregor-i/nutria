@@ -2,7 +2,7 @@ package nutria.frontend.pages.common
 
 import nutria.frontend.pages.LoadingState
 import nutria.frontend.{Context, ExecutionContext, PageState, Router}
-import snabbdom.{Node, Snabbdom}
+import snabbdom.{Event, Node, Snabbdom}
 
 import scala.concurrent.Future
 
@@ -10,21 +10,18 @@ object Link extends ExecutionContext {
   def apply(newState: PageState)(implicit context: Context[_]): Node =
     Node("a")
       .key(newState.hashCode())
-      .event("click", Snabbdom.event { e =>
-        e.preventDefault()
+      .event[Event]("click", event => {
+        event.preventDefault()
         context.update(context.global.copy(navbarExpanded = false), newState)
       })
-      .hook(
-        "postpatch",
-        Snabbdom.hook { (_, vnode) =>
-          Future {
-            for {
-              (path, search) <- Router.stateToUrl(newState)
-              elem           <- vnode.elm.toOption
-            } yield elem.setAttribute("href", path + Router.queryParamsToUrl(search))
-          }
+      .hookPostpatch({ (_, vnode) =>
+        Future {
+          for {
+            (path, search) <- Router.stateToUrl(newState)
+            elem           <- vnode.elm.toOption
+          } yield elem.setAttribute("href", path + Router.queryParamsToUrl(search))
         }
-      )
+      })
 
   def async(
       href: String,
@@ -32,7 +29,7 @@ object Link extends ExecutionContext {
   )(implicit context: Context[_]): Node = {
     Node("a")
       .attr("href", href)
-      .event("click", Snabbdom.event { e =>
+      .event[Event]("click", e => {
         e.preventDefault()
         context.update(context.global.copy(navbarExpanded = false), LoadingState(loadingState))
       })

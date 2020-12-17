@@ -5,7 +5,7 @@ import nutria.core.languages.StringFunction
 import nutria.core.{RGB, RGBA}
 import nutria.frontend.util.{ComplexLenses, Updatable}
 import org.scalajs.dom.raw.HTMLInputElement
-import snabbdom.{Node, Snabbdom}
+import snabbdom.{Event, Node}
 
 import scala.util.Try
 import scala.util.chaining._
@@ -20,7 +20,7 @@ object Input {
       Node("input.input")
         .attr("type", "text")
         .prop("value", updatable.state)
-        .event("change", Snabbdom.event { event =>
+        .event[Event]("change", event => {
           val value = event.target.asInstanceOf[HTMLInputElement].value
           updatable.update(value)
         })
@@ -32,9 +32,9 @@ object Input {
       Node("input.input")
         .attr("type", "text")
         .prop("value", updatable.state.string)
-        .event(
+        .event[Event](
           "change",
-          snabbdom.Snabbdom.event { event =>
+          event => {
             val element = event.target.asInstanceOf[HTMLInputElement]
             StringFunction(element.value) match {
               case Some(v) =>
@@ -51,9 +51,9 @@ object Input {
       Node("input.input")
         .attr("type", "number")
         .prop("value", updatable.state.toString)
-        .event(
+        .event[Event](
           "change",
-          Snabbdom.event { event =>
+          event => {
             val element = event.target.asInstanceOf[HTMLInputElement]
             updatable.update(element.value.toInt)
           }
@@ -64,9 +64,9 @@ object Input {
       Node("input.input")
         .attr("type", "number")
         .prop("value", updatable.state.toString)
-        .event(
+        .event[Event](
           "change",
-          Snabbdom.event { event =>
+          event => {
             val element = event.target.asInstanceOf[HTMLInputElement]
             Try(element.value.toDouble).toEither match {
               case Right(v) =>
@@ -97,9 +97,9 @@ object Input {
       Node("input.input")
         .attr("type", "color")
         .prop("value", RGB.toRGBString(updatable.state.withoutAlpha))
-        .event(
+        .event[Event](
           "change",
-          Snabbdom.event { event =>
+          event => {
             val element = event.target.asInstanceOf[HTMLInputElement]
             RGB.parseRGBString(element.value).map(_.withAlpha()).toOption match {
               case Some(v) =>
@@ -118,9 +118,9 @@ object Input {
         .attr("type", "text")
         .prop("value", value.map(_.withoutAlpha).map(RGB.toRGBString).mkString(" "))
         .style("background-image", s"linear-gradient(to right, ${value.map(_.withoutAlpha).map(RGB.toRGBString).mkString(", ")})")
-        .event(
+        .event[Event](
           "change",
-          snabbdom.Snabbdom.event { event =>
+          event => {
             val element = event.target.asInstanceOf[HTMLInputElement]
             element.value
               .split("\\s")

@@ -33,13 +33,10 @@ object LoadingPage extends Page[LoadingState] {
           )
       )
       .key(context.local.process.hashCode())
-      .hook(
-        "insert",
-        Snabbdom.hook { _ =>
-          context.local.process.onComplete {
-            case Success(newState) => context.update(newState)
-            case Failure(error)    => context.update(ErrorState.asyncLoadError(error))
-          }
+      .hookInsert { _ =>
+        context.local.process.onComplete {
+          case Success(newState) => context.update(newState)
+          case Failure(error)    => context.update(ErrorState.asyncLoadError(error))
         }
-      )
+      }
 }

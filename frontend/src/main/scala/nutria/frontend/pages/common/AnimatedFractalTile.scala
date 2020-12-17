@@ -6,33 +6,34 @@ import nutria.frontend.util.Untyped
 import org.scalajs.dom
 import org.scalajs.dom.html.Canvas
 import org.scalajs.dom.raw.WebGLRenderingContext
-import snabbdom.{Node, Snabbdom, SnabbdomFacade}
+import snabbdom.{Event, Node}
 
 import scala.scalajs.js
 import scala.util.Random
+import scala.util.chaining.scalaUtilChainingOps
 
 object AnimatedFractalTile {
   def apply(fractalImageOverTime: LazyList[FractalImage]): Node =
     Node("canvas")
       .key(Random.nextInt())
       .style("backgroundImage", Images.rendering)
-      .event(
+      .event[Event](
         "dblclick",
-        Snabbdom.event { event =>
-          val target = Untyped(event.target)
+        event => {
+          val target = event.target
           if (dom.document.fullscreenElement != null) {
             dom.document.exitFullscreen()
           } else {
-            target.requestFullscreen()
+            Untyped(target).requestFullscreen()
           }
         }
       )
-      .hooks(hooks(fractalImageOverTime))
+      .pipe(addHooks(_)(fractalImageOverTime))
 
-  private def hooks(fractalImageOverTime: LazyList[FractalImage]): Seq[(String, SnabbdomFacade.Hook)] = {
+  private def addHooks(node: Node)(fractalImageOverTime: LazyList[FractalImage]): Node = {
     var animationHandle: Int = 0
-    Seq(
-      "insert" -> Snabbdom.hook { vnode =>
+    node
+      .hookInsert { vnode =>
         val canvas = vnode.elm.get.asInstanceOf[Canvas]
         val ctx    = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
         var frames = fractalImageOverTime
@@ -47,8 +48,8 @@ object AnimatedFractalTile {
           animationHandle = dom.window.requestAnimationFrame(callback)
         }
         animationHandle = dom.window.requestAnimationFrame(callback)
-      },
-      "destroy" -> Snabbdom.hook { node =>
+      }
+      .hookDestroy { node =>
         dom.window.cancelAnimationFrame(animationHandle)
         node.elm.get
           .asInstanceOf[Canvas]
@@ -56,6 +57,5 @@ object AnimatedFractalTile {
           .getExtension("WEBGL_lose_context")
           .loseContext()
       }
-    )
   }
 }

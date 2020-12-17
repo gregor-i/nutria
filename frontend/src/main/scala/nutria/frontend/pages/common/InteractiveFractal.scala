@@ -24,7 +24,6 @@ object InteractiveFractal {
       .events(ExplorerEvents.canvasWheelEvent(updatable))
       .events(ExplorerEvents.canvasTouchEvents(updatable))
       .child(
-        Node("canvas")
-          .hooks(CanvasHooks(image))
+        Node("canvas").pipe(CanvasHooks(image))
       )
 }

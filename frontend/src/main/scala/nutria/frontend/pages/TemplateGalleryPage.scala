@@ -6,7 +6,7 @@ import nutria.api.FractalTemplateEntityWithId
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common._
 import nutria.frontend.service.TemplateService
-import snabbdom.{Node, Snabbdom}
+import snabbdom.{Event, Node}
 
 import scala.concurrent.Future
 
@@ -42,7 +42,7 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
         Header
           .fab(Node("button"))
           .child(Icons.icon(Icons.plus))
-          .event("click", Snabbdom.event(_ => context.update(TemplateEditorState.initial)))
+          .event[Event]("click", _ => context.update(TemplateEditorState.initial))
       )
       .child(body())
       .child(Footer())

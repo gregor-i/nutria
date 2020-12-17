@@ -3,7 +3,7 @@ package nutria.frontend.pages.common
 import monocle.Lens
 import nutria.frontend.util.{SnabbdomUtil, Updatable}
 import org.scalajs.dom.raw.{HTMLInputElement, HTMLSelectElement}
-import snabbdom.{Node, Snabbdom}
+import snabbdom.{Event, Node, Snabbdom}
 
 object Form {
 
@@ -45,7 +45,7 @@ object Form {
       actions = actions,
       node = Node("textArea.textarea")
         .style("min-height", "400px")
-        .event("change", Snabbdom.event { event =>
+        .event[Event]("change", event => {
           val value = event.target.asInstanceOf[HTMLInputElement].value
           updatable.update(lens.set(value)(updatable.state))
         })
@@ -75,9 +75,9 @@ object Form {
       node = Node("div.select.is-fullwidth")
         .child(
           Node("select")
-            .event(
+            .event[Event](
               "change",
-              Snabbdom.event { event =>
+              event => {
                 val selected = event.target.asInstanceOf[HTMLSelectElement].value
                 options
                   .find(_._1 == selected)

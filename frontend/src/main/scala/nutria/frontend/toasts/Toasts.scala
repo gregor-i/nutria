@@ -2,7 +2,7 @@ package nutria.frontend.toasts
 
 import nutria.frontend.ExecutionContext
 import org.scalajs.dom
-import snabbdom.{Node, Snabbdom, SnabbdomFacade, VNode}
+import snabbdom.{Event, Node, Snabbdom, VNode}
 
 import scala.concurrent.Future
 import scala.util.Try
@@ -27,13 +27,13 @@ object Toasts extends ExecutionContext {
         case toast: FireAndForgetToast =>
           notification(toast.toastType, toast.text)
             .key(toast.id)
-            .child(Node("button.delete").event("click", Snabbdom.event(_ => removeToast(toast.id))))
+            .child(Node("button.delete").event[Event]("click", _ => removeToast(toast.id)))
             .style("transition", "0.5s")
-            .hook("insert", Snabbdom.hook { vnode =>
+            .hookInsert { vnode =>
               dom.window.setTimeout(() => vnode.elm.get.style.opacity = "0", 2000)
               dom.window.setTimeout(() => removeToast(toast.id), 2500)
               ()
-            })
+            }
 
         case toast: FutureToast[_] =>
           toast.progress.value match {
@@ -42,24 +42,19 @@ object Toasts extends ExecutionContext {
 
               notification(toastType, text)
                 .key(toast.id)
-                .child(Node("button.delete").event("click", Snabbdom.event(_ => removeToast(toast.id))))
+                .child(Node("button.delete").event[Event]("click", _ => removeToast(toast.id)))
                 .style("transition", "0.5s")
-                .hook(
-                  "postpatch",
-                  Snabbdom.hook { vnode =>
-                    dom.window.setTimeout(() => vnode.elm.get.style.opacity = "0", 2000)
-                    dom.window.setTimeout(() => removeToast(toast.id), 2500)
-                    ()
-                  }
-                )
+                .hookPostpatch { (vnode, _) =>
+                  dom.window.setTimeout(() => vnode.elm.get.style.opacity = "0", 2000)
+                  dom.window.setTimeout(() => removeToast(toast.id), 2500)
+                }
 
             case None =>
               notification(Info, toast.progressText)
                 .key(toast.id)
-                .hook("insert", Snabbdom.hook { _ =>
+                .hookInsert { _ =>
                   toast.progress.onComplete(_ => render())
-                  ()
-                })
+                }
           }
       })
       .toVNode
@@ -117,7 +112,7 @@ object Toasts extends ExecutionContext {
     render()
   }
 
-  val patch: SnabbdomFacade.PatchFunction = Snabbdom.init(
+  val patch: snabbdom.PatchFunction = Snabbdom.init(
     classModule = true,
     styleModule = true,
     eventlistenersModule = true

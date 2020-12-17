@@ -10,8 +10,7 @@ import nutria.frontend.toasts.Toasts
 import nutria.frontend.util.Untyped
 import org.scalajs.dom
 import org.scalajs.dom.html.Anchor
-import snabbdom.Snabbdom.event
-import snabbdom.SnabbdomFacade.Eventlistener
+import snabbdom.{Event, Eventlistener}
 
 import scala.concurrent.Future
 import scala.util.chaining.scalaUtilChainingOps
@@ -37,7 +36,7 @@ object Actions extends ExecutionContext {
     }
 
   def togglePublishedImage(fractal: WithId[FractalImageEntity])(implicit context: Context[UserGalleryState]): Eventlistener =
-    event { _ =>
+    (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
           val published = fractal.entity.published
@@ -60,10 +59,9 @@ object Actions extends ExecutionContext {
             }
         }
       }
-    }
 
   def deleteFractalFromUserGallery(fractalId: String)(implicit context: Context[UserGalleryState]): Eventlistener =
-    event { _ =>
+    (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
           withWarningToast("Deleting Fractal", "Fractal deleted") {
@@ -79,10 +77,9 @@ object Actions extends ExecutionContext {
           }
         }
       }
-    }
 
   def deleteFractal(fractalId: String)(implicit context: Context[_]): Eventlistener =
-    event { _ =>
+    (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
           withWarningToast("Deleting Fractal", "Fractal deleted") {
@@ -93,10 +90,9 @@ object Actions extends ExecutionContext {
           }
         }
       }
-    }
 
   def updateFractal(fractalWithId: WithId[FractalImageEntity])(implicit context: Context[_]): Eventlistener =
-    event { _ =>
+    (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
           withSuccessToast("Updating Fractal", "Fractal updated") {
@@ -106,10 +102,9 @@ object Actions extends ExecutionContext {
           }
         }
       }
-    }
 
   def saveAsNewFractal(fractalEntity: FractalImageEntity)(implicit context: Context[_]): Eventlistener =
-    event { _ =>
+    (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
           withSuccessToast("Saving Fractal", "Fractal saved") {
@@ -119,10 +114,9 @@ object Actions extends ExecutionContext {
           }
         }
       }
-    }
 
   def saveSnapshot(fractalEntity: FractalImageEntity)(implicit context: Context[ExplorerState]): Eventlistener =
-    event { _ =>
+    (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
           withSuccessToast("Saving Fractal", "Fractal saved") {
@@ -132,10 +126,9 @@ object Actions extends ExecutionContext {
           }
         }
       }
-    }
 
   def saveTemplate(templateEntity: FractalTemplateEntity)(implicit context: Context[TemplateEditorState]): Eventlistener =
-    event { _ =>
+    (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
           withSuccessToast("Saving Template", "Template saved") {
@@ -145,10 +138,9 @@ object Actions extends ExecutionContext {
           }
         }
       }
-    }
 
   def updateTemplate(template: FractalTemplateEntityWithId)(implicit context: Context[_]): Eventlistener =
-    event { _ =>
+    (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
           withSuccessToast("Updating Template", "Template updated") {
@@ -158,10 +150,9 @@ object Actions extends ExecutionContext {
           }
         }
       }
-    }
 
   def deleteTemplate(templateId: String)(implicit context: Context[_]): Eventlistener =
-    event { _ =>
+    (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
           withWarningToast("Deleting Template", "Template deleted") {
@@ -172,10 +163,9 @@ object Actions extends ExecutionContext {
           }
         }
       }
-    }
 
   def togglePublishedTemplate(template: FractalTemplateEntityWithId)(implicit context: Context[TemplateGalleryState]): Eventlistener =
-    event { _ =>
+    (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
           val published = template.entity.published
@@ -198,10 +188,9 @@ object Actions extends ExecutionContext {
             }
         }
       }
-    }
 
   def deleteUser(userId: String)(implicit context: Context[_]): Eventlistener =
-    event { _ =>
+    (_: Event) =>
       onlyLoggedIn {
         asyncUpdateBoth {
           withSuccessToast("Deleting account", "Good Bye!") {
@@ -212,10 +201,9 @@ object Actions extends ExecutionContext {
           }
         }
       }
-    }
 
   def saveToDisk(fractalImage: FractalImage, dimensions: Dimensions)(implicit context: Context[_]): Eventlistener =
-    event { _ =>
+    (_: Event) => {
       val dataUrl = FractalTile.dataUrl(fractalImage, dimensions)
       val link    = dom.document.createElement("a").asInstanceOf[Anchor]
       Untyped(link).download = "fractal-image.png"

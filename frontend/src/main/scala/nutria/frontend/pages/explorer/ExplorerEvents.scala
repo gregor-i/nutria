@@ -4,7 +4,7 @@ import nutria.core.{Point, Viewport}
 import nutria.frontend.util.Updatable
 import org.scalajs.dom._
 import org.scalajs.dom.html.Canvas
-import snabbdom.{Snabbdom, SnabbdomFacade}
+import snabbdom.Eventlistener
 
 import scala.scalajs.js
 
@@ -46,62 +46,58 @@ object ExplorerEvents {
   private def calcNewView(boundingBox: ClientRect, moves: Seq[(Point, Point)], view: Viewport) =
     Transform.applyToViewport(moves, view.cover(boundingBox.width, boundingBox.height))
 
-  def canvasWheelEvent(updatable: Updatable[Viewport, Viewport]): Seq[(String, SnabbdomFacade.Eventlistener)] = {
-    val eventHandler =
-      Snabbdom.specificEvent { event: MouseEvent =>
-        event.preventDefault()
-        val (_, boundingBox) = context(event)
-        val p                = toPoint(event, boundingBox)
-        val steps            = -event.asInstanceOf[WheelEvent].deltaY
+  def canvasWheelEvent(updatable: Updatable[Viewport, Viewport]): Seq[(String, Eventlistener)] = {
+    val eventHandler = { event: MouseEvent =>
+      event.preventDefault()
+      val (_, boundingBox) = context(event)
+      val p                = toPoint(event, boundingBox)
+      val steps            = -event.asInstanceOf[WheelEvent].deltaY
 
-        updatable.update(
-          updatable.state
-            .cover(boundingBox.width, boundingBox.height)
-            .zoomSteps(p, steps / 50.0)
-            .rotate(p, event.asInstanceOf[WheelEvent].deltaX / 200.0)
-        )
-      }
+      updatable.update(
+        updatable.state
+          .cover(boundingBox.width, boundingBox.height)
+          .zoomSteps(p, steps / 50.0)
+          .rotate(p, event.asInstanceOf[WheelEvent].deltaX / 200.0)
+      )
+    }
     Seq("wheel" -> eventHandler)
   }
 
-  def canvasMouseEvents(updatable: Updatable[Viewport, Viewport]): Seq[(String, SnabbdomFacade.Eventlistener)] = {
+  def canvasMouseEvents(updatable: Updatable[Viewport, Viewport]): Seq[(String, Eventlistener)] = {
     var startPosition = Option.empty[Point]
 
-    val pointerDown =
-      Snabbdom.specificEvent { event: MouseEvent =>
-        event.preventDefault()
-        val (_, boundingBox) = context(event)
-        startPosition = Some(toPoint(event, boundingBox))
-      }
+    val pointerDown = { event: MouseEvent =>
+      event.preventDefault()
+      val (_, boundingBox) = context(event)
+      startPosition = Some(toPoint(event, boundingBox))
+    }
 
-    def pointerEnd =
-      Snabbdom.specificEvent { event: MouseEvent =>
-        startPosition match {
-          case Some(from) =>
-            event.preventDefault()
-            val (canvas, boundingBox) = context(event)
-            val to                    = toPoint(event, boundingBox)
-            val newView               = calcNewView(boundingBox, Seq(from -> to), updatable.state)
-            resetTransformCss(canvas)
-            updatable.update(newView)
-          case None => ()
-        }
+    def pointerEnd = { event: MouseEvent =>
+      startPosition match {
+        case Some(from) =>
+          event.preventDefault()
+          val (canvas, boundingBox) = context(event)
+          val to                    = toPoint(event, boundingBox)
+          val newView               = calcNewView(boundingBox, Seq(from -> to), updatable.state)
+          resetTransformCss(canvas)
+          updatable.update(newView)
+        case None => ()
       }
+    }
 
-    def pointerMove =
-      Snabbdom.specificEvent { event: MouseEvent =>
-        startPosition match {
-          case Some(from) =>
-            event.preventDefault()
-            val (canvas, boundingBox) = context(event)
-            val to                    = toPoint(event, boundingBox)
-            transformCss(
-              element = canvas,
-              moves = Seq(from -> to)
-            )
-          case None => ()
-        }
+    def pointerMove = { event: MouseEvent =>
+      startPosition match {
+        case Some(from) =>
+          event.preventDefault()
+          val (canvas, boundingBox) = context(event)
+          val to                    = toPoint(event, boundingBox)
+          transformCss(
+            element = canvas,
+            moves = Seq(from -> to)
+          )
+        case None => ()
       }
+    }
 
     Seq(
       "mousedown"   -> pointerDown,
@@ -112,10 +108,10 @@ object ExplorerEvents {
     )
   }
 
-  def canvasTouchEvents(updatable: Updatable[Viewport, Viewport]): Seq[(String, SnabbdomFacade.Eventlistener)] = {
+  def canvasTouchEvents(updatable: Updatable[Viewport, Viewport]): Seq[(String, Eventlistener)] = {
     var moves = Map.empty[Double, TouchMove]
 
-    val touchStart = Snabbdom.specificEvent { event: TouchEvent =>
+    val touchStart = { event: TouchEvent =>
       event.preventDefault()
       val (_, boundingBox) = context(event)
 
@@ -128,7 +124,7 @@ object ExplorerEvents {
       moves ++= newTouches
     }
 
-    val touchMove = Snabbdom.specificEvent { event: TouchEvent =>
+    val touchMove = { event: TouchEvent =>
       event.preventDefault()
       val (canvas, boundingBox) = context(event)
       val updates = for {
@@ -143,7 +139,7 @@ object ExplorerEvents {
       transformCss(canvas, moves.values.map(_.toMove).toSeq)
     }
 
-    val touchEnd = Snabbdom.specificEvent { event: TouchEvent =>
+    val touchEnd = { event: TouchEvent =>
       event.preventDefault()
       val (canvas, boundingBox) = context(event)
 

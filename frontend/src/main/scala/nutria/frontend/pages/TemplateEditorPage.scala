@@ -14,7 +14,7 @@ import nutria.frontend.service.TemplateService
 import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
 import nutria.shaderBuilder.FragmentShaderSource
 import org.scalajs.dom.raw.HTMLTextAreaElement
-import snabbdom.{Node, Snabbdom}
+import snabbdom.{Event, Node, Snabbdom}
 
 import scala.util.chaining._
 
@@ -126,10 +126,10 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
         )
         .child(
           Node("textarea.code-editor.is-family-code")
-            .event(
+            .event[Event](
               "input",
               Debounce(
-                Snabbdom.event { event =>
+                event => {
                   event.target
                     .asInstanceOf[HTMLTextAreaElement]
                     .value

@@ -26,17 +26,11 @@ object CompileStatus {
   def apply(template: FractalTemplate): Node = {
     Node("pre.is-paddingless.message")
       .prop("innerHTML", s"<div class='message-body'>Compiling ...</div>")
-      .hook(
-        "insert",
-        Snabbdom.hook { node =>
-          hook(template)(node.elm.get)
-        }
-      )
-      .hook(
-        "postpatch",
-        Snabbdom.hook { (_, newNode) =>
-          hook(template)(newNode.elm.get)
-        }
-      )
+      .hookInsert { node =>
+        hook(template)(node.elm.get)
+      }
+      .hookPostpatch { (_, newNode) =>
+        hook(template)(newNode.elm.get)
+      }
   }
 }

@@ -3,7 +3,7 @@ package nutria.frontend
 import nutria.frontend.service.UserService
 import org.scalajs.dom
 import org.scalajs.dom.Element
-import snabbdom.{Snabbdom, SnabbdomFacade, VNode}
+import snabbdom.{PatchFunction, Snabbdom, VNode}
 
 import scala.scalajs.js.|
 
@@ -11,7 +11,7 @@ class NutriaApp(container: Element) extends ExecutionContext {
 
   private var node: Element | VNode = container
 
-  private val patch: SnabbdomFacade.PatchFunction = Snabbdom.init(
+  private val patch: PatchFunction = Snabbdom.init(
     classModule = true,
     attributesModule = true,
     styleModule = true,
