@@ -4,7 +4,7 @@ module.exports = (env, options) => {
   return {
     entry: {
       app: [
-        devMode ? './frontend/target/scala-2.13/frontend-fastopt.js' :  './frontend/target/scala-2.13/frontend-fullopt.js'
+        devMode ? './frontend/target/scala-2.13/frontend-fastopt.js' :  './frontend/target/scala-2.13/frontend-opt.js'
       ]
     },
     output: {
