@@ -1,4 +1,5 @@
-package nutria.frontend.pages.common
+package nutria.frontend.pages
+package common
 
 import nutria.core.FractalImage
 import nutria.frontend.FractalRenderer
@@ -14,7 +15,7 @@ import scala.util.chaining.scalaUtilChainingOps
 
 object AnimatedFractalTile {
   def apply(fractalImageOverTime: LazyList[FractalImage]): Node =
-    Node("canvas")
+    "canvas"
       .key(Random.nextInt())
       .style("backgroundImage", Images.rendering)
       .event[Event](

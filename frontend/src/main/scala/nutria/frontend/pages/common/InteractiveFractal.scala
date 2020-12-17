@@ -1,4 +1,5 @@
-package nutria.frontend.pages.common
+package nutria.frontend.pages
+package common
 
 import monocle.Lens
 import nutria.core.{FractalImage, FractalTemplate, Viewport}
@@ -19,7 +20,7 @@ object InteractiveFractal {
     )
 
   private def apply(image: FractalImage, updatable: Updatable[Viewport, Viewport]): Node =
-    Node("div.interaction-panel")
+    "div.interaction-panel"
       .events(ExplorerEvents.canvasMouseEvents(updatable))
       .events(ExplorerEvents.canvasWheelEvent(updatable))
       .events(ExplorerEvents.canvasTouchEvents(updatable))

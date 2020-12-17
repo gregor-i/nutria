@@ -4,7 +4,7 @@ import nutria.frontend.util.Updatable
 
 import scala.concurrent.Future
 
-package object pages {
+package object pages extends snabbdom.Syntax {
 
   implicit class EnrichFutureOfState(futState: Future[PageState]) {
     def loading(): LoadingState = LoadingState(futState)

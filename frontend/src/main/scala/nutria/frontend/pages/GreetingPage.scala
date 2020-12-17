@@ -27,23 +27,23 @@ object GreetingPage extends Page[GreetingState] {
 
   private def content(implicit context: Context) = {
     Modal(closeAction = _ => context.update(Links.explorerState(fractal = context.local.randomFractal)))(
-      Node("div.content").prop("innerHTML", StaticContent("frontend/src/main/html/greeting.html")),
+      "div.content".prop("innerHTML", StaticContent("frontend/src/main/html/greeting.html")),
       ButtonList(
         Link(DocumentationState.introduction)
           .classes("button", "is-link", "is-outlined")
           .child(Icons.icon(Icons.info))
-          .child(Node("span").text("more information")),
+          .child("span".text("more information")),
         Link
           .async("/gallery", Links.galleryState())
           .classes("button", "is-primary")
           .child(Icons.icon(Icons.gallery))
-          .child(Node("span").text("Start exploring!"))
+          .child("span".text("Start exploring!"))
       )
     )
   }
 
   private def renderCanvas(implicit context: Context): Node =
-    Node("div.background")
+    "div.background"
       .child(
         Node("canvas").pipe(CanvasHooks(context.local.randomFractal.value))
       )

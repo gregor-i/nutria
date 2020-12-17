@@ -1,4 +1,5 @@
-package nutria.frontend.pages.common
+package nutria.frontend.pages
+package common
 
 import snabbdom.Node
 
@@ -28,8 +29,8 @@ object Icons {
   val undo      = "fa-undo"
 
   def icon(icon: String): Node =
-    Node("span.icon")
+    "span.icon"
       .child(
-        Node("i.fas").`class`(icon)
+        "i.fas".`class`(icon)
       )
 }

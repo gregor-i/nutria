@@ -1,4 +1,5 @@
-package nutria.frontend.pages.common
+package nutria.frontend.pages
+package common
 
 import monocle.Lens
 import nutria.core._

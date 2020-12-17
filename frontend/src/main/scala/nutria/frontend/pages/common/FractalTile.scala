@@ -1,4 +1,5 @@
-package nutria.frontend.pages.common
+package nutria.frontend.pages
+package common
 
 import nutria.core.{Dimensions, FractalImage}
 import nutria.frontend.FractalRenderer
@@ -26,7 +27,7 @@ private object ImgStrategy {
   private lazy val webglCtx       = canvas.getContext("webgl").asInstanceOf[WebGLRenderingContext]
 
   def render(fractalImage: FractalImage, dimensions: Dimensions): Node =
-    Node("img")
+    "img"
       .key(fractalImage.hashCode)
       .attr("width", dimensions.width.toString)
       .attr("height", dimensions.height.toString)
@@ -51,7 +52,7 @@ private object ImgStrategy {
 
 private object CanvasStrategy {
   def render(fractalImage: FractalImage, dimensions: Dimensions): Node =
-    Node("canvas")
+    "canvas"
       .key(fractalImage.hashCode)
       .attr("width", dimensions.width.toString)
       .attr("height", dimensions.height.toString)

@@ -1,5 +1,6 @@
 package nutria.frontend.toasts
 
+import snabbdom.Syntax._
 import nutria.frontend.ExecutionContext
 import org.scalajs.dom
 import snabbdom.{Event, Node, Snabbdom, VNode}
@@ -22,12 +23,12 @@ object Toasts extends ExecutionContext {
   private var node: Option[VNode] = None
 
   private def render(): Unit = {
-    val ui = Node("toast-bar")
+    val ui = "toast-bar"
       .child(toasts.map {
         case toast: FireAndForgetToast =>
           notification(toast.toastType, toast.text)
             .key(toast.id)
-            .child(Node("button.delete").event[Event]("click", _ => removeToast(toast.id)))
+            .child("button.delete".event[Event]("click", _ => removeToast(toast.id)))
             .style("transition", "0.5s")
             .hookInsert { vnode =>
               dom.window.setTimeout(() => vnode.elm.get.style.opacity = "0", 2000)
@@ -42,7 +43,7 @@ object Toasts extends ExecutionContext {
 
               notification(toastType, text)
                 .key(toast.id)
-                .child(Node("button.delete").event[Event]("click", _ => removeToast(toast.id)))
+                .child("button.delete".event[Event]("click", _ => removeToast(toast.id)))
                 .style("transition", "0.5s")
                 .hookPostpatch { (vnode, _) =>
                   dom.window.setTimeout(() => vnode.elm.get.style.opacity = "0", 2000)
@@ -70,22 +71,15 @@ object Toasts extends ExecutionContext {
   }
 
   def notification(toastType: ToastType, text: String): Node =
-    Node("div.notification")
+    "div.notification"
       .classes(toastType.`class`)
       .child(
-        Node("div.media")
+        "div.media"
           .child(
-            Node("figure.media-left")
-              .child(
-                Node("span.icon")
-                  .child(
-                    Node("i.fas.fa-lg").classes(toastType.iconClasses: _*)
-                  )
-              )
+            "figure.media-left"
+              .child("span.icon".child("i.fas.fa-lg".classes(toastType.iconClasses: _*)))
           )
-          .child(
-            Node("div.media-content").text(text)
-          )
+          .child("div.media-content".text(text))
       )
 
   def successToast(text: String): Unit = addToast(text, Success)

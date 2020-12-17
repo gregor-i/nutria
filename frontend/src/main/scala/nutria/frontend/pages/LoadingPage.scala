@@ -21,7 +21,7 @@ object LoadingPage extends Page[LoadingState] {
     Body()
       .child(Header())
       .child(
-        Node("i.fa.fa-spinner.fa-pulse.has-text-primary")
+        "i.fa.fa-spinner.fa-pulse.has-text-primary"
           .styles(
             Seq(
               "position"   -> "absolute",

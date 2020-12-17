@@ -1,4 +1,5 @@
-package nutria.frontend.pages.common
+package nutria.frontend.pages
+package common
 
 import nutria.frontend.pages.LoadingState
 import nutria.frontend.{Context, ExecutionContext, PageState, Router}
@@ -8,7 +9,7 @@ import scala.concurrent.Future
 
 object Link extends ExecutionContext {
   def apply(newState: PageState)(implicit context: Context[_]): Node =
-    Node("a")
+    "a"
       .key(newState.hashCode())
       .event[Event]("click", event => {
         event.preventDefault()
@@ -27,7 +28,7 @@ object Link extends ExecutionContext {
       href: String,
       loadingState: => Future[PageState]
   )(implicit context: Context[_]): Node = {
-    Node("a")
+    "a"
       .attr("href", href)
       .event[Event]("click", e => {
         e.preventDefault()

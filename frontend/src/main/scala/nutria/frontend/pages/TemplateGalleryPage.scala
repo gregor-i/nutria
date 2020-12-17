@@ -40,7 +40,7 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
       .child(Header())
       .child(
         Header
-          .fab(Node("button"))
+          .fab("button")
           .child(Icons.icon(Icons.plus))
           .event[Event]("click", _ => context.update(TemplateEditorState.initial))
       )
@@ -48,33 +48,33 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
       .child(Footer())
 
   def body()(implicit context: Context): Node =
-    Node("div.container")
+    "div.container"
       .child(
-        Node("section.section")
-          .child(Node("h1.title.is-1").text("Template Gallery:"))
+        "section.section"
+          .child("h1.title.is-1".text("Template Gallery:"))
       )
       .child(table(context.local.templates))
 
   private def table(
       templates: Seq[FractalTemplateEntityWithId]
   )(implicit context: Context): Node =
-    Node("section.section")
+    "section.section"
       .child(
-        Node("table.table.is-fullwidth")
+        "table.table.is-fullwidth"
           .child(
-            Node("tr")
-              .child(Node("th").text("Title"))
-              .child(Node("th").text("State"))
-              .child(Node("th"))
+            "tr"
+              .child("th".text("Title"))
+              .child("th".text("State"))
+              .child("th")
           )
           .child(
             templates.map(
               template =>
-                Node("tr")
-                  .child(Node("td").text(template.entity.title))
-                  .child(Node("td").text(if (template.entity.published) "published" else "private"))
+                "tr"
+                  .child("td".text(template.entity.title))
+                  .child("td".text(if (template.entity.published) "published" else "private"))
                   .child(
-                    Node("td").child(
+                    "td".child(
                       ButtonList(
                         Link(TemplateEditorState.byTemplate(template))
                           .classes("button", "is-rounded")

@@ -1,4 +1,5 @@
-package nutria.frontend.pages.common
+package nutria.frontend.pages
+package common
 
 import monocle.Lens
 import nutria.frontend.util.{SnabbdomUtil, Updatable}
@@ -29,7 +30,7 @@ object Form {
     Label(
       label = label,
       actions = actions,
-      node = Node("input.input")
+      node = "input.input"
         .attr("type", "text")
         .attr("disabled", "disabled")
         .attr("value", value)
@@ -43,7 +44,7 @@ object Form {
     Label(
       label = label,
       actions = actions,
-      node = Node("textArea.textarea")
+      node = "textArea.textarea"
         .style("min-height", "400px")
         .event[Event]("change", event => {
           val value = event.target.asInstanceOf[HTMLInputElement].value
@@ -72,9 +73,9 @@ object Form {
     Label(
       label = label,
       actions = actions,
-      node = Node("div.select.is-fullwidth")
+      node = "div.select.is-fullwidth"
         .child(
-          Node("select")
+          "select"
             .event[Event](
               "change",
               event => {
@@ -89,7 +90,7 @@ object Form {
             .child(
               options.map {
                 case (stringValue, value) =>
-                  Node("option")
+                  "option"
                     .boolAttr("selected", eqFunction(value, currentValue))
                     .text(stringValue)
               }

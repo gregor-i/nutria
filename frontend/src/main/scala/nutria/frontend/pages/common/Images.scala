@@ -1,4 +1,5 @@
-package nutria.frontend.pages.common
+package nutria.frontend.pages
+package common
 
 import snabbdom.Node
 
@@ -8,5 +9,5 @@ object Images {
   val compileError = "/assets/compile_error.svg"
   val rendering    = "/assets/rendering.svg"
 
-  def apply(src: String): Node = Node("img").attr("src", src)
+  def apply(src: String): Node = "img".attr("src", src)
 }

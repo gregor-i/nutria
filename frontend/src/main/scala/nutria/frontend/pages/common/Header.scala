@@ -8,19 +8,19 @@ import snabbdom.Node
 
 object Header {
   def apply()(implicit context: Context[PageState]): Node = {
-    Node("nav.navbar")
+    "nav.navbar"
       .attr("role", "navigation")
       .attr("aria-label", "main navigation")
       .child(
-        Node("div.navbar-brand")
+        "div.navbar-brand"
           .child(brand)
           .child(burgerMenu())
       )
       .child(
-        Node("div.navbar-menu")
+        "div.navbar-menu"
           .`class`("is-active", context.global.navbarExpanded)
           .child(
-            Node("div.navbar-start")
+            "div.navbar-start"
               .child(
                 Link
                   .async("/gallery", Links.galleryState())
@@ -73,7 +73,7 @@ object Header {
               )
           )
           .child(
-            Node("div.navbar-end")
+            "div.navbar-end"
               .child(
                 context.global.user match {
                   case Some(user) => logoutItem(user)
@@ -97,7 +97,7 @@ object Header {
   val logoutHref: String = "/auth/logout"
 
   private val brand =
-    Node("div.navbar-item")
+    "div.navbar-item"
       .child(
         Images(Images.icon)
           .style("height", "36px")
@@ -105,7 +105,7 @@ object Header {
           .style("max-height", "36px")
       )
       .child(
-        Node("span")
+        "span"
           .style("font-size", "36px")
           .style("line-height", "36px")
           .style("color", "black")
@@ -114,30 +114,30 @@ object Header {
       )
 
   private def burgerMenu()(implicit context: Context[_]) =
-    Node("a.navbar-burger.burger")
+    "a.navbar-burger.burger"
       .event("click", SnabbdomUtil.modifyGlobal(GlobalState.navbarExpanded.modify(!_)))
       .`class`("is-active", context.global.navbarExpanded)
       .attr("aria-label", "menu")
       .attr("aria-expanded", "false")
-      .child(Node("span").attr("aria-hidden", "true"))
-      .child(Node("span").attr("aria-hidden", "true"))
-      .child(Node("span").attr("aria-hidden", "true"))
+      .child("span".attr("aria-hidden", "true"))
+      .child("span".attr("aria-hidden", "true"))
+      .child("span".attr("aria-hidden", "true"))
 
   private def loginItem(implicit context: Context[PageState]) =
-    Node("div.navbar-item")
+    "div.navbar-item"
       .child(
-        Node("a.button.is-rounded")
+        "a.button.is-rounded"
           .attr("href", loginHref(context.local))
           .child(Icons.icon(Icons.login))
-          .child(Node("span").text("Log in"))
+          .child("span".text("Log in"))
       )
 
   private def logoutItem(user: User) =
-    Node("div.navbar-item")
+    "div.navbar-item"
       .child(
-        Node("a.button.is-rounded")
+        "a.button.is-rounded"
           .attr("href", logoutHref)
           .child(Icons.icon(Icons.logout))
-          .child(Node("span").text(s"Log out"))
+          .child("span".text(s"Log out"))
       )
 }

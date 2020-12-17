@@ -122,22 +122,22 @@ object ExplorerPage extends Page[ExplorerState] {
   def editDialog()(implicit context: Context): Option[Node] =
     context.local.editModal.map { _ =>
       Modal(closeAction = SnabbdomUtil.modify(ExplorerState.editModal.set(None)))(
-        Node("div.container")
+        "div.container"
           .child(
-            Node("section.section")
-              .child(Node("h1.title.is-1").text(Option(context.local.fractalImage.title).filter(_.nonEmpty).getOrElse("<No Title given>")))
-              .child(Node("h2.subtitle").text(context.local.fractalImage.description))
+            "section.section"
+              .child("h1.title.is-1".text(Option(context.local.fractalImage.title).filter(_.nonEmpty).getOrElse("<No Title given>")))
+              .child("h2.subtitle".text(context.local.fractalImage.description))
           )
           .child(EntityAttributes.section(ExplorerState.fractalImage))
           .child(
-            Node("section.section").children(
-              Node("h4.title.is-4").text("Parameters:"),
+            "section.section".children(
+              "h4.title.is-4".text("Parameters:"),
               ParameterForm.list(ExplorerState.fractalImage.composeLens(Entity.value).composeLens(FractalImage.appliedParameters)),
               AAInput(ExplorerState.fractalImage.composeLens(Entity.value).composeLens(FractalImage.antiAliase))
             )
           )
           .child(
-            Node("section.section")
+            "section.section"
               .child(editModalActions())
           )
       )
@@ -173,9 +173,9 @@ object ExplorerPage extends Page[ExplorerState] {
       val downloadAction = Actions.saveToDisk(context.local.fractalImage.value.copy(antiAliase = params.antiAliase), params.dimensions)
 
       Modal(closeAction = SnabbdomUtil.modify(ExplorerState.saveModal.set(None)))(
-        Node("div")
+        "div"
           .style("marginBottom", "1.5rem")
-          .child(Node("h1.title").text("Render high resolution Image"))
+          .child("h1.title".text("Render high resolution Image"))
           .child(
             Form.forLens(
               "width",

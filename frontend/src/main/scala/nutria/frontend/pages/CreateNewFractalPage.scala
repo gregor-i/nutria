@@ -67,8 +67,8 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
     Body()
       .child(Header())
       .child(
-        Node("div.container")
-          .child(Node("section.section").child(Node("h1.title.is-1").text("Create new Fractal")))
+        "div.container"
+          .child("section.section".child("h1.title.is-1".text("Create new Fractal")))
           .child {
             context.local.step match {
               case TemplateStep =>
@@ -86,10 +86,10 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
       .child(Footer())
 
   private def selectTemplate()(implicit context: Context): Node =
-    Node("section.section")
-      .child(Node("h4.title.is-4").text("Step 1: Select the fractal template"))
+    "section.section"
+      .child("h4.title.is-4".text("Step 1: Select the fractal template"))
       .child(
-        Node("div.fractal-tile-list")
+        "div.fractal-tile-list"
           .child(
             context.local.templates.map { template =>
               Link(context.local.copy(step = ParametersStep(template)))
@@ -106,11 +106,11 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
   )(implicit context: Context): Node = {
     val image = templateLens.get(context.local).map(FractalImage.fromTemplate)
 
-    Node("section.section")
-      .child(Node("h4.title.is-4").text("Step 2: Modify parameters"))
+    "section.section"
+      .child("h4.title.is-4".text("Step 2: Modify parameters"))
       .child(ParameterForm.list(templateLens.composeLens(Entity.value).composeLens(FractalTemplate.parameters)))
       .child(
-        Node("div.fractal-tile-list")
+        "div.fractal-tile-list"
           .child(
             InteractiveFractal
               .forTemplate(templateLens.composeLens(Entity.value))

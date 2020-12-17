@@ -80,34 +80,34 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       .child(common.Footer())
 
   def body(implicit context: Context) =
-    Node("div.container")
+    "div.container"
       .child(
-        Node("section.section")
-          .child(Node("h1.title.is-1").text("Fractal Template"))
-//          .child(Node("h2.subtitle").text("description")
+        "section.section"
+          .child("h1.title.is-1".text("Fractal Template"))
+//          .child("h2.subtitle".text("description")
       )
       .child(EntityAttributes.section(TemplateEditorState.entity))
       .child(
-        Node("section.section").children(
-          Node("h4.title.is-4").text("Template:"),
+        "section.section".children(
+          "h4.title.is-4".text("Template:"),
           template(TemplateEditorState.template)
         )
       )
       .child(
-        Node("section.section").children(
-          Node("h4.title.is-4").text("Parameters:"),
+        "section.section".children(
+          "h4.title.is-4".text("Parameters:"),
           parameters(),
           openModalButton()
         )
       )
       .child(
-        Node("section.section").children(
-          Node("h4.title.is-4").text("Preview:"),
+        "section.section".children(
+          "h4.title.is-4".text("Preview:"),
           preview()
         )
       )
       .child(
-        Node("section.section")
+        "section.section"
           .child(actions())
       )
       .child(parameterModal(TemplateEditorState.newParameter, TemplateEditorState.parameters))
@@ -116,16 +116,16 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       lens: Lens[State, FractalTemplate]
   )(implicit context: Context) = {
     val codeEditor =
-      Node("div.code-editor-container")
+      "div.code-editor-container"
         .child(
-          Node("pre.code-editor-line-numbers").text {
+          "pre.code-editor-line-numbers".text {
             (1 to (context.local.entity.value.code.count(_ == '\n') + 1))
               .map(number => s"${number}:")
               .mkString("\n")
           }
         )
         .child(
-          Node("textarea.code-editor.is-family-code")
+          "textarea.code-editor.is-family-code"
             .event[Event](
               "input",
               Debounce(
@@ -186,13 +186,13 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
       )
 
       Modal(closeAction = SnabbdomUtil.modify(lensToMaybeParameter.set(None)))(
-        Node("h5.title.is-5").text("Add Parameter"),
+        "h5.title.is-5".text("Add Parameter"),
         selectType,
         Form.forLens("name", description = "", lens = lensToParameter.composeLens(Parameter.name)),
         Form.forLens("description", description = "", lens = lensToParameter.composeLens(Parameter.description)),
         Label(
           label = "generated code:",
-          node = Node("pre")
+          node = "pre"
             .text(FragmentShaderSource.parameter(lensToParameter.get(context.local)))
             .style("whiteSpace", "break-spaces"),
           actions = Seq.empty
@@ -235,7 +235,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
     )
 
   def preview()(implicit context: Context) =
-    Node("div.fractal-tile-list")
+    "div.fractal-tile-list"
       .child(
         InteractiveFractal
           .forTemplate(TemplateEditorState.template)

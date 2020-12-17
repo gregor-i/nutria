@@ -1,4 +1,5 @@
-package nutria.frontend.pages.common
+package nutria.frontend.pages
+package common
 
 import nutria.core.FractalTemplate
 import nutria.frontend.{CompileShaderException, FractalRenderer}
@@ -24,7 +25,7 @@ object CompileStatus {
     }
 
   def apply(template: FractalTemplate): Node = {
-    Node("pre.is-paddingless.message")
+    "pre.is-paddingless.message"
       .prop("innerHTML", s"<div class='message-body'>Compiling ...</div>")
       .hookInsert { node =>
         hook(template)(node.elm.get)

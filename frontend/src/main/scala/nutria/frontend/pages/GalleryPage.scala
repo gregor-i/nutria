@@ -36,13 +36,13 @@ object GalleryPage extends Page[GalleryState] {
           .child(Icons.icon(Icons.plus))
       )
       .child(
-        Node("div.container")
+        "div.container"
           .child(
-            Node("section.section")
-              .child(Node("h1.title.is-1").text("Fractal Gallery:"))
+            "section.section"
+              .child("h1.title.is-1".text("Fractal Gallery:"))
           )
           .child(
-            Node("div.fractal-tile-list")
+            "div.fractal-tile-list"
               .child(Pagination.page(GalleryState.publicFractals, GalleryState.page).map(renderFractalTile(_)))
               .child(dummyTiles)
           )
@@ -51,7 +51,7 @@ object GalleryPage extends Page[GalleryState] {
       .child(Footer())
 
   def renderFractalTile(fractal: WithId[FractalImageEntity])(implicit context: Context): Node =
-    Node("article.fractal-tile.is-relative")
+    "article.fractal-tile.is-relative"
       .child(
         Link(Links.explorerState(fractal))
           .child(
@@ -59,7 +59,7 @@ object GalleryPage extends Page[GalleryState] {
           )
       )
       .child(
-        Node("div.buttons.overlay-bottom-right.padding")
+        "div.buttons.overlay-bottom-right.padding"
           .child(
             Link(Links.explorerState(fractal))
               .classes("button", "is-outlined", "is-rounded")
@@ -73,9 +73,9 @@ object GalleryPage extends Page[GalleryState] {
       )
 
   private val dummyTile =
-    Node("article.dummy-tile")
+    "article.dummy-tile"
       .child(
-        Node("canvas")
+        "canvas"
           .attr("width", Dimensions.thumbnail.width.toString)
           .attr("height", "0")
       )

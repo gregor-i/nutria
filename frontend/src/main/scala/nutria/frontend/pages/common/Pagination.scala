@@ -1,4 +1,5 @@
-package nutria.frontend.pages.common
+package nutria.frontend.pages
+package common
 
 import monocle.Lens
 import nutria.frontend.util.{SnabbdomUtil, Updatable}
@@ -27,10 +28,10 @@ object Pagination {
       p >= 1 && p <= pages
 
     def link(p: Int) =
-      Node("li")
+      "li"
         .key(p)
         .child(
-          Node("a.pagination-link")
+          "a.pagination-link"
             .`class`("is-current", p == page)
             .text(p.toString)
             .event("click", action(p))
@@ -38,12 +39,12 @@ object Pagination {
 
     val range = (page - 2).max(1) to (page + 2).min(pages)
 
-    Node("nav.pagination.is-centered")
+    "nav.pagination.is-centered"
       .attr("role", "navigation")
       .attr("aria-label", "pagination")
       .child(
-        Node("ul.pagination-list")
-          .child(Node("a.pagination-link").child(Icons.icon(Icons.prev)).boolAttr("disabled", !isValid(page - 1)).event("click", action(page - 1)))
+        "ul.pagination-list"
+          .child("a.pagination-link".child(Icons.icon(Icons.prev)).boolAttr("disabled", !isValid(page - 1)).event("click", action(page - 1)))
           .pipe { node =>
             if (!range.contains(1) && !range.contains(2))
               node
@@ -61,10 +62,10 @@ object Pagination {
             else
               node
           }
-          .child(Node("a.pagination-link").child(Icons.icon(Icons.next)).boolAttr("disabled", !isValid(page + 1)).event("click", action(page + 1)))
+          .child("a.pagination-link".child(Icons.icon(Icons.next)).boolAttr("disabled", !isValid(page + 1)).event("click", action(page + 1)))
       )
   }
 
-  private val ellipsis = Node("li").child(Node("span.pagination-ellipsis").text("…"))
+  private val ellipsis = "li".child("span.pagination-ellipsis".text("…"))
 
 }

@@ -1,4 +1,5 @@
-package nutria.frontend.pages.common
+package nutria.frontend.pages
+package common
 
 import mathParser.complex.{Complex, ComplexLanguage}
 import nutria.core.languages.StringFunction
@@ -17,7 +18,7 @@ trait Input[S] {
 object Input {
   implicit val stringInput: Input[String] =
     updatable =>
-      Node("input.input")
+      "input.input"
         .attr("type", "text")
         .prop("value", updatable.state)
         .event[Event]("change", event => {
@@ -29,7 +30,7 @@ object Input {
       implicit lang: ComplexLanguage[L]
   ): Input[StringFunction[L]] =
     updatable =>
-      Node("input.input")
+      "input.input"
         .attr("type", "text")
         .prop("value", updatable.state.string)
         .event[Event](
@@ -48,7 +49,7 @@ object Input {
 
   implicit val intInput: Input[Int] =
     updatable =>
-      Node("input.input")
+      "input.input"
         .attr("type", "number")
         .prop("value", updatable.state.toString)
         .event[Event](
@@ -61,7 +62,7 @@ object Input {
 
   implicit val doubleInput: Input[Double] =
     updatable =>
-      Node("input.input")
+      "input.input"
         .attr("type", "number")
         .prop("value", updatable.state.toString)
         .event[Event](
@@ -80,7 +81,7 @@ object Input {
 
   implicit val complexInput: Input[Complex] =
     updatable =>
-      Node("div.field-body")
+      "div.field-body"
         .child(
           doubleInput
             .node(Updatable.composeLens(updatable, ComplexLenses.real))
@@ -94,7 +95,7 @@ object Input {
 
   implicit val colorInput: Input[RGBA] =
     updatable =>
-      Node("input.input")
+      "input.input"
         .attr("type", "color")
         .prop("value", RGB.toRGBString(updatable.state.withoutAlpha))
         .event[Event](
@@ -114,7 +115,7 @@ object Input {
   implicit val colorGradientInput: Input[Seq[RGBA]] =
     updatable => {
       val value = updatable.state
-      Node("input.input.color-gradient-input")
+      "input.input.color-gradient-input"
         .attr("type", "text")
         .prop("value", value.map(_.withoutAlpha).map(RGB.toRGBString).mkString(" "))
         .style("background-image", s"linear-gradient(to right, ${value.map(_.withoutAlpha).map(RGB.toRGBString).mkString(", ")})")

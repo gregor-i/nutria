@@ -23,14 +23,14 @@ object ErrorPage extends Page[ErrorState] {
     Body()
       .child(Header())
       .child(
-        Node("div.section")
+        "div.section"
           .child(
-            Node("article.message.is-danger")
+            "article.message.is-danger"
               .child(
-                Node("div.message-body")
-                  .child(Node("div.title").text("An unexpected error occured."))
-                  .child(Node("div.subtitle").text(context.local.message))
-                  .child(Node("a").attr("href", "/").text("return to landing page"))
+                "div.message-body"
+                  .child("div.title".text("An unexpected error occured."))
+                  .child("div.subtitle".text(context.local.message))
+                  .child("a".attr("href", "/").text("return to landing page"))
               )
           )
       )

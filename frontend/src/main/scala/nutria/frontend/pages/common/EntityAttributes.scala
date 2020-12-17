@@ -8,8 +8,8 @@ import snabbdom.Node
 
 object EntityAttributes {
   def section[S, E](lens: Lens[S, Entity[E]])(implicit updatable: Updatable[S, S]): Node =
-    Node("section.section")
-      .child(Node("h4.title.is-4").text("Administration Attributes:"))
+    "section.section"
+      .child("h4.title.is-4".text("Administration Attributes:"))
       .child(form(lens))
 
   def form[S, E](lens: Lens[S, Entity[E]])(implicit updatable: Updatable[S, S]): Seq[Node] = {

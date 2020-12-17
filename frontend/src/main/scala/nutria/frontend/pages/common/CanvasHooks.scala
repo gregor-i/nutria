@@ -1,4 +1,5 @@
-package nutria.frontend.pages.common
+package nutria.frontend.pages
+package common
 
 import nutria.core.FractalImage
 import nutria.frontend.util.AsyncUtil

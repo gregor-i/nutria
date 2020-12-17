@@ -35,15 +35,15 @@ object ColorfulFractalNoisePage extends Page[ColorfulFractalNoiseState] {
     Body()
       .child(Header())
       .child(
-        Node("div.container")
+        "div.container"
           .child(fractalTile())
           .child(inputs())
       )
 
   private def fractalTile()(implicit context: Context) =
-    Node("div.fractal-tile-list")
+    "div.fractal-tile-list"
       .child {
-        Node("div.fractal-tile")
+        "div.fractal-tile"
           .style("height", Dimensions.preview.height.toString + "px")
           .style("width", Dimensions.preview.width.toString + "px")
           .child(AnimatedFractalTile(fractalImageOverTime(context.local)))
@@ -57,7 +57,7 @@ object ColorfulFractalNoisePage extends Page[ColorfulFractalNoiseState] {
   }
 
   private def inputs()(implicit context: Context) =
-    Node("div.section")
+    "div.section"
       .child(
         Form.forLens(
           "t0",

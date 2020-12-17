@@ -47,10 +47,10 @@ object DocumentationPage extends Page[DocumentationState] {
   private def content(subpage: Subpage) =
     subpage match {
       case FAQ =>
-        Node("div.container")
+        "div.container"
           .prop("innerHTML", StaticContent("frontend/src/main/html/faq.html"))
       case Introduction =>
-        Node("div.container")
+        "div.container"
           .prop("innerHTML", StaticContent("frontend/src/main/html/introduction.html"))
     }
 

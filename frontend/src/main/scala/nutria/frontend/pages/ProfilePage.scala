@@ -29,15 +29,15 @@ object ProfilePage extends Page[ProfileState] {
       .child(Footer())
 
   def content()(implicit context: Context) =
-    Node("div.container")
+    "div.container"
       .child(
-        Node("section.section")
-          .child(Node("h1.title.is-1").text("User Profile"))
-          .child(Node("h2.subtitle").text("ID: " + context.local.about.id))
+        "section.section"
+          .child("h1.title.is-1".text("User Profile"))
+          .child("h2.subtitle".text("ID: " + context.local.about.id))
       )
       .child(
-        Node("section.section").children(
-          Node("h4.title.is-4").text("Saved information from Google:"),
+        "section.section".children(
+          "h4.title.is-4".text("Saved information from Google:"),
           Form
             .readonlyStringInput("Google User Id", context.local.about.googleUserId.getOrElse("<None>")),
           Form.readonlyStringInput("Name", context.local.about.name),
@@ -45,11 +45,11 @@ object ProfilePage extends Page[ProfileState] {
         )
       )
       .child(
-        Node("section.section")
+        "section.section"
           .child(
-            Node("div.field.is-grouped.is-grouped-right")
+            "div.field.is-grouped.is-grouped-right"
               .child(
-                Node("p.control")
+                "p.control"
                   .child(
                     Button("Delete profile", Icons.delete, Actions.deleteUser(context.local.about.id))
                       .classes("is-danger")
