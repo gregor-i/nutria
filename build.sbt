@@ -1,3 +1,4 @@
+import org.scalajs.sbtplugin.Stage
 import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
 import scala.sys.process._
@@ -66,10 +67,10 @@ val frontend = project
   .enablePlugins(ScalaJSPlugin)
   .settings(
     scalaJSUseMainModuleInitializer := true,
-    scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) }
+    scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) }
   )
   .settings(
-    libraryDependencies += "com.github.gregor-i" %%% "scalajs-snabbdom" % "1.0.1",
+    libraryDependencies += "com.github.gregor-i" %%% "scalajs-snabbdom" % "1.1",
     scalaJsDom,
     scalatest
   )
@@ -117,7 +118,7 @@ compile in frontend := {
   val buildFrontend = (frontend / Compile / fastOptJS).value.data
   val outputFile    = (backend / baseDirectory).value / "public" / "assets" / "nutria.js"
   streams.value.log.info("integrating frontend (fastOptJS)")
-  val npmLog = Seq("./node_modules/.bin/browserify", buildFrontend.toString, "-o", outputFile.toString).!!
+  val npmLog = Seq("./node_modules/.bin/webpack", "--mode", "development").!!
   streams.value.log.info(npmLog)
   ret
 }
@@ -126,7 +127,7 @@ stage in frontend := {
   val buildFrontend = (frontend / Compile / fullOptJS).value.data
   val outputFile    = (backend / baseDirectory).value / "public" / "assets" / "nutria.js"
   streams.value.log.info("integrating frontend (fullOptJS)")
-  val npmLog = Seq("./node_modules/.bin/browserify", buildFrontend.toString, "-o", outputFile.toString).!!
+  val npmLog = Seq("./node_modules/.bin/webpack", "--mode", "production").!!
   streams.value.log.info(npmLog)
   outputFile
 }

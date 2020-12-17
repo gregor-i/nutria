@@ -8,5 +8,5 @@ import scala.scalajs.js.annotation.JSImport
 @js.native
 @JSImport("snabbdom-to-html", JSImport.Namespace)
 object SnabbdomToHtml extends js.Object {
-  def apply(vNode: VNode): String = js.native
+  def `default`(vNode: VNode): String = js.native
 }

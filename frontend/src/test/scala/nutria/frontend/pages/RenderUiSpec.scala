@@ -23,7 +23,7 @@ class RenderUiSpec extends AnyFunSuite {
       Pages
         .ui(context)
         .toVNode
-        .pipe(SnabbdomToHtml.apply)
+        .pipe(SnabbdomToHtml.`default`)
         .pipe(withFixture)
         .pipe(write(fileName, _))
     }

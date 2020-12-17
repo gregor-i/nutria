@@ -16,7 +16,7 @@ class GenerateHTMLSpec extends AnyFunSuite {
     Pages
       .ui(NoOpContext(local = LoadingState(process = Future.never), global = GlobalState.initial))
       .toVNode
-      .pipe(SnabbdomToHtml.apply)
+      .pipe(SnabbdomToHtml.`default`)
       .pipe(withFixture)
       .pipe(HtmlFormatter.render)
       .pipe(write("frontend/src/main/html/nutria.html", _))

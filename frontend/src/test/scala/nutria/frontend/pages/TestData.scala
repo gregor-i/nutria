@@ -30,12 +30,11 @@ object TestData {
     ("Error", ErrorState("error message"), noUser),
     ("FAQ", DocumentationState.faq, user),
     ("Introduction", DocumentationState.introduction, user),
-    ("Greeting", GreetingState(randomFractal = fractalImage), user),
+    ("Greeting", GreetingState(randomFractal = Entity(value = fractalImage)), user),
     ("Explorer-owner", ExplorerState(remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)), owner),
     ("Explorer-no-user", ExplorerState(remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)), noUser),
     ("Explorer-user", ExplorerState(remoteFractal = Some(fractalEntity), fractalImage = Entity(value = fractalImage)), user),
     ("Gallery", GalleryState(publicFractals = publicFractals, page = 1), noUser),
-    ("Details-Diverging", DetailsState(remoteFractal = fractalEntity, fractalToEdit = fractalEntity), noUser),
     ("Template-Editor", TemplateEditorState.initial, user),
     (
       "Template-Editor-new-parameter-Int",
