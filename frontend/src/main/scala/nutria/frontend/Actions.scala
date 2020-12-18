@@ -4,13 +4,13 @@ import nutria.api._
 import nutria.core.{Dimensions, FractalImage}
 import nutria.frontend.pages._
 import nutria.frontend.pages.common.FractalTile
+import nutria.frontend.service.ToastSyntax._
 import nutria.frontend.service.{FractalService, TemplateService, UserService}
-import nutria.frontend.toasts.Syntax._
-import nutria.frontend.toasts.Toasts
 import nutria.frontend.util.Untyped
 import org.scalajs.dom
 import org.scalajs.dom.html.Anchor
 import snabbdom.{Event, Eventlistener}
+import toasts.Toasts
 
 import scala.concurrent.Future
 import scala.util.chaining.scalaUtilChainingOps
