@@ -9,8 +9,8 @@ import nutria.frontend.service.{FractalService, TemplateService, UserService}
 import nutria.frontend.util.Untyped
 import org.scalajs.dom
 import org.scalajs.dom.html.Anchor
-import snabbdom.{Event, Eventlistener}
-import toasts.Toasts
+import snabbdom.{Event}
+import snabbdom.toasts.Toasts
 
 import scala.concurrent.Future
 import scala.util.chaining.scalaUtilChainingOps
@@ -35,7 +35,7 @@ object Actions extends ExecutionContext {
       case Some(_) => op
     }
 
-  def togglePublishedImage(fractal: WithId[FractalImageEntity])(implicit context: Context[UserGalleryState]): Eventlistener =
+  def togglePublishedImage(fractal: WithId[FractalImageEntity])(implicit context: Context[UserGalleryState]): Event => Unit =
     (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
@@ -60,7 +60,7 @@ object Actions extends ExecutionContext {
         }
       }
 
-  def deleteFractalFromUserGallery(fractalId: String)(implicit context: Context[UserGalleryState]): Eventlistener =
+  def deleteFractalFromUserGallery(fractalId: String)(implicit context: Context[UserGalleryState]): Event => Unit =
     (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
@@ -78,7 +78,7 @@ object Actions extends ExecutionContext {
         }
       }
 
-  def deleteFractal(fractalId: String)(implicit context: Context[_]): Eventlistener =
+  def deleteFractal(fractalId: String)(implicit context: Context[_]): Event => Unit =
     (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
@@ -91,7 +91,7 @@ object Actions extends ExecutionContext {
         }
       }
 
-  def updateFractal(fractalWithId: WithId[FractalImageEntity])(implicit context: Context[_]): Eventlistener =
+  def updateFractal(fractalWithId: WithId[FractalImageEntity])(implicit context: Context[_]): Event => Unit =
     (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
@@ -103,7 +103,7 @@ object Actions extends ExecutionContext {
         }
       }
 
-  def saveAsNewFractal(fractalEntity: FractalImageEntity)(implicit context: Context[_]): Eventlistener =
+  def saveAsNewFractal(fractalEntity: FractalImageEntity)(implicit context: Context[_]): Event => Unit =
     (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
@@ -115,7 +115,7 @@ object Actions extends ExecutionContext {
         }
       }
 
-  def saveSnapshot(fractalEntity: FractalImageEntity)(implicit context: Context[ExplorerState]): Eventlistener =
+  def saveSnapshot(fractalEntity: FractalImageEntity)(implicit context: Context[ExplorerState]): Event => Unit =
     (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
@@ -127,7 +127,7 @@ object Actions extends ExecutionContext {
         }
       }
 
-  def saveTemplate(templateEntity: FractalTemplateEntity)(implicit context: Context[TemplateEditorState]): Eventlistener =
+  def saveTemplate(templateEntity: FractalTemplateEntity)(implicit context: Context[TemplateEditorState]): Event => Unit =
     (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
@@ -139,7 +139,7 @@ object Actions extends ExecutionContext {
         }
       }
 
-  def updateTemplate(template: FractalTemplateEntityWithId)(implicit context: Context[_]): Eventlistener =
+  def updateTemplate(template: FractalTemplateEntityWithId)(implicit context: Context[_]): Event => Unit =
     (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
@@ -151,7 +151,7 @@ object Actions extends ExecutionContext {
         }
       }
 
-  def deleteTemplate(templateId: String)(implicit context: Context[_]): Eventlistener =
+  def deleteTemplate(templateId: String)(implicit context: Context[_]): Event => Unit =
     (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
@@ -164,7 +164,7 @@ object Actions extends ExecutionContext {
         }
       }
 
-  def togglePublishedTemplate(template: FractalTemplateEntityWithId)(implicit context: Context[TemplateGalleryState]): Eventlistener =
+  def togglePublishedTemplate(template: FractalTemplateEntityWithId)(implicit context: Context[TemplateGalleryState]): Event => Unit =
     (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
@@ -189,7 +189,7 @@ object Actions extends ExecutionContext {
         }
       }
 
-  def deleteUser(userId: String)(implicit context: Context[_]): Eventlistener =
+  def deleteUser(userId: String)(implicit context: Context[_]): Event => Unit =
     (_: Event) =>
       onlyLoggedIn {
         asyncUpdateBoth {
@@ -202,7 +202,7 @@ object Actions extends ExecutionContext {
         }
       }
 
-  def saveToDisk(fractalImage: FractalImage, dimensions: Dimensions)(implicit context: Context[_]): Eventlistener =
+  def saveToDisk(fractalImage: FractalImage, dimensions: Dimensions)(implicit context: Context[_]): Event => Unit =
     (_: Event) => {
       val dataUrl = FractalTile.dataUrl(fractalImage, dimensions)
       val link    = dom.document.createElement("a").asInstanceOf[Anchor]

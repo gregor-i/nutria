@@ -9,7 +9,8 @@ import nutria.frontend._
 import nutria.frontend.pages.common._
 import nutria.frontend.service.FractalService
 import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
-import snabbdom.{Node, Snabbdom}
+import snabbdom.Node
+import snabbdom.components.{Button, ButtonList, Modal}
 
 @Lenses
 case class ExplorerState(
@@ -91,7 +92,7 @@ object ExplorerPage extends Page[ExplorerState] {
       .childOptional(editDialog())
 
   def renderActionBar()(implicit context: Context): Node =
-    ButtonList()
+    ButtonList.right()
       .classes("overlay-bottom-right", "padding")
       .child(buttonSave(context.local.fractalImage))
       .child(buttonOpenEditModal())
@@ -164,7 +165,7 @@ object ExplorerPage extends Page[ExplorerState] {
         Seq(buttonFork)
     }
 
-    ButtonList(buttons: _*)
+    ButtonList.right(buttons: _*)
   }
 
   def saveDialog()(implicit context: Context): Option[Node] =
@@ -191,7 +192,7 @@ object ExplorerPage extends Page[ExplorerState] {
             )
           )
           .child(Form.forLens("anti alias", description = "Anti Aliase Factor", lens = lensParams composeLens SaveFractalDialog.antiAliase)),
-        ButtonList(Button("Download", Icons.download, downloadAction).classes("is-primary"))
+        ButtonList.right(Button("Download", Icons.download, downloadAction).classes("is-primary"))
       )
     }
 }

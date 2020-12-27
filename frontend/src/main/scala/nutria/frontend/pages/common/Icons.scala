@@ -1,8 +1,6 @@
 package nutria.frontend.pages
 package common
 
-import snabbdom.Node
-
 object Icons {
   val upload    = "fa-upload"
   val save      = "fa-save"
@@ -27,10 +25,4 @@ object Icons {
   val next      = "fa-chevron-right"
   val prev      = "fa-chevron-left"
   val undo      = "fa-undo"
-
-  def icon(icon: String): Node =
-    "span.icon"
-      .child(
-        "i.fas".`class`(icon)
-      )
 }

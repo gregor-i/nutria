@@ -5,6 +5,7 @@ import nutria.api.User
 import nutria.frontend._
 import nutria.frontend.util.SnabbdomUtil
 import snabbdom.Node
+import snabbdom.components.Icon
 
 object Header {
   def apply()(implicit context: Context[PageState]): Node = {
@@ -128,7 +129,7 @@ object Header {
       .child(
         "a.button.is-rounded"
           .attr("href", loginHref(context.local))
-          .child(Icons.icon(Icons.login))
+          .child(Icon(Icons.login))
           .child("span".text("Log in"))
       )
 
@@ -137,7 +138,7 @@ object Header {
       .child(
         "a.button.is-rounded"
           .attr("href", logoutHref)
-          .child(Icons.icon(Icons.logout))
+          .child(Icon(Icons.logout))
           .child("span".text(s"Log out"))
       )
 }

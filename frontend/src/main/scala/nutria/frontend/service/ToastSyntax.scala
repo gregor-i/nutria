@@ -1,6 +1,6 @@
 package nutria.frontend.service
 
-import toasts.{ToastType, Toasts}
+import snabbdom.toasts.{ToastType, Toasts}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}

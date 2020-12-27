@@ -6,7 +6,7 @@ import nutria.frontend.{CompileShaderException, FractalRenderer}
 import org.scalajs.dom
 import org.scalajs.dom.html.{Canvas, Element}
 import org.scalajs.dom.raw.WebGLRenderingContext
-import snabbdom.{Node, Snabbdom}
+import snabbdom.Node
 
 object CompileStatus {
   private lazy val canvas: Canvas = dom.document.createElement("canvas").asInstanceOf[Canvas]

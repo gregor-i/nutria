@@ -7,6 +7,7 @@ import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common._
 import nutria.frontend.service.NutriaAdminService
 import nutria.frontend.{GlobalState, Page, PageState}
+import snabbdom.components.{Button, ButtonList}
 import snabbdom.{Event, Node}
 
 import scala.concurrent.Future
@@ -65,8 +66,7 @@ object AdminPage extends Page[AdminState] {
                   .child("td".text(user.googleUserId.getOrElse("<None>")))
                   .child(
                     "td".child(
-                      Button
-                        .icon(Icons.delete, action(NutriaAdminService.deleteUser(user.id)))
+                      Button.icon(Icons.delete, action(NutriaAdminService.deleteUser(user.id)))
                     )
                   )
             )
@@ -98,8 +98,7 @@ object AdminPage extends Page[AdminState] {
                   .child("td".text(fractal.entity.fold("invalid")(_.description)))
                   .child(
                     "td".child(
-                      Button
-                        .icon(Icons.delete, action(NutriaAdminService.deleteFractal(fractal.id)))
+                      Button.icon(Icons.delete, action(NutriaAdminService.deleteFractal(fractal.id)))
                     )
                   )
             )
@@ -139,7 +138,7 @@ object AdminPage extends Page[AdminState] {
   private def actionBar()(implicit context: Context): Node =
     "section.section"
       .child(
-        ButtonList(
+        ButtonList.right(
           Button("clean Fractals", action(NutriaAdminService.cleanFractals())),
           Button("delete all Fractals", action(NutriaAdminService.truncateFractals())),
           Button("insert examples", action(NutriaAdminService.insertExamples())),

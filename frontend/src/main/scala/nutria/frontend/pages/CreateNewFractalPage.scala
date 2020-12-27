@@ -13,6 +13,7 @@ import nutria.frontend.pages.common._
 import nutria.frontend.service.TemplateService
 import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
 import snabbdom.Node
+import snabbdom.components.{Button, ButtonList}
 
 import scala.concurrent.Future
 import scala.util.chaining._
@@ -120,7 +121,7 @@ object CreateNewFractalPage extends Page[CreateNewFractalState] {
           )
       )
       .child(
-        ButtonList(
+        ButtonList.right(
           backButton(),
           finishButton(image)
         )

@@ -6,6 +6,7 @@ import nutria.core.Dimensions
 import nutria.frontend._
 import nutria.frontend.pages.common.{FractalTile, _}
 import snabbdom._
+import snabbdom.components.Icon
 
 import scala.util.chaining._
 
@@ -33,7 +34,7 @@ object GalleryPage extends Page[GalleryState] {
         Link
           .async("/new-fractal", CreateNewFractalState.load(context.global))
           .pipe(Header.fab)
-          .child(Icons.icon(Icons.plus))
+          .child(Icon(Icons.plus))
       )
       .child(
         "div.container"
@@ -63,12 +64,12 @@ object GalleryPage extends Page[GalleryState] {
           .child(
             Link(Links.explorerState(fractal))
               .classes("button", "is-outlined", "is-rounded")
-              .child(Icons.icon(Icons.explore))
+              .child(Icon(Icons.explore))
           )
           .child(
             Link(Links.explorerStateWithModal(fractal))
               .classes("button", "is-outlined", "is-rounded")
-              .child(Icons.icon(Icons.edit))
+              .child(Icon(Icons.edit))
           )
       )
 

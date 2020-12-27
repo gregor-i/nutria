@@ -1,9 +1,8 @@
 package nutria.frontend.pages
 package common
 
-import nutria.frontend.pages.LoadingState
 import nutria.frontend.{Context, ExecutionContext, PageState, Router}
-import snabbdom.{Event, Node, Snabbdom}
+import snabbdom.{Event, Node}
 
 import scala.concurrent.Future
 

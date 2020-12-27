@@ -14,7 +14,8 @@ import nutria.frontend.service.TemplateService
 import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
 import nutria.shaderBuilder.FragmentShaderSource
 import org.scalajs.dom.raw.HTMLTextAreaElement
-import snabbdom.{Event, Node, Snabbdom}
+import snabbdom.components.{Button, ButtonList, Modal}
+import snabbdom.{Event, Node}
 
 import scala.util.chaining._
 
@@ -197,7 +198,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
             .style("whiteSpace", "break-spaces"),
           actions = Seq.empty
         ),
-        ButtonList(
+        ButtonList.right(
           Button("Cancel", Icons.cancel, SnabbdomUtil.modify(lensToMaybeParameter.set(None))),
           Button(
             if (overwrite) "Overwrite" else "Add",
@@ -226,7 +227,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
   }
 
   def openModalButton()(implicit context: Context) =
-    ButtonList(
+    ButtonList.right(
       Button(
         "Add new Parameter",
         Icons.plus,
@@ -254,7 +255,7 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
         Seq.empty
     }
 
-    ButtonList(buttons: _*)
+    ButtonList.right(buttons: _*)
   }
 
   private def buttonSave(implicit context: Context) =

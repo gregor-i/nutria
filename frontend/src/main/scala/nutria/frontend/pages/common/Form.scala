@@ -4,7 +4,8 @@ package common
 import monocle.Lens
 import nutria.frontend.util.{SnabbdomUtil, Updatable}
 import org.scalajs.dom.raw.{HTMLInputElement, HTMLSelectElement}
-import snabbdom.{Event, Node, Snabbdom}
+import snabbdom.components.Button
+import snabbdom.{Event, Node}
 
 object Form {
 

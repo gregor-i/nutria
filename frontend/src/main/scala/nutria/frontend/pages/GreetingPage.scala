@@ -1,12 +1,12 @@
 package nutria.frontend.pages
 
-import nutria.api.{Entity, FractalImageEntity}
-import nutria.core.FractalImage
+import nutria.api.FractalImageEntity
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend._
 import nutria.frontend.pages.common._
 import nutria.macros.StaticContent
-import snabbdom.{Event, Node, Snabbdom}
+import snabbdom.Node
+import snabbdom.components.{ButtonList, Icon, Modal}
 
 import scala.util.chaining.scalaUtilChainingOps
 
@@ -28,15 +28,15 @@ object GreetingPage extends Page[GreetingState] {
   private def content(implicit context: Context) = {
     Modal(closeAction = _ => context.update(Links.explorerState(fractal = context.local.randomFractal)))(
       "div.content".prop("innerHTML", StaticContent("frontend/src/main/html/greeting.html")),
-      ButtonList(
+      ButtonList.right(
         Link(DocumentationState.introduction)
           .classes("button", "is-link", "is-outlined")
-          .child(Icons.icon(Icons.info))
+          .child(Icon(Icons.info))
           .child("span".text("more information")),
         Link
           .async("/gallery", Links.galleryState())
           .classes("button", "is-primary")
-          .child(Icons.icon(Icons.gallery))
+          .child(Icon(Icons.gallery))
           .child("span".text("Start exploring!"))
       )
     )

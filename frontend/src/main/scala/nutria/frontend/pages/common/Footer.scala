@@ -2,7 +2,6 @@ package nutria.frontend.pages
 package common
 
 import nutria.macros.StaticContent
-import snabbdom.Node
 
 object Footer {
   def apply() =

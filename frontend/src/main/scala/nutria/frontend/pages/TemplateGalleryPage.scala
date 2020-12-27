@@ -6,6 +6,7 @@ import nutria.api.FractalTemplateEntityWithId
 import nutria.frontend.Router.{Path, QueryParameter}
 import nutria.frontend.pages.common._
 import nutria.frontend.service.TemplateService
+import snabbdom.components.{Button, ButtonList, Icon}
 import snabbdom.{Event, Node}
 
 import scala.concurrent.Future
@@ -41,7 +42,7 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
       .child(
         Header
           .fab("button")
-          .child(Icons.icon(Icons.plus))
+          .child(Icon(Icons.plus))
           .event[Event]("click", _ => context.update(TemplateEditorState.initial))
       )
       .child(body())
@@ -75,10 +76,10 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
                   .child("td".text(if (template.entity.published) "published" else "private"))
                   .child(
                     "td".child(
-                      ButtonList(
+                      ButtonList.right(
                         Link(TemplateEditorState.byTemplate(template))
                           .classes("button", "is-rounded")
-                          .child(Icons.icon(Icons.edit)),
+                          .child(Icon(Icons.edit)),
                         Button.icon(if (template.entity.published) Icons.unpublish else Icons.publish, Actions.togglePublishedTemplate(template)),
                         Button.icon(Icons.delete, Actions.deleteTemplate(template.id))
                       )
