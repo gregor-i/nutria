@@ -92,7 +92,8 @@ object ExplorerPage extends Page[ExplorerState] {
       .childOptional(editDialog())
 
   def renderActionBar()(implicit context: Context): Node =
-    ButtonList.right()
+    ButtonList
+      .right()
       .classes("overlay-bottom-right", "padding")
       .child(buttonSave(context.local.fractalImage))
       .child(buttonOpenEditModal())
