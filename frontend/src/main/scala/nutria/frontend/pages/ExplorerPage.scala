@@ -123,7 +123,7 @@ object ExplorerPage extends Page[ExplorerState] {
 
   def editDialog()(implicit context: Context): Option[Node] =
     context.local.editModal.map { _ =>
-      Modal(closeAction = SnabbdomUtil.modify(ExplorerState.editModal.set(None)))(
+      Modal(closeAction = Some(SnabbdomUtil.modify(ExplorerState.editModal.set(None))))(
         "div.container"
           .child(
             "section.section"
@@ -174,7 +174,7 @@ object ExplorerPage extends Page[ExplorerState] {
       val lensParams     = ExplorerState.saveModal.composeLens(LenseUtils.unsafe(monocle.std.all.some[SaveFractalDialog]))
       val downloadAction = Actions.saveToDisk(context.local.fractalImage.value.copy(antiAliase = params.antiAliase), params.dimensions)
 
-      Modal(closeAction = SnabbdomUtil.modify(ExplorerState.saveModal.set(None)))(
+      Modal(closeAction = Some(SnabbdomUtil.modify(ExplorerState.saveModal.set(None))))(
         "div"
           .style("marginBottom", "1.5rem")
           .child("h1.title".text("Render high resolution Image"))

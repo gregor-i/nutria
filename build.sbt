@@ -70,9 +70,9 @@ val frontend = project
     scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) }
   )
   .settings(
-    libraryDependencies += "com.github.gregor-i" %%% "scalajs-snabbdom" % "1.2.3",
-    libraryDependencies += "com.github.gregor-i" %%% "snabbdom-toasts" % "1.2.3",
-    libraryDependencies += "com.github.gregor-i" %%% "snabbdom-components" % "1.2.3",
+    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "scalajs-snabbdom" % "1.2.4",
+    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-toasts" % "1.2.4",
+    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-components" % "1.2.4",
     scalaJsDom,
     scalatest
   )

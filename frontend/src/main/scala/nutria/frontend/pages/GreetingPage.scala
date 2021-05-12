@@ -26,7 +26,7 @@ object GreetingPage extends Page[GreetingState] {
       .child(content)
 
   private def content(implicit context: Context) = {
-    Modal(closeAction = _ => context.update(Links.explorerState(fractal = context.local.randomFractal)))(
+    Modal(closeAction = Some(_ => context.update(Links.explorerState(fractal = context.local.randomFractal))))(
       "div.content".prop("innerHTML", StaticContent("frontend/src/main/html/greeting.html")),
       ButtonList.right(
         Link(DocumentationState.introduction)
