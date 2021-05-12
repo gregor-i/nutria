@@ -8,7 +8,7 @@ version in ThisBuild := "0.0.1"
 scalaVersion in ThisBuild := "2.13.4"
 scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation", "-Ymacro-annotations")
 scalafmtOnCompile in ThisBuild := true
-resolvers in ThisBuild += Resolver.bintrayRepo("gregor-i", "maven")
+resolvers in ThisBuild += "jitpack" at "https://jitpack.io"
 
 // projects
 lazy val nutria = project
@@ -36,7 +36,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .dependsOn(macros)
   .in(file("core"))
   .settings(
-    libraryDependencies += "com.github.gregor-i" %%% "math-parser" % "1.6.1",
+    libraryDependencies += "com.github.gregor-i.math-parser" %%% "math-parser" % "1.6.1",
     libraryDependencies ++= Seq(
       "io.circe" %%% "circe-core"           % "0.13.0",
       "io.circe" %%% "circe-generic"        % "0.13.0",
@@ -105,8 +105,7 @@ lazy val backend = project
     libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.8",
     libraryDependencies += "org.scalatestplus.play"  %% "scalatestplus-play" % "5.1.0" % Test
   )
-  .enablePlugins(EmbeddedPostgresPlugin)
-  .settings(javaOptions += s"-DDATABASE_URL=${postgresConnectionString.value}")
+  .settings(javaOptions += s"-DDATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres")
 
 val `static-renderer` = project
   .in(file("static-renderer"))
