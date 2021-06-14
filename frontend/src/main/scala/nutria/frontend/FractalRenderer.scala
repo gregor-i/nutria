@@ -1,6 +1,6 @@
 package nutria.frontend
 
-import nutria.core.{FractalImage, FractalTemplate, Viewport}
+import nutria.core.{ComplexParameter, FloatParameter, FractalImage, FractalTemplate, IntParameter, RGBAParameter, Viewport}
 import nutria.macros.StaticContent
 import nutria.shaderBuilder._
 import org.scalajs.dom
@@ -28,7 +28,7 @@ object FractalRenderer {
         Right(cachedProgram)
 
       case (`ctx`, cachedImage, cachedProgram) if cachedImage.copy(viewport = image.viewport) == image =>
-        draw(image.viewport, cachedProgram)(ctx)
+        draw(image, cachedProgram)(ctx)
         cache = (ctx, image, cachedProgram)
         Right(cachedProgram)
 
@@ -48,7 +48,7 @@ object FractalRenderer {
       vertexShader   <- compileVertexShader(StaticContent("shader-builder/src/main/glsl/vertex_shader.glsl"))(gl)
       fragmentShader <- compileFragmentShader(FragmentShaderSource.forImage(image, image.antiAliase))(gl)
       program        <- linkProgram(vertexShader, fragmentShader)(gl)
-      _              <- draw(image.viewport, program)(gl)
+      _              <- draw(image, program)(gl)
     } yield program
 
   private def compileVertexShader(source: String)(gl: RenderingContext): Either[CompileShaderException, Shader] =
@@ -99,7 +99,7 @@ object FractalRenderer {
     )
   )
 
-  private def draw(view: Viewport, program: Program)(gl: RenderingContext): Either[DrawException, Unit] = {
+  private def draw(image: FractalImage, program: Program)(gl: RenderingContext): Either[DrawException, Unit] = {
     gl.useProgram(program)
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
 
@@ -117,7 +117,15 @@ object FractalRenderer {
       gl.drawingBufferHeight
     )
 
-    val v = view.cover(gl.drawingBufferWidth, gl.drawingBufferHeight).flipB
+    image.appliedParameters.foreach {
+      case p: IntParameter     => gl.uniform1i(gl.getUniformLocation(program, p.name), p.value)
+      case p: FloatParameter   => gl.uniform1f(gl.getUniformLocation(program, p.name), p.value)
+      case p: ComplexParameter => gl.uniform2f(gl.getUniformLocation(program, p.name), p.value.real, p.value.imag)
+      case p: RGBAParameter    => gl.uniform4f(gl.getUniformLocation(program, p.name), p.value.R, p.value.G, p.value.B, p.value.A)
+      case _                   => ()
+    }
+
+    val v = image.viewport.cover(gl.drawingBufferWidth, gl.drawingBufferHeight).flipB
     gl.uniform2f(gl.getUniformLocation(program, "u_view_O"), v.origin._1, v.origin._2)
     gl.uniform2f(gl.getUniformLocation(program, "u_view_A"), v.A._1, v.A._2)
     gl.uniform2f(gl.getUniformLocation(program, "u_view_B"), v.B._1, v.B._2)

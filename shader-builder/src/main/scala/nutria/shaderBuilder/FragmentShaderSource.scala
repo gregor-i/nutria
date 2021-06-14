@@ -39,15 +39,14 @@ object FragmentShaderSource {
     nutria.shaderBuilder.Function(name, optimized)
   }
 
-  def constant(name: String, expr: WebGlExpression[_]): String = {
-    s"const ${expr.typeName} ${name} = ${expr.toCode};"
-  }
+  def uniform(name: String, expr: WebGlExpression[_]): String =
+    s"uniform ${expr.typeName} ${name} = ${expr.toCode};"
 
   def parameter: Parameter => String = {
-    case IntParameter(name, _, value)           => constant(name, IntLiteral(value))
-    case FloatParameter(name, _, value)         => constant(name, FloatLiteral(value))
-    case ComplexParameter(name, _, value)       => constant(name, Vec2(value.real, value.imag))
-    case RGBAParameter(name, _, value)          => constant(name, Vec4.fromRGBA(value))
+    case IntParameter(name, _, value)           => uniform(name, IntLiteral(value))
+    case FloatParameter(name, _, value)         => uniform(name, FloatLiteral(value))
+    case ComplexParameter(name, _, value)       => uniform(name, Vec2(value.real, value.imag))
+    case RGBAParameter(name, _, value)          => uniform(name, Vec4.fromRGBA(value))
     case ColorGradientParameter(name, _, value) => colorGradient(name, value)
     case fp: FunctionParameter if fp.includeDerivative =>
       Seq(

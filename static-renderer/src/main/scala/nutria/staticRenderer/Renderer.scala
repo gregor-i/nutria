@@ -1,8 +1,7 @@
 package nutria.staticRenderer
 
 import java.io.{File, FileWriter}
-
-import nutria.core.{Dimensions, FractalImage}
+import nutria.core.{Dimensions, FractalImage, IntParameter}
 import nutria.shaderBuilder.FragmentShaderSource
 
 import scala.sys.process._
