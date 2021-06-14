@@ -18,6 +18,6 @@ class RendererSpec extends RenderingSuite {
   renderingTest("renders Newton Iterations")(
     fractal = FractalImage(Examples.timeEscape, Viewport.mandelbrot),
     dimensions = Dimensions.fullHD,
-    fileName = s"${baseFolder}/NewtonIteration-default.png"
+    fileName = s"${baseFolder}/Mandelbrot-default.png"
   )
 }

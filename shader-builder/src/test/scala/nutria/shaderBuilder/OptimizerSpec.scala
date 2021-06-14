@@ -22,7 +22,7 @@ class OptimizerSpec extends AnyFunSuite with Matchers {
     StringFunction[ZAndLambda](string)
       .getOrElse(cancel("string function could not be parsed"))
 
-  test("the power optimizer removes all powers to natural numbers") {
+  test("the power optimizer transforms all powers of natural numbers to products and sums") {
     val webGlCode = stringFunction(generatedPolynom).node
       .pipe(PowerOptimizer.optimizer.optimize)
       .pipe(nutria.shaderBuilder.Function("some_name", _))
