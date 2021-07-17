@@ -36,12 +36,12 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .dependsOn(macros)
   .in(file("core"))
   .settings(
-    libraryDependencies += "com.github.gregor-i.math-parser" %%% "math-parser" % "1.6.1",
+    libraryDependencies += "com.github.gregor-i.math-parser" %%% "math-parser" % "1.6.2",
     libraryDependencies ++= Seq(
-      "io.circe" %%% "circe-core"           % "0.13.0",
-      "io.circe" %%% "circe-generic"        % "0.13.0",
-      "io.circe" %%% "circe-generic-extras" % "0.13.0",
-      "io.circe" %%% "circe-parser"         % "0.13.0"
+      "io.circe" %%% "circe-core"           % "0.14.1",
+      "io.circe" %%% "circe-generic"        % "0.14.1",
+      "io.circe" %%% "circe-generic-extras" % "0.14.1",
+      "io.circe" %%% "circe-parser"         % "0.14.1"
     ),
     libraryDependencies ++= Seq(
       "com.github.julien-truffaut" %%% "monocle-core"   % "2.1.0",
@@ -51,7 +51,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     scalatest
   )
   .jsSettings(
-    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.0.0"
+    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.3.0"
   )
 
 lazy val `shader-builder` = crossProject(JSPlatform, JVMPlatform)
@@ -99,10 +99,10 @@ lazy val backend = project
     libraryDependencies += guice,
     libraryDependencies += jdbc,
     libraryDependencies += evolutions,
-    libraryDependencies += "io.lemonlabs"            %% "scala-uri"          % "3.0.0",
-    libraryDependencies += "com.dripower"            %% "play-circe"         % "2812.0",
-    libraryDependencies += "org.postgresql"          % "postgresql"          % "42.2.18",
-    libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.8",
+    libraryDependencies += "io.lemonlabs"            %% "scala-uri"          % "3.5.0",
+    libraryDependencies += "com.dripower"            %% "play-circe"         % "2814.2",
+    libraryDependencies += "org.postgresql"          % "postgresql"          % "42.2.23",
+    libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.10",
     libraryDependencies += "org.scalatestplus.play"  %% "scalatestplus-play" % "5.1.0" % Test
   )
   .settings(javaOptions += s"-DDATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres")
@@ -181,7 +181,7 @@ test in nutria := Def
 
 def scalatest =
   Seq(
-    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.3" % Test,
+    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.9" % Test,
     testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
   )
 

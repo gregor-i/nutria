@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.3",
-    "bulma": "^0.9.2",
+    "bulma": "^0.9.3",
     "debounce": "^1.2.1",
     "npm-run-all": "^4.1",
     "sass": "^1.32.12",
@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build": "npm run make-dirs && run-p build-*",
-    "develop": "run-p start-postgres server watch",
+    "develop": "run-p start-postgres build server watch",
     "make-dirs": "mkdir -p backend/public/assets && mkdir -p backend/public/html",
     "start-postgres": "docker-compose up",
     "build-css": "sass frontend/src/main/css/nutria.sass backend/public/assets/nutria.css --no-source-map --style compressed",
