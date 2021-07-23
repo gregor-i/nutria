@@ -70,9 +70,9 @@ val frontend = project
     scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) }
   )
   .settings(
-    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "scalajs-snabbdom" % "1.2.4",
-    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-toasts" % "1.2.4",
-    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-components" % "1.2.4",
+    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "scalajs-snabbdom"    % "1.2.6",
+    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-toasts"     % "1.2.6",
+    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-components" % "1.2.6",
     scalaJsDom,
     scalatest
   )
@@ -119,7 +119,7 @@ compile in frontend := {
   val buildFrontend = (frontend / Compile / fastOptJS).value.data
   val outputFile    = (backend / baseDirectory).value / "public" / "assets" / "nutria.js"
   streams.value.log.info("integrating frontend (fastOptJS)")
-  val npmLog = Seq("./node_modules/.bin/webpack", "--mode", "development").!!
+  val npmLog = Seq("./node_modules/.bin/esbuild", buildFrontend.getAbsolutePath, s"--outfile=${outputFile.getAbsolutePath}", "--bundle").!!
   streams.value.log.info(npmLog)
   ret
 }
@@ -128,7 +128,8 @@ stage in frontend := {
   val buildFrontend = (frontend / Compile / fullOptJS).value.data
   val outputFile    = (backend / baseDirectory).value / "public" / "assets" / "nutria.js"
   streams.value.log.info("integrating frontend (fullOptJS)")
-  val npmLog = Seq("./node_modules/.bin/webpack", "--mode", "production").!!
+  val npmLog =
+    Seq("./node_modules/.bin/esbuild", buildFrontend.getAbsolutePath, s"--outfile=${outputFile.getAbsolutePath}", "--bundle", "--minify").!!
   streams.value.log.info(npmLog)
   outputFile
 }
