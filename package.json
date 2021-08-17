@@ -29,7 +29,7 @@
   "devDependencies": {
     "html-formatter": "^0",
     "nodemon": "^2.0.7",
-    "snabbdom-to-html": "^5"
+    "snabbdom-to-html": "^7.0.0"
   },
   "engines": {
     "node": "^16",
