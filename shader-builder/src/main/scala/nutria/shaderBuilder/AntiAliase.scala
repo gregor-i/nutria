@@ -36,5 +36,4 @@ object AntiAliase {
        |${outputVar} = acc / (float(aa) * float(aa));
      """.stripMargin
   }
-
 }

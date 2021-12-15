@@ -6,7 +6,6 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success, Try}
 
 object ToastSyntax {
-
   def withSuccessToast[A](progressText: String, onComplete: A => String)(progress: Future[A])(implicit ex: ExecutionContext): Future[A] = {
     Toasts.asyncToast[A](progressText, progress) {
       case Success(value) => ToastType.Success -> onComplete(value)

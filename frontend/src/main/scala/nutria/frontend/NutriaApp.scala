@@ -8,7 +8,6 @@ import snabbdom.{PatchFunction, Snabbdom, VNode}
 import scala.scalajs.js.|
 
 class NutriaApp(container: Element) extends ExecutionContext {
-
   private var node: Element | VNode = container
 
   private val patch: PatchFunction = Snabbdom.init(

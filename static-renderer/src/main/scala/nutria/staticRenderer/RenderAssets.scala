@@ -6,7 +6,6 @@ import scala.util.Try
 import scala.util.chaining._
 
 object RenderAssets {
-
   def main(args: Array[String]): Unit =
     for {
       _ <- favicon()

@@ -30,6 +30,5 @@ class OptimizerSpec extends AnyFunSuite with Matchers {
     assert("complex_power".r.findAllMatchIn(webGlCode).isEmpty)
     assert("\\+".r.findAllMatchIn(webGlCode).length == 7)
     assert("complex_product".r.findAllMatchIn(webGlCode).length == 13)
-
   }
 }

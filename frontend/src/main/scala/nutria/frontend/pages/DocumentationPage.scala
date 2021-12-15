@@ -22,7 +22,6 @@ case object FAQ          extends Subpage
 case object Introduction extends Subpage
 
 object DocumentationPage extends Page[DocumentationState] {
-
   override def stateFromUrl = {
     case (user, "/documentation/faq", _) =>
       DocumentationState(subpage = FAQ)
@@ -53,5 +52,4 @@ object DocumentationPage extends Page[DocumentationState] {
         "div.container"
           .prop("innerHTML", StaticContent("frontend/src/main/html/introduction.html"))
     }
-
 }

@@ -88,5 +88,4 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
             )
           )
       )
-
 }

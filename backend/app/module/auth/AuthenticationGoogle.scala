@@ -18,7 +18,6 @@ class AuthenticationGoogle @Inject() (conf: Configuration, wsClient: WSClient, u
 ) extends InjectedController
     with Circe
     with AuthenticationController {
-
   val clientId: String     = conf.get[String]("auth.google.clientId")
   val clientSecret: String = conf.get[String]("auth.google.clientSecret")
   val callbackUrl: String  = conf.get[String]("auth.google.callbackUrl")

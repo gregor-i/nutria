@@ -16,7 +16,6 @@ abstract class EntityController[E <: Entity[_]: Decoder: Encoder](entityRepo: En
     implicit ordering: Ordering[WithId[E]]
 ) extends InjectedController
     with Circe {
-
   def listPublic() = Action {
     entityRepo
       .listPublic()

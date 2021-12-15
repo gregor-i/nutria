@@ -7,7 +7,6 @@ import scala.jdk.CollectionConverters._
 
 // https://bugs.openjdk.java.net/browse/JDK-8146872
 class JDBCInitModule extends Module {
-
   val logger = Logger.apply(classOf[JDBCInitModule])
 
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = {
@@ -25,5 +24,4 @@ class JDBCInitModule extends Module {
     }
     Seq.empty
   }
-
 }
