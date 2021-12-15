@@ -6,7 +6,7 @@ addSbtPlugin("org.scalameta"      % "sbt-scalafmt"             % "2.2.1")
 addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.8")
 
 // js
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.6.0")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.8.0")
 
 // service worker
 addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.10.0")
