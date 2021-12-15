@@ -5,7 +5,7 @@ import scala.sys.process._
 
 // global settings
 version in ThisBuild := "0.0.1"
-scalaVersion in ThisBuild := "2.13.4"
+scalaVersion in ThisBuild := "2.13.7"
 scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation", "-Ymacro-annotations")
 scalafmtOnCompile in ThisBuild := true
 resolvers in ThisBuild += "jitpack" at "https://jitpack.io"
