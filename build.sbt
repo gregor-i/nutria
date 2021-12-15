@@ -4,11 +4,11 @@ import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 import scala.sys.process._
 
 // global settings
-version in ThisBuild := "0.0.1"
-scalaVersion in ThisBuild := "2.13.7"
-scalacOptions in ThisBuild ++= Seq("-feature", "-deprecation", "-Ymacro-annotations")
-scalafmtOnCompile in ThisBuild := true
-resolvers in ThisBuild += "jitpack" at "https://jitpack.io"
+(ThisBuild / version) := "0.0.1"
+(ThisBuild / scalaVersion) := "2.13.7"
+(ThisBuild / scalacOptions) ++= Seq("-feature", "-deprecation", "-Ymacro-annotations")
+(ThisBuild / scalafmtOnCompile) := true
+(ThisBuild / resolvers) += "jitpack" at "https://jitpack.io"
 
 // projects
 lazy val nutria = project
@@ -26,15 +26,13 @@ lazy val nutria = project
     `static-renderer`
   )
 
-lazy val macros = crossProject(JSPlatform, JVMPlatform)
-  .crossType(CrossType.Pure)
-  .in(file("macros"))
+lazy val macros = (file("macros") / crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure))
   .settings(libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value)
 
-lazy val core = crossProject(JSPlatform, JVMPlatform)
+lazy val core = (file("core") / crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
-  .dependsOn(macros)
-  .in(file("core"))
+  .dependsOn(macros))
   .settings(
     libraryDependencies += "com.github.gregor-i.math-parser" %%% "math-parser" % "1.6.2",
     libraryDependencies ++= Seq(
@@ -54,9 +52,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.3.0"
   )
 
-lazy val `shader-builder` = crossProject(JSPlatform, JVMPlatform)
-  .crossType(CrossType.Pure)
-  .in(file("shader-builder"))
+lazy val `shader-builder` = (file("shader-builder") / crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure))
   .dependsOn(core)
   .settings(scalatest)
 
@@ -114,7 +111,7 @@ val `static-renderer` = project
 
 // tasks
 
-compile in frontend := {
+(frontend / compile) := {
   val ret           = (frontend / Compile / compile).value
   val buildFrontend = (frontend / Compile / fastOptJS).value.data
   val outputFile    = (backend / baseDirectory).value / "public" / "assets" / "nutria.js"
@@ -124,7 +121,7 @@ compile in frontend := {
   ret
 }
 
-stage in frontend := {
+(frontend / stage) := {
   val buildFrontend = (frontend / Compile / fullOptJS).value.data
   val outputFile    = (backend / baseDirectory).value / "public" / "assets" / "nutria.js"
   streams.value.log.info("integrating frontend (fullOptJS)")
@@ -134,7 +131,7 @@ stage in frontend := {
   outputFile
 }
 
-compile in `service-worker` := {
+(`service-worker` / compile) := {
   val ret        = (`service-worker` / Compile / compile).value
   val buildSw    = (`service-worker` / Compile / fastOptJS).value.data
   val outputFile = (backend / baseDirectory).value / "public" / "assets" / "sw.js"
@@ -144,7 +141,7 @@ compile in `service-worker` := {
   ret
 }
 
-stage in `service-worker` := {
+(`service-worker` / stage) := {
   val buildSw    = (`service-worker` / Compile / fullOptJS).value.data
   val outputFile = (backend / baseDirectory).value / "public" / "assets" / "sw.js"
   streams.value.log.info("integrating service-worker (fullOptJS)")
@@ -153,30 +150,30 @@ stage in `service-worker` := {
   outputFile
 }
 
-compile in Compile in nutria := Def
+(nutria / compile in Compile)(Compile / compile) := Def
   .sequential(
-    (compile in Compile in frontend),
-    (compile in Compile in `service-worker`),
-    (compile in Compile in `static-renderer`),
-    (compile in Compile in backend)
+    (frontend / compile in Compile)(Compile / compile),
+    (`service-worker` / compile in Compile)(Compile / compile),
+    (`static-renderer` / compile in Compile)(Compile / compile),
+    (backend / compile in Compile)(Compile / compile)
   )
   .value
 
-stage in nutria := Def
+(nutria / stage) := Def
   .sequential(
-    (stage in frontend),
-    (stage in `service-worker`),
-    (stage in backend)
+    (frontend / stage),
+    (`service-worker` / stage),
+    (backend / stage)
   )
   .value
 
-test in nutria := Def
+(nutria / test) := Def
   .sequential(
-    test in Test in core.jvm,
-    test in Test in core.js,
-    test in Test in frontend,
-    test in Test in backend,
-    test in Test in `static-renderer`
+    (core.jvm / test in Test)(Test / test),
+    (core.js / test in Test)(Test / test),
+    (frontend / test in Test)(Test / test),
+    (backend / test in Test)(Test / test),
+    (`static-renderer` / test in Test)(Test / test)
   )
   .value
 
