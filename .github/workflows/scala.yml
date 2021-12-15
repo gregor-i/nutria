@@ -30,6 +30,8 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
+    - name: Compile all
+      run: sbt compile
     - name: Run core tests
       run: sbt coreJVM/test
     - name: Run frontend tests
