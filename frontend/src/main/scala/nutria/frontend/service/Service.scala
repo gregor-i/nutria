@@ -9,7 +9,6 @@ import scala.concurrent.Future
 import scala.scalajs.js.Dynamic
 
 private[service] trait Service extends ExecutionContext {
-
   private[service] def get(url: String): Future[Response] = Fetch.fetch(url).toFuture
 
   private[service] def post(url: String): Future[Response] =

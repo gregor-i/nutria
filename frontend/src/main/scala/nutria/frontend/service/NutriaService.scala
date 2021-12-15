@@ -6,7 +6,6 @@ import nutria.frontend.service.Service._
 import scala.concurrent.Future
 
 object NutriaService {
-
   // votes
   @deprecated
   def votes(): Future[Map[String, VoteStatistic]] =

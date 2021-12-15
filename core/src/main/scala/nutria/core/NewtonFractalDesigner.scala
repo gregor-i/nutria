@@ -8,7 +8,6 @@ import scala.util.Random
 import scala.util.chaining._
 
 object NewtonFractalDesigner {
-
   def apply(constant: Complex, roots: Seq[Complex]): Option[FractalImage] = {
     val polynom =
       roots
@@ -94,5 +93,4 @@ object NewtonFractalDesigner {
       yield s"${a.asString}  * z ^ (${n - i - 1})")
       .mkString(" + ")
   }
-
 }

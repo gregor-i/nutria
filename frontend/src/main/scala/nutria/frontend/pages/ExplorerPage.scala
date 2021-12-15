@@ -40,7 +40,6 @@ object ExplorerState {
 }
 
 object ExplorerPage extends Page[ExplorerState] {
-
   override def stateFromUrl = {
     case (_, s"/fractals/${fractalId}/explorer", queryParams) =>
       (for {

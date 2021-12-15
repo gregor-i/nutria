@@ -14,7 +14,6 @@ case class ProfileState(
 ) extends PageState
 
 object ProfilePage extends Page[ProfileState] {
-
   override def stateFromUrl = {
     case (globalState, s"/user/profile", _) if globalState.user.isDefined =>
       ProfileState(about = globalState.user.get)

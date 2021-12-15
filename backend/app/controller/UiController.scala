@@ -24,5 +24,4 @@ class UiController @Inject() (assets: Assets, env: Environment)(implicit ex: Exe
         )
       case _ => Action(NotFound)
     }
-
 }
