@@ -33,7 +33,9 @@ jobs:
     - name: Run core tests
       run: sbt coreJVM/test
     - name: Run frontend tests
-      run: sbt frontend/test
+      run: |
+        npm ci
+        sbt frontend/test
     - name: Run backend tests
       env:
         DATABASE_URL: "postgres://postgres:postgres@localhost:5432/postgres"
