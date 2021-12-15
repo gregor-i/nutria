@@ -10,10 +10,13 @@ object Link extends ExecutionContext {
   def apply(newState: PageState)(implicit context: Context[_]): Node =
     "a"
       .key(newState.hashCode())
-      .event[Event]("click", event => {
-        event.preventDefault()
-        context.update(context.global.copy(navbarExpanded = false), newState)
-      })
+      .event[Event](
+        "click",
+        event => {
+          event.preventDefault()
+          context.update(context.global.copy(navbarExpanded = false), newState)
+        }
+      )
       .hookPostpatch({ (_, vnode) =>
         Future {
           for {
@@ -29,9 +32,12 @@ object Link extends ExecutionContext {
   )(implicit context: Context[_]): Node = {
     "a"
       .attr("href", href)
-      .event[Event]("click", e => {
-        e.preventDefault()
-        context.update(context.global.copy(navbarExpanded = false), LoadingState(loadingState))
-      })
+      .event[Event](
+        "click",
+        e => {
+          e.preventDefault()
+          context.update(context.global.copy(navbarExpanded = false), LoadingState(loadingState))
+        }
+      )
   }
 }

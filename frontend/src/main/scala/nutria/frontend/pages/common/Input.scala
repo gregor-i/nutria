@@ -21,13 +21,16 @@ object Input {
       "input.input"
         .attr("type", "text")
         .prop("value", updatable.state)
-        .event[Event]("change", event => {
-          val value = event.target.asInstanceOf[HTMLInputElement].value
-          updatable.update(value)
-        })
+        .event[Event](
+          "change",
+          event => {
+            val value = event.target.asInstanceOf[HTMLInputElement].value
+            updatable.update(value)
+          }
+        )
 
-  implicit def stringFunctionInput[L](
-      implicit lang: ComplexLanguage[L]
+  implicit def stringFunctionInput[L](implicit
+      lang: ComplexLanguage[L]
   ): Input[StringFunction[L]] =
     updatable =>
       "input.input"

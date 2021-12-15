@@ -8,8 +8,8 @@ import snabbdom.components.Button
 import snabbdom.{Event, Node}
 
 object Form {
-  def forLens[S, V](label: String, description: String, lens: Lens[S, V], actions: Seq[(String, S => S)] = Seq.empty)(
-      implicit input: Input[V],
+  def forLens[S, V](label: String, description: String, lens: Lens[S, V], actions: Seq[(String, S => S)] = Seq.empty)(implicit
+      input: Input[V],
       updatable: Updatable[S, S]
   ): Node =
     Label(
@@ -46,10 +46,13 @@ object Form {
       actions = actions,
       node = "textArea.textarea"
         .style("min-height", "400px")
-        .event[Event]("change", event => {
-          val value = event.target.asInstanceOf[HTMLInputElement].value
-          updatable.update(lens.set(value)(updatable.state))
-        })
+        .event[Event](
+          "change",
+          event => {
+            val value = event.target.asInstanceOf[HTMLInputElement].value
+            updatable.update(lens.set(value)(updatable.state))
+          }
+        )
         .text(lens.get(updatable.state))
     )
 
@@ -88,11 +91,10 @@ object Form {
               }
             )
             .child(
-              options.map {
-                case (stringValue, value) =>
-                  "option"
-                    .boolAttr("selected", eqFunction(value, currentValue))
-                    .text(stringValue)
+              options.map { case (stringValue, value) =>
+                "option"
+                  .boolAttr("selected", eqFunction(value, currentValue))
+                  .text(stringValue)
               }
             )
         )

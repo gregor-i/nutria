@@ -49,16 +49,15 @@ object CreateNewFractalState extends ExecutionContext {
 }
 
 object CreateNewFractalPage extends Page[CreateNewFractalState] {
-  override def stateFromUrl = {
-    case (globalState, "/new-fractal", queryParameter) =>
-      val stepFromUrl = queryParameter
-        .get("step")
-        .flatMap(Router.queryDecoded[CreateNewFractalState.Step])
+  override def stateFromUrl = { case (globalState, "/new-fractal", queryParameter) =>
+    val stepFromUrl = queryParameter
+      .get("step")
+      .flatMap(Router.queryDecoded[CreateNewFractalState.Step])
 
-      CreateNewFractalState
-        .load(globalState)
-        .map(state => stepFromUrl.fold(state)(step => state.copy(step = step)))
-        .loading()
+    CreateNewFractalState
+      .load(globalState)
+      .map(state => stepFromUrl.fold(state)(step => state.copy(step = step)))
+      .loading()
   }
 
   override def stateToUrl(state: CreateNewFractalState): Option[Location] =

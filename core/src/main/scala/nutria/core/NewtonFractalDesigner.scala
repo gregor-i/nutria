@@ -70,12 +70,11 @@ object NewtonFractalDesigner {
           .fold(Complex(0, 0))(_ + _)
       }
       .zipWithIndex
-      .map {
-        case (a, i) =>
-          if (i % 2 == 0)
-            a
-          else
-            a * (-1)
+      .map { case (a, i) =>
+        if (i % 2 == 0)
+          a
+        else
+          a * (-1)
       }
   }
 

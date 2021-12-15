@@ -29,8 +29,8 @@ object Router {
 
   def queryParamsToUrl(search: QueryParameter): String = {
     val stringSearch = search
-      .map {
-        case (key, value) => s"$key=$value"
+      .map { case (key, value) =>
+        s"$key=$value"
       }
       .mkString("&")
     if (stringSearch == "")
@@ -43,8 +43,8 @@ object Router {
     search
       .dropWhile(_ == '?')
       .split('&')
-      .collect {
-        case s"${key}=${value}" => key -> value
+      .collect { case s"${key}=${value}" =>
+        key -> value
       }
       .toMap
 

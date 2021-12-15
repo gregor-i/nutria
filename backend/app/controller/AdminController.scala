@@ -41,16 +41,15 @@ class AdminController @Inject() (
   def insertExamples = Action { req =>
     authenticator.adminUser(req) { admin =>
       Examples.allNamed
-        .foreach {
-          case (name, template) =>
-            templateRepo.save(
-              id = UUID.randomUUID().toString,
-              owner = admin.id,
-              entity = Entity(
-                title = name,
-                value = template
-              )
+        .foreach { case (name, template) =>
+          templateRepo.save(
+            id = UUID.randomUUID().toString,
+            owner = admin.id,
+            entity = Entity(
+              title = name,
+              value = template
             )
+          )
         }
       Ok
     }

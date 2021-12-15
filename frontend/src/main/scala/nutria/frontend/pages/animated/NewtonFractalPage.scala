@@ -27,15 +27,14 @@ object NewtonFractalState {
 }
 
 object NewtonFractalPage extends Page[NewtonFractalState] {
-  override def stateFromUrl: PartialFunction[(GlobalState, Path, QueryParameter), PageState] = {
-    case (_, "/animated/newton-fractal", params) =>
-      NewtonFractalState(
-        alpha = params.get("alpha").flatMap(_.toDoubleOption).getOrElse(0.05),
-        beta = params.get("beta").flatMap(_.toDoubleOption).getOrElse(0.01),
-        gamma = params.get("gamma").flatMap(_.toDoubleOption).getOrElse(0.995),
-        seed = params.get("seed").flatMap(_.toIntOption).getOrElse(123123),
-        numberOfRoots = params.get("numberOfRoots").flatMap(_.toIntOption).getOrElse(5)
-      )
+  override def stateFromUrl: PartialFunction[(GlobalState, Path, QueryParameter), PageState] = { case (_, "/animated/newton-fractal", params) =>
+    NewtonFractalState(
+      alpha = params.get("alpha").flatMap(_.toDoubleOption).getOrElse(0.05),
+      beta = params.get("beta").flatMap(_.toDoubleOption).getOrElse(0.01),
+      gamma = params.get("gamma").flatMap(_.toDoubleOption).getOrElse(0.995),
+      seed = params.get("seed").flatMap(_.toIntOption).getOrElse(123123),
+      numberOfRoots = params.get("numberOfRoots").flatMap(_.toIntOption).getOrElse(5)
+    )
   }
 
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =

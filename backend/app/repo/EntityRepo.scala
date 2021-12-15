@@ -18,8 +18,8 @@ abstract class EntityRepo[E <: Entity[_]: Decoder: Encoder](tableName: String, r
     updatedAt  <- SqlParser.get[Instant]("updated_at").map(ZonedDateTime.ofInstant(_, ZoneOffset.UTC))
   } yield WithId[Option[E]](id, owner, maybeE, updatedAt, insertedAt)
 
-  val rowToEntity: PartialFunction[WithId[Option[E]], WithId[E]] = {
-    case withId @ WithId(_, _, Some(entity), _, _) => withId.copy(entity = entity)
+  val rowToEntity: PartialFunction[WithId[Option[E]], WithId[E]] = { case withId @ WithId(_, _, Some(entity), _, _) =>
+    withId.copy(entity = entity)
   }
 
   def list(): List[WithId[Option[E]]] =

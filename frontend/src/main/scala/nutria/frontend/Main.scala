@@ -29,10 +29,13 @@ object Main {
         Dynamic.global.navigator.serviceWorker.asInstanceOf[ServiceWorkerContainer]
       }.filter(!js.isUndefined(_))
       registration <- navigator.register("/assets/sw.js", Dynamic.literal(scope = "/")).toFuture
-      _ = registration.addEventListener("updatefound", (_: js.Any) => {
-        dom.console.debug("new service worker found. page reload!")
-        dom.window.location.reload()
-      })
+      _ = registration.addEventListener(
+        "updatefound",
+        (_: js.Any) => {
+          dom.console.debug("new service worker found. page reload!")
+          dom.window.location.reload()
+        }
+      )
     } yield registration)
       .onComplete {
         case Success(_: ServiceWorkerRegistration) =>

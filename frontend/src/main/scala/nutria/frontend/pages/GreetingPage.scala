@@ -13,8 +13,8 @@ import scala.util.chaining.scalaUtilChainingOps
 case class GreetingState(randomFractal: FractalImageEntity) extends PageState
 
 object GreetingPage extends Page[GreetingState] {
-  override def stateFromUrl = {
-    case (_, "/", _) => Links.greetingState().loading()
+  override def stateFromUrl = { case (_, "/", _) =>
+    Links.greetingState().loading()
   }
 
   override def stateToUrl(state: GreetingState): Option[(Path, QueryParameter)] =

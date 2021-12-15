@@ -29,8 +29,8 @@ object TemplateGalleryState extends ExecutionContext {
 }
 
 object TemplateGalleryPage extends Page[TemplateGalleryState] {
-  override def stateFromUrl = {
-    case (globalState, "/templates", _) => TemplateGalleryState.load(globalState).loading()
+  override def stateFromUrl = { case (globalState, "/templates", _) =>
+    TemplateGalleryState.load(globalState).loading()
   }
 
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =
@@ -69,22 +69,21 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
               .child("th")
           )
           .child(
-            templates.map(
-              template =>
-                "tr"
-                  .child("td".text(template.entity.title))
-                  .child("td".text(if (template.entity.published) "published" else "private"))
-                  .child(
-                    "td".child(
-                      ButtonList.right(
-                        Link(TemplateEditorState.byTemplate(template))
-                          .classes("button", "is-rounded")
-                          .child(Icon(Icons.edit)),
-                        Button.icon(if (template.entity.published) Icons.unpublish else Icons.publish, Actions.togglePublishedTemplate(template)),
-                        Button.icon(Icons.delete, Actions.deleteTemplate(template.id))
-                      )
+            templates.map(template =>
+              "tr"
+                .child("td".text(template.entity.title))
+                .child("td".text(if (template.entity.published) "published" else "private"))
+                .child(
+                  "td".child(
+                    ButtonList.right(
+                      Link(TemplateEditorState.byTemplate(template))
+                        .classes("button", "is-rounded")
+                        .child(Icon(Icons.edit)),
+                      Button.icon(if (template.entity.published) Icons.unpublish else Icons.publish, Actions.togglePublishedTemplate(template)),
+                      Button.icon(Icons.delete, Actions.deleteTemplate(template.id))
                     )
                   )
+                )
             )
           )
       )

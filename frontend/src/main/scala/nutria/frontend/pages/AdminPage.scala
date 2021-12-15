@@ -57,18 +57,17 @@ object AdminPage extends Page[AdminState] {
               .child("th")
           )
           .child(
-            users.map(
-              user =>
-                "tr"
-                  .child("td".text(user.id))
-                  .child("td".text(user.name))
-                  .child("td".text(user.email))
-                  .child("td".text(user.googleUserId.getOrElse("<None>")))
-                  .child(
-                    "td".child(
-                      Button.icon(Icons.delete, action(NutriaAdminService.deleteUser(user.id)))
-                    )
+            users.map(user =>
+              "tr"
+                .child("td".text(user.id))
+                .child("td".text(user.name))
+                .child("td".text(user.email))
+                .child("td".text(user.googleUserId.getOrElse("<None>")))
+                .child(
+                  "td".child(
+                    Button.icon(Icons.delete, action(NutriaAdminService.deleteUser(user.id)))
                   )
+                )
             )
           )
       )
@@ -88,19 +87,18 @@ object AdminPage extends Page[AdminState] {
               .child("th")
           )
           .child(
-            fractals.map(
-              fractal =>
-                "tr"
-                  .child("td".text(fractal.id))
-                  .child("td".text(fractal.owner))
-                  .child("td".text(fractal.entity.fold("invalid")(_.published.toString)))
-                  .child("td".text(fractal.entity.fold("invalid")(_.title)))
-                  .child("td".text(fractal.entity.fold("invalid")(_.description)))
-                  .child(
-                    "td".child(
-                      Button.icon(Icons.delete, action(NutriaAdminService.deleteFractal(fractal.id)))
-                    )
+            fractals.map(fractal =>
+              "tr"
+                .child("td".text(fractal.id))
+                .child("td".text(fractal.owner))
+                .child("td".text(fractal.entity.fold("invalid")(_.published.toString)))
+                .child("td".text(fractal.entity.fold("invalid")(_.title)))
+                .child("td".text(fractal.entity.fold("invalid")(_.description)))
+                .child(
+                  "td".child(
+                    Button.icon(Icons.delete, action(NutriaAdminService.deleteFractal(fractal.id)))
                   )
+                )
             )
           )
       )
@@ -122,15 +120,14 @@ object AdminPage extends Page[AdminState] {
               .child("th")
           )
           .child(
-            templates.map(
-              template =>
-                "tr"
-                  .child("td".text(template.id))
-                  .child("td".text(template.owner))
-                  .child("td".text(template.entity.fold("invalid")(_.published.toString)))
-                  .child("td".text(template.entity.fold("invalid")(_.title)))
-                  .child("td".text(template.entity.fold("invalid")(_.description)))
-                  .child("td")
+            templates.map(template =>
+              "tr"
+                .child("td".text(template.id))
+                .child("td".text(template.owner))
+                .child("td".text(template.entity.fold("invalid")(_.published.toString)))
+                .child("td".text(template.entity.fold("invalid")(_.title)))
+                .child("td".text(template.entity.fold("invalid")(_.description)))
+                .child("td")
             )
           )
       )

@@ -22,10 +22,9 @@ object UserGalleryPage extends Page[UserGalleryState] {
   override def stateToUrl(state: UserGalleryPage.State): Option[(Path, QueryParameter)] =
     Some(s"/user/${state.aboutUser}/gallery" -> Map("page" -> state.page.toString))
 
-  override def stateFromUrl = {
-    case (user, s"/user/${userId}/gallery", query) =>
-      val page = query.get("page").flatMap(_.toIntOption).getOrElse(1)
-      Links.userGalleryState(userId, page = page).loading()
+  override def stateFromUrl = { case (user, s"/user/${userId}/gallery", query) =>
+    val page = query.get("page").flatMap(_.toIntOption).getOrElse(1)
+    Links.userGalleryState(userId, page = page).loading()
   }
 
   def render(implicit context: Context) =

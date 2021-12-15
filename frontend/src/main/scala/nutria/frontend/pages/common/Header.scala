@@ -39,29 +39,26 @@ object Header {
                   .text("FAQ")
               )
               .childOptional(
-                context.global.user.map(
-                  user =>
-                    Link
-                      .async(s"/user/${user.id}/gallery", Links.userGalleryState(user.id))
-                      .classes("navbar-item")
-                      .text("My Gallery")
+                context.global.user.map(user =>
+                  Link
+                    .async(s"/user/${user.id}/gallery", Links.userGalleryState(user.id))
+                    .classes("navbar-item")
+                    .text("My Gallery")
                 )
               )
               .childOptional(
-                context.global.user.map(
-                  _ =>
-                    Link
-                      .async("/templates", TemplateGalleryState.load(context.global))
-                      .classes("navbar-item")
-                      .text("My Templates")
+                context.global.user.map(_ =>
+                  Link
+                    .async("/templates", TemplateGalleryState.load(context.global))
+                    .classes("navbar-item")
+                    .text("My Templates")
                 )
               )
               .childOptional(
-                context.global.user.map(
-                  user =>
-                    Link(ProfileState(user))
-                      .classes("navbar-item")
-                      .text("My Profile")
+                context.global.user.map(user =>
+                  Link(ProfileState(user))
+                    .classes("navbar-item")
+                    .text("My Profile")
                 )
               )
               .childOptional(
