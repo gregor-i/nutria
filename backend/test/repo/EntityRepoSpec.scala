@@ -15,7 +15,6 @@ abstract class EntityRepoSpec[E <: Entity[_]](repoGetter: Application => EntityR
     with Matchers
     with GuiceOneAppPerSuite
     with BeforeAndAfterEach {
-
   val repo = repoGetter(app)
 
   def row(entity: E) =

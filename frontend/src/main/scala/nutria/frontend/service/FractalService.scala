@@ -48,5 +48,4 @@ object FractalService {
       .put(s"/api/fractals/${fractalEntity.id}", fractalEntity.entity)
       .flatMap(check(200))
       .flatMap(parse[WithId[FractalImageEntity]])
-
 }

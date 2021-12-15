@@ -70,7 +70,6 @@ object FragmentShaderSource {
     parameters.map(parameter).mkString("\n")
 
   def colorGradient(name: String, colors: Seq[RGBA]): String = {
-
     val gradients =
       for ((Seq(colorLow, colorHigh), index) <- colors.sliding(2).zipWithIndex)
         yield s"if (i == ${index}) return mix(${Vec4.fromRGBA(colorLow).toCode}, ${Vec4.fromRGBA(colorHigh).toCode}, f);"
@@ -88,6 +87,5 @@ object FragmentShaderSource {
       |
       |}
       |""".stripMargin
-
   }
 }

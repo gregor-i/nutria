@@ -12,7 +12,6 @@ import org.scalajs.dom.webgl.{Program, RenderingContext, Shader}
 import scala.scalajs.js.Dynamic
 
 object FractalRenderer {
-
   // todo: result is ignored
   private var cache: (RenderingContext, FractalImage, Program) = null
   def render(interactionPanel: HTMLElement, canvas: Canvas, image: FractalImage): Either[WebGlException, Program] = {
@@ -129,5 +128,4 @@ object FractalRenderer {
     else
       Left(DrawException(gl))
   }
-
 }

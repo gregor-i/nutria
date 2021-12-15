@@ -33,7 +33,6 @@ case class NewtonFunctionParameter(name: String, description: String = "", value
     extends Parameter
 
 object Parameter extends CirceCodec {
-
   val name = Lens[Parameter, String](get = _.name) { newName =>
     {
       case p: IntParameter             => IntParameter.name.set(newName)(p)

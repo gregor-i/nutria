@@ -19,7 +19,6 @@ case class UserGalleryState(
 ) extends PageState
 
 object UserGalleryPage extends Page[UserGalleryState] {
-
   override def stateToUrl(state: UserGalleryPage.State): Option[(Path, QueryParameter)] =
     Some(s"/user/${state.aboutUser}/gallery" -> Map("page" -> state.page.toString))
 

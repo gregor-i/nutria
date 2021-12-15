@@ -7,7 +7,6 @@ import play.api.mvc.{Request, Result, Results}
 import repo.UserRepo
 
 class Authenticator @Inject() (conf: Configuration, userRepo: UserRepo) extends Results {
-
   private val adminEmail = conf.get[String]("auth.admin.email")
 
   def adminUser[A](req: Request[A])(ifAuthorized: User => Result): Result =

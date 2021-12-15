@@ -18,7 +18,6 @@ class AdminController @Inject() (
     authenticator: Authenticator
 ) extends InjectedController
     with Circe {
-
   def loadState() = Action { req =>
     authenticator.adminUser(req) { admin =>
       Ok(

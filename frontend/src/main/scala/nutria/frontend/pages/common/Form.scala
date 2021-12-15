@@ -8,7 +8,6 @@ import snabbdom.components.Button
 import snabbdom.{Event, Node}
 
 object Form {
-
   def forLens[S, V](label: String, description: String, lens: Lens[S, V], actions: Seq[(String, S => S)] = Seq.empty)(
       implicit input: Input[V],
       updatable: Updatable[S, S]

@@ -50,5 +50,4 @@ class VotesRepoSpec extends AnyFunSuite with Matchers with GuiceOneAppPerSuite w
     repo.delete(vote1up.forFractal, vote1up.byUser)
     repo.getAll() should not contain (vote1up)
   }
-
 }

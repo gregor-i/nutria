@@ -17,7 +17,6 @@ case class GalleryState(
 ) extends PageState
 
 object GalleryPage extends Page[GalleryState] {
-
   override def stateFromUrl = {
     case (user, "/gallery", query) =>
       val page = query.get("page").flatMap(_.toIntOption).getOrElse(1)

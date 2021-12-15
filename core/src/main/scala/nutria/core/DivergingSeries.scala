@@ -4,7 +4,6 @@ import mathParser.complex._
 import nutria.core.languages._
 
 object DivergingSeries {
-
   def deriveIteration(iteration: StringFunction[ZAndLambda]): ComplexNode[ZAndZDerAndLambda] = {
     import mathParser.{BinaryNode, ConstantNode, UnitaryNode, VariableNode}
 

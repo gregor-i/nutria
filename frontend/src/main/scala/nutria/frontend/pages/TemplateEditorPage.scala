@@ -44,7 +44,6 @@ object TemplateEditorState extends LenseUtils {
 }
 
 object TemplateEditorPage extends Page[TemplateEditorState] {
-
   override def stateFromUrl = {
     case (_, s"/templates/${templateId}/editor", queryParams) =>
       (for {

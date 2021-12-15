@@ -68,5 +68,4 @@ object Pagination {
   }
 
   private val ellipsis = "li".child("span.pagination-ellipsis".text("…"))
-
 }
