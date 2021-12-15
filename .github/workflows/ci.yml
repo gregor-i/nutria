@@ -1,4 +1,4 @@
-name: Scala CI
+name: CI
 
 on:
   push:
@@ -30,6 +30,12 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
+    - name: Install NPM dependencies
+      run: npm ci
+    - name: Compile NPM
+      run: npm run build
+    - name: Compile sbt
+      run: sbt compile
     - name: Run core tests
       run: sbt coreJVM/test
     - name: Run frontend tests

@@ -51,17 +51,17 @@ object Main {
 
   def populateCache(cacheName: String, files: js.Array[RequestInfo]): Future[Unit] =
     for {
-      cache <- self.caches.open(cacheName).toFuture
+      cache <- self.caches.get.open(cacheName).toFuture
       _     <- cache.addAll(files).toFuture
     } yield ()
 
   def fromCache(cacheName: String, request: RequestInfo): Future[Response] =
     for {
-      cache         <- self.caches.open(cacheName).toFuture
+      cache         <- self.caches.get.open(cacheName).toFuture
       maybeResponse <- cache.`match`(request).toFuture
       response      <- Future(maybeResponse.get)
     } yield response
 
   def invalidateCache(cacheName: String): Future[Boolean] =
-    self.caches.delete(cacheName).toFuture
+    self.caches.get.delete(cacheName).toFuture
 }
