@@ -13,8 +13,8 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.chaining._
 // https://developers.google.com/identity/protocols/OAuth2WebServer
 @Singleton
-class AuthenticationGoogle @Inject() (conf: Configuration, wsClient: WSClient, userRepo: UserRepo)(
-    implicit ex: ExecutionContext
+class AuthenticationGoogle @Inject() (conf: Configuration, wsClient: WSClient, userRepo: UserRepo)(implicit
+    ex: ExecutionContext
 ) extends InjectedController
     with Circe
     with AuthenticationController {
@@ -79,7 +79,7 @@ class AuthenticationGoogle @Inject() (conf: Configuration, wsClient: WSClient, u
     request.queryString.get("code") match {
       case None =>
         Redirect(requestTokenUrl)
-        // todo: consider using the state-parameter to store the return-to
+          // todo: consider using the state-parameter to store the return-to
           .addingToSession("return-to" -> request.getQueryString("return-to").getOrElse("/"))
           .pipe(Future.successful)
 

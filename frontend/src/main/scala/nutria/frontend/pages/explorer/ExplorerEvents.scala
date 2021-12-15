@@ -20,10 +20,9 @@ object ExplorerEvents {
   private def transformCss(element: Canvas, moves: Seq[(Point, Point)]): Unit = {
     val (translate, scale, rotate) = Transform.transformations(moves)
 
-    element.asInstanceOf[js.Dynamic].style.transform =
-      s"translate(${translate._1 * 100}%, ${translate._2 * 100}%) " +
-        s"scale($scale)" +
-        s"rotate(${rotate * 180d / Math.PI}deg)"
+    element.asInstanceOf[js.Dynamic].style.transform = s"translate(${translate._1 * 100}%, ${translate._2 * 100}%) " +
+      s"scale($scale)" +
+      s"rotate(${rotate * 180d / Math.PI}deg)"
   }
 
   private def toPoint(event: MouseEvent, boundingBox: ClientRect): Point = {
@@ -129,8 +128,8 @@ object ExplorerEvents {
       val (canvas, boundingBox) = context(event)
       val updates = for {
         t <- toSeq(event.changedTouches)
-        start <- moves.get(t.identifier).collect {
-          case Processing(start, _) => start
+        start <- moves.get(t.identifier).collect { case Processing(start, _) =>
+          start
         }
       } yield t.identifier -> Processing(start, toPoint(t, boundingBox))
 

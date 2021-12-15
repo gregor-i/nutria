@@ -17,13 +17,12 @@ class VotesController @Inject() (votesRepo: VotesRepo, authenticator: Authentica
       .getAll()
       .groupBy(_.forFractal)
       .view
-      .mapValues(
-        votes =>
-          VoteStatistic(
-            upvotes = votes.count(_.verdict == UpVote),
-            downvotes = votes.count(_.verdict == DownVote),
-            yourVerdict = maybeUser.flatMap(user => votes.find(_.byUser == user.id)).map(_.verdict)
-          )
+      .mapValues(votes =>
+        VoteStatistic(
+          upvotes = votes.count(_.verdict == UpVote),
+          downvotes = votes.count(_.verdict == DownVote),
+          yourVerdict = maybeUser.flatMap(user => votes.find(_.byUser == user.id)).map(_.verdict)
+        )
       )
       .toMap
       .pipe(_.asJson)

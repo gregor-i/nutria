@@ -33,7 +33,5 @@ private class Poller(ws: WSClient, url: String) {
   private implicit val as = ActorSystem("NoSleepModule")
   private implicit val ex = as.dispatcher
 
-  as.scheduler.scheduleAtFixedRate(initialDelay = 0.seconds, interval = 10.minutes)(
-    () => ws.url(url).get()
-  )
+  as.scheduler.scheduleAtFixedRate(initialDelay = 0.seconds, interval = 10.minutes)(() => ws.url(url).get())
 }

@@ -78,7 +78,7 @@ object ExplorerPage extends Page[ExplorerState] {
     state.remoteFractal match {
       case Some(remoteFractal) if state.dirty => Some(s"/fractals/${remoteFractal.id}/explorer" -> (stateQueryParam ++ modalQueryParam))
       case Some(remoteFractal)                => Some(s"/fractals/${remoteFractal.id}/explorer" -> modalQueryParam)
-      case None                               => Some("/explorer"                               -> (stateQueryParam ++ modalQueryParam))
+      case None                               => Some("/explorer" -> (stateQueryParam ++ modalQueryParam))
     }
   }
 

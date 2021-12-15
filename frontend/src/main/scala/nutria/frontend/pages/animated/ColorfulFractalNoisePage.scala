@@ -15,12 +15,11 @@ case class ColorfulFractalNoiseState(
 ) extends PageState
 
 object ColorfulFractalNoisePage extends Page[ColorfulFractalNoiseState] {
-  override def stateFromUrl: PartialFunction[(GlobalState, Path, QueryParameter), PageState] = {
-    case (_, "/animated/fractal-noise", params) =>
-      ColorfulFractalNoiseState(
-        t0 = params.get("t0").flatMap(_.toDoubleOption).getOrElse(0.0),
-        deltaT = params.get("deltaT").flatMap(_.toDoubleOption).getOrElse(0.1)
-      )
+  override def stateFromUrl: PartialFunction[(GlobalState, Path, QueryParameter), PageState] = { case (_, "/animated/fractal-noise", params) =>
+    ColorfulFractalNoiseState(
+      t0 = params.get("t0").flatMap(_.toDoubleOption).getOrElse(0.0),
+      deltaT = params.get("deltaT").flatMap(_.toDoubleOption).getOrElse(0.1)
+    )
   }
 
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =

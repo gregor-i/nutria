@@ -15,12 +15,11 @@ class UiController @Inject() (assets: Assets, env: Environment)(implicit ex: Exe
   def serviceWorker(file: String, folder: String) =
     env.mode match {
       case Mode.Prod =>
-        Action.async(
-          rq =>
-            assets
-              .at(folder, file)
-              .apply(rq)
-              .map(_.withHeaders("Service-Worker-Allowed" -> "/"))
+        Action.async(rq =>
+          assets
+            .at(folder, file)
+            .apply(rq)
+            .map(_.withHeaders("Service-Worker-Allowed" -> "/"))
         )
       case _ => Action(NotFound)
     }
