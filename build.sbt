@@ -1,4 +1,3 @@
-import org.scalajs.sbtplugin.Stage
 import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
 import scala.sys.process._
@@ -26,13 +25,15 @@ lazy val nutria = project
     `static-renderer`
   )
 
-lazy val macros = (file("macros") / crossProject(JSPlatform, JVMPlatform)
-  .crossType(CrossType.Pure))
+lazy val macros = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("macros"))
   .settings(libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value)
 
-lazy val core = (file("core") / crossProject(JSPlatform, JVMPlatform)
+lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
-  .dependsOn(macros))
+  .dependsOn(macros)
+  .in(file("core"))
   .settings(
     libraryDependencies += "com.github.gregor-i.math-parser" %%% "math-parser" % "1.6.2",
     libraryDependencies ++= Seq(
@@ -52,9 +53,10 @@ lazy val core = (file("core") / crossProject(JSPlatform, JVMPlatform)
     libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.3.0"
   )
 
-lazy val `shader-builder` = (file("shader-builder") / crossProject(JSPlatform, JVMPlatform)
-  .crossType(CrossType.Pure))
+lazy val `shader-builder` = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
   .dependsOn(core)
+  .in(file("shader-builder"))
   .settings(scalatest)
 
 val frontend = project
@@ -70,7 +72,6 @@ val frontend = project
     libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "scalajs-snabbdom"    % "1.2.6",
     libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-toasts"     % "1.2.6",
     libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-components" % "1.2.6",
-    scalaJsDom,
     scalatest
   )
 
@@ -150,30 +151,30 @@ val `static-renderer` = project
   outputFile
 }
 
-(nutria / compile in Compile)(Compile / compile) := Def
+(nutria / Compile / compile) := Def
   .sequential(
-    (frontend / compile in Compile)(Compile / compile),
-    (`service-worker` / compile in Compile)(Compile / compile),
-    (`static-renderer` / compile in Compile)(Compile / compile),
-    (backend / compile in Compile)(Compile / compile)
+    frontend / Compile / compile,
+    `service-worker` / Compile / compile,
+    `static-renderer` / Compile / compile,
+    backend / Compile / compile
   )
   .value
 
 (nutria / stage) := Def
   .sequential(
-    (frontend / stage),
-    (`service-worker` / stage),
-    (backend / stage)
+    frontend / stage,
+    `service-worker` / stage,
+    backend / stage
   )
   .value
 
 (nutria / test) := Def
   .sequential(
-    (core.jvm / test in Test)(Test / test),
-    (core.js / test in Test)(Test / test),
-    (frontend / test in Test)(Test / test),
-    (backend / test in Test)(Test / test),
-    (`static-renderer` / test in Test)(Test / test)
+    core.jvm / Test / test,
+    core.js / Test / test,
+    frontend / Test / test,
+    backend / Test / test,
+    `static-renderer` / Test / test
   )
   .value
 
