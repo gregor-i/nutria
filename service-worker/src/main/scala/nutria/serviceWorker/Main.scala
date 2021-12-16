@@ -1,10 +1,11 @@
 package nutria.serviceWorker
 
-import org.scalajs.dom.experimental.Fetch._
-import org.scalajs.dom.experimental._
-import org.scalajs.dom.experimental.serviceworkers.ServiceWorkerGlobalScope.self
-import org.scalajs.dom.experimental.serviceworkers.{ExtendableEvent, FetchEvent}
+import org.scalajs.dom.Fetch._
+import org.scalajs.dom.Response
+import org.scalajs.dom.ServiceWorkerGlobalScope.self
+import org.scalajs.dom.{ExtendableEvent, FetchEvent, RequestInfo}
 
+import scala.annotation.nowarn
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.scalajs.js
@@ -12,6 +13,7 @@ import scala.scalajs.js.Dynamic
 import scala.scalajs.js.JSConverters._
 import scala.util.chaining._
 
+@nowarn("cat=other")
 object Main {
   val assetCacheName = "assets"
 
