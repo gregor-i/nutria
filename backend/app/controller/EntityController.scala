@@ -12,8 +12,8 @@ import io.circe.syntax._
 
 import scala.util.chaining._
 
-abstract class EntityController[E <: Entity[_]: Decoder: Encoder](entityRepo: EntityRepo[E], authenticator: Authenticator)(implicit
-    ordering: Ordering[WithId[E]]
+abstract class EntityController[E <: Entity[_]: Decoder: Encoder](entityRepo: EntityRepo[E], authenticator: Authenticator)(
+    implicit ordering: Ordering[WithId[E]]
 ) extends InjectedController
     with Circe {
   def listPublic() = Action {

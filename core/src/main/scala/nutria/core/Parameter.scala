@@ -23,14 +23,26 @@ case class RGBAParameter(name: String, description: String = "", value: RGBA) ex
 @Lenses
 case class ColorGradientParameter(name: String, description: String = "", value: Seq[RGBA]) extends Parameter
 @Lenses
-case class FunctionParameter(name: String, description: String = "", value: StringFunction[ZAndLambda], includeDerivative: Boolean = false)
-    extends Parameter
+case class FunctionParameter(
+    name: String,
+    description: String = "",
+    value: StringFunction[ZAndLambda],
+    includeDerivative: Boolean = false
+) extends Parameter
 @Lenses
-case class InitialFunctionParameter(name: String, description: String = "", value: StringFunction[Lambda.type], includeDerivative: Boolean = false)
-    extends Parameter
+case class InitialFunctionParameter(
+    name: String,
+    description: String = "",
+    value: StringFunction[Lambda.type],
+    includeDerivative: Boolean = false
+) extends Parameter
 @Lenses
-case class NewtonFunctionParameter(name: String, description: String = "", value: StringFunction[ZAndLambda], includeDerivative: Boolean = false)
-    extends Parameter
+case class NewtonFunctionParameter(
+    name: String,
+    description: String = "",
+    value: StringFunction[ZAndLambda],
+    includeDerivative: Boolean = false
+) extends Parameter
 
 object Parameter extends CirceCodec {
   val name = Lens[Parameter, String](get = _.name) { newName =>

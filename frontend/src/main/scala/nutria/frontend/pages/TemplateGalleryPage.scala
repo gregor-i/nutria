@@ -79,7 +79,10 @@ object TemplateGalleryPage extends Page[TemplateGalleryState] {
                       Link(TemplateEditorState.byTemplate(template))
                         .classes("button", "is-rounded")
                         .child(Icon(Icons.edit)),
-                      Button.icon(if (template.entity.published) Icons.unpublish else Icons.publish, Actions.togglePublishedTemplate(template)),
+                      Button.icon(
+                        if (template.entity.published) Icons.unpublish else Icons.publish,
+                        Actions.togglePublishedTemplate(template)
+                      ),
                       Button.icon(Icons.delete, Actions.deleteTemplate(template.id))
                     )
                   )

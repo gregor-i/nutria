@@ -36,7 +36,8 @@ object SaveFractalDialog {
 }
 
 object ExplorerState {
-  val viewport: Lens[ExplorerState, Viewport] = ExplorerState.fractalImage.composeLens(Entity.value).composeLens(FractalImage.viewport)
+  val viewport: Lens[ExplorerState, Viewport] =
+    ExplorerState.fractalImage.composeLens(Entity.value).composeLens(FractalImage.viewport)
 }
 
 object ExplorerPage extends Page[ExplorerState] {
@@ -76,9 +77,10 @@ object ExplorerPage extends Page[ExplorerState] {
     val stateQueryParam = Map("state" -> Router.queryEncoded(state.fractalImage))
     val modalQueryParam = if (state.editModal.isDefined) Map("edit" -> "true") else Map.empty[String, String]
     state.remoteFractal match {
-      case Some(remoteFractal) if state.dirty => Some(s"/fractals/${remoteFractal.id}/explorer" -> (stateQueryParam ++ modalQueryParam))
-      case Some(remoteFractal)                => Some(s"/fractals/${remoteFractal.id}/explorer" -> modalQueryParam)
-      case None                               => Some("/explorer" -> (stateQueryParam ++ modalQueryParam))
+      case Some(remoteFractal) if state.dirty =>
+        Some(s"/fractals/${remoteFractal.id}/explorer" -> (stateQueryParam ++ modalQueryParam))
+      case Some(remoteFractal) => Some(s"/fractals/${remoteFractal.id}/explorer" -> modalQueryParam)
+      case None                => Some("/explorer" -> (stateQueryParam ++ modalQueryParam))
     }
   }
 
@@ -111,8 +113,9 @@ object ExplorerPage extends Page[ExplorerState] {
 
   def buttonResetViewport()(implicit context: Context): Node =
     context.local.remoteFractal match {
-      case Some(remoteFractal) => Button.icon(Icons.undo, SnabbdomUtil.modify(ExplorerState.viewport.set(remoteFractal.entity.value.viewport)))
-      case None                => Button.icon(Icons.undo, SnabbdomUtil.noop).boolAttr("disabled", true)
+      case Some(remoteFractal) =>
+        Button.icon(Icons.undo, SnabbdomUtil.modify(ExplorerState.viewport.set(remoteFractal.entity.value.viewport)))
+      case None => Button.icon(Icons.undo, SnabbdomUtil.noop).boolAttr("disabled", true)
     }
 
   def buttonSave(fractalImage: FractalImageEntity)(implicit context: Context): Node =
@@ -126,14 +129,18 @@ object ExplorerPage extends Page[ExplorerState] {
         "div.container"
           .child(
             "section.section"
-              .child("h1.title.is-1".text(Option(context.local.fractalImage.title).filter(_.nonEmpty).getOrElse("<No Title given>")))
+              .child(
+                "h1.title.is-1".text(Option(context.local.fractalImage.title).filter(_.nonEmpty).getOrElse("<No Title given>"))
+              )
               .child("h2.subtitle".text(context.local.fractalImage.description))
           )
           .child(EntityAttributes.section(ExplorerState.fractalImage))
           .child(
             "section.section".children(
               "h4.title.is-4".text("Parameters:"),
-              ParameterForm.list(ExplorerState.fractalImage.composeLens(Entity.value).composeLens(FractalImage.appliedParameters)),
+              ParameterForm.list(
+                ExplorerState.fractalImage.composeLens(Entity.value).composeLens(FractalImage.appliedParameters)
+              ),
               AAInput(ExplorerState.fractalImage.composeLens(Entity.value).composeLens(FractalImage.antiAliase))
             )
           )
@@ -146,7 +153,11 @@ object ExplorerPage extends Page[ExplorerState] {
 
   private def editModalActions()(implicit context: Context): Node = {
     def buttonUpdate =
-      Button("Update", Icons.save, Actions.updateFractal(context.local.remoteFractal.get.copy(entity = context.local.fractalImage)))
+      Button(
+        "Update",
+        Icons.save,
+        Actions.updateFractal(context.local.remoteFractal.get.copy(entity = context.local.fractalImage))
+      )
         .classes("is-primary")
 
     def buttonDelete =
@@ -170,8 +181,9 @@ object ExplorerPage extends Page[ExplorerState] {
 
   def saveDialog()(implicit context: Context): Option[Node] =
     context.local.saveModal.map { params =>
-      val lensParams     = ExplorerState.saveModal.composeLens(LenseUtils.unsafe(monocle.std.all.some[SaveFractalDialog]))
-      val downloadAction = Actions.saveToDisk(context.local.fractalImage.value.copy(antiAliase = params.antiAliase), params.dimensions)
+      val lensParams = ExplorerState.saveModal.composeLens(LenseUtils.unsafe(monocle.std.all.some[SaveFractalDialog]))
+      val downloadAction =
+        Actions.saveToDisk(context.local.fractalImage.value.copy(antiAliase = params.antiAliase), params.dimensions)
 
       Modal(closeAction = Some(SnabbdomUtil.modify(ExplorerState.saveModal.set(None))))(
         "div"
@@ -191,7 +203,13 @@ object ExplorerPage extends Page[ExplorerState] {
               lens = lensParams composeLens SaveFractalDialog.dimensions composeLens Dimensions.height
             )
           )
-          .child(Form.forLens("anti alias", description = "Anti Aliase Factor", lens = lensParams composeLens SaveFractalDialog.antiAliase)),
+          .child(
+            Form.forLens(
+              "anti alias",
+              description = "Anti Aliase Factor",
+              lens = lensParams composeLens SaveFractalDialog.antiAliase
+            )
+          ),
         ButtonList.right(Button("Download", Icons.download, downloadAction).classes("is-primary"))
       )
     }

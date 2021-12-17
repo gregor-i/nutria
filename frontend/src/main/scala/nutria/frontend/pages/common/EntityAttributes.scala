@@ -15,7 +15,11 @@ object EntityAttributes {
   def form[S, E](lens: Lens[S, Entity[E]])(implicit updatable: Updatable[S, S]): Seq[Node] = {
     Seq(
       Form.forLens("Title", description = "give this fractal a short name", lens = lens composeLens Entity.title),
-      Form.forLens("Description", description = "give this fractal a short description", lens = lens composeLens Entity.description),
+      Form.forLens(
+        "Description",
+        description = "give this fractal a short description",
+        lens = lens composeLens Entity.description
+      ),
       Form.forLens(
         "References",
         description = "if there is a detailed explanation somewhere on the web, you can post the links here",

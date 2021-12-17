@@ -55,7 +55,10 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
 
     case (_, s"/templates/editor", queryParams) =>
       val templateFromUrl =
-        queryParams.get("state").flatMap(Router.queryDecoded[FractalTemplateEntity]).getOrElse(Entity(value = FractalTemplate.empty))
+        queryParams
+          .get("state")
+          .flatMap(Router.queryDecoded[FractalTemplateEntity])
+          .getOrElse(Entity(value = FractalTemplate.empty))
 
       TemplateEditorState(
         remoteTemplate = None,

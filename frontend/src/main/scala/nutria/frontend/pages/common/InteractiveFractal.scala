@@ -11,7 +11,10 @@ import scala.util.chaining._
 
 object InteractiveFractal {
   def forImage[S](lens: Lens[S, FractalImage])(implicit updatable: Updatable[S, S]): Node =
-    apply(image = lens.get(updatable.state), updatable = Updatable.composeLens(updatable, lens.composeLens(FractalImage.viewport)))
+    apply(
+      image = lens.get(updatable.state),
+      updatable = Updatable.composeLens(updatable, lens.composeLens(FractalImage.viewport))
+    )
 
   def forTemplate[S](lens: Lens[S, FractalTemplate])(implicit updatable: Updatable[S, S]): Node =
     apply(

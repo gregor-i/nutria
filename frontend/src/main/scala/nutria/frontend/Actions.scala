@@ -53,7 +53,10 @@ object Actions extends ExecutionContext {
           } yield context.local.copy(userFractals = reloaded))
             .pipe { fut =>
               if (published)
-                fut.withWarningToast("Unpublishing Fractal", "Fractal unpublished. The fractal will no longer be listed in the public gallery.")
+                fut.withWarningToast(
+                  "Unpublishing Fractal",
+                  "Fractal unpublished. The fractal will no longer be listed in the public gallery."
+                )
               else
                 fut.withSuccessToast("Publishing Fractal", "Fractal published. The fractal will be listed in the public gallery.")
             }
@@ -164,7 +167,9 @@ object Actions extends ExecutionContext {
         }
       }
 
-  def togglePublishedTemplate(template: FractalTemplateEntityWithId)(implicit context: Context[TemplateGalleryState]): Event => Unit =
+  def togglePublishedTemplate(
+      template: FractalTemplateEntityWithId
+  )(implicit context: Context[TemplateGalleryState]): Event => Unit =
     (_: Event) =>
       onlyLoggedIn {
         asyncUpdate {
@@ -182,9 +187,15 @@ object Actions extends ExecutionContext {
           } yield context.local.copy(templates = templates))
             .pipe { fut =>
               if (published)
-                fut.withWarningToast("Unpublishing Template", "Template unpublished. The template will no longer be listed in the public gallery.")
+                fut.withWarningToast(
+                  "Unpublishing Template",
+                  "Template unpublished. The template will no longer be listed in the public gallery."
+                )
               else
-                fut.withSuccessToast("Publishing Template", "Template published. The template will be listed in the public gallery.")
+                fut.withSuccessToast(
+                  "Publishing Template",
+                  "Template published. The template will be listed in the public gallery."
+                )
             }
         }
       }

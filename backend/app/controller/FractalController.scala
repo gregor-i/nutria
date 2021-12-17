@@ -8,7 +8,8 @@ import repo.ImageRepo
 
 import scala.util.Random
 
-class FractalController @Inject() (fractalRepo: ImageRepo, authenticator: Authenticator) extends EntityController(fractalRepo, authenticator) {
+class FractalController @Inject() (fractalRepo: ImageRepo, authenticator: Authenticator)
+    extends EntityController(fractalRepo, authenticator) {
   def getRandomFractal() = Action {
     val entities = fractalRepo
       .listPublic()

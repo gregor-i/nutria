@@ -69,8 +69,14 @@ object Form {
       eqFunction = (a: Boolean, b: Boolean) => a == b
     )
 
-  def selectInput[S, A](label: String, options: Seq[(String, A)], lens: Lens[S, A], eqFunction: (A, A) => Boolean, actions: Seq[Node] = Seq.empty)(
-      implicit updatable: Updatable[S, S]
+  def selectInput[S, A](
+      label: String,
+      options: Seq[(String, A)],
+      lens: Lens[S, A],
+      eqFunction: (A, A) => Boolean,
+      actions: Seq[Node] = Seq.empty
+  )(implicit
+      updatable: Updatable[S, S]
   ) = {
     val currentValue = lens.get(updatable.state)
     Label(

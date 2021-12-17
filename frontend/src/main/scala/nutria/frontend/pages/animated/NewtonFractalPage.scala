@@ -27,14 +27,15 @@ object NewtonFractalState {
 }
 
 object NewtonFractalPage extends Page[NewtonFractalState] {
-  override def stateFromUrl: PartialFunction[(GlobalState, Path, QueryParameter), PageState] = { case (_, "/animated/newton-fractal", params) =>
-    NewtonFractalState(
-      alpha = params.get("alpha").flatMap(_.toDoubleOption).getOrElse(0.05),
-      beta = params.get("beta").flatMap(_.toDoubleOption).getOrElse(0.01),
-      gamma = params.get("gamma").flatMap(_.toDoubleOption).getOrElse(0.995),
-      seed = params.get("seed").flatMap(_.toIntOption).getOrElse(123123),
-      numberOfRoots = params.get("numberOfRoots").flatMap(_.toIntOption).getOrElse(5)
-    )
+  override def stateFromUrl: PartialFunction[(GlobalState, Path, QueryParameter), PageState] = {
+    case (_, "/animated/newton-fractal", params) =>
+      NewtonFractalState(
+        alpha = params.get("alpha").flatMap(_.toDoubleOption).getOrElse(0.05),
+        beta = params.get("beta").flatMap(_.toDoubleOption).getOrElse(0.01),
+        gamma = params.get("gamma").flatMap(_.toDoubleOption).getOrElse(0.995),
+        seed = params.get("seed").flatMap(_.toIntOption).getOrElse(123123),
+        numberOfRoots = params.get("numberOfRoots").flatMap(_.toIntOption).getOrElse(5)
+      )
   }
 
   override def stateToUrl(state: State): Option[(Path, QueryParameter)] =
@@ -93,7 +94,10 @@ object NewtonFractalPage extends Page[NewtonFractalState] {
           lens = NewtonFractalState.constant.composeLens(NewtonFractalState.imag)
         )
       )
-      .child(Form.forLens("number of roots", description = "how many roots should be generated", lens = NewtonFractalState.numberOfRoots))
+      .child(
+        Form
+          .forLens("number of roots", description = "how many roots should be generated", lens = NewtonFractalState.numberOfRoots)
+      )
       .child(
         Form.forLens(
           "alpha",
@@ -102,7 +106,11 @@ object NewtonFractalPage extends Page[NewtonFractalState] {
         )
       )
       .child(
-        Form.forLens("beta", description = "parameter for random walk: how fast does the root move foreward", lens = NewtonFractalState.beta)
+        Form.forLens(
+          "beta",
+          description = "parameter for random walk: how fast does the root move foreward",
+          lens = NewtonFractalState.beta
+        )
       )
       .child(
         Form.forLens(
@@ -113,6 +121,10 @@ object NewtonFractalPage extends Page[NewtonFractalState] {
       )
       .child(
         Form
-          .forLens("seed", description = "seed for the random number generation, needed for moving the roots", lens = NewtonFractalState.seed)
+          .forLens(
+            "seed",
+            description = "seed for the random number generation, needed for moving the roots",
+            lens = NewtonFractalState.seed
+          )
       )
 }

@@ -45,7 +45,9 @@ object Pagination {
       .attr("aria-label", "pagination")
       .child(
         "ul.pagination-list"
-          .child("a.pagination-link".child(Icon(Icons.prev)).boolAttr("disabled", !isValid(page - 1)).event("click", action(page - 1)))
+          .child(
+            "a.pagination-link".child(Icon(Icons.prev)).boolAttr("disabled", !isValid(page - 1)).event("click", action(page - 1))
+          )
           .pipe { node =>
             if (!range.contains(1) && !range.contains(2))
               node
@@ -63,7 +65,9 @@ object Pagination {
             else
               node
           }
-          .child("a.pagination-link".child(Icon(Icons.next)).boolAttr("disabled", !isValid(page + 1)).event("click", action(page + 1)))
+          .child(
+            "a.pagination-link".child(Icon(Icons.next)).boolAttr("disabled", !isValid(page + 1)).event("click", action(page + 1))
+          )
       )
   }
 

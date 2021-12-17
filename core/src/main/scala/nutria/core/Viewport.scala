@@ -9,7 +9,9 @@ object Viewport extends CirceCodec {
   val aroundZero: Viewport = Viewport(Point(-2.0, -2.0), Point(4.0, 0), Point(0, 4.0))
 
   implicit val codec: Codec[Viewport] = Codec.from(
-    encodeA = Encoder[Vector[Double]].contramap(view => Vector(view.origin._1, view.origin._2, view.A._1, view.A._2, view.B._1, view.B._2)),
+    encodeA = Encoder[Vector[Double]].contramap(view =>
+      Vector(view.origin._1, view.origin._2, view.A._1, view.A._2, view.B._1, view.B._2)
+    ),
     decodeA = Decoder[Vector[Double]].emap {
       case Vector(ox, oy, ax, ay, bx, by) => Right(Viewport((ox, oy), (ax, ay), (bx, by)))
       case _                              => Left("no match")

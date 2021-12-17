@@ -23,7 +23,14 @@ object NewtonFractalDesigner {
     }
   }
 
-  def animation(constant: Complex, roots: Seq[Complex], seed: Int, alpha: Double, beta: Double, gamma: Double): LazyList[FractalImage] = {
+  def animation(
+      constant: Complex,
+      roots: Seq[Complex],
+      seed: Int,
+      alpha: Double,
+      beta: Double,
+      gamma: Double
+  ): LazyList[FractalImage] = {
     val random = new Random(seed)
 
     val streams = roots.map { root =>
