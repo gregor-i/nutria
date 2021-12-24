@@ -3,7 +3,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 import scala.sys.process._
 
 // global settings
-(ThisBuild / version) := "0.0.1"
+(ThisBuild / version)      := "0.0.1"
 (ThisBuild / scalaVersion) := "2.13.7"
 (ThisBuild / scalacOptions) ++= Seq("-feature", "-deprecation", "-Ymacro-annotations")
 (ThisBuild / scalafmtOnCompile) := true
@@ -99,7 +99,7 @@ lazy val backend = project
     libraryDependencies += evolutions,
     libraryDependencies += "io.lemonlabs"            %% "scala-uri"          % "3.6.0",
     libraryDependencies += "com.dripower"            %% "play-circe"         % "2814.2",
-    libraryDependencies += "org.postgresql"          % "postgresql"          % "42.3.1",
+    libraryDependencies += "org.postgresql"           % "postgresql"         % "42.3.1",
     libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.10",
     libraryDependencies += "org.scalatestplus.play"  %% "scalatestplus-play" % "5.1.0" % Test
   )
@@ -117,7 +117,8 @@ val `static-renderer` = project
   val buildFrontend = (frontend / Compile / fastOptJS).value.data
   val outputFile    = (backend / baseDirectory).value / "public" / "assets" / "nutria.js"
   streams.value.log.info("integrating frontend (fastOptJS)")
-  val npmLog = Seq("./node_modules/.bin/esbuild", buildFrontend.getAbsolutePath, s"--outfile=${outputFile.getAbsolutePath}", "--bundle").!!
+  val npmLog =
+    Seq("./node_modules/.bin/esbuild", buildFrontend.getAbsolutePath, s"--outfile=${outputFile.getAbsolutePath}", "--bundle").!!
   streams.value.log.info(npmLog)
   ret
 }
@@ -127,7 +128,13 @@ val `static-renderer` = project
   val outputFile    = (backend / baseDirectory).value / "public" / "assets" / "nutria.js"
   streams.value.log.info("integrating frontend (fullOptJS)")
   val npmLog =
-    Seq("./node_modules/.bin/esbuild", buildFrontend.getAbsolutePath, s"--outfile=${outputFile.getAbsolutePath}", "--bundle", "--minify").!!
+    Seq(
+      "./node_modules/.bin/esbuild",
+      buildFrontend.getAbsolutePath,
+      s"--outfile=${outputFile.getAbsolutePath}",
+      "--bundle",
+      "--minify"
+    ).!!
   streams.value.log.info(npmLog)
   outputFile
 }
