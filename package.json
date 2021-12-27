@@ -3,9 +3,6 @@
     "@fortawesome/fontawesome-free": "^5.15.3",
     "bulma": "^0.9.3",
     "debounce": "^1.2.1",
-    "esbuild": "^0.12.15",
-    "npm-run-all": "^4.1",
-    "sass": "^1.32.12",
     "snabbdom": "^3.0.3"
   },
   "scripts": {
@@ -18,6 +15,7 @@
     "build-html": "cp frontend/src/main/html/nutria.html backend/public/html/nutria.html",
     "build-img": "cp frontend/src/main/img/* backend/public/assets/.",
     "build-static": "cp frontend/src/main/static/* backend/public/assets/.",
+    "build-frontend": "sbt frontend/stage",
     "server": "sbt backend/run",
     "watch": "run-p watch-*",
     "watch-css": "nodemon --exec npm run build-css --watch frontend/src/main/css -e sass",
@@ -29,7 +27,10 @@
   "devDependencies": {
     "html-formatter": "^0",
     "nodemon": "^2.0.7",
-    "snabbdom-to-html": "^7.0.0"
+    "snabbdom-to-html": "^7.0.0",
+    "esbuild": "^0.12.15",
+    "npm-run-all": "^4.1",
+    "sass": "^1.32.12"
   },
   "engines": {
     "node": "^16",
