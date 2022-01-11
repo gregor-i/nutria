@@ -8,7 +8,7 @@ import nutria.CirceCodec
 class StringFunction[V] private (val string: String, val node: ComplexNode[V]) {
   override def equals(other: Any): Boolean =
     other match {
-      case o: StringFunction[V] => this.string == o.string && this.node == o.node
+      case o: StringFunction[_] => this.string == o.string && this.node == o.node
       case _                    => false
     }
 

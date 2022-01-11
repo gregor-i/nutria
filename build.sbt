@@ -66,7 +66,8 @@ val frontend = project
   .enablePlugins(ScalaJSPlugin)
   .settings(
     scalaJSUseMainModuleInitializer := true,
-    scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) }
+    scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
+    scalacOptions += "-P:scalajs:nowarnGlobalExecutionContext"
   )
   .settings(
     libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "scalajs-snabbdom"    % "1.2.6",
@@ -84,7 +85,8 @@ val `service-worker` = project
     buildInfoKeys := Seq(
       BuildInfoKey.action("buildTime") { System.currentTimeMillis },
       BuildInfoKey.action("assetFiles") { "ls backend/public/assets".!! }
-    )
+    ),
+    scalacOptions += "-P:scalajs:nowarnGlobalExecutionContext"
   )
   .settings(scalaJsDom)
 

@@ -62,6 +62,9 @@ object FragmentShaderSource {
       else
         function(name, value.node)
 
+    case NewtonFunctionParameter(name, _, value, false) =>
+      function(name, value.node)
+
     case NewtonFunctionParameter(name, _, value, true) =>
       function(name, value.node) + "\n" + function(name + "_derived", value.node.derive(Z))
   }

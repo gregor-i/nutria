@@ -92,6 +92,8 @@ class AuthenticationGoogle @Inject() (conf: Configuration, wsClient: WSClient, u
         } yield Redirect(returnTo)
           .addingToSession("user-id" -> user.id)
           .removingFromSession("return-to")
+
+      case _ => throw new Exception("unexpected")
     }
   }
 

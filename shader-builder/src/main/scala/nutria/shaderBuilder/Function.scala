@@ -1,7 +1,7 @@
 package nutria.shaderBuilder
 
 import mathParser.complex._
-import mathParser.{BinaryNode, ConstantNode, UnitaryNode}
+import mathParser.{BinaryNode, ConstantNode, UnitaryNode, VariableNode}
 
 object Function {
   def apply[V](name: String, node: ComplexNode[V])(implicit lang: ComplexLanguage[V]): String = {
@@ -43,6 +43,7 @@ object Function {
           statements = statements :+ s"vec2 $name = ${unitaryNodeToCode(op, refChild)};"
           names = names.updated(node, name)
           name
+        case variable @ VariableNode(_) => names(variable)
       }
 
     val ref = loop(node)
