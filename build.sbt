@@ -101,7 +101,7 @@ lazy val backend = project
     libraryDependencies += evolutions,
     libraryDependencies += "io.lemonlabs"            %% "scala-uri"          % "3.6.0",
     libraryDependencies += "com.dripower"            %% "play-circe"         % "2814.2",
-    libraryDependencies += "org.postgresql"           % "postgresql"         % "42.3.1",
+    libraryDependencies += "org.postgresql"           % "postgresql"         % "42.3.2",
     libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.10",
     libraryDependencies += "org.scalatestplus.play"  %% "scalatestplus-play" % "5.1.0" % Test
   )
