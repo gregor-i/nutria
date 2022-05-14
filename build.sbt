@@ -194,4 +194,4 @@ def scalatest =
   )
 
 def scalaJsDom =
-  libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.1.0"
+  libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.2.0"
