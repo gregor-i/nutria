@@ -39,7 +39,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies ++= Seq(
       "io.circe" %%% "circe-core"           % "0.14.1",
       "io.circe" %%% "circe-generic"        % "0.14.1",
-      "io.circe" %%% "circe-generic-extras" % "0.14.1",
+      "io.circe" %%% "circe-generic-extras" % "0.14.2",
       "io.circe" %%% "circe-parser"         % "0.14.1"
     ),
     libraryDependencies ++= Seq(
