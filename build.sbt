@@ -37,10 +37,10 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(
     libraryDependencies += "com.github.gregor-i.math-parser" %%% "math-parser" % "1.6.2",
     libraryDependencies ++= Seq(
-      "io.circe" %%% "circe-core"           % "0.14.1",
-      "io.circe" %%% "circe-generic"        % "0.14.1",
+      "io.circe" %%% "circe-core"           % "0.14.2",
+      "io.circe" %%% "circe-generic"        % "0.14.2",
       "io.circe" %%% "circe-generic-extras" % "0.14.1",
-      "io.circe" %%% "circe-parser"         % "0.14.1"
+      "io.circe" %%% "circe-parser"         % "0.14.2"
     ),
     libraryDependencies ++= Seq(
       "com.github.julien-truffaut" %%% "monocle-core"   % "2.1.0",
