@@ -37,10 +37,10 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(
     libraryDependencies += "com.github.gregor-i.math-parser" %%% "math-parser" % "1.6.2",
     libraryDependencies ++= Seq(
-      "io.circe" %%% "circe-core"           % "0.14.1",
-      "io.circe" %%% "circe-generic"        % "0.14.1",
-      "io.circe" %%% "circe-generic-extras" % "0.14.2",
-      "io.circe" %%% "circe-parser"         % "0.14.1"
+      "io.circe" %%% "circe-core"           % "0.14.2",
+      "io.circe" %%% "circe-generic"        % "0.14.2",
+      "io.circe" %%% "circe-generic-extras" % "0.14.1",
+      "io.circe" %%% "circe-parser"         % "0.14.2"
     ),
     libraryDependencies ++= Seq(
       "com.github.julien-truffaut" %%% "monocle-core"   % "2.1.0",
@@ -101,7 +101,7 @@ lazy val backend = project
     libraryDependencies += evolutions,
     libraryDependencies += "io.lemonlabs"            %% "scala-uri"          % "4.0.2",
     libraryDependencies += "com.dripower"            %% "play-circe"         % "2814.2",
-    libraryDependencies += "org.postgresql"           % "postgresql"         % "42.3.4",
+    libraryDependencies += "org.postgresql"           % "postgresql"         % "42.3.6",
     libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.10",
     libraryDependencies += "org.scalatestplus.play"  %% "scalatestplus-play" % "5.1.0" % Test
   )
@@ -189,9 +189,9 @@ val `static-renderer` = project
 
 def scalatest =
   Seq(
-    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.11" % Test,
+    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.12" % Test,
     testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
   )
 
 def scalaJsDom =
-  libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.1.0"
+  libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.2.0"
