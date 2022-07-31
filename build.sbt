@@ -189,7 +189,7 @@ val `static-renderer` = project
 
 def scalatest =
   Seq(
-    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.12" % Test,
+    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.13" % Test,
     testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
   )
 
