@@ -4,7 +4,7 @@ import scala.sys.process._
 
 // global settings
 (ThisBuild / version)      := "0.0.1"
-(ThisBuild / scalaVersion) := "2.13.8"
+(ThisBuild / scalaVersion) := "2.13.9"
 (ThisBuild / scalacOptions) ++= Seq("-feature", "-deprecation", "-Ymacro-annotations")
 (ThisBuild / scalafmtOnCompile) := scala.sys.env.get("CI").isEmpty
 (ThisBuild / resolvers) += "jitpack" at "https://jitpack.io"
