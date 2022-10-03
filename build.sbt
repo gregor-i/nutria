@@ -102,7 +102,7 @@ lazy val backend = project
     libraryDependencies += "io.lemonlabs"            %% "scala-uri"          % "4.0.2",
     libraryDependencies += "com.dripower"            %% "play-circe"         % "2814.2",
     libraryDependencies += "org.postgresql"           % "postgresql"         % "42.4.2",
-    libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.10",
+    libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.7.0",
     libraryDependencies += "org.scalatestplus.play"  %% "scalatestplus-play" % "5.1.0" % Test
   )
   .settings(javaOptions += s"-DDATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres")
