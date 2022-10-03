@@ -52,13 +52,10 @@ jobs:
           npm run build
       - name:  build backend
         run: sbt backend/stage
-      - name: build docker
-        run: docker build -t registry.heroku.com/nutria-explorer/web .
-      - name: release image
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      - name: login docker hub
+        run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
+      - name: build docker image
+        run: docker build -t ${{secrets.DOCKER_USER}}/nutria .
+      - name: publish docker image
         if: github.ref == 'refs/heads/master'
-        run: |
-          docker login --username=_ --password=$(heroku auth:token) registry.heroku.com
-          docker push registry.heroku.com/nutria-explorer/web
-          heroku container:release web -a nutria-explorer
+        run: docker push ${{secrets.DOCKER_USER}}/nutria
