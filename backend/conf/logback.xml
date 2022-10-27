@@ -10,7 +10,6 @@
 
     <logger name="play" level="INFO"/>
     <logger name="application" level="DEBUG"/>
-    <logger name="module.NoSleepModule" level="INFO"/>
     <logger name="module.MigrationModule" level="INFO"/>
 
     <root level="WARN">
