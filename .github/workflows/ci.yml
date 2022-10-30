@@ -50,7 +50,9 @@ jobs:
         run: |
           npm ci
           npm run build
-      - name:  build backend
+      - name: build service worker
+        run: sbt service-worker/stage
+      - name: build backend
         run: sbt backend/stage
       - name: login docker hub
         run: docker login -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
