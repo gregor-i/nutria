@@ -70,9 +70,9 @@ val frontend = project
     scalacOptions += "-P:scalajs:nowarnGlobalExecutionContext"
   )
   .settings(
-    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "scalajs-snabbdom"    % "1.2.6",
-    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-toasts"     % "1.2.6",
-    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-components" % "1.2.6",
+    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "scalajs-snabbdom"    % "1.3.0",
+    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-toasts"     % "1.3.0",
+    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-components" % "1.3.0",
     scalatest
   )
 
