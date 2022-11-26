@@ -4,9 +4,18 @@ import nutria.core.{FractalImage, FractalTemplate, Viewport}
 import nutria.macros.StaticContent
 import nutria.shaderBuilder._
 import org.scalajs.dom
+import org.scalajs.dom.HTMLElement
+import org.scalajs.dom.WebGLRenderingContext.{
+  ARRAY_BUFFER,
+  COMPILE_STATUS,
+  FLOAT,
+  FRAGMENT_SHADER,
+  NO_ERROR,
+  STATIC_DRAW,
+  TRIANGLES,
+  VERTEX_SHADER
+}
 import org.scalajs.dom.html.Canvas
-import org.scalajs.dom.raw.HTMLElement
-import org.scalajs.dom.raw.WebGLRenderingContext._
 import org.scalajs.dom.webgl.{Program, RenderingContext, Shader}
 
 import scala.scalajs.js.Dynamic

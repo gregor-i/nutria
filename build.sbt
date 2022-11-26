@@ -4,9 +4,8 @@ import scala.sys.process._
 
 // global settings
 (ThisBuild / version)      := "0.0.1"
-(ThisBuild / scalaVersion) := "2.13.8"
+(ThisBuild / scalaVersion) := "2.13.10"
 (ThisBuild / scalacOptions) ++= Seq("-feature", "-deprecation", "-Ymacro-annotations")
-(ThisBuild / scalafmtOnCompile) := scala.sys.env.get("CI").isEmpty
 (ThisBuild / resolvers) += "jitpack" at "https://jitpack.io"
 
 // projects
@@ -70,9 +69,9 @@ val frontend = project
     scalacOptions += "-P:scalajs:nowarnGlobalExecutionContext"
   )
   .settings(
-    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "scalajs-snabbdom"    % "1.2.6",
-    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-toasts"     % "1.2.6",
-    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-components" % "1.2.6",
+    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "scalajs-snabbdom"    % "1.3.0",
+    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-toasts"     % "1.3.0",
+    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-components" % "1.3.0",
     scalatest
   )
 

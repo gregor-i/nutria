@@ -13,7 +13,7 @@ import nutria.frontend.pages.common.{Form, _}
 import nutria.frontend.service.TemplateService
 import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
 import nutria.shaderBuilder.FragmentShaderSource
-import org.scalajs.dom.raw.HTMLTextAreaElement
+import org.scalajs.dom.HTMLTextAreaElement
 import snabbdom.components.{Button, ButtonList, Modal}
 import snabbdom.{Event, Node}
 

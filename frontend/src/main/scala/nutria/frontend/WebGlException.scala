@@ -1,6 +1,6 @@
 package nutria.frontend
 
-import org.scalajs.dom.raw.{WebGLProgram, WebGLRenderingContext, WebGLShader}
+import org.scalajs.dom.{WebGLProgram, WebGLRenderingContext, WebGLShader}
 
 sealed abstract class WebGlException(message: String) extends Exception(message)
 
