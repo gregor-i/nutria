@@ -25,24 +25,24 @@ object ExplorerEvents {
       s"rotate(${rotate * 180d / Math.PI}deg)"
   }
 
-  private def toPoint(event: MouseEvent, boundingBox: ClientRect): Point = {
+  private def toPoint(event: MouseEvent, boundingBox: DOMRect): Point = {
     val x = (event.clientX - boundingBox.left) / boundingBox.width
     val y = (event.clientY - boundingBox.top) / boundingBox.height
     (x, y)
   }
 
-  private def toPoint(touch: Touch, boundingBox: ClientRect): Point = {
+  private def toPoint(touch: Touch, boundingBox: DOMRect): Point = {
     val x = (touch.clientX - boundingBox.left) / boundingBox.width
     val y = (touch.clientY - boundingBox.top) / boundingBox.height
     (x, y)
   }
 
-  private def context(event: UIEvent): (Canvas, ClientRect) = {
+  private def context(event: UIEvent): (Canvas, DOMRect) = {
     val container = event.currentTarget.asInstanceOf[html.Div]
     (container.firstElementChild.asInstanceOf[Canvas], container.getBoundingClientRect())
   }
 
-  private def calcNewView(boundingBox: ClientRect, moves: Seq[(Point, Point)], view: Viewport) =
+  private def calcNewView(boundingBox: DOMRect, moves: Seq[(Point, Point)], view: Viewport) =
     Transform.applyToViewport(moves, view.cover(boundingBox.width, boundingBox.height))
 
   def canvasWheelEvent(updatable: Updatable[Viewport, Viewport]): Seq[(String, Eventlistener)] = {

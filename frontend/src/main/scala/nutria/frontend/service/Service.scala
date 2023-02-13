@@ -3,7 +3,7 @@ package nutria.frontend.service
 import io.circe.syntax._
 import io.circe.{Decoder, Encoder, parser}
 import nutria.frontend.ExecutionContext
-import org.scalajs.dom.experimental.{Fetch, RequestInit, Response}
+import org.scalajs.dom.{Fetch, RequestInit, Response}
 
 import scala.concurrent.Future
 import scala.scalajs.js.Dynamic

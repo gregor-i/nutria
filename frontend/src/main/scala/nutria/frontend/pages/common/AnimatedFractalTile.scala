@@ -5,8 +5,8 @@ import nutria.core.FractalImage
 import nutria.frontend.FractalRenderer
 import nutria.frontend.util.Untyped
 import org.scalajs.dom
+import org.scalajs.dom.WebGLRenderingContext
 import org.scalajs.dom.html.Canvas
-import org.scalajs.dom.raw.WebGLRenderingContext
 import snabbdom.{Event, Node}
 
 import scala.scalajs.js
