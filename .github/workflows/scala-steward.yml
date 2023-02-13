@@ -1,8 +1,8 @@
 on:
   workflow_dispatch:
   # This workflow will launch at 00:00 every day
-  schedule:
-    - cron: '0 0 * * *'
+#  schedule:
+#    - cron: '0 0 * * *'
 
 name: Launch Scala Steward
 
