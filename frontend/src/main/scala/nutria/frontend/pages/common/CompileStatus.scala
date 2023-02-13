@@ -4,8 +4,8 @@ package common
 import nutria.core.FractalTemplate
 import nutria.frontend.{CompileShaderException, FractalRenderer}
 import org.scalajs.dom
+import org.scalajs.dom.WebGLRenderingContext
 import org.scalajs.dom.html.{Canvas, Element}
-import org.scalajs.dom.raw.WebGLRenderingContext
 import snabbdom.Node
 
 object CompileStatus {

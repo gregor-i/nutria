@@ -4,9 +4,8 @@ import scala.sys.process._
 
 // global settings
 (ThisBuild / version)      := "0.0.1"
-(ThisBuild / scalaVersion) := "2.13.8"
+(ThisBuild / scalaVersion) := "2.13.10"
 (ThisBuild / scalacOptions) ++= Seq("-feature", "-deprecation", "-Ymacro-annotations")
-(ThisBuild / scalafmtOnCompile) := scala.sys.env.get("CI").isEmpty
 (ThisBuild / resolvers) += "jitpack" at "https://jitpack.io"
 
 // projects
@@ -37,10 +36,10 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(
     libraryDependencies += "com.github.gregor-i.math-parser" %%% "math-parser" % "1.6.2",
     libraryDependencies ++= Seq(
-      "io.circe" %%% "circe-core"           % "0.14.2",
-      "io.circe" %%% "circe-generic"        % "0.14.2",
+      "io.circe" %%% "circe-core"           % "0.14.4",
+      "io.circe" %%% "circe-generic"        % "0.14.4",
       "io.circe" %%% "circe-generic-extras" % "0.14.2",
-      "io.circe" %%% "circe-parser"         % "0.14.2"
+      "io.circe" %%% "circe-parser"         % "0.14.4"
     ),
     libraryDependencies ++= Seq(
       "com.github.julien-truffaut" %%% "monocle-core"   % "2.1.0",
@@ -50,7 +49,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     scalatest
   )
   .jsSettings(
-    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.4.0"
+    libraryDependencies += "io.github.cquiroz" %%% "scala-java-time" % "2.5.0"
   )
 
 lazy val `shader-builder` = crossProject(JSPlatform, JVMPlatform)
@@ -70,9 +69,9 @@ val frontend = project
     scalacOptions += "-P:scalajs:nowarnGlobalExecutionContext"
   )
   .settings(
-    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "scalajs-snabbdom"    % "1.2.6",
-    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-toasts"     % "1.2.6",
-    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-components" % "1.2.6",
+    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "scalajs-snabbdom"    % "1.3.0",
+    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-toasts"     % "1.3.0",
+    libraryDependencies += "com.github.gregor-i.scalajs-snabbdom" %%% "snabbdom-components" % "1.3.0",
     scalatest
   )
 
@@ -101,7 +100,7 @@ lazy val backend = project
     libraryDependencies += evolutions,
     libraryDependencies += "io.lemonlabs"            %% "scala-uri"          % "4.0.2",
     libraryDependencies += "com.dripower"            %% "play-circe"         % "2814.2",
-    libraryDependencies += "org.postgresql"           % "postgresql"         % "42.4.2",
+    libraryDependencies += "org.postgresql"           % "postgresql"         % "42.4.3",
     libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.6.10",
     libraryDependencies += "org.scalatestplus.play"  %% "scalatestplus-play" % "5.1.0" % Test
   )
@@ -189,7 +188,7 @@ val `static-renderer` = project
 
 def scalatest =
   Seq(
-    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.12" % Test,
+    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.15" % Test,
     testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-oD")
   )
 

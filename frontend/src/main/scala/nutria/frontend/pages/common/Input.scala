@@ -5,7 +5,7 @@ import mathParser.complex.{Complex, ComplexLanguage}
 import nutria.core.languages.StringFunction
 import nutria.core.{RGB, RGBA}
 import nutria.frontend.util.{ComplexLenses, Updatable}
-import org.scalajs.dom.raw.HTMLInputElement
+import org.scalajs.dom.HTMLInputElement
 import snabbdom.{Event, Node}
 
 import scala.util.Try
