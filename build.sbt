@@ -38,7 +38,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies ++= Seq(
       "io.circe" %%% "circe-core"           % "0.14.4",
       "io.circe" %%% "circe-generic"        % "0.14.4",
-      "io.circe" %%% "circe-generic-extras" % "0.14.2",
+      "io.circe" %%% "circe-generic-extras" % "0.14.3",
       "io.circe" %%% "circe-parser"         % "0.14.4"
     ),
     libraryDependencies ++= Seq(
@@ -101,6 +101,8 @@ lazy val backend = project
     libraryDependencies += "io.lemonlabs"            %% "scala-uri"          % "4.0.2",
     libraryDependencies += "com.dripower"            %% "play-circe"         % "2814.2",
     libraryDependencies += "org.postgresql"           % "postgresql"         % "42.4.3",
+    libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.7.0",
+    libraryDependencies += "org.postgresql"           % "postgresql"         % "42.5.3",
     libraryDependencies += "org.playframework.anorm" %% "anorm"              % "2.7.0",
     libraryDependencies += "org.scalatestplus.play"  %% "scalatestplus-play" % "5.1.0" % Test
   )
