@@ -13,10 +13,11 @@ import nutria.frontend.pages.common.{Form, _}
 import nutria.frontend.service.TemplateService
 import nutria.frontend.util.{LenseUtils, SnabbdomUtil}
 import nutria.shaderBuilder.FragmentShaderSource
-import org.scalajs.dom.HTMLTextAreaElement
+import org.scalajs.dom.{HTMLTextAreaElement, KeyboardEvent}
 import snabbdom.components.{Button, ButtonList, Modal}
 import snabbdom.{Event, Node}
 
+import scala.scalajs.js
 import scala.util.chaining._
 
 @Lenses
@@ -129,6 +130,33 @@ object TemplateEditorPage extends Page[TemplateEditorState] {
         )
         .child(
           "textarea.code-editor.is-family-code"
+            .event[KeyboardEvent](
+              "keydown",
+              event => {
+                if (event.keyCode == 9) {
+                  event.preventDefault()
+                  val textArea = event.target.asInstanceOf[HTMLTextAreaElement]
+                  val start    = textArea.selectionStart
+                  val end      = textArea.selectionEnd
+                  if (start == end && !event.shiftKey) {
+                    textArea
+                      .asInstanceOf[js.Dynamic]
+                      .setRangeText("  ", start, start, "end")
+                  } else {
+                    val text          = textArea.value
+                    val lineStart     = ((start - 1) to 0 by -1).find(i => text(i) == '\n').fold(0)(_ + 1)
+                    val lineEnd       = (end until text.length).find(i => text(i) == '\n').getOrElse(text.length)
+                    val selectedLines = text.substring(lineStart, lineEnd)
+                    val updatedText =
+                      if (event.shiftKey) selectedLines.replace("\n  ", "\n").stripPrefix("  ")
+                      else "  " + selectedLines.replace("\n", "\n  ")
+                    textArea
+                      .asInstanceOf[js.Dynamic]
+                      .setRangeText(updatedText, lineStart, lineEnd, "select")
+                  }
+                }
+              }
+            )
             .event[Event](
               "input",
               Debounce(
