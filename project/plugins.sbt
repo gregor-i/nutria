@@ -7,6 +7,3 @@ addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.19")
 
 // js
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.13.0")
-
-// service worker
-addSbtPlugin("com.eed3si9n" % "sbt-buildinfo" % "0.11.0")

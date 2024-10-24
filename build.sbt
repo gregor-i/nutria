@@ -19,7 +19,6 @@ lazy val nutria = project
     `shader-builder`.js,
     `shader-builder`.jvm,
     frontend,
-    `service-worker`,
     backend,
     `static-renderer`
   )
@@ -75,20 +74,6 @@ val frontend = project
     scalatest
   )
 
-val `service-worker` = project
-  .in(file("service-worker"))
-  .enablePlugins(ScalaJSPlugin)
-  .settings(scalaJSUseMainModuleInitializer := true)
-  .enablePlugins(BuildInfoPlugin)
-  .settings(
-    buildInfoKeys := Seq(
-      BuildInfoKey.action("buildTime") { System.currentTimeMillis },
-      BuildInfoKey.action("assetFiles") { "ls backend/public/assets".!! }
-    ),
-    scalacOptions += "-P:scalajs:nowarnGlobalExecutionContext"
-  )
-  .settings(scalaJsDom)
-
 lazy val backend = project
   .in(file("backend"))
   .dependsOn(core.jvm)
@@ -140,29 +125,9 @@ val `static-renderer` = project
   outputFile
 }
 
-(`service-worker` / compile) := {
-  val ret        = (`service-worker` / Compile / compile).value
-  val buildSw    = (`service-worker` / Compile / fastOptJS).value.data
-  val outputFile = (backend / baseDirectory).value / "public" / "assets" / "sw.js"
-  streams.value.log.info("integrating service-worker (fastOptJS)")
-  val buildLog = Seq("cp", buildSw.toString, outputFile.toString).!!
-  streams.value.log.info(buildLog)
-  ret
-}
-
-(`service-worker` / stage) := {
-  val buildSw    = (`service-worker` / Compile / fullOptJS).value.data
-  val outputFile = (backend / baseDirectory).value / "public" / "assets" / "sw.js"
-  streams.value.log.info("integrating service-worker (fullOptJS)")
-  val buildLog = Seq("cp", buildSw.toString, outputFile.toString).!!
-  streams.value.log.info(buildLog)
-  outputFile
-}
-
 (nutria / Compile / compile) := Def
   .sequential(
     frontend / Compile / compile,
-    `service-worker` / Compile / compile,
     `static-renderer` / Compile / compile,
     backend / Compile / compile
   )
@@ -171,7 +136,6 @@ val `static-renderer` = project
 (nutria / stage) := Def
   .sequential(
     frontend / stage,
-    `service-worker` / stage,
     backend / stage
   )
   .value

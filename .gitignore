@@ -24,3 +24,5 @@ node_modules/
 backend/public
 
 temp/
+result
+result/
